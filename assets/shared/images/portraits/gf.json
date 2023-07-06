@@ -1,0 +1,21 @@
+{
+    "offset": [-50,-175],
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "idle",
+            "loop": true,
+            "framerate": 24,
+            "offsets": [0,0]
+        },
+        {
+            "animName": "talk",
+            "animFile": "talk",
+            "loop": true,
+            "framerate": 24,
+            "offsets": [0,0]
+        }
+    ],
+    "bigScale": 0.85,
+    "smallScale": 0.65
+}

@@ -1,0 +1,6 @@
+{
+    "mustHit": true,
+    "hitHealth": [0.0237, 0.029],
+    "missHealth": [0.0475, 0.0118],
+    "altAnim": ""
+}

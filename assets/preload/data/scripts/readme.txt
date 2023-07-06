@@ -1,0 +1,1 @@
+Read the wiki to learn how to code fnfBunny scripts

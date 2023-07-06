@@ -1,0 +1,4 @@
+export/
+.vscode/
+example_mods/
+source/funkin/states/TestingState.hx

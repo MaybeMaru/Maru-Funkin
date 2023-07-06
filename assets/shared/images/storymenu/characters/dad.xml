@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="menuDad.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="dadIdle0000" x="10" y="10" width="429" height="759" frameX="0" frameY="-8" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0001" x="10" y="10" width="429" height="759" frameX="0" frameY="-8" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0002" x="449" y="10" width="424" height="757" frameX="-2" frameY="-10" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0003" x="449" y="10" width="424" height="757" frameX="-2" frameY="-10" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0004" x="883" y="10" width="423" height="759" frameX="-3" frameY="-8" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0005" x="883" y="10" width="423" height="759" frameX="-3" frameY="-8" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0006" x="10" y="779" width="419" height="766" frameX="-5" frameY="-1" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0007" x="10" y="779" width="419" height="766" frameX="-5" frameY="-1" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0008" x="439" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0009" x="439" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0010" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0011" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0012" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+	<SubTexture name="dadIdle0013" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+</TextureAtlas>

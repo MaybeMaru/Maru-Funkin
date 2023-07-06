@@ -1,0 +1,18 @@
+{
+    "antialiasing": true,
+    "scale": 0.9,
+    "imagePath": "bf",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "idle",
+            "offsets": [25,15],
+            "loop": true
+        },
+        {
+            "animName": "confirm",
+            "animFile": "pressed",
+            "offsets": [25,20]
+        }
+    ]
+}

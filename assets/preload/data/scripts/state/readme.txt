@@ -1,0 +1,1 @@
+Add here scripts that will play on EVERY MusicBeatState

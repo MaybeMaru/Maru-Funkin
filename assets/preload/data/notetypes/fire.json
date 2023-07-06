@@ -1,0 +1,7 @@
+{
+    "mustHit": false,
+    "hitHealth": [-0.01, -0.005],
+    "missHealth": [0,0],
+    "altAnim": "miss",
+    "skin": "fire"
+}

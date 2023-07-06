@@ -1,0 +1,73 @@
+{
+	"imagePath": "week4/Mom_Assets",
+	"icon": "mom",
+	"camOffsets": [
+		-150,
+		0
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "Mom Idle",
+			"indices": []
+		},
+		{
+			"offsets": [
+				8,
+				-175
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "MOM DOWN POSE",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-52,
+				-60
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "Mom Pose Left",
+			"indices": []
+		},
+		{
+			"offsets": [
+				137,
+				-29
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "Mom Left Pose",
+			"indices": []
+		},
+		{
+			"offsets": [
+				24,
+				66
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "Mom Up Pose",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		-40,
+		410
+	],
+	"scale": 1,
+	"flipX": false,
+	"antialiasing": true,
+	"packer": "Sparrow"
+}

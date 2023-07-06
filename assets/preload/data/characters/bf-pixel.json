@@ -1,0 +1,119 @@
+{
+	"imagePath": "week6/bfPixel",
+	"icon": "bf-pixel",
+	"camOffsets": [
+		400,
+		300
+	],
+	"charOffsets": [
+		-160,
+		-170
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 12,
+			"animFile": "idle",
+			"indices": [0,1,2,3,4,4,4]
+		},
+		{
+			"offsets": [
+				-36,
+				-12
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 12,
+			"animFile": "singUP",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-6,
+				0
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 12,
+			"animFile": "singLEFT",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-6,
+				0
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 12,
+			"animFile": "singRIGHT",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 12,
+			"animFile": "singDOWN",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-36,
+				-12
+			],
+			"loop": false,
+			"animName": "singUPmiss",
+			"framerate": 12,
+			"animFile": "missUP",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-6,
+				0
+			],
+			"loop": false,
+			"animName": "singLEFTmiss",
+			"framerate": 12,
+			"animFile": "missLEFT",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-6,
+				0
+			],
+			"loop": false,
+			"animName": "singRIGHTmiss",
+			"framerate": 12,
+			"animFile": "missRIGHT",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "singDOWNmiss",
+			"framerate": 12,
+			"animFile": "missDOWN",
+			"indices": []
+		}
+	],
+	"scale": 6,
+	"isPlayer": true,
+	"flipX": true,
+	"gameOverChar": "bf-pixel-dead",
+	"antialiasing": false,
+	"gameOverSuffix": "pixel"
+}

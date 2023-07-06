@@ -1,0 +1,72 @@
+{
+	"antialiasing": true,
+	"imagePath": "week3/Pico_FNF_assetss",
+	"camOffsets": [
+		-150,
+		75
+	],
+	"icon": "pico",
+	"scale": 1,
+	"charOffsets": [
+		-110,
+		60
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "Pico Idle Dance",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				192,
+				-78
+			],
+			"animFile": "Pico Down Note0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-82,
+				-10
+			],
+			"animFile": "Pico NOTE LEFT0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				56,
+				1
+			],
+			"animFile": "Pico Note Right0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-42,
+				30
+			],
+			"animFile": "pico Up note0",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": true
+}

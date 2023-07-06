@@ -1,0 +1,199 @@
+{ "frames": [
+   {
+    "filename": "PIXEL SPLASH 0.ase",
+    "frame": { "x": 1, "y": 1, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 1.ase",
+    "frame": { "x": 47, "y": 1, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 2.ase",
+    "frame": { "x": 93, "y": 1, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 3.ase",
+    "frame": { "x": 139, "y": 1, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 4.ase",
+    "frame": { "x": 185, "y": 1, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 5.ase",
+    "frame": { "x": 1, "y": 44, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 6.ase",
+    "frame": { "x": 47, "y": 44, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 7.ase",
+    "frame": { "x": 93, "y": 44, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 8.ase",
+    "frame": { "x": 139, "y": 44, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 9.ase",
+    "frame": { "x": 185, "y": 44, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 10.ase",
+    "frame": { "x": 1, "y": 87, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 11.ase",
+    "frame": { "x": 47, "y": 87, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 12.ase",
+    "frame": { "x": 93, "y": 87, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 13.ase",
+    "frame": { "x": 139, "y": 87, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 14.ase",
+    "frame": { "x": 185, "y": 87, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 15.ase",
+    "frame": { "x": 1, "y": 130, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 16.ase",
+    "frame": { "x": 47, "y": 130, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 17.ase",
+    "frame": { "x": 93, "y": 130, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 18.ase",
+    "frame": { "x": 139, "y": 130, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   },
+   {
+    "filename": "PIXEL SPLASH 19.ase",
+    "frame": { "x": 185, "y": 130, "w": 45, "h": 42 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 42 },
+    "sourceSize": { "w": 45, "h": 42 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.6-dev",
+  "format": "I8",
+  "size": { "w": 231, "h": 173 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "splashPURPLE", "from": 0, "to": 4, "direction": "forward" },
+   { "name": "splashBLUE", "from": 5, "to": 9, "direction": "forward" },
+   { "name": "splashGREEN", "from": 10, "to": 14, "direction": "forward" },
+   { "name": "splashRED", "from": 15, "to": 19, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

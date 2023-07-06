@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="titleOptions.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Options! instancia 10000" x="10" y="10" width="717" height="196"/>
+	<SubTexture name="Options! instancia 10001" x="10" y="10" width="717" height="196"/>
+	<SubTexture name="Options! instancia 10002" x="10" y="216" width="717" height="196"/>
+	<SubTexture name="Options! instancia 10003" x="10" y="216" width="717" height="196"/>
+</TextureAtlas>

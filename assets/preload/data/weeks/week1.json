@@ -1,0 +1,14 @@
+{
+    "songList": 
+    {
+        "songs":["Bopeebo", "Fresh", "Dad Battle"],
+        "weekNum": 1,
+        "songIcon": ["dad"]
+    },
+    "weekImage": "week1",
+    "weekName": "Daddy Dearest",
+    "weekColor": "0xFF9271FD",
+    "storyBf": "bf",
+	"storyDad": "dad",
+	"storyGf": "gf"
+}

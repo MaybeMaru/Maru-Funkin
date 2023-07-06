@@ -1,0 +1,72 @@
+{
+	"imagePath": "week6/senpai",
+	"antialiasing": false,
+	"icon": "senpai",
+	"camOffsets": [
+		100,
+		450
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "Senpai Idle instance 1",
+			"indices": []
+		},
+		{
+			"offsets": [
+				18,
+				36
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "SENPAI UP NOTE instance 1",
+			"indices": []
+		},
+		{
+			"offsets": [
+				30,
+				0
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "SENPAI LEFT NOTE instance 1",
+			"indices": []
+		},
+		{
+			"offsets": [
+				6,
+				0
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "SENPAI RIGHT NOTE instance 1",
+			"indices": []
+		},
+		{
+			"offsets": [
+				12,
+				0
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "SENPAI DOWN NOTE instance 1",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		-30,
+		70
+	],
+	"scale": 6,
+	"flipX": false
+}

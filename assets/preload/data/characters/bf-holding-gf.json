@@ -1,0 +1,128 @@
+{
+	"imagePath": "week7/bf-hold-gf",
+	"icon": "bf",
+	"camOffsets": [
+		100,
+		100
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "BF idle dance",
+			"indices": []
+		},
+		{
+			"offsets": [
+				1,
+				90
+			],
+			"loop": false,
+			"animName": "catch",
+			"framerate": 24,
+			"animFile": "BF catches GF0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-45,
+				9
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "BF NOTE UP0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				6,
+				2
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "BF NOTE LEFT0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-48,
+				21
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "BF NOTE RIGHT0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-14,
+				-16
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "BF NOTE DOWN0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-47,
+				5
+			],
+			"loop": false,
+			"animName": "singUPmiss",
+			"framerate": 24,
+			"animFile": "BF NOTE UP MISS",
+			"indices": []
+		},
+		{
+			"offsets": [
+				8,
+				4
+			],
+			"loop": false,
+			"animName": "singLEFTmiss",
+			"framerate": 24,
+			"animFile": "BF NOTE LEFT MISS",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-40,
+				33
+			],
+			"loop": false,
+			"animName": "singRIGHTmiss",
+			"framerate": 24,
+			"animFile": "BF NOTE RIGHT MISS",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-23,
+				-13
+			],
+			"loop": false,
+			"animName": "singDOWNmiss",
+			"framerate": 24,
+			"animFile": "BF NOTE DOWN MISS",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		-30,
+		20
+	],
+	"scale": 1,
+	"flipX": true,
+	"isPlayer": true,
+	"antialiasing": true
+}

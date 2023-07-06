@@ -1,0 +1,73 @@
+{
+	"imagePath": "week6/spirit",
+	"icon": "spirit",
+	"camOffsets": [
+		50,
+		300
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "idle spirit_",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				60
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "up_",
+			"indices": []
+		},
+		{
+			"offsets": [
+				4,
+				-11
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "left_",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-12,
+				6
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "right_",
+			"indices": []
+		},
+		{
+			"offsets": [
+				396,
+				378
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "spirit down_",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		-40,
+		-20
+	],
+	"scale": 6,
+	"flipX": false,
+	"antialiasing": false,
+	"packer": "SheetPacker"
+}

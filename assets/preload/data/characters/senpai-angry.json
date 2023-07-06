@@ -1,0 +1,72 @@
+{
+	"imagePath": "week6/senpai",
+	"antialiasing": false,
+	"icon": "senpai",
+	"camOffsets": [
+		100,
+		450
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "Angry Senpai Idle",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				36
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "Angry Senpai UP NOTE",
+			"indices": []
+		},
+		{
+			"offsets": [
+				24,
+				6
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "Angry Senpai LEFT NOTE",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "Angry Senpai RIGHT NOTE",
+			"indices": []
+		},
+		{
+			"offsets": [
+				6,
+				6
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "Angry Senpai DOWN NOTE",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		-30,
+		60
+	],
+	"scale": 6,
+	"flipX": false
+}

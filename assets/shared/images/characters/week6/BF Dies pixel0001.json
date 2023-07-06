@@ -1,0 +1,1149 @@
+{ "frames": [
+   {
+    "filename": "BF Dies pixel0001 0.png",
+    "frame": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 1.png",
+    "frame": { "x": 0, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 2.png",
+    "frame": { "x": 0, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 3.png",
+    "frame": { "x": 0, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 4.png",
+    "frame": { "x": 0, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 5.png",
+    "frame": { "x": 0, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 6.png",
+    "frame": { "x": 0, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 7.png",
+    "frame": { "x": 0, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 8.png",
+    "frame": { "x": 0, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 9.png",
+    "frame": { "x": 0, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 10.png",
+    "frame": { "x": 0, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 11.png",
+    "frame": { "x": 0, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 12.png",
+    "frame": { "x": 90, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 13.png",
+    "frame": { "x": 90, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 14.png",
+    "frame": { "x": 90, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 15.png",
+    "frame": { "x": 90, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 16.png",
+    "frame": { "x": 90, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 17.png",
+    "frame": { "x": 90, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 18.png",
+    "frame": { "x": 90, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 19.png",
+    "frame": { "x": 90, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 20.png",
+    "frame": { "x": 90, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 21.png",
+    "frame": { "x": 90, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 22.png",
+    "frame": { "x": 90, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 23.png",
+    "frame": { "x": 90, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 24.png",
+    "frame": { "x": 180, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 25.png",
+    "frame": { "x": 180, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 26.png",
+    "frame": { "x": 180, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 27.png",
+    "frame": { "x": 180, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 28.png",
+    "frame": { "x": 180, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 29.png",
+    "frame": { "x": 180, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 30.png",
+    "frame": { "x": 180, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 31.png",
+    "frame": { "x": 180, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 32.png",
+    "frame": { "x": 180, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 33.png",
+    "frame": { "x": 180, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 34.png",
+    "frame": { "x": 180, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 35.png",
+    "frame": { "x": 180, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 36.png",
+    "frame": { "x": 270, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 37.png",
+    "frame": { "x": 270, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 38.png",
+    "frame": { "x": 270, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 39.png",
+    "frame": { "x": 270, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 40.png",
+    "frame": { "x": 270, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 41.png",
+    "frame": { "x": 270, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 42.png",
+    "frame": { "x": 270, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 43.png",
+    "frame": { "x": 270, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 44.png",
+    "frame": { "x": 270, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 45.png",
+    "frame": { "x": 270, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 46.png",
+    "frame": { "x": 270, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 47.png",
+    "frame": { "x": 270, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 48.png",
+    "frame": { "x": 360, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 49.png",
+    "frame": { "x": 360, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 50.png",
+    "frame": { "x": 360, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 51.png",
+    "frame": { "x": 360, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 52.png",
+    "frame": { "x": 360, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 53.png",
+    "frame": { "x": 360, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 54.png",
+    "frame": { "x": 360, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 55.png",
+    "frame": { "x": 360, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 56.png",
+    "frame": { "x": 360, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 57.png",
+    "frame": { "x": 360, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 58.png",
+    "frame": { "x": 360, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 59.png",
+    "frame": { "x": 360, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 60.png",
+    "frame": { "x": 450, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 61.png",
+    "frame": { "x": 450, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 62.png",
+    "frame": { "x": 450, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 63.png",
+    "frame": { "x": 450, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 64.png",
+    "frame": { "x": 450, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 65.png",
+    "frame": { "x": 450, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 66.png",
+    "frame": { "x": 450, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 67.png",
+    "frame": { "x": 450, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 68.png",
+    "frame": { "x": 450, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 69.png",
+    "frame": { "x": 450, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 70.png",
+    "frame": { "x": 450, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 71.png",
+    "frame": { "x": 450, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 72.png",
+    "frame": { "x": 540, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 73.png",
+    "frame": { "x": 540, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 74.png",
+    "frame": { "x": 540, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 75.png",
+    "frame": { "x": 540, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 76.png",
+    "frame": { "x": 540, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 77.png",
+    "frame": { "x": 540, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 78.png",
+    "frame": { "x": 540, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 79.png",
+    "frame": { "x": 540, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 80.png",
+    "frame": { "x": 540, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 81.png",
+    "frame": { "x": 540, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 82.png",
+    "frame": { "x": 540, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 83.png",
+    "frame": { "x": 540, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 84.png",
+    "frame": { "x": 630, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 85.png",
+    "frame": { "x": 630, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 86.png",
+    "frame": { "x": 630, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 87.png",
+    "frame": { "x": 630, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 88.png",
+    "frame": { "x": 630, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 89.png",
+    "frame": { "x": 630, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 90.png",
+    "frame": { "x": 630, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 91.png",
+    "frame": { "x": 630, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 92.png",
+    "frame": { "x": 630, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 93.png",
+    "frame": { "x": 630, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 94.png",
+    "frame": { "x": 630, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 95.png",
+    "frame": { "x": 630, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 96.png",
+    "frame": { "x": 720, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 97.png",
+    "frame": { "x": 720, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 98.png",
+    "frame": { "x": 720, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 99.png",
+    "frame": { "x": 720, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 100.png",
+    "frame": { "x": 720, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 101.png",
+    "frame": { "x": 720, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 102.png",
+    "frame": { "x": 720, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 103.png",
+    "frame": { "x": 720, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 104.png",
+    "frame": { "x": 720, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 105.png",
+    "frame": { "x": 720, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 106.png",
+    "frame": { "x": 720, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 107.png",
+    "frame": { "x": 720, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 108.png",
+    "frame": { "x": 810, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 109.png",
+    "frame": { "x": 810, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 110.png",
+    "frame": { "x": 810, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 111.png",
+    "frame": { "x": 810, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 112.png",
+    "frame": { "x": 810, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 113.png",
+    "frame": { "x": 810, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 114.png",
+    "frame": { "x": 810, "y": 486, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 115.png",
+    "frame": { "x": 810, "y": 567, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 116.png",
+    "frame": { "x": 810, "y": 648, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 117.png",
+    "frame": { "x": 810, "y": 729, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 118.png",
+    "frame": { "x": 810, "y": 810, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 119.png",
+    "frame": { "x": 810, "y": 891, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 120.png",
+    "frame": { "x": 900, "y": 0, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 121.png",
+    "frame": { "x": 900, "y": 81, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 122.png",
+    "frame": { "x": 900, "y": 162, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 123.png",
+    "frame": { "x": 900, "y": 243, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 124.png",
+    "frame": { "x": 900, "y": 324, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   },
+   {
+    "filename": "BF Dies pixel0001 125.png",
+    "frame": { "x": 900, "y": 405, "w": 90, "h": 81 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 90, "h": 81 },
+    "sourceSize": { "w": 90, "h": 81 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "size": { "w": 990, "h": 972 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "BF dies pixel", "from": 0, "to": 57, "direction": "forward" },
+   { "name": "Retry Loop", "from": 58, "to": 91, "direction": "forward" },
+   { "name": "RETRY CONFIRM", "from": 92, "to": 125, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

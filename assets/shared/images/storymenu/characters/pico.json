@@ -1,0 +1,13 @@
+{
+    "antialiasing": true,
+    "scale": 1,
+    "imagePath": "pico",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "picoIdle",
+            "loop": true,
+            "offsets": [50,50]
+        }
+    ]
+}

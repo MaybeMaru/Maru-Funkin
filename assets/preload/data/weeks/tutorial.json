@@ -1,0 +1,14 @@
+{
+    "songList": 
+    {
+        "songs":["Tutorial"],
+        "weekNum": 0,
+        "songIcon": ["gf"]
+    },
+    "weekImage": "tutorial",
+    "weekName": "Tutorial",
+    "weekColor": "0xFFB00B69",
+    "storyBf": "bf",
+	"storyDad": "",
+	"storyGf": "gf"
+}

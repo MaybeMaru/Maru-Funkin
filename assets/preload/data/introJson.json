@@ -1,0 +1,59 @@
+{
+    "bpm": 102,
+    "beats":
+    [
+        {
+            "create":
+            [
+                "ninjamuffin99",
+                "phantomArcade",
+                "kawaisprite",
+                "evilsk8r"
+            ]
+        },
+        {},
+        {
+            "add": "present"
+        },
+        {
+            "clear": true
+        },
+        {
+            "create":
+            [
+                "In association",
+                "with"
+            ]
+        },
+        {},
+        {
+            "add": "newgrounds",
+            "sprite": "title/newgrounds_logo"
+        },
+        {
+            "clear": true
+        },
+        {
+            "makeRandom": 0
+        },
+        {},
+        {
+            "addRandom": 1
+        },
+        {
+            "clear": true
+        },
+        {
+            "add": "Friday"
+        },
+        {
+            "add": "Night"
+        },
+        {
+            "add": "Funkin"
+        },
+        {
+            "skip": true
+        }
+    ]
+}

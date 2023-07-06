@@ -1,0 +1,123 @@
+{
+    "noteData": {
+        "anims" : [
+            {
+                "animName": "scrollLEFT",
+                "animFile": "purple0"
+            }, {
+                "animName": "scrollDOWN",
+                "animFile": "blue0"
+            }, {
+                "animName": "scrollUP",
+                "animFile": "green0"
+            }, {
+                "animName": "scrollRIGHT",
+                "animFile": "red0"
+            }, {
+                "animName": "holdLEFT",
+                "animFile": "purple hold piece"
+            }, {
+                "animName": "holdDOWN",
+                "animFile": "blue hold piece"
+            }, {
+                "animName": "holdUP",
+                "animFile": "green hold piece"
+            }, {
+                "animName": "holdRIGHT",
+                "animFile": "red hold piece"
+            }, {
+                "animName": "holdLEFT-end",
+                "animFile": "purple hold end"
+            }, {
+                "animName": "holdDOWN-end",
+                "animFile": "blue hold end"
+            }, {
+                "animName": "holdUP-end",
+                "animFile": "green hold end"
+            }, {
+                "animName": "holdRIGHT-end",
+                "animFile": "red hold end"
+            }
+        ],
+        "imagePath": "noteAssets",
+        "antialiasing": true,
+        "scale": 0.7,
+        "sustainScaleOffset": 1.019,
+        "noteColorArray" : ["0xffc24b99", "0xff00ffff", "0xff12fa05", "0xfff9393f"]
+    },
+    "strumData": {
+        "anims" : [
+            {
+                "animName": "staticLEFT",
+                "animFile": "arrowLEFT"
+            },{
+                "animName": "staticDOWN",
+                "animFile": "arrowDOWN"
+            },{
+                "animName": "staticUP",
+                "animFile": "arrowUP"
+            },{
+                "animName": "staticRIGHT",
+                "animFile": "arrowRIGHT"
+            }, {
+                "animName": "pressedLEFT",
+                "animFile": "left press",
+                "offsets": [-2,-2]
+            },{
+                "animName": "pressedDOWN",
+                "animFile": "down press",
+                "offsets": [-2,-2]
+            },{
+                "animName": "pressedUP",
+                "animFile": "up press",
+                "offsets": [-2,-2]
+            },{
+                "animName": "pressedRIGHT",
+                "animFile": "right press",
+                "offsets": [-2,-2]
+            },{
+                "animName": "confirmLEFT",
+                "animFile": "left confirm",
+                "offsets": [25,25]
+            },{
+                "animName": "confirmDOWN",
+                "animFile": "down confirm",
+                "offsets": [25,25]
+            },{
+                "animName": "confirmUP",
+                "animFile": "up confirm",
+                "offsets": [25,25]
+            },{
+                "animName": "confirmRIGHT",
+                "animFile": "right confirm",
+                "offsets": [25,25]
+            }
+        ],
+        "imagePath": "strumAssets",
+        "antialiasing": true,
+        "scale": 0.7
+    },
+    "splashData": {
+        "anims" : [
+            {
+                "animName": "splashLEFT",
+                "animFile": "note splash purple 1",
+                "offsets": [175,165]
+            },{
+                "animName": "splashDOWN",
+                "animFile": "note splash blue 1"
+            },{
+                "animName": "splashUP",
+                "animFile": "note splash green 1"
+            },{
+                "animName": "splashRIGHT",
+                "animFile": "note splash red 1"
+            }
+        ],
+        "imagePath": "splashAssets",
+        "antialiasing": true,
+        "scale": 0.8
+    },
+    "antialiasing": true,
+    "scale": 0.8
+}

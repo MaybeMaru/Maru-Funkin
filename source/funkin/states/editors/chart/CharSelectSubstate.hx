@@ -1,0 +1,93 @@
+package funkin.states.editors.chart;
+
+class CharSelectSubstate extends MusicBeatSubstate {
+    public static var lastChar:String = 'bf';
+    var selectFunction:Void->Void = null;
+
+    var curFolder:Int = 0;
+    var curSelected:Array<Int> = [0,0];
+    var iconArray:Array<Array<HealthIcon>> = [[],[]];
+    var charArray:Array<Array<MenuAlphabet>> = [[],[]];
+
+	public function new(?selectFunction:Void->Void):Void {
+		super();
+        this.selectFunction = selectFunction;
+
+        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0.6;
+		bg.scrollFactor.set();
+		add(bg);
+
+        var vanillaChars:Array<String> = Paths.getFileList(TEXT, false, 'json', 'data/characters');
+        var modChars:Array<String> = Paths.getModFileList('data/characters', 'json', false);
+
+        var listsToAdd:Array<Array<String>> = [vanillaChars, modChars];
+
+        for (f in 0...listsToAdd.length) {
+            for (i in 0...listsToAdd[f].length) {
+                var list = listsToAdd[f];
+                var charText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, list[i], true);
+                charText.scrollFactor.set();
+                charText.targetY = i;
+                charText.forceX = false;
+                charText.setTargetPos();
+                add(charText);
+                    
+                var iconName:String = Character.getCharData(list[i]).icon;
+                var charIcon:HealthIcon = new HealthIcon(iconName);
+                charIcon.scrollFactor.set();
+                charIcon.sprTracker = charText;
+                add(charIcon);
+
+                iconArray[f].push(charIcon);
+                charArray[f].push(charText);
+            }
+        }
+        changeFolder();
+    }
+    
+    override public function update(elapsed:Float):Void {
+        super.update(elapsed);
+        if (getKey('UI_UP-P'))		changeSelection(-1);
+		if (getKey('UI_DOWN-P'))	changeSelection(1);
+        if (getKey('UI_LEFT-P'))	changeFolder(-1);
+		if (getKey('UI_RIGHT-P'))	changeFolder(1);
+        if (getKey('ACCEPT-P'))     selectChar();
+        else if (getKey('BACK-P'))  close();
+    }
+
+    function selectChar():Void {
+        lastChar = charArray[curFolder][curSelected[curFolder]].text;
+        if (selectFunction != null) selectFunction();
+        close();
+    }
+
+    function changeFolder(change:Int = 0):Void {
+        curFolder += change;
+		if (curFolder < 0)				        curFolder = curSelected.length - 1;
+		if (curFolder >= curSelected.length)	curFolder = 0;
+        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+
+        for (f in 0...charArray.length) {
+            var showBool:Bool = (f == curFolder);
+            for (i in 0...charArray[f].length) {
+                charArray[f][i].visible = showBool;
+                iconArray[f][i].visible = showBool;
+            }
+        }
+        changeSelection();
+    }
+
+    function changeSelection(change:Int = 0):Void {
+        curSelected[curFolder] += change;
+        if (curSelected[curFolder] < 0)				                curSelected[curFolder] = charArray[curFolder].length - 1;
+		if (curSelected[curFolder] >= charArray[curFolder].length)	curSelected[curFolder] = 0;
+        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+
+        for (i in 0...charArray[curFolder].length) {
+            charArray[curFolder][i].targetY = i - curSelected[curFolder];
+            charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
+            iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
+        }
+	}
+}

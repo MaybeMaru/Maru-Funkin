@@ -1,0 +1,116 @@
+{
+	"antialiasing": true,
+	"imagePath": "week5/mom_dad_christmas_assets",
+	"camOffsets": [
+		-175,
+		25
+	],
+	"icon": "parents",
+	"scale": 1,
+	"charOffsets": [
+		210,
+		350
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "Parent Christmas Idle",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				-40,
+				-24
+			],
+			"animFile": "Parent Down Note Dad",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				0,
+				-21
+			],
+			"animFile": "Parent Right Note Dad",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				-28,
+				20
+			],
+			"animFile": "Parent Left Note Dad",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-42,
+				26
+			],
+			"animFile": "Parent Up Note Dad",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN-alt",
+			"loop": false,
+			"offsets": [
+				-40,
+				-24
+			],
+			"animFile": "Parent Down Note Mom",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT-alt",
+			"loop": false,
+			"offsets": [
+				0,
+				-21
+			],
+			"animFile": "Parent Right Note Mom",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT-alt",
+			"loop": false,
+			"offsets": [
+				-28,
+				20
+			],
+			"animFile": "Parent Left Note Mom",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP-alt",
+			"loop": false,
+			"offsets": [
+				-42,
+				26
+			],
+			"animFile": "Parent Up Note Mom",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": false
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="evil_hand.png">
+    <!-- Made using Maru Aseprite JSON to XML converter -->
+    <SubTexture name="nextLine00000" x="0" y="0" width="27" height="21"/>
+    <SubTexture name="nextLine00001" x="0" y="21" width="27" height="21"/>
+    <SubTexture name="nextLine00002" x="0" y="42" width="27" height="21"/>
+    <SubTexture name="waitLine00000" x="27" y="0" width="27" height="21"/>
+    <SubTexture name="waitLine00001" x="27" y="21" width="27" height="21"/>
+    <SubTexture name="waitLine00002" x="27" y="42" width="27" height="21"/>
+    <SubTexture name="waitLine00003" x="54" y="0" width="27" height="21"/>
+    <SubTexture name="clickLine00000" x="54" y="21" width="27" height="21"/>
+    <SubTexture name="clickLine00001" x="54" y="42" width="27" height="21"/>
+    <SubTexture name="clickLine00002" x="81" y="0" width="27" height="21"/>
+</TextureAtlas>

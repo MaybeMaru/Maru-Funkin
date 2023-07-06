@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="menuPico.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="picoIdle0000" x="10" y="10" width="217" height="230" frameX="0" frameY="-6" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0001" x="10" y="10" width="217" height="230" frameX="0" frameY="-6" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0002" x="237" y="10" width="220" height="233" frameX="0" frameY="-3" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0003" x="237" y="10" width="220" height="233" frameX="0" frameY="-3" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0004" x="467" y="10" width="224" height="234" frameX="-1" frameY="-3" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0005" x="701" y="10" width="221" height="234" frameX="-4" frameY="-3" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0006" x="10" y="254" width="222" height="236" frameX="-4" frameY="-1" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0007" x="242" y="254" width="221" height="236" frameX="-5" frameY="-1" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0008" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0009" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0010" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0011" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0012" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+	<SubTexture name="picoIdle0013" x="473" y="254" width="221" height="237" frameX="-5" frameY="0" frameWidth="226" frameHeight="237"/>
+</TextureAtlas>

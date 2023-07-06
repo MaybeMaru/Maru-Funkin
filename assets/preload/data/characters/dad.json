@@ -1,0 +1,72 @@
+{
+	"imagePath": "week1/DADDY_DEAREST",
+	"camOffsets": [
+		-150,
+		100
+	],
+	"icon": "dad",
+	"scale": 1,
+	"charOffsets": [
+		0,
+		350
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "Dad idle dance",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				1,
+				-31
+			],
+			"animFile": "Dad Sing Note DOWN",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-3,
+				27
+			],
+			"animFile": "Dad Sing Note LEFT",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				-9,
+				10
+			],
+			"animFile": "dad sing note right",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-9,
+				50
+			],
+			"animFile": "Dad Sing note UP",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": false,
+	"antialiasing": true
+}

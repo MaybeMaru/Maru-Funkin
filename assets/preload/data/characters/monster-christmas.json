@@ -1,0 +1,72 @@
+{
+	"antialiasing": true,
+	"imagePath": "week5/monsterChristmas",
+	"camOffsets": [
+		-300,
+		100
+	],
+	"icon": "monster",
+	"scale": 1,
+	"charOffsets": [
+		90,
+		290
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "monster idle0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				-60,
+				-90
+			],
+			"animFile": "monster down0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-52,
+				11
+			],
+			"animFile": "Monster Right note0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				-36,
+				10
+			],
+			"animFile": "Monster left note0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-28,
+				56
+			],
+			"animFile": "monster up note0",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": false
+}

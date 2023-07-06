@@ -1,0 +1,83 @@
+{
+	"imagePath": "week7/tankmanCaptain",
+	"antialiasing": true,
+	"icon": "tankman",
+	"camOffsets": [
+		-50,
+		0
+	],
+	"anims": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animName": "idle",
+			"framerate": 24,
+			"animFile": "Tankman Idle Dance0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				72,
+				-112
+			],
+			"loop": false,
+			"animName": "singDOWN",
+			"framerate": 24,
+			"animFile": "Tankman DOWN note0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-16,
+				-28
+			],
+			"loop": false,
+			"animName": "singRIGHT",
+			"framerate": 24,
+			"animFile": "Tankman Note Left0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				92,
+				-11
+			],
+			"loop": false,
+			"animName": "singLEFT",
+			"framerate": 24,
+			"animFile": "Tankman Right Note0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				52,
+				50
+			],
+			"loop": false,
+			"animName": "singUP",
+			"framerate": 24,
+			"animFile": "Tankman UP note0",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-16,
+				-10
+			],
+			"loop": false,
+			"animName": "singUP-alt",
+			"framerate": 24,
+			"animFile": "Tankman Ugh0",
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		100,
+		150
+	],
+	"scale": 1,
+	"flipX": true
+}

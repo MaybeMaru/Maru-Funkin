@@ -1,0 +1,133 @@
+{
+	"imagePath": "week4/bfCar",
+	"icon": "bf",
+	"camOffsets": [
+		100,
+		100
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"animFile": "BF idle dance",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "idle-loop",
+			"offsets": [
+				0,
+				0
+			],
+			"loop": true,
+			"animFile": "BF idle dance",
+			"framerate": 24,
+			"indices": [
+				10,
+				11,
+				12,
+				13
+			]
+		},
+		{
+			"animName": "singUP",
+			"offsets": [
+				-29,
+				27
+			],
+			"loop": false,
+			"animFile": "BF NOTE UP0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"offsets": [
+				12,
+				-6
+			],
+			"loop": false,
+			"animFile": "BF NOTE LEFT0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"offsets": [
+				-38,
+				-7
+			],
+			"loop": false,
+			"animFile": "BF NOTE RIGHT0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"offsets": [
+				-10,
+				-50
+			],
+			"loop": false,
+			"animFile": "BF NOTE DOWN0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUPmiss",
+			"offsets": [
+				-29,
+				27
+			],
+			"loop": false,
+			"animFile": "BF NOTE UP MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFTmiss",
+			"offsets": [
+				12,
+				24
+			],
+			"loop": false,
+			"animFile": "BF NOTE LEFT MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHTmiss",
+			"offsets": [
+				-30,
+				21
+			],
+			"loop": false,
+			"animFile": "BF NOTE RIGHT MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWNmiss",
+			"offsets": [
+				-11,
+				-19
+			],
+			"loop": false,
+			"animFile": "BF NOTE DOWN MISS",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"scale": 1,
+	"charOffsets": [
+		20,
+		0
+	],
+	"isPlayer": true,
+	"flipX": true,
+	"antialiasing": true
+}

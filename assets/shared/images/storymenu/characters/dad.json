@@ -1,0 +1,13 @@
+{
+    "antialiasing": true,
+    "scale": 0.5,
+    "imagePath": "dad",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "dadIdle",
+            "loop": true,
+            "offsets": [150,195]
+        }
+    ]
+}

@@ -1,0 +1,130 @@
+{
+	"imagePath": "week5/bfChristmas",
+	"camOffsets": [
+		100,
+		100
+	],
+	"icon": "bf",
+	"scale": 1,
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "BF idle dance",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-38,
+				27
+			],
+			"animFile": "BF NOTE UP0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				14,
+				-6
+			],
+			"animFile": "BF NOTE LEFT0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-53,
+				-5
+			],
+			"animFile": "BF NOTE RIGHT0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				-20,
+				-52
+			],
+			"animFile": "BF NOTE DOWN0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUPmiss",
+			"loop": false,
+			"offsets": [
+				-32,
+				25
+			],
+			"animFile": "BF NOTE UP MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFTmiss",
+			"loop": false,
+			"offsets": [
+				8,
+				20
+			],
+			"animFile": "BF NOTE LEFT MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHTmiss",
+			"loop": false,
+			"offsets": [
+				-42,
+				19
+			],
+			"animFile": "BF NOTE RIGHT MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singDOWNmiss",
+			"loop": false,
+			"offsets": [
+				-16,
+				-19
+			],
+			"animFile": "BF NOTE DOWN MISS",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "hey",
+			"loop": false,
+			"offsets": [
+				2,
+				6
+			],
+			"animFile": "BF HEY",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"charOffsets": [
+		0,
+		0
+	],
+	"isPlayer": true,
+	"flipX": true,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
+}

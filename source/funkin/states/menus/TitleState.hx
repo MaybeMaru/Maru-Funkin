@@ -1,0 +1,273 @@
+package funkin.states.menus;
+
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
+import flixel.graphics.FlxGraphic;
+import lime.app.Application;
+import shaders.ColorSwap;
+
+typedef IntroPart = {
+	var create:Array<String>;
+	var add:String;
+	var sprite:String;
+	var makeRandom:Null<Int>;
+	var addRandom:Null<Int>;
+	var clear:Bool;
+	var skip:Bool;
+}
+
+typedef IntroJson = {
+	var beats:Array<IntroPart>;
+	var bpm:Float;
+}
+
+class TitleState extends MusicBeatState {
+	static var initialized:Bool = false;
+	static var openedGame:Bool = false;
+	var skippedIntro:Bool = false;
+
+	var blackScreen:FlxSprite;
+	var titleGroup:FlxGroup;
+	var textSprite:Alphabet;
+	var spriteGroup:FlxGroup;
+	var swagShader:ColorSwap;
+
+	var curWacky:Array<String> = [];
+	var introJson:IntroJson = null;
+
+	override public function create():Void {
+		FlxG.mouse.visible = false;
+		super.create();
+
+		//Load Settings / Mods
+		if (!initialized) {
+			FlxG.save.bind('funkin');
+			Controls.setupBindings();
+			Preferences.setupPrefs();
+			CoolUtil.init();
+			Highscore.load();
+			#if desktop
+			DiscordClient.initialize();
+			Application.current.onExit.add (function (exitCode) {
+				DiscordClient.shutdown();
+			});
+			#end
+
+			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+			diamond.persist = true;
+			diamond.destroyOnNoUse = false;
+
+			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.6, new FlxPoint(0, -1),
+			{asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+
+			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.4, new FlxPoint(0, 1),
+			{asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+
+			CoolUtil.playMusic('freakyMenu', 0);
+			FlxG.sound.music.fadeIn(4, 0, 0.7);
+		}
+
+		curWacky = FlxG.random.getObject(getIntroTextShit());
+		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
+		Conductor.changeBPM(introJson.bpm);
+		persistentUpdate = true;
+		swagShader = new ColorSwap();
+
+		titleGroup = new FlxGroup();
+		add(titleGroup);
+		titleGroup.add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
+
+		logoBump = new FunkinSprite('title/logoBumpin', [-115,-100]);
+		logoBump.addAnim('idle', 'logo bumpin');
+		logoBump.dance();
+		logoBump.shader = swagShader.shader;
+		FlxTween.tween(logoBump, {y: logoBump.y + 50}, 1.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+		titleGroup.add(logoBump);
+
+		gfDance = new FunkinSprite('title/gfDanceTitle', [FlxG.width*0.42,FlxG.height*0.0675]);
+		gfDance.addAnim('danceLeft', 'gfDance', 24, false, [30,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+		gfDance.addAnim('danceRight', 'gfDance', 24, false, [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]);
+		gfDance.shader = swagShader.shader;
+		titleGroup.add(gfDance);
+
+		titleText = new FunkinSprite('title/titleEnter', [100,FlxG.height*0.8]);
+		titleText.addAnim('idle', 'Press Enter to Begin');
+		titleText.addAnim('press', 'ENTER PRESSED', 24, true);
+		titleText.playAnim('idle');
+		titleText.color = 0xFF3333CC;
+		titleText.screenCenter(X);
+		titleGroup.add(titleText);
+
+		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		add(blackScreen);
+		blackScreen.visible = !initialized;
+
+		textSprite = new Alphabet(FlxG.width/2,FlxG.height/4,'');
+		textSprite.alignment = CENTER;
+		add(textSprite);
+		spriteGroup = new FlxGroup();
+		add(spriteGroup);
+
+		var piss:Float = initialized ? 0.1 : 1;
+		new FlxTimer().start(piss, function(tmr:FlxTimer) {
+			if(!initialized) {
+				var iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
+				iconz.screenCenter();
+				add(iconz);
+
+				FlxG.sound.play(Paths.sound('intro/introSound'), 1, false, null, true, function() {
+					new FlxTimer().start(0.1, function(tmr:FlxTimer) {iconz.destroy();} );
+					new FlxTimer().start(0.5, function(tmr:FlxTimer) {initialized = true;} );
+				});
+			}
+			else {
+				skipIntro();
+			}
+		});
+	}
+
+	var danceLeft:Bool = false;
+	var gfDance:FunkinSprite;
+	var titleText:FunkinSprite;
+	var logoBump:FunkinSprite;
+
+	function makeIntroShit(index:Int):Void {
+		var nuggets:IntroPart = introJson.beats[index];
+		if (nuggets.sprite != null) {
+			var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height/2]);
+			introSpr.setGraphicSize(Std.int(introSpr.width*0.7));
+			introSpr.screenCenter(X);
+			spriteGroup.add(introSpr);
+		}
+		if (nuggets.create != null)			makeText(nuggets.create);
+		if (nuggets.add != null)			addText(nuggets.add);
+		if (nuggets.makeRandom != null)		makeText([curWacky[nuggets.makeRandom]]);
+		if (nuggets.addRandom != null)		addText(curWacky[nuggets.addRandom]);
+		if (nuggets.clear)					clearText();
+		if (nuggets.skip)					skipIntro();
+	}
+
+	function makeText(text:Array<String>):Void {
+		var newText:String = '';
+		for (i in 0...text.length) {
+			newText += '${text[i]}${(i == text.length-1 ? '' : '\n')}';
+		}
+		textSprite.text = newText.trim();
+	}
+
+	function addText(text:String):Void {
+		var newText:String = '${textSprite.text}\n$text'.trim();
+		textSprite.text = newText;
+	}
+
+	function clearText():Void {
+		textSprite.text = '';
+		for (spr in spriteGroup) {
+			spr.kill();
+		}
+	}
+
+	function getIntroTextShit():Array<Array<String>> {
+		var convIntroLines:Array<Array<String>> = [];
+		var introLines:Array<String> = CoolUtil.coolTextFile(Paths.txt('introText'));
+		for (line in introLines) {
+			convIntroLines.push(line.trim().split('--'));
+		}
+		return convIntroLines;
+	}
+
+	var transitioning:Bool = false;
+	var titleSine:Float = 0;
+
+	override function update(elapsed:Float):Void {
+		if (FlxG.sound.music != null)
+			Conductor.songPosition = FlxG.sound.music.time;
+
+		if (FlxG.keys.justPressed.F) {
+			FlxG.fullscreen = !FlxG.fullscreen;
+		}
+
+		if (initialized && !transitioning && titleText != null) {
+			titleSine += 135 * elapsed;
+			titleText.alpha = 1 - Math.sin((Math.PI * titleSine) / 135)/1.48;
+			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, titleText.alpha);
+		}
+
+		if (getKey('ACCEPT-P')) {
+			if (!transitioning && skippedIntro) {
+			transitioning = true;
+			titleText.playAnim('press');
+			titleText.color = FlxColor.WHITE;
+			titleText.alpha = 1;
+
+			CoolUtil.playSound('confirmMenu', 0.7);
+			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
+
+			new FlxTimer().start(2, function(tmr:FlxTimer) {
+				if (!initialized) {	// Check if version is outdated
+					trace('Checking if version is outdated');	
+					var gitFile = new haxe.Http("https://raw.githubusercontent.com/MaybeMaru/Funkin/main/gameVersion.json");
+
+					gitFile.onError = function (error) {
+						trace('error: $error');
+					}
+
+					var openOutdated:Bool = false;
+					gitFile.onData = function (data:String) {
+						trace(data);
+						var newVersionData:EngineVersion = Json.parse(data);
+						trace('cur Version: ${Main.engineVersion} // new Version: ${newVersionData.version}');
+
+						if (Main.engineVersion != newVersionData.version) {
+							openOutdated = true;
+							OutdatedState.newVer = newVersionData;
+						}
+					}
+
+					gitFile.request();
+					FlxG.switchState(openOutdated ? new OutdatedState() : new MainMenuState());
+				}
+				else {
+					FlxG.switchState(new MainMenuState());
+				}
+			});
+			}
+			else if (!skippedIntro) {
+				skipIntro();
+			}
+		}
+
+		if (getKey('UI_LEFT')) swagShader.update(-elapsed * 0.1);
+		if (getKey('UI_RIGHT')) swagShader.update(elapsed * 0.1);
+
+		super.update(elapsed);
+	}
+
+	override function beatHit():Void {
+		super.beatHit();
+
+		if (initialized && gfDance.exists) {
+			logoBump.playAnim('idle', true);
+			gfDance.dance();
+		}
+
+		if (curBeat <= introJson.beats.length && !skippedIntro) {
+			makeIntroShit(curBeat-1);
+		}
+	}
+
+	function skipIntro():Void {
+		if (!skippedIntro && initialized) {
+			skippedIntro = true;
+			clearText();
+			blackScreen.visible = false;
+			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
+		}
+	}
+}

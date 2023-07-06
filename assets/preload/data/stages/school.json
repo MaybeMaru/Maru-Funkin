@@ -1,0 +1,9 @@
+{
+	"skin": "pixel",
+    "library": "week6",
+	"gfOffsets": [0,0],
+	"dadOffsets": [-125,0],
+	"dadCamOffsets": [0,-50],
+	"bfOffsets": [-50,0],
+	"startCamOffsets": [-650,-475]
+}

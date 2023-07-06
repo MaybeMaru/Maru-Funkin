@@ -1,0 +1,34 @@
+{
+    "lines": [
+        {
+            "char": 0,
+            "text": "HEY!",
+            "bubble": "loud"
+        },
+        {
+            "char": 0,
+            "text": "You think you can just sing with my daughter like that?!"
+        },
+        {
+            "char": 1,
+            "text": "Skdoo bep"
+        },
+        {
+            "char": 0,
+            "text": "If you want to date her..."
+        },
+        {
+            "char": 0,
+            "text": "You're going to have to go through ME first!",
+            "bubble": "loud"
+        },
+        {
+            "char": 1,
+            "text": "Bop beep be be"
+        }
+    ],
+
+    "dad": "dad",
+    "bf": "bf",
+    "gf": "gf"
+}

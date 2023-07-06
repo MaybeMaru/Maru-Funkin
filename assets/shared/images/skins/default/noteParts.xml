@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="noteParts.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="hold_base0000" x="439" y="160" width="38" height="44"/>
+	<SubTexture name="hold_outline0000" x="215" y="177" width="50" height="44"/>
+	<SubTexture name="hold_white0000" x="326" y="177" width="40" height="44"/>
+	<SubTexture name="holdend_base0000" x="487" y="160" width="38" height="34"/>
+	<SubTexture name="holdend_outline0000" x="379" y="160" width="50" height="64"/>
+	<SubTexture name="holdend_white0000" x="275" y="177" width="41" height="43"/>
+	<SubTexture name="note_base0000" x="525" y="10" width="129" height="133"/>
+	<SubTexture name="note_blur0000" x="10" y="10" width="195" height="199"/>
+	<SubTexture name="note_outline0000" x="215" y="10" width="154" height="157"/>
+	<SubTexture name="note_white0000" x="379" y="10" width="136" height="140"/>
+</TextureAtlas>

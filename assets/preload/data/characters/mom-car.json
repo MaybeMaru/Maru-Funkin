@@ -1,0 +1,88 @@
+{
+	"antialiasing": true,
+	"imagePath": "week4/momCar",
+	"camOffsets": [
+		-150,
+		0
+	],
+	"icon": "mom",
+	"scale": 1,
+	"charOffsets": [
+		-40,
+		400
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "Mom Idle",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "idle-loop",
+			"loop": true,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "Mom Idle",
+			"framerate": 24,
+			"indices": [
+				11,
+				12,
+				13,
+				14
+			]
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				2,
+				-182
+			],
+			"animFile": "MOM DOWN POSE",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-52,
+				-60
+			],
+			"animFile": "Mom Pose Left",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				70,
+				-1
+			],
+			"animFile": "Mom Left Pose",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				24,
+				56
+			],
+			"animFile": "Mom Up Pose",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": false
+}

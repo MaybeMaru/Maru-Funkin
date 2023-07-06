@@ -1,0 +1,90 @@
+{
+	"antialiasing": true,
+	"imagePath": "week2/Monster_Assets",
+	"camOffsets": [
+		-300,
+		100
+	],
+	"icon": "monster",
+	"scale": 1,
+	"charOffsets": [
+		90,
+		260
+	],
+	"anims": [
+		{
+			"animName": "idle",
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "monster idle0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "idle-loop",
+			"loop": true,
+			"offsets": [
+				0,
+				0
+			],
+			"animFile": "monster idle0",
+			"framerate": 24,
+			"indices": [
+				10,
+				11,
+				12,
+				13,
+				14,
+				15
+			]
+		},
+		{
+			"animName": "singDOWN",
+			"loop": false,
+			"offsets": [
+				-60,
+				-90
+			],
+			"animFile": "monster down0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singRIGHT",
+			"loop": false,
+			"offsets": [
+				-52,
+				15
+			],
+			"animFile": "Monster Right note0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singLEFT",
+			"loop": false,
+			"offsets": [
+				-36,
+				10
+			],
+			"animFile": "Monster left note0",
+			"framerate": 24,
+			"indices": []
+		},
+		{
+			"animName": "singUP",
+			"loop": false,
+			"offsets": [
+				-28,
+				92
+			],
+			"animFile": "monster up note0",
+			"framerate": 24,
+			"indices": []
+		}
+	],
+	"flipX": false
+}
