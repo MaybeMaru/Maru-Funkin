@@ -1,10 +1,5 @@
 package funkin.states.menus;
 
-import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.addons.transition.TransitionData;
-import flixel.graphics.FlxGraphic;
-import lime.app.Application;
 import shaders.ColorSwap;
 
 typedef IntroPart = {
@@ -39,39 +34,6 @@ class TitleState extends MusicBeatState {
 	override public function create():Void {
 		FlxG.mouse.visible = false;
 		super.create();
-
-		//Load Settings / Mods
-		if (!initialized) {
-			FlxG.save.bind('funkin');
-			Controls.setupBindings();
-			Preferences.setupPrefs();
-			CoolUtil.init();
-			Highscore.load();
-			#if desktop
-			DiscordClient.initialize();
-			Application.current.onExit.add (function (exitCode) {
-				DiscordClient.shutdown();
-			});
-			#end
-
-			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-			diamond.persist = true;
-			diamond.destroyOnNoUse = false;
-
-			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.6, new FlxPoint(0, -1),
-			{asset: diamond, width: 32, height: 32},
-			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-
-			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.4, new FlxPoint(0, 1),
-			{asset: diamond, width: 32, height: 32},
-			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
-			CoolUtil.playMusic('freakyMenu', 0);
-			FlxG.sound.music.fadeIn(4, 0, 0.7);
-		}
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
@@ -114,22 +76,7 @@ class TitleState extends MusicBeatState {
 		spriteGroup = new FlxGroup();
 		add(spriteGroup);
 
-		var piss:Float = initialized ? 0.1 : 1;
-		new FlxTimer().start(piss, function(tmr:FlxTimer) {
-			if(!initialized) {
-				var iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
-				iconz.screenCenter();
-				add(iconz);
-
-				FlxG.sound.play(Paths.sound('intro/introSound'), 1, false, null, true, function() {
-					new FlxTimer().start(0.1, function(tmr:FlxTimer) {iconz.destroy();} );
-					new FlxTimer().start(0.5, function(tmr:FlxTimer) {initialized = true;} );
-				});
-			}
-			else {
-				skipIntro();
-			}
-		});
+		initialized = true;
 	}
 
 	var danceLeft:Bool = false;

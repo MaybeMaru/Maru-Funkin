@@ -14,7 +14,7 @@ class Main extends Sprite
 		height: 720, 					// Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		initialState:					// The FlxState the game starts with.
 		#if PRELOAD_ALL	funkin.Preloader
-		#else			funkin.states.menus.TitleState	#end,
+		#else			SplashState	#end,
 		//funkin.states.TestingState,
 		zoom: -1.0, 					// If -1, zoom is automatically calculated to fit the window dimensions.
 		framerate: 60, 					// How many frames per second the game should run at.

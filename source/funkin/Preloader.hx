@@ -143,9 +143,6 @@ class Preloader extends flixel.FlxState {
         FlxG.mouse.visible = false;
         elapsedCrap+=elapsed;
 
-        #if web 
-            FlxG.switchState(new funkin.states.menus.TitleState());
-        #else
         if (elapsedCrap > 0.3) {
             if (!startedCache) {
                 cacheAssets();
@@ -180,14 +177,14 @@ class Preloader extends flixel.FlxState {
                 fileIndex=0;
 
                 if (listIndex > cacheList.length-1) {
-                    FlxG.switchState(new funkin.states.menus.TitleState());
+                    FlxG.switchState(new SplashState());
                 }
             }
             else {  //  CHANGE FILE
                 fileIndex++;
             }
         }
-        #end
+
         super.update(elapsed);
     }
 }

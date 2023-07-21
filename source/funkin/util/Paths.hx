@@ -3,7 +3,6 @@ package funkin.util;
 import flash.media.Sound;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.display.BitmapData;
-import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
@@ -184,12 +183,12 @@ class Paths
 		//	Returns [file Mod, file Name]
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSparrow(image(key, library), CoolUtil.getFileContent(file('images/$key.xml', library)));
+	inline static public function getSparrowAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
+		return FlxAtlasFrames.fromSparrow(image(key, library, gpu), CoolUtil.getFileContent(file('images/$key.xml', library)));
 	}
 
-	inline static public function getPackerAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), CoolUtil.getFileContent(file('images/$key.txt', library)));
+	inline static public function getPackerAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, gpu), CoolUtil.getFileContent(file('images/$key.txt', library)));
 	}
 
 	inline static public function getAsepriteAtlas(key:String, ?library:String):FlxAtlasFrames {
@@ -231,17 +230,12 @@ class Paths
 				}
 			}
 		};
-		if (global) {
-			pushFile(getModPath(folder));
-		}
-		if (curFolder) {
-			pushFile(getModPath('${ModdingUtil.curModFolder}/$folder'));
-		}
+		if (global) pushFile(getModPath(folder));
+		if (curFolder) pushFile(getModPath('${ModdingUtil.curModFolder}/$folder'));
 		if (allFolders) {
 			for (modFolder in ModdingUtil.modFolders) {
-				if (ModdingUtil.modFoldersMap.get(modFolder)) {
+				if (ModdingUtil.modFoldersMap.get(modFolder))
 					pushFile(getModPath('$modFolder/$folder'));
-				}
 			}
 		}
 		fileList.sort(CoolUtil.sortAlphabetically);
@@ -251,9 +245,7 @@ class Paths
 
 	inline static public function getImage(path:String):FlxGraphicAsset {
 		var returnThing:FlxGraphicAsset = path;
-		if (Preloader.existsBitmap(path)) {
-			returnThing = Preloader.getBitmap(path);
-		}
+		if (Preloader.existsBitmap(path)) returnThing = Preloader.getBitmap(path);
 		else if (exists(path, IMAGE)) {
 			var bitmap:BitmapData = getBitmapData(path);//#if desktop BitmapData.fromFile(removeAssetLib(path)); #else OpenFlAssets.getBitmapData(path, false); #end
 			Preloader.addFromBitmap(bitmap, path);
@@ -263,11 +255,8 @@ class Paths
 	}
 
 	inline static public function getBitmapData(path:String):BitmapData {
-		#if desktop
-			return BitmapData.fromFile(removeAssetLib(path));
-		#else
-			return OpenFlAssets.getBitmapData(path, false);
-		#end
+		#if desktop return BitmapData.fromFile(removeAssetLib(path));
+		#else 		return OpenFlAssets.getBitmapData(path, false); #end
 	}
 
 	inline static public function getSound(path:String):FlxSoundAsset {

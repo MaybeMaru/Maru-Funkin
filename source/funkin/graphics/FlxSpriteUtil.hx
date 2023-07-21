@@ -27,6 +27,7 @@ class FlxSpriteUtil extends FlxSprite {
 	public var animDatas:Map<String, SpriteAnimation>;
 	public var specialAnim:Bool = false;
 	public var _packer:String = 'image';
+	public var _dynamic:Dynamic = {};
 
     public function new(?X:Float = 0, ?Y:Float = 0):Void {
         animOffsets = new Map<String, FlxPoint>();
@@ -34,10 +35,17 @@ class FlxSpriteUtil extends FlxSprite {
         super(X,Y);
     }
 
-	public function loadImage(path:String, global:Bool = false):Void {
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		if (_dynamic.update != null) {
+			Reflect.callMethod(null, _dynamic.update, [elapsed]);
+		}
+	}
+
+	public function loadImage(path:String, global:Bool = false, gpu:Bool = true):Void {
 		_packer = Paths.getPackerType(path).toLowerCase().trim();
 		switch (_packer) {
-			case 'image':		loadGraphic((!global) ? Paths.image(path) : Paths.image(path, null, false, true));
+			case 'image':		loadGraphic(Paths.image(path, null, !gpu, global));
 			case 'sparrow':		frames = Paths.getSparrowAtlas(path);
 			case 'sheetpacker':	frames = Paths.getPackerAtlas(path);
 			case 'json':		frames = Paths.getAsepriteAtlas(path);
@@ -77,9 +85,7 @@ class FlxSpriteUtil extends FlxSprite {
 			flipX = !flipX;
 			scale.x *= -1;
 		}
-		else {
-			super.draw();
-		}
+		else super.draw();
 	}
 
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {
@@ -89,9 +95,7 @@ class FlxSpriteUtil extends FlxSprite {
 			scale.x *= -1;
 			return bounds;
 		}
-		return {
-			super.getScreenBounds(rect, cam);
-		}
+		return super.getScreenBounds(rect, cam);
 	}
 
     public function switchAnim(anim1:String, anim2:String):Void {
@@ -131,8 +135,8 @@ class FlxSpriteUtil extends FlxSprite {
 	}
 
 	public function addAnim(animName:String, animFile:String, animFramerate:Int = 24, animLoop:Bool = false, ?animIndices:Array<Int>, ?animOffsets:Array<Float>):Void {
-        animIndices = (animIndices != null) ? animIndices : [];
-        animOffsets = (animOffsets != null) ? animOffsets : [0,0];
+        animIndices = animIndices != null ? animIndices : [];
+        animOffsets = animOffsets != null ? animOffsets : [0,0];
 		
 		setAnimData(animName, {
 			animName:animName,
@@ -145,23 +149,19 @@ class FlxSpriteUtil extends FlxSprite {
 	}
 
 	public function getAnimData(anim:String):SpriteAnimation {
-		if (animDatas.get(anim) != null) {
-			return animDatas.get(anim);
-		}
-		return Reflect.copy(DEFAULT_ANIM);
+		return animDatas.get(anim) != null ? animDatas.get(anim) : Reflect.copy(DEFAULT_ANIM);
 	}
 
 	public function setAnimData(anim:String, newData:SpriteAnimation):Void {
 		animDatas[anim] = newData;
 		addOffset(anim, newData.offsets[0], newData.offsets[1]);
 
-		var animName = newData.animName;
-		var animFile = newData.animFile;
+		var name = newData.animName;
+		var file = newData.animFile;
 		var indices = newData.indices;
-		var framerate = newData.framerate;
+		var fps = newData.framerate;
 		var loop = newData.loop;
 
-		if (indices.length > 0) animation.addByIndices(animName, animFile, indices, "", framerate, loop);
-		else					animation.addByPrefix(animName, animFile, framerate, loop);
+		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
 	}
 }
