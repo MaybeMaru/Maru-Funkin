@@ -12,25 +12,23 @@ class TestingState extends MusicBeatState {
 
         for (g in 0...16) {
             for (i in 0...4) {
-                var testLength = g * 400;
-                var susNote:TestNote = new TestNote(i,testLength, 400);
+                var testLength = g * 1000;
+                var susNote:TestNote = new TestNote(i,testLength, 1000);
                 susNote.targetSpr = conductorBar;
                 add(susNote);
-                susNote.x = FlxG.width/4 + 200 * i%4;
-                //susNote.y = susNote.getMillPos(susNote.strumTime);
+                susNote.x = FlxG.width/4 + 150 * i%4;
     
                 var testNote:TestNote = new TestNote(i, testLength, 0);
                 testNote.targetSpr = conductorBar;
                 add(testNote);
-                testNote.x = FlxG.width/4 + 200 * i%4;
-                //testNote.y = testNote.getMillPos(susNote.strumTime);
+                testNote.x = FlxG.width/4 + 150 * i%4;
             }
         }
     }
     
     override function update(elapsed:Float) {
         super.update(elapsed);
-        Conductor.songPosition+=elapsed*100;
+        Conductor.songPosition+=elapsed*200;
         if (FlxG.keys.justPressed.NINE)     FlxG.resetState();
         if (FlxG.keys.justPressed.EIGHT)    Preferences.setPref('downscroll', !Preferences.getPref('downscroll'));
     }
@@ -80,7 +78,11 @@ class TestNote extends FlxSpriteUtil {
             susEnd.animation.play('holdEnd$dir', true);
             susEnd.updateHitbox();
             scale.set(refSprite.scale.x,refSprite.scale.y);
-            set_susLength(susLength);
+            
+            //Offset sustain
+            var _off = getPosMill(NoteUtil.swagHeight * 0.5);
+            initSusLength -= _off;
+            this.strumTime += _off;
         } else {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
@@ -92,43 +94,35 @@ class TestNote extends FlxSpriteUtil {
         updateHitbox();
 
         if (isSustainNote) {
-            drawSustain(true, Math.floor((height - NoteUtil.swagHeight / 2) / scale.y));
+            updateSustain(true);
+            initHeight = height;
             var downscroll = Preferences.getPref('downscroll');
             offset.set(0, downscroll ? height - NoteUtil.swagHeight : 0);
             offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
-            //offset.y -= NoteUtil.swagHeight * (downscroll ? 1 : 0.5);
+            offset.y -= downscroll ? NoteUtil.swagHeight * 0.5 : 0;
             alpha = 0.6;
         }
+    }
+
+    var initHeight:Float = 0; // Get the height when its full
+
+    function updateSustain(force:Bool = false) {
+        drawSustain(force, Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0)));
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
         if (targetSpr != null) { // Move to strum
             var downscroll = Preferences.getPref('downscroll');
-            var noteMove = getMillPos(Conductor.songPosition - strumTime);
-            var strumCenter = targetSpr.y + targetSpr.height / 2;
-            var susOffset = isSustainNote ?  NoteUtil.swagHeight * 0.5 : 0;
-            y = strumCenter + susOffset - (downscroll ? -noteMove : noteMove);
-
-            if (Conductor.songPosition >= strumTime && isSustainNote) {
-                var _susOffset = Math.max(getMillPos(strumTime + initSusLength - Conductor.songPosition), 0);
-                y = strumCenter + _susOffset - (downscroll ? -noteMove : noteMove);
-
-                if (Conductor.songPosition >= (strumTime + initSusLength)) {
-                    destroy();
-                }
-
-                //trace(getMillPos(Conductor.songPosition - strumTime));
-                //susLength = getSusLeft() - NoteUtil.swagHeight * 0.5;
-            }
             
-            /*if (isSustainNote) { // If its sustain and pressed calculate sustain left
-                if ((downscroll ? (y >= strumCenter) : (y <= strumCenter))) {
-                    y = strumCenter;
-                    susLength = getSusLeft();
-                    offset.y = downscroll ? height : 0;
-                }
-            }*/
+            var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
+            var strumCenter = targetSpr.y + targetSpr.height / 2; // Center of the target strum
+            y = strumCenter - (downscroll ? -noteMove : noteMove); // Set Position
+            
+            if (Conductor.songPosition >= strumTime && isSustainNote) { // Sustain is being pressed
+                y = strumCenter;
+                updateSustain();
+            }
         }
     }
 
@@ -168,11 +162,15 @@ class TestNote extends FlxSpriteUtil {
         }
     }
 
-    public function getMillPos(mills:Float):Float {
+    public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
+        return pos / (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
+    }
+
+    public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
         return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getSusLeft():Float {
-        return Math.min(Math.max((strumTime + initSusLength) - Conductor.songPosition, 0), initSusLength);
+    public function getSusLeft(_off:Float = 0):Float {
+        return Math.min(Math.max((strumTime + initSusLength + _off) - Conductor.songPosition, 0), initSusLength + _off);
     }
 }
