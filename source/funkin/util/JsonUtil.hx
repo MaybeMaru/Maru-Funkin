@@ -93,11 +93,11 @@ class JsonUtil {
 		return returnJson;
 	}
 
-	inline public static function getAsepritePacker(path:String, ?library:String):FlxAtlasFrames {
+	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
 		var jsonDir = Paths.removeAssetLib(Paths.file('images/$path.json', library));
 		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(jsonDir));
 
-		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library), false, Paths.image(path, library));
+		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, gpu), false, Paths.image(path, library, true));
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
 		var framesTagData:Array<Array<Dynamic>> = [];

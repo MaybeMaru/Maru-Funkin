@@ -191,8 +191,8 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, gpu), CoolUtil.getFileContent(file('images/$key.txt', library)));
 	}
 
-	inline static public function getAsepriteAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return JsonUtil.getAsepritePacker(key, library);
+	inline static public function getAsepriteAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
+		return JsonUtil.getAsepritePacker(key, library, gpu);
 	}
 
 	inline static public function getAnimateAtlas(key:String, ?library:String):FlxAtlasFrames {

@@ -82,7 +82,6 @@ class TestNote extends FlxSpriteUtil {
             //Offset sustain
             var _off = getPosMill(NoteUtil.swagHeight * 0.5);
             initSusLength -= _off;
-            this.strumTime += _off;
         } else {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
@@ -93,21 +92,15 @@ class TestNote extends FlxSpriteUtil {
 
         updateHitbox();
 
-        if (isSustainNote) {
-            updateSustain(true);
-            initHeight = height;
+        if (isSustainNote) { // Setup sustain
+            drawSustain(true);
             var downscroll = Preferences.getPref('downscroll');
-            offset.set(0, downscroll ? height - NoteUtil.swagHeight : 0);
+            offset.set();
             offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
-            offset.y -= downscroll ? NoteUtil.swagHeight * 0.5 : 0;
+            angle = downscroll ? 180 : 0;
+            flipX = downscroll;
             alpha = 0.6;
         }
-    }
-
-    var initHeight:Float = 0; // Get the height when its full
-
-    function updateSustain(force:Bool = false) {
-        drawSustain(force, Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0)));
     }
 
     override function update(elapsed:Float) {
@@ -117,11 +110,16 @@ class TestNote extends FlxSpriteUtil {
             
             var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
             var strumCenter = targetSpr.y + targetSpr.height / 2; // Center of the target strum
+            strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
             y = strumCenter - (downscroll ? -noteMove : noteMove); // Set Position
             
-            if (Conductor.songPosition >= strumTime && isSustainNote) { // Sustain is being pressed
-                y = strumCenter;
-                updateSustain();
+            if (Conductor.songPosition >= strumTime) { 
+                if (isSustainNote) {    // Sustain is being pressed
+                    y = strumCenter;
+                    drawSustain();
+                } else {
+                    destroy();
+                }
             }
         }
     }
@@ -134,15 +132,15 @@ class TestNote extends FlxSpriteUtil {
 
     function set_noteSpeed(value:Float):Float {
         noteSpeed = value;
-        drawSustain(true);
+        drawSustain();
         return value;
     }
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
-        var _height = newHeight != null ? newHeight : Math.floor(Math.max(getMillPos(susLength) / scale.y, 0));
+        var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if ((_height != height && _height > 0) || forced) {
             makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
-            origin.set(susPiece.width / 2, 0);
+            origin.set(width / 2, 0);
 
             // draw piece
             var loops = Math.floor(_height / susPiece.height) + 1;
@@ -150,11 +148,9 @@ class TestNote extends FlxSpriteUtil {
                 stamp(susPiece, 0, Std.int(i * susPiece.height));
     
             //draw end
-            var downScroll = Preferences.getPref('downscroll');
             var endPos = _height - susEnd.height;
-            pixels.fillRect(new openfl.geom.Rectangle(0, downScroll ? 0 : endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-            susEnd.flipY = downScroll;
-            stamp(susEnd, 0, downScroll ? 0 : Std.int(endPos));
+            pixels.fillRect(new openfl.geom.Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+            stamp(susEnd, 0, Std.int(endPos));
         }
 
         if (_height <= 0) {
@@ -170,7 +166,7 @@ class TestNote extends FlxSpriteUtil {
         return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getSusLeft(_off:Float = 0):Float {
-        return Math.min(Math.max((strumTime + initSusLength + _off) - Conductor.songPosition, 0), initSusLength + _off);
+    public function getSusLeft():Float {
+        return Math.min(Math.max((strumTime + initSusLength) - Conductor.songPosition, 0), initSusLength);
     }
 }
