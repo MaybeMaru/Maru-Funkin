@@ -141,7 +141,7 @@ class TestNote extends FlxSpriteUtil {
         if (_height > 0) {
             if (_height < height) { // Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
-                offset.y = (_height - height) * scale.y * (Preferences.getPref('downscroll') ? 1 : -1);
+                offset.y = (_height - height) * scale.y * -Math.cos(flixel.math.FlxAngle.asRadians(angle));
             } else { // New graphic
                 makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
                 origin.set(width / 2, 0);
