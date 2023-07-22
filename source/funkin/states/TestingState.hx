@@ -12,8 +12,8 @@ class TestingState extends MusicBeatState {
 
         for (g in 0...16) {
             for (i in 0...4) {
-                var testLength = g * 1000;
-                var susNote:TestNote = new TestNote(i,testLength, 1000);
+                var testLength = g * 400;
+                var susNote:TestNote = new TestNote(i,testLength, 400);
                 susNote.targetSpr = conductorBar;
                 add(susNote);
                 susNote.x = FlxG.width/4 + 150 * i%4;
@@ -28,7 +28,7 @@ class TestingState extends MusicBeatState {
     
     override function update(elapsed:Float) {
         super.update(elapsed);
-        Conductor.songPosition+=elapsed*200;
+        Conductor.songPosition+=elapsed*300;
         if (FlxG.keys.justPressed.NINE)     FlxG.resetState();
         if (FlxG.keys.justPressed.EIGHT)    Preferences.setPref('downscroll', !Preferences.getPref('downscroll'));
     }
@@ -94,9 +94,9 @@ class TestNote extends FlxSpriteUtil {
 
         if (isSustainNote) { // Setup sustain
             drawSustain(true);
-            var downscroll = Preferences.getPref('downscroll');
             offset.set();
             offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
+            var downscroll = Preferences.getPref('downscroll');
             angle = downscroll ? 180 : 0;
             flipX = downscroll;
             alpha = 0.6;
@@ -111,7 +111,7 @@ class TestNote extends FlxSpriteUtil {
             var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
             var strumCenter = targetSpr.y + targetSpr.height / 2; // Center of the target strum
             strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
-            y = strumCenter - (downscroll ? -noteMove : noteMove); // Set Position
+            y = strumCenter - (noteMove * getCos(isSustainNote ? angle : downscroll ? 180 : 0)); // Set Position
             
             if (Conductor.songPosition >= strumTime) { 
                 if (isSustainNote) {    // Sustain is being pressed
@@ -122,6 +122,10 @@ class TestNote extends FlxSpriteUtil {
                 }
             }
         }
+    }
+
+    function getCos(?_angle) {
+        return Math.cos(FlxAngle.asRadians(_angle == null ? angle : _angle));
     }
 
     function set_susLength(value:Float):Float {
@@ -141,7 +145,7 @@ class TestNote extends FlxSpriteUtil {
         if (_height > 0) {
             if (_height < height) { // Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
-                offset.y = (_height - height) * scale.y * -Math.cos(flixel.math.FlxAngle.asRadians(angle));
+                offset.y = (_height - height) * scale.y * -getCos();
             } else { // New graphic
                 makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
                 origin.set(width / 2, 0);
@@ -153,7 +157,7 @@ class TestNote extends FlxSpriteUtil {
         
                 //draw end
                 var endPos = _height - susEnd.height;
-                pixels.fillRect(new openfl.geom.Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+                pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
                 stamp(susEnd, 0, Std.int(endPos));
             }
         } else {
