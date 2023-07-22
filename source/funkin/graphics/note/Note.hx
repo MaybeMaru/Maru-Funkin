@@ -10,7 +10,7 @@ typedef NoteTypeJson = {
 }
 
 class NoteUtil {
-	public static var swagWidth:Float = 155 * 0.7;
+	public static var swagWidth:Float = 160 * 0.7;
 	public static var swagHeight:Float = 155 * 0.7;
 	public static inline var speedOffset:Float = 0.65; //0.45?
 
@@ -74,185 +74,153 @@ class NoteUtil {
 	}
 }
 
-class Note extends FlxTypedSpriteGroup<FlxSpriteUtil> {
-    public var noteSpr:FlxSpriteUtil;
-    public var susSpr:FlxSpriteUtil;
-    public var susTailSpr:FlxSpriteUtil;
-
-    public var strumTime:Float = 0;
+class Note extends FlxSpriteUtil {
     public var noteData:Int = 0;
+    public var strumData:Int = 0;
+    public var strumTime:Float = 0;
+
+    public var initSusLength:Float = 0;
     public var susLength(default, set):Float = 0;
+    public var isSustainNote:Bool = false;
+
     public var noteSpeed(default, set):Float = 1;
-    public var stepCrochet:Float = 0;
-    public var targetSpr:FlxSprite = null;
-	public var forceStrum:Bool = true;				// Forces the strum to go to the parent strum
-	public var isSustainNote:Bool = false;			// Shortcut to susLength > 0
+    public var targetSpr:NoteStrum = null;
+    public var mustPress:Bool = false;
 
-    public function set_noteSpeed(val:Float):Float {
-        val = Math.abs(val);
-        if (val < 0.1) {
-            val = 0.1;
-        }
-        noteSpeed = val;
-        set_susLength(susLength);
-        return val;
-    }
-
-    public function set_susLength(val:Float):Float {
-        val = Math.floor(val);
-		susLength = val;
-		isSustainNote = val > 0;
-		susSpr.visible = isSustainNote;
-		susTailSpr.visible = isSustainNote;
-        if (isSustainNote) {
-            susSpr.origin.y = 0;
-			var scaledHeight = getMillScale(val) - pixelToScale(susSpr, NoteUtil.swagWidth/2) - pixelToScale(susSpr, susTailSpr.height);
-			scaledHeight = (scaledHeight < 0 ? 0 : scaledHeight);
-            susSpr.scale.y = scaledHeight;
-            updateHitboxCustom(susSpr);
-            
-            susSpr.scale.y = pixelToScale(susSpr, (susSpr.height + pixelToScale(susSpr, height) - 1));
-            var downScroll:Bool = Preferences.getPref('downscroll');
-            susSpr.scale.y *= downScroll ? -1 : 1;
-            susTailSpr.origin = susSpr.origin;
-            susTailSpr.scale.y = Math.abs(susTailSpr.scale.y);
-            susTailSpr.scale.y *= downScroll ? -1 : 1;
-            updateSusPos();
-        }
-        return val;
-    }
-
-    public function new(strumTime:Float = 0, noteData:Int = 0, susLength:Float = 0, stepCrochet:Float = 0):Void {
-        super(-2000,0);
+    // Used for stamp() !!!
+    var susPiece:FlxSprite;
+    var susEnd:FlxSprite;
+    var refSprite:FlxSpriteUtil;
+    
+    public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
+        super();
         this.noteData = noteData;
-        this.stepCrochet = stepCrochet;
-		skin = null; // Get the default skin
-
         this.strumTime = strumTime;
-        this.susLength = (Math.floor(susLength) > 0 ? susLength + stepCrochet : 0);
-		scrollFactor.set();
-    }
+        isSustainNote = susLength > 0;
+        initSusLength = susLength;
+        this.skin = skin;
 
-    public var skin(default, set):String = '';
-	public var type(default, set):String = '';
-    public var noteJson:NoteSkinData;
-
-	public function set_skin(?value:String):String {
-		value = (value == null ? SkinUtil.curSkin : value);
-		if (value != skin) {
-			skin = value;
-
-            noteJson = SkinUtil.getSkinData(skin).noteData;
-			noteJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, noteJson);
-
-            for (spr in this) {
-                spr.visible = false;
-            }
-
-            for (i in 0...3) {
-                var spr = new FlxSpriteUtil();
-                spr.loadImage('skins/$skin/${noteJson.imagePath}');
-                for (anim in noteJson.anims) {
-                    spr.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-                }
-                spr.antialiasing = noteJson.antialiasing;
-                spr.antialiasing = spr.antialiasing ? Preferences.getPref('antialiasing') : false;
-
-                switch(i) {
-                    case 2: noteSpr = spr;      add(noteSpr);
-                    case 1: susSpr = spr;       add(susSpr);    susSpr.clipRect = new FlxRect(0, 0, susSpr.frameWidth, susSpr.frameHeight-1);
-                    case 0: susTailSpr = spr;   add(susTailSpr);
-                }
-            }
-            playPartsAnims();
-        }
-		return value;
-	}
-
-    public function playPartsAnims(?jsonScale:Float):Void {
-        jsonScale = jsonScale != null ? jsonScale : noteJson.scale;
         var dir = CoolUtil.directionArray[noteData];
-        var anims = [
-            'hold$dir-end',
-            'hold$dir',
-            'scroll$dir'
-        ];
 
-        var i:Int = 0;
-        for (spr in this) {
-            spr.playAnim(anims[i]);
-            spr.updateHitbox();
-            spr.scale.set(jsonScale,jsonScale);
+        if (isSustainNote) {
+            susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
+            susPiece.animation.play('hold$dir', true);
+            susPiece.updateHitbox();
+            susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
+            susEnd.animation.play('hold$dir-end', true);
+            susEnd.updateHitbox();
+            
+            //Offset sustain
+            var _off = getPosMill(NoteUtil.swagHeight * 0.5);
+            initSusLength += _off / PlayState.SONG.speed;
+        } else {
+            loadGraphicFromSprite(refSprite);
+            animOffsets = refSprite.animOffsets.copy();
+            animDatas = refSprite.animDatas.copy();
+            playAnim('scroll$dir');
+        }
 
-            switch (i) {
-                case 2:  spr.updateHitbox();
-                default: updateHitboxCustom(spr); spr.alpha = 0.6;
+        scale.set(refSprite.scale.x, refSprite.scale.y);
+        updateHitbox();
+        antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
+
+        if (isSustainNote) { // Setup sustain
+            drawSustain(true);
+            offset.set(0,0);
+            offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
+            var downscroll = Preferences.getPref('downscroll');
+            angle = downscroll ? 180 : 0;
+            flipX = downscroll;
+            alpha = 0.6;
+        }
+
+        if (!alive) {
+            destroy();
+        }
+    }
+
+    public var pressed:Bool = false;
+    public var inSustain:Bool = false;
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        if (targetSpr != null) { // Move to strum
+            var downscroll = Preferences.getPref('downscroll');
+            var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
+            var strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
+            strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
+            y = strumCenter - (noteMove * getCos(isSustainNote ? angle : downscroll ? 180 : 0)); // Set Position
+            x = targetSpr.x;
+
+            if (isSustainNote) { // Get if the sustain is between pressing bounds
+                inSustain = Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength;
+                offset.y = 0;
+
+                if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
+                    y = strumCenter;
+                    drawSustain();
+                }
+            } else {
+                calcHit();
             }
-            i++;
+
+            active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
         }
     }
 
-	public var mustHit:Bool = true; // The note gets ignored if false
-	public var altAnim:String = '';
-	public var hitHealth:Array<Float> = [0.025, 0.0125];
-	public var missHealth:Array<Float> = [0.0475, 0.02375];
-
-	public function set_type(value:String = 'default'):String {
-		type = value;
-		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(type);
-		mustHit = noteJson.mustHit;
-		altAnim = noteJson.altAnim;
-		hitHealth = noteJson.hitHealth;
-		missHealth = noteJson.missHealth;
-		return value;
-	}
-
-	function updateSusPos():Void {
-        susSpr.y = noteSpr.y + NoteUtil.swagWidth/2;
-        susTailSpr.y = susSpr.y + (Preferences.getPref('downscroll') ? -susSpr.height : susSpr.height);
-
-        updateHitboxCustom(noteSpr);
-        updateHitboxCustom(susSpr);
-        susSpr.x = noteSpr.x + noteSpr.width/2 - (susSpr.width/2)/susSpr.scale.x;
-        susTailSpr.x = susSpr.x;
+    function getCos(?_angle) {
+        return Math.cos(FlxAngle.asRadians(_angle == null ? angle : _angle));
     }
 
-    private function updateHitboxCustom(spr:FlxSpriteUtil):Void {
-        spr.width = Math.abs(spr.scale.x) * spr.frameWidth;
-        spr.height = Math.abs(spr.scale.y) * spr.frameHeight;
-    }
-    private function pixelToScale(spr:FlxSprite, pixelSize:Float, getHeight:Bool = true):Float {
-        return pixelSize / (getHeight ? spr.frameHeight : spr.frameWidth);
-    }
-    private function getMillScale(millLength:Float):Float {
-        return Math.abs(pixelToScale(susSpr, getMillPos(millLength)));
-    }
-    private function getMillPos(mills:Float):Float {
-		return (mills / 1000) * FlxG.height * noteSpeed * NoteUtil.speedOffset;
+    function set_susLength(value:Float):Float {
+        susLength = Math.max(value, 0);
+        drawSustain();
+        return value;
     }
 
-    override public function update(elp:Float):Void {
-        super.update(elp);
-        if (targetSpr != null) {
-			var centerX = NoteUtil.swagWidth/2 - noteSpr.width/2;
-			x = (targetSpr.x + centerX);
+    function set_noteSpeed(value:Float):Float {
+        noteSpeed = value;
+        drawSustain();
+        return value;
+    }
 
-			var downscroll = Preferences.getPref('downscroll');
-			var noteMove = getMillPos(Conductor.songPosition - strumTime);
-			var centerY = NoteUtil.swagHeight/2 - noteSpr.height/2;
-            y = (targetSpr.y + centerY) - (downscroll ? -noteMove : noteMove);
-
-            calcHit();
-            calcSus();
-
-			active = (downscroll ? (y < FlxG.height) : (y > -height));
+    public function drawSustain(forced:Bool = false, ?newHeight:Int) {
+        if (!isSustainNote) return;
+        var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
+        if (_height > 0) {
+            if (forced || (_height > height)) {// New graphic
+                makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
+                origin.set(width / 2, 0);
+    
+                // draw piece
+                var loops = Math.floor(_height / susPiece.height) + 1;
+                for (i in 0...loops) 
+                    stamp(susPiece, 0, Std.int(i * susPiece.height));
+        
+                //draw end
+                var endPos = _height - susEnd.height;
+                pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+                stamp(susEnd, 0, Std.int(endPos));
+            } else {// Cut
+                clipRect = new FlxRect(0, height - _height, width, _height);
+                offset.y = (_height - height) * scale.y * -getCos();
+            }
+        } else {
+            kill();
         }
     }
 
-    public var sustainPressed:Bool = false;  // Cuts the note to the middle of the struns
-	public var hitSustainStart:Bool = false; // Checks if the tip of the sustain has been pressed already
-    public var inSustain:Bool = false;       // If in the current song position the sustain key should be pressed
-    public var mustPress:Bool = false;       // If the note should or not be on the players lane  
+    public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
+        return pos / (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
+    }
+
+    public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
+        return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
+    }
+
+    public function getSusLeft():Float {
+        return Math.min(Math.max((strumTime + initSusLength) - Conductor.songPosition, 0), initSusLength);
+    }
 
     public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
@@ -267,9 +235,8 @@ class Note extends FlxTypedSpriteGroup<FlxSpriteUtil> {
 			}
 			else {
 				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
-					if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset) {
+					if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset)
 						canBeHit = true;
-					}
 				}
 				else {
 					willMiss = true;
@@ -279,38 +246,44 @@ class Note extends FlxTypedSpriteGroup<FlxSpriteUtil> {
 		}
 		else {
 			canBeHit = false;
-			if (strumTime <= Conductor.songPosition) {
+			if (strumTime <= Conductor.songPosition)
 				wasGoodHit = true;
-			}
 		}
 	}
 
-    function calcSus():Void {
-        inSustain = strumTime <= Conductor.songPosition && strumTime + susLength >= Conductor.songPosition;
-        if (inSustain) {
-            //trace('IN SUSSS');
-        }
+    public var skin(default, set):String = '';
+    public var skinJson:NoteSkinData;
+	public function set_skin(?value:String):String {
+		value = (value == null ? SkinUtil.curSkin : value);
+		if (value != skin) {
+			skin = value;
+            skinJson = SkinUtil.getSkinData(skin).noteData;
+			skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
-        if (sustainPressed) {
-            var susParts = [susTailSpr, susSpr];
-            var downscroll = Preferences.getPref('downscroll');
-            for (i in 0...susParts.length) {
-                var daNote = susParts[i];
-                var center = targetSpr.y + (NoteUtil.swagHeight / 2);
-                var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight-i);
-                if ((!downscroll ?
-                    daNote.y + daNote.offset.y * daNote.scale.y <= center :
-                    daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center)) {
-                    if (!downscroll) {
-                        swagRect.y = (center - daNote.y) / daNote.scale.y;
-                        swagRect.height -= swagRect.y;
-                    } else {
-                        swagRect.y = daNote.frameHeight - swagRect.height;
-                        swagRect.height = (center - daNote.y) / daNote.scale.y;
-                    }
-                    daNote.clipRect = swagRect;
-                }
+            refSprite = new FlxSpriteUtil();
+            refSprite.loadImage('skins/$skin/${skinJson.imagePath}');
+            refSprite.scale.set(skinJson.scale,skinJson.scale);
+            refSprite.updateHitbox();
+            for (anim in skinJson.anims) {
+                refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
             }
         }
-    }
+		return value;
+	}
+
+    public var type(default, set):String = '';
+	public var mustHit:Bool = true; // The note gets ignored if false
+	public var altAnim:String = '';
+	public var hitHealth:Array<Float> = [0.025, 0.0125];
+	public var missHealth:Array<Float> = [0.0475, 0.02375];
+
+	public function set_type(value:String = 'default'):String {
+		type = value;
+		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(type);
+		mustHit = noteJson.mustHit;
+		altAnim = noteJson.altAnim;
+		hitHealth = noteJson.hitHealth;
+		missHealth = noteJson.missHealth;
+		return value;
+	}
 }

@@ -950,11 +950,11 @@ class ChartingState extends MusicBeatState {
 						note.scrollFactor.set(1,1);
 						note.strumTime = daStrumTime;
 						note.noteData = daNoteData % Conductor.NOTE_DATA_LENGTH;
-						note.type = daType;
-						note.skin = typeData.skin;
-						note.playPartsAnims();
+						//note.type = daType;
+						//note.skin = typeData.skin;
+						//note.playPartsAnims();
 						note.susLength = daSus;
-						note.mustPress = (daNoteData > 3) ? !mustHit : mustHit; 
+						//note.mustPress = (daNoteData > 3) ? !mustHit : mustHit; 
 						note.x = Math.floor(daNoteData * GRID_SIZE);
 						note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime())));
 						curRenderedNotes.add(note);
@@ -1013,9 +1013,9 @@ class ChartingState extends MusicBeatState {
 
 	function getNoteData(note:Note):Int {
 		var fixedData:Int = note.noteData;
-		if(note.mustPress != _song.notes[_curSection].mustHitSection) {
+		/*if(note.mustPress != _song.notes[_curSection].mustHitSection) {
 			fixedData += Conductor.NOTE_DATA_LENGTH;
-		}
+		}*/
 		return fixedData;
 	}
 

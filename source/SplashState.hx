@@ -46,7 +46,7 @@ class SplashState extends MusicBeatState {
                 new FlxTimer().start(0.5, function(tmr:FlxTimer) {
                     CoolUtil.playMusic('freakyMenu', 0);
                     FlxG.sound.music.fadeIn(4, 0, 1);
-                    FlxG.switchState(new funkin.states.TestingState());
+                    FlxG.switchState(new TitleState());
                 });
             });
         });

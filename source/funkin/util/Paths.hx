@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.system.FlxAssets;
 import flash.media.Sound;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.display.BitmapData;
@@ -247,7 +248,7 @@ class Paths
 		var returnThing:FlxGraphicAsset = path;
 		if (Preloader.existsBitmap(path)) returnThing = Preloader.getBitmap(path);
 		else if (exists(path, IMAGE)) {
-			var bitmap:BitmapData = getBitmapData(path);//#if desktop BitmapData.fromFile(removeAssetLib(path)); #else OpenFlAssets.getBitmapData(path, false); #end
+			var bitmap:BitmapData = getBitmapData(path);
 			Preloader.addFromBitmap(bitmap, path);
 			returnThing = Preloader.getBitmap(path);
 		}
@@ -255,16 +256,21 @@ class Paths
 	}
 
 	inline static public function getBitmapData(path:String):BitmapData {
-		#if desktop return BitmapData.fromFile(removeAssetLib(path));
-		#else 		return OpenFlAssets.getBitmapData(path, false); #end
+		#if desktop	
+		var fixPath = removeAssetLib(path);
+		if (!fixPath.startsWith('assets'))
+			return FlxAssets.getBitmapData(fixPath);
+		#end
+		return OpenFlAssets.getBitmapData(path, false);
 	}
 
 	inline static public function getSound(path:String):FlxSoundAsset {
 		var returnThing:FlxSoundAsset = path;
 		#if desktop
 		if(FileSystem.exists(path))
-			returnThing = Sound.fromFile(path);
+			FlxAssets.getSound(path);
 		#end
+
 		return returnThing;
 	}
 

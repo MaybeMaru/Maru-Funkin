@@ -82,7 +82,7 @@ class LatencyState extends MusicBeatState
 
 			if (daNote.y < strumLine.y)
 			{
-				if (!daNote.wasGoodHit)
+				/*if (!daNote.wasGoodHit)
 				{
 					var rating:Rating = new Rating();
 					rating.sickRating('sick');
@@ -91,7 +91,7 @@ class LatencyState extends MusicBeatState
 				}
 
 				daNote.alpha = 0.6;
-				daNote.wasGoodHit = true;
+				daNote.wasGoodHit = true;*/
 			}
 			else
 			{

@@ -96,7 +96,7 @@ class Preloader extends flixel.FlxState {
     function cacheAssets():Void {
             //  Get the assets image list
         var assetsImages:Array<String> = Paths.getFileList(IMAGE, true, 'png');
-        //imageCache = fixFileList(assetsImages);
+        imageCache = fixFileList(assetsImages);
 
             //  Get the assets music list
         var musicAssets:Array<String> = Paths.getFileList(MUSIC, true, Paths.SOUND_EXT, 'music/');

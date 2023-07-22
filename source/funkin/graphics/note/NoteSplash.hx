@@ -13,9 +13,9 @@ class NoteSplash extends FlxSpriteUtil {
 
 	public function setupNoteSplash(X:Float, Y:Float, noteData:Int = 0, ?note:Note):Void {
         if (note != null) {
-            if (note.skin != curSkin) {
+            /*if (note.skin != curSkin) {
                 loadSkin(note.skin);
-            }
+            }*/
             updateHitbox();
             X = note.x + NoteUtil.swagWidth/2;
             Y = note.y + NoteUtil.swagWidth/2;
