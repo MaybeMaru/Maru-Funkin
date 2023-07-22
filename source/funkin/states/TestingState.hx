@@ -138,22 +138,25 @@ class TestNote extends FlxSpriteUtil {
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
-        if ((_height != height && _height > 0) || forced) {
-            makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
-            origin.set(width / 2, 0);
-
-            // draw piece
-            var loops = Math.floor(_height / susPiece.height) + 1;
-            for (i in 0...loops) 
-                stamp(susPiece, 0, Std.int(i * susPiece.height));
+        if (_height > 0) {
+            if (_height < height) { // Cut
+                clipRect = new FlxRect(0, height - _height, width, _height);
+                offset.y = (_height - height) * scale.y * (Preferences.getPref('downscroll') ? 1 : -1);
+            } else { // New graphic
+                makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
+                origin.set(width / 2, 0);
     
-            //draw end
-            var endPos = _height - susEnd.height;
-            pixels.fillRect(new openfl.geom.Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-            stamp(susEnd, 0, Std.int(endPos));
-        }
-
-        if (_height <= 0) {
+                // draw piece
+                var loops = Math.floor(_height / susPiece.height) + 1;
+                for (i in 0...loops) 
+                    stamp(susPiece, 0, Std.int(i * susPiece.height));
+        
+                //draw end
+                var endPos = _height - susEnd.height;
+                pixels.fillRect(new openfl.geom.Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+                stamp(susEnd, 0, Std.int(endPos));
+            }
+        } else {
             destroy();
         }
     }
