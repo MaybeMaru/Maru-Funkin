@@ -491,10 +491,6 @@ class PlayState extends MusicBeatState {
 				newNote.type = noteType;
 				unspawnNotes.push(newNote);
 
-				/*// Get mapped BPM changes
-				var noteBPM = Conductor.getLastBpmChange(strumTime).bpm;
-				var noteStepCrochet = ((60 / noteBPM) * 1000) / Conductor.STEPS_LENGTH;*/
-
 				// Add note sustain
 				if (sustainLength > 0) {
 					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
@@ -1037,9 +1033,12 @@ class PlayState extends MusicBeatState {
 		boyfriend.holdTimer = 0;
 		boyfriend.sing(note.noteData, note.altAnim);
 		vocals.volume = 1;
-		
-		playerStrums.members[note.noteData].playStrumAnim('confirm', true);
-		if (inBotplay) playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
+
+		if (inBotplay) 	{
+			playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
+			note.setSusPressed();
+		}
+		else playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 		ModdingUtil.addCall('goodSustainPress', [note]);
 	}
@@ -1049,8 +1048,9 @@ class PlayState extends MusicBeatState {
 			health += note.hitHealth[0];
 			boyfriend.holdTimer = 0;
 			boyfriend.sing(note.noteData, note.altAnim);
-			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
-			if (inBotplay) playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
+
+			if (inBotplay) 	playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
+			else 			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
@@ -1068,8 +1068,8 @@ class PlayState extends MusicBeatState {
 		dad.holdTimer = 0;
 		vocals.volume = 1;
 
-		if (!getPref('vanilla-ui'))
-			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+		if (!getPref('vanilla-ui')) playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+		note.setSusPressed();
 
 		ModdingUtil.addCall('opponentSustainPress', [note]);
 	}
@@ -1079,8 +1079,7 @@ class PlayState extends MusicBeatState {
 		dad.holdTimer = 0;
 		vocals.volume = 1;
 
-		if (!getPref('vanilla-ui'))
-			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+		if (!getPref('vanilla-ui')) playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 
 		ModdingUtil.addCall('opponentNoteHit', [note]);
 
@@ -1144,10 +1143,10 @@ class PlayState extends MusicBeatState {
 		super.destroy();
 	}
 
-	private function playStrumAnim(data:Int = 0, anim:String = 'confirm'):Void {
+	private function playStrumAnim(data:Int = 0, anim:String = 'confirm', forced:Bool = true):Void {
 		var leStrum:NoteStrum = strumLineNotes.members[data];
 		if (leStrum != null) {
-			leStrum.playStrumAnim(anim);
+			leStrum.playStrumAnim(anim, forced);
 			leStrum.staticTime = Conductor.stepCrochet/1000;
 		}
 	}

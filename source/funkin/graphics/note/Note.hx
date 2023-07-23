@@ -144,13 +144,14 @@ class Note extends FlxSpriteUtil {
 
     public var pressed:Bool = false;
     public var inSustain:Bool = false;
+    var strumCenter:Float = 0;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
         if (targetSpr != null) { // Move to strum
             var downscroll = Preferences.getPref('downscroll');
             var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-            var strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
+            strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
             strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
             y = strumCenter - (noteMove * getCos(isSustainNote ? angle : downscroll ? 180 : 0)); // Set Position
             x = targetSpr.x - (noteMove * getSin(isSustainNote ? angle : downscroll ? 180 : 0));
@@ -160,8 +161,7 @@ class Note extends FlxSpriteUtil {
                 offset.y = 0;
 
                 if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
-                    y = strumCenter;
-                    drawSustain();
+                    setSusPressed();
                 }
             } else {
                 calcHit();
@@ -169,6 +169,11 @@ class Note extends FlxSpriteUtil {
 
             active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
         }
+    }
+
+    public function setSusPressed() {
+        y = strumCenter;
+        drawSustain();
     }
 
     function getCos(?_angle) {
