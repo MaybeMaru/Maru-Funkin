@@ -250,7 +250,7 @@ class PlayState extends MusicBeatState {
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
-		NoteUtil.setSwag(strumLineNotes.members);
+		//NoteUtil.setSwag(strumLineNotes.members);
 
 		//Make Song
 		Conductor.songPosition = -5000;
@@ -600,9 +600,7 @@ class PlayState extends MusicBeatState {
 
 	#if desktop
 	override public function onFocusLost():Void {
-		if (getPref('auto-pause') && !paused && !inCutscene) {
-			openPauseSubState();
-		}
+		if (getPref('auto-pause') && !paused && !inCutscene) openPauseSubState();
 		super.onFocusLost();
 	}
 	#end
@@ -638,7 +636,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('update', [elapsed]);
 
 		if (FlxG.keys.justPressed.NINE) {
-			switch (iconP1.animation.curAnim.name) {
+			switch (iconP1.iconName) {
 				case 'bf-old': 	 iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
 				case 'bf-older': iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
 				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
@@ -709,7 +707,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / SONG.speed / NoteUtil.speedOffset) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / SONG.speed) {
 				var dunceNote:Note = unspawnNotes[0];
 				notes.add(dunceNote);
 				dunceNote.update(elapsed);
@@ -729,9 +727,9 @@ class PlayState extends MusicBeatState {
 				// Manage botplay notes
 				if (inBotplay) {
 					if (daNote.mustPress) {
-						if (Conductor.songPosition >= daNote.strumTime) {
+						if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
 							if (daNote.isSustainNote) {
-								daNote.pressed = daNote.inSustain && daNote.mustHit;
+								daNote.pressed = daNote.inSustain;
 								if (daNote.pressed) goodSustainPress(daNote);
 							} else  goodNoteHit(daNote);
 						}
@@ -740,12 +738,22 @@ class PlayState extends MusicBeatState {
 
 				// Manage opponent notes
 				if (!daNote.mustPress) {
-					if (Conductor.songPosition >= daNote.strumTime) {
+					if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
 						if (daNote.isSustainNote) {
-							daNote.pressed = daNote.inSustain && daNote.mustHit;
+							daNote.pressed = daNote.inSustain ;
 							if (daNote.pressed) opponentSustainPress(daNote);
 						} else  opponentNoteHit(daNote);
 					}
+				}
+
+				//Remove missed Notes
+				if (!daNote.active) {
+					if (daNote.tooLate || (!daNote.wasGoodHit && daNote.mustPress)) {
+						if (daNote.mustHit)
+							noteMiss(daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote);
+					}
+					notes.remove(daNote, true);
+					daNote.destroy();
 				}
 			});
 		}

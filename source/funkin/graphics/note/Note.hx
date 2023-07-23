@@ -12,7 +12,6 @@ typedef NoteTypeJson = {
 class NoteUtil {
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var swagHeight:Float = 155 * 0.7;
-	public static inline var speedOffset:Float = 0.65; //0.45?
 
     public static var DEFAULT_NOTE_TYPE:NoteTypeJson = {
 		mustHit: true,
@@ -105,7 +104,7 @@ class Note extends FlxSpriteUtil {
             
             //Offset sustain
             var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-            initSusLength += _off / (PlayState.SONG.speed + 0.11);
+            initSusLength += _off / (PlayState.SONG.speed * 2);
         } else {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();

@@ -7,6 +7,7 @@ class HealthIcon extends FlxSpriteUtil {
 	public var isDying:Bool = false;
 	public var singleAnim:Bool = false;
 	public var staticSize:Float = 1;
+	public var iconName:String = '';
 
 	public function new(char:String = 'bf', isPlayer:Bool = false):Void {
 		super();
@@ -16,14 +17,12 @@ class HealthIcon extends FlxSpriteUtil {
 
 	public function makeIcon(char:String = 'bf'):Void {
 		antialiasing = Preferences.getPref('antialiasing');
-		if (char == 'senpai' || char == 'spirit' || char.contains('-pixel')) {
-			antialiasing = false;
-		}
+		iconName = char;
+		if (char == 'senpai' || char == 'spirit' || char.contains('-pixel')) antialiasing = false;
 
 		var icon:FlxGraphicAsset = Paths.image('icons/face');
-		if (Paths.exists(Paths.image('icons/$char', null, true, true), IMAGE)) {
+		if (Paths.exists(Paths.image('icons/$char', null, true, true), IMAGE))
 			icon = Paths.image('icons/$char', null, false, true);
-		}
 
 		loadImage('icons/$char', true);	//	Load it first to get the width and height
 		singleAnim = false;
