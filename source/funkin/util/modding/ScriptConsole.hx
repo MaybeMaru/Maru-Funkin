@@ -1,6 +1,6 @@
 package funkin.util.modding;
 
-class ScriptConsole extends FlxSpriteGroup {
+class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
     private var traceTextArray:Array<ConsoleTrace> = [];
     public static var listToAdd:Array<Dynamic> = [];
     public var show:Bool = false;
@@ -20,21 +20,21 @@ class ScriptConsole extends FlxSpriteGroup {
 
     public function consoleTrace(text:String, color:Int = 0xffffffff):Void {
         for (member in traceTextArray) {
-            member.y += member.height;//*1.2;
-            if (member.y >= FlxG.height/1.1) {
-                removeMember(member);
+            if (member.alive) {
+                member.y += member.height;
+                if (member.y >= FlxG.height/1.1)
+                    removeMember(member);
             }
         }
-        var newTrace:ConsoleTrace = new ConsoleTrace(text,color,Std.int(bgThing.width-20));
+        var newTrace:ConsoleTrace = recycle(ConsoleTrace);
+        newTrace.init(text,color);
         traceTextArray.push(newTrace);
         add(newTrace);
     }
 
     function removeMember(member:ConsoleTrace):Void {
-        member.visible = false;
-        member.destroy();
+        member.kill();
         traceTextArray.remove(member);
-        remove(member);
     }
 
     public function addToTraceList(text:String, color:Int = 0xffffffff):Void {
@@ -58,9 +58,8 @@ class ScriptConsole extends FlxSpriteGroup {
             for (member in traceTextArray) {
                 member.alphaTime -= elapsed*2;
                 member.alpha = member.alphaTime;
-                if (member.alpha <= 0) {
+                if (member.alpha <= 0)
                     removeMember(member);
-                }
             }
         }
     }
@@ -68,8 +67,12 @@ class ScriptConsole extends FlxSpriteGroup {
 
 class ConsoleTrace extends FlxText {
     public var alphaTime:Float = 10;
-    public function new(text:String, color:Int, width:Int) {
-        super(20,50,width,text,10);
+    public function new() {
+        super(20,50,Std.int(FlxG.width/2.25),"",10);
+    }
+    public function init(text:String, color:Int) {
+        setPosition(20,50);
+        this.text = text;
         this.color = color;
     }
 }

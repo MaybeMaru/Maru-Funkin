@@ -401,7 +401,7 @@ class PlayState extends MusicBeatState {
 		cameraMovement();
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
-			ModdingUtil.addCall('startTimer', swagCounter);
+			ModdingUtil.addCall('startTimer', [swagCounter]);
 			dad.dance();
 			gf.dance();
 			boyfriend.dance();
@@ -454,7 +454,7 @@ class PlayState extends MusicBeatState {
 
 	private function generateSong():Void {
 		var songData:SwagSong = SONG;
-		ModdingUtil.addCall('generateSong', songData);
+		ModdingUtil.addCall('generateSong', [songData]);
 
 		inst = new FlxSound().loadEmbedded(Paths.inst(songData.song));
 		FlxG.sound.list.add(inst);
@@ -548,7 +548,7 @@ class PlayState extends MusicBeatState {
 				babyArrow.y += offsetY;
 			}
 
-			ModdingUtil.addCall('generateStaticArrow', babyArrow);
+			ModdingUtil.addCall('generateStaticArrow', [babyArrow]);
 		}
 	}
 
@@ -630,12 +630,12 @@ class PlayState extends MusicBeatState {
 			scoreTxt.setPosition(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30);
 		}
 
-		ModdingUtil.addCall('updateScore', songScore);
+		ModdingUtil.addCall('updateScore', [songScore]);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		ModdingUtil.addCall('update', elapsed);
+		ModdingUtil.addCall('update', [elapsed]);
 
 		if (FlxG.keys.justPressed.NINE) {
 			switch (iconP1.animation.curAnim.name) {
@@ -713,58 +713,39 @@ class PlayState extends MusicBeatState {
 				var dunceNote:Note = unspawnNotes[0];
 				notes.add(dunceNote);
 				dunceNote.update(elapsed);
-				notes.sort(function (order:Int, note1:Note, note2:Note):Int return FlxSort.byValues(order, note1.strumTime, note2.strumTime));
 				notes.sort(function (order:Int, note1:Note, note2:Note):Int {
-					if (note1.isSustainNote && !note2.isSustainNote) return -1;
-					if (!note1.isSustainNote && note2.isSustainNote) return 1;
-					return order;
-				}, FlxSort.DESCENDING);	
+					if (note1.strumTime == note2.strumTime) {
+						if (note1.isSustainNote && !note2.isSustainNote) return -1;
+						if (!note1.isSustainNote && note2.isSustainNote) return 1;
+					}
+					return FlxSort.byValues(order, note1.strumTime, note2.strumTime);
+				}, FlxSort.DESCENDING);
 				unspawnNotes.splice(unspawnNotes.indexOf(dunceNote), 1);
 			}
 		}
 
 		if (generatedMusic) {
 			notes.forEachAlive(function(daNote:Note) {
-				/*
-				if (daNote.mustHit) {
-					if (inBotplay && daNote.mustPress && daNote.canBeHit) {
-						daNote.mustPress = false;
-						daNote.calcHit();
-						daNote.mustPress = true;
-					}
-					if (daNote.wasGoodHit) {
-						if (daNote.mustPress) {
-							if (inBotplay) {
-								if ((daNote.isSustainNote && !daNote.hitSustainStart) || !daNote.isSustainNote) {
-									daNote.wasGoodHit = false;
-									daNote.strumTime = Conductor.songPosition;
-									goodNoteHit(daNote);
-								}
-								if (daNote.isSustainNote && daNote.inSustain) {
-									daNote.sustainPressed = true;
-									goodSustainPress(daNote);
-								}
-							}
-						} else {
-							if ((daNote.isSustainNote && !daNote.hitSustainStart) || !daNote.isSustainNote) {
-								opponentNoteHit(daNote);
-							}
-							if (daNote.isSustainNote && daNote.inSustain) {
-								daNote.sustainPressed = true;
-								opponentSustainPress(daNote);
-							}
+				// Manage botplay notes
+				if (inBotplay) {
+					if (daNote.mustPress) {
+						if (Conductor.songPosition >= daNote.strumTime) {
+							if (daNote.isSustainNote) {
+								daNote.pressed = daNote.inSustain && daNote.mustHit;
+								if (daNote.pressed) goodSustainPress(daNote);
+							} else  goodNoteHit(daNote);
 						}
 					}
 				}
-				*/
 
-				if (!daNote.active) {
-					if (daNote.tooLate || (!daNote.wasGoodHit && daNote.mustPress)) {
-						if (daNote.mustHit)
-							noteMiss(daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote);
+				// Manage opponent notes
+				if (!daNote.mustPress) {
+					if (Conductor.songPosition >= daNote.strumTime) {
+						if (daNote.isSustainNote) {
+							daNote.pressed = daNote.inSustain && daNote.mustHit;
+							if (daNote.pressed) opponentSustainPress(daNote);
+						} else  opponentNoteHit(daNote);
 					}
-					notes.remove(daNote, true);
-					daNote.destroy();
 				}
 			});
 		}
@@ -777,7 +758,7 @@ class PlayState extends MusicBeatState {
 			endSong();
 		//#end
 
-		ModdingUtil.addCall('updatePost', elapsed);
+		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
 	
 	function cameraMovement():Void {
@@ -790,7 +771,7 @@ class PlayState extends MusicBeatState {
 		var camOffsets:Array<Int> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
 		
 		if (camFollow.x != intendedPos) {
-			ModdingUtil.addCall('cameraMovement', mustHit ? 1 : 0);
+			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0]);
 			camFollow.setPosition(mustHit ? bfMidpointX : dadMidpointX, mustHit ? boyfriend.getMidpoint().y : dad.getMidpoint().y);
 			camFollow.x -= mustHit ? boyfriend.camOffsets.x : dad.camOffsets.x;
 			camFollow.y -= mustHit ? boyfriend.camOffsets.y : dad.camOffsets.y;
@@ -862,7 +843,7 @@ class PlayState extends MusicBeatState {
 		vocals.volume = 1;
 		noteCount++;
 
-		ModdingUtil.addCall('popUpScore', daNote);
+		ModdingUtil.addCall('popUpScore', [daNote]);
 
 		var score:Int = 0;
 		var setupSplash:Bool = false;
@@ -1009,7 +990,7 @@ class PlayState extends MusicBeatState {
 				health -= 0.04;
 				songScore -= 10;
 				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-				ModdingUtil.addCall('badNoteHit', direction);
+				ModdingUtil.addCall('badNoteHit', [direction]);
 			}
 			else {
 				if (combo >= 5) {
@@ -1023,7 +1004,7 @@ class PlayState extends MusicBeatState {
 				noteCount++;
 				songMisses++;
 					
-				ModdingUtil.addCall('noteMiss', noteMissed);
+				ModdingUtil.addCall('noteMiss', [noteMissed]);
 			}
 
 			boyfriend.stunned = true;
@@ -1052,7 +1033,7 @@ class PlayState extends MusicBeatState {
 		playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 		if (inBotplay) playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
 
-		ModdingUtil.addCall('goodSustainPress', note);
+		ModdingUtil.addCall('goodSustainPress', [note]);
 	}
 	
 	function goodNoteHit(note:Note):Void {
@@ -1067,7 +1048,7 @@ class PlayState extends MusicBeatState {
 			vocals.volume = 1;
 			combo++;
 			popUpScore(note.strumTime, note);
-			ModdingUtil.addCall('goodNoteHit', note);
+			ModdingUtil.addCall('goodNoteHit', [note]);
 
 			notes.remove(note, true);
 			note.destroy();
@@ -1082,7 +1063,7 @@ class PlayState extends MusicBeatState {
 		if (!getPref('vanilla-ui'))
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 
-		ModdingUtil.addCall('opponentSustainPress', note);
+		ModdingUtil.addCall('opponentSustainPress', [note]);
 	}
 
 	function opponentNoteHit(note:Note):Void {
@@ -1093,7 +1074,7 @@ class PlayState extends MusicBeatState {
 		if (!getPref('vanilla-ui'))
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 
-		ModdingUtil.addCall('opponentNoteHit', note);
+		ModdingUtil.addCall('opponentNoteHit', [note]);
 
 		notes.remove(note, true);
 		note.destroy();
@@ -1102,7 +1083,7 @@ class PlayState extends MusicBeatState {
 	override function stepHit():Void {
 		super.stepHit();
 		Conductor.autoSync(inst,vocals);
-		ModdingUtil.addCall('stepHit', curStep);
+		ModdingUtil.addCall('stepHit', [curStep]);
 	}
 
 	override public function beatHit():Void {
@@ -1125,7 +1106,7 @@ class PlayState extends MusicBeatState {
 			if (curBeat % gfSpeed == 0 && !gf.animation.curAnim.name.startsWith("sing"))	gf.dance();
 		}
 
-		ModdingUtil.addCall('beatHit', curBeat);
+		ModdingUtil.addCall('beatHit', [curBeat]);
 	}
 
 	override public function sectionHit():Void {
@@ -1143,7 +1124,7 @@ class PlayState extends MusicBeatState {
 			ghostTapEnabled = !curSectionData.mustHitSection;
 		}
 
-		ModdingUtil.addCall('sectionHit', curSection);
+		ModdingUtil.addCall('sectionHit', [curSection]);
 	}
 
 	override function destroy():Void {

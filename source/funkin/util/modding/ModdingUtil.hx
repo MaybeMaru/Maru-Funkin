@@ -87,7 +87,7 @@ class ModdingUtil {
         console.exists ? console.consoleTrace(text, color) : console.addToTraceList(text, color);
     }
 
-    inline public static function addCall(name:String, ?args:Dynamic, global:Bool = false):Void {
+    inline public static function addCall(name:String, ?args:Array<Dynamic>, global:Bool = false):Void {
         for (script in (global ? globalScripts : playStateScripts)) {
             try             script.callback(name,args)
             catch(e:Any)    errorTrace('${script.scriptID} / ${Std.string(e)}');

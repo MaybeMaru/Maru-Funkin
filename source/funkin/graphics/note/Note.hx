@@ -91,15 +91,8 @@ class Note extends FlxSpriteUtil {
     var susPiece:FlxSprite;
     var susEnd:FlxSprite;
     var refSprite:FlxSpriteUtil;
-    
-    public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
-        super();
-        this.noteData = noteData;
-        this.strumTime = strumTime;
-        isSustainNote = susLength > 0;
-        initSusLength = susLength;
-        this.skin = skin;
 
+    public function createGraphic() {
         var dir = CoolUtil.directionArray[noteData];
 
         if (isSustainNote) {
@@ -112,7 +105,7 @@ class Note extends FlxSpriteUtil {
             
             //Offset sustain
             var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-            initSusLength += _off / PlayState.SONG.speed;
+            initSusLength += _off / (PlayState.SONG.speed + 0.11);
         } else {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
@@ -123,6 +116,17 @@ class Note extends FlxSpriteUtil {
         scale.set(refSprite.scale.x, refSprite.scale.y);
         updateHitbox();
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
+    }
+    
+    public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
+        super();
+        this.noteData = noteData;
+        this.strumTime = strumTime;
+        isSustainNote = susLength > 0;
+        initSusLength = susLength;
+        this.skin = skin;
+
+        createGraphic();
 
         if (isSustainNote) { // Setup sustain
             drawSustain(true);
@@ -150,7 +154,7 @@ class Note extends FlxSpriteUtil {
             var strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
             strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
             y = strumCenter - (noteMove * getCos(isSustainNote ? angle : downscroll ? 180 : 0)); // Set Position
-            x = targetSpr.x;
+            x = targetSpr.x - (noteMove * getSin(isSustainNote ? angle : downscroll ? 180 : 0));
 
             if (isSustainNote) { // Get if the sustain is between pressing bounds
                 inSustain = Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength;
@@ -170,6 +174,10 @@ class Note extends FlxSpriteUtil {
 
     function getCos(?_angle) {
         return Math.cos(FlxAngle.asRadians(_angle == null ? angle : _angle));
+    }
+
+    function getSin(?_angle) {
+        return Math.sin(FlxAngle.asRadians(_angle == null ? angle : _angle));
     }
 
     function set_susLength(value:Float):Float {

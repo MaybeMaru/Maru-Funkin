@@ -31,7 +31,7 @@ class MusicBeatState extends FlxUIState {
 
 	override function update(elapsed:Float):Void {
 		handleSteps();
-		ModdingUtil.addCall('stateUpdate', elapsed, true);
+		ModdingUtil.addCall('stateUpdate', [elapsed], true);
 		if (FlxG.keys.justPressed.F1) {
 			scriptConsole.show = !scriptConsole.show;
 		}
@@ -71,21 +71,21 @@ class MusicBeatState extends FlxUIState {
 	}
 
 	public function stepHit():Void {
-		ModdingUtil.addCall('stateStepHit', curStep, true);
+		ModdingUtil.addCall('stateStepHit', [curStep], true);
 		if (curStep % Conductor.BEATS_LENGTH == 0) {
 			beatHit();
 		}
 	}
 
 	public function beatHit():Void {
-		ModdingUtil.addCall('stateBeatHit', curBeat, true);
+		ModdingUtil.addCall('stateBeatHit', [curBeat], true);
 		if (curBeat % Conductor.BEATS_LENGTH == 0) {
 			sectionHit();
 		}
 	}
 
 	public function sectionHit():Void {
-		ModdingUtil.addCall('stateSectionHit', curSection, true);
+		ModdingUtil.addCall('stateSectionHit', [curSection], true);
 	}
 
 	//Just a quicker way to get settings

@@ -73,7 +73,7 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 		if (Controls.getKey('ACCEPT-P') && dialogueStarted && !isEnding) {
 			if (!textFinished) {
 				skipCallback();
-				ModdingUtil.addCall('skipDialogueLine', jsonParsed.lines[0]);
+				ModdingUtil.addCall('skipDialogueLine', [jsonParsed.lines[0]]);
 			}
 			else {
 				if (jsonParsed.lines[1] == null && jsonParsed.lines[0] != null) {
@@ -85,7 +85,7 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 					jsonParsed.lines.remove(jsonParsed.lines[0]);
 					startDialogue();
 					nextCallback();
-					ModdingUtil.addCall('nextDialogueLine', jsonParsed.lines[0]);
+					ModdingUtil.addCall('nextDialogueLine', [jsonParsed.lines[0]]);
 				}
 			}
 

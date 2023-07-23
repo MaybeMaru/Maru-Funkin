@@ -900,9 +900,8 @@ class ChartingState extends MusicBeatState {
 
 		var hitList:Array<FlxTypedGroup<Dynamic>> = [curRenderedNotes, curRenderedSustains, curRenderedTextTypes];
 		for (group in hitList) {
-			for (member in group) {
+			for (member in group)
 				member.kill();
-			}
 		}
 
 		var changeBPM:Null<Bool> = _song.notes[_curSection].changeBPM;
@@ -920,16 +919,6 @@ class ChartingState extends MusicBeatState {
 			}
 			Conductor.changeBPM(daBPM);
 		}
-
-		
-			/*if (daNoteData > 7) {
-				//trace('FIRE!!!');
-				daNoteData = daNoteData % 4;
-				daType = 'tricky-fire';
-				typeData = NoteUtil.getTypeJson(daType);
-				i[1] = daNoteData;
-				i[3] = daType;
-			}*/
 		
 		curSelectedNoteSpr = null;
 		var displaySections:Array<Null<SwagSection>> = [_song.notes[_curSection-1], _song.notes[_curSection], _song.notes[_curSection+1]];
@@ -943,21 +932,30 @@ class ChartingState extends MusicBeatState {
 						var daNoteData = i[1];
 						var daSus = i[2];
 						var daType:String = NoteUtil.getTypeName(i[3]);
-						var mustHit:Bool = sectionData.mustHitSection;
+						var mustPress:Bool = sectionData.mustHitSection;
 						var typeData:NoteTypeJson = NoteUtil.getTypeJson(daType);
 
 						var note:Note = curRenderedNotes.recycle(Note);
-						note.scrollFactor.set(1,1);
 						note.strumTime = daStrumTime;
 						note.noteData = daNoteData % Conductor.NOTE_DATA_LENGTH;
-						//note.type = daType;
-						//note.skin = typeData.skin;
-						//note.playPartsAnims();
-						note.susLength = daSus;
-						//note.mustPress = (daNoteData > 3) ? !mustHit : mustHit; 
-						note.x = Math.floor(daNoteData * GRID_SIZE);
-						note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime())));
+						note.mustPress = (daNoteData > 3) ? !mustPress : mustPress; 
+						note.type = daType;
+						note.skin = typeData.skin;
+						note.createGraphic();
+						
+						note.scrollFactor.set(1,1);
+						note.setGraphicSize(GRID_SIZE, GRID_SIZE);
+						note.updateHitbox();
+						note.setPosition(Math.floor(daNoteData * GRID_SIZE), Math.floor(getYfromStrum((daStrumTime - sectionStartTime()))));
 						curRenderedNotes.add(note);
+
+						if (s == 1) {
+							note.alpha = 1;	//	Start section click sounds
+							note.color = FlxColor.WHITE;
+						} else {
+							note.alpha = 0.3;
+							note.color = FlxColor.fromRGB(150,150,150);
+						}
 			
 						/*var note:Note = curRenderedNotes.recycle(Note);	//	Recycle is faster than creating a new one
 						note.strumTime = daStrumTime;

@@ -12,9 +12,9 @@ class FunkScript {
 		return interp.variables;
 	}
 
-	public function callback(nameStr:String, ?arg:Dynamic) {
+	public function callback(nameStr:String, ?args:Array<Dynamic>) {
 		if (varExists(nameStr)) {
-			(arg != null) ? varGet(nameStr)(arg) : varGet(nameStr)();
+			Reflect.callMethod(this, varGet(nameStr), args == null ? [] : args);
 		}
 	}
 
