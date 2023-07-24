@@ -11,6 +11,7 @@ class ChartPreview extends FlxSprite {
         super(50,100);
         makeGraphic(NOTE_WIDTH * STRUMS_LENGTH, NOTE_HEIGHT, FlxColor.GRAY);
         updateHitbox();
+        antialiasing = false;
         this.moveConductor = moveConductor;
     }
 
@@ -19,12 +20,9 @@ class ChartPreview extends FlxSprite {
     public function startDraw(?sections:Array<SwagSection>, secTime:Float = 0):Void {
         var notes:Array<Dynamic> = [];
         if (sections != null) {
-            if (sections[0] != null) {
+            if (sections[0] != null)
                 notes = moveConductor ? Song.sortSections(sections) : sections[0].sectionNotes;
-            }
-        } else {
-            sections = [];
-        }
+        } else sections = [];
 
         SIZE_CALC = NOTE_HEIGHT / Conductor.crochet*4;
 
@@ -42,9 +40,8 @@ class ChartPreview extends FlxSprite {
         for (i in 0...sections.length) {
             if (sections[i] != null) {
                 if (sections[i].sectionNotes != null) {
-                    if (sections[i].sectionNotes.length > 0) {
+                    if (sections[i].sectionNotes.length > 0)
                         lastFilled = i+1;
-                    }
                 }
             }
         }
@@ -56,9 +53,8 @@ class ChartPreview extends FlxSprite {
         for (i in 0...sections.length) {
             if (sections[i] != null) {
                 if (sections[i].sectionNotes != null) {
-                    if (sections[i].sectionNotes.length > 0) {
+                    if (sections[i].sectionNotes.length > 0)
                         pixels.fillRect(new Rectangle(0, i * 16 * NOTE_HEIGHT - NOTE_HEIGHT, NOTE_WIDTH*STRUMS_LENGTH, NOTE_HEIGHT), col);
-                    }
                 }
             }
         }
@@ -93,9 +89,8 @@ class ChartPreview extends FlxSprite {
             skinColorArray[skin] = DEFAULT_COLORS.copy();
             if (SkinUtil.getSkinData(skin) != null) {
                 if (SkinUtil.getSkinData(skin).noteData != null) {
-                    if (SkinUtil.getSkinData(skin).noteData.noteColorArray != null) {
+                    if (SkinUtil.getSkinData(skin).noteData.noteColorArray != null)
                         skinColorArray[skin] =  SkinUtil.getSkinData(skin).noteData.noteColorArray;
-                    }
                 }
             }
         }
@@ -103,9 +98,8 @@ class ChartPreview extends FlxSprite {
     }
 
     public function hexToRGB(hex:String):Array<Int> {
-        if(hex.startsWith('0x')) {
+        if(hex.startsWith('0x'))
             hex = hex.substr(2);
-        }
         var rgb = [];
         while(hex.length > 0) {
             rgb.push(Std.parseInt('0x${hex.substr(0,2)}'));
@@ -116,8 +110,7 @@ class ChartPreview extends FlxSprite {
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (moveConductor) {
+        if (moveConductor)
             offset.y = Conductor.songPosition * SIZE_CALC;
-        }
     }
 }

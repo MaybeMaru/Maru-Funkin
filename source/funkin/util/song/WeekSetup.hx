@@ -34,9 +34,8 @@ class WeekSetup {
 		for (week in weeks) {
 			var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$week.json', TEXT, null, true));
 			var parsedJson:WeekJson = Json.parse(getJson);
-            if (parsedJson.weekDiffs == null || parsedJson.weekDiffs.length == 0) {
+            if (parsedJson.weekDiffs == null || parsedJson.weekDiffs.length == 0)
                 parsedJson.weekDiffs = CoolUtil.defaultDiffArray;
-            }
             weekList.push(parsedJson);
             weekDataMap.set(week, parsedJson);
 		}
@@ -45,11 +44,11 @@ class WeekSetup {
 
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
         var modFolder:Null<String> = modWeekMap.get(weekName);
-        if (ModdingUtil.modFolders.contains(modFolder) && modFolder != null) {
+        if (modFolder == null) ModdingUtil.curModFolder = "";   // In base game
+        else if (ModdingUtil.modFolders.contains(modFolder)) {  // In a mod
             trace('SELECTED MOD FOLDER $modFolder');
 			ModdingUtil.curModFolder = modFolder;
         }
-
         PlayState.storyWeek = weekName;
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);

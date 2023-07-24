@@ -22,7 +22,7 @@ function create():Void {
 	}
 
 	var overlayShit:FunkinSprite = new FunkinSprite('limo/limoOverlay', [-500,-600]);
-	overlayShit.alpha = 0.2;
+	overlayShit.alpha = 0.15;
 	overlayShit.blend = getBlendMode('add');
 	addSpr(overlayShit, 'overlay', true);
 

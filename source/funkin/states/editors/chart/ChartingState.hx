@@ -163,6 +163,7 @@ class ChartingState extends MusicBeatState {
 
 		add(iconP1);
 		add(iconP2);
+		updateHeads(true);
 
 		Conductor.songPosition = 0;
 		Conductor.sync(inst,vocals);
@@ -624,9 +625,8 @@ class ChartingState extends MusicBeatState {
 
 		keysStuff();
 
-		if (Conductor.songPosition < 0) {
+		if (Conductor.songPosition < 0)
 			Conductor.songPosition = 0;
-		}
 
 		FlxG.watch.addQuick('curBeat', curBeat);
 		FlxG.watch.addQuick('curStep', curStep);
@@ -822,9 +822,7 @@ class ChartingState extends MusicBeatState {
 
 	function changeSection(sec:Int = 0, updateMusic:Bool = true):Void {
 		sec = sec < 0 ? 0 : sec;
-		if (_curSection == sec && _song.notes[sec] != null && sec > 0) {
-			return;
-		}
+		if (_curSection == sec && _song.notes[sec] != null && sec > 0) return;
 		_curSection = sec;
 		_song.notes[sec] = Song.checkSection(_song.notes[sec]); //double check
 		updateGrid();
@@ -862,22 +860,21 @@ class ChartingState extends MusicBeatState {
 		updateHeads();
 	}
 
-	function updateHeads():Void {
-		if (Character.getCharData(_song.players[0]) != null) {
-			iconP1.makeIcon(Character.getCharData(_song.players[0]).icon);
+	function updateHeads(forced:Bool = false):Void {
+		var arr = [iconP1,iconP2];
+		for (i in 0...arr.length) {
+			var ico = arr[i];
+			var data = Character.getCharData(_song.players[i]);
+			if (data != null) {
+				if ((ico.iconName != data.icon) || forced) {
+					ico.makeIcon(data.icon);
+					ico.setGraphicSize(0,60);
+					ico.updateHitbox();
+					ico.scrollFactor.set(1,1);
+				} 
+			} 
+			ico.setPosition(check_mustHitSection.checked ?  (i == 0 ? 0 : gridBG.width/2) : (i != 0 ? 0 : gridBG.width/2), -100);
 		}
-		if (Character.getCharData(_song.players[1]) != null) {
-			iconP2.makeIcon(Character.getCharData(_song.players[1]).icon);
-		}
-
-		iconP1.scrollFactor.set(1,1);
-		iconP2.scrollFactor.set(1,1);
-
-		iconP1.setPosition((check_mustHitSection.checked) ? 0 : gridBG.width/2,-100);
-		iconP2.setPosition((check_mustHitSection.checked) ? gridBG.width/2 : 0,-100);
-
-		iconP1.setGraphicSize(0,60);
-		iconP2.setGraphicSize(0,60);
 	}
 
 	function updateNoteUI():Void {
@@ -899,9 +896,9 @@ class ChartingState extends MusicBeatState {
 		updatePreview();
 
 		var hitList:Array<FlxTypedGroup<Dynamic>> = [curRenderedNotes, curRenderedSustains, curRenderedTextTypes];
-		for (group in hitList) {
-			for (member in group)
-				member.kill();
+		for (g in hitList) {
+			for (i in g.members)
+				i.kill();
 		}
 
 		var changeBPM:Null<Bool> = _song.notes[_curSection].changeBPM;
@@ -913,9 +910,8 @@ class ChartingState extends MusicBeatState {
 		} else { // get last bpm
 			var daBPM:Float = _song.bpm;
 			for (i in 0..._curSection) {
-				if (_song.notes[i].changeBPM) {
+				if (_song.notes[i].changeBPM)
 					daBPM = _song.notes[i].bpm;
-				}
 			}
 			Conductor.changeBPM(daBPM);
 		}
@@ -1011,9 +1007,8 @@ class ChartingState extends MusicBeatState {
 
 	function getNoteData(note:Note):Int {
 		var fixedData:Int = note.noteData;
-		/*if(note.mustPress != _song.notes[_curSection].mustHitSection) {
+		if(note.mustPress != _song.notes[_curSection].mustHitSection)
 			fixedData += Conductor.NOTE_DATA_LENGTH;
-		}*/
 		return fixedData;
 	}
 
@@ -1049,16 +1044,10 @@ class ChartingState extends MusicBeatState {
 	function clearSong():Void {
 		for (i in 0..._song.notes.length) {
 			_song.notes[i].sectionNotes = [];
-			//_song.notes[i].sectionNotes = [];
 		}
 		stopSong();
 		changeSection();
 		updateGrid();
-		/*stopSong();
-		_song.notes = [];
-		addSection();
-		changeSection();
-		updateGrid();*/
 	}
 
 	private function addNote():Void {
@@ -1100,20 +1089,22 @@ class ChartingState extends MusicBeatState {
 		FlxG.resetState();
 	}
 
+	function getSongString(_:Null<String> = null) {
+		return Json.stringify({
+			"song": Song.optimizeJson(_song)
+		}, _);
+	}
+
 	function autosaveSong():Void {
 		_song = Song.checkSong(_song);
-		autoSaveFile.data.autosave = Json.stringify({
-			"song": Song.optimizeJson(_song)
-		});
+		autoSaveFile.data.autosave = getSongString();
 		autoSaveFile.flush();
 	}
 
 	private function saveLevel():Void {
 		_song = Song.checkSong(_song);
-		var data:String = Json.stringify({
-			"song": Song.optimizeJson(_song)
-		}, "\t");
-		if ((data != null) && (data.length > 0)) {
+		var data:String = getSongString("\t");
+		if (data.length > 0) {
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);

@@ -49,9 +49,7 @@ class NoteUtil {
 	}
 
     inline public static function getTypeJson(type:String = 'default'):NoteTypeJson {
-		if (noteTypesMap.get(type) != null) {
-			return noteTypesMap.get(type);
-		}
+		if (noteTypesMap.get(type) != null) return noteTypesMap.get(type);
 		var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
 		typeJson = JsonUtil.checkJsonDefaults(DEFAULT_NOTE_TYPE, typeJson);
 		noteTypesMap.set(type, typeJson);
@@ -91,7 +89,7 @@ class Note extends FlxSpriteUtil {
     var susEnd:FlxSprite;
     var refSprite:FlxSpriteUtil;
 
-    public function createGraphic() {
+    public function createGraphic(init:Bool = true) {
         var dir = CoolUtil.directionArray[noteData];
 
         if (isSustainNote) {
@@ -102,9 +100,10 @@ class Note extends FlxSpriteUtil {
             susEnd.animation.play('hold$dir-end', true);
             susEnd.updateHitbox();
             
-            //Offset sustain
-            var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-            initSusLength += _off / (PlayState.SONG.speed * 2);
+            if (init) { // Offset sustain
+                var _off = getPosMill(NoteUtil.swagHeight * 0.5);
+                initSusLength += _off / (PlayState.SONG.speed * 2);
+            }
         } else {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
@@ -116,6 +115,18 @@ class Note extends FlxSpriteUtil {
         updateHitbox();
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
     }
+
+    public function setupSustain() {
+        if (isSustainNote) {
+            drawSustain(true);
+            offset.set(0,0);
+            offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
+            var downscroll = Preferences.getPref('downscroll');
+            angle = downscroll ? 180 : 0;
+            flipX = downscroll;
+            alpha = 0.6;
+        }
+    }
     
     public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
         super();
@@ -126,20 +137,9 @@ class Note extends FlxSpriteUtil {
         this.skin = skin;
 
         createGraphic();
+        setupSustain();
 
-        if (isSustainNote) { // Setup sustain
-            drawSustain(true);
-            offset.set(0,0);
-            offset.x -= NoteUtil.swagWidth / 2 - width / 2.125;
-            var downscroll = Preferences.getPref('downscroll');
-            angle = downscroll ? 180 : 0;
-            flipX = downscroll;
-            alpha = 0.6;
-        }
-
-        if (!alive) {
-            destroy();
-        }
+        if (!alive) destroy(); // clear small sustains
     }
 
     public var pressed:Bool = false;
@@ -201,17 +201,16 @@ class Note extends FlxSpriteUtil {
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > 0) {
             if (forced || (_height > height)) {// New graphic
-                makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height');
+                makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height$skin');
                 origin.set(width / 2, 0);
     
                 // draw piece
                 var loops = Math.floor(_height / susPiece.height) + 1;
-                for (i in 0...loops) 
-                    stamp(susPiece, 0, Std.int(i * susPiece.height));
+                for (i in 0...loops)
+                    stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
         
                 //draw end
                 var endPos = _height - susEnd.height;
-                pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
                 stamp(susEnd, 0, Std.int(endPos));
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
@@ -263,22 +262,33 @@ class Note extends FlxSpriteUtil {
 		}
 	}
 
+    public function changeSkin(value:String = 'default') {
+        skin = value;
+        createGraphic(false);
+        setupSustain();
+    }
+
     public var skin(default, set):String = '';
     public var skinJson:NoteSkinData;
-	public function set_skin(?value:String):String {
+	public function set_skin(value:String = 'default'):String {
 		value = (value == null ? SkinUtil.curSkin : value);
 		if (value != skin) {
-			skin = value;
-            skinJson = SkinUtil.getSkinData(skin).noteData;
-			skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+            skin = value;
+            try { // Prevent null skins
+                skinJson = SkinUtil.getSkinData(skin).noteData;
+                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+            } catch(e) {
+                skin = '_missing_skin';
+                skinJson = SkinUtil.getSkinData(skin).noteData;
+                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+            }
 
             refSprite = new FlxSpriteUtil();
             refSprite.loadImage('skins/$skin/${skinJson.imagePath}');
             refSprite.scale.set(skinJson.scale,skinJson.scale);
             refSprite.updateHitbox();
-            for (anim in skinJson.anims) {
+            for (anim in skinJson.anims)
                 refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-            }
         }
 		return value;
 	}

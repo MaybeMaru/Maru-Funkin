@@ -52,12 +52,11 @@ class Conductor {
 		trace('new BPM map BUDDY $bpmChangeMap');
 	}
 
-	public static function getLastBpmChange(leTime:Float = 0):BPMChangeEvent {
+	public static function getLastBpmChange(time:Float = 0):BPMChangeEvent {
 		if (bpmChangeMap.length > 0) {
 			for (i in 0...bpmChangeMap.length) {
-				if (leTime >= bpmChangeMap[i].songTime) {
+				if (time >= bpmChangeMap[i].songTime)
 					return bpmChangeMap[i];
-				}
 			}
 		}
 		return {
@@ -75,9 +74,7 @@ class Conductor {
 
 	public static function sync(inst:FlxSound, ?vocals:FlxSound):Void {
 		inst.time = songPosition - songOffset[0];
-		if (vocals != null) {
-			vocals.time = songPosition - songOffset[1];
-		}
+		if (vocals != null) vocals.time = songPosition - songOffset[1];
 	}
 
 	//	Resync if inst is off by 20 milliseconds by default
@@ -86,9 +83,7 @@ class Conductor {
 			(songPosition > (inst.time + songOffset[0] + minOff * songPitch))
 		|| 	(songPosition < (inst.time + songOffset[0] - minOff * songPitch));
 
-		if (needsResync) {
-			Conductor.sync(inst,vocals);
-		}
+		if (needsResync) Conductor.sync(inst,vocals);
 	}
 
 	public static function setPitch(pitch:Float = 1, forceVar:Bool = true, forceTime:Bool = true):Void {
