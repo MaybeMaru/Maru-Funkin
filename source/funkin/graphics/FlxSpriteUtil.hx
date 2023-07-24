@@ -42,6 +42,10 @@ class FlxSpriteUtil extends FlxSprite {
 		}
 	}
 
+	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true) {
+		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
+	}
+
 	public function loadImage(path:String, global:Bool = false, gpu:Bool = true):Void {
 		_packer = Paths.getPackerType(path).toLowerCase().trim();
 		switch (_packer) {

@@ -196,6 +196,8 @@ class Note extends FlxSpriteUtil {
         return value;
     }
 
+    public var percentCut:Float = 1;
+
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
@@ -215,6 +217,7 @@ class Note extends FlxSpriteUtil {
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
+                percentCut = (1 / height * _height);
             }
         } else {
             kill();

@@ -746,9 +746,8 @@ class PlayState extends MusicBeatState {
 
 				//Remove missed Notes
 				if (!daNote.active) {
-					if (daNote.tooLate || (!daNote.wasGoodHit && daNote.mustPress)) {
-						if (daNote.mustHit)
-							noteMiss(daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote);
+					if (daNote.mustPress && daNote.mustHit) {
+						noteMiss(daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote);
 					}
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -999,13 +998,13 @@ class PlayState extends MusicBeatState {
 				ModdingUtil.addCall('badNoteHit', [direction]);
 			}
 			else {
-				if (combo >= 5) {
-					gf.playAnim('sad');
-				}
+				if (combo >= 5) gf.playAnim('sad');
 
 				combo = 0;
 				vocals.volume = 0;
-				//health -= noteMissed.missHealth[0];
+				var healthLoss = noteMissed.missHealth[noteMissed.isSustainNote ? 1 : 0];
+				if (noteMissed.isSustainNote) healthLoss *= noteMissed.percentCut * (noteMissed.initSusLength / Conductor.stepCrochet);
+				health -= healthLoss;
 
 				noteCount++;
 				songMisses++;
