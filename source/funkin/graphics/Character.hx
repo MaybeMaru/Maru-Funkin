@@ -154,8 +154,20 @@ class Character extends FlxSpriteUtil {
 		super.update(elapsed);
 	}
 
-	public function sing(noteData:Int = 0, altAnim:String = ''):Void {
-		playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+	public var _singHoldTimer:Float = 0;
+	public var holdFrame:Int = 4;
+
+	public function sing(noteData:Int = 0, altAnim:String = '', hit:Bool = true):Void {
+		if (hit) {
+			playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+			_singHoldTimer = 0;
+		} else {
+			_singHoldTimer += FlxG.elapsed;
+			if (_singHoldTimer >= holdFrame / 24) {//Conductor.stepCrochet * 0.001) {
+				playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+				_singHoldTimer = 0;
+			}
+		}
 	}
 
 	public function hey():Void {

@@ -184,6 +184,7 @@ class PixelPortrait extends FlxSprite {
 		animation.addByPrefix('enter', 'Portrait Enter', 24, false);
 
 		if (path.endsWith('-pixel')) {
+			antialiasing = false;
 			setGraphicSize(Std.int(width * PixelDialogueBox.PIXEL_ZOOM * 0.9));
 			updateHitbox();
 		}

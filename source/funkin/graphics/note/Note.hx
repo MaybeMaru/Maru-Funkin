@@ -283,19 +283,18 @@ class Note extends FlxSpriteUtil {
 		return value;
 	}
 
-    public var type(default, set):String = '';
+    public var noteType(default, set):String = '';
 	public var mustHit:Bool = true; // The note gets ignored if false
 	public var altAnim:String = '';
 	public var hitHealth:Array<Float> = [0.025, 0.0125];
 	public var missHealth:Array<Float> = [0.0475, 0.02375];
 
-	public function set_type(value:String = 'default'):String {
-		type = value;
-		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(type);
+	public function set_noteType(value:String = 'default'):String {
+		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(value);
 		mustHit = noteJson.mustHit;
 		altAnim = noteJson.altAnim;
 		hitHealth = noteJson.hitHealth;
 		missHealth = noteJson.missHealth;
-		return value;
+		return noteType = value;
 	}
 }

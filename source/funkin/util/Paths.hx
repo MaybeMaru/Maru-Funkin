@@ -21,9 +21,9 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
-	public static function getPath(file:String, type:AssetType, library:Null<String>, forceFolder:Bool = false, takeMod:Bool = true):String {
+	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true):String {
 		#if desktop
-		if (takeMod) {
+		if (mods) {
 			var modLib:String = '';
 			if (library != null)
 				modLib = '$library/';
@@ -32,7 +32,7 @@ class Paths
 			if (FileSystem.exists(modFolderPath))
 				return modFolderPath;
 			
-			if (forceFolder) {
+			if (allMods) {
 				for (modFolder in ModdingUtil.modFolders) {
 					if (ModdingUtil.modFoldersMap.get(modFolder)) {
 						var modFolderPath = getModPath('$modFolder/$modLib$file');

@@ -69,25 +69,21 @@ class JsonUtil {
 		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
 		fullPath:Bool = false, mainFolder:String = 'data'):Array<String> {
 		
-		var jsonList:Array<String> = [];
         var assetsList:Array<String> = [];
         var modList:Array<String> = [];
 
-        if (assets) {
+        if (assets)
             assetsList = Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder');
-        }
         #if desktop
         modList = Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods);
         #end
 
-		jsonList = assetsList.concat(modList);
-        return jsonList;
+        return assetsList.concat(modList);
 	}
 
 	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic {
-		if (!getJsonList(folder,true,true,true,false,false,library).contains(path)) {
+		if (!getJsonList(folder,true,true,true,false,false,library).contains(path))
 			return null;
-		}
 		var getJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
 		var returnJson:Dynamic = Json.parse(getJson);
 		return returnJson;
@@ -129,20 +125,17 @@ class JsonUtil {
 
 	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
 		var defaults = Reflect.copy(defaultsInput);
-		if (input == null) {
-			return defaults;
-		}
+		if (input == null) return defaults;
+
 		var props = Reflect.fields(defaults);
 		for (prop in props) {
 			if (Reflect.hasField(input, prop)) {
 				var val = Reflect.field(input, prop);
-				if (val == null) {
+				if (val == null)
 					Reflect.setField(input, prop, Reflect.field(defaults, prop));
-				}
 			}
-			else {
+			else
 				Reflect.setField(input, prop, Reflect.field(defaults, prop));
-			}
 		}
 		return removeUnusedVars(defaults, input);
 	}
@@ -151,9 +144,8 @@ class JsonUtil {
 		var defProps = Reflect.fields(defaults);
 		var inputProps = Reflect.fields(input);
 		for (prop in inputProps) {
-			if (!defProps.contains(prop)) {
+			if (!defProps.contains(prop))
 				Reflect.deleteField(input, prop);
-			}
 		}
 		return input;
 	}

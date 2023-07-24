@@ -488,7 +488,7 @@ class PlayState extends MusicBeatState {
 				newNote.noteSpeed = SONG.speed;
 				newNote.targetSpr = targetStrum;
 				newNote.mustPress = mustPress;
-				newNote.type = noteType;
+				newNote.noteType = noteType;
 				unspawnNotes.push(newNote);
 
 				// Add note sustain
@@ -497,6 +497,7 @@ class PlayState extends MusicBeatState {
 					newSustain.noteSpeed = SONG.speed;
 					newSustain.targetSpr = targetStrum;
 					newSustain.mustPress = mustPress;
+					newSustain.noteType = noteType;
 					unspawnNotes.push(newSustain);
 				}
 
@@ -527,6 +528,7 @@ class PlayState extends MusicBeatState {
 		var startX:Float = NoteUtil.swagWidth * 0.666 + (FlxG.width / 2) * player;
 		var startY:Float = strumLine.y;
 		var offsetY:Float = getPref('downscroll') ? 10 : -10;
+		var isPlayer = player == 1;
 		
 		for (i in 0...Conductor.NOTE_DATA_LENGTH) {
 			var strumX:Float = startX + (NoteUtil.swagWidth + 5) * i;
@@ -536,8 +538,8 @@ class PlayState extends MusicBeatState {
 			babyArrow.scrollFactor.set();
 			strumLineNotes.add(babyArrow);
 			strumLineInitPos.push(babyArrow.getPosition());
-			(player == 1 ? playerStrums : opponentStrums).add(babyArrow);
-			(player == 1 ? playerStrumsInitPos : opponentStrumsInitPos).push(babyArrow.getPosition());
+			(isPlayer ? playerStrums : opponentStrums).add(babyArrow);
+			(isPlayer ? playerStrumsInitPos : opponentStrumsInitPos).push(babyArrow.getPosition());
 			
 			if (!skipStrumIntro) {
 				babyArrow.alpha = 0;
@@ -1031,7 +1033,7 @@ class PlayState extends MusicBeatState {
 	function goodSustainPress(note:Note) {
 		health += note.hitHealth[1] * (FlxG.elapsed * 5);
 		boyfriend.holdTimer = 0;
-		boyfriend.sing(note.noteData, note.altAnim);
+		boyfriend.sing(note.noteData, note.altAnim, false);
 		vocals.volume = 1;
 
 		if (inBotplay) 	{
@@ -1064,7 +1066,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	function opponentSustainPress(note:Note):Void {
-		dad.sing(note.noteData, note.altAnim);
+		dad.sing(note.noteData, note.altAnim, false);
 		dad.holdTimer = 0;
 		vocals.volume = 1;
 

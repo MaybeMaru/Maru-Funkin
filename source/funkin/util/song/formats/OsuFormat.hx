@@ -11,9 +11,8 @@ class OsuFormat {
         var fnfMap:SwagSong = Song.getDefaultSong();
 
         //  Check if its not an osu!mania map
-        if (getMapVar(osuMap, 'Mode') != 3) {
+        if (getMapVar(osuMap, 'Mode') != 3)
             return fnfMap;
-        }
 
         var title = getMapVar(osuMap, 'Title');
         var version = getMapVar(osuMap, 'Version');
@@ -26,9 +25,8 @@ class OsuFormat {
         var sections:Array<SwagSection> = [];
         for (i in 0...Lambda.count(hitObjects)) {
             var newSec:SwagSection = Song.getDefaultSection();
-            if (hitObjects.get(i) != null) {
+            if (hitObjects.get(i) != null)
                 newSec.sectionNotes = hitObjects.get(i);
-            }
             sections.push(newSec);
         }
 
@@ -54,9 +52,8 @@ class OsuFormat {
         for (i in 0...map.length) {
             if (map[i].startsWith('[TimingPoints]')) {
                 var returnArray:Array<Dynamic> = [];
-                for (tm in map[i+1].split(',')) {
+                for (tm in map[i+1].split(','))
                     returnArray.push(Std.parseFloat(tm));
-                }
                 return returnArray;
             }
         }

@@ -30,17 +30,15 @@ class Highscore {
 
 	inline public static function getSongScore(song:String, diff:String):Int {
 		var daSong:String = formatSave(song,diff);
-		if (!songScores.exists(daSong)) {
+		if (!songScores.exists(daSong))
 			setScore(daSong, 0);
-		}
 		return songScores.get(daSong);
 	}
 
 	inline public static function getWeekScore(week:String, diff:String):Int {
 		var daWeek:String = formatSave('week-$week',diff);
-		if (!songScores.exists(daWeek)) {
+		if (!songScores.exists(daWeek))
 			setScore(daWeek, 0);
-		}
 		return songScores.get(daWeek);
 	}
 
@@ -57,13 +55,8 @@ class Highscore {
         scoreSaveFile.bind('funkinScore');
 		songScores = new Map<String, Int>();
 		weekUnlocks = new Map<String, Bool>();
-
-        if (scoreSaveFile.data.songScores != null) {
-			songScores = scoreSaveFile.data.songScores;
-		}
-        if (scoreSaveFile.data.weekUnlocks != null) {
-			weekUnlocks = scoreSaveFile.data.weekUnlocks;
-		}
+        if (scoreSaveFile.data.songScores != null)	songScores = scoreSaveFile.data.songScores;
+        if (scoreSaveFile.data.weekUnlocks != null)	weekUnlocks = scoreSaveFile.data.weekUnlocks;
 	}
 
 	public static function save():Void {
@@ -82,9 +75,8 @@ class Highscore {
 	 *	STORY MODE WEEK PROGRESSION
 	 */
 	inline public static function getWeekUnlock(week:String):Bool {
-		if (!weekUnlocks.exists(week)) {
+		if (!weekUnlocks.exists(week))
 			setWeekUnlock(week, true);
-		}
 		return weekUnlocks.get(week);
 	}
 	

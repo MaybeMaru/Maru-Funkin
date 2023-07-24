@@ -44,34 +44,34 @@ class ModdingUtil {
     }
 
     inline public static function getModFolderList():Array<String> {
-		var guh:Array<String> = [];
+		var list:Array<String> = [];
 		#if desktop
 		if (FileSystem.exists('mods')) {
 			for (folder in FileSystem.readDirectory('mods')) {
                 if (!folderExceptions.contains(folder) && FileSystem.isDirectory('mods/$folder')) {
                     modFoldersMap.set(folder, true);
-                    guh.push(folder);
+                    list.push(folder);
                 }
 			}
 		}
 		#end
-		return guh;
+		return list;
 	}
 
     inline public static function addScript(path:String, global:Bool = false, ?scriptVarNames:Array<String>, ?scriptVars:Array<Dynamic>):Void {
         consoleTrace('[ADD] $path / $global', FlxColor.LIME);
         var scriptCode:String = CoolUtil.getFileContent(path);
-        var piss:FunkScript = new FunkScript(scriptCode);
-        piss.scriptID = path;
+        var script:FunkScript = new FunkScript(scriptCode);
+        script.scriptID = path;
 
         if (scriptVarNames != null && scriptVars != null) {
             for (i in 0...scriptVars.length) {
-                piss.addVar(scriptVarNames[i], scriptVars[i]);
+                script.addVar(scriptVarNames[i], scriptVars[i]);
             }
         }
 
-        scriptsMap.set(path, piss);
-        (global ? globalScripts : playStateScripts).push(piss);
+        scriptsMap.set(path, script);
+        (global ? globalScripts : playStateScripts).push(script);
     }
 
     inline public static function setModFolder(modName:String, activated:Bool):Void {
@@ -89,16 +89,14 @@ class ModdingUtil {
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>, global:Bool = false):Void {
         for (script in (global ? globalScripts : playStateScripts)) {
-            try             script.callback(name,args)
+            try             script.callback(name, args)
             catch(e:Any)    errorTrace('${script.scriptID} / ${Std.string(e)}');
         }
     }
 
-    inline public static function getScriptList(folder:String = 'scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
-        var scriptList:Array<String> = (assets) ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
-        #if desktop
-        scriptList = scriptList.concat(Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods));
-        #end
-        return scriptList;
+    public static function getScriptList(folder:String = 'scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
+        #if !desktop return []; #end
+        var scriptList:Array<String> = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
+        return scriptList.concat(Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods));
     }
 }

@@ -939,7 +939,7 @@ class ChartingState extends MusicBeatState {
 						note.strumTime = daStrumTime;
 						note.noteData = daNoteData % Conductor.NOTE_DATA_LENGTH;
 						note.mustPress = (daNoteData > 3) ? !mustPress : mustPress; 
-						note.type = daType;
+						note.noteType = daType;
 						note.skin = typeData.skin;
 						note.createGraphic();
 						

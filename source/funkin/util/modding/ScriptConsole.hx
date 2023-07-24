@@ -66,7 +66,8 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
 }
 
 class ConsoleTrace extends FlxText {
-    public var alphaTime:Float = 10;
+    inline static var time:Float = 10;
+    public var alphaTime:Float = time;
     public function new() {
         super(20,50,Std.int(FlxG.width/2.25),"",10);
     }
@@ -74,5 +75,7 @@ class ConsoleTrace extends FlxText {
         setPosition(20,50);
         this.text = text;
         this.color = color;
+        alpha = 1;
+        alphaTime = time;
     }
 }

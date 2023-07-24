@@ -13,13 +13,13 @@ class WeekSetup {
 
     inline public static function getWeekList():Array<WeekJson> {
         //Load week Jsons
-        var piss:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
+        var weeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
         var mod:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
 
         //Vanilla weeks go first >:)
-        piss = piss.concat(global);
-        piss = piss.concat(mod.map(week -> Paths.getFileMod(week)[1]));
+        weeks = weeks.concat(global);
+        weeks = weeks.concat(mod.map(week -> Paths.getFileMod(week)[1]));
 
 		modWeekMap = new Map<String,String>();
 		for (week in mod) {
@@ -29,9 +29,9 @@ class WeekSetup {
 
 		//Parse jsons
         weekList = [];
-        weekNameList = piss;
+        weekNameList = weeks;
         weekDataMap = new Map<String,WeekJson>();
-		for (week in piss) {
+		for (week in weeks) {
 			var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$week.json', TEXT, null, true));
 			var parsedJson:WeekJson = Json.parse(getJson);
             if (parsedJson.weekDiffs == null || parsedJson.weekDiffs.length == 0) {

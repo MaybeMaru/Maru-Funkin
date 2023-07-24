@@ -33,8 +33,11 @@ class LatencyState extends MusicBeatState
 		offsetText.screenCenter();
 		hitSpr.alpha -= elapsed;
 
-		if (FlxG.keys.justPressed.ENTER)
-			FlxG.switchState(new MainMenuState());
+		if (FlxG.keys.justPressed.ENTER) {
+			CoolUtil.playMusic('freakyMenu', 0);
+			FlxG.sound.music.fadeIn(4, 0, 1);
+			FlxG.switchState(new OptionsState());
+		}
 
 		if (FlxG.sound.music.playing)
 			resync();
