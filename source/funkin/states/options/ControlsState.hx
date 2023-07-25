@@ -124,9 +124,7 @@ class ControlsState extends MusicBeatState {
 	}
 
 	function changeSelection(change:Int = 0):Void {
-		curSelected += change;
-		if (curSelected < 0)						curSelected = controlItems.length - 1;
-		if (curSelected >= controlItems.length)		curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, controlItems.length - 1);
 		if (change != 0)	CoolUtil.playSound('scrollMenu');
 
 		for (item in controlItems.members) {

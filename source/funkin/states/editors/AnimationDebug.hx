@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import flixel.addons.display.FlxBackdrop;
 import funkin.states.editors.chart.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
 
@@ -19,8 +20,8 @@ import openfl.events.IOErrorEvent;
 class AnimationDebug extends MusicBeatState {
 	var UI_box:FlxUITabMenu;
 	var tabs = [
-		{name: "Character", label: 'Character'},
 		{name: "Animation", label: 'Animation'},
+		{name: "Character", label: 'Character'}
 	];
 
 	var displayChar:Character;
@@ -61,11 +62,10 @@ class AnimationDebug extends MusicBeatState {
 		FlxG.cameras.add(camUI);
 		FlxG.cameras.setDefaultDrawTarget(camUI, true);
 
-		var gridBG:FlxSprite = FlxGridOverlay.create(20, 20, FlxG.width*2, FlxG.height*2, true, 0xff7c7c7c,0xff6e6e6e);
-		gridBG.scrollFactor.set(0.5, 0.5);
-		gridBG.screenCenter();
-		add(gridBG);
+		var gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40, 40, true, 0xff7c7c7c,0xff6e6e6e).pixels);
 		gridBG.cameras = [camChar];
+		gridBG.scrollFactor.set(0.5, 0.5);
+		add(gridBG);
 
 		animsText = new FlxTypedGroup<FlxText>();
 		add(animsText);
@@ -151,7 +151,7 @@ class AnimationDebug extends MusicBeatState {
 		stepper_camX = new FlxUINumericStepper(stepper_offsetY.x + stepper_offsetY.width + 20, stepper_scale.y, 10);
 		stepper_camY = new FlxUINumericStepper(stepper_camX.x + stepper_camX.width, stepper_scale.y, 10);
 
-		check_isPlayer = new FlxUICheckBox(stepper_scale.x, stepper_scale.y + 20, null, null, "Is Player", 100);
+		check_isPlayer = new FlxUICheckBox(stepper_scale.x, stepper_scale.y + 20, null, null, "Is Player (Game)", 100);
 		check_isPlayer.callback = function() {
 			character.isPlayer = check_isPlayer.checked;
 			displayChar.isPlayerJson = check_isPlayer.checked;
@@ -203,7 +203,7 @@ class AnimationDebug extends MusicBeatState {
 		tab_group_char.add(saveButton);
 
 		displayIcon = new HealthIcon();
-		displayIcon.setPosition(UI_box.width);//UI_box.x + UI_box.width, UI_box.y + UI_box.width/16);
+		displayIcon.setPosition(UI_box.width);
 		displayIcon.scale.set(0.5,0.5);
 		displayIcon.updateHitbox();
 		tab_group_char.add(displayIcon);
@@ -224,6 +224,7 @@ class AnimationDebug extends MusicBeatState {
 	var check_loop:FlxUICheckBox;
 	var input_indices:FlxUIInputText;
 	var updateButton:FlxButton;
+	var removeButton:FlxButton;
 
 	var dropDown_anims:FlxUIDropDownMenu;
 
@@ -231,24 +232,38 @@ class AnimationDebug extends MusicBeatState {
 		var tab_group_anim = new FlxUI(null, UI_box);
 		tab_group_anim.name = 'Animation';
 
-			//	TODO ADD ANIMATION TAB
-
 		input_animName = new FlxUIInputText(10, 20, 200, '', 8);
 		input_animFile = new FlxUIInputText(input_animName.x, input_animName.y + 35, 200, '', 8);
-
 		stepper_animFramerate = new FlxUINumericStepper(input_animFile.x, input_animFile.y + 35, 1, 24, 0, 60);
-		
 		check_loop = new FlxUICheckBox(stepper_animFramerate.x + 80, stepper_animFramerate.y, null, null, "Loop Anim", 100);
-		check_loop.callback = function() {
-				// TODO CHECK LOOP
-		};
-
 		input_indices = new FlxUIInputText(stepper_animFramerate.x, stepper_animFramerate.y + 35, 200, '', 8);
 
-		updateButton = new FlxButton(input_indices.x, input_indices.y + 25, "Update Animation", function() {
-				// TODO UPDATE ANIMATION
-			displayChar.setAnimData(dropDown_anims.selectedLabel, getUpdatedAnimData());
-			set_dropDown_anims(dropDown_anims.selectedLabel);
+		updateButton = new FlxButton(input_indices.x, input_indices.y + 25, "Update / Add", function() {
+			var lastAnim = dropDown_anims.selectedLabel;
+			if (!displayChar.animOffsets.exists(input_animName.text)) {
+				var animData = getUpdatedAnimData();
+				displayChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
+				ghostChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
+				lastAnim = animData.animName;
+			} else {
+				displayChar.setAnimData(lastAnim, getUpdatedAnimData());
+				ghostChar.setAnimData(lastAnim, getUpdatedAnimData());
+			}
+			set_dropDown_anims(lastAnim);
+			updateOffsetText(true);
+			updateGhostAnims();
+			formatJsonChar();
+			setAnimUIValues();
+		});
+
+		removeButton = new FlxButton(updateButton.x + 100, updateButton.y, 'Remove', function () {
+			if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(dropDown_anims.selectedLabel)) {
+				displayChar.animOffsets.remove(dropDown_anims.selectedLabel);
+				ghostChar.animOffsets.remove(dropDown_anims.selectedLabel);
+				displayChar.animDatas.remove(dropDown_anims.selectedLabel);
+				ghostChar.animDatas.remove(dropDown_anims.selectedLabel);
+			}
+			set_dropDown_anims();
 			updateOffsetText(true);
 			updateGhostAnims();
 			formatJsonChar();
@@ -256,7 +271,6 @@ class AnimationDebug extends MusicBeatState {
 		});
 
 		dropDown_anims = new FlxUIDropDownMenu(input_animName.x + 210, input_animName.y, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), function(anim:String) {
-				//TODO SELECT ANIMATION
 			dropDown_anims.selectedLabel = anim;
 			setAnimUIValues();
 		});
@@ -273,20 +287,34 @@ class AnimationDebug extends MusicBeatState {
 		tab_group_anim.add(check_loop);
 		tab_group_anim.add(input_indices);
 		tab_group_anim.add(updateButton);
+		tab_group_anim.add(removeButton);
 		tab_group_anim.add(dropDown_anims);
 
 		UI_box.addGroup(tab_group_anim);
 	}
 
+	function pushJsonAnims() {
+		character.anims = [];
+		for (anim in displayChar.animDatas.keys()) {
+			character.anims.push({
+				animName: displayChar.animDatas[anim].animName,
+				animFile: displayChar.animDatas[anim].animFile,
+				offsets: displayChar.animDatas[anim].offsets,
+				loop: displayChar.animDatas[anim].loop,
+				indices: displayChar.animDatas[anim].indices,
+				framerate: displayChar.animDatas[anim].framerate,
+			});
+		}
+	}
+
 	function set_dropDown_anims(?lastAnim:String):Void {
 		var anims:Array<String> = [];
-		for (anim => charOffsets in displayChar.animOffsets) {
-			anims.push(anim);
-		}
+		for (anim => charOffsets in displayChar.animOffsets) anims.push(anim);
+		anims = anims.length > 0 ? anims : ['newAnim']; // Prevent null
 		dropDown_anims.setData(FlxUIDropDownMenu.makeStrIdLabelArray(anims, true));
-		if (lastAnim != null && anims.contains(lastAnim)) {
+
+		if (lastAnim != null && anims.contains(lastAnim))
 			dropDown_anims.selectedLabel = lastAnim;
-		}
 	}
 
 	function loadCharacter(newChar:String = 'bf'):Void {
@@ -478,9 +506,7 @@ class AnimationDebug extends MusicBeatState {
 		}
 		if (updateAnim != null) {
 			displayChar.playAnim(updateAnim, true);
-			if (ghostAnim == null) {	//	TODO TEMPORAL NULL GHOST ANIM FIX
-				ghostAnim = updateAnim;
-			}
+			if (ghostAnim == null) ghostAnim = updateAnim;
 		}
 		ghostChar.animOffsets = displayChar.animOffsets;
 		ghostChar.playAnim(ghostAnim, true);
@@ -489,25 +515,13 @@ class AnimationDebug extends MusicBeatState {
 	function formatJsonChar():Void {
 		character.imagePath = input_imagePath.text;
 		character.icon = input_icon.text;
-		for (i in 0...character.anims.length) {	//	UPDATE JSON ANIM OFFSETS
-			var animName:String = character.anims[i].animName;
-			var animOffsets:FlxPoint = displayChar.animOffsets.get(animName);
-			character.anims[i].offsets = [animOffsets.x,animOffsets.y];
-
-			var animData:SpriteAnimation = displayChar.getAnimData(animName);
-			character.anims[i].animFile = animData.animFile;
-			character.anims[i].framerate = animData.framerate;
-			character.anims[i].loop =  animData.loop;
-			character.anims[i].indices =  animData.indices;
-		}
+		pushJsonAnims();
 	}
 
 	function checkFocus():Bool {
 		var focusInputs = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
 		for (input in focusInputs) {
-			if (input.hasFocus) {
-				return true;
-			}
+			if (input.hasFocus) return true;
 		}
 		return false;
 	}
@@ -530,13 +544,13 @@ class AnimationDebug extends MusicBeatState {
 			camFollow.velocity.x *= (FlxG.keys.pressed.J) ? -1 : 1;
 			if (FlxG.keys.pressed.E)	camChar.zoom += 0.01 * multiplier * camChar.zoom;
 			if (FlxG.keys.pressed.Q)	camChar.zoom -= 0.01 * multiplier * camChar.zoom;
+			camChar.zoom = Math.max(Math.min(camChar.zoom, 10), 0.25);
 	
 				// CHANGE ANIM
-			if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S) {
+			if ((FlxG.keys.justPressed.W || FlxG.keys.justPressed.S) && animsList.length > 0) {
 				if (FlxG.keys.justPressed.W) curAnimIndex--;
 				if (FlxG.keys.justPressed.S) curAnimIndex++;
-				if (curAnimIndex < 0) curAnimIndex = animsList.length-1;
-				if (curAnimIndex >= animsList.length) curAnimIndex = 0;
+				curAnimIndex = FlxMath.wrap(curAnimIndex, 0, animsList.length-1);
 				displayChar.playAnim(animsList[curAnimIndex], true);
 				updateOffsetText();
 			}
@@ -573,33 +587,7 @@ class AnimationDebug extends MusicBeatState {
 		var data:String = Json.stringify(character, "\t");
 		if ((data != null) && (data.length > 0)) {
 			_file = new FileReference();
-			_file.addEventListener(Event.COMPLETE, onSaveComplete);
-			_file.addEventListener(Event.CANCEL, onSaveCancel);
-			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 			_file.save(data.trim(), '${displayChar.curCharacter}.json');
 		}
-	}
-
-	function onSaveComplete(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
-		FlxG.log.notice("Successfully saved LEVEL DATA.");
-	}
-
-	function onSaveCancel(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
-	}
-
-	function onSaveError(_):Void {
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
-		FlxG.log.error("Problem saving Level data");
 	}
 }

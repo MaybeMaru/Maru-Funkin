@@ -392,8 +392,6 @@ class PlayState extends MusicBeatState {
 		Conductor.setPitch(Conductor.songPitch);
 		ModdingUtil.addCall('startCountdown');
 
-		var introArray:Array<String> = ['ready','set','go'];
-		var downCounter:Array<Dynamic> = [3,2,1,'Go'];
 		var swagCounter:Int = 0;
 		var introSkin:String = SkinUtil.curSkin;
 
@@ -410,7 +408,7 @@ class PlayState extends MusicBeatState {
 
 			if (swagCounter < Conductor.BEATS_LENGTH) {
 				if (swagCounter > 0) {
-					var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${introArray[swagCounter-1]}');
+					var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${['ready','set','go'][swagCounter-1]}');
 					countdownSpr.scale.set(SkinUtil.curSkinData.scale,SkinUtil.curSkinData.scale);
 					countdownSpr.screenCenter();
 					countdownSpr.cameras = [camHUD];
@@ -420,7 +418,7 @@ class PlayState extends MusicBeatState {
 					countdownSpr.velocity.y -= SONG.bpm*10;
 					FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochet / 1000, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
 				}
-				CoolUtil.playSound('skins/$introSkin/intro${downCounter[swagCounter]}', 0.6);
+				CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
 			}
 			swagCounter++;
 		}, 5);
@@ -810,8 +808,7 @@ class PlayState extends MusicBeatState {
 				if (storyPlaylist.length <= 0) {
 					transIn = FlxTransitionableState.defaultTransIn;
 					transOut = FlxTransitionableState.defaultTransOut;
-					
-					showUI(false);
+
 					SkinUtil.setCurSkin('default');
 					FlxG.switchState(new StoryMenuState());
 					if (!(inBotplay || inPractice))
@@ -823,7 +820,6 @@ class PlayState extends MusicBeatState {
 			}
 			else {
 				trace('WENT BACK TO FREEPLAY??');
-				showUI(false);
 				SkinUtil.setCurSkin('default');
 				FlxG.switchState(new FreeplayState());
 			}
@@ -1136,7 +1132,6 @@ class PlayState extends MusicBeatState {
 	}
 
 	override function destroy():Void {
-		showUI(false);
 		Conductor.setPitch(1, false);
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
@@ -1191,8 +1186,6 @@ class PlayState extends MusicBeatState {
 
 	public function showUI(bool:Bool):Void {
 		var displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, healthBarBG, strumLineNotes, grpNoteSplashes, notes];
-		for (displayObject in displayObjects) {
-			displayObject.visible = bool;
-		}
+		for (displayObject in displayObjects) displayObject.visible = bool;
 	}
 }

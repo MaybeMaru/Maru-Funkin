@@ -23,18 +23,14 @@ class MusicBeatState extends FlxUIState {
 		ModdingUtil.clearScripts(true);
 		var globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
 		var curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
-		for (script in globalStateScripts.concat(curStateScripts)) {
-			ModdingUtil.addScript(script, true);
-		}
+		for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script, true);
 		ModdingUtil.addCall('stateCreate', null, true);
 	}
 
 	override function update(elapsed:Float):Void {
 		handleSteps();
 		ModdingUtil.addCall('stateUpdate', [elapsed], true);
-		if (FlxG.keys.justPressed.F1) {
-			scriptConsole.show = !scriptConsole.show;
-		}
+		if (FlxG.keys.justPressed.F1) scriptConsole.show = !scriptConsole.show;
 		super.update(elapsed);
 	}
 
@@ -91,4 +87,30 @@ class MusicBeatState extends FlxUIState {
 	//Just a quicker way to get settings
 	public function getPref(pref:String):Dynamic		return Preferences.getPref(pref);
 	public function getKey(key:String):Dynamic			return Controls.getKey(key);
+	
+	// Fix broken transitions
+	override function transitionIn() {
+		if (transIn != null && transIn.type != NONE)
+		{
+			var _trans = createTransition(transIn);
+			_trans.setStatus(FULL);
+			_trans.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+			openSubState(_trans);
+			_trans.finishCallback = finishTransIn;
+			_trans.start(OUT);
+		}
+	}
+
+	override function transitionOut(?OnExit:() -> Void) {
+		_onExit = OnExit;
+		if (hasTransOut) {
+			var _trans = createTransition(transOut);
+			_trans.setStatus(EMPTY);
+			_trans.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+			openSubState(_trans);
+			_trans.finishCallback = finishTransOut;
+			_trans.start(IN);
+		}
+		else _onExit();
+	}
 }

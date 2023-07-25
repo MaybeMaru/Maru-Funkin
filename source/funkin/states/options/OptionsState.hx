@@ -40,16 +40,18 @@ class OptionsState extends MusicBeatState {
 			optionItem.screenCenter(X);
 			grpOptionsItems.add(optionItem);
 		}
+		changeSelection();
 		super.create();
 	}
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
+		if (!selectedSomethin) controlShit();
+	}
 
-		if (!selectedSomethin) {
-			controlShit();
-		}
-
+	function changeSelection(value:Int = 0) {
+		curSelected = FlxMath.wrap(curSelected + value, 0, optionItems.length - 1);
+		if (value != 0) CoolUtil.playSound('scrollMenu');
 		grpOptionsItems.forEach(function(item:Alphabet) {
 			item.color = FlxColor.WHITE;
 			item.alpha = 0.6;
@@ -62,18 +64,8 @@ class OptionsState extends MusicBeatState {
 	}
 
 	function controlShit():Void {
-		if (getKey('UI_UP-P')) {
-			CoolUtil.playSound('scrollMenu');
-			curSelected--;
-		}
-
-		if (getKey('UI_DOWN-P')) {
-			CoolUtil.playSound('scrollMenu');
-			curSelected++;
-		}
-
-		if (curSelected < 0)					curSelected = optionItems.length - 1;
-		if (curSelected >= optionItems.length)	curSelected = 0;
+		if (getKey('UI_UP-P')) changeSelection(-1);
+		if (getKey('UI_DOWN-P')) changeSelection(1);
 
 		if (getKey('ACCEPT-P')) {
 			selectedSomethin = true;

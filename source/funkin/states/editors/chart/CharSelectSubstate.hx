@@ -8,6 +8,7 @@ class CharSelectSubstate extends MusicBeatSubstate {
     var curSelected:Array<Int> = [0,0];
     var iconArray:Array<Array<HealthIcon>> = [[],[]];
     var charArray:Array<Array<MenuAlphabet>> = [[],[]];
+    var folderTxt:Alphabet;
 
 	public function new(?selectFunction:Void->Void):Void {
 		super();
@@ -17,6 +18,11 @@ class CharSelectSubstate extends MusicBeatSubstate {
 		bg.alpha = 0.6;
 		bg.scrollFactor.set();
 		add(bg);
+
+        folderTxt = new Alphabet(FlxG.width - 10, 10);
+        folderTxt.scrollFactor.set();
+        folderTxt.alignment = RIGHT;
+        folderTxt.color = FlxColor.YELLOW;
 
         var vanillaChars:Array<String> = Paths.getFileList(TEXT, false, 'json', 'data/characters');
         var modChars:Array<String> = Paths.getModFileList('data/characters', 'json', false);
@@ -44,6 +50,7 @@ class CharSelectSubstate extends MusicBeatSubstate {
             }
         }
         changeFolder();
+        add(folderTxt);
     }
     
     override public function update(elapsed:Float):Void {
@@ -63,10 +70,13 @@ class CharSelectSubstate extends MusicBeatSubstate {
     }
 
     function changeFolder(change:Int = 0):Void {
-        curFolder += change;
-		if (curFolder < 0)				        curFolder = curSelected.length - 1;
-		if (curFolder >= curSelected.length)	curFolder = 0;
+        curFolder = FlxMath.wrap(curFolder + change, 0, curSelected.length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+
+        switch(curFolder) {
+            case 0: folderTxt.text = 'Base game';
+            case 1: folderTxt.text = 'Mods';
+        }
 
         for (f in 0...charArray.length) {
             var showBool:Bool = (f == curFolder);
@@ -79,9 +89,7 @@ class CharSelectSubstate extends MusicBeatSubstate {
     }
 
     function changeSelection(change:Int = 0):Void {
-        curSelected[curFolder] += change;
-        if (curSelected[curFolder] < 0)				                curSelected[curFolder] = charArray[curFolder].length - 1;
-		if (curSelected[curFolder] >= charArray[curFolder].length)	curSelected[curFolder] = 0;
+        curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
         for (i in 0...charArray[curFolder].length) {

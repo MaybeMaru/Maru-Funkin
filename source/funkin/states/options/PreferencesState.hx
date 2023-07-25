@@ -32,9 +32,7 @@ class PreferencesState extends MusicBeatState {
     }
 
     function changeSelection(change:Int = 0):Void {
-        curSelected += change;
-        if (curSelected < 0)                    curSelected = prefItems.length - 1;
-		if (curSelected >= prefItems.length)    curSelected = 0;
+        curSelected = FlxMath.wrap(curSelected + change, 0, prefItems.length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu');
 
         for (item in prefItems.members) {

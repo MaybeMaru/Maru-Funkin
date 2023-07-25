@@ -73,11 +73,8 @@ class PauseSubState extends MusicBeatSubstate {
 		if (coolDown > 0) {
 			coolDown-=elapsed;
 		} else {
-			if (getKey('ACCEPT-P')) {
-				var daSelected:String = menuItems[curSelected];
-				PlayState.game.showUI(daSelected == 'Resume');
-	
-				switch (daSelected) {
+			if (getKey('ACCEPT-P')) {	
+				switch (menuItems[curSelected]) {
 					case "Resume":			close();
 					case "Restart song":	FlxG.resetState();
 					case "Options":			OptionsState.fromPlayState = true;	FlxG.switchState(new OptionsState());
@@ -93,10 +90,7 @@ class PauseSubState extends MusicBeatSubstate {
 	}
 
 	function changeSelection(change:Int = 0):Void {
-		curSelected += change;
-		if (curSelected < 0)					curSelected = menuItems.length - 1;
-		if (curSelected >= menuItems.length)	curSelected = 0;
-
+		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
 		for (i in 0...grpMenuShit.members.length) {
 			var item = grpMenuShit.members[i];
 			item.targetY = i - curSelected;
