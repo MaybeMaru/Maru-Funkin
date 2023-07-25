@@ -299,6 +299,8 @@ class Note extends FlxSpriteUtil {
 		return value;
 	}
 
+    //function reloadRefSprite = 
+
     public var noteType(default, set):String = '';
 	public var mustHit:Bool = true; // The note gets ignored if false
 	public var altAnim:String = '';

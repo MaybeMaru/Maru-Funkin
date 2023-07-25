@@ -13,7 +13,7 @@ import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 import funkin.states.editors.chart.ChartPreview;
 import funkin.states.editors.chart.CharSelectSubstate;
-import funkin.states.editors.chart.ChartSustain;
+//import funkin.states.editors.chart.ChartSustain;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.util.FlxSave;
 
@@ -38,11 +38,11 @@ class ChartingState extends MusicBeatState {
 	var dummyArrow:FlxSprite;
 	var bg:FunkinSprite;
 
-	var curRenderedNotes:FlxTypedGroup<Note>;
-	var curRenderedSustains:FlxTypedGroup<ChartSustain>;
+	var curRenderedNotes:FlxTypedGroup<ChartNote>;
+	var curRenderedSustains:FlxTypedGroup<ChartNote>;
 	var curRenderedTextTypes:FlxTypedGroup<FunkinText>;
 
-	var GRID_SIZE:Int = 40;
+	public static inline var GRID_SIZE:Int = 40;
 	var gridBG:FlxSprite;
 	var gridBGback:FlxSprite;
 	var gridBlackLine:FlxSprite;
@@ -118,8 +118,8 @@ class ChartingState extends MusicBeatState {
 		gridBlackLine.offset.x = gridBlackLine.width;
 		add(gridBlackLine);
 
-		curRenderedNotes = new FlxTypedGroup<Note>();
-		curRenderedSustains = new FlxTypedGroup<ChartSustain>();
+		curRenderedNotes = new FlxTypedGroup<ChartNote>();
+		curRenderedSustains = new FlxTypedGroup<ChartNote>();
 		curRenderedTextTypes = new FlxTypedGroup<FunkinText>();
 
 		_song = Song.checkSong(PlayState.SONG);
@@ -924,34 +924,67 @@ class ChartingState extends MusicBeatState {
 				var sectionNotes:Array<Dynamic> = sectionData.sectionNotes;
 				if (sectionNotes != null) {
 					for (i in sectionNotes) {
-						var daStrumTime = i[0];
-						var daNoteData = i[1];
-						var daSus = i[2];
-						var daType:String = NoteUtil.getTypeName(i[3]);
+						var strumTime = i[0];
+						var noteData = i[1];
+						var susLength = i[2];
+						var noteType:String = NoteUtil.getTypeName(i[3]);
 						var mustPress:Bool = sectionData.mustHitSection;
-						var typeData:NoteTypeJson = NoteUtil.getTypeJson(daType);
+						var typeData:NoteTypeJson = NoteUtil.getTypeJson(noteType);
 
-						var note:Note = curRenderedNotes.recycle(Note);
+						var notePos = new FlxPoint(Math.floor(noteData * GRID_SIZE), Math.floor(getYfromStrum((strumTime - sectionStartTime()))));
+
+						var note:ChartNote = curRenderedNotes.recycle(ChartNote);
+						note.init(strumTime, noteData, notePos.x, notePos.y, 0, typeData.skin, mustPress);
+						curRenderedNotes.add(note);
+
+						if (susLength > 0) {
+							var susNote:ChartNote = curRenderedSustains.recycle(ChartNote);
+							susNote.init(strumTime, noteData, notePos.x, notePos.y, susLength, typeData.skin, mustPress, true);
+							curRenderedSustains.add(susNote);
+						}
+						
+						/*var note:Note = curRenderedNotes.recycle(Note);
+						note.isSustainNote = false;
 						note.strumTime = daStrumTime;
 						note.noteData = daNoteData % Conductor.NOTE_DATA_LENGTH;
 						note.mustPress = (daNoteData > 3) ? !mustPress : mustPress; 
 						note.noteType = daType;
-						note.skin = typeData.skin;
-						note.createGraphic();
+						note.changeSkin(typeData.skin);
+						//note.skin = typeData.skin;
+						//note.createGraphic();
 						
 						note.scrollFactor.set(1,1);
 						note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 						note.updateHitbox();
 						note.setPosition(Math.floor(daNoteData * GRID_SIZE), Math.floor(getYfromStrum((daStrumTime - sectionStartTime()))));
-						curRenderedNotes.add(note);
+						curRenderedNotes.add(note);*/
 
-						if (s == 1) {
+						/*if (daSus > 0) {
+							var susNote:Note = curRenderedSustains.recycle(Note);
+							susNote.strumTime = daStrumTime;
+							susNote.noteData = note.noteData;
+							susNote.mustPress = note.mustPress;
+							
+							susNote.isSustainNote = true;
+							susNote.initSusLength = daSus - susNote.getPosMill(GRID_SIZE / 2);
+							susNote.changeSkin(typeData.skin);
+
+							susNote.angle = 0;
+							susNote.scrollFactor.set(1,1);
+							susNote.setPosition(note.x - GRID_SIZE, note.y + GRID_SIZE /2);
+							susNote.scale.copyFrom(note.scale);
+							var _heigth:Int = Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height) / susNote.scale.y);
+							susNote.drawSustain(false, _heigth);
+							curRenderedSustains.add(susNote);
+						}*/
+
+						/*if (s == 1) {
 							note.alpha = 1;	//	Start section click sounds
 							note.color = FlxColor.WHITE;
 						} else {
 							note.alpha = 0.3;
 							note.color = FlxColor.fromRGB(150,150,150);
-						}
+						}*/
 			
 						/*var note:Note = curRenderedNotes.recycle(Note);	//	Recycle is faster than creating a new one
 						note.strumTime = daStrumTime;
@@ -982,7 +1015,7 @@ class ChartingState extends MusicBeatState {
 						}*/
 			
 						if (typeData.showText) {
-							var crap:String = (daType.startsWith('default')) ? daType.split('default')[1] : daType;
+							var crap:String = (noteType.startsWith('default')) ? noteType.split('default')[1] : noteType;
 							var typeText:FunkinText = curRenderedTextTypes.recycle(FunkinText);
 							typeText.text = crap;
 							typeText.setPosition(note.x - (typeText.width/2 - note.width/2), note.y - (typeText.height/2 - note.height/2));

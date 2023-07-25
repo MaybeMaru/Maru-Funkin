@@ -60,13 +60,18 @@ class CharSelectSubstate extends MusicBeatSubstate {
         if (getKey('UI_LEFT-P'))	changeFolder(-1);
 		if (getKey('UI_RIGHT-P'))	changeFolder(1);
         if (getKey('ACCEPT-P'))     selectChar();
-        else if (getKey('BACK-P'))  close();
+        else if (getKey('BACK-P'))  closeRemove();
+    }
+
+    function closeRemove() {
+        close();
+        destroy();
     }
 
     function selectChar():Void {
         lastChar = charArray[curFolder][curSelected[curFolder]].text;
         if (selectFunction != null) selectFunction();
-        close();
+        closeRemove();
     }
 
     function changeFolder(change:Int = 0):Void {

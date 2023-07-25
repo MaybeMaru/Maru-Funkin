@@ -331,7 +331,7 @@ class AnimationDebug extends MusicBeatState {
 		updateOffsetText(true);
 		setUIValues();
 		updateCamOffsets();
-		iconChangeCheck(true);
+		makeIcon();
 		set_dropDown_anims();
 		setAnimUIValues();
 	}
@@ -439,7 +439,7 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
-		if(id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
+		if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
 				//	SCALE STEPPER
 			if (sender == stepper_scale) {
 				character.scale = stepper_scale.value;
@@ -459,17 +459,19 @@ class AnimationDebug extends MusicBeatState {
 				updateCamOffsets();
 			}
 		}
+		if (id == FlxUIInputText.INPUT_EVENT && (sender is FlxUIInputText)) {
+				// ICON INPUT
+			if ((sender == input_icon)) {
+				makeIcon();
+			}
+		}
 	}
 
-	var lastText:String = 'bf';
-	function iconChangeCheck(forced:Bool = false):Void {
-		if (input_icon.text != lastText || forced) {
-			displayIcon.makeIcon(input_icon.text);
-			displayIconDead.visible = !displayIcon.singleAnim;
-			displayIconDead.makeIcon(input_icon.text);
-			displayIconDead.animCheck();
-			lastText = input_icon.text;
-		}
+	function makeIcon() {
+		displayIcon.makeIcon(input_icon.text);
+		displayIconDead.visible = !displayIcon.singleAnim;
+		displayIconDead.makeIcon(input_icon.text);
+		displayIconDead.animCheck();
 	}
 
 	function updateCamOffsets():Void {
@@ -527,10 +529,6 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	override function update(elapsed:Float):Void {
-		curAnimText.text = (displayChar.animation.curAnim != null) ? displayChar.animation.curAnim.name : 'NULL_ANIM';
-		curAnimText.color = (displayChar.animation.curAnim != null) ? FlxColor.WHITE : FlxColor.RED;
-		iconChangeCheck();
-
 		if (!checkFocus()) {
 			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
 			if (FlxG.keys.justPressed.ENTER){
@@ -579,6 +577,9 @@ class AnimationDebug extends MusicBeatState {
 			}
 		}
 		super.update(elapsed);
+
+		curAnimText.text = (displayChar.animation.curAnim != null) ? displayChar.animation.curAnim.name : 'NULL_ANIM';
+		curAnimText.color = (displayChar.animation.curAnim != null) ? FlxColor.WHITE : FlxColor.RED;
 	}
 
 	var _file:FileReference;
