@@ -1,7 +1,5 @@
 package funkin.states.menus;
 
-import shaders.ColorSwap;
-
 typedef IntroPart = {
 	var create:Array<String>;
 	var add:String;
@@ -26,7 +24,6 @@ class TitleState extends MusicBeatState {
 	var titleGroup:FlxGroup;
 	var textSprite:Alphabet;
 	var spriteGroup:FlxGroup;
-	var swagShader:ColorSwap;
 
 	var curWacky:Array<String> = [];
 	var introJson:IntroJson = null;
@@ -39,7 +36,6 @@ class TitleState extends MusicBeatState {
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
 		Conductor.changeBPM(introJson.bpm);
 		persistentUpdate = true;
-		swagShader = new ColorSwap();
 
 		titleGroup = new FlxGroup();
 		add(titleGroup);
@@ -48,15 +44,17 @@ class TitleState extends MusicBeatState {
 		logoBump = new FunkinSprite('title/logoBumpin', [-115,-100]);
 		logoBump.addAnim('idle', 'logo bumpin');
 		logoBump.dance();
-		logoBump.shader = swagShader.shader;
 		FlxTween.tween(logoBump, {y: logoBump.y + 50}, 1.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 		titleGroup.add(logoBump);
 
 		gfDance = new FunkinSprite('title/gfDanceTitle', [FlxG.width*0.42,FlxG.height*0.0675]);
 		gfDance.addAnim('danceLeft', 'gfDance', 24, false, [30,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
 		gfDance.addAnim('danceRight', 'gfDance', 24, false, [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]);
-		gfDance.shader = swagShader.shader;
 		titleGroup.add(gfDance);
+
+		Shader.initShader('colorSwap');
+		Shader.setSpriteShader(logoBump, 'colorSwap');
+		Shader.setSpriteShader(gfDance, 'colorSwap');
 
 		titleText = new FunkinSprite('title/titleEnter', [100,FlxG.height*0.8]);
 		titleText.addAnim('idle', 'Press Enter to Begin');
@@ -131,6 +129,7 @@ class TitleState extends MusicBeatState {
 
 	var transitioning:Bool = false;
 	var titleSine:Float = 0;
+	var timeElp:Float = 0;
 
 	override function update(elapsed:Float):Void {
 		if (FlxG.sound.music != null)
@@ -141,9 +140,12 @@ class TitleState extends MusicBeatState {
 		}
 
 		if (initialized && !transitioning && titleText != null) {
-			titleSine += 135 * elapsed;
-			titleText.alpha = 1 - Math.sin((Math.PI * titleSine) / 135)/1.48;
-			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, titleText.alpha);
+			titleSine += elapsed * 3;
+			titleSine %= Math.PI * 2;
+
+			var lerpValue = Math.sin(titleSine);
+			titleText.alpha = (lerpValue + 1) * 0.25 + 0.75;
+			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) / 2);
 		}
 
 		if (getKey('ACCEPT-P')) {
@@ -190,8 +192,9 @@ class TitleState extends MusicBeatState {
 			}
 		}
 
-		if (getKey('UI_LEFT')) swagShader.update(-elapsed * 0.1);
-		if (getKey('UI_RIGHT')) swagShader.update(elapsed * 0.1);
+		if (getKey('UI_LEFT')) timeElp -= elapsed;
+		if (getKey('UI_RIGHT'))timeElp += elapsed;
+		Shader.setFloat('colorSwap', 'iTime', timeElp);
 
 		super.update(elapsed);
 	}

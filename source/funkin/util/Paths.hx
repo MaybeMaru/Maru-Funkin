@@ -109,6 +109,11 @@ class Paths
 		return getPath('data/$key.hx', TEXT, library);
 	}
 
+	inline static public function shader(key:String, ?library:String):String
+	{
+		return getPath('data/shaders/$key.frag', TEXT, library);
+	}
+
 	static public function sound(key:String, ?library:String):FlxSoundAsset
 	{
 		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library);

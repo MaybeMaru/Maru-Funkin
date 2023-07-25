@@ -47,7 +47,6 @@ class FunkScript {
 		addVar('Preferences', Preferences);
 		addVar('Controls', Controls);
 
-		addVar('WiggleEffect', shaders.WiggleEffect);
 		addVar('DialogueBox', funkin.graphics.dialogue.NormalDialogueBox);
 		addVar('PixelDialogueBox', funkin.graphics.dialogue.PixelDialogueBox);
 		addVar('FunkinSprite', FunkinSprite);
@@ -114,17 +113,6 @@ class FunkScript {
 				case 'shader': 		return SHADER;
 				case 'subtract': 	return SUBTRACT;
 				default:			return NORMAL;
-			}
-		});
-
-		addVar('getWiggleEffectType', function(wiggleType:String):shaders.WiggleEffect.WiggleEffectType {
-			switch(wiggleType.toLowerCase().trim()) {
-				case 'dreamy': 					return DREAMY;
-				case 'wavy': 					return WAVY;
-				case 'heat_wave_horizontal': 	return HEAT_WAVE_HORIZONTAL;
-				case 'heat_wave_vertical': 		return HEAT_WAVE_VERTICAL;
-				case 'flag': 					return FLAG;
-				default: 						return DREAMY;
 			}
 		});
 

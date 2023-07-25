@@ -27,20 +27,12 @@ class FlxSpriteUtil extends FlxSprite {
 	public var animDatas:Map<String, SpriteAnimation>;
 	public var specialAnim:Bool = false;
 	public var _packer:String = 'image';
-	public var _dynamic:Dynamic = {};
 
     public function new(?X:Float = 0, ?Y:Float = 0):Void {
         animOffsets = new Map<String, FlxPoint>();
 		animDatas = new Map<String, SpriteAnimation>();
         super(X,Y);
     }
-
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-		if (_dynamic.update != null) {
-			Reflect.callMethod(null, _dynamic.update, [elapsed]);
-		}
-	}
 
 	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true) {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);

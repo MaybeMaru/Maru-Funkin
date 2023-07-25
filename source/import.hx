@@ -12,6 +12,7 @@ import funkin.util.song.WeekSetup;
 import funkin.util.Paths;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
+import funkin.util.Shader;
 #if desktop
 import funkin.util.Discord;
 import funkin.util.Discord.DiscordClient;
