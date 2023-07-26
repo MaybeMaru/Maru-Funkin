@@ -44,7 +44,7 @@ class ModFoldersState extends MusicBeatState {
     }
 
     function reloadFolders():Void {
-        CoolUtil.init(false);
+        CoolUtil.init();
         CoolUtil.playMusic('freakyMenu');
         FlxG.resetState();
     }

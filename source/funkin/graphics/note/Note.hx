@@ -217,6 +217,7 @@ class Note extends FlxSpriteUtil {
         
                 //draw end
                 var endPos = _height - susEnd.height;
+                pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
                 stamp(susEnd, 0, Std.int(endPos));
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);

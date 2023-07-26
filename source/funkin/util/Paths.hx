@@ -247,20 +247,20 @@ class Paths
 	}
 
 	inline static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		var returnThing:FlxGraphicAsset = path;
+		var retImage:FlxGraphicAsset = path;
 
 		if (gpu) {
-			if (Preloader.existsBitmap(path)) returnThing = Preloader.getBitmap(path);
+			if (Preloader.existsBitmap(path)) retImage = Preloader.getBitmap(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
 				Preloader.addFromBitmap(bitmap, path);
-				returnThing = Preloader.getBitmap(path);
+				retImage = Preloader.getBitmap(path);
 			}
 		} else {
-			returnThing = getBitmapData(path, true);
+			retImage = getBitmapData(path, true);
 		}
 
-		return returnThing;
+		return retImage;
 	}
 
 	/*
@@ -286,16 +286,23 @@ class Paths
 		return bitmap;
 	}
 
-	inline static public function getSound(path:String):FlxSoundAsset {
-		var returnSound:FlxSoundAsset = path;
+	public static var cachedSounds:Map<String, Sound> = [];
+
+	static public function getSound(key:String):FlxSoundAsset {
+		if (cachedSounds.exists(key)) {
+			return cachedSounds.get(key);
+		}
 		#if desktop
-		var fixPath = removeAssetLib(path);
+		var fixPath = removeAssetLib(key);
 		if (!fixPath.startsWith('assets')) {
-			returnSound = Sound.fromFile(path);
+			var sound = Sound.fromFile(fixPath);
+			cachedSounds.set(key, sound);
+			return sound;
 		}
 		#end
-
-		return returnSound;
+		var sound = OpenFlAssets.getSound(key);
+		cachedSounds.set(key, sound);
+		return sound;
 	}
 
 	inline static public function getPackerType(key:String, ?library:String):String {
