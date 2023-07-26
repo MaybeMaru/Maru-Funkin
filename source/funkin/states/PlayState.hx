@@ -496,6 +496,7 @@ class PlayState extends MusicBeatState {
 					newSustain.targetSpr = targetStrum;
 					newSustain.mustPress = mustPress;
 					newSustain.noteType = noteType;
+					newSustain.parentNote = newNote;
 					unspawnNotes.push(newSustain);
 				}
 
@@ -751,15 +752,21 @@ class PlayState extends MusicBeatState {
 					daNote.destroy();
 				}
 			});
+
+			if (inst.playing) {
+				if (Conductor.songPosition - SONG.offsets[1] >= vocals.length) { // Prevent repeating vocals
+					vocals.volume = 0;
+				}
+			}
 		}
 
 		if (!inCutscene)
 			keyShit();
 
-		//#if debug
+		#if debug
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
-		//#end
+		#end
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}

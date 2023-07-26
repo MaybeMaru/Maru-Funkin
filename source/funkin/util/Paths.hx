@@ -154,10 +154,10 @@ class Paths
 		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}.$ext', TEXT, 'songs');
 	}
 
-	inline static public function image(key:String, ?library:String, forcePath:Bool = false, getGlobal:Bool = false):FlxGraphicAsset
+	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset
 	{
-		var imagePath:String = getPath('images/$key.png', IMAGE, library, getGlobal);
-		return forcePath ? imagePath : getImage(imagePath);
+		var imagePath:String = getPath('images/$key.png', IMAGE, library, allMods);
+		return forcePath ? imagePath : getImage(imagePath, gpu);
 	}
 
 	inline static public function atlas(key:String, ?library:String):String
@@ -172,29 +172,26 @@ class Paths
 	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
-		#if desktop
-		return FileSystem.exists(removeAssetLib(file));
-		#else
-		return OpenFlAssets.exists(file, type);
-		#end
+		#if desktop return FileSystem.exists(removeAssetLib(file));
+		#else		return OpenFlAssets.exists(file, type);			#end
 	}
 
 	inline static public function removeAssetLib(path:String):String {
 		return #if desktop path.contains(':') ? path.split(':')[1] : #end path;
 	}
 
+	//	Returns [file Mod, file Name]
 	inline static public function getFileMod(dir:String):Array<String> {
 		var dirParts = dir.split('/');
 		return [dirParts[1], dirParts[dirParts.length-1].split('.')[0]];
-		//	Returns [file Mod, file Name]
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSparrow(image(key, library, gpu), CoolUtil.getFileContent(file('images/$key.xml', library)));
+		return FlxAtlasFrames.fromSparrow(image(key, library, false, false, gpu), CoolUtil.getFileContent(file('images/$key.xml', library)));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, gpu), CoolUtil.getFileContent(file('images/$key.txt', library)));
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, false, false, gpu), CoolUtil.getFileContent(file('images/$key.txt', library)));
 	}
 
 	inline static public function getAsepriteAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
@@ -249,34 +246,56 @@ class Paths
 		#end
 	}
 
-	inline static public function getImage(path:String):FlxGraphicAsset {
+	inline static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		var returnThing:FlxGraphicAsset = path;
-		if (Preloader.existsBitmap(path)) returnThing = Preloader.getBitmap(path);
-		else if (exists(path, IMAGE)) {
-			var bitmap:BitmapData = getBitmapData(path);
-			Preloader.addFromBitmap(bitmap, path);
-			returnThing = Preloader.getBitmap(path);
+
+		if (gpu) {
+			if (Preloader.existsBitmap(path)) returnThing = Preloader.getBitmap(path);
+			else if (exists(path, IMAGE)) {
+				var bitmap:BitmapData = getBitmapData(path);
+				Preloader.addFromBitmap(bitmap, path);
+				returnThing = Preloader.getBitmap(path);
+			}
+		} else {
+			returnThing = getBitmapData(path, true);
 		}
+
 		return returnThing;
 	}
 
-	inline static public function getBitmapData(path:String):BitmapData {
+	/*
+		Used to get bitmaps without using gpu loading
+		Gpu loading is faster but breaks bitmap functions
+	*/
+	public static var cachedBitmaps:Map<String, BitmapData> = [];
+
+	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
+		if (cachedBitmaps.exists(key)) {
+			return cachedBitmaps.get(key);
+		}
 		#if desktop	
-		var fixPath = removeAssetLib(path);
-		if (!fixPath.startsWith('assets'))
-			return FlxAssets.getBitmapData(fixPath);
+		var fixPath = removeAssetLib(key);
+		if (!fixPath.startsWith('assets')) {
+			var bitmap = BitmapData.fromFile(fixPath);
+			if (cache) cachedBitmaps.set(key, bitmap);
+			return bitmap;
+		}
 		#end
-		return OpenFlAssets.getBitmapData(path, false);
+		var bitmap = OpenFlAssets.getBitmapData(key);
+		if (cache) cachedBitmaps.set(key, bitmap);
+		return bitmap;
 	}
 
 	inline static public function getSound(path:String):FlxSoundAsset {
-		var returnThing:FlxSoundAsset = path;
+		var returnSound:FlxSoundAsset = path;
 		#if desktop
-		if(FileSystem.exists(path))
-			FlxAssets.getSound(path);
+		var fixPath = removeAssetLib(path);
+		if (!fixPath.startsWith('assets')) {
+			returnSound = Sound.fromFile(path);
+		}
 		#end
 
-		return returnThing;
+		return returnSound;
 	}
 
 	inline static public function getPackerType(key:String, ?library:String):String {

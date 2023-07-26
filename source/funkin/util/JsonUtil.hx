@@ -93,7 +93,8 @@ class JsonUtil {
 		var jsonDir = Paths.removeAssetLib(Paths.file('images/$path.json', library));
 		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(jsonDir));
 
-		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, gpu), false, Paths.image(path, library, true));
+		var image_ = Paths.image(path, library, false, false, gpu);
+		var graphic:FlxGraphic = FlxG.bitmap.add(image_, false, Paths.image(path, library, true));
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
 		var framesTagData:Array<Array<Dynamic>> = [];
@@ -148,5 +149,10 @@ class JsonUtil {
 				Reflect.deleteField(input, prop);
 		}
 		return input;
+	}
+
+	public static function copyJson<T>(c:T):T {
+		var serializedData = haxe.Serializer.run(c);
+        return haxe.Unserializer.run(serializedData);
 	}
 }

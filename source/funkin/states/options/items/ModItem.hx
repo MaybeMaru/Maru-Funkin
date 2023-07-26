@@ -17,8 +17,8 @@ class ModItem extends FlxSpriteGroup {
         modBox.alpha = 0.6;
         add(modBox);
 
-        var sexPaths:Array<String> = [Paths.file('$modName/icon.png', IMAGE), Paths.image('options/blankMod', true)];
-        var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.exists(sexPaths[0], IMAGE) ? sexPaths[0] : sexPaths[1]);
+        var icon = Paths.file('$modName/icon.png', IMAGE);
+        var modIcon:FlxSprite = new FlxSprite().loadGraphic(Paths.exists(icon, IMAGE) ? Paths.getImage(icon) : Paths.image('options/blankMod'));
         modIcon.x += (modIcon.width/8)/2;   modIcon.y += (modIcon.height/8)/2;
         modIcon.antialiasing = true;
         modIcon.scale.set(0.6,0.6);

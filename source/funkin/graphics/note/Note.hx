@@ -83,6 +83,7 @@ class Note extends FlxSpriteUtil {
     public var noteSpeed(default, set):Float = 1;
     public var targetSpr:NoteStrum = null;
     public var mustPress:Bool = false;
+    public var parentNote:Note = null; // For sustain notes
 
     // Used for stamp() !!!
     var susPiece:FlxSprite;
@@ -290,7 +291,7 @@ class Note extends FlxSpriteUtil {
             }
 
             refSprite = new FlxSpriteUtil();
-            refSprite.loadImage('skins/$skin/${skinJson.imagePath}');
+            refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
             refSprite.scale.set(skinJson.scale,skinJson.scale);
             refSprite.updateHitbox();
             for (anim in skinJson.anims)

@@ -124,7 +124,7 @@ class Song {
 
 	//Removes unused variables for smaller size
 	inline public static function optimizeJson(input:SwagSong):SwagSong {
-		var song:SwagSong = Reflect.copy(input);
+		var song:SwagSong = JsonUtil.copyJson(input);
 		for (i in 0...song.notes.length) {
 			var sec = song.notes[i];
 			if (!sec.changeBPM) {
@@ -201,9 +201,9 @@ class Song {
 
 	//Returns a copied default variable, so you dont accidentally change the defaults in runtime while using them
 	inline public static function getDefaultSong():SwagSong {
-		return Reflect.copy(DEFAULT_SONG);
+		return JsonUtil.copyJson(DEFAULT_SONG);
 	}
 	inline public static function getDefaultSection():SwagSection {
-		return Reflect.copy(DEFAULT_SECTION);
+		return JsonUtil.copyJson(DEFAULT_SECTION);
 	}
 }

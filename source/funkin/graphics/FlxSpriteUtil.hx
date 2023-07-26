@@ -41,11 +41,11 @@ class FlxSpriteUtil extends FlxSprite {
 	public function loadImage(path:String, global:Bool = false, gpu:Bool = true):Void {
 		_packer = Paths.getPackerType(path).toLowerCase().trim();
 		switch (_packer) {
-			case 'image':		loadGraphic(Paths.image(path, null, !gpu, global));
-			case 'sparrow':		frames = Paths.getSparrowAtlas(path);
-			case 'sheetpacker':	frames = Paths.getPackerAtlas(path);
-			case 'json':		frames = Paths.getAsepriteAtlas(path);
-			case 'atlas':       frames = Paths.getAnimateAtlas(path);
+			case 'image':		loadGraphic(Paths.image(path, null, false, global, gpu));
+			case 'sparrow':		frames = Paths.getSparrowAtlas(path, null, gpu);
+			case 'sheetpacker':	frames = Paths.getPackerAtlas(path, null, gpu);
+			case 'json':		frames = Paths.getAsepriteAtlas(path, null, gpu);
+			case 'atlas':       frames = Paths.getAnimateAtlas(path, null);
 		}
 	}
 
