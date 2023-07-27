@@ -64,7 +64,6 @@ class SettingItem extends FlxSpriteGroup {
         CoolUtil.playSound('scrollMenu');
         if (usePrefs) {
             Preferences.setPref(itemPref, prefValue);
-            Preferences.savePrefs();
             Preferences.effectPrefs();
         }
 

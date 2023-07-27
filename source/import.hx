@@ -27,6 +27,7 @@ import openfl.utils.Assets as OpenFlAssets;
 import funkin.util.FlxColorFix;
 import funkin.util.JsonUtil;
 import funkin.util.Stage;
+import funkin.util.SaveData;
 
 //Note
 import funkin.graphics.note.Note;

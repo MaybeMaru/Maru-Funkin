@@ -33,16 +33,14 @@ class PromptSubstate extends MusicBeatSubstate {
         }
         if (waitTime > 0) {
             waitTime -= elapsed;
-        } else {
-            if ((Controls.gamepad.connected) ? (Controls.gamepad.firstJustPressedID() != FlxGamepadInputID.NONE) : (FlxG.keys.firstJustPressed() != FlxKey.NONE)) {
-                var pressedKey = (Controls.gamepad.connected) ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
-                var stringKey:String = Std.string(pressedKey);
-                if (stringKey != 'ESCAPE') {
-                    Controls.setBinding(keyToChange, stringKey, keyBindIndex);
-                    CoolUtil.playSound('confirmMenu');
-                }
-                close();
+        } else if (Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() != FlxGamepadInputID.NONE : FlxG.keys.firstJustPressed() != FlxKey.NONE) {
+            var keyCode:Int = Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
+            var pressedKey:String = Controls.inGamepad() ? FlxGamepadInputID.toStringMap.get(keyCode) : FlxKey.toStringMap.get(keyCode);
+            if (pressedKey != 'ESCAPE') {
+                Controls.setBinding(keyToChange, pressedKey, keyBindIndex);
+                CoolUtil.playSound('confirmMenu');
             }
+            close();
         }
     }
 }

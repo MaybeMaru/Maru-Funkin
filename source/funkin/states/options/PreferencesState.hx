@@ -79,7 +79,7 @@ class PreferencesState extends MusicBeatState {
         }
 
         if (getKey('BACK-P')) {
-            Preferences.savePrefs();
+            SaveData.flushData();
             FlxG.switchState(new OptionsState());
         }
     }

@@ -11,6 +11,15 @@ class Controls {
     public static var controlArray:Array<String> = [];
     public static var gamepad:FlxGamepad = null;
 
+    // Returns if the controler is being used
+	inline public static function inGamepad():Bool
+    {
+        var bool = gamepad == null;
+        if (!bool)
+            bool = gamepad.connected;
+        return !bool;
+    }
+
     inline public static function addGamepad(newGamepad:FlxGamepad):Void {
         gamepad = newGamepad;
     }
@@ -20,10 +29,6 @@ class Controls {
     }
 
     inline public static function initGamepads():Void {
-        /*gamepad = new FlxGamepad(0,FlxG.gamepads);
-        if (FlxG.gamepads.lastActive != null) {
-            gamepad = FlxG.gamepads.lastActive;
-        }*/
         FlxG.gamepads.deviceConnected.add(addGamepad);
         FlxG.gamepads.deviceDisconnected.add(removeGamepad);
         if (FlxG.gamepads.lastActive != null) {
@@ -33,8 +38,8 @@ class Controls {
 
     inline public static function setupBindings():Void {
         controlArray = [];
-        controlBindings = new Map<String, Array<String>>();
-        controlGamepadBindings = new Map<String, Array<String>>();
+		controlBindings = SaveData.getSave('controls').get('keyboardBinds');
+		controlGamepadBindings = SaveData.getSave('controls').get('gamepadBinds');
         initGamepads();
 
         addBinding('NOTE_LEFT',  ['D', 'LEFT'],           ['DPAD_LEFT',  'LEFT_STICK_DIGITAL_LEFT']);
@@ -52,30 +57,28 @@ class Controls {
         addBinding('PAUSE',      ['ENTER', 'ESCAPE'],     ['START','A']);
         addBinding('RESET',      ['R'],                   ['RIGHT_STICK_CLICK']);
 
-        loadBindings();
-        saveBindings();
+        SaveData.flushData();
     }
 
     inline public static function getKey(bind:String):Bool {
         bind = bind.toUpperCase().trim();
-        var bindParts:Array<String> = bind.split('-');
-        var bindName:String  = bindParts[0];
-        var bindType:String = (bindParts[1] != null) ? bindParts[1] : '';
+		var bindParts:Array<String> = bind.split('-');
+		var bindName:String = bindParts[0];
+		var bindType:String = (bindParts[1] != null) ? bindParts[1] : '';
 
-        var bindArray:Array<FlxKey> = [];
-        for (bind in controlBindings.get(bindName)) {
-            bindArray.push(FlxKey.fromString(bind));
-        }
-        var gamepadBindArray:Array<FlxGamepadInputID> = [];
-        for (bind in controlGamepadBindings.get(bindName)) {
+		var bindArray:Array<FlxKey> = [];
+		for (bind in controlBindings.get(bindName))
+			bindArray.push(FlxKey.fromString(bind));
+
+		var gamepadBindArray:Array<FlxGamepadInputID> = [];
+        for (bind in controlGamepadBindings.get(bindName))
             gamepadBindArray.push(FlxGamepadInputID.fromString(bind));
-        }
-        
-        return checkKey(bindType,bindArray,gamepadBindArray);
+
+		return checkKey(bindType, bindArray, gamepadBindArray);
     }
 
-    inline private static function checkKey(bindType:String = '', bindArray:Array<FlxKey>, gamepadBindArray:Array<FlxGamepadInputID>) {
-        if (gamepad != null) {
+    inline private static function checkKey(bindType:String = '', bindArray:Array<FlxKey>, gamepadBindArray:Array<FlxGamepadInputID>):Bool {
+        if (inGamepad()) {
             switch (bindType.toUpperCase().trim()) {
                 case 'R':   return gamepad.anyJustReleased(gamepadBindArray);    //  Release Key
                 case 'P':   return gamepad.anyJustPressed(gamepadBindArray);     //  Press Key
@@ -90,37 +93,19 @@ class Controls {
         }
     }
 
-    inline public static function loadBindings():Void {
-        controlSaveFile = new FlxSave();
-        controlSaveFile.bind('funkinControls');
-        if (controlSaveFile.data.controlBindings == null || controlSaveFile.data.controlGamepadBindings == null) {
-            saveBindings();
-        } else {
-            controlBindings = controlSaveFile.data.controlBindings;
-            controlGamepadBindings = controlSaveFile.data.controlGamepadBindings;
-        }
-    }
-
-    inline public static function saveBindings():Void {
-        controlSaveFile.data.controlBindings = new Map<String, Array<String>>();
-        controlSaveFile.data.controlBindings = controlBindings;
-        controlSaveFile.data.controlGamepadBindings = new Map<String, Array<String>>();
-        controlSaveFile.data.controlGamepadBindings = controlGamepadBindings;
-        controlSaveFile.flush();
-    }
-
     inline public static function getBinding(bind:String):Array<String> {
         bind = bind.toUpperCase().trim();
-        var bindingStuff:Array<String> = gamepad != null ? controlGamepadBindings.get(bind) : controlBindings.get(bind);
+        var bindingStuff:Array<String> = inGamepad() ? controlGamepadBindings.get(bind) : controlBindings.get(bind);
         return bindingStuff;
     }
 
     inline public static function setBinding(bind:String, key:String, index:Int):Void {
         bind = bind.toUpperCase().trim();
         key = key.toUpperCase().trim();
-        var lastSettings:Array<String> = (gamepad != null ? controlGamepadBindings : controlBindings).get(bind);
+        var lastSettings:Array<String> = (inGamepad() ? controlGamepadBindings : controlBindings).get(bind);
         lastSettings[index] = key;
-        (gamepad != null ? controlGamepadBindings : controlBindings).set(bind, lastSettings);
+        (inGamepad() ? controlGamepadBindings : controlBindings).set(bind, lastSettings);
+        SaveData.flushData();
     }
 
     inline public static function addBinding(bind:String, keys:Array<String>, gamepadKeys:Array<String>):Void {
@@ -129,7 +114,7 @@ class Controls {
             keys[i] = keys[i].toUpperCase().trim();
         }
         controlArray.push(bind);
-        controlBindings.set(bind, keys);
-        controlGamepadBindings.set(bind, gamepadKeys);
+        if (!controlBindings.exists(bind))          controlBindings.set(bind, keys);
+        if (!controlGamepadBindings.exists(bind))   controlGamepadBindings.set(bind, gamepadKeys);
     }
 }

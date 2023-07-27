@@ -9,7 +9,7 @@ class Preferences {
 
     inline public static function setupPrefs():Void {
         prefsArray = [];
-        preferences = new Map<String, Dynamic>();
+        preferences = SaveData.getSave('preferences');
         prefsLabels = new Map<String, String>();
 
         // Miscellaneous
@@ -37,31 +37,16 @@ class Preferences {
         addPref('antialiasing',   'antialiasing',    true); #if desktop
         addPref('auto-pause',     'auto pause',      false);#end
 
-        loadPrefs();
-        savePrefs();
+        SaveData.flushData();
         effectPrefs();
     }
 
-    inline public static function addPref(identifier:String, label:String, defaultValue:Dynamic):Void {
-        identifier = identifier.toLowerCase().trim();
-        prefsArray.push(identifier);
-        preferences.set(identifier, defaultValue);
-        prefsLabels.set(identifier, label);
-    }
+    inline public static function addPref(id:String, label:String, defaultValue:Dynamic):Void {
+        id = id.toLowerCase().trim();
+        prefsArray.push(id);
 
-    inline public static function loadPrefs():Void {
-        prefsSaveFile = new FlxSave();
-        prefsSaveFile.bind('funkinPrefs');
-        (prefsSaveFile.data.preferences == null) ? savePrefs() : preferences = prefsSaveFile.data.preferences;
-
-        //  Double check lol
-        for (pref in prefsArray) {
-            if (prefsSaveFile.data.preferences.get(pref) == null) {
-                savePrefs();
-                preferences = prefsSaveFile.data.preferences;
-                break;
-            }
-        }
+        prefsLabels.set(id, label);
+        if (!preferences.exists(id)) preferences.set(id, defaultValue);
     }
 
     inline public static function effectPrefs():Void {
@@ -74,12 +59,6 @@ class Preferences {
         }
     }
 
-    inline public static function savePrefs():Void {
-        prefsSaveFile.data.preferences = new Map<String, Array<String>>();
-        prefsSaveFile.data.preferences = preferences;
-        prefsSaveFile.flush();
-    }
-
     inline public static function getPref(pref:String):Dynamic {
         pref = pref.toLowerCase().trim();
         var prefVar:Dynamic = preferences.get(pref);
@@ -88,6 +67,7 @@ class Preferences {
 
     inline public static function setPref(pref:String, value:Dynamic):Void {
         preferences.set(pref.toLowerCase().trim(), value);
+        SaveData.flushData();
     }
 
     inline public static function getLabel(pref:String):String {

@@ -92,7 +92,7 @@ class ControlsState extends MusicBeatState {
 
 	override function closeSubState():Void {
 		super.closeSubState();
-		Controls.saveBindings();
+		SaveData.flushData();
 		reloadValues();
 	}
 

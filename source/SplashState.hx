@@ -12,6 +12,7 @@ class SplashState extends MusicBeatState {
         //Load Settings / Mods
         FlxG.save.bind('funkin');
         FlxSprite.defaultAntialiasing = true;
+        SaveData.init();
 		Controls.setupBindings();
 		Preferences.setupPrefs();
 		CoolUtil.init();
