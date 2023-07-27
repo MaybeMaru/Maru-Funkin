@@ -28,7 +28,6 @@ class NoteUtil {
 		scale: 0.7,
 		antialiasing: true,
 		flipX: false,
-		sustainScaleOffset: 1,
 		noteColorArray: ["0xffc24b99", "0xff00ffff", "0xff12fa05", "0xfff9393f"]
 	}
 

@@ -121,10 +121,8 @@ class Shader
 	inline public static function setSampler2D(shader:String, prop:String, path:String, ?bitmap:BitmapData)
 	{
 		if (existsShader(shader)) {
-			var asset = new FlxSprite().loadGraphic(Paths.image(path, null));
-			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : asset.pixels);
+			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : Paths.getBitmapData(Paths.image(path, null, true), true));
 		}
-
 	}
 
 	inline public static function existsShader(shader:String)

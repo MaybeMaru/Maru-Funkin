@@ -1,6 +1,12 @@
 package funkin.util.modding;
+import openfl.display.BitmapData;
 import hscript.Parser;
 import hscript.Interp;
+
+enum HscriptFunctionCallback {
+	STOP_FUNCTION;
+	CONTINUE_FUNCTION;
+}
 
 class FunkScript {
 	public static var parser:Parser = new Parser();
@@ -14,8 +20,13 @@ class FunkScript {
 
 	public function callback(nameStr:String, ?args:Array<Dynamic>) {
 		if (varExists(nameStr)) {
-			Reflect.callMethod(this, varGet(nameStr), args == null ? [] : args);
+			callMethod(nameStr, args == null ? [] : args);
 		}
+	}
+
+	public function callMethod(nameStr:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
+		var value = Reflect.callMethod(this, varGet(nameStr), args);
+		return value == null ? CONTINUE_FUNCTION : value;
 	}
 
 	public function new(hscriptCode:String):Void {
@@ -34,7 +45,11 @@ class FunkScript {
 
 	public function addScriptVars():Void { //Preloaded Variables
 		interp = new Interp();
-		
+
+		// Wip
+
+		addVar('STOP_FUNCTION', STOP_FUNCTION);
+
 		//Funkin Bunny
 
         addVar('PlayState', PlayState.game);
@@ -46,6 +61,7 @@ class FunkScript {
 		addVar('Paths', Paths);
 		addVar('Preferences', Preferences);
 		addVar('Controls', Controls);
+		addVar('Shader', Shader);
 
 		addVar('DialogueBox', funkin.graphics.dialogue.NormalDialogueBox);
 		addVar('PixelDialogueBox', funkin.graphics.dialogue.PixelDialogueBox);
@@ -128,13 +144,13 @@ class FunkScript {
 		});
 
 		addVar('addSpr', function(spr:Dynamic, sprTag:String = 'coolswag', OnTop:Bool = false):Void {
-			if (!OnTop) {
-				PlayState.game.bgSpr.add(spr);
-				PlayState.game.bgSprMap.set(sprTag, spr);
-			}
-			else {
+			if (OnTop) {
 				PlayState.game.fgSpr.add(spr);
 				PlayState.game.fgSprMap.set(sprTag, spr);
+			}
+			else {
+				PlayState.game.bgSpr.add(spr);
+				PlayState.game.bgSprMap.set(sprTag, spr);
 			}
 		});
 
@@ -145,6 +161,32 @@ class FunkScript {
 				ModdingUtil.errorTrace('Sprite not found: $key');
 				return null;
 			}												
+		});
+
+		// Runtime shader functions
+
+		addVar('initShader', function (shader:String, ?tag:String, forced:Bool = false):Void {
+			Shader.initShader(shader, tag, forced);
+		});
+
+		addVar('setSpriteShader', function (sprite:FlxSprite, shader:String) {
+			Shader.setSpriteShader(sprite, shader);
+		});
+
+		addVar('setShaderSampler2D', function (shader:String, prop:String, path:String = "", ?bitmap:BitmapData) {
+			Shader.setSampler2D(shader, prop, path, bitmap);
+		});
+
+		addVar('setShaderFloat', function (shader:String, prop:String, value:Float) {
+			Shader.setFloat(shader, prop, value);
+		});
+
+		addVar('setShaderInt', function (shader:String, prop:String, value:Int) {
+			Shader.setInt(shader, prop, value);
+		});
+
+		addVar('setShaderBool', function (shader:String, prop:String, value:Bool) {
+			Shader.setBool(shader, prop, value);
 		});
 	}
 

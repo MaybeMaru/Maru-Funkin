@@ -73,15 +73,15 @@ class Conductor {
 	}
 
 	public static function sync(inst:FlxSound, ?vocals:FlxSound):Void {
-		inst.time = songPosition - songOffset[0];
-		if (vocals != null) vocals.time = songPosition - songOffset[1];
+		inst.time = songPosition - songOffset[0] - settingOffset;
+		if (vocals != null) vocals.time = songPosition - songOffset[1] - settingOffset;
 	}
 
 	//	Resync if inst is off by 20 milliseconds by default
 	public static function autoSync(inst:FlxSound, ?vocals:FlxSound, minOff:Int = 20):Void {
 		var needsResync:Bool =
-			(songPosition > (inst.time + songOffset[0] + minOff * songPitch))
-		|| 	(songPosition < (inst.time + songOffset[0] - minOff * songPitch));
+			(songPosition > (inst.time + songOffset[0] + settingOffset + minOff * songPitch))
+		|| 	(songPosition < (inst.time + songOffset[0] + settingOffset - minOff * songPitch));
 
 		if (needsResync) Conductor.sync(inst,vocals);
 	}
