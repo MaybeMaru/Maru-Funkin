@@ -26,7 +26,7 @@ class HealthIcon extends FlxSpriteUtil {
 
 		loadImage('icons/$char', true);	//	Load it first to get the width and height
 		singleAnim = false;
-		if (_packer == 'image') {
+		if (_packer == IMAGE) {
 			singleAnim = !(width > height * 1.9);
 			if (!singleAnim) {
 				loadGraphic(icon, true, Math.floor(width / 2), Math.floor(height));

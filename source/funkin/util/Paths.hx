@@ -198,9 +198,9 @@ class Paths
 		return JsonUtil.getAsepritePacker(key, library, gpu);
 	}
 
-	inline static public function getAnimateAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return flxanimate.frames.FlxAnimateFrames.fromTextureAtlas(atlas(key, library));
-	}
+	/*inline static public function getAnimateAtlas(key:String, ?library:String):FlxFramesCollection {
+		return animateatlas.AtlasFrameMaker.construct(file('images/$key/Animation.json', library).split('/Animation.json')[0]);
+	}*/
 
 	inline static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
 		var fileList:Array<String> = [];
@@ -305,11 +305,19 @@ class Paths
 		return sound;
 	}
 
-	inline static public function getPackerType(key:String, ?library:String):String {
-		if 		(exists(file('images/$key.xml', library), TEXT))				return 'sparrow';
-		else if (exists(file('images/$key.txt', library), TEXT))				return 'sheetpacker';
-		else if (exists(file('images/$key.json', library), TEXT))				return 'json';
-		else if (exists(file('images/$key/Animation.json', library), TEXT))		return 'atlas';
-		else																	return 'image';
+	inline static public function getPackerType(key:String, ?library:String):PackerType {
+		if 		(exists(file('images/$key.xml', library), TEXT))				return SPARROW;
+		else if (exists(file('images/$key.txt', library), TEXT))				return SHEETPACKER;
+		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
+		else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
+		else																	return IMAGE;
 	}
+}
+
+enum PackerType {
+	IMAGE;
+	SPARROW;
+	SHEETPACKER;
+	JSON;
+	ATLAS;
 }

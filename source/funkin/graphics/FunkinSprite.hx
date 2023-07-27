@@ -1,6 +1,5 @@
 package funkin.graphics;
 
-import flxanimate.FlxAnimate;
 import flixel.math.FlxPoint;
 
 class FunkinSprite extends FlxSpriteUtil {
@@ -11,7 +10,7 @@ class FunkinSprite extends FlxSpriteUtil {
     public function new(path:String, ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = true):Void {
         super();
 
-        animated = !(Paths.getPackerType(path) == 'image');
+        animated = Paths.getPackerType(path) != IMAGE;
         loadImage(path);
 
         var jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);

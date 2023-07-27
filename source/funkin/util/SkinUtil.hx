@@ -1,7 +1,6 @@
 package funkin.util;
 
 typedef NoteSkinData = {
-    var ?sustainScaleOffset:Float;
     var ?noteColorArray:Array<String>;
 } & SpriteJson
 

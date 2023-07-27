@@ -70,32 +70,42 @@ class CharSelectSubstate extends MusicBeatSubstate {
     }
 
     function changeFolder(change:Int = 0):Void {
-        curFolder = FlxMath.wrap(curFolder + change, 0, curSelected.length - 1);
-        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
-
-        switch(curFolder) {
-            case 0: folderTxt.text = 'Base game';
-            case 1: folderTxt.text = 'Mods';
-        }
-
-        for (f in 0...charArray.length) {
-            var showBool:Bool = (f == curFolder);
-            for (i in 0...charArray[f].length) {
-                charArray[f][i].visible = showBool;
-                iconArray[f][i].visible = showBool;
+        try {
+            curFolder = FlxMath.wrap(curFolder + change, 0, curSelected.length - 1);
+            if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+    
+            switch(curFolder) {
+                case 0: folderTxt.text = 'Base game';
+                case 1: folderTxt.text = 'Mods';
             }
+    
+            for (f in 0...charArray.length) {
+                var showBool:Bool = (f == curFolder);
+                for (i in 0...charArray[f].length) {
+                    charArray[f][i].visible = showBool;
+                    iconArray[f][i].visible = showBool;
+                }
+            }
+            changeSelection();
         }
-        changeSelection();
+        catch(e) {
+            trace('EMPTY FOLDER');
+        }
     }
 
     function changeSelection(change:Int = 0):Void {
-        curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
-        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+        try {
+            curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
+            if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-        for (i in 0...charArray[curFolder].length) {
-            charArray[curFolder][i].targetY = i - curSelected[curFolder];
-            charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
-            iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
+            for (i in 0...charArray[curFolder].length) {
+                charArray[curFolder][i].targetY = i - curSelected[curFolder];
+                charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
+                iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
+            }
+        }
+        catch(e) {
+            trace('EMPTY FOLDER');
         }
 	}
 }

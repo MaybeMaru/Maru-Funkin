@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="tankmanTop1.png" width="678" height="885">
+  <SubTexture name="tankmanTop10001.png" x="7" y="7"  width="368" height="281" frameX="-0" frameY="-13" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10005.png" x="7" y="302"  width="367" height="281" frameX="-2" frameY="-3" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10007.png" x="389" y="7" width="282" height="367" rotated="true"  frameX="-2" frameY="-1" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10003.png" x="7" y="597"  width="366" height="281" frameX="-0" frameY="-9" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10008.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10002.png" x="7" y="7"  width="368" height="281" frameX="-0" frameY="-13" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10016.png" x="7" y="7"  width="368" height="281" frameX="-0" frameY="-13" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10017.png" x="7" y="7"  width="368" height="281" frameX="-0" frameY="-13" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10004.png" x="7" y="597"  width="366" height="281" frameX="-0" frameY="-9" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10018.png" x="7" y="597"  width="366" height="281" frameX="-0" frameY="-9" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10019.png" x="7" y="597"  width="366" height="281" frameX="-0" frameY="-9" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10006.png" x="7" y="302"  width="367" height="281" frameX="-2" frameY="-3" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10020.png" x="7" y="302"  width="367" height="281" frameX="-2" frameY="-3" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10021.png" x="7" y="302"  width="367" height="281" frameX="-2" frameY="-3" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10022.png" x="389" y="7" width="282" height="367" rotated="true"  frameX="-2" frameY="-1" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10009.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10010.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10011.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10012.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10013.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10014.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10015.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10023.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10024.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10025.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10026.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10027.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10028.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+  <SubTexture name="tankmanTop10029.png" x="388" y="388" width="282" height="366" rotated="true"  frameX="-3" frameY="-0" frameWidth="369" frameHeight="294"/>
+</TextureAtlas>

@@ -69,7 +69,6 @@ class FunkScript {
 		addVar('FlxG', flixel.FlxG);
         addVar('FlxSprite', FlxSpriteUtil);	//	The cooler FlxSprite
 		addVar('FlxText', flixel.text.FlxText);
-		addVar('FlxAnimate', flxanimate.FlxAnimate);
 		addVar('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
 		addVar('FlxSpriteGroup', flixel.group.FlxSpriteGroup);
 		addVar('FlxSound', flixel.sound.FlxSound);

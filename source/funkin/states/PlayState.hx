@@ -228,12 +228,15 @@ class PlayState extends MusicBeatState {
 		add(bgSpr);
 
 		add(gfGroup);
+		gf.group = gfGroup;
 		gfGroup.add(gf);
 		
 		add(dadGroup);
+		dad.group = dadGroup;
 		dadGroup.add(dad);
 
 		add(boyfriendGroup);
+		boyfriend.group = boyfriendGroup;
 		boyfriendGroup.add(boyfriend);
 
 		add(fgSpr);

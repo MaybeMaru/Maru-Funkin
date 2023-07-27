@@ -101,8 +101,6 @@ import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 
 import haxe.Json;
-
-import flxanimate.FlxAnimate;
 import flixel.graphics.frames.FlxFramesCollection;
 
 using StringTools;

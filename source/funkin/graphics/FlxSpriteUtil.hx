@@ -26,7 +26,7 @@ class FlxSpriteUtil extends FlxSprite {
     public var animOffsets:Map<String, FlxPoint>;
 	public var animDatas:Map<String, SpriteAnimation>;
 	public var specialAnim:Bool = false;
-	public var _packer:String = 'image';
+	public var _packer:PackerType = IMAGE;
 
     public function new(?X:Float = 0, ?Y:Float = 0):Void {
         animOffsets = new Map<String, FlxPoint>();
@@ -38,14 +38,14 @@ class FlxSpriteUtil extends FlxSprite {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
 	}
 
-	public function loadImage(path:String, global:Bool = false, gpu:Bool = true):Void {
-		_packer = Paths.getPackerType(path).toLowerCase().trim();
+	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):Void {
+		_packer = Paths.getPackerType(path);
 		switch (_packer) {
-			case 'image':		loadGraphic(Paths.image(path, null, false, global, gpu));
-			case 'sparrow':		frames = Paths.getSparrowAtlas(path, null, gpu);
-			case 'sheetpacker':	frames = Paths.getPackerAtlas(path, null, gpu);
-			case 'json':		frames = Paths.getAsepriteAtlas(path, null, gpu);
-			case 'atlas':       frames = Paths.getAnimateAtlas(path, null);
+			default:			loadGraphic(Paths.image(path, library, false, global, gpu));
+			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, gpu);
+			case SHEETPACKER: 	frames = Paths.getPackerAtlas(path, library, gpu);
+			case JSON:			frames = Paths.getAsepriteAtlas(path, library, gpu);
+			//case ATLAS: 		frames = Paths.getAnimateAtlas(path);	
 		}
 	}
 

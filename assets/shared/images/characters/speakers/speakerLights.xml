@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="speakerLights.png" width="1636" height="1856">
+  <SubTexture name="glow0001.png" x="7" y="7"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0002.png" x="825" y="7"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0003.png" x="7" y="471"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0004.png" x="825" y="471"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0005.png" x="7" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0006.png" x="7" y="1399"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0007.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0049.png" x="825" y="1399"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0008.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0009.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0010.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0011.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0012.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0013.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0014.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0015.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0016.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0017.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0018.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0019.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0020.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0021.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0022.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0023.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0024.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0025.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0026.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0027.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0028.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0029.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0030.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0031.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0032.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0033.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0034.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0035.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0036.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0037.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0038.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0039.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0040.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0041.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0042.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0043.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0044.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0045.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0046.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0047.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0048.png" x="825" y="935"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+  <SubTexture name="glow0050.png" x="825" y="1399"  width="804" height="450" frameX="-5" frameY="-4" frameWidth="818" frameHeight="461"/>
+</TextureAtlas>

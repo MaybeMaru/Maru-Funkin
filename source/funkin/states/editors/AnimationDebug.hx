@@ -296,13 +296,15 @@ class AnimationDebug extends MusicBeatState {
 	function pushJsonAnims() {
 		character.anims = [];
 		for (anim in displayChar.animDatas.keys()) {
+			var animData = displayChar.animDatas.get(anim);
+			var animOffset = displayChar.animOffsets.get(anim);
 			character.anims.push({
-				animName: displayChar.animDatas[anim].animName,
-				animFile: displayChar.animDatas[anim].animFile,
-				offsets: displayChar.animDatas[anim].offsets,
-				loop: displayChar.animDatas[anim].loop,
-				indices: displayChar.animDatas[anim].indices,
-				framerate: displayChar.animDatas[anim].framerate,
+				animName: animData.animName,
+				animFile: animData.animFile,
+				offsets: [animOffset.x, animOffset.y],
+				loop: animData.loop,
+				indices: animData.indices,
+				framerate: animData.framerate,
 			});
 		}
 	}
@@ -397,11 +399,13 @@ class AnimationDebug extends MusicBeatState {
 	function getUpdatedAnimData():SpriteAnimation {
 		var curAnim:String = dropDown_anims.selectedLabel;
 		var newAnimData = Reflect.copy(displayChar.getAnimData(curAnim));
+		var animOffsets:FlxPoint = displayChar.animOffsets.get(curAnim);
 		newAnimData.animName = input_animName.text;
 		newAnimData.animFile = input_animFile.text;
 		newAnimData.framerate = Std.int(stepper_animFramerate.value);
 		newAnimData.loop = check_loop.checked;
 		newAnimData.indices = txtToIndices(input_indices.text);
+		newAnimData.offsets = [animOffsets.x, animOffsets.y];
 		return newAnimData;
 	}
 

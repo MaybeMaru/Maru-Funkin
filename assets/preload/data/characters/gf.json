@@ -1,43 +1,33 @@
 {
 	"imagePath": "week1/GF_assets",
-	"antialiasing": true,
-	"icon": "gf",
+	"isGF": true,
 	"camOffsets": [
 		-25,
 		50
+	],
+	"icon": "gf",
+	"scale": 1,
+	"charOffsets": [
+		-50,
+		230
 	],
 	"anims": [
 		{
 			"offsets": [
 				-2,
-				-8
+				-5
 			],
+			"indices": [],
 			"loop": true,
-			"animName": "scared",
 			"framerate": 24,
 			"animFile": "GF FEAR",
-			"indices": []
-		},
-		{
-			"offsets": [
-				0,
-				-11
-			],
-			"loop": false,
-			"animName": "singDOWN",
-			"framerate": 24,
-			"animFile": "GF Down Note",
-			"indices": []
+			"animName": "scared"
 		},
 		{
 			"offsets": [
 				0,
 				0
 			],
-			"loop": false,
-			"animName": "danceRight",
-			"framerate": 24,
-			"animFile": "GF Dancing Beat0",
 			"indices": [
 				15,
 				16,
@@ -54,28 +44,28 @@
 				27,
 				28,
 				29
-			]
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat0",
+			"animName": "danceRight"
 		},
 		{
 			"offsets": [
-				0,
-				13
+				-14,
+				-8
 			],
+			"indices": [],
 			"loop": false,
-			"animName": "singUP",
 			"framerate": 24,
-			"animFile": "GF Up Note",
-			"indices": []
+			"animFile": "GF Down Note",
+			"animName": "singDOWN"
 		},
 		{
 			"offsets": [
 				0,
 				0
 			],
-			"loop": false,
-			"animName": "danceLeft",
-			"framerate": 24,
-			"animFile": "GF Dancing Beat0",
 			"indices": [
 				30,
 				0,
@@ -93,33 +83,55 @@
 				12,
 				13,
 				14
-			]
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat0",
+			"animName": "danceLeft"
 		},
 		{
 			"offsets": [
-				45,
-				1
+				-10,
+				14
 			],
-			"loop": true,
-			"animName": "hairBlow",
+			"indices": [],
+			"loop": false,
 			"framerate": 24,
-			"animFile": "GF Dancing Beat Hair blowing",
+			"animFile": "GF Up Note",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [
+				231,
+				0
+			],
 			"indices": [
 				0,
 				1,
 				2,
 				3
-			]
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair blowing",
+			"animName": "hairBlow"
 		},
 		{
 			"offsets": [
 				0,
+				-7
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Right Note",
+			"animName": "singRIGHT"
+		},
+		{
+			"offsets": [
+				141,
 				0
 			],
-			"loop": false,
-			"animName": "hairFall",
-			"framerate": 24,
-			"animFile": "GF Dancing Beat Hair Landing",
 			"indices": [
 				0,
 				1,
@@ -133,39 +145,39 @@
 				9,
 				10,
 				11
-			]
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair Landing",
+			"animName": "hairFall"
 		},
 		{
 			"offsets": [
-				0,
-				9
+				-19,
+				13
 			],
+			"indices": [],
 			"loop": false,
-			"animName": "cheer",
 			"framerate": 24,
 			"animFile": "GF Cheer",
-			"indices": []
+			"animName": "cheer"
 		},
 		{
 			"offsets": [
 				0,
-				-11
+				-5
 			],
+			"indices": [],
 			"loop": false,
-			"animName": "singRIGHT",
 			"framerate": 24,
-			"animFile": "GF Right Note",
-			"indices": []
+			"animFile": "GF left note",
+			"animName": "singLEFT"
 		},
 		{
 			"offsets": [
-				-2,
+				-18,
 				-12
 			],
-			"loop": false,
-			"animName": "sad",
-			"framerate": 24,
-			"animFile": "gf sad",
 			"indices": [
 				0,
 				1,
@@ -180,25 +192,16 @@
 				10,
 				11,
 				12
-			]
-		},
-		{
-			"offsets": [
-				0,
-				-10
 			],
 			"loop": false,
-			"animName": "singLEFT",
 			"framerate": 24,
-			"animFile": "GF left note",
-			"indices": []
+			"animFile": "gf sad",
+			"animName": "sad"
 		}
 	],
-	"charOffsets": [
-		0,
-		230
-	],
-	"scale": 1,
+	"isPlayer": false,
 	"flipX": false,
-	"isGF": true
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
 }
