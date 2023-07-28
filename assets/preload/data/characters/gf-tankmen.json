@@ -1,0 +1,87 @@
+{
+	"imagePath": "week7/gfTankmen",
+	"isGF": false,
+	"camOffsets": [
+		0,
+		0
+	],
+	"icon": "gf",
+	"scale": 1,
+	"charOffsets": [
+		-50,
+		230
+	],
+	"anims": [
+		{
+			"offsets": [
+				57,
+				-19
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Crying at Gunpoint0",
+			"animName": "sad"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [
+				30,
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing at Gunpoint0",
+			"animName": "danceLeft"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing at Gunpoint0",
+			"animName": "danceRight"
+		}
+	],
+	"isPlayer": false,
+	"flipX": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
+}

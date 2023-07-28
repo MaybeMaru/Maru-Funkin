@@ -433,9 +433,9 @@ class AnimationDebug extends MusicBeatState {
 			var txtSplit = text.split(',');
 			for (i in txtSplit) {
 				i = i.trim();
-				var nums:String = '0123456789';
-				if (nums.contains(i) && i.length > 0) {
-					retIndices.push(Std.parseInt(i));
+				var int = Std.parseInt(i);
+				if (int != null) {
+					retIndices.push(int);
 				}
 			}
 		}

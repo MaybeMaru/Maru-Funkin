@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="gfTankmen.png" width="2120" height="2179">
+  <SubTexture name="GF Crying at Gunpoint0001.png" x="7" y="7"  width="389" height="404" frameX="-0" frameY="-4" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0007.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0009.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0011.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0005.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0003.png" x="7" y="822" width="404" height="382" rotated="true"  frameX="-0" frameY="-1" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Dancing at Gunpoint0019.png" x="845" y="426"  width="333" height="410" frameX="-4" frameY="-12" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0021.png" x="425" y="850" width="410" height="332" rotated="true"  frameX="-6" frameY="-11" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0020.png" x="849" y="850" width="411" height="331" rotated="true"  frameX="-6" frameY="-11" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0014.png" x="1202" y="7"  width="323" height="421" frameX="-0" frameY="-0" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0017.png" x="849" y="1195" width="411" height="330" rotated="true"  frameX="-2" frameY="-12" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0011.png" x="7" y="1218" width="421" height="322" rotated="true"  frameX="-1" frameY="-0" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0018.png" x="1192" y="442" width="411" height="328" rotated="true"  frameX="-4" frameY="-12" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0022.png" x="1539" y="7"  width="328" height="411" frameX="-10" frameY="-10" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0016.png" x="1274" y="784"  width="321" height="411" frameX="-2" frameY="-12" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0008.png" x="1274" y="1209" width="420" height="312" rotated="true"  frameX="-10" frameY="-1" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0007.png" x="1274" y="1535" width="410" height="305" rotated="true"  frameX="-2" frameY="-11" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0005.png" x="442" y="1196"  width="305" height="409" frameX="-1" frameY="-13" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0006.png" x="7" y="1554" width="408" height="304" rotated="true"  frameX="-2" frameY="-13" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0004.png" x="761" y="1539" width="406" height="305" rotated="true"  frameX="-1" frameY="-16" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0023.png" x="429" y="1619"  width="297" height="416" frameX="-33" frameY="-5" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0002.png" x="1181" y="1854" width="409" height="301" rotated="true"  frameX="-6" frameY="-14" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0003.png" x="7" y="1872" width="407" height="300" rotated="true"  frameX="-6" frameY="-16" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0025.png" x="740" y="1858" width="416" height="293" rotated="true"  frameX="-33" frameY="-5" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0026.png" x="1604" y="1854" width="415" height="293" rotated="true"  frameX="-33" frameY="-6" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0028.png" x="1698" y="1535" width="415" height="293" rotated="true"  frameX="-33" frameY="-6" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0029.png" x="1609" y="784" width="415" height="292" rotated="true"  frameX="-33" frameY="-6" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0001.png" x="1617" y="432" width="409" height="295" rotated="true"  frameX="-12" frameY="-14" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Crying at Gunpoint0002.png" x="7" y="7"  width="389" height="404" frameX="-0" frameY="-4" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0004.png" x="7" y="822" width="404" height="382" rotated="true"  frameX="-0" frameY="-1" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0006.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0013.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0014.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0021.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0022.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0029.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0030.png" x="806" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0008.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0015.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0016.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0023.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0024.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0031.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0032.png" x="410" y="7"  width="382" height="405" frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0010.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0017.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0018.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0025.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0026.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0033.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0034.png" x="7" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0012.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0019.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0020.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0027.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0028.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Crying at Gunpoint0035.png" x="426" y="426" width="405" height="382" rotated="true"  frameX="-0" frameY="-0" frameWidth="389" frameHeight="408"/>
+  <SubTexture name="GF Dancing at Gunpoint0009.png" x="1274" y="1209" width="420" height="312" rotated="true"  frameX="-10" frameY="-1" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0010.png" x="1274" y="1209" width="420" height="312" rotated="true"  frameX="-10" frameY="-1" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0012.png" x="7" y="1218" width="421" height="322" rotated="true"  frameX="-1" frameY="-0" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0013.png" x="7" y="1218" width="421" height="322" rotated="true"  frameX="-1" frameY="-0" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0015.png" x="1202" y="7"  width="323" height="421" frameX="-0" frameY="-0" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0024.png" x="429" y="1619"  width="297" height="416" frameX="-33" frameY="-5" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0027.png" x="1604" y="1854" width="415" height="293" rotated="true"  frameX="-33" frameY="-6" frameWidth="338" frameHeight="423"/>
+  <SubTexture name="GF Dancing at Gunpoint0030.png" x="1609" y="784" width="415" height="292" rotated="true"  frameX="-33" frameY="-6" frameWidth="338" frameHeight="423"/>
+</TextureAtlas>
