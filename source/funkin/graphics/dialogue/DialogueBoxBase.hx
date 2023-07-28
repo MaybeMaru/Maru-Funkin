@@ -17,7 +17,6 @@ typedef DialogueJson = {
 
 	var ?sound:String;
 	var ?music:String;
-	var ?box:String;
 
 	var ?bf:String;
 	var ?dad:String;
@@ -43,19 +42,27 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 	public var closeCallback:Void->Void;
 
 	public function new():Void {
+		super();
+
 		var jsonThing:String = "";
 		jsonThing = CoolUtil.getFileContent(Paths.getPath('${Song.formatSongFolder(PlayState.SONG.song)}/dialogue.json', TEXT, 'songs'));
 		jsonParsed = Json.parse(jsonThing);
 
-		super();
-		if (jsonParsed.music == null)	jsonParsed.music = (SkinUtil.curSkin == 'pixel') ? 'skins/pixel/Lunchbox' : 'breakfast';
-		if (jsonParsed.bf == null)		jsonParsed.bf = 'bf-pixel';
-		if (jsonParsed.dad == null)		jsonParsed.dad = 'senpai-pixel';
-		if (jsonParsed.gf == null)		jsonParsed.gf = 'gf-pixel';
+		var defaultDialogue:DialogueJson = {
+			lines: [],
+			music: (SkinUtil.curSkin == 'pixel') ? 'skins/pixel/Lunchbox' : 'breakfast',
+			bf: 'bf-pixel',
+			dad: 'senpai-pixel',
+			gf: 'gf-pixel'
+		}
 
+		jsonParsed = JsonUtil.checkJsonDefaults(defaultDialogue, jsonParsed);
 		dialogueChars = [jsonParsed.dad,jsonParsed.bf,jsonParsed.gf];
-		FlxG.sound.playMusic(Paths.music(jsonParsed.music), 0);
-		FlxG.sound.music.fadeIn(1, 0, 0.8);
+		
+		if (Paths.exists(Paths.music(jsonParsed.music, true), MUSIC)) {
+			FlxG.sound.playMusic(Paths.music(jsonParsed.music), 0);
+			FlxG.sound.music.fadeIn(1, 0, 0.8);
+		}
 	}
 
 	public var dialogueOpened:Bool = false;

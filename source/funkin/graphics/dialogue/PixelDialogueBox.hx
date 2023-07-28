@@ -18,10 +18,8 @@ class PixelDialogueBox extends DialogueBoxBase {
 	public var portraitLeft:PixelPortrait;
 	public var portraitRight:PixelPortrait;
 
-	//public var box:FlxSprite;
 	public var box:FunkinSprite;
 	public var swagDialogue:FlxTypeText;
-	//public var handSelect:FlxSprite;
 	public var handSelect:FunkinSprite;
 	public var bgFade:FlxSprite;
 
@@ -39,14 +37,6 @@ class PixelDialogueBox extends DialogueBoxBase {
 				bgFade.alpha = 0.7;
 		}, 5);
 
-		boxType = (boxTypes.get(skin) != null) ? skin : 'pixel';
-		var shit:Array<Dynamic> = boxTypes.get(boxType);
-
-		/*box = new FlxSprite(-20, 45);
-		box.frames = Paths.getSparrowAtlas('skins/${shit[0]}');
-		shit[1][2] != null ? box.animation.addByIndices('normalOpen', shit[1][1], shit[1][2], "", 24) : box.animation.addByPrefix('normalOpen', shit[1][1], 24, false);
-		shit[2][2] != null ? box.animation.addByIndices('normalOpen', shit[2][1], shit[2][2], "", 24) : box.animation.addByPrefix('normalOpen', shit[2][1], 24, false);*/
-
 		portraitGroup = new FlxSpriteGroup();
 		add(portraitGroup);
 
@@ -55,26 +45,19 @@ class PixelDialogueBox extends DialogueBoxBase {
 		portraitGroup.add(portraitLeft);
 		portraitGroup.add(portraitRight);
 
-		box = new FunkinSprite('skins/${shit[0]}', [-20, 45]);
-		box.addAnim('normalOpen', shit[1][1], 24, false, shit[1][2]);
+		boxType = boxTypes.exists(skin) ? skin : 'pixel';
+		var boxData:Array<Dynamic> = boxTypes.get(boxType);
+
+		box = new FunkinSprite('skins/${boxData[0]}', [-20, 45]);
+		box.addAnim('normalOpen', boxData[1][1], 24, false, boxData[1][2]);
 		box.setGraphicSize(Std.int(box.width * PIXEL_ZOOM * 0.9));
 		box.updateHitbox();
+		box.screenCenter(X);
 		box.playAnim('normalOpen');
 		add(box);
 
 		box.screenCenter(X);
 		portraitLeft.screenCenter(X);
-
-		/*handSelect = new FlxSprite(FlxG.width * 0.79, FlxG.height * 0.78);
-		handSelect.frames = Paths.getSparrowAtlas('skins/pixel/hand_textbox');
-		handSelect.animation.addByPrefix('enter', 	'nextLine', 	12, false);
-		handSelect.animation.addByPrefix('load', 	'waitLine', 	12, true);
-		handSelect.animation.addByPrefix('click', 	'clickLine', 	12, false);
-		handSelect.setGraphicSize(Std.int(handSelect.width * PIXEL_ZOOM * 0.9));
-		handSelect.updateHitbox();
-		handSelect.alpha = 0;
-		handSelect.animation.play('load');
-		add(handSelect);*/
 
 		handSelect = new FunkinSprite('skins/pixel/hand_textbox', [FlxG.width * 0.79, FlxG.height * 0.78]);
 		handSelect.addAnim('enter', 'nextLine', 12);
@@ -104,8 +87,6 @@ class PixelDialogueBox extends DialogueBoxBase {
     override public function update(elapsed:Float):Void {
 
         textFinished = swagDialogue.text.length == targetDialogue.length;
-        /*if (!textFinished && handSelect.animation.curAnim.finished)             handSelect.animation.play('load');
-		else if (textFinished && handSelect.animation.curAnim.name == 'load')   handSelect.animation.play('enter');*/
 		if (handSelect.animation.curAnim != null) {
 			if (!textFinished && handSelect.animation.curAnim.finished) {
 				handSelect.playAnim('load');

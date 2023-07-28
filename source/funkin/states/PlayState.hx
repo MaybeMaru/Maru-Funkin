@@ -326,7 +326,7 @@ class PlayState extends MusicBeatState {
 
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
-		inCutscene ? ModdingUtil.addCall('startCutscene', false) : startCountdown();
+		inCutscene ? ModdingUtil.addCall('startCutscene', [false]) : startCountdown();
 
 		super.create();
 	}
@@ -825,7 +825,7 @@ class PlayState extends MusicBeatState {
 						Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
 				}
 				else {
-					inCutscene ? ModdingUtil.addCall('startCutscene', true) : switchSong();
+					inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : switchSong();
 				}
 			}
 			else {

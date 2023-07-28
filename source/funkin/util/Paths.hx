@@ -126,11 +126,11 @@ class Paths
 		return sound('$key${FlxG.random.int(min, max)}', library);
 	}
 
-	inline static public function music(key:String, ?library:String):FlxSoundAsset
+	inline static public function music(key:String, ?library:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var musicPath:String = getPath('music/$key.$SOUND_EXT', MUSIC, library);
 		var soundFile:FlxSoundAsset = getSound(musicPath);
-		return soundFile;
+		return forcePath ? musicPath : soundFile;
 	}
 
 	inline static public function voices(song:String, forcePath:Bool = false):FlxSoundAsset
@@ -270,9 +270,7 @@ class Paths
 	public static var cachedBitmaps:Map<String, BitmapData> = [];
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
-		if (cachedBitmaps.exists(key)) {
-			return cachedBitmaps.get(key);
-		}
+		if (cachedBitmaps.exists(key)) return cachedBitmaps.get(key);
 		#if desktop	
 		var fixPath = removeAssetLib(key);
 		if (!fixPath.startsWith('assets')) {
@@ -289,9 +287,7 @@ class Paths
 	public static var cachedSounds:Map<String, Sound> = [];
 
 	static public function getSound(key:String):FlxSoundAsset {
-		if (cachedSounds.exists(key)) {
-			return cachedSounds.get(key);
-		}
+		if (cachedSounds.exists(key)) return cachedSounds.get(key);
 		#if desktop
 		var fixPath = removeAssetLib(key);
 		if (!fixPath.startsWith('assets')) {
@@ -300,9 +296,12 @@ class Paths
 			return sound;
 		}
 		#end
-		var sound = OpenFlAssets.getSound(key);
-		cachedSounds.set(key, sound);
-		return sound;
+		if (exists(key, MUSIC)) {
+			var sound = OpenFlAssets.getSound(key);
+			cachedSounds.set(key, sound);
+			return sound;
+		}
+		return key;
 	}
 
 	inline static public function getPackerType(key:String, ?library:String):PackerType {

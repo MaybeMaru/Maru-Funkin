@@ -15,7 +15,7 @@ function startCutscene()
     {
         PlayState.remove(blackScreen);
         FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-        PlayState.camFollow.y = -2050;
+        PlayState.camFollow.setPosition(500,-1500);
         PlayState.camGame.focusOn(PlayState.camFollow.getPosition());
         PlayState.camGame.zoom = 1.5;
 
