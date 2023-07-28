@@ -1,54 +1,16 @@
 {
 	"imagePath": "week7/picoSpeaker",
-	"isGF": false,
+	"icon": "pico",
 	"camOffsets": [
 		0,
 		0
 	],
-	"icon": "pico",
-	"scale": 1,
-	"charOffsets": [
-		-50,
-		230
-	],
+	"isGF": false,
 	"anims": [
 		{
 			"offsets": [
-				568,
-				50
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico shoot 30",
-			"animName": "shoot3"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Dual Wield on Speaker idle",
-			"animName": "idle"
-		},
-		{
-			"offsets": [
-				579,
-				97
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico shoot 40",
-			"animName": "shoot4"
-		},
-		{
-			"offsets": [
 				5,
-				116
+				134
 			],
 			"indices": [],
 			"loop": false,
@@ -59,18 +21,116 @@
 		{
 			"offsets": [
 				-8,
-				-12
+				5
 			],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "Pico shoot 20",
 			"animName": "shoot2"
+		},
+		{
+			"offsets": [
+				0,
+				5
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Dual Wield on Speaker idle",
+			"animName": "idle"
+		},
+		{
+			"offsets": [
+				568,
+				68
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 30",
+			"animName": "shoot3"
+		},
+		{
+			"offsets": [
+				579,
+				114
+			],
+			"indices": [
+				23,
+				24,
+				25
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Pico shoot 40",
+			"animName": "shoot4-loop"
+		},
+		{
+			"offsets": [
+				579,
+				114
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 40",
+			"animName": "shoot4"
+		},
+		{
+			"offsets": [
+				568,
+				68
+			],
+			"indices": [
+				23,
+				24,
+				25
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Pico shoot 30",
+			"animName": "shoot3-loop"
+		},
+		{
+			"offsets": [
+				-8,
+				5
+			],
+			"indices": [
+				23,
+				24,
+				25
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Pico shoot 20",
+			"animName": "shoot2-loop"
+		},
+		{
+			"offsets": [
+				5,
+				134
+			],
+			"indices": [
+				23,
+				24,
+				25
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Pico shoot 10",
+			"animName": "shoot1-loop"
 		}
 	],
-	"isPlayer": false,
+	"charOffsets": [
+		-50,
+		230
+	],
+	"scale": 1,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

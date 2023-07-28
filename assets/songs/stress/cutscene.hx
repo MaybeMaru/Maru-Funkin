@@ -1,4 +1,4 @@
-importLib('Song', 'funkin.util.song');
+/*importLib('Song', 'funkin.util.song');
 
 var cutsceneTankman:FlxAnimate;
 var cutscenePico:FlxAnimate;
@@ -22,14 +22,6 @@ function create()
 
     for (anim in gayAnims)
         speakerPico.anim.addByAnimIndices(anim[0], CoolUtil.atlasIndices(anim[1][0],anim[1][1]), 24, StringTools.endsWith(anim[0],'-loop'));
-    /*speakerPico.anim.addByAnimIndices('shoot1',          CoolUtil.atlasIndices(15,25), 24);
-    speakerPico.anim.addByAnimIndices('shoot2',          CoolUtil.atlasIndices(26,35), 24);
-    speakerPico.anim.addByAnimIndices('shoot3',          CoolUtil.atlasIndices(36,45), 24);
-    speakerPico.anim.addByAnimIndices('shoot4',          CoolUtil.atlasIndices(46,56), 24);
-    speakerPico.anim.addByAnimIndices('shoot1-loop',     CoolUtil.atlasIndices(19,25), 24, true);
-    speakerPico.anim.addByAnimIndices('shoot2-loop',     CoolUtil.atlasIndices(30,35), 24, true);
-    speakerPico.anim.addByAnimIndices('shoot3-loop',     CoolUtil.atlasIndices(40,45), 24, true);
-    speakerPico.anim.addByAnimIndices('shoot4-loop',     CoolUtil.atlasIndices(50,56), 24, true);*/
     speakerPico.visible = false;
 
     PlayState.gf.visible = false;
@@ -258,4 +250,4 @@ function update()
         playPicoAnim('shoot'+noteData);
         animationNotes.shift();
     }
-}
+}*/

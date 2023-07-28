@@ -5089,13 +5089,23 @@
 				"sectionNotes": [],
 				"sectionEvents": [],
 				"mustHitSection": true
+			},
+			{
+				"sectionNotes": [],
+				"sectionEvents": [],
+				"mustHitSection": true
+			},
+			{
+				"sectionNotes": [],
+				"sectionEvents": [],
+				"mustHitSection": true
 			}
 		],
 		"stage": "tank",
 		"players": [
 			"bf-holding-gf",
 			"tankman",
-			"gf"
+			"pico-speaker"
 		],
 		"speed": 2.6,
 		"bpm": 178

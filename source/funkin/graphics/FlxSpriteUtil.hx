@@ -34,11 +34,12 @@ class FlxSpriteUtil extends FlxSprite {
         super(X,Y);
     }
 
-	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true) {
+	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteUtil {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
+		return this;
 	}
 
-	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):Void {
+	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):FlxSpriteUtil {
 		_packer = Paths.getPackerType(path);
 		switch (_packer) {
 			default:			loadGraphic(Paths.image(path, library, false, global, gpu));
@@ -47,6 +48,7 @@ class FlxSpriteUtil extends FlxSprite {
 			case JSON:			frames = Paths.getAsepriteAtlas(path, library, gpu);
 			//case ATLAS: 		frames = Paths.getAnimateAtlas(path);	
 		}
+		return this;
 	}
 
 	public function loadSpriteJson(path:String, folder:String = '', global:Bool = false) {
@@ -145,7 +147,7 @@ class FlxSpriteUtil extends FlxSprite {
 	}
 
 	public function getAnimData(anim:String):SpriteAnimation {
-		return animDatas.get(anim) != null ? animDatas.get(anim) : Reflect.copy(DEFAULT_ANIM);
+		return animDatas.exists(anim) ? animDatas.get(anim) : Reflect.copy(DEFAULT_ANIM);
 	}
 
 	public function setAnimData(anim:String, newData:SpriteAnimation):Void {
