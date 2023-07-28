@@ -6,6 +6,6 @@ function startCountdown()
     for (note in PlayState.unspawnNotes)
     {
         if (!note.mustPress)
-            note.loadSkin('pixel');
+            note.changeSkin('pixel');
     }
 }

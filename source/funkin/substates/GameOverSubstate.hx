@@ -54,9 +54,9 @@ class GameOverSubstate extends MusicBeatSubstate {
 				}
 		
 				if (bf.animation.curAnim.finished) {
-					ModdingUtil.addCall('musicGameOver');
 					CoolUtil.playMusic('${skinFolder}gameOver');
 					gameOverDance();
+					ModdingUtil.addCall('musicGameOver');
 				}
 			}
 		}
@@ -70,6 +70,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 	override function beatHit():Void {
 		super.beatHit();
+		ModdingUtil.addCall('beatHitGameOver', [curBeat]);
 
 		if (!isEnding) {
 			gameOverDance();

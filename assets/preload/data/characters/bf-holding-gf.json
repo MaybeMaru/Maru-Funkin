@@ -5,6 +5,7 @@
 		100,
 		100
 	],
+	"gameOverChar": "bf-holding-gf-dead",
 	"anims": [
 		{
 			"offsets": [

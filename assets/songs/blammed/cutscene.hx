@@ -38,7 +38,7 @@ function beatHit(curBeat)
 function addBlammedTransition() {
 	PlayState.camGame.flash(getSpr('phillyWindow').color, Conductor.crochet/250, null, true);
 	PlayState.switchChar('bf', 'bf-car');
-	PlayState.gf.visible = false;
+	PlayState.gfGroup.visible = false;
 	blammedOverlay.alpha = 0.6;
 
 	PlayState.boyfriend.x += 75;
