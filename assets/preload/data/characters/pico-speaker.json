@@ -1,0 +1,76 @@
+{
+	"imagePath": "week7/picoSpeaker",
+	"isGF": false,
+	"camOffsets": [
+		0,
+		0
+	],
+	"icon": "pico",
+	"scale": 1,
+	"charOffsets": [
+		-50,
+		230
+	],
+	"anims": [
+		{
+			"offsets": [
+				568,
+				50
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 30",
+			"animName": "shoot3"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Dual Wield on Speaker idle",
+			"animName": "idle"
+		},
+		{
+			"offsets": [
+				579,
+				97
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 40",
+			"animName": "shoot4"
+		},
+		{
+			"offsets": [
+				5,
+				116
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 10",
+			"animName": "shoot1"
+		},
+		{
+			"offsets": [
+				-8,
+				-12
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico shoot 20",
+			"animName": "shoot2"
+		}
+	],
+	"isPlayer": false,
+	"flipX": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
+}
