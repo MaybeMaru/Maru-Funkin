@@ -27,12 +27,16 @@ class SaveData
 		var controlSave:Map<String, Map<String, Array<String>>> = new Map<String, Map<String, Array<String>>>();
 		controlSave['keyboardBinds'] = new Map<String, Array<String>>();
 		controlSave['gamepadBinds'] = new Map<String, Array<String>>();
-
 		var prefsSave:Map<String, Dynamic> = new Map<String, Dynamic>();
+		var scoresSave:Map<String, Int> = new Map<String, Int>();
+		var weekUnlockSave:Map<String, Bool> = new Map<String, Bool>();
 
 		// Add save bases
 		saves['controls'] = controlSave;
 		saves['preferences'] = prefsSave;
+		saves['scores'] = scoresSave;
+		saves['weekUnlock'] = weekUnlockSave;
+		saves['autoSaveChart'] = "";
 
 		getDataFile();
 		flushData();

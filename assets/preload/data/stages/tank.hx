@@ -69,7 +69,7 @@ var tankDudesData:Array<Array<Dynamic>> = [
 function createPost():Void {
 	for (i in 0...tankDudesData.length) {
 		var tankDude:FunkinSprite = new FunkinSprite(tankDudesData[i][0], tankDudesData[i][1], tankDudesData[i][2]);
-		tankDude.addAnim('idle', tankDudesData[i][3]);
+		tankDude.addAnim('idle', Std.string(tankDudesData[i][3]));
 		tankDude.playAnim('idle', true);
 		tankDudes.push(tankDude);
 		addSpr(tankDude, 'tank' + i, true);
@@ -100,9 +100,12 @@ var tankX:Float = 400;
 
 function moveTank():Void {
 	if (!PlayState.inCutscene) {
+		tankGround.visible = true;
 		tankAngle += tankSpeed * FlxG.elapsed;
 		tankGround.angle = (tankAngle - 90 + 15);
 		tankGround.x = tankX + 1500 * Math.cos(Math.PI / 180 * (1 * tankAngle + 180));
 		tankGround.y = 1300 + 1100 * Math.sin(Math.PI / 180 * (1 * tankAngle + 180));
+	} else {
+		tankGround.visible = false;
 	}
 }

@@ -14,14 +14,13 @@ import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 import funkin.states.editors.chart.ChartPreview;
 import funkin.states.editors.chart.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
-import flixel.util.FlxSave;
 
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
 
 class ChartingState extends MusicBeatState {
-	var autoSaveFile:FlxSave;
+	public static var autoSaveChart:String;
 
 	var _file:FileReference;
 	var UI_box:FlxUITabMenu;
@@ -92,8 +91,7 @@ class ChartingState extends MusicBeatState {
 		ogPitch = Conductor.songPitch;
 		FlxG.mouse.visible = true;
 		PlayState.inChartEditor = true;
-		autoSaveFile = new FlxSave();
-        autoSaveFile.bind('funkinChart');
+		autoSaveChart = SaveData.getSave('autoSaveChart');
 
 		_curSection = lastSection;
 
@@ -1036,8 +1034,7 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function loadAutosave():Void {
-		PlayState.SONG = Song.parseJson('', autoSaveFile.data.autosave);
-		PlayState.SONG = Song.checkSong(PlayState.SONG);
+		PlayState.SONG = Song.checkSong(Song.parseJson('', autoSaveChart));
 		FlxG.resetState();
 	}
 
@@ -1049,8 +1046,9 @@ class ChartingState extends MusicBeatState {
 
 	function autosaveSong():Void {
 		_song = Song.checkSong(_song);
-		autoSaveFile.data.autosave = getSongString();
-		autoSaveFile.flush();
+		autoSaveChart = getSongString();
+		SaveData.setSave('autoSaveChart', autoSaveChart);
+		SaveData.flushData();
 	}
 
 	private function saveLevel():Void {
