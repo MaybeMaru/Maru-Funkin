@@ -1,6 +1,13 @@
 var cutsceneTankman_Body:FunkinSprite;
 var cutsceneTankman_Head:FunkinSprite;
 
+// Cutscene stuff
+var demonGf:FunkinSprite;
+var john:FunkinSprite;
+var steve:FunkinSprite;
+
+var loadedCutsceneAssets:Bool = false;
+
 function create()
 {
     if (!GameVars.isStoryMode)
@@ -10,21 +17,35 @@ function create()
         cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 155], [1,1]);
         cutsceneTankman_Body.addAnim('godEffingDamnIt', 'body/BODY_3_10');
         cutsceneTankman_Body.addAnim('lookWhoItIs', 'body/BODY_3_20');
-
         cutsceneTankman_Body.addOffset('godEffingDamnIt', 95, 160);
         cutsceneTankman_Body.addOffset('lookWhoItIs', 5, 32);
 
         cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10], [1,1]);
         cutsceneTankman_Head.addAnim('godEffingDamnIt', 'HEAD_3_10');
         cutsceneTankman_Head.addAnim('lookWhoItIs', 'HEAD_3_20');
-
         cutsceneTankman_Head.addOffset('godEffingDamnIt', 30, 25);
         cutsceneTankman_Head.addOffset('lookWhoItIs', 10, 10);
 
-        //PlayState.dad.alpha = 0.6;
+        demonGf = new FunkinSprite('cutscenes/demon_gf', [PlayState.gf.x - 920, PlayState.gf.y - 454]);
+        demonGf.addAnim('demonGf', 'demon_gf');
+        john = new FunkinSprite('cutscenes/john', [PlayState.gf.x + 402.5, PlayState.gf.y - 45]);
+        john.addAnim('john', 'JOHN');
+        steve = new FunkinSprite('cutscenes/steve', [PlayState.gf.x - 895, PlayState.gf.y - 345]);
+        steve.addAnim('steve', 'STEVE');
+
         PlayState.dad.visible = false;
         PlayState.dadGroup.add(cutsceneTankman_Body);
         PlayState.dadGroup.add(cutsceneTankman_Head);
+
+        PlayState.gfGroup.add(john);
+        PlayState.gfGroup.add(steve);
+        PlayState.gfGroup.add(demonGf);
+
+        john.visible = false;
+        steve.visible = false;
+        demonGf.visible = false;
+
+        loadedCutsceneAssets = true;
     }
 }
 
@@ -54,7 +75,7 @@ function startCutscene()
     // Zoom to GF
     new FlxTimer().start(15.2, function(tmr:FlxTimer)
     {
-        //PlayState.gf.visible = false;
+        demonGf.playAnim('demonGf');
         FlxTween.tween(PlayState.camFollow, {x: 650, y: 300}, 1, {ease: FlxEase.sineOut});
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
     });
@@ -155,22 +176,48 @@ function zoomBack()
 	PlayState.camGame.zoom = 0.8;
 }
 
+var addedPico:Bool = false;
+var killedDudes:Bool = false;
 var catchedGF:Bool = false;
+
 function updatePost()
 {
-    /*if (curCutscenePicoAnim == 'picoArrives_1')
-    {
-        if (cutscenePico.anim.get_curFrame() >= 2 && !catchedGF)
-        {
+    if (FlxG.keys.justPressed.R) {
+        FlxG.resetState();
+    }
+
+    if (demonGf.animation.curAnim != null) {
+        demonGf.visible = !demonGf.animation.curAnim.finished;
+        PlayState.gf.visible = !demonGf.visible;
+        if (PlayState.gf.visible && !addedPico) {
+            PlayState.gf.dance();
+            addedPico = true;
+        }
+
+        if (demonGf.animation.curAnim.curFrame >= 55 && !killedDudes) { // Pico kills
+            killedDudes = true;
+            john.playAnim('john');
+            steve.playAnim('steve');
+            john.visible = true;
+            steve.visible = true;
+        }
+
+        if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) { // Catch Geef
             catchedGF = true;
             PlayState.boyfriend.playAnim('catch');
-            PlayState.boyfriend.animation.finishCallback = function(){PlayState.boyfriend.dance();};
+            new FlxTimer().start(1, function(tmr) {
+                PlayState.boyfriend.dance();
+            });
         }
-    }*/
+    }
 
-    if (cutsceneTankman_Head.animation.curAnim != null) {
+    if (loadedCutsceneAssets) {
         if (cutsceneTankman_Head.animation.curAnim.name == 'godEffingDamnIt') {
             cutsceneTankman_Head.visible = !cutsceneTankman_Head.animation.curAnim.finished;
+        }
+        if (killedDudes) {
+            john.visible = !john.animation.curAnim.finished;
+            steve.visible = !steve.animation.curAnim.finished;
         }
     }
 }

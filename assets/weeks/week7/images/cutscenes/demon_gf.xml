@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="demon_gf.png" width="7968" height="4000">
+  <SubTexture name="demon_gf0001" x="4" y="4"  width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0003" x="4" y="463"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0005" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0096" x="915" y="4" width="488" height="435" rotated="true"  frameX="-1021" frameY="-314" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0019" x="4" y="1381"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0021" x="919" y="447"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0023" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0030" x="919" y="906"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0097" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0032" x="4" y="2299"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0033" x="919" y="1365"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0034" x="1834" y="446"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0035" x="4" y="2758"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0036" x="919" y="1824"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0037" x="1834" y="905"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0122" x="1906" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0038" x="2749" y="4"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0039" x="4" y="3217"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0040" x="919" y="2283"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0041" x="1834" y="1364"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0042" x="2749" y="463"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0043" x="3664" y="4"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0044" x="919" y="2742"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0045" x="1834" y="1823"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0046" x="2749" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0047" x="3664" y="463"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0048" x="4579" y="4"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0049" x="919" y="3201"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0050" x="1834" y="2282"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0051" x="2749" y="1381"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0052" x="3664" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0053" x="4579" y="463"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0054" x="5494" y="4"  width="1134" height="913" frameX="-517" frameY="-0" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0055" x="1834" y="2741"  width="907" height="810" frameX="-744" frameY="-103" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0056" x="2749" y="1840"  width="600" height="675" frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0057" x="3664" y="1381"  width="600" height="760" frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0093" x="2749" y="2523" width="608" height="1411" rotated="true"  frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0095" x="6636" y="4" width="653" height="1456" rotated="true"  frameX="-0" frameY="-314" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0120" x="7297" y="4" width="667" height="1213" rotated="true"  frameX="-243" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0113" x="3365" y="2149" width="739" height="1171" rotated="true"  frameX="-285" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0114" x="4112" y="2149" width="673" height="1184" rotated="true"  frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0116" x="4793" y="2149" width="652" height="1198" rotated="true"  frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0118" x="3365" y="3341"  width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0060" x="4579" y="922" width="652" height="958" rotated="true"  frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0064" x="5239" y="925"  width="912" height="645" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0063" x="4580" y="3355"  width="914" height="641" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0090" x="5239" y="1578"  width="1093" height="388" frameX="-347" frameY="-415" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0062" x="6340" y="1468"  width="922" height="620" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0061" x="5453" y="1974" width="590" height="928" rotated="true"  frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0065" x="6051" y="2096"  width="883" height="534" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0092" x="6051" y="2638"  width="1314" height="545" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0091" x="5502" y="3191"  width="1314" height="507" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0123" x="6159" y="925"  width="432" height="474" frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0124" x="7297" y="1225"  width="432" height="474" frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0058" x="6942" y="2096"  width="567" height="531" frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0067" x="6824" y="3191"  width="453" height="498" frameX="-969" frameY="-455" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0068" x="1834" y="3559"  width="511" height="360" frameX="-895" frameY="-467" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0069" x="7270" y="1707"  width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0071" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0089" x="7285" y="3191"  width="617" height="355" frameX="-823" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0125" x="7517" y="2071"  width="422" height="428" frameX="-1026" frameY="-377" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0002" x="4" y="4"  width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0004" x="4" y="463"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0006" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0007" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0008" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0009" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0010" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0011" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0012" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0013" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0014" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0015" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0016" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0017" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0018" x="4" y="922"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0020" x="4" y="1381"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0022" x="919" y="447"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0024" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0025" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0026" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0027" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0028" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0029" x="4" y="1840"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0031" x="919" y="906"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0059" x="6942" y="2096"  width="567" height="531" frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0066" x="6051" y="2096"  width="883" height="534" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0070" x="7270" y="1707"  width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0072" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0073" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0074" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0075" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0076" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0077" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0078" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0079" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0080" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0081" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0082" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0083" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0084" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0085" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0086" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0087" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0088" x="7373" y="2635"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0094" x="2749" y="2523" width="608" height="1411" rotated="true"  frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0098" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0099" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0100" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0101" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0102" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0103" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0104" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0105" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0106" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0107" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0108" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0109" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0110" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0111" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0112" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0121" x="1411" y="4" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0115" x="4112" y="2149" width="673" height="1184" rotated="true"  frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0117" x="4793" y="2149" width="652" height="1198" rotated="true"  frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+  <SubTexture name="demon_gf0119" x="3365" y="3341"  width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157"/>
+</TextureAtlas>
