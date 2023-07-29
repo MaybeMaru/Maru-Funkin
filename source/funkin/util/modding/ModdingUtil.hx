@@ -58,7 +58,7 @@ class ModdingUtil {
 		return list;
 	}
 
-    inline public static function addScript(path:String, global:Bool = false, ?scriptVarNames:Array<String>, ?scriptVars:Array<Dynamic>):Void {
+    inline public static function addScript(path:String, global:Bool = false, ?scriptVarNames:Array<String>, ?scriptVars:Array<Dynamic>, ?tag:String):Void {
         consoleTrace('[ADD] $path / $global', FlxColor.LIME);
         var scriptCode:String = CoolUtil.getFileContent(path);
         var script:FunkScript = new FunkScript(scriptCode);
@@ -70,7 +70,7 @@ class ModdingUtil {
             }
         }
 
-        scriptsMap.set(path, script);
+        scriptsMap.set(tag == null ? path : tag, script);
         (global ? globalScripts : playStateScripts).push(script);
     }
 

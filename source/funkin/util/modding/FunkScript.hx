@@ -18,10 +18,11 @@ class FunkScript {
 		return interp.variables;
 	}
 
-	public function callback(nameStr:String, ?args:Array<Dynamic>) {
+	public function callback(nameStr:String, ?args:Array<Dynamic>):Dynamic {
 		if (varExists(nameStr)) {
-			callMethod(nameStr, args == null ? [] : args);
+			return callMethod(nameStr, args == null ? [] : args);
 		}
+		return null;
 	}
 
 	public function callMethod(nameStr:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
@@ -113,20 +114,13 @@ class FunkScript {
 
 		addVar('getBlendMode', function(blendType:String):openfl.display.BlendMode {
 			switch(blendType.toLowerCase().trim()) {
-				case 'add': 		return ADD;
-				case 'alpha': 		return ALPHA;
-				case 'darken': 		return DARKEN;
-				case 'difference': 	return DIFFERENCE;
-				case 'erase': 		return ERASE;
-				case 'hardlight': 	return HARDLIGHT;
-				case 'invert': 		return INVERT;
-				case 'layer': 		return LAYER;
-				case 'lighten': 	return LIGHTEN;
-				case 'multiply': 	return MULTIPLY;
-				case 'overlay': 	return OVERLAY;
-				case 'screen': 		return SCREEN;
-				case 'shader': 		return SHADER;
-				case 'subtract': 	return SUBTRACT;
+				case 'add': 		return ADD; 	case 'alpha': 		return ALPHA;
+				case 'darken': 		return DARKEN; 	case 'difference': 	return DIFFERENCE;
+				case 'erase': 		return ERASE; 	case 'hardlight': 	return HARDLIGHT;
+				case 'invert': 		return INVERT; 	case 'layer': 		return LAYER;
+				case 'lighten': 	return LIGHTEN; case 'multiply': 	return MULTIPLY;
+				case 'overlay': 	return OVERLAY; case 'screen': 		return SCREEN;
+				case 'shader': 		return SHADER; 	case 'subtract': 	return SUBTRACT;
 				default:			return NORMAL;
 			}
 		});
@@ -161,6 +155,23 @@ class FunkScript {
 				ModdingUtil.errorTrace('Sprite not found: $key');
 				return null;
 			}												
+		});
+
+		// Script functions
+
+		addVar('addScript', function(path:String, ?tag:String, ?keys:Array<String>, ?vars:Array<Dynamic>):Void {
+			ModdingUtil.addScript(path, false, keys, vars, tag);
+		});
+
+		addVar('getScriptVar', function(script:String, key:String):Dynamic {
+			if (varExists(key)) {
+				return ModdingUtil.scriptsMap.get(script).varGet(key);
+			}
+			return null;
+		});
+
+		addVar('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic {
+			return ModdingUtil.scriptsMap.get(script).callback(func, args);
 		});
 
 		// Runtime shader functions
