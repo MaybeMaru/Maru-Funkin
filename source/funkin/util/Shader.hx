@@ -2,6 +2,7 @@ package funkin.util;
 
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.display.BitmapData;
+import openfl.filters.ShaderFilter;
 
 class Shader
 {
@@ -40,27 +41,13 @@ class Shader
 		return shaderMap.get(shader);
 	}
 
-	// Doesnt work correctly yet
-
-	/*public static function resetCameraCache(camera:FlxCamera)
+	inline public static function setCameraShader(camera:FlxCamera, shader:String)
+	{
+		if (existsShader(shader))
 		{
-			var spr = camera.flashSprite;
-			if (spr == null || spr.filters == null)
-				return;
-			@:privateAccess {
-				spr.__cacheBitmap = null;
-				spr.__cacheBitmapData = null;
-			}
+			camera.setFilters([new ShaderFilter(getShader(shader))]);
 		}
-
-		inline public static function setCameraShader(camera:FlxCamera, shader:String)
-		{
-			if (existsShader(shader))
-			{
-				resetCameraCache(camera);
-				camera.setFilters([new ShaderFilter(getShader(shader))]);
-			}
-	}*/
+	}
 
 	inline public static function copyShader(shader:String, tag:String)
 	{

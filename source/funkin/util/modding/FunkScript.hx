@@ -188,6 +188,10 @@ class FunkScript {
 		addVar('setShaderBool', function (shader:String, prop:String, value:Bool) {
 			Shader.setBool(shader, prop, value);
 		});
+
+		addVar('setCameraShader', function(camera:FlxCamera, shader:String) {
+			Shader.setCameraShader(camera, shader);
+		});
 	}
 
 	public function execute(codeToRun:String):Dynamic {
