@@ -2,10 +2,8 @@ package funkin;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
-import flixel.util.FlxSave;
 
 class Controls {
-    private static var controlSaveFile:FlxSave;
     public static var controlBindings:Map<String, Array<String>>;
     public static var controlGamepadBindings:Map<String, Array<String>>;
     public static var controlArray:Array<String> = [];

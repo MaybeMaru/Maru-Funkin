@@ -1,4 +1,5 @@
-var cutsceneTankman:FlxAnimate;
+var cutsceneTankman_Body:FunkinSprite;
+var cutsceneTankman_Head:FunkinSprite;
 
 function create()
 {
@@ -6,15 +7,19 @@ function create()
     {
         PlayState.inCutscene = true;
 
-        cutsceneTankman = new FlxAnimate(PlayState.dad.x, PlayState.dad.y, Paths.atlas('captainLipsync'));
-        cutsceneTankman.x += 114;
-        cutsceneTankman.y -= 35;
+        cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 155], [1,1]);
+        cutsceneTankman_Body.addAnim('wellWellWell', 'body/BODY_1_10');
+        cutsceneTankman_Body.addAnim('killYou', 'body/BODY_1_20');
+        cutsceneTankman_Body.addOffset('killYou', 40, 5);
 
-        cutsceneTankman.antialiasing = true;
-        cutsceneTankman.anim.addByAnimIndices('wellWellWell', CoolUtil.numberArray(79,1), 24);
-        cutsceneTankman.anim.addByAnimIndices('killYou', CoolUtil.numberArray(226,81), 24);
+        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10], [1,1]);
+        cutsceneTankman_Head.addAnim('wellWellWell', 'HEAD_1_10');
+        cutsceneTankman_Head.addAnim('killYou', 'HEAD_1_20');
+        cutsceneTankman_Head.addOffset('wellWellWell', 0, -5);
+
         PlayState.dad.visible = false;
-        PlayState.dadGroup.add(cutsceneTankman);
+        PlayState.dadGroup.add(cutsceneTankman_Body);
+        PlayState.dadGroup.add(cutsceneTankman_Head);
     }
 }
 
@@ -34,7 +39,8 @@ function startCutscene()
     // Well Well Well
     new FlxTimer().start(0.1, function(tmr:FlxTimer)
     {
-        cutsceneTankman.anim.play('wellWellWell', true);
+        cutsceneTankman_Body.playAnim('wellWellWell', true);
+        cutsceneTankman_Head.playAnim('wellWellWell', true);
         CoolUtil.playSound('wellWellWell');
     });
 
@@ -63,14 +69,16 @@ function startCutscene()
         PlayState.camFollow.x -= 450;
 
         CoolUtil.playSound('killYou');
-        cutsceneTankman.anim.play('killYou');
+        cutsceneTankman_Body.playAnim('killYou', true);
+        cutsceneTankman_Head.playAnim('killYou', true);
     });
 
     //End Cutscene
     new FlxTimer().start(12, function(tmr:FlxTimer)
     {
         PlayState.dad.visible = true;
-        cutsceneTankman.visible = false;
+        cutsceneTankman_Body.visible = false;
+        cutsceneTankman_Head.visible = false;
         FlxG.sound.music.fadeOut(1.5, 0);
         FlxTween.tween(PlayState.camGame, {zoom: PlayState.defaultCamZoom}, Conductor.crochet / 255, {ease: FlxEase.cubeInOut});
         PlayState.startCountdown();

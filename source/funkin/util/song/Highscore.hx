@@ -1,5 +1,4 @@
 package funkin.util.song;
-import flixel.util.FlxSave;
 
 class Highscore {
 	public static var songScores:Map<String, Int>;

@@ -1,8 +1,6 @@
 package funkin;
-import flixel.util.FlxSave;
 
 class Preferences {
-    private static var prefsSaveFile:FlxSave;
     public static var prefsArray:Array<String>;
     public static var preferences:Map<String, Dynamic>;
     public static var prefsLabels:Map<String, String>;
@@ -29,8 +27,8 @@ class Preferences {
         //addPref('good-off',      'good mil offset',  43);
 
         // UI
-        addPref('framerate',      'framerate',       60);   #if !mobile
-        addPref('fps-counter',    'fps counter',     true); #end
+        addPref('framerate',      'framerate',       60);
+        addPref('fps-counter',    'fps counter',     true);
         addPref('vanilla-ui',     'vanilla ui',      false);
         addPref('flashing-light', 'flashing lights', true);
         addPref('camera-zoom',    'camera zooms',    true);
