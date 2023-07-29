@@ -1,4 +1,5 @@
-var cutsceneTankman:FlxAnimate;
+var cutsceneTankman_Body:FunkinSprite;
+var cutsceneTankman_Head:FunkinSprite;
 
 function create()
 {
@@ -6,14 +7,15 @@ function create()
     {
         PlayState.inCutscene = true;
 
-        cutsceneTankman = new FlxAnimate(PlayState.dad.x, PlayState.dad.y, Paths.atlas('captainLipsync'));
-        cutsceneTankman.x += 114;
-        cutsceneTankman.y -= 35;
+        cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 150], [1,1]);
+        cutsceneTankman_Body.addAnim('tightBars', 'body/BODY_20');
 
-        cutsceneTankman.antialiasing = true;
-        cutsceneTankman.anim.addByAnimIndices('tightBars', CoolUtil.numberArray(507,228), 24);
+        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10], [1,1]);
+        cutsceneTankman_Head.addAnim('tightBars', 'HEAD_20');
+
         PlayState.dad.visible = false;
-        PlayState.dadGroup.add(cutsceneTankman);
+        PlayState.dadGroup.add(cutsceneTankman_Body);
+        PlayState.dadGroup.add(cutsceneTankman_Head);
     }
 }
 
@@ -32,7 +34,8 @@ function startCutscene()
     // Pretty thight bars
     new FlxTimer().start(0.1, function(tmr:FlxTimer)
     {
-        cutsceneTankman.anim.play('tightBars', true);
+        cutsceneTankman_Body.playAnim('tightBars', true);
+        cutsceneTankman_Head.playAnim('tightBars', true);
         CoolUtil.playSound('tankSong2');
 
         //Im too lazy, just took the Psych Engine variables LOL
@@ -52,7 +55,8 @@ function startCutscene()
     new FlxTimer().start(11.5, function(tmr:FlxTimer)
     {
         PlayState.dad.visible = true;
-        cutsceneTankman.visible = false;
+        cutsceneTankman_Body.visible = false;
+        cutsceneTankman_Head.visible = false;
         FlxG.sound.music.fadeOut(1.5, 0);
         FlxTween.tween(PlayState.camGame, {zoom: PlayState.defaultCamZoom}, Conductor.crochet / 255, {ease: FlxEase.cubeInOut});
         PlayState.gf.animation.finishCallback = null;

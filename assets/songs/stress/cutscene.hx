@@ -1,6 +1,5 @@
-/*var cutsceneTankman:FlxAnimate;
-var cutscenePico:FlxAnimate;
-var speakerPico:FlxAnimate;*/
+var cutsceneTankman_Body:FunkinSprite;
+var cutsceneTankman_Head:FunkinSprite;
 
 function create()
 {
@@ -8,18 +7,24 @@ function create()
     {
         PlayState.inCutscene = true;
 
-        /*cutsceneTankman = new FlxAnimate(PlayState.dad.x, PlayState.dad.y, Paths.getAtlas('captainLipsync'));
-        cutsceneTankman.x += 114;
-        cutsceneTankman.y -= 35;
+        cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 155], [1,1]);
+        cutsceneTankman_Body.addAnim('godEffingDamnIt', 'body/BODY_3_10');
+        cutsceneTankman_Body.addAnim('lookWhoItIs', 'body/BODY_3_20');
 
-        cutsceneTankman.antialiasing = true;
-        cutsceneTankman.anim.addByAnimIndices('godEffingDamnIt', CoolUtil.numberArray(916,508), 24);
-        cutsceneTankman.anim.addByAnimIndices('lookWhoItIs', CoolUtil.numberArray(1277,917), 24);
+        cutsceneTankman_Body.addOffset('godEffingDamnIt', 95, 160);
+        cutsceneTankman_Body.addOffset('lookWhoItIs', 5, 32);
 
-        //Layering
+        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10], [1,1]);
+        cutsceneTankman_Head.addAnim('godEffingDamnIt', 'HEAD_3_10');
+        cutsceneTankman_Head.addAnim('lookWhoItIs', 'HEAD_3_20');
+
+        cutsceneTankman_Head.addOffset('godEffingDamnIt', 30, 25);
+        cutsceneTankman_Head.addOffset('lookWhoItIs', 10, 10);
+
+        //PlayState.dad.alpha = 0.6;
         PlayState.dad.visible = false;
-        PlayState.gfGroup.add(cutscenePico);
-        PlayState.dadGroup.add(cutsceneTankman);*/
+        PlayState.dadGroup.add(cutsceneTankman_Body);
+        PlayState.dadGroup.add(cutsceneTankman_Head);
     }
 }
 
@@ -41,7 +46,8 @@ function startCutscene()
     // God effing damn it
     new FlxTimer().start(0.1, function(tmr:FlxTimer)
     {
-        //cutsceneTankman.anim.play('godEffingDamnIt');
+        cutsceneTankman_Body.playAnim('godEffingDamnIt', true);
+        cutsceneTankman_Head.playAnim('godEffingDamnIt', true);
         stressCutscene.play(true);
     });
 
@@ -62,7 +68,9 @@ function startCutscene()
     // Look who it is
     new FlxTimer().start(19.5, function(tmr:FlxTimer)
     {
-        //cutsceneTankman.anim.play('lookWhoItIs', true);
+        cutsceneTankman_Body.playAnim('lookWhoItIs', true);
+        cutsceneTankman_Head.playAnim('lookWhoItIs', true);
+        cutsceneTankman_Head.visible = true;
     });
 
     //Focus to tankman
@@ -100,8 +108,9 @@ function startCutscene()
     //End Cutscene
     new FlxTimer().start(35.5, function(tmr:FlxTimer)
     {
-        //PlayState.dad.visible = true;
-        //cutsceneTankman.visible = false;
+        PlayState.dad.visible = true;
+        cutsceneTankman_Body.visible = false;
+        cutsceneTankman_Head.visible = false;
         FlxTween.tween(PlayState.camGame, {zoom: PlayState.defaultCamZoom}, Conductor.crochet / 255, {ease: FlxEase.cubeInOut});
         PlayState.startCountdown();
     });
@@ -110,8 +119,8 @@ function startCutscene()
     {
         var censorBar:FunkinSprite = new FunkinSprite('censor', [300,450], [1,1]);
         censorBar.addAnim('mouth censor', 'mouth censor', 24, true);
+        censorBar.addOffset('mouth censor', 75, 0);
         censorBar.playAnim('mouth censor', true);
-        censorBar.updateHitbox();
         censorBar.visible = false;
         PlayState.add(censorBar);
     
@@ -139,11 +148,6 @@ function startCutscene()
     }
 }
 
-function startSong()
-{
-    FlxG.sound.music.volume = 1;
-}
-
 function zoomBack()
 {
 	PlayState.camFollow.x = 630;
@@ -163,4 +167,10 @@ function updatePost()
             PlayState.boyfriend.animation.finishCallback = function(){PlayState.boyfriend.dance();};
         }
     }*/
+
+    if (cutsceneTankman_Head.animation.curAnim != null) {
+        if (cutsceneTankman_Head.animation.curAnim.name == 'godEffingDamnIt') {
+            cutsceneTankman_Head.visible = !cutsceneTankman_Head.animation.curAnim.finished;
+        }
+    }
 }
