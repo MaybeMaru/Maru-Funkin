@@ -164,8 +164,9 @@ class FunkScript {
 		});
 
 		addVar('getScriptVar', function(script:String, key:String):Dynamic {
-			if (varExists(key)) {
-				return ModdingUtil.scriptsMap.get(script).varGet(key);
+			var script = ModdingUtil.scriptsMap.get(script);
+			if (script.varExists(key)) {
+				return script.varGet(key);
 			}
 			return null;
 		});

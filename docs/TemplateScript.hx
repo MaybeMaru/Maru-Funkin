@@ -4,25 +4,28 @@
     Thank u for using this engine, but tbh use Psych or some other better engine smh...
 */
 
-//  HSCRIPT FUNCTIONS
+/*
+    HSCRIPT FUNCTIONS
+*/
 
 /*
     Adds to the hscript interpreter a class
-    @param className    --> Name of the class       EX: 'FlxSprite'
-    @param classPackage --> Package of the class    EX: 'flixel'
+    @param className        --> Name of the class           EX: 'FlxSprite'
+    @param classPackage     --> Package of the class        EX: 'flixel'
+    @param customClassName  --> Custom tag for the class    (OPTIONAL) 
 */
-importLib(className:String, classPackage:String);
+importLib(className:String, classPackage:String, ?customClassName:String);
 
 /*
-    Adds a FunkinSprite to the foreground or background of PlayState
-    @param spriteVar    --> FunkinSprite object to add
+    Adds a sprite of any kind to the foreground or background of PlayState
+    @param spriteVar    --> Sprite object to add
     @param spriteTag    --> Tag of the sprite to add
     @param onTop        --> If to add it on the foreground or background of PlayState
 */
-addSpr(spriteVar:FunkinSprite, spriteTag:String, onTop:Bool)
+addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool)
 
 /*
-    Returns a FunkinSprite from the foreground or background of PlayState
+    Returns a sprite from the foreground or background of PlayState
     @param spriteTag    --> Tag of the sprite to get
 */
 getSpr(spriteTag:String)
@@ -32,12 +35,6 @@ getSpr(spriteTag:String)
     @param blendModeName --> Name of the blend mode EX: 'multiply'
 */
 getBlendMode(blendModeName:String);
-
-/*
-    Returns a WiggleEffectType
-    @param wiggleName --> Name of the wiggle type EX: 'heat_wave_horizontal'
-*/
-getWiggleEffectType(wiggleName:String);
 
 /*
     Returns the preference variable
@@ -56,7 +53,93 @@ getPref(prefName:String);
 */
 getKey(keyName:String);
 
-//  PLAYSTATE CALLBACKS
+/*
+    Adds a new script
+    @param scriptPath       --> Path of the script
+    @param scriptTag        --> Custom tag for the script           (OPTIONAL)
+    @param scriptVarKeys    --> List of names of custom variables   (OPTIONAL)
+    @param scriptVars       --> List of custom variables            (OPTIONAL)
+*/
+addScript(scriptPath:String, ?scriptTag:String, ?scriptKeys:Array<String>, ?scriptVars:Array<Dynamic>);
+
+/*
+    Returns a variable from a script
+    @param scriptTag --> Path or tag of the script
+    @param scriptVar --> Name of the variable to get
+*/
+getScriptVar(scriptTag:String, scriptVar:String);
+
+/*
+    Calls a function from a script
+    @param scriptTag        --> Path or tag of the script
+    @param scriptFunction   --> Name of the function to call
+    @param functionArgs     --> Arguments to use in the function (OPTIONAL)
+*/
+callScriptFunction(scriptTag:String, scriptFunction:String, ?functionArgs:Array<Dynamic>);
+
+/*
+        HSCRIPT SHADER FUNCTIONS
+*/
+
+/*
+    Initiates a fragment shader
+    @param shaderPath   --> File name of the shader
+    @param shaderTag    --> Custom tag for the shader (allows duplicates)   (OPTIONAL)
+    @param forcedCreate --> If to force the shader to be initiated again    (OPTIONAL)
+*/
+initShader(shaderPath:String, ?shaderTag:String, ?forcedCreate:Bool);
+
+/*
+    Sets a shader to a FlxSprite
+    @param sprite       --> Sprite to add the shader to
+    @param shaderTag    --> Name or tag of the shader
+*/
+setSpriteShader(sprite:FlxSprite, shaderTag:String);
+
+/*
+    Sets a shader to a FlxCamera
+    @param camera       --> Camera to add the shader to
+    @param shaderTag    --> Name or tag of the shader
+*/
+setCameraShader(camera:FlxCamera, shaderTag:String);
+
+/*
+    Sets a bitmap to a shader sampler2D
+    @param shaderTag        --> Name or tag of the shader
+    @param variableName     --> Name of the variable to set
+    @param imagePath        --> Path of the image to get bitmap data from         (OPTIONAL)
+    @param bitmap           --> Alternatively, bitmap data to set the variable to (OPTIONAL)
+*/
+setShaderSampler2D(shaderTag:String, variableName:String, ?imagePath:String, ?bitmap:BitmapData);
+
+/*
+    Sets a float to a shader variable
+    @param shaderTag        --> Name or tag of the shader
+    @param variableName     --> Name of the variable to set
+    @param floatValue       --> Float value to set the variable to
+*/
+setShaderFloat(shaderTag:String, variableName:String, floatValue:Float);
+
+/*
+    Sets a int to a shader variable
+    @param shaderTag        --> Name or tag of the shader
+    @param variableName     --> Name of the variable to set
+    @param intValue         --> Int value to set the variable to
+*/
+setShaderInt(shaderTag:String, variableName:String, intValue:Int);
+
+/*
+    Sets a bool to a shader variable
+    @param shaderTag        --> Name or tag of the shader
+    @param variableName     --> Name of the variable to set
+    @param boolValue        --> Bool value to set the variable to
+*/
+setShaderBool(shaderTag:String, prop:String, boolValue:Bool);
+
+
+/*
+        HSCRIPT PLAYSTATE CALLBACKS
+*/
 
 function create()
 {

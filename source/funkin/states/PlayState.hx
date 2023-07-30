@@ -208,6 +208,9 @@ class PlayState extends MusicBeatState {
 		for (script in songScripts)
 			ModdingUtil.addScript(script);
 
+		//Skin Script
+		ModdingUtil.addScript(Paths.script('skins/${SkinUtil.curSkin}'));
+
 		//Global Scripts
 		var globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
 		for (script in globalScripts)
