@@ -57,7 +57,7 @@ class CoolUtil {
 
 		var musicDataPath:String = Paths.getPath('music/$music-data.txt', MUSIC, null);
 		if (Paths.exists(musicDataPath, TEXT)) {
-			Conductor.changeBPM(Std.parseFloat(getFileContent(musicDataPath)));
+			Conductor.bpm = Std.parseFloat(getFileContent(musicDataPath));
 		}
 	}
 

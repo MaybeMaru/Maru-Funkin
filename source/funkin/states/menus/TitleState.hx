@@ -34,7 +34,7 @@ class TitleState extends MusicBeatState {
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
-		Conductor.changeBPM(introJson.bpm);
+		Conductor.bpm = introJson.bpm;
 		persistentUpdate = true;
 
 		titleGroup = new FlxGroup();

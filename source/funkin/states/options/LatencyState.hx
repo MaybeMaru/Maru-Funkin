@@ -20,7 +20,7 @@ class LatencyState extends MusicBeatState
 		add(hitSpr);
 
 		FlxG.sound.playMusic(Paths.music('latency'), 1, true);
-		Conductor.changeBPM(100);
+		Conductor.bpm = 100;
 		Conductor.songPosition = 0;
 		offset = Conductor.settingOffset;
 

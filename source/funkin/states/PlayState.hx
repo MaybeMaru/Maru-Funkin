@@ -129,7 +129,7 @@ class PlayState extends MusicBeatState {
 
 		SONG = Song.checkSong(SONG); //Double check null values
 		Conductor.mapBPMChanges(SONG);
-		Conductor.changeBPM(SONG.bpm);
+		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
 
 		#if desktop
@@ -296,6 +296,9 @@ class PlayState extends MusicBeatState {
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		iconP2.playIcon = true;
 		iconGroup.add(iconP2);
+
+		dad.iconSpr = iconP2;
+		boyfriend.iconSpr = iconP1;
 
 		scoreTxt = new FunkinText(healthBarBG.x, healthBarBG.y + 30);
 		add(scoreTxt);
@@ -467,7 +470,7 @@ class PlayState extends MusicBeatState {
 	
 		var noteData:Array<SwagSection> = songData.notes;
 		curSong = songData.song;
-		Conductor.changeBPM(songData.bpm);
+		Conductor.bpm = songData.bpm;
 	
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
@@ -1101,7 +1104,7 @@ class PlayState extends MusicBeatState {
 		super.beatHit();
 		if (curSectionData != null) {
 			if (curSectionData.changeBPM) {
-				Conductor.changeBPM(curSectionData.bpm);
+				Conductor.bpm = curSectionData.bpm;
 				FlxG.log.add('CHANGED BPM!');
 			}
 		}

@@ -41,6 +41,7 @@ function updatePost()
 
             ScriptChar.playAnim('shoot'+shootAnim, true);
             ScriptChar.specialAnim = true;
+            ScriptChar.forceDance = false;
             picoNotes_.shift();
         }
     }

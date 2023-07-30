@@ -1,30 +1,36 @@
 importLib('HealthIcon', 'funkin.graphics');
 var gfIcon:HealthIcon;
-var targetIcon:HealthIcon;
+var doStuff:Bool = false; // Prevent null error
 
 function createPost():Void {
-    gfIcon = new HealthIcon('gf');
-    gfIcon.cameras = [PlayState.camHUD];
-    PlayState.iconGroup.add(gfIcon);
-
-    targetIcon = (ScriptChar.isPlayer) ? PlayState.iconP1 : PlayState.iconP2;
-    targetIcon.staticSize = 0.75;
+    doStuff = ScriptChar.iconSpr != null;
+    if (doStuff)  {
+        gfIcon = new HealthIcon('gf');
+        gfIcon.cameras = [PlayState.camHUD];
+        PlayState.iconGroup.add(gfIcon);
+    
+        ScriptChar.iconSpr.staticSize = 0.75;
+    }
 }
 
 function beatHit():Void {
-    targetIcon.bumpIcon(1.3/1.25);
+    if (doStuff)  {
+        ScriptChar.iconSpr.bumpIcon(1.3/1.25);
+    }
 }
 
 function updatePost():Void {
-    gfIcon.flipX = ScriptChar.isPlayer;
-    var offset:Float = 50;
-    if (!ScriptChar.isPlayer) {
-        offset *= -1;
+    if (doStuff)  {
+        gfIcon.flipX = ScriptChar.iconSpr.flipX;
+        var offset:Float = 50;
+        if (!ScriptChar.isPlayer) {
+            offset *= -1;
+        }
+    
+        gfIcon.x = ScriptChar.iconSpr.x + offset;
+        gfIcon.y = ScriptChar.iconSpr.y;
+        ScriptChar.iconSpr.offset.y = -5;
+        gfIcon.scale.set(ScriptChar.iconSpr.scale.x, ScriptChar.iconSpr.scale.y);
+        gfIcon.updateHitbox();
     }
-
-    gfIcon.x = targetIcon.x + offset;
-    gfIcon.y = targetIcon.y;
-    targetIcon.offset.y = -5;
-    gfIcon.scale.set(targetIcon.scale.x, targetIcon.scale.y);
-    gfIcon.updateHitbox();
 }

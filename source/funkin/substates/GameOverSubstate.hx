@@ -23,7 +23,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		add(camFollow);
 
 		Conductor.songPosition = 0;
-		Conductor.changeBPM(100);
+		Conductor.bpm = 100;
 
 		CoolUtil.playSound('${skinFolder}fnf_loss_sfx');
 		bf.playAnim('firstDeath');

@@ -129,7 +129,7 @@ class ChartingState extends MusicBeatState {
 		updateGrid();
 
 		loadSong(_song.song);
-		Conductor.changeBPM(_song.bpm);
+		Conductor.bpm = _song.bpm;
 		Conductor.mapBPMChanges(_song);
 		Conductor.songOffset = _song.offsets;
 
@@ -522,7 +522,7 @@ class ChartingState extends MusicBeatState {
 				case 'song_bpm':
 					tempBpm = nums.value;
 					Conductor.mapBPMChanges(_song);
-					Conductor.changeBPM(tempBpm);
+					Conductor.bpm = tempBpm;
 				
 				case 'song_inst_offset':
 					var tempOffset:Int = Std.int(nums.value);
@@ -901,7 +901,7 @@ class ChartingState extends MusicBeatState {
 		var changeBPM:Null<Bool> = _song.notes[_curSection].changeBPM;
 		if (changeBPM != null || !changeBPM) {
 			if (changeBPM && _song.notes[_curSection].bpm > 0) {
-				Conductor.changeBPM(_song.notes[_curSection].bpm);
+				Conductor.bpm = _song.notes[_curSection].bpm;
 				FlxG.log.add('CHANGED BPM!');
 			}
 		} else { // get last bpm
@@ -910,7 +910,7 @@ class ChartingState extends MusicBeatState {
 				if (_song.notes[i].changeBPM)
 					daBPM = _song.notes[i].bpm;
 			}
-			Conductor.changeBPM(daBPM);
+			Conductor.bpm = daBPM;
 		}
 		
 		curSelectedNoteSpr = null;

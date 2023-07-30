@@ -213,37 +213,37 @@ var catchedGF:Bool = false;
 
 function updatePost()
 {
-    if (demonGf.animation.curAnim != null) {
-        if (demonGf.animation.curAnim.name == 'demonGf') {
-            demonGf.visible = !demonGf.animation.curAnim.finished;
-            PlayState.gf.visible = !demonGf.visible;
-            if (PlayState.gf.visible && !addedPico) {
-                PlayState.gf.dance();
-                addedPico = true;
-            }
-    
-            if (demonGf.animation.curAnim.curFrame >= 55 && !killedDudes) { // Pico kills
-                killedDudes = true;
-                john.playAnim('john');
-                steve.playAnim('steve');
-                john.visible = true;
-                steve.visible = true;
-            }
-    
-            if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) { // Catch Geef
-                catchedGF = true;
-                beef.visible = false;
-                PlayState.boyfriend.visible = true;
-                PlayState.boyfriend.playAnim('catch');
-                new FlxTimer().start(1, function(tmr) {
-                    PlayState.boyfriend.dance();
-                    PlayState.boyfriend.animation.curAnim.finish();
-                });
+    if (loadedCutsceneAssets) {
+        if (demonGf.animation.curAnim != null) {
+            if (demonGf.animation.curAnim.name == 'demonGf') {
+                demonGf.visible = !demonGf.animation.curAnim.finished;
+                PlayState.gf.visible = !demonGf.visible;
+                if (PlayState.gf.visible && !addedPico) {
+                    PlayState.gf.dance();
+                    addedPico = true;
+                }
+        
+                if (demonGf.animation.curAnim.curFrame >= 55 && !killedDudes) { // Pico kills
+                    killedDudes = true;
+                    john.playAnim('john');
+                    steve.playAnim('steve');
+                    john.visible = true;
+                    steve.visible = true;
+                }
+        
+                if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) { // Catch Geef
+                    catchedGF = true;
+                    beef.visible = false;
+                    PlayState.boyfriend.visible = true;
+                    PlayState.boyfriend.playAnim('catch');
+                    new FlxTimer().start(1, function(tmr) {
+                        PlayState.boyfriend.dance();
+                        PlayState.boyfriend.animation.curAnim.finish();
+                    });
+                }
             }
         }
-    }
-
-    if (loadedCutsceneAssets) {
+        
         if (cutsceneTankman_Head.animation.curAnim.name == 'godEffingDamnIt') {
             cutsceneTankman_Head.visible = !cutsceneTankman_Head.animation.curAnim.finished;
         }

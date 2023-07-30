@@ -13,7 +13,7 @@ class Conductor {
 	inline public static var STEPS_LENGTH:Int = 4;
 	inline public static var STEPS_SECTION_LENGTH:Int = STEPS_LENGTH * BEATS_LENGTH;
 
-	public static var bpm:Float = 100;
+	public static var bpm(default, set):Float = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); 	// beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; 		// steps in milliseconds
 	public static var sectionCrochet:Float = crochet * 4; 	// sections in milliseconds
@@ -25,6 +25,12 @@ class Conductor {
 
 	public static var safeFrames:Int = 15;
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; //safeFrames in milliseconds
+
+	public static function set_bpm(value:Float):Float {
+		crochet = (60 / value) * 1000;
+		stepCrochet = crochet / 4;
+		return bpm = value;
+	}
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
@@ -66,12 +72,6 @@ class Conductor {
 		};
 	}
 
-	public static function changeBPM(newBpm:Float):Void {
-		bpm = newBpm;
-		crochet = ((60 / bpm) * 1000);
-		stepCrochet = crochet / 4;
-	}
-
 	public static function sync(inst:FlxSound, ?vocals:FlxSound):Void {
 		inst.time = songPosition - songOffset[0] - settingOffset;
 		if (vocals != null) vocals.time = songPosition - songOffset[1] - settingOffset;
@@ -87,7 +87,7 @@ class Conductor {
 	}
 
 	public static function setPitch(pitch:Float = 1, forceVar:Bool = true, forceTime:Bool = true):Void {
-		pitch = (pitch < 0.25) ? 0.25 : (pitch > 2) ? 2 : pitch;
+		pitch = FlxMath.bound(pitch, 0.25, 2);
 		songPitch = (forceVar) ? pitch : songPitch;
 		FlxG.timeScale = (forceTime) ? pitch : FlxG.timeScale;
 		if (PlayState.game != null) {

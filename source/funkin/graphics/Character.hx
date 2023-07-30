@@ -35,6 +35,7 @@ class Character extends FlxSpriteUtil {
 
 	//	Display
 	public var icon:String = 'face';
+	public var iconSpr:HealthIcon = null;
 	public var curCharacter:String = 'bf';
 	public var isPlayer:Bool = false;
 	public var isPlayerJson:Bool = false;
