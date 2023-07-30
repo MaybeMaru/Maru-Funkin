@@ -12,7 +12,7 @@ var loadedCutsceneAssets:Bool = false;
 
 function create()
 {
-    if (!GameVars.isStoryMode)
+    if (GameVars.isStoryMode)
     {
         PlayState.inCutscene = true;
 
@@ -123,9 +123,13 @@ function startCutscene()
         PlayState.camFollow.y = PlayState.dad.y + 170;
     });
 
+    //Small anticipation
+    new FlxTimer().start(21, function(tmr:FlxTimer) {
+        PlayState.gf.dance();
+    });
+
     //Little friend
-    new FlxTimer().start(21.5, function(tmr:FlxTimer)
-    {
+    new FlxTimer().start(21.5, function(tmr:FlxTimer) {
         PlayState.gf.playAnim('shoot1-loop');
     });
 
@@ -209,10 +213,6 @@ var catchedGF:Bool = false;
 
 function updatePost()
 {
-    if (FlxG.keys.justPressed.R) {
-        FlxG.resetState();
-    }
-
     if (demonGf.animation.curAnim != null) {
         if (demonGf.animation.curAnim.name == 'demonGf') {
             demonGf.visible = !demonGf.animation.curAnim.finished;
@@ -247,6 +247,7 @@ function updatePost()
         if (cutsceneTankman_Head.animation.curAnim.name == 'godEffingDamnIt') {
             cutsceneTankman_Head.visible = !cutsceneTankman_Head.animation.curAnim.finished;
         }
+        
         if (killedDudes) {
             john.visible = !john.animation.curAnim.finished;
             steve.visible = !steve.animation.curAnim.finished;

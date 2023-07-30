@@ -188,19 +188,16 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addScript(Paths.script('stages/$curStage'));
 
 		//Character Scripts
-		var charArray:Array<Character> = [PlayState.game.boyfriend,PlayState.game.dad,PlayState.game.gf];
-		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/characters');
-		
+		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
-			for (char in charArray) {
+			for (char in [PlayState.game.boyfriend,PlayState.game.dad,PlayState.game.gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].toLowerCase().split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
-					var scriptChar:Character = null;
 
 					if (char.curCharacter == charName) {
-						scriptChar = char;
-						ModdingUtil.addScript(characterScripts[i], ['ScriptChar'], [scriptChar]);
+						ModdingUtil.addScript(characterScripts[i], ['ScriptChar'], [char]);
+						break;
 					}
 				}
 			}	
