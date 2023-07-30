@@ -191,9 +191,7 @@ class StoryMenuState extends MusicBeatState {
 
 	function changeDifficulty(change:Int = 0):Void {
 		var lastDiff:String = curWeekDiffs[curDifficulty];
-		curDifficulty += change;
-		if (curDifficulty < 0) curDifficulty = curWeekDiffs.length-1;
-		if (curDifficulty > curWeekDiffs.length-1) curDifficulty = 0;
+		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		intendedScore = Highscore.getWeekScore(WeekSetup.weekNameList[curWeek], curWeekDiffs[curDifficulty]);
 
 		sprDiff.loadGraphic(Paths.image('storymenu/difficulties/${curWeekDiffs[curDifficulty]}', null, false, true));
@@ -211,9 +209,7 @@ class StoryMenuState extends MusicBeatState {
 
 	function changeWeek(change:Int = 0):Void {
 		var lastWeekDiffs = WeekSetup.weekList[curWeek].weekDiffs;
-		curWeek += change;
-		if (curWeek >= WeekSetup.weekList.length)	curWeek = 0;
-		if (curWeek < 0)							curWeek = WeekSetup.weekList.length - 1;
+		curWeek = FlxMath.wrap(curWeek += change, 0, WeekSetup.weekList.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu');
 		curWeekDiffs = WeekSetup.weekList[curWeek].weekDiffs;
 
@@ -236,11 +232,8 @@ class StoryMenuState extends MusicBeatState {
 		for (i in 0...grpWeekCharacters.members.length) {
 			grpWeekCharacters.members[i].setupChar(weekCharacters[curWeek][i]);
 		}
-		var stringThing:Array<String> = WeekSetup.weekList[curWeek].songList.songs;
 		txtTracklist.text = 'Tracks\n';
-		for (song in stringThing) {
-			txtTracklist.text += '\n$song';
-		}
+		for (song in WeekSetup.weekList[curWeek].songList.songs) txtTracklist.text += '\n$song';
 		txtTracklist.text = txtTracklist.text.toUpperCase();
 		txtTracklist.screenCenter(X);
 		txtTracklist.x -= FlxG.width * 0.35;

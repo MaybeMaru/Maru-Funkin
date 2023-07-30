@@ -5,7 +5,11 @@ class FreeplayState extends MusicBeatState {
 
 	var songs:Array<SongMetadata> = [];
 	var coolColors:Map<String, String>;
-	var curWeekDiffs:Array<String> = ['easy','normal','hard'];
+	var curWeekDiffs:Array<String> = [
+		'easy',
+		'normal',
+		'hard'
+	];
 
 	public static var curSelected:Int = 0;
 	public static var curDifficulty:Int = 1;
@@ -126,9 +130,9 @@ class FreeplayState extends MusicBeatState {
 		diffText.x = sexPos;
 		scoreBG.x = sexPos - 6;
 
-		detectChangeSelection();
 		if (getKey('UI_LEFT-P'))	changeDiff(-1);
 		if (getKey('UI_RIGHT-P'))	changeDiff(1);
+		detectChangeSelection();
 
 		if (getKey('BACK-P')) {
 			FlxG.switchState(new MainMenuState());
@@ -151,19 +155,29 @@ class FreeplayState extends MusicBeatState {
 		}
 	}
 
-	var timerChange:Array<Float> = [0,0];
+	var startTmr:Float = 0;
+	var tmr:Float = 0;
 	function detectChangeSelection():Void { //Unecessary but cool
-		for (i in 0...2) {
-			var key:String = i == 0 ? 'UP' : 'DOWN';
-			var change:Int = i == 0 ? -1 : 1;
-			if (getKey('UI_$key')) {
-				timerChange[i] += FlxG.elapsed;
-				if (getKey('UI_$key-P') || (timerChange[i] >= 0.5 && timerChange[i] % 0.1 < 0.005)) {
-					changeSelection(change);
+		if (getKey('UI_UP-P') || getKey('UI_DOWN-P')) {
+			startTmr = tmr = 0;
+			changeSelection(getKey('UI_UP-P') ? -1 : 1);
+		}
+
+		if (FlxG.mouse.wheel != 0)
+			changeSelection(-FlxG.mouse.wheel);
+
+		if (getKey('UI_UP') || getKey('UI_DOWN')) {
+			startTmr +=  FlxG.elapsed;
+			if (startTmr >= 0.333) {
+				tmr += FlxG.elapsed;
+				if (tmr >= 0.1333) {
+					tmr = 0;
+					changeSelection(getKey('UI_UP') ? -1 : 1);
 				}
-			} else {
-				timerChange[i] = 0;
 			}
+		} else {
+			startTmr = 0;
+			tmr = 0;
 		}
 	}
 
@@ -173,19 +187,14 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	function changeDiff(change:Int = 0):Void {
-		curDifficulty += change;
-		if (curDifficulty < 0)						curDifficulty = curWeekDiffs.length-1;
-		if (curDifficulty > curWeekDiffs.length-1)	curDifficulty = 0;
-
+		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		intendedScore = Highscore.getSongScore(songs[curSelected].songName, curWeekDiffs[curDifficulty]);
 		diffText.text = curWeekDiffs[curDifficulty].toUpperCase();
 	}
 
 	function changeSelection(change:Int = 0):Void {
 		var lastWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;
-		curSelected += change;
-		if (curSelected < 0)				curSelected = songs.length - 1;
-		if (curSelected >= songs.length)	curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected += change, 0, songs.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
 		curWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;

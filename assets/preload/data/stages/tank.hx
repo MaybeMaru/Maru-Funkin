@@ -58,12 +58,12 @@ function create():Void {
 
 var tankDudes:Array<FunkinSprite> = [];
 var tankDudesData:Array<Array<Dynamic>> = [
-	['tank5', [1620, 700], 	[1.5, 1.5], ['fg']],
-	['tank4', [1300, 900], 	[1.5, 1.5], ['fg']],
-	['tank2', [450, 940], 	[1.5, 1.5], ['foreground']],
-	['tank1', [-300, 750], 	[2, 0.2], 	['fg']],
-	['tank0', [-500, 650], 	[1.7, 1.5], ['fg']],
-	['tank3', [1300, 1200], [3.5, 2.5], ['fg']]
+	['tank5', [1620, 700], 	[1.5, 1.5], 'fg tankhead far right instance 1'],
+	['tank4', [1300, 900], 	[1.5, 1.5], 'fg tankman bobbin 3 instance 1'],
+	['tank2', [450, 940], 	[1.5, 1.5], 'foreground man 3 instance 1'],
+	['tank1', [-300, 750], 	[2, 0.2], 	'fg tankhead 5 instance 1'],
+	['tank0', [-500, 650], 	[1.7, 1.5], 'fg tankhead far right instance 1'],
+	['tank3', [1300, 1200], [3.5, 2.5], 'fg tankhead 4 instance 1']
 ];
 
 function createPost():Void {
