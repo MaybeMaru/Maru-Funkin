@@ -208,10 +208,22 @@ function generateStaticArrow(babyArrow:NoteStrum)
    //   babyArrow --> The created strumline note
 }
 
+function generateSong(songData:SwagSong)
+{
+    //  Called when notes and music files are loaded
+    //  songData --> Song data about to be loaded in game
+}
+
 function goodNoteHit(note:Note)
 {
     //  Called every time a note is hit correctly by the player
     //  note --> Note hit by the player
+}
+
+function goodSustainPress(note:Note)
+{
+    // Called every frame a sustain note is being pressed by the player
+    // note --> Note pressed by the player
 }
 
 function badNoteHit(direction:Int)
@@ -227,10 +239,16 @@ function noteMiss(noteMissed:Note)
     //  noteMissed --> The missed note
 }
 
-function opponentNoteHit(daNote:Note)
+function opponentNoteHit(note:Note)
 {
     //  Called every time a note is hit by the opponent
     //  daNote --> Note hit by the opponent
+}
+
+function opponentSustainPress(note:Note)
+{
+    // Called every frame a sustain note is being pressed by the opponent
+    // note --> Note pressed by the opponent
 }
 
 function updateScore(songScore:Int)
