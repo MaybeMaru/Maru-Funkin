@@ -11,7 +11,6 @@ class CoolUtil {
 		NoteUtil.initTypes();
 		#if desktop
 		ModdingUtil.reloadModFolders();
-		ModdingUtil.getDefModFolder();
 		#end
 	}
 

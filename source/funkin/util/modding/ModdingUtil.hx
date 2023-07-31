@@ -3,7 +3,7 @@ package funkin.util.modding;
 class ModdingUtil {
     //Mod folders
     public static var modFolders:Array<String> = [];
-    public static var modFoldersMap:Map<String, Bool>;
+    public static var modFoldersMap:Map<String, Bool> = [];
     private static var folderExceptions:Array<String> = [
         'data',
         'fonts',
@@ -25,9 +25,11 @@ class ModdingUtil {
     }
 
     inline public static function reloadModFolders():Void {
-        modFoldersMap = new Map<String, Bool>();
+        modFoldersMap = SaveData.getSave('activeMods');
         modFolders = getModFolderList();
         getDefModFolder();
+
+        SaveData.flushData();
     }
 
     public static function getDefModFolder():Void {
@@ -49,7 +51,9 @@ class ModdingUtil {
 		if (FileSystem.exists('mods')) {
 			for (folder in FileSystem.readDirectory('mods')) {
                 if (!folderExceptions.contains(folder) && FileSystem.isDirectory('mods/$folder')) {
-                    modFoldersMap.set(folder, true);
+                    if (!modFoldersMap.exists(folder)) {
+                        modFoldersMap.set(folder, true);
+                    }
                     list.push(folder);
                 }
 			}
@@ -76,6 +80,7 @@ class ModdingUtil {
 
     inline public static function setModFolder(modName:String, activated:Bool):Void {
         modFoldersMap.set(modName, activated);
+        SaveData.flushData();
     }
 
     inline public static function errorTrace(text:String):Void {

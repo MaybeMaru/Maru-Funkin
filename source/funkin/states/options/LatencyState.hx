@@ -35,6 +35,8 @@ class LatencyState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.ENTER) {
 			Conductor.settingOffset = offset;
+			SaveData.setSave('offset', Conductor.settingOffset);
+			SaveData.flushData();
 			CoolUtil.playMusic('freakyMenu', 0);
 			FlxG.sound.music.fadeIn(4, 0, 1);
 			FlxG.switchState(new OptionsState());

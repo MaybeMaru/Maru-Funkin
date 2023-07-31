@@ -44,6 +44,7 @@ class ModFoldersState extends MusicBeatState {
     }
 
     function reloadFolders():Void {
+        SaveData.flushData();
         CoolUtil.init();
         CoolUtil.playMusic('freakyMenu');
         FlxG.resetState();
@@ -74,9 +75,7 @@ class ModFoldersState extends MusicBeatState {
 
         if(FlxG.mouse.wheel != 0 && (modFolderItems.length > 3)) {
             var limit:Int = Std.int(modFolderItems.length-3);
-            sliderPos += FlxG.mouse.wheel;
-            if (sliderPos>0)                sliderPos = 0;
-            else if (sliderPos < -limit)    sliderPos = -limit;
+            sliderPos = FlxMath.bound(sliderPos + FlxG.mouse.wheel, -limit, 0);
 		}
 
         for (item in modFolderItems) {

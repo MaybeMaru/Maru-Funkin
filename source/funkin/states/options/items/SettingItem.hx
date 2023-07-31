@@ -23,10 +23,12 @@ class SettingItem extends FlxSpriteGroup {
         itemPref = prefName;
         prefValue = usePrefs ? Preferences.getPref(itemPref) : daValue;
 
-        var leType = Type.typeof(prefValue);
-        if (leType == TBool)                            settingType = 'bool';
-        else if (leType == TInt || leType == TFloat)    settingType = 'num';
-        //if (leType == TClass(Array))            settingType = 'array';
+        var varType = Type.typeof(prefValue);
+        switch (varType) {
+            default:            settingType = 'bool';
+            case TInt | TFloat: settingType = 'num';
+            case TClass(Array): settingType = 'array';
+        }
 
         settingTxt = new Alphabet(20, 100, description);
         add(settingTxt);
@@ -55,10 +57,11 @@ class SettingItem extends FlxSpriteGroup {
         prefValue = newValue;
 
         //hardcoded limits
-        switch (itemPref) {
-            case 'framerate':
-                if (prefValue > 240)    prefValue = 240;
-                if (prefValue < 60)     prefValue = 60;
+        if (settingType == 'num') {
+            switch (itemPref) {
+                case 'framerate': prefValue = FlxMath.bound(prefValue, 60, 240);
+                default:          prefValue = FlxMath.bound(prefValue, 0, 999);
+            }
         }
     
         CoolUtil.playSound('scrollMenu');

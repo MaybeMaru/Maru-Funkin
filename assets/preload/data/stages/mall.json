@@ -1,8 +1,8 @@
 {
     "library": "week5",
-	"gfOffsets": [0,0],
+	"gfOffsets": [-150,0],
 	"dadOffsets": [250,0],
-	"bfOffsets": [-200,0],
-	"startCamOffsets": [-200,-400],
-	"bfCamOffsets": [0,75]
+	"bfOffsets": [-300,0],
+	"startCamOffsets": [-200, 0],
+	"bfCamOffsets": [200,75]
 }

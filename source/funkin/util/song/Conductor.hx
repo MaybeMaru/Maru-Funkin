@@ -26,6 +26,10 @@ class Conductor {
 	public static var safeFrames:Int = 15;
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; //safeFrames in milliseconds
 
+	public static function init():Void {
+		settingOffset = SaveData.getSave('offset');
+	}
+
 	public static function set_bpm(value:Float):Float {
 		crochet = (60 / value) * 1000;
 		stepCrochet = crochet / 4;

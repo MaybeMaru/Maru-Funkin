@@ -30,13 +30,16 @@ class SaveData
 		var prefsSave:Map<String, Dynamic> = new Map<String, Dynamic>();
 		var scoresSave:Map<String, Int> = new Map<String, Int>();
 		var weekUnlockSave:Map<String, Bool> = new Map<String, Bool>();
+		var activeModsSave:Map<String, Bool> = new Map<String, Bool>();
 
 		// Add save bases
 		saves['controls'] = controlSave;
 		saves['preferences'] = prefsSave;
 		saves['scores'] = scoresSave;
 		saves['weekUnlock'] = weekUnlockSave;
+		saves['activeMods'] = activeModsSave;
 		saves['autoSaveChart'] = "";
+		saves['offset'] = 0.0;
 
 		getDataFile();
 		flushData();
