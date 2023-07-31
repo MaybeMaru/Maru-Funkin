@@ -165,7 +165,7 @@ class Character extends FlxSpriteUtil {
 			_singHoldTimer = 0;
 		} else {
 			_singHoldTimer += FlxG.elapsed;
-			if (_singHoldTimer >= ((holdFrame / 24) - 0.01)) {//Conductor.stepCrochet * 0.001) {
+			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {//Conductor.stepCrochet * 0.001) {
 				playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
 				_singHoldTimer = 0;
 			}

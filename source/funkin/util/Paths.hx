@@ -21,7 +21,7 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
-	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true):String {
+	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
 		if (mods) {
 			var modLib:String = '';
@@ -48,18 +48,26 @@ class Paths
 		}
 		#end
 
-		if (library != null)
-			return getLibraryPath(file, library);
-
-		if (currentLevel != null) {
-			var levelPath = getLibraryPathForce(file, 'weeks',currentLevel);
+		if (library != null && level != null) {
+			var levelPath = getLibraryPathForce(file, library, level);
 			if (OpenFlAssets.exists(levelPath, type))
 				return levelPath;
 		}
+		else if (library != null) {
+			var libraryPath = getLibraryPath(file, library);
+			if (OpenFlAssets.exists(libraryPath, type))
+				return libraryPath;
+		}
 
-		var levelPath = getLibraryPathForce(file, "shared");
-		if (OpenFlAssets.exists(levelPath, type))
-			return levelPath;
+		if (currentLevel != null) {
+			var curLevelPath = getLibraryPathForce(file, 'weeks', currentLevel);
+			if (OpenFlAssets.exists(curLevelPath, type))
+				return curLevelPath;
+		}
+
+		var sharedPath = getLibraryPathForce(file, "shared");
+		if (OpenFlAssets.exists(sharedPath, type))
+			return sharedPath;
 
 		return getPreloadPath(file);
 	}
@@ -114,9 +122,9 @@ class Paths
 		return getPath('data/shaders/$key.frag', TEXT, library);
 	}
 
-	static public function sound(key:String, ?library:String):FlxSoundAsset
+	static public function sound(key:String, ?library:String, ?level:String):FlxSoundAsset
 	{
-		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library);
+		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library, false, true, level);
 		var soundFile:FlxSoundAsset = getSound(soundPath);
 		return soundFile;
 	}

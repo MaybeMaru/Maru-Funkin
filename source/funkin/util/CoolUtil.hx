@@ -5,6 +5,7 @@ class CoolUtil {
 	public static var directionArray:Array<String> = 	['LEFT','DOWN','UP','RIGHT'];
 	public static var colorArray:Array<String> = 		['purple','blue','green','red'];
 	public static var noteColorArray:Array<Int> = 		[0xffc24b99, 0xff00ffff, 0xff12fa05, 0xfff9393f];
+	public static var debugMode:Bool = false;
 
 	inline public static function init():Void {
 		SkinUtil.setCurSkin();

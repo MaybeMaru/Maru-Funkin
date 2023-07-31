@@ -153,7 +153,6 @@ class PlayState extends MusicBeatState {
 
 		//MAKE CHARACTERS
 		gf = new Character(400, 360, SONG.players[2]);
-		gf.scrollFactor.set(0.95, 0.95);
 		dad = new Character(100, 450,SONG.players[1]);
 		boyfriend = new Character(770, 450, SONG.players[0], true);
 
@@ -230,6 +229,7 @@ class PlayState extends MusicBeatState {
 		add(gfGroup);
 		gf.group = gfGroup;
 		gfGroup.add(gf);
+		gfGroup.scrollFactor.set(0.95, 0.95);
 		
 		add(dadGroup);
 		dad.group = dadGroup;
@@ -769,10 +769,8 @@ class PlayState extends MusicBeatState {
 		if (!inCutscene)
 			keyShit();
 
-		#if debug
-		if (FlxG.keys.justPressed.ONE)
+		if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 			endSong();
-		#end
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}

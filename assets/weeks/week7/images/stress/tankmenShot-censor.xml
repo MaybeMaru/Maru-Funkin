@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="tankmenShot-censor.png" width="3894" height="3966">
+  <SubTexture name="John Shot 20013" x="4" y="4"  width="1220" height="824" frameX="-0" frameY="-0" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20009" x="1232" y="4"  width="1111" height="769" frameX="-109" frameY="-41" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20007" x="2351" y="4"  width="1010" height="824" frameX="-197" frameY="-0" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20006" x="1232" y="781"  width="1008" height="824" frameX="-199" frameY="-0" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20008" x="4" y="836"  width="1103" height="751" frameX="-109" frameY="-41" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20005" x="4" y="1595"  width="1053" height="720" frameX="-149" frameY="-65" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20004" x="2248" y="836"  width="1053" height="720" frameX="-149" frameY="-65" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 10013" x="2248" y="1564"  width="1049" height="624" frameX="-0" frameY="-0" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10006" x="1065" y="1613"  width="913" height="620" frameX="-133" frameY="-0" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 20002" x="1986" y="2196"  width="882" height="627" frameX="-216" frameY="-47" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20003" x="1065" y="2241"  width="911" height="594" frameX="-187" frameY="-80" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 10005" x="4" y="2323"  width="896" height="580" frameX="-98" frameY="-40" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10004" x="2876" y="2196"  width="839" height="607" frameX="-155" frameY="-13" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10007" x="2876" y="2811"  width="934" height="541" frameX="-112" frameY="-79" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10002" x="1984" y="2831"  width="804" height="615" frameX="-107" frameY="-2" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10003" x="2796" y="3360"  width="812" height="602" frameX="-99" frameY="-15" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10020" x="908" y="2843"  width="741" height="554" frameX="-114" frameY="-38" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10001" x="4" y="2911"  width="751" height="512" frameX="-0" frameY="-68" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 20010" x="763" y="3405"  width="768" height="492" frameX="-12" frameY="-177" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20012" x="1539" y="3454"  width="780" height="462" frameX="-0" frameY="-207" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 10008" x="3305" y="1564"  width="426" height="609" frameX="-223" frameY="-15" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 20001" x="4" y="3431"  width="597" height="430" frameX="-242" frameY="-212" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 10009" x="3309" y="836"  width="533" height="467" frameX="-116" frameY="-157" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10010" x="3369" y="4"  width="521" height="467" frameX="-128" frameY="-157" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10012" x="2327" y="3454"  width="459" height="491" frameX="-190" frameY="-133" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10011" x="3369" y="4"  width="521" height="467" frameX="-128" frameY="-157" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10014" x="2327" y="3454"  width="459" height="491" frameX="-190" frameY="-133" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10016" x="2327" y="3454"  width="459" height="491" frameX="-190" frameY="-133" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10018" x="2327" y="3454"  width="459" height="491" frameX="-190" frameY="-133" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10015" x="2248" y="1564"  width="1049" height="624" frameX="-0" frameY="-0" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10017" x="2248" y="1564"  width="1049" height="624" frameX="-0" frameY="-0" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 10019" x="2248" y="1564"  width="1049" height="624" frameX="-0" frameY="-0" frameWidth="1049" frameHeight="624"/>
+  <SubTexture name="John Shot 20011" x="763" y="3405"  width="768" height="492" frameX="-12" frameY="-177" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20014" x="1539" y="3454"  width="780" height="462" frameX="-0" frameY="-207" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20016" x="1539" y="3454"  width="780" height="462" frameX="-0" frameY="-207" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20018" x="1539" y="3454"  width="780" height="462" frameX="-0" frameY="-207" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20015" x="4" y="4"  width="1220" height="824" frameX="-0" frameY="-0" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20017" x="4" y="4"  width="1220" height="824" frameX="-0" frameY="-0" frameWidth="1220" frameHeight="824"/>
+  <SubTexture name="John Shot 20019" x="4" y="4"  width="1220" height="824" frameX="-0" frameY="-0" frameWidth="1220" frameHeight="824"/>
+</TextureAtlas>

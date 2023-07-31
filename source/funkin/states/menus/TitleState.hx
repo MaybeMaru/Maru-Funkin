@@ -146,6 +146,7 @@ class TitleState extends MusicBeatState {
 			var lerpValue = Math.sin(titleSine);
 			titleText.alpha = (lerpValue + 1) * 0.25 + 0.75;
 			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) / 2);
+			checkCode();
 		}
 
 		if (getKey('ACCEPT-P')) {
@@ -154,6 +155,7 @@ class TitleState extends MusicBeatState {
 			titleText.playAnim('press');
 			titleText.color = FlxColor.WHITE;
 			titleText.alpha = 1;
+			openedGame = true;
 
 			CoolUtil.playSound('confirmMenu', 0.7);
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
@@ -207,7 +209,7 @@ class TitleState extends MusicBeatState {
 			gfDance.dance();
 		}
 
-		if (curBeat <= introJson.beats.length && !skippedIntro) {
+		if (curBeat <= introJson.beats.length && !skippedIntro && !openedGame) {
 			makeIntroShit(curBeat-1);
 		}
 	}
@@ -220,4 +222,24 @@ class TitleState extends MusicBeatState {
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
 		}
 	}
+
+	var codeIndex:Int = 0;
+    var konamiCode:Array<FlxKey> = [
+        FlxKey.UP, FlxKey.UP,
+        FlxKey.DOWN, FlxKey.DOWN,
+        FlxKey.LEFT, FlxKey.RIGHT,
+        FlxKey.LEFT, FlxKey.RIGHT,
+        FlxKey.B, FlxKey.A
+    ];
+
+	private function checkCode():Void {
+        if (FlxG.keys.anyJustPressed([konamiCode[codeIndex]])) {
+            codeIndex++;
+            if (codeIndex >= konamiCode.length && !CoolUtil.debugMode) {
+                codeIndex = 0;
+                CoolUtil.debugMode = true;
+				CoolUtil.playSound('confirmMenu', 0.7);
+            }
+        } else if (FlxG.keys.anyJustPressed([FlxKey.ANY])) codeIndex = 0;
+    }
 }

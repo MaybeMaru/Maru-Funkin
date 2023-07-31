@@ -15,6 +15,8 @@ function create()
     if (GameVars.isStoryMode)
     {
         PlayState.inCutscene = true;
+        var censored:Bool = !getPref('naughty');
+        var censorStr:String = censored ? '-censor' : '';
 
         cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 155], [1,1]);
         cutsceneTankman_Body.addAnim('godEffingDamnIt', 'body/BODY_3_10');
@@ -28,21 +30,24 @@ function create()
         cutsceneTankman_Head.addOffset('godEffingDamnIt', 30, 25);
         cutsceneTankman_Head.addOffset('lookWhoItIs', 15, 15);
 
-        demonGf = new FunkinSprite('cutscenes/demon_gf', [PlayState.gf.x - 920, PlayState.gf.y - 454]);
+        demonGf = new FunkinSprite('cutscenes/demon_gf' + censorStr, [PlayState.gf.x - 920, PlayState.gf.y - 454], [0.95, 0.95]);
         demonGf.addAnim('demonGf', 'DEMON_GF');
         demonGf.addAnim('dancing', 'GF Dancing at Gunpoint', 24, true);
         demonGf.addOffset('dancing', -736, -464);
-        john = new FunkinSprite('cutscenes/john', [PlayState.gf.x + 402.5, PlayState.gf.y - 45]);
+        if (censored) {
+            demonGf.addOffset('demonGf', -150, 0);
+        }
+        john = new FunkinSprite('cutscenes/john' + censorStr, [PlayState.gf.x + 402.5, PlayState.gf.y - 45], [0.95, 0.95]);
         john.addAnim('john', 'JOHN');
-        steve = new FunkinSprite('cutscenes/steve', [PlayState.gf.x - 895, PlayState.gf.y - 345]);
+        steve = new FunkinSprite('cutscenes/steve' + censorStr, [PlayState.gf.x - 895, PlayState.gf.y - 345], [0.95, 0.95]);
         steve.addAnim('steve', 'STEVE');
 
         PlayState.dad.visible = false;
         PlayState.dadGroup.add(cutsceneTankman_Body);
         PlayState.dadGroup.add(cutsceneTankman_Head);
 
-        PlayState.gfGroup.add(john);
-        PlayState.gfGroup.add(steve);
+        addSpr(john);
+        addSpr(steve);
         PlayState.gfGroup.add(demonGf);
 
         john.visible = false;
@@ -96,7 +101,7 @@ function startCutscene()
         demonGf.playAnim('demonGf');
         FlxTween.tween(PlayState.camFollow, {x: 700, y: 300}, 1, {ease: FlxEase.sineOut});
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
-        FlxTween.tween(demonBg, {alpha: 0.9}, 2.25, {ease: FlxEase.quadInOut});
+        FlxTween.tween(demonBg, {alpha: 0.9}, 2.25, {ease: FlxEase.quadOut});
         setCameraShader(PlayState.camGame, 'demon_blur');
     });
 
