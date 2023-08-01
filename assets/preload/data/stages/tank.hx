@@ -49,11 +49,13 @@ function create():Void {
 	tankGround.addAnim('tank', 'BG tank w lighting', 24, true);
 	tankGround.playAnim('tank');
 	addSpr(tankGround);
+
+	makeGroup('tankmanRun'); // Used later for pico
 						
 	var ground:FunkinSprite = new FunkinSprite('tankGround', [-420, -150]);
 	ground.setGraphicSize(Std.int(ground.width * 1.15));
 	ground.updateHitbox();
-	addSpr(ground);
+	PlayState.add(ground);
 }
 
 var tankDudes:Array<FunkinSprite> = [];

@@ -20,16 +20,15 @@ class PlayState extends MusicBeatState {
 	private var stageJsonData:StageJson;
 	public var bgSpr:FlxTypedGroup<Dynamic>;
 	public var fgSpr:FlxTypedGroup<Dynamic>;
-	public var bgSprMap:Map<String, Dynamic>;
-	public var fgSprMap:Map<String, Dynamic>;
+	public var objMap:Map<String, Dynamic> = [];
 
 	public var dad:Character;
 	public var gf:Character;
 	public var boyfriend:Character;
 
-	public var dadGroup:FlxSpriteGroup;
-	public var gfGroup:FlxSpriteGroup;
-	public var boyfriendGroup:FlxSpriteGroup;
+	public var dadGroup:FlxTypedSpriteGroup<Dynamic>;
+	public var gfGroup:FlxTypedSpriteGroup<Dynamic>;
+	public var boyfriendGroup:FlxTypedSpriteGroup<Dynamic>;
 
 	private var camFollow:FlxObject;
 	private static var prevCamFollow:FlxObject;
@@ -144,12 +143,10 @@ class PlayState extends MusicBeatState {
 		//FG & BG SPRITES
 		bgSpr = new FlxTypedGroup<Dynamic>();
 		fgSpr = new FlxTypedGroup<Dynamic>();
-		bgSprMap = new Map<String, Dynamic>();
-		fgSprMap = new Map<String, Dynamic>();
 
-		gfGroup = new FlxSpriteGroup();
-		dadGroup = new FlxSpriteGroup();
-		boyfriendGroup = new FlxSpriteGroup();
+		gfGroup = new FlxTypedSpriteGroup<Dynamic>();
+		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
+		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
 		//MAKE CHARACTERS
 		gf = new Character(400, 360, SONG.players[2]);
@@ -215,6 +212,8 @@ class PlayState extends MusicBeatState {
 		for (script in globalScripts)
 			ModdingUtil.addScript(script);
 
+		add(bgSpr);
+
 		ModdingUtil.addCall('create');
 
 		// Make Dad GF
@@ -224,7 +223,6 @@ class PlayState extends MusicBeatState {
 		}
 
 		//Sprites order
-		add(bgSpr);
 
 		add(gfGroup);
 		gf.group = gfGroup;
@@ -1172,7 +1170,7 @@ class PlayState extends MusicBeatState {
 	private function switchChar(type:String, newCharName:String):Void {
 		var targetChar:Character = boyfriend;
 		var targetOffsets:Array<Int> = stageJsonData.bfOffsets;
-		var targetGroup:FlxSpriteGroup = boyfriendGroup;
+		var targetGroup:FlxTypedSpriteGroup<Dynamic> = boyfriendGroup;
 		switch (type.toLowerCase().trim()) {
 			case 'dad':					targetOffsets = stageJsonData.dadOffsets; targetChar = dad; targetGroup = dadGroup;
 			case 'girlfriend' | 'gf': 	targetOffsets = stageJsonData.gfOffsets; targetChar = gf; targetGroup = gfGroup;

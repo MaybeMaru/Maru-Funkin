@@ -88,6 +88,7 @@ class FunkScript {
 		addVar('FlxText', flixel.text.FlxText);
 		addVar('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
 		addVar('FlxSpriteGroup', flixel.group.FlxSpriteGroup);
+		addVar('FlxGroup', flixel.group.FlxGroup);
 		addVar('FlxSound', flixel.sound.FlxSound);
 		addVar('FlxMath', flixel.math.FlxMath);
 		addVar('FlxColor', FlxColorFix); //	xd
@@ -137,24 +138,36 @@ class FunkScript {
 			ModdingUtil.consoleTrace(text, color);
 		});
 
-		addVar('addSpr', function(spr:Dynamic, sprTag:String = 'coolswag', OnTop:Bool = false):Void {
-			if (OnTop) {
-				PlayState.game.fgSpr.add(spr);
-				PlayState.game.fgSprMap.set(sprTag, spr);
-			}
-			else {
-				PlayState.game.bgSpr.add(spr);
-				PlayState.game.bgSprMap.set(sprTag, spr);
-			}
+		addVar('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
+			var sprKey = '_${OnTop ? 'fg' : 'bg'}_sprite_$key';
+			PlayState.game.objMap.set(sprKey, spr);
+			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
 		});
 
 		addVar('getSpr', function(key:String):Null<Dynamic> {
-			if (PlayState.game.bgSprMap.get(key) != null)		return PlayState.game.bgSprMap.get(key);
-			else if (PlayState.game.fgSprMap.get(key) != null)	return PlayState.game.fgSprMap.get(key);
+			for (i in ['fg', 'bg']) {
+				var sprKey = '_${i}_sprite_$key';
+				if (PlayState.game.objMap.exists(sprKey)) {
+					return PlayState.game.objMap.get(sprKey);
+				}
+			}
+			ModdingUtil.errorTrace('Sprite not found: $key');
+			return null;								
+		});
+
+		addVar('makeGroup', function(key:String) {
+			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
+			PlayState.game.add(newGroup);
+			PlayState.game.objMap.set('_group_$key', newGroup);
+		});
+
+		addVar('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
+			if (PlayState.game.objMap.exists('_group_$key'))
+				return PlayState.game.objMap.get('_group_$key');
 			else {
-				ModdingUtil.errorTrace('Sprite not found: $key');
+				ModdingUtil.errorTrace('Group not found: $key');
 				return null;
-			}												
+			}
 		});
 
 		// Script functions

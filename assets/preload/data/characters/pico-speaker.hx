@@ -8,6 +8,8 @@ function createPost():Void {
     speaker = new FlxSprite(ScriptChar.x - 190, ScriptChar.y + 305.5);
     speaker.loadImage('characters/speakers');
     speaker.addAnim('speakers', 'speakers');
+    speaker.playAnim('speakers', true);
+    speaker.animation.curAnim.finish();
     ScriptChar.group.insert(0, speaker);
 
     speaker.flippedOffsets =  ScriptChar.flippedOffsets;
@@ -18,6 +20,7 @@ function createPost():Void {
 
     if (Paths.exists(Paths.chart(GameVars.SONG.song, 'picospeaker'), "TEXT")) {
         picoNotes_ = Song.getSongNotes('picospeaker',  GameVars.SONG.song);
+        initTankmenBG();
     }
 }
 
@@ -44,5 +47,12 @@ function updatePost()
             ScriptChar.forceDance = false;
             picoNotes_.shift();
         }
+    }
+}
+
+// Tankmen Run
+function initTankmenBG() {
+    if (getGroup('tankmanRun') != null) {
+        trace('EXISTS GROUP TO ADD SHIT TO!!!');
     }
 }

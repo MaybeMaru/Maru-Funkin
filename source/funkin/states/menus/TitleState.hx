@@ -150,7 +150,7 @@ class TitleState extends MusicBeatState {
 		}
 
 		if (getKey('ACCEPT-P')) {
-			if (!transitioning && skippedIntro) {
+			if (!transitioning && (skippedIntro || openedGame) ) {
 			transitioning = true;
 			titleText.playAnim('press');
 			titleText.color = FlxColor.WHITE;
@@ -163,7 +163,7 @@ class TitleState extends MusicBeatState {
 			new FlxTimer().start(2, function(tmr:FlxTimer) {
 				if (!initialized) {	// Check if version is outdated
 					trace('Checking if version is outdated');	
-					var gitFile = new haxe.Http("https://raw.githubusercontent.com/MaybeMaru/Funkin/main/gameVersion.json");
+					var gitFile = new haxe.Http("https://raw.githubusercontent.com/MaybeMaru/Maru-Funkin/main/gameVersion.json");
 
 					gitFile.onError = function (error) {
 						trace('error: $error');

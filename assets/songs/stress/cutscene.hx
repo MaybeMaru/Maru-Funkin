@@ -33,13 +33,13 @@ function create()
         demonGf = new FunkinSprite('cutscenes/demon_gf' + censorStr, [PlayState.gf.x - 920, PlayState.gf.y - 454], [0.95, 0.95]);
         demonGf.addAnim('demonGf', 'DEMON_GF');
         demonGf.addAnim('dancing', 'GF Dancing at Gunpoint', 24, true);
-        demonGf.addOffset('dancing', -736, -464);
+        demonGf.addOffset('dancing', -738, -464);
         if (censored) {
             demonGf.addOffset('demonGf', -150, 0);
         }
-        john = new FunkinSprite('cutscenes/john' + censorStr, [PlayState.gf.x + 402.5, PlayState.gf.y - 45], [0.95, 0.95]);
+        john = new FunkinSprite('cutscenes/john' + censorStr, [PlayState.gf.x + 398, PlayState.gf.y - 45], [0.95, 0.95]);
         john.addAnim('john', 'JOHN');
-        steve = new FunkinSprite('cutscenes/steve' + censorStr, [PlayState.gf.x - 895, PlayState.gf.y - 345], [0.95, 0.95]);
+        steve = new FunkinSprite('cutscenes/steve' + censorStr, [PlayState.gf.x - 887.5, PlayState.gf.y - 345], [0.95, 0.95]);
         steve.addAnim('steve', 'STEVE');
 
         PlayState.dad.visible = false;

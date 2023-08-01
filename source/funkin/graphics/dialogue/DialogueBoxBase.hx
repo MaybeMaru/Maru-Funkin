@@ -106,7 +106,9 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 	function endDialogue():Void {
 		if (!isEnding) {
 			isEnding = true;
-			FlxG.sound.music.fadeOut(2.2, 0);
+			if (FlxG.sound.music != null) {
+				FlxG.sound.music.fadeOut(2.2, 0);
+			}
 
 			new FlxTimer().start(1.2, function(tmr:FlxTimer) {
 				closeCallback();

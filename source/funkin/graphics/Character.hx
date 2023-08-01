@@ -47,7 +47,7 @@ class Character extends FlxSpriteUtil {
 	public var holdTimer:Float = 0;
 	public var stunned:Bool = false;
 	public var forceDance:Bool = true;
-	public var group:FlxSpriteGroup = null;
+	public var group:FlxTypedSpriteGroup<Dynamic> = null;
 
 	public static function getCharData(char:String = 'bf'):CharacterJson {
 		var charJson:CharacterJson = JsonUtil.getJson(char, 'characters');
