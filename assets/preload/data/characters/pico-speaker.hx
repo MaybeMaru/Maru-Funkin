@@ -43,7 +43,7 @@ function updatePost(elapsed)
                 shootAnim = 3;
             shootAnim += FlxG.random.int(0, 1);
 
-            ScriptChar.playAnim('shoot'+shootAnim, true);
+            ScriptChar.playAnim('shoot' + shootAnim, true);
             ScriptChar.specialAnim = true;
             ScriptChar.forceDance = false;
             picoNotes_.shift();
@@ -56,10 +56,13 @@ function initTankmenBG() {
     if (getGroup('tankmanRun') != null) {
         for (i in 0...picoNotes_.length) {
             if (FlxG.random.bool(16)) {
-                var tankman:FlxSprite = new FlxSprite(500, 200 + FlxG.random.int(50, 100)).loadImage('stress/tankmenRunning');
-                tankman.addAnim('run', 'tankman running', 24, true);
-                tankman.playAnim('run');
-                tankman.animation.curAnim.curFrame = FlxG.random.int(0, tankman.animation.curAnim.numFrames - 1);
+                var spritePath = 'stress/tankmenShot' + (getPref('naughty') ? '' : '-censor');
+                var tankman:FlxSprite = new FlxSprite(500, 200 + FlxG.random.int(50, 100)).loadImage(spritePath);
+                tankman.scrollFactor.set(0.8,0.8);
+                tankman.addAnim('run', 'tankman running0', 24, true);
+                tankman.addAnim('shot', 'John Shot ' + FlxG.random.int(1,2) + '0');
+                tankman.addOffset('shot', 250, 200);
+                tankman.playAnim('run', true, false, FlxG.random.int(0, 10));
                 tankman.scale.set(0.8,0.8);
                 tankman.updateHitbox();
 
@@ -77,16 +80,20 @@ function updateTankmenBG(elapsed) {
     if (getGroup('tankmanRun') != null) {
         for (i in getGroup('tankmanRun').members) {
             if (i.alive) {
-                var endDirection:Float = (FlxG.width * 0.74) + i._dynamic.endingOffset;
-                if (i.flipX) {
-                    endDirection = (FlxG.width * 0.02) - i._dynamic.endingOffset;
-                    i.x = (endDirection + (Conductor.songPosition - i._dynamic.strumTime) * i._dynamic.tankSpeed);
-                } else {
-                    i.x = (endDirection - (Conductor.songPosition - i._dynamic.strumTime) * i._dynamic.tankSpeed);
+                if (i.animation.curAnim.name == 'run') {
+                    var endDirection:Float = (FlxG.width * 0.74) + i._dynamic.endingOffset;
+                    if (i.flipX) {
+                        endDirection = (FlxG.width * 0.02) - i._dynamic.endingOffset;
+                        i.x = (endDirection + (Conductor.songPosition - i._dynamic.strumTime) * i._dynamic.tankSpeed);
+                    } else {
+                        i.x = (endDirection - (Conductor.songPosition - i._dynamic.strumTime) * i._dynamic.tankSpeed);
+                    }
+
+                    if (Conductor.songPosition >= i._dynamic.strumTime) {
+                        i.playAnim('shot', true);
+                    }
                 }
-    
-                if (Conductor.songPosition >= i._dynamic.strumTime) { 
-                    // Kill the bitch
+                else if (i.animation.curAnim.name == 'shot' && i.animation.curAnim.finished) {
                     i.kill();
                 }
             }
