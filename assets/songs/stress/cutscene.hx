@@ -35,7 +35,7 @@ function create()
         demonGf.addAnim('dancing', 'GF Dancing at Gunpoint', 24, true);
         demonGf.addOffset('dancing', -738, -464);
         if (censored) {
-            demonGf.addOffset('demonGf', -150, 0);
+            demonGf.addOffset('demonGf', -152, 0);
         }
         john = new FunkinSprite('cutscenes/john' + censorStr, [PlayState.gf.x + 398, PlayState.gf.y - 45], [0.95, 0.95]);
         john.addAnim('john', 'JOHN');
@@ -46,8 +46,8 @@ function create()
         PlayState.dadGroup.add(cutsceneTankman_Body);
         PlayState.dadGroup.add(cutsceneTankman_Head);
 
-        addSpr(john);
-        addSpr(steve);
+        PlayState.add(john);
+        PlayState.add(steve);
         PlayState.gfGroup.add(demonGf);
 
         john.visible = false;
