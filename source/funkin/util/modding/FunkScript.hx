@@ -151,6 +151,16 @@ class FunkScript {
 			return null;								
 		});
 
+		addVar('existsSpr', function(key:String):Null<Dynamic> {
+			for (i in ['fg', 'bg']) {
+				var sprKey = '_${i}_sprite_$key';
+				if (PlayState.game.objMap.exists(sprKey)) {
+					return true;
+				}
+			}
+			return false;						
+		});
+
 		addVar('makeGroup', function(key:String) {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
 			PlayState.game.add(newGroup);

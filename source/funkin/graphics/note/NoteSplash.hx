@@ -34,13 +34,8 @@ class NoteSplash extends FlxSpriteUtil {
 		skin = skin == null ? SkinUtil.curSkin : skin;
 		if (curSkin != skin) {
 			animOffsets = new Map<String, FlxPoint>();
-			curSkin = skin;
-			loadJsonInput(SkinUtil.getSkinData(skin).splashData, 'skins/$skin');
-			/*
-				if (Preferences.getPref('vanilla-ui')) {	//Semi Hardcoded vanilla splashes, fight me
-					Paths.exists(Paths.image('$path-vanilla', null, true), IMAGE) ? loadImage('$path-vanilla') : loadSkin('default');
-				}
-			*/
+			curSkin = Preferences.getPref('vanilla-ui') ? 'default' : skin;
+			loadJsonInput(SkinUtil.getSkinData(curSkin).splashData, 'skins/$curSkin', false, Preferences.getPref('vanilla-ui') ? 'skins/$curSkin/splashAssets-vanilla' : null);
 		}
 	}
 

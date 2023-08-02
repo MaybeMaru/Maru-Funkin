@@ -30,6 +30,10 @@ function create():Void {
 	phillyCityLights.blend = getBlendMode('add');
 	addSpr(phillyCityLights, 'phillyWindow');
 
+	initShader('bloom', 'bloom');
+	setShaderFloat('bloom', 'u_intensity', 1);
+	setSpriteShader(phillyCityLights, 'bloom');
+
 	var streetBehind:FunkinSprite = new FunkinSprite('philly/behindTrain', [-40, 50]);
 	addSpr(streetBehind, 'streetBehind');
 
@@ -73,14 +77,15 @@ function sectionHit(curSection):Void {
 	}
 	phillyCityLights.visible = showLights;
 	phillyCityLights.alpha = 1;
-	phillyColor++;
-	if (phillyColor > 4) {
-		phillyColor = 0;
-	} 
+	phillyColor = FlxMath.wrap(phillyColor + 1, 0, 4);
 }
 
 function update(elapsed):Void {
     phillyCityLights.alpha -= elapsed*(Conductor.bpm/200);
+	if (phillyCityLights.alpha > 0) {
+		setShaderFloat('bloom', 'u_intensity', Math.min(phillyCityLights.alpha + 1, 1));
+	}
+
     if (trainMoving) {
         trainFrameTiming += elapsed;
         if (trainFrameTiming >= 1 / 24) {

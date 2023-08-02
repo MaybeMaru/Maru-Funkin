@@ -33,23 +33,28 @@ class Rating extends FlxTypedSpriteGroup<RatingSprite> {
         comboSpr.y += lastSickSpr.height;
         comboSpr.x += lastSickSpr.width/3;
         comboSpr.acceleration.y = FlxG.random.int(200, 300);
-		comboSpr.velocity.y = FlxG.random.int(-140, -160);
-		comboSpr.velocity.x = FlxG.random.int(-5, 5);
-        lastComboSpr = comboSpr;
+        comboSpr.velocity.y = FlxG.random.int(-140, -160);
+        comboSpr.velocity.x = FlxG.random.int(-5, 5);
+        comboSpr.visible = !Preferences.getPref('vanilla-ui');
         addOnTop(comboSpr);
+
+        lastComboSpr = comboSpr;
+        comboHeight = comboSpr.height;
     }
+
+    var comboHeight:Float = 50;
 
     public function comboNumRating(combo:Int):Void {
         var numSplit:Array<String> = Std.string(combo).split('');
         numSplit.reverse();
         for (i in 0...numSplit.length) {
             if (combo >= 10) {
-                if (i == 0) {
-                    comboRating();
-                    lastComboSpr.visible = !Preferences.getPref('vanilla-ui');
-                }
+                if (i == 0) comboRating();
                 var numSpr:RatingSprite = getRatingSpr();
                 numSpr.setupRating('nums');
+
+                var numScale:Float = comboHeight / numSpr.frameHeight * 0.8;
+                numSpr.scale.set(numScale,numScale);
                 numSpr.animation.play(numSplit[i], true);
                 numSpr.updateHitbox();
                 numSpr.tweenDissapear(1.5);

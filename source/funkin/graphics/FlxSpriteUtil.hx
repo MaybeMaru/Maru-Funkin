@@ -56,12 +56,12 @@ class FlxSpriteUtil extends FlxSprite {
 		loadJsonInput(spriteJson, folder, global);
 	}
 
-	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false) {
+	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String) {
 		var spriteJson:SpriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, spriteJson);
 
 		folder = folder.length > 0 ? '$folder/' : '';
-		loadImage('$folder${spriteJson.imagePath}', global);
+		loadImage(specialImage != null ? specialImage : '$folder${spriteJson.imagePath}', global);
 
 		for (anim in spriteJson.anims) {
 			anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
