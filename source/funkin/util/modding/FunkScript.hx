@@ -102,14 +102,10 @@ class FunkScript {
 
 		addVar('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
 			if(packageStr != '') packageStr += '.';
-
 			if (customName != null && !varExists(customName)) {
-				trace('imported hscript library $packageStr$classStr as $customName');
 				addVar(customName, Type.resolveClass(packageStr + classStr));
 				return;
 			}
-
-			trace('imported hscript library $packageStr$classStr');
 			addVar(classStr, Type.resolveClass(packageStr + classStr));
 		});
 

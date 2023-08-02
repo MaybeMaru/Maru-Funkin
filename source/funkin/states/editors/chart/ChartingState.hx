@@ -941,13 +941,15 @@ class ChartingState extends MusicBeatState {
 						}
 			
 						if (typeData.showText) {
-							var typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1] : noteType;
-							var typeText:FunkinText = curRenderedTextTypes.recycle(FunkinText);
-							typeText.text = typeStr;
-							typeText.setPosition(note.x - (typeText.width/2 - note.width/2), note.y - (typeText.height/2 - note.height/2));
-							typeText.color = note.color;
-							typeText.scrollFactor.set(1,1);
-							curRenderedTextTypes.add(typeText);
+							var typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
+							if (typeStr.length > 0) {
+								var typeText:FunkinText = curRenderedTextTypes.recycle(FunkinText);
+								typeText.text = typeStr;
+								typeText.setPosition(note.x - (typeText.width/2 - note.width/2), note.y - (typeText.height/2 - note.height/2));
+								typeText.color = note.color;
+								typeText.scrollFactor.set(1,1);
+								curRenderedTextTypes.add(typeText);
+							}
 						}
 			
 						if (i == curSelectedNote) {

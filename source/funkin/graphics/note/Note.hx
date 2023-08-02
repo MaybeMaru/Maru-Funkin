@@ -114,6 +114,14 @@ class Note extends FlxSpriteUtil {
         scale.set(refSprite.scale.x, refSprite.scale.y);
         updateHitbox();
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
+
+        if (!isSustainNote) {
+            var _anim = 'scroll$dir';
+            if (animOffsets.exists(_anim)) {
+                var _off = animOffsets.get(_anim);
+                offset.add(_off.x, _off.y);
+            }
+        }
     }
 
     public var susOffsetX:Float = 0;
