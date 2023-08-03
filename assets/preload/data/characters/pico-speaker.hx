@@ -53,7 +53,7 @@ function updatePost(elapsed)
 
 // Tankmen Run
 function initTankmenBG() {
-    if (getGroup('tankmanRun') != null) {
+    if (existsGroup('tankmanRun')) {
         for (i in 0...picoNotes_.length) {
             if (FlxG.random.bool(16)) {
                 var spritePath = 'stress/tankmenShot' + (getPref('naughty') ? '' : '-censor');
@@ -77,7 +77,7 @@ function initTankmenBG() {
 }
 
 function updateTankmenBG(elapsed) {
-    if (getGroup('tankmanRun') != null) {
+    if (existsGroup('tankmanRun')) {
         for (i in getGroup('tankmanRun').members) {
             if (i.alive) {
                 if (i.animation.curAnim.name == 'run') {

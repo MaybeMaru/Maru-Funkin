@@ -1,5 +1,7 @@
 //Lights
+var phillyLightsColors:Array<Int> = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
 var phillyCityLights:FunkinSprite;
+var phillyCityLightsBlur:FunkinSprite; // Was gonna use a shader but takes too much memory, so fuck it
 var phillyColor:Int = 0;
 
 //Train
@@ -19,20 +21,20 @@ function create():Void {
 	addSpr(bg, 'phillyBg');
 
 	var city:FunkinSprite = new FunkinSprite('philly/city', [-10, 0], [0.3,0.3]);
-	city.setGraphicSize(Std.int(city.width * 0.85));
-	city.updateHitbox();
+	city.setScale(0.85);
 	addSpr(city, 'phillyCity');
 
 	phillyCityLights = new FunkinSprite('philly/phillyWindow', [city.x, 0], [0.3,0.3]);
 	phillyCityLights.visible = false;
-	phillyCityLights.setGraphicSize(Std.int(phillyCityLights.width * 0.85));
-	phillyCityLights.updateHitbox();
+	phillyCityLights.setScale(0.85);
 	phillyCityLights.blend = getBlendMode('add');
 	addSpr(phillyCityLights, 'phillyWindow');
 
-	initShader('bloom', 'bloom');
-	setShaderFloat('bloom', 'u_intensity', 1);
-	setSpriteShader(phillyCityLights, 'bloom');
+	phillyCityLightsBlur = new FunkinSprite('philly/phillyWindow-blur', [city.x, 0], [0.3,0.3]);
+	phillyCityLightsBlur.visible = false;
+	phillyCityLightsBlur.setScale(0.85);
+	phillyCityLightsBlur.blend = getBlendMode('add');
+	addSpr(phillyCityLightsBlur, 'phillyWindowBlur');
 
 	var streetBehind:FunkinSprite = new FunkinSprite('philly/behindTrain', [-40, 50]);
 	addSpr(streetBehind, 'streetBehind');
@@ -62,29 +64,35 @@ function beatHit(curBeat):Void {
     }
 }
 
-var phillyLightsColors:Array<Int> = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
 function sectionHit(curSection):Void {
-	var stuffToColor:Array<Null<FunkinSprite>> = [phillyCityLights, getSpr('blammedOverlay'), getSpr('tunnelBG')];
+	var stuffToColor:Array<Null<FunkinSprite>> = [phillyCityLights, phillyCityLightsBlur];
+	if (existsSpr('blammedOverlay')) { // Prevent getting a null sprite error
+		stuffToColor.push('blammedOverlay');
+		stuffToColor.push('tunnelBG');
+	}
+
 	var curColor:Int = phillyLightsColors[phillyColor];
 	for (obj in stuffToColor) {
 		if (obj != null) {	//	BLAMMED COLORS
 			obj.color = curColor;
 		}
 	}
+	
 	var showLights:Bool = true;
 	switch(PlayState.curSong) {
 		case 'Pico': showLights = (curSection > 1);	//	PICO CUTSCENE
 	}
 	phillyCityLights.visible = showLights;
+	phillyCityLightsBlur.visible = showLights;
 	phillyCityLights.alpha = 1;
+	phillyCityLightsBlur.alpha = 1;
 	phillyColor = FlxMath.wrap(phillyColor + 1, 0, 4);
 }
 
 function update(elapsed):Void {
-    phillyCityLights.alpha -= elapsed*(Conductor.bpm/200);
-	if (phillyCityLights.alpha > 0) {
-		setShaderFloat('bloom', 'u_intensity', Math.min(phillyCityLights.alpha + 1, 1));
-	}
+	var alphaLight:Float = (Conductor.crochet / 1000) * elapsed;
+	phillyCityLights.alpha -= alphaLight * 2;
+	phillyCityLightsBlur.alpha -= alphaLight * 2.5;
 
     if (trainMoving) {
         trainFrameTiming += elapsed;

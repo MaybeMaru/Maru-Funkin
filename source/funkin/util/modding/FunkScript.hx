@@ -176,6 +176,10 @@ class FunkScript {
 			}
 		});
 
+		addVar('existsGroup', function(key:String):Null<Dynamic> {
+			return PlayState.game.objMap.exists('_group_$key');						
+		});
+
 		// Script functions
 
 		addVar('addScript', function(path:String, ?tag:String, ?keys:Array<String>, ?vars:Array<Dynamic>):Void {
@@ -204,6 +208,10 @@ class FunkScript {
 			Shader.setSpriteShader(sprite, shader);
 		});
 
+		addVar('setCameraShader', function(camera:FlxCamera, shader:String) {
+			Shader.setCameraShader(camera, shader);
+		});
+
 		addVar('setShaderSampler2D', function (shader:String, prop:String, path:String = "", ?bitmap:BitmapData) {
 			Shader.setSampler2D(shader, prop, path, bitmap);
 		});
@@ -218,10 +226,6 @@ class FunkScript {
 
 		addVar('setShaderBool', function (shader:String, prop:String, value:Bool) {
 			Shader.setBool(shader, prop, value);
-		});
-
-		addVar('setCameraShader', function(camera:FlxCamera, shader:String) {
-			Shader.setCameraShader(camera, shader);
 		});
 	}
 

@@ -34,6 +34,13 @@ class FlxSpriteUtil extends FlxSprite {
         super(X,Y);
     }
 
+	public function setScale(_scale:Float = 1, updateBox:Bool = true) {
+		scale.set(_scale,_scale);
+		if (updateBox) {
+			updateHitbox();
+		}
+	}
+
 	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteUtil {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
 		return this;

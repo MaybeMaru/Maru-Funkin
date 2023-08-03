@@ -4,7 +4,7 @@ var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
 function create():Void {
-    halloweenBG = new FunkinSprite('halloween_bg', [-200,-80], [1,1], ['halloweem bg0', 'halloweem bg lightning strike']);
+    halloweenBG = new FunkinSprite('halloween_bg', [-200,-80], [1,1]);
     halloweenBG.addAnim('static', 'halloweem bg0');
     halloweenBG.addAnim('thunder', 'halloweem bg lightning strike');
     halloweenBG.playAnim('static');
