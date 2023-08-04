@@ -7,7 +7,7 @@ function create():Void {
 	stageFront.setScale(1.1);
 	addSpr(stageFront, 'stageFront');
 
-	for (i in 0..2) {
+	for (i in 0...2) {
 		var right:Bool = i == 1;
 		var stageLight:FunkinSprite = new FunkinSprite('stage_light', [-150 + (right ? 1300 : 0), -50], [0.95,0.95]);
 		stageLight.setScale(1.1);

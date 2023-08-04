@@ -1,7 +1,7 @@
 package funkin.states.editors;
 
 import flixel.addons.display.FlxBackdrop;
-import funkin.states.editors.chart.CharSelectSubstate;
+import funkin.substates.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
 
 import flixel.ui.FlxButton;

@@ -7,7 +7,7 @@
             "animName": "idle",
             "animFile": "senpaiIdle",
             "loop": true,
-            "offsets": [50,50]
+            "offsets": [100,-100]
         }
     ]
 }

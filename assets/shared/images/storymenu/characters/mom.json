@@ -7,7 +7,7 @@
             "animName": "idle",
             "animFile": "momIdle",
             "loop": true,
-            "offsets": [150,195]
+            "offsets": [125,225]
         }
     ]
 }

@@ -12,7 +12,7 @@ import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 import funkin.states.editors.chart.ChartPreview;
-import funkin.states.editors.chart.CharSelectSubstate;
+import funkin.substates.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
 
 import openfl.events.Event;

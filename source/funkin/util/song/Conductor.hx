@@ -77,17 +77,26 @@ class Conductor {
 	}
 
 	public static function sync(inst:FlxSound, ?vocals:FlxSound):Void {
-		inst.time = songPosition - songOffset[0] - settingOffset;
-		if (vocals != null) vocals.time = songPosition - songOffset[1] - settingOffset;
+		soundSync(inst, songOffset[0]);
+		soundSync(vocals, songOffset[1]);
 	}
 
-	//	Resync if inst is off by 20 milliseconds by default
-	public static function autoSync(inst:FlxSound, ?vocals:FlxSound, minOff:Int = 20):Void {
-		var needsResync:Bool =
-			(songPosition > (inst.time + songOffset[0] + settingOffset + minOff * songPitch))
-		|| 	(songPosition < (inst.time + songOffset[0] + settingOffset - minOff * songPitch));
+	public static function soundSync(?sound:FlxSound, offset:Float = 0) {
+		if (sound == null) return;
+		var playing:Bool = sound.playing;
+		sound.pause();
+		sound.time = songPosition - offset - settingOffset;
+		if (playing) sound.play();
+	}
 
-		if (needsResync) Conductor.sync(inst,vocals);
+	//	Resync if sounds if they are off by 20 milliseconds by default
+	public static function autoSync(inst:FlxSound, ?vocals:FlxSound, minOff:Int = 20):Void {
+		var syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > minOff * songPitch;
+		if (syncInst) soundSync(inst, songOffset[0]);
+
+		if (vocals == null) return;
+		var syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > minOff * songPitch;
+		if (syncVocals) soundSync(vocals, songOffset[1]);
 	}
 
 	public static function setPitch(pitch:Float = 1, forceVar:Bool = true, forceTime:Bool = true):Void {

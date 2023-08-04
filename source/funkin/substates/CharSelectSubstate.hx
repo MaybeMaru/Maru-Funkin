@@ -1,4 +1,4 @@
-package funkin.states.editors.chart;
+package funkin.substates;
 
 class CharSelectSubstate extends MusicBeatSubstate {
     public static var lastChar:String = 'bf';

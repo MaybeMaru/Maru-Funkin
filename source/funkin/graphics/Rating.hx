@@ -53,7 +53,7 @@ class Rating extends FlxTypedSpriteGroup<RatingSprite> {
                 var numSpr:RatingSprite = getRatingSpr();
                 numSpr.setupRating('nums');
 
-                var numScale:Float = comboHeight / numSpr.frameHeight * 0.8;
+                var numScale:Float = comboHeight / numSpr.frameHeight;// * 0.8;
                 numSpr.scale.set(numScale,numScale);
                 numSpr.animation.play(numSplit[i], true);
                 numSpr.updateHitbox();
@@ -81,18 +81,20 @@ class Rating extends FlxTypedSpriteGroup<RatingSprite> {
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (targetSpr != null) setPosition(targetSpr.x - targetSpr.width/2, targetSpr.y - targetSpr.width/4);
+        if (targetSpr != null) setPosition(targetSpr.x - 400, targetSpr.y - 200);//targetSpr.x - targetSpr.width/2, targetSpr.y - targetSpr.width/4);
     }
 }
 
 class RatingSprite extends FlxSpriteUtil {
     public function setupRating(path:String) {
         var imagePath = 'skins/${SkinUtil.curSkin}/ratings/$path';
+        var scaleMult:Float = 1;
         loadImage(imagePath);
         switch(path) {
             case 'nums':
                 loadImageAnimated(imagePath, Std.int(width / 10), Std.int(height));
                 for (i in 0...10) animation.add(Std.string(i), [i], 1);
+            case 'combo': scaleMult = 0.9;
         }
         setPosition(0,0);
         offset.set(0,0);
@@ -100,13 +102,9 @@ class RatingSprite extends FlxSpriteUtil {
 		velocity.y = FlxG.random.int(-140, -175);
 		velocity.x = FlxG.random.int(0, -10);
         FlxTween.cancelTweensOf(this);
-        loadSkinSettings();
-    }
 
-    public function loadSkinSettings():Void {
         var skinData = SkinUtil.getSkinData(SkinUtil.curSkin);
-        scale.set(skinData.scale, skinData.scale);
-        updateHitbox();
+        setScale(skinData.scale * scaleMult);
         antialiasing = skinData.antialiasing ? Preferences.getPref('antialiasing') : false;
     }
 
