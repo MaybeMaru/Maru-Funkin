@@ -89,7 +89,7 @@ class Conductor {
 		if (playing) sound.play();
 	}
 
-	//	Resync if sounds if they are off by 20 milliseconds by default
+	//	Resync if music is out of sync by 20 milliseconds by default
 	public static function autoSync(inst:FlxSound, ?vocals:FlxSound, minOff:Int = 20):Void {
 		var syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > minOff * songPitch;
 		if (syncInst) soundSync(inst, songOffset[0]);

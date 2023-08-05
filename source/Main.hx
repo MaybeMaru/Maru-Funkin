@@ -1,8 +1,6 @@
 package;
 
 import flixel.FlxGame;
-import flixel.FlxState;
-import openfl.Assets;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -23,7 +21,7 @@ class Main extends Sprite
 	};
 
 	public static var fpsCounter:FPS_Mem; //The FPS display child
-	public static var engineVersion:String = "pre-alpha"; //The engine version, if its not the same as the github one itll open OutdatedSubState
+	public static var engineVersion:String = "closed-alpha"; //The engine version, if its not the same as the github one itll open OutdatedSubState
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -35,23 +33,14 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-
-		if (stage != null)
-		{
-			init();
-		}
-		else
-		{
-			addEventListener(Event.ADDED_TO_STAGE, init);
-		}
+		if 	(stage != null) init();
+		else 				addEventListener(Event.ADDED_TO_STAGE, init);
 	}
 
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
-		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
-		}
 
 		setupGame();
 	}

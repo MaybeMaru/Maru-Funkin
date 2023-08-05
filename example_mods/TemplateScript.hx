@@ -5,11 +5,61 @@
 */
 
 /*
+    PRE-ADDED HSCRIPT CLASSES
+*/
+
+// States
+PlayState // Current PlayState instance (you'll need this one most of the time)
+GameVars // PlayState class (for static variables)
+State // Current MusicBeatState
+
+// Util
+CoolUtil
+Conductor
+Paths
+Preferences
+Controls
+Shader
+
+// Objects
+DialogueBox
+PixelDialogueBox
+FunkinSprite
+FunkinText
+Character
+Note
+Alphabet
+TypedAlphabet
+MenuAlphabet
+
+// Haxe
+Std
+Math
+Type
+Reflect
+StringTools
+
+// Haxeflixel
+FlxG
+FlxSprite
+FlxText
+FlxTypedGroup
+FlxSpriteGroup
+FlxGroup
+FlxSound
+FlxMath
+FlxColor
+FlxTimer
+FlxTween
+FlxEase
+FlxTrail
+
+/*
     HSCRIPT FUNCTIONS
 */
 
 /*
-    Adds to the hscript interpreter a class
+    Adds a class to the script
     @param className        --> Name of the class           EX: 'FlxSprite'
     @param classPackage     --> Package of the class        EX: 'flixel'
     @param customClassName  --> Custom tag for the class    (OPTIONAL) 
@@ -31,6 +81,30 @@ addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool)
 getSpr(spriteTag:String)
 
 /*
+    Returns if a sprite from the foreground or background of PlayState exists
+    @param spriteTag    --> Tag of the sprite to get
+*/
+existsSpr(spriteTag:String)
+
+/*
+    Creates and adds a group to PlayState
+    @param groupTag    --> Sprite object to add
+*/
+makeGroup(groupTag:String)
+
+/*
+    Returns a group from PlayState
+    @param groupTag    --> Tag of the sprite to get
+*/
+getGroup(groupTag:String)
+
+/*
+    Returns if a group from PlayState exists
+    @param groupTag    --> Tag of the sprite to get
+*/
+existsGroup(groupTag:String)
+
+/*
     Returns a BlendMode type
     @param blendModeName --> Name of the blend mode EX: 'multiply'
 */
@@ -43,6 +117,30 @@ getBlendMode(blendModeName:String);
 getPref(prefName:String);
 
 /*
+    PREFERENCES TAGS:
+
+    // Miscellaneous
+    'naughty'           => Naughtyness
+
+    // Gameplay
+    'botplay'           => Botplay Mode
+    'practice'          => Practice Mode
+    'downscroll'        => Downscroll
+    'ghost-tap'         => Ghost Tapping
+    'deghost-tap'       => Deghostify
+    'stack-rating'      => Stack Ratings
+
+    // UI
+    'framerate'         => Framerate
+    'fps-counter'       => Fps Counter
+    'vanilla-ui'        => Vanilla UI
+    'flashing-light'    => Flashing Lights
+    'camera-zoom'       => Camera Zooms
+    'antialiasing'      => Antialiasing
+    'auto-pause'        => Auto Pause
+*/
+
+/*
     Returns if the asked key is pressed
     @param keyName --> Name of the key to check EX: 'NOTE_LEFT'
 
@@ -52,6 +150,28 @@ getPref(prefName:String);
     For key releases write the name like        'NOTE_LEFT-R'
 */
 getKey(keyName:String);
+
+/*
+    CONTROLS TAGS:
+
+    // Note
+    'NOTE_LEFT'
+    'NOTE_DOWN'
+    'NOTE_UP'
+    'NOTE_RIGHT'
+
+    // UI
+    'UI_LEFT'
+    'UI_DOWN'
+    'UI_UP'
+    'UI_RIGHT'
+
+    // Extra
+    'ACCEPT'
+    'BACK'
+    'PAUSE'
+    'RESET'
+*/
 
 /*
     Adds a new script
@@ -138,7 +258,7 @@ setShaderBool(shaderTag:String, prop:String, boolValue:Bool);
 
 
 /*
-        HSCRIPT PLAYSTATE CALLBACKS
+    HSCRIPT PLAYSTATE CALLBACKS
 */
 
 function create()

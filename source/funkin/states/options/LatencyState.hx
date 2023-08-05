@@ -2,8 +2,8 @@ package funkin.states.options;
 
 class LatencyState extends MusicBeatState
 {
-	var offsetText:FlxText;
-	var hitSpr:FlxSprite;
+	var offsetText:Alphabet;
+	var hitSpr:FlxSpriteUtil;
 	var offset:Float = 0;
 
 	override function create()
@@ -11,28 +11,43 @@ class LatencyState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		offsetText = new FlxText(0,0,0,"", 20);
+		var bg:FunkinSprite = new FunkinSprite('options/latencyDesat');
+		bg.color = 0xff2b2b2b;
+		add(bg);
+
+		hitSpr = new FlxSpriteUtil(-35, FlxG.height / 2).loadImage('characters/speakers');
+		hitSpr.setScale(0.8);
+		hitSpr.addAnim('idle', 'speakers');
+		hitSpr.playAnim('idle');
+		add(hitSpr);
+
+		offsetText = new Alphabet(hitSpr.x + hitSpr.width / 2 + 75, hitSpr.y - hitSpr.height / 2);
+		offsetText.alignment = CENTER;
 		add(offsetText);
 
-		hitSpr = new FlxSprite();
-		hitSpr.scale.set(3,3);
-		hitSpr.screenCenter();
-		add(hitSpr);
+		var txtLine:FlxSprite = new FlxSprite(0,25).makeGraphic(FlxG.width,50,FlxColor.BLACK);
+		add(txtLine);
+
+		var txtStr = "Sync your beats by tapping the space bar in rhythm to measure your offset.\nHit enter when done to save your calculated offset.";
+		var txt:FlxText = new FlxText(FlxG.width/5,27.5,0,txtStr,16);
+		txt.alignment = CENTER;
+		add(txt);
 
 		FlxG.sound.playMusic(Paths.music('latency'), 1, true);
 		Conductor.bpm = 100;
 		Conductor.songPosition = 0;
 		offset = Conductor.settingOffset;
+		updateTxt();
 
 		super.create();
 	}
 
+	function updateTxt() {
+		offsetText.text = "Offset:\n" + offset + "ms";
+	}
+
 	override function update(elapsed:Float)
 	{
-		offsetText.text = "Press space at the time of the beat.\n" + "Offset: " + offset + "ms";
-		offsetText.screenCenter();
-		hitSpr.alpha -= elapsed;
-
 		if (FlxG.keys.justPressed.ENTER) {
 			Conductor.settingOffset = offset;
 			SaveData.setSave('offset', Conductor.settingOffset);
@@ -59,6 +74,7 @@ class LatencyState extends MusicBeatState
 		var _off = Conductor.songPosition - lastBeatTime;
 		lastOffsets.push(_off);
 		offset = getAverageOffset();
+		updateTxt();
 	}
 
 	function getAverageOffset() {
@@ -72,9 +88,8 @@ class LatencyState extends MusicBeatState
 	override public function beatHit()
 	{
 		super.beatHit();
-		resync();
 		lastBeatTime = Conductor.songPosition;
-		hitSpr.alpha = 1;
+		hitSpr.playAnim('idle', true);
 	}
 
 	function resync()

@@ -69,6 +69,7 @@ class FunkScript {
 		addVar('FunkinSprite', FunkinSprite);
 		addVar('FunkinText', FunkinText);
 		addVar('Character', Character);
+		addVar('Note', Note);
 
 		addVar('Alphabet', Alphabet);
 		addVar('TypedAlphabet', TypedAlphabet);
@@ -80,6 +81,7 @@ class FunkScript {
 		addVar('Math', Math);
 		addVar('Type', Type);
 		addVar('StringTools', StringTools);
+		addVar('Reflect', Reflect);
 		
 		//Flixel
 
@@ -96,7 +98,6 @@ class FunkScript {
 		addVar('FlxTween', flixel.tweens.FlxTween);
 		addVar('FlxEase', flixel.tweens.FlxEase);
 		addVar('FlxTrail', flixel.addons.effects.FlxTrail);
-		addVar('Reflect', Reflect);
 
 		//HScript Functions
 

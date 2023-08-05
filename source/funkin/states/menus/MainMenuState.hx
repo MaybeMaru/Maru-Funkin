@@ -66,7 +66,7 @@ class MainMenuState extends MusicBeatState {
 		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
 		menuCam.follow(camFollow, null, 0.06);
 
-		var versionText:String = 'Bunny Engine v${Main.engineVersion}\nFriday Night Funkin v${Application.current.meta.get('version')}';
+		var versionText:String = 'Mau Engin v${Main.engineVersion}\nFriday Night Funkin v${Application.current.meta.get('version')}';
 
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 18*2, 0, versionText, 12);
 		versionShit.scrollFactor.set();
@@ -146,11 +146,9 @@ class MainMenuState extends MusicBeatState {
 		super.update(elapsed);
 	}
 
-	function changeItem(huh:Int = 0):Void {
-		curSelected += huh;
-		if (curSelected >= menuItems.length)	curSelected = 0;
-		if (curSelected < 0)					curSelected = menuItems.length - 1;
-		if (huh != 0) CoolUtil.playSound('scrollMenu');
+	function changeItem(add:Int = 0):Void {
+		curSelected = FlxMath.wrap(curSelected + add, 0, menuItems.length - 1);
+		if (add != 0) CoolUtil.playSound('scrollMenu');
 
 		menuItems.forEach(function(spr:FunkinSprite) {
 			spr.playAnim('idle');
@@ -162,7 +160,7 @@ class MainMenuState extends MusicBeatState {
 			spr.screenCenter(X);
 		});
 
-		menuItems.sort(function(int:Int, obj1:FunkinSprite, obj2:FunkinSprite){
+		menuItems.sort(function(int:Int, obj1:FunkinSprite, obj2:FunkinSprite) {
 			return FlxSort.byValues(FlxSort.DESCENDING, obj1.ID-curSelected, obj2.ID-curSelected);
 		});
 	}
