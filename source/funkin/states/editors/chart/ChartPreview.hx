@@ -29,10 +29,12 @@ class ChartPreview extends FlxSprite {
         var pCol:Int = (moveConductor ? 150 : 0);
         makeGraphic(NOTE_WIDTH*STRUMS_LENGTH, (moveConductor ? getSectionsLength(sections) : 1) * 16 * NOTE_HEIGHT, FlxColor.TRANSPARENT);
         updateHitbox();
-        pixels.fillRect(new Rectangle(0,0, width*1.5, height*1.5), FlxColor.fromRGB(pCol,pCol,pCol,64));
-        drawSections(sections);
+        pixels.fillRect(new Rectangle(0,0, width * 1.5, height * 1.5), FlxColor.fromRGB(pCol,pCol,pCol,64));
+        if (moveConductor) {
+            drawSections(sections);
+        }
         drawSong(secTime, notes);
-        pixels.fillRect(new Rectangle(width/2-NOTE_HEIGHT/2, 0, NOTE_HEIGHT, height), FlxColor.fromRGB(0,0,0,50));
+        pixels.fillRect(new Rectangle(moveConductor ? width * 0.5 - NOTE_HEIGHT * 0.5 : width * 0.5 + NOTE_WIDTH, 0, NOTE_HEIGHT, height), FlxColor.fromRGB(0,0,0,50));
     }
 
     private function getSectionsLength(sections:Array<SwagSection>):Int {
@@ -73,8 +75,8 @@ class ChartPreview extends FlxSprite {
                     var noteRGB:Array<Int> = getNoteRGB(note);
                     pixels.fillRect(new Rectangle(note[1]*NOTE_WIDTH, pY, NOTE_WIDTH, NOTE_HEIGHT), FlxColor.fromRGB(noteRGB[1],noteRGB[2],noteRGB[3],noteRGB[0]));
                     if (note[2] > 0) {
-                        pixels.fillRect(new Rectangle(note[1] * NOTE_WIDTH + NOTE_WIDTH/4, pY + NOTE_HEIGHT,
-                        Std.int(NOTE_WIDTH/2), Std.int(note[2] * SIZE_CALC)), FlxColor.fromRGB(noteRGB[1],noteRGB[2],noteRGB[3], Std.int(255*0.6)));
+                        pixels.fillRect(new Rectangle(note[1] * NOTE_WIDTH + NOTE_WIDTH * 0.25, pY + NOTE_HEIGHT,
+                        Std.int(NOTE_WIDTH * 0.5), Std.int(note[2] * SIZE_CALC)), FlxColor.fromRGB(noteRGB[1],noteRGB[2],noteRGB[3], Std.int(255*0.6)));
                     }
                 }
             }

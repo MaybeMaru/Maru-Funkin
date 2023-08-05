@@ -129,7 +129,7 @@ class Note extends FlxSpriteUtil {
     public function setupSustain() {
         if (isSustainNote) {
             drawSustain(true);
-            susOffsetX = -(NoteUtil.swagWidth / 2 - width / 2.125);
+            susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
             offset.set(susOffsetX,0);
             alpha = 0.6;
         }

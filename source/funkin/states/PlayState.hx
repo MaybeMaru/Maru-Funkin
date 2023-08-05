@@ -93,7 +93,7 @@ class PlayState extends MusicBeatState {
 	public var inDialogue:Bool = true;
 	public var dialogueBox:DialogueBoxBase = null;
 
-	#if desktop	// Discord RPC variables
+	#if cpp	// Discord RPC variables
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
@@ -131,7 +131,7 @@ class PlayState extends MusicBeatState {
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
 
-		#if desktop
+		#if cpp
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
 		if (Character.getCharData(SONG.players[1]) != null) {
@@ -446,8 +446,7 @@ class PlayState extends MusicBeatState {
 
 		// Song duration in a float, useful for the time left feature
 		songLength = inst.length;
-		#if desktop
-		// Updating Discord Rich Presence (with Time Left)
+		#if cpp // Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${curDifficulty})', iconRPC, true, songLength);
 		#end
 	}
@@ -590,7 +589,7 @@ class PlayState extends MusicBeatState {
 				vocals.play();
 			}
 
-			#if desktop
+			#if cpp
 			var presenceDetails = '${SONG.song} (${curDifficulty})';
 			var presenceTime = startTimer.finished ? songLength - Conductor.songPosition : null;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, startTimer.finished, presenceTime);
@@ -644,14 +643,14 @@ class PlayState extends MusicBeatState {
 			}
 		} else if (FlxG.keys.justPressed.SEVEN) {
 			FlxG.switchState(new ChartingState());
-			#if desktop DiscordClient.changePresence("Chart Editor", null, null, true); #end
+			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		} else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
 			FlxG.switchState(new AnimationDebug(SONG.players[1]));
-			#if desktop DiscordClient.changePresence("Character Editor", null, null, true); #end
+			#if cpp DiscordClient.changePresence("Character Editor", null, null, true); #end
 		} else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
-			#if desktop DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC); #end
+			#if cpp DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC); #end
 		}
 
 		//Makes the conductor song go vroom vroom
@@ -700,8 +699,7 @@ class PlayState extends MusicBeatState {
 	
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				
-				#if desktop
-				// Game Over doesn't get his own variable because it's only used here
+				#if cpp // Game Over doesn't get his own variable because it's only used here
 				DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
 				#end
 			}
@@ -804,7 +802,7 @@ class PlayState extends MusicBeatState {
 		if (inChartEditor) {
 			FlxG.switchState(new ChartingState());
 
-			#if desktop
+			#if cpp
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 			#end
 		}

@@ -882,11 +882,11 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function updatePreview():Void {
-		/*if (initialized && _song.notes != null) {
+		if (initialized && _song.notes != null) {
 			chartPreview.startDraw(_song.notes);
 			var copyLastSec:Int = _curSection - Std.int(stepperCopy.value);
 			lastSectionPreview.startDraw([_song.notes[copyLastSec]], sectionStartTime(copyLastSec));
-		}*/
+		}
 	}
 
 	function updateGrid():Void {

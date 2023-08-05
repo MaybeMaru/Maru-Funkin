@@ -17,7 +17,7 @@ class SplashState extends MusicBeatState {
         Conductor.init();
 		CoolUtil.init();
 		Highscore.load();
-		#if desktop
+		#if cpp
 		DiscordClient.initialize();
 		Application.current.onExit.add (function (exitCode)DiscordClient.shutdown());
         #end

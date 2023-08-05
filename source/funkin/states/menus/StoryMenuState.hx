@@ -57,8 +57,7 @@ class StoryMenuState extends MusicBeatState {
 
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 		
-		#if desktop
-		// Updating Discord Rich Presence
+		#if cpp // Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 

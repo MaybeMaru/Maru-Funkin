@@ -17,8 +17,7 @@ class MainMenuState extends MusicBeatState {
 	var menuItems:FlxTypedGroup<FunkinSprite>;
 
 	override function create():Void {
-		#if desktop
-		// Updating Discord Rich Presence
+		#if cpp 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 

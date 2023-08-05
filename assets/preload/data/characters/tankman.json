@@ -1,17 +1,56 @@
 {
 	"imagePath": "week7/tankmanCaptain",
-	"isGF": false,
+	"icon": "tankman",
 	"camOffsets": [
 		-50,
 		0
 	],
-	"icon": "tankman",
-	"scale": 1,
-	"charOffsets": [
-		100,
-		150
-	],
+	"isGF": false,
 	"anims": [
+		{
+			"offsets": [
+				-19,
+				-29
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Tankman Note Left MISS0",
+			"animName": "singRIGHTmiss"
+		},
+		{
+			"offsets": [
+				72,
+				-112
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Tankman DOWN note0",
+			"animName": "singDOWN"
+		},
+		{
+			"offsets": [
+				85,
+				-13
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Tankman Right Note MISS0",
+			"animName": "singLEFTmiss"
+		},
+		{
+			"offsets": [
+				52,
+				50
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Tankman UP note0",
+			"animName": "singUP"
+		},
 		{
 			"offsets": [
 				0,
@@ -47,14 +86,25 @@
 		},
 		{
 			"offsets": [
-				72,
-				-112
+				81,
+				-111
 			],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "Tankman DOWN note0",
-			"animName": "singDOWN"
+			"animFile": "Tankman DOWN note MISS0",
+			"animName": "singDOWNmiss"
+		},
+		{
+			"offsets": [
+				43,
+				48
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Tankman UP note MISS0",
+			"animName": "singUPmiss"
 		},
 		{
 			"offsets": [
@@ -69,17 +119,6 @@
 		},
 		{
 			"offsets": [
-				52,
-				50
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Tankman UP note0",
-			"animName": "singUP"
-		},
-		{
-			"offsets": [
 				92,
 				-11
 			],
@@ -90,9 +129,14 @@
 			"animName": "singLEFT"
 		}
 	],
-	"isPlayer": false,
+	"charOffsets": [
+		100,
+		150
+	],
+	"scale": 1,
 	"flipX": true,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }
