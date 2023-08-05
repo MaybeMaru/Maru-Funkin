@@ -1,13 +1,13 @@
 {
     "antialiasing": true,
-    "scale": 0.5,
+    "scale": 0.45,
     "imagePath": "parents",
     "anims": [
         {
             "animName": "idle",
             "animFile": "parentsIdle",
             "loop": true,
-            "offsets": [0,0]
+            "offsets": [380,190]
         }
     ]
 }

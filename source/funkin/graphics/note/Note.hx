@@ -214,18 +214,25 @@ class Note extends FlxSpriteUtil {
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > 0) {
             if (forced || (_height > height)) {// New graphic
-                makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height$skin');
-                origin.set(width / 2, 0);
-    
-                // draw piece
-                var loops = Math.floor(_height / susPiece.height) + 1;
-                for (i in 0...loops)
-                    stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
+                var key:String = 'sus$noteData$_height$skin';
+                if (FlxG.bitmap.checkCache(key)) { // Save on drawing the graphic more than one time?
+                    frames = FlxG.bitmap.get(key).imageFrame;
+                    origin.set(width / 2, 0);
+                    return;
+                } else {
+                    makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height$skin');
+                    origin.set(width / 2, 0);
         
-                //draw end
-                var endPos = _height - susEnd.height;
-                pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-                stamp(susEnd, 0, Std.int(endPos));
+                    // draw piece
+                    var loops = Math.floor(_height / susPiece.height) + 1;
+                    for (i in 0...loops)
+                        stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
+            
+                    //draw end
+                    var endPos = _height - susEnd.height;
+                    pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+                    stamp(susEnd, 0, Std.int(endPos));
+                }
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();

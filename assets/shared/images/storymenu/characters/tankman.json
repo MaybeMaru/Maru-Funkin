@@ -1,0 +1,13 @@
+{
+    "antialiasing": true,
+    "scale": 1,
+    "imagePath": "tankman",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "tankmanIdle",
+            "loop": true,
+            "offsets": [60,-60]
+        }
+    ]
+}
