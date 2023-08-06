@@ -140,16 +140,32 @@ class FunkScript {
 			PlayState.game.objMap.set(sprKey, spr);
 			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
 		});
+		
+		addVar('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
+			var sprKey = '_${OnTop ? 'fg' : 'bg'}_sprite_$key';
+			PlayState.game.objMap.set(sprKey, spr);
+			OnTop ? PlayState.game.fgSpr.insert(order, spr) : PlayState.game.bgSpr.insert(order, spr);
+		});
 
 		addVar('getSpr', function(key:String):Null<Dynamic> {
 			for (i in ['fg', 'bg']) {
 				var sprKey = '_${i}_sprite_$key';
-				if (PlayState.game.objMap.exists(sprKey)) {
+				if (PlayState.game.objMap.exists(sprKey))
 					return PlayState.game.objMap.get(sprKey);
-				}
 			}
 			ModdingUtil.errorTrace('Sprite not found: $key');
 			return null;								
+		});
+
+		addVar('getSprOrder', function(key:String):Int {
+			for (i in ['fg', 'bg']) {
+				var sprKey = '_${i}_sprite_$key';
+				var group = (i == 'fg' ? PlayState.game.fgSpr : PlayState.game.bgSpr);
+				if (PlayState.game.objMap.exists(sprKey))
+					return group.members.indexOf(PlayState.game.objMap.get(sprKey));
+			}
+			ModdingUtil.errorTrace('Sprite not found: $key');
+			return 0;
 		});
 
 		addVar('existsSpr', function(key:String):Null<Dynamic> {
@@ -162,9 +178,9 @@ class FunkScript {
 			return false;						
 		});
 
-		addVar('makeGroup', function(key:String) {
+		addVar('makeGroup', function(key:String, ?order:Int) {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
-			PlayState.game.add(newGroup);
+			order != null ? PlayState.game.insert(order, newGroup) : PlayState.game.add(newGroup);
 			PlayState.game.objMap.set('_group_$key', newGroup);
 		});
 
@@ -197,6 +213,13 @@ class FunkScript {
 
 		addVar('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic {
 			return ModdingUtil.scriptsMap.get(script).callback(func, args);
+		});
+
+		addVar('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
+			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts)) {
+				if (forced || !i.varExists(key))
+					i.addVar(key, _var);
+			}
 		});
 
 		// Runtime shader functions

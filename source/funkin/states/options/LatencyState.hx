@@ -25,10 +25,10 @@ class LatencyState extends MusicBeatState
 		offsetText.alignment = CENTER;
 		add(offsetText);
 
-		var txtLine:FlxSprite = new FlxSprite(0,25).makeGraphic(FlxG.width,50,FlxColor.BLACK);
+		var txtLine:FlxSprite = new FlxSprite(0,25).makeGraphic(FlxG.width,70,FlxColor.BLACK);
 		add(txtLine);
 
-		var txtStr = "Sync your beats by tapping the space bar in rhythm to measure your offset.\nHit enter when done to save your calculated offset.";
+		var txtStr = "Sync your beats by tapping the space bar in rhythm to measure your offset.\nHit enter when done to save your calculated offset.\nHit escape to exit without saving your calculated offset.";
 		var txt:FlxText = new FlxText(FlxG.width/5,27.5,0,txtStr,16);
 		txt.alignment = CENTER;
 		add(txt);
@@ -52,9 +52,9 @@ class LatencyState extends MusicBeatState
 			Conductor.settingOffset = offset;
 			SaveData.setSave('offset', Conductor.settingOffset);
 			SaveData.flushData();
-			CoolUtil.playMusic('freakyMenu', 0);
-			FlxG.sound.music.fadeIn(4, 0, 1);
-			FlxG.switchState(new OptionsState());
+			exit();
+		} else if (FlxG.keys.justPressed.ESCAPE) {
+			exit();
 		}
 
 		if (FlxG.sound.music.playing)
@@ -64,6 +64,12 @@ class LatencyState extends MusicBeatState
 			pushOffset();
 
 		super.update(elapsed);
+	}
+
+	function exit() {
+		CoolUtil.playMusic('freakyMenu', 0);
+		FlxG.sound.music.fadeIn(4, 0, 1);
+		FlxG.switchState(new OptionsState());
 	}
 
 	var lastBeatTime:Float = 0;

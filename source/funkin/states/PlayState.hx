@@ -219,7 +219,7 @@ class PlayState extends MusicBeatState {
 		// Make Dad GF
 		if (SONG.players[1] == SONG.players[2] && dad.isGF) {
 			dad.setPosition(gf.x, gf.y);
-			gf.visible = false;
+			gfGroup.visible = false;
 		}
 
 		//Sprites order
