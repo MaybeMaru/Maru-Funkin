@@ -33,7 +33,7 @@ class LatencyState extends MusicBeatState
 		txt.alignment = CENTER;
 		add(txt);
 
-		FlxG.sound.playMusic(Paths.music('latency'), 1, true);
+		FlxG.sound.playMusic(Paths.music('maruOffsets'), 1, true);
 		Conductor.bpm = 100;
 		Conductor.songPosition = 0;
 		offset = Conductor.settingOffset;
@@ -67,17 +67,20 @@ class LatencyState extends MusicBeatState
 	}
 
 	function exit() {
-		CoolUtil.playMusic('freakyMenu', 0);
-		FlxG.sound.music.fadeIn(4, 0, 1);
+		FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		FlxG.switchState(new OptionsState());
 	}
 
 	var lastBeatTime:Float = 0;
+	var nextBeatTime:Float = 0;
 	var lastOffsets:Array<Float> = [];
 
 	function pushOffset() {
 		resync();
-		var _off = Conductor.songPosition - lastBeatTime;
+		var off1_:Float = Math.abs(Conductor.songPosition - lastBeatTime);
+        var off2_:Float = Math.abs(Conductor.songPosition - nextBeatTime);
+		var _off = (off1_ < off2_ ? Conductor.songPosition - lastBeatTime : Conductor.songPosition - nextBeatTime);
+		
 		lastOffsets.push(_off);
 		offset = getAverageOffset();
 		updateTxt();
@@ -95,6 +98,7 @@ class LatencyState extends MusicBeatState
 	{
 		super.beatHit();
 		lastBeatTime = Conductor.songPosition;
+		nextBeatTime = Conductor.songPosition + Conductor.crochet;
 		hitSpr.playAnim('idle', true);
 	}
 

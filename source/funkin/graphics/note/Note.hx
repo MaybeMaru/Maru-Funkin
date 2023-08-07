@@ -102,7 +102,7 @@ class Note extends FlxSpriteUtil {
             
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-                initSusLength += _off / (PlayState.SONG.speed * 2);
+                initSusLength += _off / (PlayState.game.songSpeed * 2);
             }
         } else {
             loadGraphicFromSprite(refSprite);

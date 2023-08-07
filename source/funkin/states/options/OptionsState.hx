@@ -46,6 +46,9 @@ class OptionsState extends MusicBeatState {
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
+		if (FlxG.sound.music.volume < 0.8) {
+			FlxG.sound.music.volume += 0.5 * elapsed;
+		}
 		if (!selectedSomethin) controlShit();
 	}
 

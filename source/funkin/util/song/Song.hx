@@ -1,5 +1,6 @@
 package funkin.util.song;
 
+import funkin.util.song.formats.QuaFormat;
 import haxe.Json;
 import flixel.util.FlxSort;
 
@@ -56,7 +57,8 @@ class Song {
 	private static var CHART_FORMATS = [
 		'json',
 		'osu',
-		'sm', 'ssc'
+		'sm', 'ssc',
+		'qua'
 	];
 
 	public static function loadFromFile(diff:String, ?folder:String):SwagSong {
@@ -68,6 +70,7 @@ class Song {
 					case 'json':			return checkSong(parseJson(chartPath));
 					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));
 					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));
+					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));
 				}
 			}
 		}

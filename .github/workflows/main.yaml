@@ -1,0 +1,46 @@
+name: Engine Compile
+
+on:
+  push:
+    branches:
+      - main
+  
+  workflow_dispatch:
+
+jobs:
+  brewWindows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@main
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.1
+
+      - name: Install Hxcpp
+        run: |
+          haxelib setup C:/haxelib --quiet
+          haxelib install hxcpp --quiet
+        shell: cmd
+
+      - name: Install libraries
+        run: |
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install newgrounds --quiet
+          haxelib install discord_rpc --quiet
+          haxelib install hscript --quiet
+        shell: cmd
+
+      - name: Compile game
+        run: haxelib run lime build windows
+
+      - name: Upload action build
+        uses: actions/upload-artifact@main
+        with:
+          name: Windows
+          path: export/windows/bin
