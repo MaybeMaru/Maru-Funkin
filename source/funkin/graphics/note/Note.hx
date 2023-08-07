@@ -208,11 +208,12 @@ class Note extends FlxSpriteUtil {
     }
 
     public var percentCut:Float = 1;
+    public static inline var susEndHeight:Int = 6; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
-        if (_height > 0) {
+        if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
                 var key:String = 'sus$noteData$_height$skin';
                 if (FlxG.bitmap.checkCache(key)) { // Save on drawing the graphic more than one time?

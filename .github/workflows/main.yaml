@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  brewWindows:
+  engineCompile:
     runs-on: windows-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.1
+          haxe-version: 4.2.5
 
       - name: Install Hxcpp
         run: |
@@ -28,7 +28,7 @@ jobs:
         run: |
           haxelib install lime --quiet
           haxelib install openfl --quiet
-          haxelib install flixel --quiet
+          haxelib install flixel 5.3.0 --quiet
           haxelib install flixel-addons --quiet
           haxelib install flixel-ui --quiet
           haxelib install newgrounds --quiet
