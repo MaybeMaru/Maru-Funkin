@@ -10,5 +10,7 @@
     "weekColor": "0xFFFF78BF",
     "storyBf": "bf",
 	"storyDad": "senpai",
-	"storyGf": "gf"
+	"storyGf": "gf",
+    "startUnlocked": false,
+    "unlockWeek": "week 7"
 }

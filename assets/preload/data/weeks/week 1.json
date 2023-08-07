@@ -2,7 +2,6 @@
     "songList": 
     {
         "songs":["Bopeebo", "Fresh", "Dad Battle"],
-        "weekNum": 1,
         "songIcon": ["dad"]
     },
     "weekImage": "week1",
@@ -10,5 +9,7 @@
     "weekColor": "0xFF9271FD",
     "storyBf": "bf",
 	"storyDad": "dad",
-	"storyGf": "gf"
+	"storyGf": "gf",
+    "startUnlocked": true,
+    "unlockWeek": "week 2"
 }

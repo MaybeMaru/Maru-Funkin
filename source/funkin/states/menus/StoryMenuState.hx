@@ -63,7 +63,6 @@ class StoryMenuState extends MusicBeatState {
 
 		for (i in 0...WeekSetup.weekList.length) {
 			var weekThing:MenuItem = new MenuItem(i, WeekSetup.weekList[i].weekImage);
-			Highscore.setWeekUnlock(WeekSetup.weekNameList[i], true);
 			weekThing.locked = !Highscore.getWeekUnlock(WeekSetup.weekNameList[i]);
 			grpWeekText.add(weekThing);
 		}

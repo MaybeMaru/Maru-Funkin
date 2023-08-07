@@ -2,7 +2,6 @@
     "songList": 
     {
         "songs":["Tutorial"],
-        "weekNum": 0,
         "songIcon": ["gf"]
     },
     "weekImage": "tutorial",
@@ -10,5 +9,6 @@
     "weekColor": "0xFFB00B69",
     "storyBf": "bf",
 	"storyDad": "",
-	"storyGf": "gf"
+	"storyGf": "gf",
+    "startUnlocked": true
 }

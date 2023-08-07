@@ -67,8 +67,8 @@ function beatHit(curBeat):Void {
 function sectionHit(curSection):Void {
 	var stuffToColor:Array<Null<FunkinSprite>> = [phillyCityLights, phillyCityLightsBlur];
 	if (existsSpr('blammedOverlay')) { // Prevent getting a null sprite error
-		stuffToColor.push('blammedOverlay');
-		stuffToColor.push('tunnelBG');
+		stuffToColor.push(getSpr('blammedOverlay'));
+		stuffToColor.push(getSpr('tunnelBG'));
 	}
 
 	var curColor:Int = phillyLightsColors[phillyColor];

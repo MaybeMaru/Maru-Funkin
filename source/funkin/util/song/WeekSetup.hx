@@ -8,14 +8,32 @@ class WeekSetup {
     public static var modWeekMap:Map<String,String>;
     public static var weekList:Array<WeekJson> = [];
     public static var weekNameList:Array<String> = [];
+    public static var vanillaWeekNameList:Array<String> = [];
     public static var weekDataMap:Map<String,WeekJson>;
     public static var curWeekDiffs:Array<String> = ['easy','normal','hard'];
+
+    public static var DEFAULT_WEEK:WeekJson = {
+        songList: {
+            songs:["Tutorial"],
+            songIcon: ["gf"]
+        },
+        weekDiffs: CoolUtil.defaultDiffArray,
+        weekImage: "tutorial",
+        weekName: "Tutorial",
+        weekColor: "0xffffffff",
+        storyBf: "bf",
+        storyDad: "dad",
+        storyGf: "gf",
+        startUnlocked: true,
+        unlockWeek: "",
+	}
 
     inline public static function getWeekList():Array<WeekJson> {
         //Load week Jsons
         var weeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
         var mod:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
+        vanillaWeekNameList = weeks.copy();
 
         //Vanilla weeks go first >:)
         weeks = weeks.concat(global);
@@ -33,11 +51,14 @@ class WeekSetup {
         weekDataMap = new Map<String,WeekJson>();
 		for (week in weeks) {
 			var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$week.json', TEXT, null, true));
-			var parsedJson:WeekJson = Json.parse(getJson);
-            if (parsedJson.weekDiffs == null || parsedJson.weekDiffs.length == 0)
-                parsedJson.weekDiffs = CoolUtil.defaultDiffArray;
+            var parsedJson:WeekJson = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(DEFAULT_WEEK), Json.parse(getJson));
             weekList.push(parsedJson);
             weekDataMap.set(week, parsedJson);
+
+            // Unlock the week
+            if (!Highscore.getWeekUnlock(week) && parsedJson.startUnlocked) {
+                Highscore.setWeekUnlock(week, true);
+            }
 		}
         return weekList;
     }

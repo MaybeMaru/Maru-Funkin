@@ -10,5 +10,7 @@
     "weekColor": "0xFF223344",
     "storyBf": "bf",
 	"storyDad": "spooky",
-	"storyGf": "gf"
+	"storyGf": "gf",
+    "startUnlocked": false,
+    "unlockWeek": "week 3"
 }

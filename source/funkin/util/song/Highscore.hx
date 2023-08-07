@@ -62,7 +62,7 @@ class Highscore {
 	 */
 	inline public static function getWeekUnlock(week:String):Bool {
 		if (!weekUnlocks.exists(week))
-			setWeekUnlock(week, true);
+			setWeekUnlock(week, false);
 		return weekUnlocks.get(week);
 	}
 	

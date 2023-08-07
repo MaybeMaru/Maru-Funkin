@@ -224,22 +224,58 @@ class TitleState extends MusicBeatState {
 	}
 
 	var codeIndex:Int = 0;
-    var konamiCode:Array<FlxKey> = [
-        FlxKey.UP, FlxKey.UP,
-        FlxKey.DOWN, FlxKey.DOWN,
-        FlxKey.LEFT, FlxKey.RIGHT,
-        FlxKey.LEFT, FlxKey.RIGHT,
-        FlxKey.B, FlxKey.A
-    ];
+	var curCode:String = 'konami';
+
+	var codes:Map<String, Array<FlxKey>> = [
+		'konami' => [ // debug code
+			FlxKey.UP, FlxKey.UP, FlxKey.DOWN, FlxKey.DOWN,
+			FlxKey.LEFT, FlxKey.RIGHT, FlxKey.LEFT, FlxKey.RIGHT,
+			FlxKey.B, FlxKey.A
+		],
+		'unlock' => [ // unlock code
+			FlxKey.U,FlxKey.N,FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+		],
+		'lock' => [ // lock code
+			FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+		]
+	];
 
 	private function checkCode():Void {
-        if (FlxG.keys.anyJustPressed([konamiCode[codeIndex]])) {
-            codeIndex++;
-            if (codeIndex >= konamiCode.length && !CoolUtil.debugMode) {
-                codeIndex = 0;
-                CoolUtil.debugMode = true;
-				CoolUtil.playSound('confirmMenu', 0.7);
-            }
-        } else if (FlxG.keys.anyJustPressed([FlxKey.ANY])) codeIndex = 0;
+		if (FlxG.keys.anyJustPressed([codes.get(curCode)[codeIndex]])) {
+			codeIndex++;
+			if (codeIndex >= codes.get(curCode).length) {
+				codeIndex = 0;
+				switch(curCode) {
+					case 'konami':
+						if (!CoolUtil.debugMode) {
+							CoolUtil.playSound('confirmMenu', 0.7);
+							CoolUtil.debugMode = true;
+						}
+					case 'unlock':
+						WeekSetup.getWeekList();
+						CoolUtil.playSound('confirmMenu', 0.7);
+						for (week in WeekSetup.vanillaWeekNameList) {
+							Highscore.setWeekUnlock(week, true);
+						}
+					case 'lock':
+						WeekSetup.getWeekList();
+						CoolUtil.playSound('confirmMenu', 0.7);
+						for (week in WeekSetup.vanillaWeekNameList) {
+							if (!WeekSetup.weekDataMap.get(week).startUnlocked) {
+								Highscore.setWeekUnlock(week, false);
+							}
+						}
+				}
+			}
+		} else if (FlxG.keys.justPressed.ANY) {
+			for (i in codes.keys()) {
+				if (FlxG.keys.anyJustPressed([codes.get(i)[0]])) {
+					codeIndex = 1;
+					curCode = i;
+					return;
+				}
+			}
+			codeIndex = 0;
+		}
     }
 }

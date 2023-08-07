@@ -402,7 +402,7 @@ class PlayState extends MusicBeatState {
 		curSectionData = Song.checkSection(SONG.notes[0]);
 		cameraMovement();
 
-		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
+		startTimer = new FlxTimer().start(Conductor.crochet * 0.001, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
 			dad.dance();
 			gf.dance();
@@ -410,22 +410,21 @@ class PlayState extends MusicBeatState {
 			iconP1.bumpIcon();
 			iconP2.bumpIcon();
 
-			if (swagCounter < Conductor.BEATS_LENGTH) {
-				if (swagCounter > 0) {
-					var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${['ready','set','go'][swagCounter-1]}');
-					countdownSpr.scale.set(SkinUtil.curSkinData.scale,SkinUtil.curSkinData.scale);
-					countdownSpr.screenCenter();
-					countdownSpr.cameras = [camHUD];
-					add(countdownSpr);
+			if (swagCounter > 0) {
+				var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${['ready','set','go'][swagCounter-1]}');
+				countdownSpr.scale.set(SkinUtil.curSkinData.scale,SkinUtil.curSkinData.scale);
+				countdownSpr.screenCenter();
+				countdownSpr.cameras = [camHUD];
+				add(countdownSpr);
 
-					countdownSpr.acceleration.y = SONG.bpm*60;
-					countdownSpr.velocity.y -= SONG.bpm*10;
-					FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochet / 1000, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
-				}
-				CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
+				countdownSpr.acceleration.y = SONG.bpm*60;
+				countdownSpr.velocity.y -= SONG.bpm*10;
+				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochet / 1000, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
 			}
+
+			CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
 			swagCounter++;
-		}, 5);
+		}, Conductor.BEATS_LENGTH);
 	}
 
 	function startSong():Void {
@@ -811,19 +810,8 @@ class PlayState extends MusicBeatState {
 				campaignScore += songScore;
 				storyPlaylist.remove(storyPlaylist[0]);
 		
-					//	FINISHED WEEK
-				if (storyPlaylist.length <= 0) {
-					transIn = FlxTransitionableState.defaultTransIn;
-					transOut = FlxTransitionableState.defaultTransOut;
-
-					SkinUtil.setCurSkin('default');
-					FlxG.switchState(new StoryMenuState());
-					if (!(inBotplay || inPractice))
-						Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
-				}
-				else {
-					inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : switchSong();
-				}
+				if (storyPlaylist.length <= 0)	endWeek();
+				else							inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : switchSong();
 			}
 			else {
 				trace('WENT BACK TO FREEPLAY??');
@@ -831,6 +819,23 @@ class PlayState extends MusicBeatState {
 				FlxG.switchState(new FreeplayState());
 			}
 		}
+	}
+
+	function endWeek() {
+		if (!(inBotplay || inPractice))
+			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
+
+		var weekData = WeekSetup.weekDataMap.get(storyWeek);
+		if (WeekSetup.weekDataMap.exists(weekData.unlockWeek)) {
+			Highscore.setWeekUnlock(weekData.unlockWeek, true);
+		}
+
+		ModdingUtil.addCall('endWeek');
+
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
+		SkinUtil.setCurSkin('default');
+		FlxG.switchState(new StoryMenuState());
 	}
 
 	function switchSong():Void {
@@ -1006,8 +1011,9 @@ class PlayState extends MusicBeatState {
 				combo = 0;
 				vocals.volume = 0;
 				var healthLoss = noteMissed.missHealth[noteMissed.isSustainNote ? 1 : 0];
-				if (noteMissed.isSustainNote) healthLoss *= noteMissed.percentCut * (noteMissed.initSusLength / Conductor.stepCrochet);
-				health -= healthLoss;
+				var healthMult:Float = noteMissed.isSustainNote ? noteMissed.percentCut * (noteMissed.initSusLength / Conductor.stepCrochet) : 1;
+				health -= healthLoss * healthMult;
+				songScore -= Std.int(10 * healthMult);
 
 				noteCount++;
 				songMisses++;
