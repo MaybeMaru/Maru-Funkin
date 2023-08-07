@@ -47,6 +47,8 @@ function create():Void {
 
 	trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
 	FlxG.sound.list.add(trainSound);
+	if (!CoolUtil.soundList.contains(trainSound))
+		CoolUtil.soundList.push(trainSound);
 
 	phillyColor += FlxG.random.int(0,3);
 }

@@ -52,7 +52,7 @@ class PlayState extends MusicBeatState {
 	private var opponentStrumsInitPos:Array<FlxPoint> = [];
 
 	private var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
-	private var ratingGroup:Rating;
+	private var ratingGroup:RatingGroup;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -313,8 +313,7 @@ class PlayState extends MusicBeatState {
 			scoreTxt.setFormat(Paths.font('vcr'), 16, FlxColor.WHITE);
 		}
 
-		ratingGroup = new Rating();
-		ratingGroup.targetSpr = boyfriend;
+		ratingGroup = new RatingGroup(boyfriend);
 		add(ratingGroup);
 		updateScore();
 
@@ -568,6 +567,7 @@ class PlayState extends MusicBeatState {
 			
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) { if (!tmr.finished) tmr.active = false; });
 			FlxTween.globalManager.forEach(function(twn:FlxTween) { if (!twn.finished) twn.active = false; });
+			CoolUtil.pauseSounds();
 	
 			openSubState((easterEgg && FlxG.random.bool(0.1)) ? new funkin.substates.GitarooPauseSubState() : new PauseSubState());
 		}
@@ -770,7 +770,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
 	
-	function cameraMovement():Void {
+	public function cameraMovement():Void {
 		if (!generatedMusic || curSectionData == null) return;
 		
 		var mustHit:Bool = curSectionData.mustHitSection;
@@ -893,7 +893,9 @@ class PlayState extends MusicBeatState {
 				rating.kill();
 		}
 		
-		ratingGroup.ratingDisplay(daRating,combo);
+		//ratingGroup.ratingDisplay(daRating,combo);
+		//ratingGroup.drawCombo(combo);
+		ratingGroup.drawComplete(daRating, combo);
 		updateScore();
 	}
 

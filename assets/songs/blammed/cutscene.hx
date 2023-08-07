@@ -18,8 +18,6 @@ function create()
 	addSpr(tunnelBG,'tunnelBG');
 
 	trainFloor = new FunkinSprite('blammed/trainFloor', [-150, 725]);
-	//trainFloor.scale.set(0.8,0.8);
-	//rainFloor.updateHitbox();
 	addSpr(trainFloor,'trainFloor');
 
 	trainFloor.visible = false;
@@ -44,12 +42,9 @@ function addBlammedTransition() {
 	PlayState.boyfriend.x += 75;
 	PlayState.dad.x -= 50;
 	
-	getSpr('overlayTrain').visible = false;
-	getSpr('overlayTrainBG').visible = false;
-
-	getSpr('phillyStreet').visible = false;
-	getSpr('phillyTrain').visible = false;
-	getSpr('streetBehind').visible = false;
+	for (i in ['overlayTrain', 'overlayTrainBG', 'phillyStreet', 'phillyTrain', 'streetBehind']) {
+		getSpr(i).visible = false;
+	}
 
 	trainFloor.visible = true;
 	tunnelBG.visible = true;
@@ -57,6 +52,7 @@ function addBlammedTransition() {
 	PlayState.camZooming = getPref('camera-zoom');
 	PlayState.defaultCamZoom = 1;
 	PlayState.camGame.zoom = PlayState.defaultCamZoom;
+	PlayState.cameraMovement();
 }
 
 function startBlammedTransition() {

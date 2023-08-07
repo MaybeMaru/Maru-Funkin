@@ -37,7 +37,7 @@ import funkin.graphics.note.NoteSplash;
 import funkin.graphics.note.NoteStrum;
 
 //PlayState Others
-import funkin.graphics.Rating;
+import funkin.graphics.RatingGroup;
 import funkin.graphics.dialogue.DialogueBoxBase;
 import funkin.graphics.dialogue.PixelDialogueBox;
 import funkin.graphics.dialogue.NormalDialogueBox;

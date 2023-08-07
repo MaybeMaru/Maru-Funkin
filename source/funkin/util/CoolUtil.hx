@@ -34,13 +34,34 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	inline public static function playSound(sound:String, volume:Float = 1):Void {
+	public static var soundList:Array<FlxSound> = [];
+
+	inline public static function playSound(sound:String, volume:Float = 1, push:Bool = true):Void {
 		var leSound:FlxSound = new FlxSound().loadEmbedded(Paths.sound(sound));
 		FlxG.sound.list.add(leSound);
+		if (push && !soundList.contains(leSound))
+			soundList.push(leSound);
 
 		leSound.volume = volume;
 		leSound.pitch = FlxG.timeScale;
 		leSound.play();
+	}
+
+	public static var pausedSounds:Array<FlxSound> = [];
+
+	inline public static function pauseSounds() {
+		pausedSounds = [];
+		for (sound in soundList) {
+			if (sound.playing) pausedSounds.push(sound);
+			sound.pause();
+		}
+	}
+
+	inline public static function playSounds() {
+		for (sound in pausedSounds) {
+			sound.play();
+		}
+		pausedSounds = [];
 	}
 
 	/*

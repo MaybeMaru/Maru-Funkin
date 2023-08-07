@@ -29,6 +29,7 @@ function updatePost():Void {
         }
 
         switch (ScriptChar.animation.curAnim.name) {
+            case 'sad':                 ScriptChar.forceDance = true;
             case 'singLEFT':            ScriptChar.danced = true;
             case 'singRIGHT':           ScriptChar.danced = false;
             case 'singUP' | 'singDOWN': ScriptChar.danced = !ScriptChar.danced;

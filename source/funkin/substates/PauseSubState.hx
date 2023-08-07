@@ -75,7 +75,7 @@ class PauseSubState extends MusicBeatSubstate {
 		} else {
 			if (getKey('ACCEPT-P')) {	
 				switch (menuItems[curSelected]) {
-					case "Resume":			close();
+					case "Resume":			close(); CoolUtil.playSounds();
 					case "Restart song":	FlxG.resetState();
 					case "Options":			OptionsState.fromPlayState = true;	FlxG.switchState(new OptionsState());
 					case "Exit to menu":	FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
