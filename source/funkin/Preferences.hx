@@ -21,6 +21,8 @@ class Preferences {
         addPref('ghost-tap',      'ghost tapping',   false);
         addPref('deghost-tap',    'deghostify',      false);
         addPref('stack-rating',   'stack ratings',   false);
+        addPref('use-const-speed', 'use constant speed', false);
+        addPref('const-speed', 'constant speed', 1.0);
 
         //addPref('shit-off',      'shit mil offset',  127);
         //addPref('bad-off',       'bad  mil offset',  106);
@@ -32,8 +34,7 @@ class Preferences {
         addPref('vanilla-ui',     'vanilla ui',      false);
         addPref('flashing-light', 'flashing lights', true);
         addPref('camera-zoom',    'camera zooms',    true);
-        addPref('antialiasing',   'antialiasing',    true); #if desktop
-        addPref('auto-pause',     'auto pause',      false);#end
+        addPref('antialiasing',   'antialiasing',    true);
 
         SaveData.flushData();
         effectPrefs();

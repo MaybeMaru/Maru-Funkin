@@ -421,25 +421,23 @@ class AnimationDebug extends MusicBeatState {
 
 	function indicesToTxt(indices:Array<Int>):String {
 		var retStr:String = '';
-		for (i in indices) {
-			retStr+='$i,';
+		for (i in 0...indices.length) {
+			retStr += '${indices[i]}' + (i < indices.length - 1 ? ',' : '');
 		}
 		return retStr;
 	}
 
 	function txtToIndices(text:String):Array<Int> {
-		var retIndices:Array<Int> = [];
-		if (text.length > 0) {
-			var txtSplit = text.split(',');
-			for (i in txtSplit) {
-				i = i.trim();
-				var int = Std.parseInt(i);
-				if (int != null) {
-					retIndices.push(int);
-				}
-			}
+		if (text.length <= 0) {
+			return [];
 		}
-		return retIndices;
+        var intArray:Array<Int> = [];
+        for (str in text.split(",")) {
+            var value:Null<Int> = Std.parseInt(str);
+            if (value != null)
+                intArray.push(value);
+        }
+        return intArray;
 	}
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

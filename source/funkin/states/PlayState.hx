@@ -103,6 +103,9 @@ class PlayState extends MusicBeatState {
 	public var inBotplay:Bool = false;
 	public var inPractice:Bool = false;
 
+	// Options stuff
+	public var songSpeed:Float = 1.0;
+
 	override public function create():Void {
 		game = this;
 		inBotplay = getPref('botplay');
@@ -130,6 +133,7 @@ class PlayState extends MusicBeatState {
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
+		songSpeed = getPref('use-const-speed') ? getPref('const-speed') : SONG.speed;
 
 		#if cpp
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
@@ -485,7 +489,7 @@ class PlayState extends MusicBeatState {
 
 				// Add note
 				var newNote:Note = new Note(noteData, strumTime, 0, skin);
-				newNote.noteSpeed = SONG.speed;
+				newNote.noteSpeed = songSpeed;
 				newNote.targetSpr = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
@@ -494,7 +498,7 @@ class PlayState extends MusicBeatState {
 				// Add note sustain
 				if (sustainLength > 0) {
 					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
-					newSustain.noteSpeed = SONG.speed;
+					newSustain.noteSpeed = songSpeed;
 					newSustain.targetSpr = targetStrum;
 					newSustain.mustPress = mustPress;
 					newSustain.noteType = noteType;
@@ -597,13 +601,6 @@ class PlayState extends MusicBeatState {
 		super.closeSubState();
 	}
 
-	#if desktop
-	override public function onFocusLost():Void {
-		if (getPref('auto-pause') && !paused && !inCutscene) openPauseSubState();
-		super.onFocusLost();
-	}
-	#end
-
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
@@ -705,7 +702,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / SONG.speed) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed) {
 				var dunceNote:Note = unspawnNotes[0];
 				notes.add(dunceNote);
 				dunceNote.update(elapsed);
@@ -729,7 +726,10 @@ class PlayState extends MusicBeatState {
 							if (daNote.isSustainNote) {
 								daNote.pressed = daNote.inSustain;
 								if (daNote.pressed) goodSustainPress(daNote);
-							} else  goodNoteHit(daNote);
+							} else {
+								daNote.strumTime = Conductor.songPosition; // force sick rating (because lag)
+								goodNoteHit(daNote);
+							}
 						}
 					}
 				}
@@ -1195,6 +1195,7 @@ class PlayState extends MusicBeatState {
 			default: 					iconP1.makeIcon(newChar.icon); boyfriend = newChar;
 		}
 		loadCharPos(type);
+		cameraMovement();
 	}
 
 	public function showUI(bool:Bool):Void {

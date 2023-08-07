@@ -68,21 +68,23 @@ class OsuFormat {
         for (l in 0...map.length) {
             if (map[l].startsWith('[HitObjects]')) {
                 for (i in l...map.length-1) {
-                    var hitObject:Array<Dynamic> = [];
-                    var hitData = map[i].split(',');
-                    for (n in 0...hitData.length) {
-                        if (hitData[n].contains(':')) {
-                            hitData[n] = hitData[n].split(':')[0];
+                    if (map[i].length > 0 && map[i].contains(',')) {
+                        var hitObject:Array<Dynamic> = [];
+                        var hitData = map[i].split(',');
+                        for (n in 0...hitData.length) {
+                            if (hitData[n].contains(':')) {
+                                hitData[n] = hitData[n].split(':')[0];
+                            }
+                            hitObject.push(Std.parseInt(hitData[n]));
                         }
-                        hitObject.push(Std.parseInt(hitData[n]));
+                        var strumTime = hitObject[2];
+                        var noteData = Math.floor(hitObject[0] * mapCircleSize / 512);
+                        var susLength = (hitObject[5] > 0) ? (hitObject[5] - strumTime) : 0;
+                        var noteSec = Std.int(strumTime/(bpmMills*4));
+                        var noteSecArray = (returnMap.get(noteSec) != null) ? returnMap.get(noteSec) : [];
+                        noteSecArray.push([strumTime,noteData,susLength]);
+                        returnMap.set(noteSec, noteSecArray);
                     }
-                    var strumTime = hitObject[2];
-                    var noteData = Math.floor(hitObject[0] * mapCircleSize / 512);
-                    var susLength = (hitObject[5] > 0) ? (hitObject[5] - strumTime) : 0;
-                    var noteSec = Std.int(strumTime/(bpmMills*4));
-                    var noteSecArray = (returnMap.get(noteSec) != null) ? returnMap.get(noteSec) : [];
-                    noteSecArray.push([strumTime,noteData,susLength]);
-                    returnMap.set(noteSec, noteSecArray);
                 }
                 break;
             }

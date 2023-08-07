@@ -67,7 +67,11 @@ class PreferencesState extends MusicBeatState {
                             }
                             
                         case 'num':
-                            var mult:Int = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
+                            var mult:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
+                            switch(item.itemPref) {
+                                case 'const-speed': mult *= 0.1;
+                                default:
+                            }
                             if (leftP || rightP) {
                                 if (leftP)  item.setValue(item.prefValue-mult);
                                 if (rightP) item.setValue(item.prefValue+mult);

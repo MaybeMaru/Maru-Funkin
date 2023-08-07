@@ -97,7 +97,7 @@ function sectionHit(curSection)
 
 function update(elapsed)
 {
-	if (getSpr('overlayTrain') != null)
+	if (existsSpr('overlayTrain'))
 	{
 		getSpr('overlayTrain').x -= (225*75)*elapsed;//elapsed*Conductor.bpm;
 		getSpr('overlayTrainBG').x = getSpr('overlayTrain').x;

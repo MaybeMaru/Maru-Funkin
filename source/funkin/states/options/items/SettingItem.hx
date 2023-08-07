@@ -59,8 +59,9 @@ class SettingItem extends FlxSpriteGroup {
         //hardcoded limits
         if (settingType == 'num') {
             switch (itemPref) {
-                case 'framerate': prefValue = FlxMath.bound(prefValue, 60, 240);
-                default:          prefValue = FlxMath.bound(prefValue, 0, 999);
+                case 'framerate':   prefValue = Std.int(FlxMath.bound(prefValue, 60, 240));
+                case 'const-speed': prefValue = FlxMath.roundDecimal(FlxMath.bound(prefValue, 0.1, 10.0), 1);
+                default:            prefValue = FlxMath.bound(prefValue, 0, 999);
             }
         }
     

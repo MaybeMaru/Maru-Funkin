@@ -34,11 +34,6 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	inline public static function atlasIndices(min:Int = 1, max:Int = 1):Array<Int> { //Like in animate
-		min--;
-		return numberArray(max, min);
-	}
-
 	inline public static function playSound(sound:String, volume:Float = 1):Void {
 		var leSound:FlxSound = new FlxSound().loadEmbedded(Paths.sound(sound));
 		FlxG.sound.list.add(leSound);
@@ -112,9 +107,8 @@ class CoolUtil {
 
     public static function getNoteJudgement(noteDiff:Float):String {
         for (i in 0...judgeOffsets.length) {
-            if (checkDiff(noteDiff, judgeOffsets[i])) {
+            if (checkDiff(noteDiff, judgeOffsets[i]))
                 return returnJudgements[i];
-            }
         }
         return 'sick';
     }
