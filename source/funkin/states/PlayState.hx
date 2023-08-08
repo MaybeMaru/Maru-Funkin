@@ -196,7 +196,7 @@ class PlayState extends MusicBeatState {
 					var charName:String = charParts[charParts.length-1].split('.')[0];
 
 					if (char.curCharacter == charName) {
-						ModdingUtil.addScript(characterScripts[i], ['ScriptChar'], [char]);
+						ModdingUtil.addScript(characterScripts[i]).set('ScriptChar', char);
 						break;
 					}
 				}

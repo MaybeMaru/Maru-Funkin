@@ -1,8 +1,8 @@
-var speaker:FlxSprite;
+var speaker:FlxSpriteExt;
 
 function createPost():Void {
     ScriptChar.x += 120;
-    speaker = new FlxSprite(ScriptChar.x - 190, ScriptChar.y + 300);
+    speaker = new FlxSpriteExt(ScriptChar.x - 190, ScriptChar.y + 300);
     speaker.loadImage('characters/speakers');
     speaker.addAnim('speakers', 'speakers');
     ScriptChar.group.insert(0, speaker);

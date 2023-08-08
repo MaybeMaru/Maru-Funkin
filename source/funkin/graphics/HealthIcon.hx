@@ -1,6 +1,6 @@
 package funkin.graphics;
 
-class HealthIcon extends FlxSpriteUtil {
+class HealthIcon extends FlxSpriteExt {
 	public var sprTracker:FlxSprite;
 	public var isPlayer:Bool = false;
 	public var playIcon:Bool = false;

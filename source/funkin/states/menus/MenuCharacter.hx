@@ -1,6 +1,6 @@
 package funkin.states.menus;
 
-class MenuCharacter extends FlxSpriteUtil {
+class MenuCharacter extends FlxSpriteExt {
 	public function new(x:Float, y:Float, startChar:String = 'bf') {
 		super(x,y);
 		setupChar(startChar);

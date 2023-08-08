@@ -62,22 +62,18 @@ class ModdingUtil {
 		return list;
 	}
 
-    inline public static function addScript(path:String, global:Bool = false, ?scriptVarNames:Array<String>, ?scriptVars:Array<Dynamic>, ?tag:String):Void {
+    inline public static function addScript(path:String, global:Bool = false, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
         if (scriptCode.length > 0) {
             consoleTrace('[ADD] $path / $global', FlxColor.LIME);
             var script:FunkScript = new FunkScript(scriptCode);
             script.scriptID = path;
     
-            if (scriptVarNames != null && scriptVars != null) {
-                for (i in 0...scriptVars.length) {
-                    script.addVar(scriptVarNames[i], scriptVars[i]);
-                }
-            }
-    
             scriptsMap.set(tag == null ? path : tag, script);
             (global ? globalScripts : playStateScripts).push(script);
+            return script;
         }
+        return null;
     }
 
     inline public static function setModFolder(modName:String, activated:Bool):Void {
@@ -96,8 +92,7 @@ class ModdingUtil {
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>, global:Bool = false):Void {
         for (script in (global ? globalScripts : playStateScripts)) {
-            try             script.callback(name, args)
-            catch(e:Any)    errorTrace('${script.scriptID} / ${Std.string(e)}');
+            script.callback(name, args);
         }
     }
 

@@ -7,7 +7,7 @@ typedef LetterData = {
     ?offsetBold:Array<Float>
 }
 
-class AlphabetCharacter extends FlxSpriteUtil {
+class AlphabetCharacter extends FlxSpriteExt {
     public var letter:String = "A";
     public var lowerLetter:String = "a";
     public var prefix:String = "";

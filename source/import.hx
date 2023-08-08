@@ -50,7 +50,7 @@ import funkin.graphics.alphabet.MenuAlphabet;
 import funkin.graphics.alphabet.TypedAlphabet;
 
 //Main graphics
-import funkin.graphics.FlxSpriteUtil;
+import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;
 import funkin.graphics.Character;
 import funkin.graphics.FunkinText;

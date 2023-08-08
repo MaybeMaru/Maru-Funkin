@@ -85,9 +85,9 @@
 	<haxedev set='webgl' />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="hscript" />
-	<define name="hscriptPos" />
 	<haxelib name="discord_rpc" if="cpp"/>
+	<haxelib name="SScript"/>
+	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

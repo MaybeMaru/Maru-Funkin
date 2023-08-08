@@ -1,15 +1,15 @@
-var speaker:FlxSprite;
-var parts:Array<FlxSprite> = [];
+var speaker:FlxSpriteExt;
+var parts:Array<FlxSpriteExt> = [];
 
 function createPost():Void {
     ScriptChar.x += 120;
-    speaker = new FlxSprite(ScriptChar.x - 190, ScriptChar.y + 305.5);
+    speaker = new FlxSpriteExt(ScriptChar.x - 190, ScriptChar.y + 305.5);
     speaker.loadImage('characters/speakers');
     speaker.addAnim('speakers', 'speakers');
     ScriptChar.group.insert(0, speaker);
 
     for (i in 0...2) {
-        var body:FlxSprite = new FlxSprite(speaker.x, speaker.y - 85).loadImage('characters/speakers/tankmanBodyPart');
+        var body:FlxSpriteExt = new FlxSpriteExt(speaker.x, speaker.y - 85).loadImage('characters/speakers/tankmanBodyPart');
         body.addAnim('idle', 'tankmanBody');
         body.flipX = i == 0;
         body.x += (i == 0 ? -100 : 510);
@@ -17,7 +17,7 @@ function createPost():Void {
         parts.push(body);
 
         var headStr = 'tankmanTop'+ (i + 1);
-        var head:FlxSprite = new FlxSprite(speaker.x, speaker.y - 215).loadImage('characters/speakers/' + headStr);
+        var head:FlxSpriteExt = new FlxSpriteExt(speaker.x, speaker.y - 215).loadImage('characters/speakers/' + headStr);
         head.x += (i != 0 ? -120 : 445);
         head.addAnim('idle', headStr);
         head.flipX = i != 0;

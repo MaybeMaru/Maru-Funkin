@@ -3,7 +3,7 @@ package funkin.graphics;
 /*
     Just FlxSprite but with helper functions
 */
-class FlxSpriteUtil extends FlxSprite {
+class FlxSpriteExt extends FlxSprite {
 
 	public static var DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
@@ -41,12 +41,12 @@ class FlxSpriteUtil extends FlxSprite {
 		}
 	}
 
-	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteUtil {
+	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteExt {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
 		return this;
 	}
 
-	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):FlxSpriteUtil {
+	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):FlxSpriteExt {
 		_packer = Paths.getPackerType(path);
 		switch (_packer) {
 			default:			loadGraphic(Paths.image(path, library, false, global, gpu));

@@ -1,5 +1,5 @@
 var grpLimoDancers:Array<FunkinSprite>;
-var fastCar:FlxSprite = null;
+var fastCar:FlxSpriteExt = null;
 
 var fastCarCanDrive:Bool = true;
 
@@ -9,30 +9,34 @@ function create():Void {
 	var skyBG:FunkinSprite = new FunkinSprite('limo/limoSunset', [-120,-50],[0.1,0.1]);
 	addSpr(skyBG, 'skyBG');
 
-	var bgLimo:FunkinSprite = new FunkinSprite('limo/bgLimo',[-200, 480], [0.4, 0.4], ['background limo pink'], true);
+	var bgLimo:FunkinSprite = new FunkinSprite('limo/bgLimo',[-200, 480], [0.4, 0.4]);
+	bgLimo.addAnim('idle', 'background limo pink', 24, true);
+	bgLimo.playAnim('idle');
 	addSpr(bgLimo, 'bgLimo');
 
 	grpLimoDancers = [];
 	for (i in 0...4) {
-		dancer = new FunkinSprite('limo/limoDancer', [(370 * i) + 130, bgLimo.y - 400], [0.4, 0.4], ['bg dancer sketch PINK']);
+		var dancer:FunkinSprite = new FunkinSprite('limo/limoDancer', [(370 * i) + 130, bgLimo.y - 400], [0.4, 0.4]);
 		dancer.addAnim('danceLeft', 'bg dancer sketch PINK', 24, false, CoolUtil.numberArray(14));
 		dancer.addAnim('danceRight', 'bg dancer sketch PINK', 24, false, CoolUtil.numberArray(30,15));
 		addSpr(dancer, 'limoDancer'+i);
 		grpLimoDancers.push(dancer);
 	}
-
-	var overlayShit:FunkinSprite = new FunkinSprite('limo/limoOverlay', [-500,-600]);
-	overlayShit.alpha = 0.15;
-	overlayShit.blend = getBlendMode('add');
-	addSpr(overlayShit, 'overlay', true);
-
-	var limo:FunkinSprite = new FunkinSprite('limo/limoDrive', [-120, 570], [1,1], ['Limo stage'], true);
-	fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol'));
+	
+	var limo:FunkinSprite = new FunkinSprite('limo/limoDrive', [-120, 570]);
+	limo.addAnim('idle', 'Limo stage', 24, true);
+	limo.playAnim('idle');
+	fastCar = new FlxSpriteExt(-300, 160).loadImage('limo/fastCarLol');
 
 	//Layering
 	PlayState.add(PlayState.bgSpr);
 	PlayState.add(PlayState.gfGroup);
 	PlayState.add(limo);
+
+	var overlayShit:FunkinSprite = new FunkinSprite('limo/limoOverlay', [-500,-600]);
+	overlayShit.alpha = 0.15;
+	overlayShit.blend = getBlendMode('add');
+	addSpr(overlayShit, 'overlay', true);
 }
 
 function createPost():Void {

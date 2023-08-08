@@ -1,6 +1,6 @@
 package funkin.graphics.note;
 
-class NoteStrum extends FlxSpriteUtil {
+class NoteStrum extends FlxSpriteExt {
     public var noteData:Int = 0;
 	public var swagWidth:Float = 100;
 	public var swagHeight:Float = 100;

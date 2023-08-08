@@ -3,7 +3,7 @@ package funkin.states.options;
 class LatencyState extends MusicBeatState
 {
 	var offsetText:Alphabet;
-	var hitSpr:FlxSpriteUtil;
+	var hitSpr:FlxSpriteExt;
 	var offset:Float = 0;
 
 	override function create()
@@ -15,7 +15,7 @@ class LatencyState extends MusicBeatState
 		bg.color = 0xff2b2b2b;
 		add(bg);
 
-		hitSpr = new FlxSpriteUtil(-35, FlxG.height / 2).loadImage('characters/speakers');
+		hitSpr = new FlxSpriteExt(-35, FlxG.height / 2).loadImage('characters/speakers');
 		hitSpr.setScale(0.8);
 		hitSpr.addAnim('idle', 'speakers');
 		hitSpr.playAnim('idle');

@@ -70,7 +70,7 @@ class NoteUtil {
 	}
 }
 
-class Note extends FlxSpriteUtil {
+class Note extends FlxSpriteExt {
     public var noteData:Int = 0;
     public var strumData:Int = 0;
     public var strumTime:Float = 0;
@@ -87,7 +87,7 @@ class Note extends FlxSpriteUtil {
     // Used for stamp() !!!
     var susPiece:FlxSprite;
     var susEnd:FlxSprite;
-    var refSprite:FlxSpriteUtil;
+    var refSprite:FlxSpriteExt;
 
     public function createGraphic(init:Bool = true) {
         var dir = CoolUtil.directionArray[noteData];
@@ -306,7 +306,7 @@ class Note extends FlxSpriteUtil {
                 skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
             }
 
-            refSprite = new FlxSpriteUtil();
+            refSprite = new FlxSpriteExt();
             refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
             refSprite.scale.set(skinJson.scale,skinJson.scale);
             refSprite.updateHitbox();

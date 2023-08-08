@@ -10,7 +10,7 @@ typedef CharacterJson = {
 	var isGF:Bool;
 } & SpriteJson;
 
-class Character extends FlxSpriteUtil {
+class Character extends FlxSpriteExt {
 	public static var DEFAULT_CHARACTER:CharacterJson = {
 		anims: [],
 		imagePath: "week1/BOYFRIEND",
@@ -79,7 +79,7 @@ class Character extends FlxSpriteUtil {
 		var imagePath:String = (!inputJson.imagePath.startsWith('characters/')) ? 'characters/${inputJson.imagePath}' : inputJson.imagePath;
 		loadImage(imagePath);
 		for (anim in inputJson.anims) {
-			anim = JsonUtil.checkJsonDefaults(FlxSpriteUtil.DEFAULT_ANIM, anim);
+			anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 		}
 	}

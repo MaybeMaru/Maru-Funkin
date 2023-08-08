@@ -108,7 +108,7 @@ class NumRating extends RemoveRating {
     }
 }
 
-class RemoveRating extends FlxSpriteUtil {
+class RemoveRating extends FlxSpriteExt {
     public var lifeTime:Float = 1;
     public var alphaSpeed:Float = 1;
     public function new() {

@@ -1,9 +1,9 @@
-var speaker:FlxSprite;
-var lights:FlxSprite;
+var speaker:FlxSpriteExt;
+var lights:FlxSpriteExt;
 
 function createPost():Void {
     ScriptChar.x += 120;
-    speaker = new FlxSprite(ScriptChar.x - 190, ScriptChar.y + 300);
+    speaker = new FlxSpriteExt(ScriptChar.x - 190, ScriptChar.y + 300);
     speaker.loadImage('characters/speakers');
     speaker.addAnim('speakers', 'speakers');
 
@@ -13,7 +13,7 @@ function createPost():Void {
         speaker.x += 140;
     }
 
-    lights = new FlxSprite(speaker.x - 80, speaker.y - 40);
+    lights = new FlxSpriteExt(speaker.x - 80, speaker.y - 40);
     lights.loadImage('characters/speakers/speakerLights');
     lights.addAnim('glow', 'glow');
 

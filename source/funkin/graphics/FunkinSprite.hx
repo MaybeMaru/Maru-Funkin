@@ -1,6 +1,6 @@
 package funkin.graphics;
 
-class FunkinSprite extends FlxSpriteUtil {
+class FunkinSprite extends FlxSpriteExt {
     public var jsonData:SpriteJson;
     public var animated:Bool = true;
     public var danced:Bool = false;
