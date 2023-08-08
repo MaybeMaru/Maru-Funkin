@@ -1,3 +1,4 @@
+#if !macro
 //Main shit
 import funkin.Controls;
 import funkin.Preferences;
@@ -104,5 +105,7 @@ import flixel.input.keyboard.FlxKey;
 
 import haxe.Json;
 import flixel.graphics.frames.FlxFramesCollection;
+import tea.SScript;
 
 using StringTools;
+#end

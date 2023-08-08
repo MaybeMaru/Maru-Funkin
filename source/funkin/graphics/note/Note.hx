@@ -68,6 +68,24 @@ class NoteUtil {
 		swagWidth = leWidth / strumArray.length;
 		swagHeight = leHeight / strumArray.length;
 	}
+
+    public static function clearSustainCache() {
+        @:privateAccess {
+            if (FlxG.bitmap._cache == null) {
+                FlxG.bitmap._cache = new Map();
+                return;
+            }
+            for (key in FlxG.bitmap._cache.keys()) {
+                if (key.startsWith('sus')) {
+                    var obj = FlxG.bitmap.get(key);
+                    if (obj != null && !obj.persist && obj.useCount <= 0) {
+                        FlxG.bitmap.removeKey(key);
+                        obj.destroy();
+                    }
+                }
+            }
+        }
+    }
 }
 
 class Note extends FlxSpriteExt {

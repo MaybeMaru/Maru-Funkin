@@ -1,5 +1,4 @@
 package funkin.util.modding;
-import tea.SScript;
 
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;

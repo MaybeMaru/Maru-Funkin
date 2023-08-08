@@ -82,6 +82,7 @@ class PlayState extends MusicBeatState {
 	var songScore:Int = 0;
 	var songMisses:Int = 0;
 	var scoreTxt:FunkinText;
+	var watermark:FunkinSprite;
 
 	public static var campaignScore:Int = 0;
 
@@ -107,7 +108,7 @@ class PlayState extends MusicBeatState {
 	public var songSpeed:Float = 1.0;
 
 	override public function create():Void {
-		FlxG.bitmap.clearCache(); // reset sustain graphics
+		NoteUtil.clearSustainCache(); // update sustain graphics
 
 		game = this;
 		inBotplay = getPref('botplay');
@@ -319,16 +320,16 @@ class PlayState extends MusicBeatState {
 		add(ratingGroup);
 		updateScore();
 
-		//	Gameplay
-		grpNoteSplashes.cameras = [camHUD];
-		strumLineNotes.cameras =  [camHUD];
-		notes.cameras = 		  [camHUD];
+		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, FlxG.height], [0,0]);
+		for (i in ['botplay', 'practice']) watermark.addAnim(i, i.toUpperCase(), 24, true);
+		if (watermark.visible = (inBotplay || inPractice)) watermark.playAnim(inBotplay ? 'botplay' : 'practice');
+		watermark.setScale(SkinUtil.curSkinData.scale * 0.75);
+		watermark.x -= watermark.width * 1.2; watermark.y -= watermark.height * 1.2;
+		watermark.alpha = 0.8;
+		add(watermark);
 
-		//	Health/Score
-		healthBar.cameras = 	  [camHUD];
-		healthBarBG.cameras = 	  [camHUD];
-		iconGroup.cameras = 	  [camHUD];
-		scoreTxt.cameras = 		  [camHUD];
+		for (i in [grpNoteSplashes, strumLineNotes, notes, healthBar, healthBarBG, iconGroup, scoreTxt, watermark])
+			i.cameras = [camHUD];
 
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
@@ -895,14 +896,11 @@ class PlayState extends MusicBeatState {
 				rating.kill();
 		}
 		
-		//ratingGroup.ratingDisplay(daRating,combo);
-		//ratingGroup.drawCombo(combo);
 		ratingGroup.drawComplete(daRating, combo);
 		updateScore();
 	}
 
 	private function keyShit():Void {
-		//Key array crap
 		holdingArray = [false,false,false,false]; controlArray = [false,false,false,false]; releaseArray = [true,true,true,true];
 		if (!inBotplay) {
 			holdingArray = [getKey('NOTE_LEFT'), 	getKey('NOTE_DOWN'),	getKey('NOTE_UP'),   getKey('NOTE_RIGHT')];
@@ -916,8 +914,7 @@ class PlayState extends MusicBeatState {
 			var removeList:Array<Note> = [];
 
 			notes.forEachAlive(function(daNote:Note) {
-				// Handle sustain notes
-				if (daNote.isSustainNote) {
+				if (daNote.isSustainNote) { // Handle sustain notes
 					daNote.pressed = holdingArray[daNote.noteData] && daNote.inSustain && daNote.mustPress;
 					if (daNote.pressed)
 						goodSustainPress(daNote);
@@ -1153,6 +1150,7 @@ class PlayState extends MusicBeatState {
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');
+		NoteUtil.clearSustainCache();
 		super.destroy();
 	}
 

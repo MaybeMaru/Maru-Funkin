@@ -86,7 +86,7 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="discord_rpc" if="cpp"/>
-	<haxelib name="SScript"/>
+	<haxelib name="SScript" unless="macro"/>
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
