@@ -43,6 +43,7 @@ class PlayState extends MusicBeatState {
 	private var releaseArray:Array<Bool> = [false,false,false,false];
 	
 	public var skipStrumIntro:Bool = false;
+	public var skipCountdown:Bool = false;
 	private var strumLineNotes:FlxTypedGroup<NoteStrum>;
 	private var playerStrums:FlxTypedGroup<NoteStrum>;
 	private var opponentStrums:FlxTypedGroup<NoteStrum>;
@@ -103,6 +104,7 @@ class PlayState extends MusicBeatState {
 	public var ghostTapEnabled:Bool = false;
 	public var inBotplay:Bool = false;
 	public var inPractice:Bool = false;
+	private var validScore:Bool = true;
 
 	// Options stuff
 	public var songSpeed:Float = 1.0;
@@ -113,6 +115,7 @@ class PlayState extends MusicBeatState {
 		game = this;
 		inBotplay = getPref('botplay');
 		inPractice = getPref('practice');
+		validScore = !(inBotplay || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');
 		SkinUtil.initSkinData();
 
@@ -322,8 +325,8 @@ class PlayState extends MusicBeatState {
 
 		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, FlxG.height], [0,0]);
 		for (i in ['botplay', 'practice']) watermark.addAnim(i, i.toUpperCase(), 24, true);
-		if (watermark.visible = (inBotplay || inPractice)) watermark.playAnim(inBotplay ? 'botplay' : 'practice');
-		watermark.setScale(SkinUtil.curSkinData.scale * 0.75);
+		if (watermark.visible = !validScore) watermark.playAnim(inBotplay ? 'botplay' : 'practice');
+		watermark.setScale(SkinUtil.curSkinData.scale * 0.7);
 		watermark.x -= watermark.width * 1.2; watermark.y -= watermark.height * 1.2;
 		watermark.alpha = 0.8;
 		add(watermark);
@@ -400,13 +403,20 @@ class PlayState extends MusicBeatState {
 
 		Conductor.songPosition = -Conductor.crochet * 5;
 		Conductor.setPitch(Conductor.songPitch);
+		curSectionData = Song.checkSection(SONG.notes[0]);
+		cameraMovement();
+
+		if (skipCountdown) {
+			Conductor.songPosition = 0;
+			startSong();
+			sectionHit();
+			return;
+		}
+
 		ModdingUtil.addCall('startCountdown');
 
 		var swagCounter:Int = 0;
 		var introSkin:String = SkinUtil.curSkin;
-
-		curSectionData = Song.checkSection(SONG.notes[0]);
-		cameraMovement();
 
 		startTimer = new FlxTimer().start(Conductor.crochet * 0.001, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
@@ -596,9 +606,9 @@ class PlayState extends MusicBeatState {
 			}
 
 			#if cpp
-			var presenceDetails = '${SONG.song} (${curDifficulty})';
-			var presenceTime = startTimer.finished ? songLength - Conductor.songPosition : null;
-			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, startTimer.finished, presenceTime);
+			var presenceDetails = '${SONG.song} ($curDifficulty)';
+			var presenceTime = songLength - Conductor.songPosition;
+			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
 			#end
 		}
 		super.closeSubState();
@@ -686,7 +696,7 @@ class PlayState extends MusicBeatState {
 		if (health > 2) health = 2;
 		else if (health <= 0) {
 			health = 0;
-			if (!(inBotplay || inPractice)) {
+			if (validScore) {
 				boyfriend.stunned = true;
 
 				persistentUpdate = false;
@@ -798,15 +808,11 @@ class PlayState extends MusicBeatState {
 		inst.volume = 0;
 		vocals.volume = 0;
 		ModdingUtil.addCall('endSong');
-		if (!(inBotplay || inPractice))
-			Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
+		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
 
 		if (inChartEditor) {
 			FlxG.switchState(new ChartingState());
-
-			#if cpp
-			DiscordClient.changePresence("Chart Editor", null, null, true);
-			#end
+			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		}
 		else {
 			if (isStoryMode) {
@@ -825,12 +831,11 @@ class PlayState extends MusicBeatState {
 	}
 
 	function endWeek() {
-		if (!(inBotplay || inPractice))
+		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
-
-		var weekData = WeekSetup.weekDataMap.get(storyWeek);
-		if (WeekSetup.weekDataMap.exists(weekData.unlockWeek)) {
-			Highscore.setWeekUnlock(weekData.unlockWeek, true);
+			var weekData = WeekSetup.weekDataMap.get(storyWeek);
+			if (WeekSetup.weekDataMap.exists(weekData.unlockWeek))
+				Highscore.setWeekUnlock(weekData.unlockWeek, true);
 		}
 
 		ModdingUtil.addCall('endWeek');

@@ -268,7 +268,7 @@ class CustomState extends MusicBeatState {
 	private var _scriptKey:String;
 
 	var super_map:Map<String, SuperMethod> = [];
-	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit'];
+	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit', 'destroy'];
 
 	public function initScript(scriptCode:String, stateTag:String) {
 		_scriptKey = stateTag;
@@ -277,6 +277,7 @@ class CustomState extends MusicBeatState {
 		script.set('Parent', this);
 		script.set('add', function(object:Dynamic) add(object));
 		script.set('insert', function(position:Int, object:Dynamic) insert(position, object));
+		script.set('remove', function(object:Dynamic) remove(object));
 
 		// This method sucks, but it works, sooooooo yeah... sorry
 		for (i in super_methods) {
@@ -313,4 +314,5 @@ class CustomState extends MusicBeatState {
 	override public function stepHit() 		if (superCallback('stepHit')) 		super.stepHit();
 	override public function beatHit() 		if (superCallback('beatHit')) 		super.beatHit();
 	override public function sectionHit() 	if (superCallback('sectionHit')) 	super.sectionHit();
+	override public function destroy() 		if (superCallback('destroy')) 		super.destroy();
 }
