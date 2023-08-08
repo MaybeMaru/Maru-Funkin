@@ -259,11 +259,16 @@ class FunkScript extends SScript {
 	}
 }
 
+typedef SuperMethod = {
+	var callback:HscriptFunctionCallback;
+	var ?value:Dynamic;
+}
+
 class CustomState extends MusicBeatState {
 	public var script:FunkScript;
 	private var _scriptKey:String;
 
-	var super_map:Map<String, HscriptFunctionCallback> = [];
+	var super_map:Map<String, SuperMethod> = [];
 	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit'];
 
 	public function initScript(scriptCode:String, stateTag:String) {
@@ -276,31 +281,34 @@ class CustomState extends MusicBeatState {
 
 		// This method sucks, but it works, sooooooo yeah... sorry
 		for (i in super_methods) {
-			super_map.set(i, STOP_FUNCTION);
-			script.set('super_' + i, function() {
-				super_map.set(i, CONTINUE_FUNCTION);
+			script.set('super_' + i, function(?value:Dynamic) {
+				super_map.set(i, {
+					callback: CONTINUE_FUNCTION,
+					value: value,
+				});
 			});
 		}
 		return this;
 	}
 
 	function superCallback(method:String, ?args:Dynamic) {
-		super_map.set(method, STOP_FUNCTION);
+		super_map.set(method, {
+			callback: STOP_FUNCTION,
+			value: null,
+		});
 		script.callback(method, args);
-		return super_map.get(method) == CONTINUE_FUNCTION;
+		return super_map.get(method).callback == CONTINUE_FUNCTION;
 	}
 
     override public function create() {
 		ModdingUtil.consoleTrace('[ADD] $_scriptKey / Custom State', FlxColor.LIME);
 		if (superCallback('create')) super.create();
-		script.callback('createPost');
     }
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) FlxG.switchState(new StoryMenuState()); // emergency exit
 		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
-		if (superCallback('update', [elapsed])) super.update(elapsed);
-		script.callback('updatePost', [elapsed]);
+		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }
 
 	override public function stepHit() 		if (superCallback('stepHit')) 		super.stepHit();

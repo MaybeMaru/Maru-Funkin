@@ -107,6 +107,8 @@ class PlayState extends MusicBeatState {
 	public var songSpeed:Float = 1.0;
 
 	override public function create():Void {
+		FlxG.bitmap.clearCache(); // reset sustain graphics
+
 		game = this;
 		inBotplay = getPref('botplay');
 		inPractice = getPref('practice');
