@@ -24,8 +24,11 @@ class WeekSetup {
         storyBf: "bf",
         storyDad: "dad",
         storyGf: "gf",
+        
         startUnlocked: true,
         unlockWeek: "",
+        hideStory: false,
+        hideFreeplay: false,
 	}
 
     inline public static function getWeekList():Array<WeekJson> {

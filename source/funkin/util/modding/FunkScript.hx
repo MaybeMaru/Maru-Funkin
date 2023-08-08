@@ -241,5 +241,69 @@ class FunkScript extends SScript {
 		set('setShaderBool', function (shader:String, prop:String, value:Bool) {
 			Shader.setBool(shader, prop, value);
 		});
+
+		set('switchCustomState', function (key:String) {
+			switchCustomState(key);
+		});
 	}
+
+	public static function switchCustomState(key:String) {
+		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
+		if (scriptCode.length <= 0) {
+			ModdingUtil.errorTrace('Custom state script not found: $key');
+			return;
+		}
+
+		var state = new CustomState().initScript(scriptCode, key);
+		FlxG.switchState(state);
+	}
+}
+
+class CustomState extends MusicBeatState {
+	public var script:FunkScript;
+	private var _scriptKey:String;
+
+	var super_map:Map<String, HscriptFunctionCallback> = [];
+	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit'];
+
+	public function initScript(scriptCode:String, stateTag:String) {
+		_scriptKey = stateTag;
+		script = new FunkScript(scriptCode);
+		script.scriptID = '_custom_state_$stateTag';
+		script.set('Parent', this);
+		script.set('add', function(object:Dynamic) add(object));
+		script.set('insert', function(position:Int, object:Dynamic) insert(position, object));
+
+		// This method sucks, but it works, sooooooo yeah... sorry
+		for (i in super_methods) {
+			super_map.set(i, STOP_FUNCTION);
+			script.set('super_' + i, function() {
+				super_map.set(i, CONTINUE_FUNCTION);
+			});
+		}
+		return this;
+	}
+
+	function superCallback(method:String, ?args:Dynamic) {
+		super_map.set(method, STOP_FUNCTION);
+		script.callback(method, args);
+		return super_map.get(method) == CONTINUE_FUNCTION;
+	}
+
+    override public function create() {
+		ModdingUtil.consoleTrace('[ADD] $_scriptKey / Custom State', FlxColor.LIME);
+		if (superCallback('create')) super.create();
+		script.callback('createPost');
+    }
+    
+    override public function update(elapsed:Float) {
+		if (FlxG.keys.justPressed.F4) FlxG.switchState(new StoryMenuState()); // emergency exit
+		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
+		if (superCallback('update', [elapsed])) super.update(elapsed);
+		script.callback('updatePost', [elapsed]);
+    }
+
+	override public function stepHit() 		if (superCallback('stepHit')) 		super.stepHit();
+	override public function beatHit() 		if (superCallback('beatHit')) 		super.beatHit();
+	override public function sectionHit() 	if (superCallback('sectionHit')) 	super.sectionHit();
 }

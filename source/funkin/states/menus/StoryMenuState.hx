@@ -61,10 +61,15 @@ class StoryMenuState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		var weekID:Int = 0;
 		for (i in 0...WeekSetup.weekList.length) {
-			var weekThing:MenuItem = new MenuItem(i, WeekSetup.weekList[i].weekImage);
-			weekThing.locked = !Highscore.getWeekUnlock(WeekSetup.weekNameList[i]);
-			grpWeekText.add(weekThing);
+			var weekData = WeekSetup.weekList[i];
+			if (!weekData.hideStory) {
+				var weekThing:MenuItem = new MenuItem(weekID, weekData.weekImage);
+				weekThing.locked = !Highscore.getWeekUnlock(WeekSetup.weekNameList[i]);
+				grpWeekText.add(weekThing);
+				weekID++;
+			}
 		}
 
 		for (i in 0...3) {

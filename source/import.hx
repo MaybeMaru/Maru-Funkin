@@ -67,8 +67,6 @@ import funkin.substates.GameOverSubstate;
 import funkin.substates.PauseSubState;
 
 //States shorcuts
-import funkin.states.EmptyState;
-
 import funkin.states.menus.FreeplayState;
 import funkin.states.menus.MainMenuState;
 import funkin.states.menus.StoryMenuState;

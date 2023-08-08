@@ -36,7 +36,7 @@ class FreeplayState extends MusicBeatState {
 		for (i in 0...WeekSetup.getWeekList().length) {
 			var week:WeekJson = WeekSetup.weekList[i];
 			var weekName:String = WeekSetup.weekNameList[i];
-			if (Highscore.getWeekUnlock(weekName)) {
+			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay) {
 				addWeek(week.songList.songs, week.songList.songIcon, weekName);
 				coolColors.set(weekName, week.weekColor);
 			}

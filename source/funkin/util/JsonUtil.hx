@@ -65,6 +65,8 @@ typedef WeekJson = {
 
 	var startUnlocked:Bool;
 	var unlockWeek:String;
+	var hideStory:Bool;
+	var hideFreeplay:Bool;
 }
 
 class JsonUtil {

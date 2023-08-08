@@ -9,7 +9,7 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
 
     public function new():Void {
         super();
-        bgThing = new FlxSprite().makeGraphic(Std.int(FlxG.width/2.25), FlxG.height, 0xff000000);
+        bgThing = new FlxSprite().makeGraphic(Std.int(FlxG.width/2.25), FlxG.height, 0xff0d0d0d);
         cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
         scrollFactor.set();
         bgThing.alpha = 0.8;
