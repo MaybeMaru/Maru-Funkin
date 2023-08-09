@@ -1,8 +1,10 @@
 package funkin.states.options;
 
+import flixel.input.gamepad.FlxGamepadInputID;
 import funkin.states.options.items.ControlItem;
 import funkin.states.options.items.InputFormatter;
 import flixel.input.gamepad.FlxGamepad;
+import funkin.substates.PromptSubstate;
 
 class ControlsState extends MusicBeatState {
 	var controlItems:FlxTypedGroup<ControlItem>;
@@ -117,9 +119,16 @@ class ControlsState extends MusicBeatState {
 		}
 
 		if (getKey('ACCEPT-P')) {
-			funkin.states.options.PromptSubstate.keyToChange = controlList[curSelected];
-			funkin.states.options.PromptSubstate.keyBindIndex = curBind;
-			openSubState(new funkin.states.options.PromptSubstate());
+			openSubState(new PromptSubstate('Press any key to rebind\n\n\n\nEscape to cancel', function () {
+				var keyCode:Int = Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
+				var pressedKey:String = Controls.inGamepad() ? FlxGamepadInputID.toStringMap.get(keyCode) : FlxKey.toStringMap.get(keyCode);
+				if (pressedKey != 'ESCAPE') {
+					Controls.setBinding(controlList[curSelected], pressedKey, curBind);
+					CoolUtil.playSound('confirmMenu');
+				}
+			}, function ():Bool {
+				return Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() != FlxGamepadInputID.NONE : FlxG.keys.firstJustPressed() != FlxKey.NONE;
+			}, 1));
 		}
 	}
 

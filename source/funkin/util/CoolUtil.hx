@@ -119,6 +119,10 @@ class CoolUtil {
         return FlxColor.fromRGB(rgb[1],rgb[2],rgb[3],rgb[0]);
     }
 
+	inline public static function getTopCam():FlxCamera {
+		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
+	}
+
 	/*
      *	RATING UTIL
     */

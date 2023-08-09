@@ -13,6 +13,7 @@ import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 import funkin.states.editors.chart.ChartPreview;
 import funkin.substates.CharSelectSubstate;
+import funkin.substates.PromptSubstate;
 import flixel.addons.display.FlxGridOverlay;
 
 import openfl.events.Event;
@@ -994,12 +995,14 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function clearSong():Void {
-		for (i in 0..._song.notes.length) {
-			_song.notes[i].sectionNotes = [];
-		}
-		stopSong();
-		changeSection();
-		updateGrid();
+		openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+			for (i in 0..._song.notes.length) {
+				_song.notes[i].sectionNotes = [];
+			}
+			stopSong();
+			changeSection();
+			updateGrid();
+		}));
 	}
 
 	private function addNote():Void {

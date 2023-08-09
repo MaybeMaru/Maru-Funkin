@@ -717,6 +717,7 @@ class PlayState extends MusicBeatState {
 		if (unspawnNotes[0] != null) {
 			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed) {
 				var dunceNote:Note = unspawnNotes[0];
+				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);
 				dunceNote.update(elapsed);
 				notes.sort(function (order:Int, note1:Note, note2:Note):Int {

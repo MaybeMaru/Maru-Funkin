@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import funkin.substates.PromptSubstate;
+
 import flixel.addons.display.FlxBackdrop;
 import funkin.substates.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
@@ -532,10 +534,13 @@ class AnimationDebug extends MusicBeatState {
 
 	override function update(elapsed:Float):Void {
 		if (!checkFocus()) {
-			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
 			if (FlxG.keys.justPressed.ENTER){
-				FlxG.switchState(new PlayState());
+				openSubState(new PromptSubstate('Are you sure you want to exit?\nUnsaved characters\nwont be recovered\n\n\nPress back to cancel', function () {
+					FlxG.switchState(new PlayState());
+				}));
 			}
+
+			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
 	
 				//	MOVE CAMERA
 			camFollow.velocity.y = (FlxG.keys.pressed.I || FlxG.keys.pressed.K) ? 90 * multiplier : 0;
