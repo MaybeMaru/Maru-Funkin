@@ -143,12 +143,12 @@ function updatePost() {
 
 	if (killin && killCount >= 4 && !murdered) {
 		murdered = true;
-		var _time = Conductor.crochet * 0.001 * 2;
+		var _time = Conductor.crochetMills * 2;
 		var _offPos = FlxG.width * 1.5;
 
 		FlxTween.tween(bgLimo, {x: _offPos - 200}, _time * 0.5, {
 			onComplete: function(twn:FlxTween) {
-				new FlxTimer().start( Conductor.crochet * 0.001 * 4, function(tmr) {
+				new FlxTimer().start( Conductor.crochetMills * 4, function(tmr) {
 					FlxTween.tween(bgLimo, {x: -200}, _time, {ease: FlxEase.backOut, // go back limo
 						onComplete: function(twn:FlxTween) {
 							canKill = true;
@@ -205,7 +205,7 @@ function dancerDeath(dancer):Void {
 			_arr.push(part);
 		}
 
-		new FlxTimer().start(Conductor.crochet * 0.001 * 4, function(tmr) {
+		new FlxTimer().start(Conductor.crochetMills * 4, function(tmr) {
 			for (i in _arr)
 				i.kill();
 		});

@@ -416,7 +416,7 @@ class PlayState extends MusicBeatState {
 		var swagCounter:Int = 0;
 		var introSkin:String = SkinUtil.curSkin;
 
-		startTimer = new FlxTimer().start(Conductor.crochet * 0.001, function(tmr:FlxTimer) {
+		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
 			dad.dance();
 			gf.dance();
@@ -433,7 +433,7 @@ class PlayState extends MusicBeatState {
 
 				countdownSpr.acceleration.y = SONG.bpm*60;
 				countdownSpr.velocity.y -= SONG.bpm*10;
-				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochet / 1000, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
+				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
 			}
 
 			CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
@@ -983,7 +983,7 @@ class PlayState extends MusicBeatState {
 				}
 			}
 
-			var overSinging:Bool = (boyfriend.holdTimer > (Conductor.stepCrochet*Conductor.STEPS_LENGTH*0.001)
+			var overSinging:Bool = (boyfriend.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
 			&& boyfriend.animation.curAnim.name.startsWith('sing')
 			&& !boyfriend.animation.curAnim.name.endsWith('miss'));
 

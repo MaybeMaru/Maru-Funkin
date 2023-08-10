@@ -88,7 +88,7 @@ function sectionHit(curSection):Void {
 }
 
 function update(elapsed):Void {
-	var alphaLight:Float = (Conductor.crochet / 1000) * elapsed;
+	var alphaLight:Float = Conductor.crochetMills * elapsed;
 	phillyCityLights.alpha -= alphaLight * 2;
 	phillyCityLightsBlur.alpha -= alphaLight * 2.5;
 

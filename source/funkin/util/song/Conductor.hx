@@ -14,9 +14,13 @@ class Conductor {
 	inline public static var STEPS_SECTION_LENGTH:Int = STEPS_LENGTH * BEATS_LENGTH;
 
 	public static var bpm(default, set):Float = 100;
-	public static var crochet:Float = ((60 / bpm) * 1000); 	// beats in milliseconds
-	public static var stepCrochet:Float = crochet / 4; 		// steps in milliseconds
-	public static var sectionCrochet:Float = crochet * 4; 	// sections in milliseconds
+	public static var crochetMills:Float = 60 / bpm;
+	public static var stepCrochetMills:Float = crochetMills * 0.25;
+	public static var sectionCrochetMills:Float = crochetMills * 4;
+	public static var crochet:Float = crochetMills * 1000; 					// beats in milliseconds
+	public static var stepCrochet:Float = stepCrochetMills * 1000;			// steps in milliseconds
+	public static var sectionCrochet:Float = sectionCrochetMills * 1000;	// sections in milliseconds
+
 	public static var songPosition:Float;
 	public static var lastSongPos:Float;
 	public static var settingOffset:Float = 0;
@@ -31,8 +35,12 @@ class Conductor {
 	}
 
 	public static function set_bpm(value:Float):Float {
-		crochet = (60 / value) * 1000;
-		stepCrochet = crochet / 4;
+		crochetMills = 60 / value;
+		stepCrochetMills = crochetMills * 0.25;
+		sectionCrochetMills = crochetMills * 4;
+		crochet = crochetMills * 1000;
+		stepCrochet = stepCrochetMills * 1000;
+		sectionCrochet = sectionCrochetMills * 1000;
 		return bpm = value;
 	}
 
