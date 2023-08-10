@@ -7,6 +7,7 @@ import openfl.display.BitmapData;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+import lime.utils.Assets as LimeAssets;
 #if desktop
 import sys.io.File;
 import sys.FileSystem;
@@ -276,6 +277,18 @@ class Paths
 		Gpu loading is faster but breaks bitmap functions
 	*/
 	public static var cachedBitmaps:Map<String, BitmapData> = [];
+	inline public static function clearBitmapCache() {
+		for (key in cachedBitmaps.keys()) {
+			var bitmap = cachedBitmaps.get(key);
+			bitmap.dispose();
+			cachedBitmaps.remove(key);
+			@:privateAccess {
+				if (FlxG.bitmap._cache.exists(key)) 
+					FlxG.bitmap._cache.remove(key);
+			}
+		}
+		FlxG.bitmap.clearCache();
+	}
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
 		if (cachedBitmaps.exists(key)) return cachedBitmaps.get(key);
@@ -293,6 +306,12 @@ class Paths
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];
+	inline public static function clearSoundCache() {
+		for (key in cachedSounds.keys()) {
+			LimeAssets.cache.clear(key);
+			cachedSounds.remove(key);
+		}
+	}
 
 	static public function getSound(key:String):FlxSoundAsset {
 		if (cachedSounds.exists(key)) return cachedSounds.get(key);

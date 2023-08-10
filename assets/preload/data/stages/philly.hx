@@ -45,11 +45,7 @@ function create():Void {
 	var street:FunkinSprite = new FunkinSprite('philly/street', [-40, streetBehind.y]);
 	addSpr(street, 'phillyStreet');
 
-	trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
-	FlxG.sound.list.add(trainSound);
-	if (!CoolUtil.soundList.contains(trainSound))
-		CoolUtil.soundList.push(trainSound);
-
+	trainSound = getSound('train_passes');
 	phillyColor += FlxG.random.int(0,3);
 }
 

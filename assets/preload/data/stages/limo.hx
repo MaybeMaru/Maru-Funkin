@@ -5,6 +5,9 @@ var bgLimo:FunkinSprite;
 
 var _lastTime:Float = -9999;
 
+var vroomVroom:Array<FlxSound> = [];
+var goreSound:FlxSound;
+
 function create():Void {
     PlayState.defaultCamZoom = 0.9;
 	metalPos = new FlxSpriteExt(-400, 125);
@@ -59,6 +62,12 @@ function create():Void {
 	overlayShit.alpha = 0.15;
 	overlayShit.blend = getBlendMode('add');
 	addSpr(overlayShit, 'overlay', true);
+
+	// caching?
+	vroomVroom = [getSound('carPass0'), getSound('carPass1')];
+	for (sound in vroomVroom) sound.volume = 0.7;
+	goreSound = getSound('gore');
+	goreSound.volume = 0.7;
 }
 
 // Car shit
@@ -90,7 +99,7 @@ function resetFastCar():Void {
 }
 
 function fastCarDrive():Void {
-	CoolUtil.playSound('carPass' + FlxG.random.int(0, 1), 0.7);
+	vroomVroom[FlxG.random.int(0, 1)].play();
     fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
     fastCarCanDrive = false;
     new FlxTimer().start(2, function(tmr:FlxTimer) {
@@ -121,6 +130,11 @@ function updatePost() {
 				i._dynamic.dead = true;
 				canKill = false;
 				dancerDeath(i);
+				if (killCount == 0) {
+					if (PlayState.gf._dynamic.dodge != null) {
+						PlayState.gf._dynamic.dodge();
+					}
+				}
 				killCount++;
 			}
 		}
@@ -223,12 +237,12 @@ function dancerDeath(dancer):Void {
 }
 
 function sectionHit(curSection):Void {
-	if (canKill && FlxG.random.bool(10))
+	if (canKill && FlxG.random.bool(20))
 		killBoogies();
 }
 
 function killBoogies() {
-	CoolUtil.playSound('gore', 0.7);
+	goreSound.play();
 	_lastTime = Conductor.songPosition;
 	calcMurder = true;
 }

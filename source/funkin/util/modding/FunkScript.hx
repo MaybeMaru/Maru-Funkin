@@ -124,6 +124,23 @@ class FunkScript extends SScript {
 			ModdingUtil.consoleTrace(text, color);
 		});
 
+		set('getSound', function (key:String):FlxSound {
+			return CoolUtil.getSound(key);
+		});
+
+		set('playSound', function (key:String, volume:Float = 1) {
+			CoolUtil.playSound(key, volume);
+		});
+
+		set('pauseSounds', function () {
+			CoolUtil.pauseSounds();
+		});
+
+		// Needs pauseSounds() first
+		set('resumeSounds', function () {
+			CoolUtil.resumeSounds();
+		});
+
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
 			var sprKey = '_${OnTop ? 'fg' : 'bg'}_sprite_$key';
 			PlayState.game.objMap.set(sprKey, spr);

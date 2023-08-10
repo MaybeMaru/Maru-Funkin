@@ -1,26 +1,33 @@
 {
-	"antialiasing": true,
 	"imagePath": "week4/gfCar",
+	"isGF": false,
+	"icon": "gf",
 	"camOffsets": [
 		0,
 		0
 	],
-	"icon": "gf",
-	"scale": 1,
-	"charOffsets": [
-		0,
-		230
-	],
 	"anims": [
 		{
-			"animName": "danceRight",
-			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"animFile": "GF Dancing Beat Hair blowing CAR",
+			"indices": [
+				26,
+				27,
+				28,
+				29
+			],
+			"loop": true,
 			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair blowing CAR",
+			"animName": "danceRight-loop"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
 			"indices": [
 				15,
 				16,
@@ -37,49 +44,28 @@
 				27,
 				28,
 				29
-			]
-		},
-		{
-			"animName": "danceRight-loop",
-			"loop": true,
-			"offsets": [
-				0,
-				0
 			],
-			"animFile": "GF Dancing Beat Hair blowing CAR",
-			"framerate": 24,
-			"indices": [
-				26,
-				27,
-				28,
-				29
-			]
-		},
-		{
-			"animName": "danceLeft-loop",
-			"loop": true,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "GF Dancing Beat Hair blowing CAR",
-			"framerate": 24,
-			"indices": [
-				11,
-				12,
-				13,
-				14
-			]
-		},
-		{
-			"animName": "danceLeft",
 			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair blowing CAR",
+			"animName": "danceRight"
+		},
+		{
+			"offsets": [
+				-1,
+				-26
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF sad",
+			"animName": "sad"
+		},
+		{
 			"offsets": [
 				0,
 				0
 			],
-			"animFile": "GF Dancing Beat Hair blowing CAR",
-			"framerate": 24,
 			"indices": [
 				30,
 				0,
@@ -97,8 +83,48 @@
 				12,
 				13,
 				14
-			]
+			],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair blowing CAR",
+			"animName": "danceLeft"
+		},
+		{
+			"offsets": [
+				5,
+				-66
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Duck Hair Blowing",
+			"animName": "dodge"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [
+				11,
+				12,
+				13,
+				14
+			],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "GF Dancing Beat Hair blowing CAR",
+			"animName": "danceLeft-loop"
 		}
 	],
-	"flipX": false
+	"charOffsets": [
+		0,
+		230
+	],
+	"scale": 1,
+	"isPlayer": false,
+	"flipX": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
 }
