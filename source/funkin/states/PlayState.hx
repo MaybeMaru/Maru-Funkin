@@ -110,7 +110,8 @@ class PlayState extends MusicBeatState {
 	public var songSpeed:Float = 1.0;
 
 	override public function create():Void {
-		NoteUtil.clearSustainCache(); // update sustain graphics
+		//NoteUtil.clearSustainCache(); // update sustain graphics
+		FlxG.bitmap.clearCache();
 
 		game = this;
 		inBotplay = getPref('botplay');
@@ -408,8 +409,6 @@ class PlayState extends MusicBeatState {
 
 		if (skipCountdown) {
 			Conductor.songPosition = 0;
-			startSong();
-			sectionHit();
 			return;
 		}
 
@@ -668,7 +667,6 @@ class PlayState extends MusicBeatState {
 			if (startedCountdown && startingSong) {
 				if (Conductor.songPosition >= 0) {
 					startSong();
-					sectionHit();
 				}
 			}
 			else if (!paused) {
@@ -1156,7 +1154,8 @@ class PlayState extends MusicBeatState {
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');
-		NoteUtil.clearSustainCache();
+		//NoteUtil.clearSustainCache();
+		FlxG.bitmap.clearCache();
 		super.destroy();
 	}
 

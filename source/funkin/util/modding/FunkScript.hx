@@ -167,7 +167,7 @@ class FunkScript extends SScript {
 			return false;						
 		});
 
-		set('makeGroup', function(key:String, ?order:Int) {
+		set('makeGroup', function(key:String, ?order:Int):Void {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
 			order != null ? PlayState.game.insert(order, newGroup) : PlayState.game.add(newGroup);
 			PlayState.game.objMap.set('_group_$key', newGroup);
@@ -182,7 +182,7 @@ class FunkScript extends SScript {
 			}
 		});
 
-		set('existsGroup', function(key:String):Null<Dynamic> {
+		set('existsGroup', function(key:String):Bool {
 			return PlayState.game.objMap.exists('_group_$key');						
 		});
 
