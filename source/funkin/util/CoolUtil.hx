@@ -38,6 +38,7 @@ class CoolUtil {
 
 	inline public static function clearCache() {
 		Paths.clearBitmapCache();
+		NoteUtil.clearSustainCache();
 		FlxG.sound.list.clear();
 		Paths.clearSoundCache();
 		System.gc();

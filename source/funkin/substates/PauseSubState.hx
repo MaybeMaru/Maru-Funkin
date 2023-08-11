@@ -76,9 +76,9 @@ class PauseSubState extends MusicBeatSubstate {
 			if (getKey('ACCEPT-P')) {	
 				switch (menuItems[curSelected]) {
 					case "Resume":			close(); CoolUtil.resumeSounds();
-					case "Restart song":	FlxG.resetState();
-					case "Options":			OptionsState.fromPlayState = true;	FlxG.switchState(new OptionsState());
-					case "Exit to menu":	FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
+					case "Restart song":	PlayState.clearCache = false; FlxG.resetState();
+					case "Options":			PlayState.clearCache = false; OptionsState.fromPlayState = true;	FlxG.switchState(new OptionsState());
+					case "Exit to menu":	PlayState.clearCache = true; FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
 				}
 			}
 		}

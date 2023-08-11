@@ -4,6 +4,10 @@ function endSong()
         PlayState.inCutscene = true;
 }
 
+function switchSong() {
+    GameVars.clearCache = true;
+}
+
 function startCutscene(onEnd)
 {
     if (onEnd)

@@ -78,7 +78,7 @@ class NoteUtil {
             for (key in FlxG.bitmap._cache.keys()) {
                 if (key.startsWith('sus')) {
                     var obj = FlxG.bitmap.get(key);
-                    if (obj != null && !obj.persist && obj.useCount <= 0) {
+                    if (obj != null) {
                         FlxG.bitmap.removeKey(key);
                         obj.destroy();
                     }
@@ -233,7 +233,7 @@ class Note extends FlxSpriteExt {
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
-                var key:String = 'sus$noteData$_height$skin';
+                var key:String = 'sus$noteData-$_height-$skin';
                 if (FlxG.bitmap.checkCache(key)) { // Save on drawing the graphic more than one time?
                     frames = FlxG.bitmap.get(key).imageFrame;
                     origin.set(width / 2, 0);

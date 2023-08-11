@@ -4,6 +4,10 @@ function createPost()
         PlayState.inCutscene = true;
 }
 
+function switchSong() {
+    GameVars.clearCache = true;
+}
+
 function startCutscene()
 {
     PlayState.createDialogue();

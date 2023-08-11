@@ -5,6 +5,7 @@ import flixel.ui.FlxBar;
 
 class PlayState extends MusicBeatState {
 	public static var game:PlayState;
+	public static var clearCache:Bool = true;
 
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
@@ -110,7 +111,8 @@ class PlayState extends MusicBeatState {
 	public var songSpeed:Float = 1.0;
 
 	override public function create():Void {
-		CoolUtil.clearCache();
+		clearCache ? CoolUtil.clearCache() : NoteUtil.clearSustainCache(); // This kinda should always be cleared lol
+		clearCache = true;
 
 		game = this;
 		inBotplay = getPref('botplay');
@@ -816,12 +818,11 @@ class PlayState extends MusicBeatState {
 			if (isStoryMode) {
 				campaignScore += songScore;
 				storyPlaylist.remove(storyPlaylist[0]);
-		
-				if (storyPlaylist.length <= 0)	endWeek();
-				else							inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : switchSong();
+				inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : (storyPlaylist.length <= 0 ? endWeek() : switchSong());
 			}
 			else {
 				trace('WENT BACK TO FREEPLAY??');
+				clearCache = true;
 				SkinUtil.setCurSkin('default');
 				FlxG.switchState(new FreeplayState());
 			}
@@ -840,6 +841,7 @@ class PlayState extends MusicBeatState {
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
+		clearCache = true;
 		SkinUtil.setCurSkin('default');
 		FlxG.switchState(new StoryMenuState());
 	}
@@ -855,6 +857,8 @@ class PlayState extends MusicBeatState {
 		inst.stop();
 		vocals.stop();
 
+		clearCache = false;
+		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to activate cache clear
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
@@ -1153,7 +1157,7 @@ class PlayState extends MusicBeatState {
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');
-		CoolUtil.clearCache();
+		if (clearCache) CoolUtil.clearCache();
 		super.destroy();
 	}
 

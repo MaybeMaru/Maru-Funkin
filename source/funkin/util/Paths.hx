@@ -145,17 +145,13 @@ class Paths
 	inline static public function voices(song:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var voicesPath:String = getPath('${Song.formatSongFolder(song)}/audio/Voices.$SOUND_EXT', MUSIC, 'songs');
-		if (forcePath) return voicesPath;
-
-		var soundFile:FlxSoundAsset = getSound(voicesPath);
-		return soundFile;
+		return forcePath ? voicesPath : getSound(voicesPath);
 	}
 
-	inline static public function inst(song:String):FlxSoundAsset
+	inline static public function inst(song:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs');
-		var soundFile:FlxSoundAsset = getSound(instPath);
-		return soundFile;
+		return forcePath ? instPath : getSound(instPath);
 	}
 
 	inline static public function chart(song:String, diff:String, ext:String = 'json'):String
