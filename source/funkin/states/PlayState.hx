@@ -705,7 +705,7 @@ class PlayState extends MusicBeatState {
 				inst.stop();
 				vocals.stop();
 	
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 				
 				#if cpp // Game Over doesn't get his own variable because it's only used here
 				DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
@@ -858,21 +858,20 @@ class PlayState extends MusicBeatState {
 		vocals.stop();
 
 		clearCache = false;
+		NoteUtil.clearSustainCache(); // Clear last song note cache
 		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to activate cache clear
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
 	private function popUpScore(strumtime:Float, daNote:Note):Void {
-		vocals.volume = 1;
 		noteCount++;
-
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
 		var score:Int = 0;
 		var setupSplash:Bool = false;
-		var daRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
+		var noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
 
-		switch (daRating) {
+		switch (noteRating) {
 			case 'sick':
 				setupSplash = true;
 				score = 350;
@@ -886,7 +885,7 @@ class PlayState extends MusicBeatState {
 				health -= ghostTapEnabled ? 0.06 : 0;
 			case 'shit':
 				score = 50;
-				noteTotal+=0.3;
+				noteTotal+=0.25;
 				health -= ghostTapEnabled ? 0.1 : 0;
 		}
 
@@ -903,7 +902,7 @@ class PlayState extends MusicBeatState {
 				rating.kill();
 		}
 		
-		ratingGroup.drawComplete(daRating, combo);
+		ratingGroup.drawComplete(noteRating, combo);
 		updateScore();
 	}
 

@@ -95,37 +95,36 @@ class JsonUtil {
 	}
 
 	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		var jsonDir = Paths.removeAssetLib(Paths.file('images/$path.json', library));
-		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(jsonDir));
-
-		var image_ = Paths.image(path, library, false, false, gpu);
-		var graphic:FlxGraphic = FlxG.bitmap.add(image_, false, Paths.image(path, library, true));
+		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(Paths.file('images/$path.json', TEXT, library)));
+		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, false, false, gpu), false, Paths.image(path, library, true));
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
 		var framesTagData:Array<Array<Dynamic>> = [];
-		for (tag in jsonData.meta.frameTags) {
+		for (tag in jsonData.meta.frameTags)
 			framesTagData.push([tag.from, tag.to, tag.name]);
-		}
 
 		var frameCount:Int = 0;
 		var frameName:String = '';
 		var newFrameName:String = '_';
 
-		for (i in 0...jsonData.frames.length) {
-			var frame = jsonData.frames[i];
-			for (data in framesTagData) {	//Get animation tag name
-				if (i >= data[0] && i <= data[1]) {
+		var isArray:Bool = jsonData.frames is Array;
+		var framesArray:Array<JsonFrame> = isArray ? jsonData.frames : Reflect.fields(jsonData.frames).map(function(field) return Reflect.field(jsonData.frames, field));
+
+		for (i in 0...framesArray.length) {
+			var frame = framesArray[i];
+			for (data in framesTagData) {
+				if (i >= data[0] && i <= data[1]) // Get animation tag name
 					newFrameName = data[2];
-				}
 				if (frameName != newFrameName) {
 					frameCount = 0;
 					frameName = newFrameName;
 				}
 			}
 			var rect = FlxRect.get(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
-			frames.addAtlasFrame(rect, FlxPoint.get(rect.width, rect.height), FlxPoint.get(), '$frameName${CoolUtil.formatInt(frameCount)}');
+			frames.addAtlasFrame(rect, FlxPoint.get(rect.width, rect.height), FlxPoint.get(), '$frameName${CoolUtil.formatInt(frameCount, 5)}');
 			frameCount++;
 		}
+		
 		return frames;
 	}
 

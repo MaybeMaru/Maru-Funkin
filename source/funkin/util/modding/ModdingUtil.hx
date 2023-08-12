@@ -2,6 +2,7 @@ package funkin.util.modding;
 
 class ModdingUtil {
     //Mod folders
+    public static var curModFolder:String = "";
     public static var modFolders:Array<String> = [];
     public static var modFoldersMap:Map<String, Bool> = [];
     private static var folderExceptions:Array<String> = [
@@ -12,7 +13,6 @@ class ModdingUtil {
         'songs',
         'sounds'
     ];
-    public static var curModFolder:Null<String> = null;
     
     //Scripts
     public static var playStateScripts:Array<FunkScript> = [];
@@ -21,6 +21,7 @@ class ModdingUtil {
 
     inline public static function clearScripts(global:Bool = false):Void {
         scriptsMap = new Map<String, FunkScript>();
+        FunkScript.globalVariables = new Map<String, Dynamic>();
         global ? globalScripts : playStateScripts = [];
     }
 
@@ -42,7 +43,7 @@ class ModdingUtil {
                 }
             }
         }
-        curModFolder = null;
+        curModFolder = "";
     }
 
     inline public static function getModFolderList():Array<String> {

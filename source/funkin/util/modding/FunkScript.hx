@@ -6,6 +6,7 @@ enum HscriptFunctionCallback {
 }
 
 class FunkScript extends SScript {
+	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
 	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
@@ -225,6 +226,18 @@ class FunkScript extends SScript {
 			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts)) {
 				if (forced || !i.exists(key))
 					i.set(key, _var);
+			}
+		});
+
+		set('setGlobalVar', function (key:String, _var:Dynamic) {
+			globalVariables.set(key, _var);
+		});
+
+		set('getGlobalVar', function (key:String) {
+			if (globalVariables.exists(key)) return globalVariables.get(key);
+			else {
+				ModdingUtil.errorTrace('Variable not found: $key');
+				return null;
 			}
 		});
 
