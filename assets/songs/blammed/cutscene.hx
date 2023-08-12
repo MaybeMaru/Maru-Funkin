@@ -1,3 +1,5 @@
+importLib('FlxBackdrop', 'flixel.addons.display');
+
 function create()
 {
 	var blammedOverlay:FunkinSprite = new FunkinSprite('', [-500,-500], [0,0]).makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.WHITE);
@@ -27,7 +29,24 @@ function create()
 		tunnelLights.alpha -= alphaVal;
 		tunnelLightsBlur.alpha -= alphaVal * 2.5;
 	}
-	
+
+	// scale, speed, color
+	var cityData = [[0.6, 50, FlxColor.fromRGB(120, 105, 185)], [0.8, 100, FlxColor.WHITE]];
+	for (i in 0...2) {
+		var cityLoop = new FlxBackdrop(Paths.image('blammed/cityLoop'), 0x01);
+		cityLoop.flipX = i == 0;
+		cityLoop.color = cityData[i][2];
+		cityLoop.scale.set(cityData[i][0], cityData[i][0]);
+		cityLoop.updateHitbox();
+		cityLoop.y += 300 + (i * 50);
+		cityLoop.scrollFactor.set(0.25,0.25);
+		cityLoop.visible = false;
+		addSpr(cityLoop, 'cityLoop' + i);
+		cityLoop._dynamic.update = function (elapsed) {
+			cityLoop.x += elapsed * cityData[i][1];
+			cityLoop.x %= cityLoop.width;
+		}
+	}
 	
 	// sides trains
 	for (i in 0...2) {
@@ -127,6 +146,7 @@ function startBlammedTransition() {
 	
 function exitTunnelTransition() {
 	for (i in ['blammedOverlay', 'tunnelBG', 'tunnelLights','tunnelLightsBlur']) getSpr(i).visible = false;
+	for (i in ['cityLoop0', 'cityLoop1'])  getSpr(i).visible = true;
 	PlayState.camGame.flash(FlxColor.WHITE, Conductor.crochetMills * 4, null, true);
 	PlayState.defaultCamZoom = 0.8;
 	PlayState.camGame.zoom = 0.8;
@@ -138,7 +158,7 @@ function exitTunnelTransition() {
 }
 	
 function startSong() {
-	Conductor.songPosition = 40 * 1000;
+	Conductor.songPosition = 20 * 1000;
 }
 	
 function sectionHit(curSection)
@@ -169,5 +189,4 @@ function update(elapsed)
 		getSpr('overlayTrain').x -= (225*75)*elapsed;
 		getSpr('overlayTrainBG').x = getSpr('overlayTrain').x;
 	}
-	
 }

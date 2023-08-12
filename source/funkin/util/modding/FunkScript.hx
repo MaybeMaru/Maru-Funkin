@@ -143,33 +143,24 @@ class FunkScript extends SScript {
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
-			var sprKey = '_${OnTop ? 'fg' : 'bg'}_sprite_$key';
-			PlayState.game.objMap.set(sprKey, spr);
+			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
 		});
 		
 		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
-			var sprKey = '_${OnTop ? 'fg' : 'bg'}_sprite_$key';
-			PlayState.game.objMap.set(sprKey, spr);
+			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.game.fgSpr.insert(order, spr) : PlayState.game.bgSpr.insert(order, spr);
 		});
 
 		set('getSpr', function(key:String):Null<Dynamic> {
-			for (i in ['fg', 'bg']) {
-				var sprKey = '_${i}_sprite_$key';
-				if (PlayState.game.objMap.exists(sprKey))
-					return PlayState.game.objMap.get(sprKey);
-			}
-			ModdingUtil.errorTrace('Sprite not found: $key');
-			return null;								
+			return ScriptUtil.getSprite(key);					
 		});
 
 		set('getSprOrder', function(key:String):Int {
 			for (i in ['fg', 'bg']) {
-				var sprKey = '_${i}_sprite_$key';
-				var group = (i == 'fg' ? PlayState.game.fgSpr : PlayState.game.bgSpr);
+				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				if (PlayState.game.objMap.exists(sprKey))
-					return group.members.indexOf(PlayState.game.objMap.get(sprKey));
+					return ScriptUtil.getGroup(i).members.indexOf(PlayState.game.objMap.get(sprKey));
 			}
 			ModdingUtil.errorTrace('Sprite not found: $key');
 			return 0;
@@ -177,12 +168,22 @@ class FunkScript extends SScript {
 
 		set('existsSpr', function(key:String):Null<Dynamic> {
 			for (i in ['fg', 'bg']) {
-				var sprKey = '_${i}_sprite_$key';
-				if (PlayState.game.objMap.exists(sprKey)) {
+				if (PlayState.game.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
 					return true;
 				}
 			}
 			return false;						
+		});
+
+		set('removeSpr', function(key:String) {
+			for (i in ['fg', 'bg']) {
+				var sprKey = ScriptUtil.getSpriteKey(i, key);
+				var group = ScriptUtil.getGroup(i);
+				if (PlayState.game.objMap.exists(sprKey)) {
+					group.remove(ScriptUtil.getSprite(key));
+					PlayState.game.objMap.remove(sprKey);
+				}
+			}
 		});
 
 		set('makeGroup', function(key:String, ?order:Int):Void {
