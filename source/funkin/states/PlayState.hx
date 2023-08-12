@@ -1058,6 +1058,7 @@ class PlayState extends MusicBeatState {
 		else playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 		ModdingUtil.addCall('goodSustainPress', [note]);
+		ModdingUtil.addCall('sustainPress', [note, true]);
 	}
 	
 	function goodNoteHit(note:Note):Void {
@@ -1074,6 +1075,7 @@ class PlayState extends MusicBeatState {
 			combo++;
 			popUpScore(note.strumTime, note);
 			ModdingUtil.addCall('goodNoteHit', [note]);
+			ModdingUtil.addCall('noteHit', [note, true]);
 
 			notes.remove(note, true);
 			note.destroy();
@@ -1089,6 +1091,7 @@ class PlayState extends MusicBeatState {
 		note.setSusPressed();
 
 		ModdingUtil.addCall('opponentSustainPress', [note]);
+		ModdingUtil.addCall('sustainPress', [note, false]);
 	}
 
 	function opponentNoteHit(note:Note):Void {
@@ -1099,6 +1102,7 @@ class PlayState extends MusicBeatState {
 		if (!getPref('vanilla-ui')) playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 
 		ModdingUtil.addCall('opponentNoteHit', [note]);
+		ModdingUtil.addCall('noteHit', [note, false]);
 
 		notes.remove(note, true);
 		note.destroy();
