@@ -325,11 +325,11 @@ class PlayState extends MusicBeatState {
 		add(ratingGroup);
 		updateScore();
 
-		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, FlxG.height], [0,0]);
+		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, getPref('downscroll') ? 0 : FlxG.height], [0,0]);
 		for (i in ['botplay', 'practice']) watermark.addAnim(i, i.toUpperCase(), 24, true);
 		if (watermark.visible = !validScore) watermark.playAnim(inBotplay ? 'botplay' : 'practice');
 		watermark.setScale(SkinUtil.curSkinData.scale * 0.7);
-		watermark.x -= watermark.width * 1.2; watermark.y -= watermark.height * 1.2;
+		watermark.x -= watermark.width * 1.2; watermark.y -= watermark.height * (getPref('downscroll') ? -0.2 : 1.2);
 		watermark.alpha = 0.8;
 		add(watermark);
 
