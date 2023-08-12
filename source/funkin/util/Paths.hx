@@ -28,8 +28,9 @@ class Paths
 			var modLib:String = '';
 			if (library != null)
 				modLib = '$library/';
-	
-			var modFolderPath = getModPath('${ModdingUtil.curModFolder}/$modLib$file');
+
+			var _folder = ModdingUtil.curModFolder.length <= 0 ? '' : '${ModdingUtil.curModFolder}/';
+			var modFolderPath = getModPath('$_folder$modLib$file');
 			if (FileSystem.exists(modFolderPath))
 				return modFolderPath;
 			
@@ -165,12 +166,6 @@ class Paths
 		return forcePath ? imagePath : getImage(imagePath, gpu);
 	}
 
-	inline static public function atlas(key:String, ?library:String):String
-	{
-		var atlasJson:String = file('images/$key/Animation.json', library);
-		return atlasJson.split('/Animation.json')[0];
-	}
-
 	inline static public function font(key:String, ?library:String):String
 	{
 		return getPath('fonts/$key.ttf', FONT, library);
@@ -204,7 +199,7 @@ class Paths
 	}
 
 	/*inline static public function getAnimateAtlas(key:String, ?library:String):FlxFramesCollection {
-		return animateatlas.AtlasFrameMaker.construct(file('images/$key/Animation.json', library).split('/Animation.json')[0]);
+		return animateatlas.AtlasFrameMaker.construct(key);
 	}*/
 
 	inline static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
@@ -331,7 +326,7 @@ class Paths
 		if 		(exists(file('images/$key.xml', library), TEXT))				return SPARROW;
 		else if (exists(file('images/$key.txt', library), TEXT))				return SHEETPACKER;
 		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
-		else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
+		//else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
 		else																	return IMAGE;
 	}
 }

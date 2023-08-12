@@ -569,7 +569,7 @@ class ChartingState extends MusicBeatState {
 
 	function beathit():Void {
 		if (check_metronome.checked) {
-			FlxG.sound.play(Paths.sound('chart/metronome_tick'));
+			CoolUtil.playSound('chart/metronome_tick');
 			var scaleMult:Float = (curBeat % Conductor.BEATS_LENGTH == 0) ? 1.25 : 1.15;
 			bg.scale.set(scaleMult,scaleMult);
 		}

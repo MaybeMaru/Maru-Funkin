@@ -1,5 +1,25 @@
 package funkin.util;
 
+// TODO stage json thing
+typedef StageProject = {
+    var layers:Array<StageLayer>;
+    var zoom:Float;
+    var scripts:Array<String>;
+}
+
+typedef StageLayer = {
+    var order:Int;
+    var objects:Array<StageObject>;
+    var camera:String;
+}
+
+typedef StageObject = {
+    var order:Int;
+    var position:Array<Float>;
+    var scrolls:Array<Float>;
+    var flipY:Bool;
+} & SpriteJson;
+
 typedef StageJson = {
 	var library:String;
     var skin:String;

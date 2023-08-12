@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="blammedTrain.png" width="6276" height="625">
+  <SubTexture name="train0003" x="4" y="4"  width="2106" height="613" frameX="-2" frameY="-0" frameWidth="2115" frameHeight="623"/>
+  <SubTexture name="train0001" x="2118" y="4"  width="2067" height="617" frameX="-29" frameY="-0" frameWidth="2115" frameHeight="623"/>
+  <SubTexture name="train0002" x="4193" y="4"  width="2079" height="617" frameX="-17" frameY="-0" frameWidth="2115" frameHeight="623"/>
+</TextureAtlas>

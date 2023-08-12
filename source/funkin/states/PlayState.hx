@@ -111,7 +111,7 @@ class PlayState extends MusicBeatState {
 	public var songSpeed:Float = 1.0;
 
 	override public function create():Void {
-		clearCache ? CoolUtil.clearCache() : NoteUtil.clearSustainCache(); // This kinda should always be cleared lol
+		if (clearCache) CoolUtil.clearCache();
 		clearCache = true;
 
 		game = this;

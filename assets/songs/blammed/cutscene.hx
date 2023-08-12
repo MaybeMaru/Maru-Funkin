@@ -3,7 +3,7 @@ var blammedOverlay:FunkinSprite;
 
 //Tunnel Section
 var tunnelBG:FunkinSprite;
-var trainFloor:FunkinSprite;
+var blammedTrain:FunkinSprite;
 
 function create()
 {
@@ -17,11 +17,34 @@ function create()
 	tunnelBG.updateHitbox();
 	addSpr(tunnelBG,'tunnelBG');
 
-	trainFloor = new FunkinSprite('blammed/trainFloor', [-150, 725]);
-	addSpr(trainFloor,'trainFloor');
+	// sides trains
+	for (i in 0...2) {
+		var sideTrain = new FunkinSprite('blammed/blammedTrain', [i == 0 ? -1650 : 950, 675]);
+		sideTrain.color = FlxColor.GRAY;
+		sideTrain.setScale(0.8);
+		sideTrain.addAnim('train', 'train', 24, true);
+		sideTrain.playAnim('train', true, false, FlxG.random.int(0,2));
+		addSpr(sideTrain,'sideTrain' + i);
+	}
 
-	trainFloor.visible = false;
-	tunnelBG.visible = false;
+	blammedTrain = new FunkinSprite('blammed/blammedTrain', [-375, 675]);
+	blammedTrain.setScale(0.8);
+	blammedTrain.addAnim('train', 'train', 24, true);
+	blammedTrain.playAnim('train');
+	addSpr(blammedTrain, 'blammedTrain');
+
+	for (i in ['sideTrain0','sideTrain1','blammedTrain']) {
+		getSpr(i)._dynamic.timeElapsed = 0;
+		getSpr(i)._dynamic.update = function (elapsed) {
+			getSpr(i)._dynamic.timeElapsed += elapsed;
+			if (getSpr(i)._dynamic.timeElapsed >= 1 / 24) {
+				getSpr(i)._dynamic.timeElapsed = 0;
+				getSpr(i).offset.set(FlxG.random.int(-1,1), FlxG.random.int(-1,1));
+			}
+		}
+	}
+
+	hideBlammed(false);
 }
 
 function beatHit(curBeat)
@@ -33,21 +56,30 @@ function beatHit(curBeat)
 	}
 }
 
+function hidePhilly(value) {
+	for (i in ['overlayTrain', 'overlayTrainBG', 'phillyStreet', 'phillyTrain', 'streetBehind']) {
+		if (existsSpr(i))
+			getSpr(i).visible = value;
+	}
+}
+
+function hideBlammed(value) {
+	for (i in ['sideTrain0','sideTrain1','blammedTrain','tunnelBG']) {
+		getSpr(i).visible = value;
+	}
+}
+
 function addBlammedTransition() {
 	PlayState.camGame.flash(getSpr('phillyWindow').color, Conductor.crochet/250, null, true);
 	PlayState.switchChar('bf', 'bf-car');
 	PlayState.gfGroup.visible = false;
-	blammedOverlay.alpha = 0.6;
+	//blammedOverlay.alpha = 0.6;
 
 	PlayState.boyfriend.x += 75;
 	PlayState.dad.x -= 50;
 	
-	for (i in ['overlayTrain', 'overlayTrainBG', 'phillyStreet', 'phillyTrain', 'streetBehind']) {
-		getSpr(i).visible = false;
-	}
-
-	trainFloor.visible = true;
-	tunnelBG.visible = true;
+	hidePhilly(false);
+	hideBlammed(true);
 
 	PlayState.camZooming = getPref('camera-zoom');
 	PlayState.defaultCamZoom = 1;
@@ -72,7 +104,6 @@ function startBlammedTransition() {
 
 function startSong() {
 	Conductor.songPosition = 40 * 1000;
-	Conductor.setPitch(1);
 }
 
 function sectionHit(curSection)
@@ -81,21 +112,32 @@ function sectionHit(curSection)
 	{
 		case 28:
 			PlayState.camZooming = false;
-			FlxTween.tween(PlayState.camGame, {zoom: 1.5}, (Conductor.crochet/1000)*16);
+			FlxTween.tween(PlayState.camGame, {zoom: 1.5}, Conductor.sectionCrochetMills * 4);
 
 		case 48:
 			blammedOverlay.visible = false;
 			tunnelBG.visible = false;
-			PlayState.camGame.flash(FlxColor.WHITE, Conductor.crochet/250, null, true);
+			PlayState.camGame.flash(FlxColor.WHITE, Conductor.crochetMills * 4, null, true);
 			PlayState.defaultCamZoom = 0.8;
+		case 72:
+			PlayState.camHUD.fade(FlxColor.BLACK, Conductor.crochetMills * 2);
 	}
 }
+
+/* WIP
+function stepHit(curStep) {
+	if (!getPref('flashing-light')) return;
+	if (curStep >= 1144 && curStep <= 1150 && curStep % 2 == 0) {
+		var alpha = curStep <= 1146 ? 120 : 160;
+		PlayState.camHUD.fade(FlxColor.fromRGB(0,0,0,Std.int(alpha)), Conductor.stepCrochetMills * 0.9);
+	}
+}*/
 
 function update(elapsed)
 {
 	if (existsSpr('overlayTrain'))
 	{
-		getSpr('overlayTrain').x -= (225*75)*elapsed;//elapsed*Conductor.bpm;
+		getSpr('overlayTrain').x -= (225*75)*elapsed;
 		getSpr('overlayTrainBG').x = getSpr('overlayTrain').x;
 	}
 }
