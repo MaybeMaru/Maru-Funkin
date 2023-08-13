@@ -7,10 +7,10 @@ function create()
     {
         PlayState.inCutscene = true;
 
-        cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 150], [1,1]);
+        cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 150]);
         cutsceneTankman_Body.addAnim('tightBars', 'body/BODY_20');
 
-        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10], [1,1]);
+        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10]);
         cutsceneTankman_Head.addAnim('tightBars', 'HEAD_20');
 
         PlayState.dad.visible = false;
@@ -25,12 +25,11 @@ function startCutscene()
     FlxG.sound.playMusic(Paths.music('DISTORTO'), 0);
     FlxG.sound.music.fadeIn(1, 0, 0.8);
 
-    FlxG.sound.list.add(new FlxSound().loadEmbedded(Paths.sound('tankSong2')));
+    for (i in ['tankSong2']) getSound(i); // Cache sounds
 
     PlayState.camFollow.x = PlayState.dad.x + 400;
     PlayState.camFollow.y = PlayState.dad.y + 170;
-    FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
-
+    
     // Pretty thight bars
     new FlxTimer().start(0.1, function(tmr:FlxTimer)
     {
@@ -63,6 +62,3 @@ function startCutscene()
         PlayState.startCountdown();
     });
 }
-
-function startSong()
-    FlxG.sound.music.volume = 1;

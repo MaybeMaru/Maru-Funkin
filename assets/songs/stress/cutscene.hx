@@ -6,7 +6,7 @@ var demonGf:FunkinSprite;
 var john:FunkinSprite;
 var steve:FunkinSprite;
 var demonBg:FlxSprite;
-var beef:FlxSprite;
+var beef:FlxSpriteExt;
 
 var loadedCutsceneAssets:Bool = false;
 
@@ -63,7 +63,7 @@ function create()
         setShaderFloat('demon_blur', 'u_alpha', 0);
 
         PlayState.boyfriend.visible = false;
-        beef = new FlxSprite(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
+        beef = new FlxSpriteExt(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
         PlayState.boyfriendGroup.add(beef);
     }
 }
@@ -72,11 +72,7 @@ function startCutscene()
 {
     PlayState.showUI(false);
 
-    var soundPath:String = 'stressCutscene';
-    if (!getPref('naughty'))
-        soundPath = 'song3censor';
-
-    var stressCutscene:FlxSound = new FlxSound().loadEmbedded(Paths.sound(soundPath));
+    var stressCutscene:FlxSound = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
     FlxG.sound.list.add(stressCutscene);
 
     PlayState.camFollow.x = PlayState.dad.x + 400;

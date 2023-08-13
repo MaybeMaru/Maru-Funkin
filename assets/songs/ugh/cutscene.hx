@@ -29,8 +29,7 @@ function startCutscene()
     FlxG.sound.playMusic(Paths.music('DISTORTO'), 0);
     FlxG.sound.music.fadeIn(1, 0, 0.8);
 
-    for (sound in ['wellWellWell', 'bfBeep', 'killYou'])
-        FlxG.sound.list.add(new FlxSound().loadEmbedded(Paths.sound(sound)));
+    for (i in ['wellWellWell', 'bfBeep', 'killYou']) getSound(i);
 
     PlayState.camGame.zoom /= 0.75;
     PlayState.camFollow.x += 25;
@@ -84,6 +83,3 @@ function startCutscene()
         PlayState.startCountdown();
     });
 }
-
-function startSong()
-    FlxG.sound.music.volume = 1;

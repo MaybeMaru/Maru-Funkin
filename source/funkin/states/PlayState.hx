@@ -14,6 +14,7 @@ class PlayState extends MusicBeatState {
 	public static var storyPlaylist:Array<String> = [];
 	public static var curDifficulty:String = 'normal';
 	public static var inChartEditor:Bool = false;
+	public static var deathCounter:Int = 0;
 
 	public var inst:FlxSound;
 	public var vocals:FlxSound;
@@ -705,6 +706,7 @@ class PlayState extends MusicBeatState {
 				inst.stop();
 				vocals.stop();
 	
+				deathCounter++;
 				openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 				
 				#if cpp // Game Over doesn't get his own variable because it's only used here
@@ -805,6 +807,7 @@ class PlayState extends MusicBeatState {
 
 	function endSong():Void {
 		canPause = false;
+		deathCounter = 0;
 		inst.volume = 0;
 		vocals.volume = 0;
 		ModdingUtil.addCall('endSong');
@@ -1211,7 +1214,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function showUI(bool:Bool):Void {
-		var displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, healthBarBG, strumLineNotes, grpNoteSplashes, notes];
+		var displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, healthBarBG, strumLineNotes, grpNoteSplashes, notes, watermark];
 		for (displayObject in displayObjects) displayObject.visible = bool;
 	}
 }
