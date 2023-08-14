@@ -562,8 +562,8 @@ class PlayState extends MusicBeatState {
 				Conductor.vocals.pause();
 			}
 			
-			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) { if (!tmr.finished) tmr.active = false; });
-			FlxTween.globalManager.forEach(function(twn:FlxTween) { if (!twn.finished) twn.active = false; });
+			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = false);
+			FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = false);
 			CoolUtil.pauseSounds();
 	
 			pauseSubstate.init();

@@ -56,18 +56,28 @@ class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
 
 class JudgeRating extends RemoveRating {
     public static var judgeRatings:Array<String> =  ['shit', 'bad', 'good', 'sick'];
+    var animated:Bool = true;
     public function new() {
         super();
-        var imagePath = 'skins/${SkinUtil.curSkin}/ratings/ratings';
-        loadImage(imagePath);
-        var _length = CoolUtil.returnJudgements.length + 1;
-        loadImageAnimated(imagePath, Std.int(width / _length), Std.int(height));
-        for (i in 0..._length) animation.add(judgeRatings[i], [i], 1);
+        for (i in judgeRatings) {
+            if (Paths.exists(Paths.image('skins/${SkinUtil.curSkin}/ratings/$i', null, true), IMAGE)) {
+                animated = false; // Backwards compatibility ???
+                break;
+            }
+        }
+
+        if (animated) {
+            var imagePath = 'skins/${SkinUtil.curSkin}/ratings/ratings';
+            loadImage(imagePath);
+            var _length = CoolUtil.returnJudgements.length + 1;
+            loadImageAnimated(imagePath, Std.int(width / _length), Std.int(height));
+            for (i in 0..._length) animation.add(judgeRatings[i], [i], 1);
+        }
     }
 
     public function init(judgement:String) {
         setPosition();
-        animation.play(judgement, true);
+        animated ? animation.play(judgement, true) : loadImage('skins/${SkinUtil.curSkin}/ratings/$judgement');
         updateHitbox();
         start(Conductor.crochet * 0.001, Conductor.stepCrochet * 0.025);
         jump();
