@@ -25,18 +25,49 @@ class NotesGroup extends FlxGroup
 	public var opponentStrumsInitPos:Array<FlxPoint> = [];
 
     public var inBotplay:Bool = false;
+	public var isPlayState:Bool = true;
     
-    public function new(_SONG:SwagSong) {
+    public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
+		this.isPlayState = isPlayState;
         SONG = Song.checkSong(_SONG); //Double check null values
         Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
-		songSpeed = getPref('use-const-speed') ? getPref('const-speed') : SONG.speed;
+		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay');
+
+		// Default values
+		if (!isPlayState) {
+			goodNoteHit = function (note:Note) {
+				if (note.wasGoodHit) return;
+				playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+				note.wasGoodHit = true;
+				notes.remove(note, true);
+				note.destroy();
+
+				if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
+					var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+					splash.setupNoteSplash(note.x, note.y, note.noteData, note);
+					grpNoteSplashes.add(splash);
+				}
+			}
+			goodSustainPress = function (note:Note) {
+				playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			}
+			opponentNoteHit = function (note:Note) {
+				playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+				notes.remove(note, true);
+				note.destroy();
+			}
+			opponentSustainPress = function (note:Note) {
+				playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+				note.setSusPressed();
+			}
+		}
     }
 
-    public function init() {
+    public function init(startPos:Float = -5000) {
         strumLine = new FlxSprite(0, !getPref('downscroll') ? 50 : FlxG.height - 150).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 		strumLineNotes = new FlxTypedGroup<NoteStrum>();
@@ -50,7 +81,7 @@ class NotesGroup extends FlxGroup
 		generateStrums(1);
 
         //Make Song
-		Conductor.songPosition = -5000;
+		Conductor.songPosition = startPos;
 		generateSong();
     }
 
@@ -97,6 +128,7 @@ class NotesGroup extends FlxGroup
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
 				var strumTime:Int = songNotes[0];
+				if (strumTime < Conductor.songPosition) continue; // Save on creating missed notes
 				var noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
 				var sustainLength = songNotes[2];
 				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
@@ -148,6 +180,13 @@ class NotesGroup extends FlxGroup
 		generatedMusic = true;
 	}
 
+	function defaultGood(note:Note) {
+		if (note.wasGoodHit) return;
+		playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+		notes.remove(note, true);
+		note.destroy();
+	}
+
     public var goodNoteHit:Dynamic = null;
     public var goodSustainPress:Dynamic = null;
     public var noteMiss:Dynamic = null;
@@ -162,8 +201,12 @@ class NotesGroup extends FlxGroup
 
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
-        if (PlayState.game == null) {
+        if (!isPlayState) {
             Conductor.songPosition += FlxG.elapsed * 1000;
+			if (!Conductor.inst.playing) Conductor.play();
+			if (Conductor.songPosition % Conductor.stepCrochet <= 5) {
+				Conductor.autoSync();
+			}
             return;
         }
 
@@ -247,7 +290,7 @@ class NotesGroup extends FlxGroup
 			}
 		}
 
-        if (PlayState.game != null) {
+        if (isPlayState) {
             if (PlayState.game.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
@@ -336,7 +379,7 @@ class NotesGroup extends FlxGroup
 				}
 			}
 
-            if (PlayState.game == null) return;
+            if (!isPlayState) return;
             if (PlayState.game.boyfriend == null) return;
 
             var bf = PlayState.game.boyfriend;

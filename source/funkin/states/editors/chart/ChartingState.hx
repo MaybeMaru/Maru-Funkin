@@ -1,5 +1,6 @@
 package funkin.states.editors.chart;
 
+import funkin.substates.NotesSubstate;
 import flixel.ui.FlxButton;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.ui.FlxUI;
@@ -83,11 +84,17 @@ class ChartingState extends MusicBeatState {
 		{name: "Editor", 	label: 'Editor'}
 	];
 
+	public var camHUD:SwagCamera;
+
 	override function create():Void {
 		ogPitch = Conductor.songPitch;
 		FlxG.mouse.visible = true;
 		PlayState.inChartEditor = true;
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
 		autoSaveChart = SaveData.getSave('autoSaveChart');
+		
+		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;
+		FlxG.cameras.add(camHUD, false);
 
 		_curSection = lastSection;
 
@@ -183,6 +190,12 @@ class ChartingState extends MusicBeatState {
 		openSubState(new CharSelectSubstate(selectFunction));
 	}
 
+	function openNotes() {
+		stopSong();
+		Conductor.setPitch(1, false);
+		openSubState(new NotesSubstate(_song, Conductor.songPosition));
+	}
+
 	var p1Button:FlxButton;
 	var p2Button:FlxButton;
 	var p3Button:FlxButton;
@@ -218,35 +231,32 @@ class ChartingState extends MusicBeatState {
 		stepperOffsetVocals.name = 'song_vocals_offset';
 
 		p1Button = new FlxButton(10, 155, "Boyfriend", function() {
-			var getP1 = function () {
+			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p1Button.text = newChar;
 				_song.players[0] = newChar;
 				updateHeads();
-			}
-			selectChar(getP1);
+			});
 		});
 		p1Button.text = _song.players[0];
 
 		p2Button = new FlxButton(stepperOffsetInst.x, p1Button.y, "Dad", function() {
-			var getP2 = function () {
+			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p2Button.text = newChar;
 				_song.players[1] = newChar;
 				updateHeads();
-			}
-			selectChar(getP2);
+			});
 		});
 		p2Button.text = _song.players[1];
 
 		p3Button = new FlxButton(loadAutosaveBtn.x, p2Button.y, "Girlfriend", function() {
-			var getP3 = function () {
+			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p3Button.text = newChar;
 				_song.players[2] = newChar;
 				//updateHeads();
-			}
-			selectChar(getP3);
+			});
 		});
 		p3Button.text = _song.players[2];
 
@@ -616,6 +626,11 @@ class ChartingState extends MusicBeatState {
 			autosaveSong();
 			Conductor.setPitch(1, false);
 			FlxG.switchState(new PlayState());
+		}
+
+		if (FlxG.keys.justPressed.ESCAPE) {
+			openNotes();
+			return;
 		}
 
 		if (FlxG.keys.justPressed.TAB) {

@@ -27,8 +27,10 @@ class Conductor {
 	public static var songOffset:Array<Int> = [0,0];
 	public static var songPitch:Float = 1;
 
-	public static var inst:FlxSound;
-	public static var vocals:FlxSound;
+	public static var inst(get, default):FlxSound = null;
+	static function get_inst() return inst == null ? inst = new FlxSound() : inst;
+	public static var vocals(get, default):FlxSound = null;
+	static function get_vocals() return vocals == null ? vocals = new FlxSound() : vocals;
 
 	public static inline function loadMusic(song:String) {
 		inst = new FlxSound().loadEmbedded(Paths.inst(song));

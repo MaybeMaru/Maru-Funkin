@@ -12,52 +12,70 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var curSelected:Int = 0;
 
+	var bg:FlxSprite;
+	var levelInfo:FunkinText;
+	var levelDifficulty:FunkinText;
+	var deathCounter:FunkinText;
+
 	public function new():Void {
 		super();
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
-		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 		FlxG.sound.list.add(pauseMusic);
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0;
+		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.scrollFactor.set();
 		add(bg);
 
-		var levelInfo:FunkinText = new FunkinText(20,15,PlayState.SONG.song,32);
+		levelInfo = new FunkinText(20,15,PlayState.SONG.song,32);
 		add(levelInfo);
 
-		var levelDifficulty:FunkinText = new FunkinText(20,15+32,(PlayState.curDifficulty.toUpperCase()),32);
+		levelDifficulty = new FunkinText(20,15+32,(PlayState.curDifficulty.toUpperCase()),32);
 		add(levelDifficulty);
 
-		var deathCounter:FunkinText = new FunkinText(20,15+64,"Blue balled: " + PlayState.deathCounter,32);
+		deathCounter = new FunkinText(20,15+64,"Blue balled: " + PlayState.deathCounter,32);
 		add(deathCounter);
-
-		levelInfo.alpha = 0;
-		levelDifficulty.alpha = 0;
-		deathCounter.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		deathCounter.x = FlxG.width - (deathCounter.width + 20);
+
+		grpMenuShit = new FlxTypedGroup<MenuAlphabet>();
+		add(grpMenuShit);
+
+		for (i in 0...menuItems.length) {
+			var songText:MenuAlphabet = new MenuAlphabet(0, 0, menuItems[i], true);
+			songText.targetY = i;
+			grpMenuShit.add(songText);
+		}
+	}
+
+	public function init() {
+		pauseMusic.volume = 0;
+		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+
+		bg.alpha = 0;
+		levelInfo.alpha = 0;
+		levelDifficulty.alpha = 0;
+		deathCounter.alpha = 0;
+		
+		levelInfo.y = 15;
+		levelDifficulty.y = 15 + 32;
+		deathCounter.y = 15 + 64;
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(deathCounter, {alpha: 1, y: deathCounter.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
-		grpMenuShit = new FlxTypedGroup<MenuAlphabet>();
-		add(grpMenuShit);
-
-		for (i in 0...menuItems.length) {
-			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, menuItems[i], true);
-			songText.targetY = i;
-			grpMenuShit.add(songText);
+		for (i in 0...grpMenuShit.members.length) {
+			grpMenuShit.members[i].setPosition(-100 * i, (70 * i) + 200);
 		}
-		
+
+		coolDown = 0.1;
+		curSelected = 0;
 		changeSelection();
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		cameras = [CoolUtil.getTopCam()];
 	}
 
 	var coolDown:Float = 0.1; //Controllers have a lil lag

@@ -223,7 +223,7 @@ class Note extends FlxSpriteExt {
 
     function set_noteSpeed(value:Float):Float {
         noteSpeed = value;
-        drawSustain();
+        if (isSustainNote) drawSustain();
         return value;
     }
 

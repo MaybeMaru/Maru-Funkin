@@ -107,6 +107,8 @@ class PlayState extends MusicBeatState {
 	public var ghostTapEnabled:Bool = false;
 	public var inPractice:Bool = false;
 	private var validScore:Bool = true;
+	
+	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
 		if (clearCache) CoolUtil.clearCache();
@@ -423,6 +425,8 @@ class PlayState extends MusicBeatState {
 		inCutscene ? ModdingUtil.addCall('startCutscene', [false]) : startCountdown();
 
 		super.create();
+		destroySubStates = false;
+		pauseSubstate = new PauseSubState();
 	}
 
 	function createDialogue():Void {
@@ -562,7 +566,8 @@ class PlayState extends MusicBeatState {
 			FlxTween.globalManager.forEach(function(twn:FlxTween) { if (!twn.finished) twn.active = false; });
 			CoolUtil.pauseSounds();
 	
-			openSubState((easterEgg && FlxG.random.bool(0.1)) ? new funkin.substates.GitarooPauseSubState() : new PauseSubState());
+			pauseSubstate.init();
+			openSubState((easterEgg && FlxG.random.bool(0.1)) ? new funkin.substates.GitarooPauseSubState() : pauseSubstate);
 		}
 	}
 
@@ -640,20 +645,6 @@ class PlayState extends MusicBeatState {
 			openPauseSubState(true);
 			#if cpp DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC); #end
 		}
-
-		/*
-		//Makes the conductor song go vroom vroom
-		if ((startingSong || Conductor.inst.playing || Conductor.songPosition < songLength) && !inCutscene) {
-			Conductor.songPosition += FlxG.elapsed * 1000;
-			if (startedCountdown && startingSong) {
-				if (Conductor.songPosition >= 0) {
-					startSong();
-				}
-			}
-			else if (!paused) {
-				if (!Conductor.inst.playing) Conductor.play();
-			}
-		}*/
 
 		//End the song if the conductor time is the same as the length
 		if (Conductor.songPosition >= songLength && canPause)

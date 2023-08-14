@@ -51,6 +51,7 @@ class CharSelectSubstate extends MusicBeatSubstate {
         }
         changeFolder();
         add(folderTxt);
+        cameras = [CoolUtil.getTopCam()];
     }
     
     override public function update(elapsed:Float):Void {
