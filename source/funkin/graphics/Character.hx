@@ -134,17 +134,18 @@ class Character extends FlxSpriteExt {
 
 	override function update(elapsed:Float):Void {
 		if(animation.curAnim != null) {
-			if (animation.curAnim.finished) {
-				var loopAnim:String = '${animation.curAnim.name}-loop'; 
+			var _curAnim = animation.curAnim;
+			if (_curAnim.finished) {
+				var loopAnim:String = '${_curAnim.name}-loop'; 
 				if (animOffsets.exists(loopAnim))
 					playAnim(loopAnim);
 			}
 
-			if (animation.curAnim.name.startsWith('sing') && !specialAnim) {
+			if (_curAnim.name.startsWith('sing') && !specialAnim) {
 				holdTimer += elapsed;
 
-				var finishAnim:Bool = (Preferences.getPref('botplay') || !isPlayer) ? (holdTimer >= Conductor.stepCrochet * 0.001 * Conductor.STEPS_LENGTH) :
-				(animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode);
+				var finishAnim:Bool = (Preferences.getPref('botplay') || !isPlayer) ? (holdTimer >= Conductor.crochetMills) :
+				(_curAnim.name.endsWith('miss') &&_curAnim.finished && !debugMode);
 
 				if (finishAnim) {
 					dance();

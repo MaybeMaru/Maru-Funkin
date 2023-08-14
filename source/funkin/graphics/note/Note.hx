@@ -1,5 +1,7 @@
 package funkin.graphics.note;
 
+import funkin.objects.NotesGroup;
+
 typedef NoteTypeJson = {
 	var mustHit:Bool;
 	var hitHealth:Array<Float>;
@@ -120,7 +122,7 @@ class Note extends FlxSpriteExt {
             
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-                initSusLength += _off / (PlayState.game.songSpeed * 2);
+                initSusLength += _off / (NotesGroup.songSpeed * 2);
             }
         } else {
             loadGraphicFromSprite(refSprite);

@@ -27,6 +27,19 @@ class Conductor {
 	public static var songOffset:Array<Int> = [0,0];
 	public static var songPitch:Float = 1;
 
+	public static var inst:FlxSound;
+	public static var vocals:FlxSound;
+
+	public static inline function loadMusic(song:String) {
+		inst = new FlxSound().loadEmbedded(Paths.inst(song));
+		FlxG.sound.list.add(inst);
+		vocals = Paths.exists(Paths.voices(song, true), MUSIC) ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
+		FlxG.sound.list.add(vocals);
+
+		inst.onComplete = function () {}
+		vocals.onComplete = function () {}
+	}
+
 	public static var safeFrames:Int = 15;
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; //safeFrames in milliseconds
 
@@ -84,7 +97,27 @@ class Conductor {
 		};
 	}
 
-	public static function sync(inst:FlxSound, ?vocals:FlxSound):Void {
+	public static function setVolume(volume:Float = 1.0) {
+		inst.volume = volume;
+		vocals.volume = volume;
+	}
+
+	public static function play():Void {
+		inst.play();
+		vocals.play();
+	}
+
+	public static function pause():Void {
+		inst.pause();
+		vocals.pause();
+	}
+
+	public static function stop():Void {
+		inst.stop();
+		vocals.stop();
+	}
+
+	public static function sync():Void {
 		soundSync(inst, songOffset[0]);
 		soundSync(vocals, songOffset[1]);
 	}
@@ -97,12 +130,9 @@ class Conductor {
 		if (playing) sound.play();
 	}
 
-	//	Resync if music is out of sync by 20 milliseconds by default
-	public static function autoSync(inst:FlxSound, ?vocals:FlxSound, minOff:Int = 20):Void {
+	public static function autoSync(minOff:Int = 20):Void {
 		var syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > minOff * songPitch;
 		if (syncInst) soundSync(inst, songOffset[0]);
-
-		if (vocals == null) return;
 		var syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > minOff * songPitch;
 		if (syncVocals) soundSync(vocals, songOffset[1]);
 	}
@@ -111,9 +141,7 @@ class Conductor {
 		pitch = FlxMath.bound(pitch, 0.25, 2);
 		songPitch = (forceVar) ? pitch : songPitch;
 		FlxG.timeScale = (forceTime) ? pitch : FlxG.timeScale;
-		if (PlayState.game != null) {
-			if (PlayState.game.inst != null) 	PlayState.game.inst.pitch = pitch;
-			if (PlayState.game.vocals != null) 	PlayState.game.vocals.pitch = pitch;
-		}
+		inst.pitch = pitch;
+		vocals.pitch = pitch;
 	}
 }

@@ -55,10 +55,7 @@ class ChartingState extends MusicBeatState {
 	var curSelectedNote:Array<Dynamic>;
 	var curSelectedNoteSpr:Note;
 
-	var inst:FlxSound;
-	var vocals:FlxSound;
 	var hasVocals:Bool = true;
-
 	var tempBpm:Float = 0;
 	var songPitch(default, set):Float = 1;
 	var ogPitch:Float = 1;
@@ -67,8 +64,6 @@ class ChartingState extends MusicBeatState {
 		value = FlxMath.roundDecimal(value,2);
 		songPitch = value;
 		Conductor.setPitch(value);
-		inst.pitch = value;
-		vocals.pitch = value;
 		return value;
 	}
 
@@ -164,7 +159,7 @@ class ChartingState extends MusicBeatState {
 		updateHeads(true);
 
 		Conductor.songPosition = 0;
-		Conductor.sync(inst,vocals);
+		Conductor.sync();
 
 		updateSectionUI();
 		changeSection();
@@ -427,14 +422,14 @@ class ChartingState extends MusicBeatState {
 		check_mute_inst.callback = function() {
 			var vol:Float = hasVocals ? 0.6 : 1;
 			if (check_mute_inst.checked) vol = 0;
-			inst.volume = vol;
+			Conductor.inst.volume = vol;
 		};
 
 		var check_mute_voices = new FlxUICheckBox(check_mute_inst.x, check_mute_inst.y + 30, null, null, "Mute Voices", 100);
 		check_mute_voices.checked = false;
 		check_mute_voices.callback = function() {
 			var vol:Float = check_mute_voices.checked ? 0 : 1;
-			vocals.volume = vol;
+			Conductor.vocals.volume = vol;
 		};
 
 		check_hitsound = new FlxUICheckBox(check_mute_inst.x, check_mute_voices.y + 30, null, null, "Use Hitsounds", 100);
@@ -461,35 +456,11 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function loadSong(daSong:String):Void {
-
 		stopSong();
-
-		if (FlxG.sound.music != null) {
-			FlxG.sound.music.stop();
-		}
-	
-		inst = new FlxSound().loadEmbedded(Paths.inst(daSong));
-		FlxG.sound.list.add(inst);
-
-		var vocalsPath:String = Paths.voices(daSong, true);
-		hasVocals = Paths.exists(vocalsPath, MUSIC);
-		if (hasVocals) {
-			vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
-			inst.volume = 0.6;
-		}
-		else {
-			vocals = new FlxSound();
-			inst.volume = 1;
-		}
-		FlxG.sound.list.add(vocals);
-
+		hasVocals = Paths.exists(Paths.voices(daSong, true), MUSIC);
+		Conductor.loadMusic(daSong);
+		Conductor.inst.volume = hasVocals ? 0.6 : 1;
 		stopSong();
-
-		inst.onComplete = function() {
-			Conductor.songPosition = 0;
-			pauseSong();
-			changeSection();
-		}
 	}
 	
 	override function closeSubState():Void {
@@ -585,9 +556,9 @@ class ChartingState extends MusicBeatState {
 	override function update(elapsed:Float):Void {
 		if (songPlaying) {
 			Conductor.songPosition += elapsed * 1000;
-			Conductor.autoSync(inst,vocals);
+			Conductor.autoSync();
 
-			if (Conductor.songPosition >= inst.length) { // end song
+			if (Conductor.songPosition >= Conductor.inst.length) { // end song
 				Conductor.songPosition = 0;
 				pauseSong();
 				changeSection();
@@ -702,7 +673,7 @@ class ChartingState extends MusicBeatState {
 
 	function updateBPMtext():Void {
 		bpmTxt.text =
-		'${Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))} / ${Std.string(FlxMath.roundDecimal(inst.length / 1000, 2))}
+		'${Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))} / ${Std.string(FlxMath.roundDecimal(Conductor.inst.length / 1000, 2))}
 		BPM: ${Conductor.bpm}
 		Section: $_curSection
 		Beat: $curBeat
@@ -769,20 +740,17 @@ class ChartingState extends MusicBeatState {
 
 	function stopSong():Void { // is this and pause song different at all lol
 		songPlaying = false;
-		if (inst != null) inst.stop();
-		if (vocals != null) vocals.stop();
+		Conductor.stop();
 	}
 	function pauseSong():Void {
 		songPlaying = false;
-		if (inst != null) inst.pause();
-		if (vocals != null) vocals.pause();
-		Conductor.sync(inst,vocals);
+		Conductor.pause();
+		Conductor.sync();
 	}
 	function playSong():Void {
 		songPlaying = true;
-		if (inst != null) inst.play();
-		if (vocals != null) vocals.play();
-		Conductor.sync(inst,vocals);
+		Conductor.play();
+		Conductor.sync();
 	}
 
 	function recalculateSteps():Int {
