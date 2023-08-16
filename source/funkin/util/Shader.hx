@@ -35,6 +35,10 @@ class Shader
 		trace('created shader $shader from $frag');
 	}
 
+	public static function clearShaders() {
+		shaderMap.clear();
+	}
+
 	public static function getShader(shader:String):Null<FlxRuntimeShader>
 	{
 		initShader(shader);

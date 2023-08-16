@@ -41,6 +41,7 @@ class CoolUtil {
 		NoteUtil.clearSustainCache();
 		FlxG.sound.list.clear();
 		Paths.clearSoundCache();
+		Shader.clearShaders();
 		System.gc();
 	}
 

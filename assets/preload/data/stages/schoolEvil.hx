@@ -7,8 +7,8 @@ function create() {
     fg.setScale(6, false);
     addSpr(fg);
 
-    initShader('thornsBg', 'bgThorns', true);
-    initShader('thornsBg', 'fgThorns', true);
+    initShader('thornsBg', 'bgThorns');
+    initShader('thornsBg', 'fgThorns');
 
     setShaderInt('bgThorns', 'effectType', 1);
     setShaderInt('fgThorns', 'effectType', 0);

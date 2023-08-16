@@ -1,10 +1,11 @@
 {
-	"imagePath": "week6/BF Dies pixel0001",
+	"imagePath": "week6/deadBfPixel",
 	"icon": "bf-pixel",
 	"camOffsets": [
 		0,
 		0
 	],
+	"isGF": false,
 	"charOffsets": [
 		-180,
 		-190
@@ -15,21 +16,56 @@
 				24,
 				6
 			],
+			"indices": [],
 			"loop": false,
-			"animName": "firstDeath",
 			"framerate": 24,
-			"animFile": "BF dies pixel",
-			"indices": []
+			"animFile": "BF Dies pixel",
+			"animName": "firstDeath"
 		},
 		{
 			"offsets": [
 				0,
 				0
 			],
+			"indices": [
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33
+			],
 			"loop": false,
-			"animName": "deathLoopLeft",
 			"framerate": 24,
 			"animFile": "Retry Loop",
+			"animName": "deathLoopRight"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "RETRY CONFIRM",
+			"animName": "deathConfirm"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
 			"indices": [
 				0,
 				1,
@@ -49,46 +85,11 @@
 				15,
 				16,
 				17
-			]
-		},
-		{
-			"offsets": [
-				0,
-				0
 			],
 			"loop": false,
-			"animName": "deathLoopRight",
 			"framerate": 24,
 			"animFile": "Retry Loop",
-			"indices": [
-				18,
-				19,
-				20,
-				21,
-				22,
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29,
-				30,
-				31,
-				32,
-				33
-			]
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
-			"animName": "deathConfirm",
-			"framerate": 24,
-			"animFile": "RETRY CONFIRM",
-			"indices": []
+			"animName": "deathLoopLeft"
 		}
 	],
 	"scale": 6,

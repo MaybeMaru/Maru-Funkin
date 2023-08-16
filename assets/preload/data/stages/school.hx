@@ -1,58 +1,69 @@
-var bgGirls:FunkinSprite;
+var bgGirls:Array<FunkinSprite> = [];
 
-function create():Void {
-	var bgSky:FunkinSprite = new FunkinSprite('weeb/weebSky', [0,0], [0.1,0.1]);
+function createPost():Void {
+	var bgSky:FunkinSprite = new FunkinSprite('school/sky', [-200,0], [0.1,0.1]);
 	addSpr(bgSky);
-	var	bgSchool:FunkinSprite = new FunkinSprite('weeb/weebSchool', [-200,0], [0.6,0.9]);
+
+	var	bgRoad:FunkinSprite = new FunkinSprite('school/road', [-200,0], [0.95,0.95]);
+	addSpr(bgRoad);
+
+	var	bgSchool:FunkinSprite = new FunkinSprite('school/school', [-200,0], [0.6,0.9]);
 	addSpr(bgSchool);
-	var	bgStreet:FunkinSprite = new FunkinSprite('weeb/weebStreet', [-200,0], [0.95,0.95]);
-	addSpr(bgStreet);
-	var	fgTrees:FunkinSprite = new FunkinSprite('weeb/weebTreesBack', [-30,130], [0.9,0.9]);
+
+	var	bgTrees:FunkinSprite = new FunkinSprite('school/bgtrees', [-200,0], [0.85,0.85]);
+	addSpr(bgTrees);
+
+	var	petals:FunkinSprite = new FunkinSprite('school/petals', [-200,0], [0.85,0.85]);
+	petals.addAnim('petals','petals',24,true);
+	petals.playAnim('petals');
+	addSpr(petals);
+
+	var	bgTrunks:FunkinSprite = new FunkinSprite('school/trunks', [-200,0], [0.875,0.875]);
+	addSpr(bgTrunks);
+
+	var	fgTrees:FunkinSprite = new FunkinSprite('school/trees', [-200,0], [0.9,0.9]);
 	addSpr(fgTrees);
 
-	var	bgTrees:FunkinSprite = new FunkinSprite('weeb/weebTrees', [-580,-800], [0.85,0.85]);
-	bgTrees.animation.add('treeLoop', CoolUtil.numberArray(18), 12);
-	bgTrees.animation.play('treeLoop');
-	addSpr(bgTrees);
-	var	treeLeaves:FunkinSprite = new FunkinSprite('weeb/petals', [-200,-40], [0.85,0.85]);
-	treeLeaves.addAnim('leaves', 'PETALS ALL', 24, true);
-	treeLeaves.playAnim('leaves');
-	addSpr(treeLeaves);
+	initShader('thornsBg', 'senpaiTrees');
+	setShaderInt('senpaiTrees', 'effectType', 0);
+    setShaderFloat('senpaiTrees', 'uFrequency', 5);
+	setSpriteShader(fgTrees, 'senpaiTrees');
 
-	var widShit = Std.int(bgSky.width*6);
-	var scaleStuff:Array<FunkinSprite> = [bgSky,bgSchool,bgStreet,treeLeaves];
-	for (obj in scaleStuff) {
-		obj.setGraphicSize(widShit);
-		obj.updateHitbox();
+	var isRoses = PlayState.curSong.toLowerCase() == 'roses';
+	var freaksSpr = isRoses ? 'school/bgGirlsDissuaded' : 'school/bgGirls';
+	var freaksAnim = isRoses ? 'BG Girls Dissuaded' : 'BG girl pair';
+	for (i in 0...4) {
+		var freaks:FunkinSprite = new FunkinSprite(freaksSpr, [i * 500, 450], [0.95, 0.95]);
+		freaks.addAnim('danceLeft', freaksAnim, 24, false, CoolUtil.numberArray(14));
+		freaks.addAnim('danceRight', freaksAnim, 24, false, CoolUtil.numberArray(30,15));
+		addSpr(freaks);
+		bgGirls.push(freaks);
 	}
 
-	bgTrees.setGraphicSize(Std.int(widShit * 1.4));
-	fgTrees.setGraphicSize(Std.int(widShit * 0.8));
-	bgTrees.updateHitbox();
-	fgTrees.updateHitbox();
+	for (i in [bgSky, bgSchool, bgRoad, bgTrees,petals, bgTrunks, fgTrees].concat(bgGirls)) {
+		i.setScale(6);
+	}
 
-	bgGirls = new FunkinSprite('weeb/bgFreaks', [-50,435], [0.9,0.9], ['BG girls group']);
-	bgGirls.addAnim('danceLeft', 'BG girls group', 24, false, CoolUtil.numberArray(14));
-	bgGirls.addAnim('danceRight', 'BG girls group', 24, false, CoolUtil.numberArray(30,15));
-	addSpr(bgGirls);
+	danceFreaks();
 }
 
 
-function createPost():Void {
-	if (PlayState.curSong.toLowerCase() == 'roses') {	//	MAKE THEM ANGRY IN ROSES
-		bgGirls.addAnim('danceLeft', 'BG fangirls dissuaded', 24, false, CoolUtil.numberArray(14));
-		bgGirls.addAnim('danceRight', 'BG fangirls dissuaded', 24, false, CoolUtil.numberArray(30,15));
+var timeElapsed:Float = 0;
+function update(elapsed) {
+    timeElapsed += elapsed;
+    setShaderFloat('senpaiTrees', 'iTime', timeElapsed);
+}
+
+function danceFreaks(){
+	for (i in bgGirls) {
+		i.dance();
 	}
-	bgGirls.dance();
-	bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
-	bgGirls.updateHitbox();
-	bgGirls.dance();
 }
 
 function beatHit(curBeat):Void {
-    bgGirls.dance();
+    danceFreaks();
 }
 
 function startTimer():Void {
-	bgGirls.dance();
+	danceFreaks();
 }
