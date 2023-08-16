@@ -161,32 +161,7 @@ class TitleState extends MusicBeatState {
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
 
 			new FlxTimer().start(2, function(tmr:FlxTimer) {
-				if (!initialized) {	// Check if version is outdated
-					trace('Checking if version is outdated');	
-					var gitFile = new haxe.Http("https://raw.githubusercontent.com/MaybeMaru/Maru-Funkin/main/gameVersion.json");
-
-					gitFile.onError = function (error) {
-						trace('error: $error');
-					}
-
-					var openOutdated:Bool = false;
-					gitFile.onData = function (data:String) {
-						trace(data);
-						var newVersionData:EngineVersion = Json.parse(data);
-						trace('cur Version: ${Main.engineVersion} // new Version: ${newVersionData.version}');
-
-						if (Main.engineVersion != newVersionData.version) {
-							openOutdated = true;
-							OutdatedState.newVer = newVersionData;
-						}
-					}
-
-					gitFile.request();
-					FlxG.switchState(openOutdated ? new OutdatedState() : new MainMenuState());
-				}
-				else {
-					FlxG.switchState(new MainMenuState());
-				}
+				FlxG.switchState(new MainMenuState());
 			});
 			}
 			else if (!skippedIntro) {

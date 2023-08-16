@@ -147,7 +147,7 @@ function startBlammedTransition() {
 function exitTunnelTransition() {
 	for (i in ['blammedOverlay', 'tunnelBG', 'tunnelLights','tunnelLightsBlur']) getSpr(i).visible = false;
 	for (i in ['cityLoop0', 'cityLoop1'])  getSpr(i).visible = true;
-	PlayState.camGame.flash(FlxColor.WHITE, Conductor.crochetMills * 4, null, true);
+	PlayState.camGame.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,120), Conductor.crochetMills * 4, null, true);
 	PlayState.defaultCamZoom = 0.8;
 	PlayState.camGame.zoom = 0.8;
 	
@@ -155,10 +155,6 @@ function exitTunnelTransition() {
 	var sky = getSpr('phillyBg');
 	sky.setScale(1.33, false);
 	sky.y += 50;
-}
-	
-function startSong() {
-	Conductor.songPosition = 20 * 1000;
 }
 	
 function sectionHit(curSection)

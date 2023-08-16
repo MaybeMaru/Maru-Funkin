@@ -94,22 +94,22 @@
                 "animName": "splashLEFT",
                 "animFile": "splashPURPLE",
                 "framerate": 12,
-                "offsets": [12, 12]
+                "offsets": [-110, -80]
             },{
                 "animName": "splashDOWN",
                 "animFile": "splashBLUE",
                 "framerate": 12,
-                "offsets": [12, 12]
+                "offsets": [-110, -80]
             },{
                 "animName": "splashUP",
                 "animFile": "splashGREEN",
                 "framerate": 12,
-                "offsets": [12, 12]
+                "offsets": [-110, -80]
             },{
                 "animName": "splashRIGHT",
                 "animFile": "splashRED",
                 "framerate": 12,
-                "offsets": [12, 12]
+                "offsets": [-110, -80]
             }
         ],
         "imagePath": "splashAssets",

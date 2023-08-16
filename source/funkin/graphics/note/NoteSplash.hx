@@ -18,14 +18,13 @@ class NoteSplash extends FlxSpriteExt {
             }*/
             updateHitbox();
             X = note.x + NoteUtil.swagWidth/2;
-            Y = note.y + NoteUtil.swagWidth/2;
+            Y = note.y + NoteUtil.swagHeight/2;
             noteData = note.noteData;
         }
         this.noteData = noteData;
         alpha = 0.6;
         setPosition(X,Y);
         playAnim('splash${CoolUtil.directionArray[noteData]}');
-		updateHitbox();
 		x-=width/2;
 		y-=height/2;
 	}

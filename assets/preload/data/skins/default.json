@@ -102,16 +102,19 @@
             {
                 "animName": "splashLEFT",
                 "animFile": "note splash purple 1",
-                "offsets": [175,165]
+                "offsets": [30,40]
             },{
                 "animName": "splashDOWN",
-                "animFile": "note splash blue 1"
+                "animFile": "note splash blue 1",
+                "offsets": [30,40]
             },{
                 "animName": "splashUP",
-                "animFile": "note splash green 1"
+                "animFile": "note splash green 1",
+                "offsets": [30,40]
             },{
                 "animName": "splashRIGHT",
-                "animFile": "note splash red 1"
+                "animFile": "note splash red 1",
+                "offsets": [30,40]
             }
         ],
         "imagePath": "splashAssets",
