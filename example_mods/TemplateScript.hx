@@ -41,6 +41,7 @@ StringTools
 
 // Haxeflixel
 FlxG
+FlxSpriteExt
 FlxSprite
 FlxText
 FlxTypedGroup
@@ -75,16 +76,37 @@ importLib(className:String, classPackage:String, ?customClassName:String);
 addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool)
 
 /*
+    Inserts a sprite of any kind in any order to the foreground or background of PlayState
+    @param spriteOrder  --> Order to insert the sprite to
+    @param spriteVar    --> Sprite object to add
+    @param spriteTag    --> Tag of the sprite to add
+    @param onTop        --> If to add it on the foreground or background of PlayState
+*/
+insertSpr(spriteOrder:Int, spriteVar:Dynamic, spriteTag:String, onTop:Bool)
+
+/*
     Returns a sprite from the foreground or background of PlayState
     @param spriteTag    --> Tag of the sprite to get
 */
 getSpr(spriteTag:String)
 
 /*
+    Returns a sprite's order from the foreground or background of PlayState
+    @param spriteTag    --> Tag of the sprite to get the order from
+*/
+getSprOrder(spriteTag:String)
+
+/*
     Returns if a sprite from the foreground or background of PlayState exists
     @param spriteTag    --> Tag of the sprite to get
 */
 existsSpr(spriteTag:String)
+
+/*
+    Removes a sprite from the foreground or background of PlayState
+    @param spriteTag    --> Tag of the sprite to remove
+*/
+removeSpr(spriteTag:String)
 
 /*
     Creates and adds a group to PlayState
@@ -174,6 +196,35 @@ getKey(keyName:String);
 */
 
 /*
+    Returns a FlxSound
+    @param soundPath --> Path of the sound
+*/
+getSound(soundPath:String);
+
+/*
+    Plays a sound
+    @param soundPath --> Path of the sound
+    @param soundVolume --> Volume of the sound (OPTIONAL)
+*/
+playSound(soundPath:String, soundVolume:Float = 1);
+
+/*
+    Pauses all sounds created using getSound() or playSound()
+*/
+pauseSounds();
+
+/*
+    Resumes all sounds created using getSound() or playSound()
+*/
+resumeSounds();
+
+/*
+    Switches the state to a custom state class
+    @param stateName --> Name of the state in data/scripts/customStates to switch to
+*/
+switchCustomState(stateName:String);
+
+/*
     Adds a new script
     @param scriptPath       --> Path of the script
     @param scriptTag        --> Custom tag for the script           (OPTIONAL)
@@ -196,6 +247,27 @@ getScriptVar(scriptTag:String, scriptVar:String);
     @param functionArgs     --> Arguments to use in the function (OPTIONAL)
 */
 callScriptFunction(scriptTag:String, scriptFunction:String, ?functionArgs:Array<Dynamic>);
+
+/*
+    Adds a variable to all current scripts
+    @param variableName    --> Name of the variable to add
+    @param variableValue   --> Value of the variable to add
+    @param forceVariable   --> If to force the variable even if it already exists in the script (OPTIONAL)
+*/
+addGlobalVar(variableName:String, variableValue:Dynamic, ?forceVariable:Bool);
+
+/*
+    Adds a variable for use with getGlobalVar(), DOESNT ADD IT TO THE SCRIPT!
+    @param variableName    --> Name of the variable to add
+    @param variableValue   --> Value of the variable to add
+*/
+setGlobalVar(variableName:String, variableValue:Dynamic);
+
+/*
+    Returns a variable added using setGlobalVar(), DOESNT GET IT FROM THE SCRIPT!
+    @param variableName    --> Name of the variable to add
+*/
+getGlobalVar(variableName:String);
 
 /*
         HSCRIPT SHADER FUNCTIONS
@@ -332,6 +404,18 @@ function generateSong(songData:SwagSong)
 {
     //  Called when notes and music files are loaded
     //  songData --> Song data about to be loaded in game
+}
+
+function noteHit(note:Note, isPlayer:Bool) {
+    //  Called when a note from any lane is hit correctly
+    //  note --> Note hit
+    //  isPlayer --> If the note is from the player lane
+}
+
+function sustainPress(note:Note, isPlayer:Bool) {
+    //  Called every frame a sustain note from any lane is beaing pressed
+    //  note --> Note pressed
+    //  isPlayer --> If the note is from the player lane
 }
 
 function goodNoteHit(note:Note)

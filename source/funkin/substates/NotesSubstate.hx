@@ -20,11 +20,11 @@ class NotesSubstate extends MusicBeatSubstate {
         SONG = Song.checkSong(_SONG);
         notesGroup = new NotesGroup(SONG, false);
         notesGroup.skipStrumIntro = true;
-        notesGroup.init(position);
+        notesGroup.init(position - 50);
         Conductor.sync();
         add(notesGroup);
 
-        var txt:FunkinText = new FunkinText(0, FlxG.height * 0.8, "coolswag", 25, 0, "center");
+        var txt:FunkinText = new FunkinText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.1 : 0.8), "coolswag", 25, 0, "center");
         txt._dynamic.update = function (elapsed) {
             var curStep = Math.floor((Conductor.songPosition - Conductor.settingOffset) / Conductor.stepCrochet);
             var curBeat = Math.floor(curStep / Conductor.BEATS_LENGTH);

@@ -342,8 +342,8 @@ class CustomState extends MusicBeatState {
 		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }
 
-	override public function stepHit() 		if (superCallback('stepHit')) 		super.stepHit();
-	override public function beatHit() 		if (superCallback('beatHit')) 		super.beatHit();
-	override public function sectionHit() 	if (superCallback('sectionHit')) 	super.sectionHit();
-	override public function destroy() 		if (superCallback('destroy')) 		super.destroy();
+	override public function stepHit() 		if (superCallback('stepHit', [curStep])) 		super.stepHit();
+	override public function beatHit() 		if (superCallback('beatHit', [curBeat])) 		super.beatHit();
+	override public function sectionHit() 	if (superCallback('sectionHit', [curSection])) 	super.sectionHit();
+	override public function destroy() 		if (superCallback('destroy')) 					super.destroy();
 }

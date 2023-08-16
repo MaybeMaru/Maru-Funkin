@@ -36,34 +36,33 @@ class NotesGroup extends FlxGroup
 		Conductor.songOffset = SONG.offsets;
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay');
+		if (isPlayState) return;
 
 		// Default values
-		if (!isPlayState) {
-			goodNoteHit = function (note:Note) {
-				if (note.wasGoodHit) return;
-				playerStrums.members[note.noteData].playStrumAnim('confirm', true);
-				note.wasGoodHit = true;
-				notes.remove(note, true);
-				note.destroy();
+		goodNoteHit = function (note:Note) {
+			if (note.wasGoodHit) return;
+			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			note.wasGoodHit = true;
+			notes.remove(note, true);
+			note.destroy();
 
-				if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
-					var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-					splash.setupNoteSplash(note.x, note.y, note.noteData, note);
-					grpNoteSplashes.add(splash);
-				}
+			if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
+				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+				splash.setupNoteSplash(note.x, note.y, note.noteData, note);
+				grpNoteSplashes.add(splash);
 			}
-			goodSustainPress = function (note:Note) {
-				playerStrums.members[note.noteData].playStrumAnim('confirm', true);
-			}
-			opponentNoteHit = function (note:Note) {
-				playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
-				notes.remove(note, true);
-				note.destroy();
-			}
-			opponentSustainPress = function (note:Note) {
-				playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
-				note.setSusPressed();
-			}
+		}
+		goodSustainPress = function (note:Note) {
+			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+		}
+		opponentNoteHit = function (note:Note) {
+			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			notes.remove(note, true);
+			note.destroy();
+		}
+		opponentSustainPress = function (note:Note) {
+			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			note.setSusPressed();
 		}
     }
 
@@ -76,9 +75,7 @@ class NotesGroup extends FlxGroup
 		add(grpNoteSplashes);
 		playerStrums = new FlxTypedGroup<NoteStrum>();
 		opponentStrums = new FlxTypedGroup<NoteStrum>();
-
-        generateStrums(0);
-		generateStrums(1);
+		for (i in 0...2) generateStrums(i);
 
         //Make Song
 		Conductor.songPosition = startPos;
@@ -178,13 +175,6 @@ class NotesGroup extends FlxGroup
 
 		FlxG.bitmap.clearUnused();
 		generatedMusic = true;
-	}
-
-	function defaultGood(note:Note) {
-		if (note.wasGoodHit) return;
-		playerStrums.members[note.noteData].playStrumAnim('confirm', true);
-		notes.remove(note, true);
-		note.destroy();
 	}
 
     public var goodNoteHit:Dynamic = null;
