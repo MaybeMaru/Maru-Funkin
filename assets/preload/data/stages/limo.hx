@@ -237,7 +237,7 @@ function dancerDeath(dancer):Void {
 }
 
 function sectionHit(curSection):Void {
-	if (canKill && FlxG.random.bool(20))
+	if (canKill && FlxG.random.bool(10))
 		killBoogies();
 }
 

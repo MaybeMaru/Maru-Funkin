@@ -43,7 +43,7 @@ function startCutscene()
 }
 
 var bgFade:FlxSprite;
-var dialogueBox:DialogueBox;
+var dialogueBox:PixelDialogueBox;
 var face:FunkinSprite;
 
 function createDialogue()
