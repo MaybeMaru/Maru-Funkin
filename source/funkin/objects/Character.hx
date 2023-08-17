@@ -1,4 +1,4 @@
-package funkin.graphics;
+package funkin.objects;
 
 typedef CharacterJson = {
     var icon:String;

@@ -1,4 +1,4 @@
-package funkin.graphics;
+package funkin.objects;
 
 class HealthIcon extends FlxSpriteExt {
 	public var sprTracker:FlxSprite;

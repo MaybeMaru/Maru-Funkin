@@ -1,4 +1,4 @@
-package funkin.graphics.note;
+package funkin.objects.note;
 
 import funkin.objects.NotesGroup;
 
@@ -166,8 +166,6 @@ class Note extends FlxSpriteExt {
 
         createGraphic();
         setupSustain();
-
-        if (!alive) destroy(); // clear small sustains
     }
 
     public var pressed:Bool = false;
@@ -223,7 +221,7 @@ class Note extends FlxSpriteExt {
 
     function set_noteSpeed(value:Float):Float {
         noteSpeed = value;
-        if (isSustainNote) drawSustain();
+        drawSustain();
         return value;
     }
 

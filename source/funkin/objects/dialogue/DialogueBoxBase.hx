@@ -1,4 +1,4 @@
-package funkin.graphics.dialogue;
+package funkin.objects.dialogue;
 
 /*
 	Helper to create dialogue boxes

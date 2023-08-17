@@ -1,4 +1,4 @@
-package funkin.graphics.dialogue;
+package funkin.objects.dialogue;
 
 class NormalDialogueBox extends DialogueBoxBase {
     public var speechBubble:FunkinSprite;

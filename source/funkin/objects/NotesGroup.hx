@@ -66,6 +66,13 @@ class NotesGroup extends FlxGroup
 		}
     }
 
+	function cacheSplash() {
+		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+		splash.setupNoteSplash(0, 0, 0);
+		grpNoteSplashes.add(splash);
+		splash.kill();
+	}
+
     public function init(startPos:Float = -5000) {
         strumLine = new FlxSprite(0, !getPref('downscroll') ? 50 : FlxG.height - 150).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
@@ -73,6 +80,7 @@ class NotesGroup extends FlxGroup
 		add(strumLineNotes);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(grpNoteSplashes);
+		cacheSplash();
 		playerStrums = new FlxTypedGroup<NoteStrum>();
 		opponentStrums = new FlxTypedGroup<NoteStrum>();
 		for (i in 0...2) generateStrums(i);
@@ -146,12 +154,15 @@ class NotesGroup extends FlxGroup
 				// Add note sustain
 				if (sustainLength > 0) {
 					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
-					newSustain.noteSpeed = songSpeed;
-					newSustain.targetSpr = targetStrum;
-					newSustain.mustPress = mustPress;
-					newSustain.noteType = noteType;
-					newSustain.parentNote = newNote;
-					unspawnNotes.push(newSustain);
+					if (newSustain.alive) {
+						newSustain.noteSpeed = songSpeed;
+						newSustain.targetSpr = targetStrum;
+						newSustain.mustPress = mustPress;
+						newSustain.noteType = noteType;
+						newSustain.parentNote = newNote;
+						unspawnNotes.push(newSustain);
+					}
+					else newSustain.destroy();  // clear too small sustains
 				}
 
 				//	Add notetype for scripts

@@ -1,4 +1,4 @@
-package funkin.graphics;
+package funkin.objects;
 
 class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
     public var targetSpr:FlxSprite = null;

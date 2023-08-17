@@ -8,6 +8,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import lime.utils.Assets as LimeAssets;
+import openfl.Assets as OflAssets;
 #if desktop
 import sys.io.File;
 import sys.FileSystem;
@@ -274,8 +275,8 @@ class Paths
 			bitmap.dispose();
 			cachedBitmaps.remove(key);
 			@:privateAccess {
-				if (FlxG.bitmap._cache.exists(key)) 
-					FlxG.bitmap._cache.remove(key);
+				OflAssets.cache.removeBitmapData(key);
+				if (FlxG.bitmap._cache.exists(key))  FlxG.bitmap._cache.remove(key);
 			}
 		}
 		FlxG.bitmap.clearCache();
@@ -302,6 +303,7 @@ class Paths
 			LimeAssets.cache.clear(key);
 			cachedSounds.remove(key);
 		}
+		for (i in ['sounds', 'songs', 'music']) OflAssets.cache.clear(i);
 	}
 
 	static public function getSound(key:String):FlxSoundAsset {

@@ -1,4 +1,4 @@
-package funkin.graphics.dialogue;
+package funkin.objects.dialogue;
 import flixel.addons.text.FlxTypeText;
 
 class PixelDialogueBox extends DialogueBoxBase {

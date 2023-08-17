@@ -1,4 +1,4 @@
-package funkin.graphics.alphabet;
+package funkin.objects.alphabet;
 
 class TypedAlphabet extends Alphabet {
     public var sounds:Array<String> = [];

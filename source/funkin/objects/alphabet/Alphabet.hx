@@ -1,4 +1,4 @@
-package funkin.graphics.alphabet;
+package funkin.objects.alphabet;
 
 enum AlphabetAlign {
 	LEFT;

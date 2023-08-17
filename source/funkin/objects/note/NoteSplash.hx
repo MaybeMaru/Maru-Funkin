@@ -1,4 +1,4 @@
-package funkin.graphics.note;
+package funkin.objects.note;
 
 class NoteSplash extends FlxSpriteExt {
     public var noteData:Int = 0;

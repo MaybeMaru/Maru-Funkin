@@ -1,4 +1,4 @@
-package funkin.util;
+package funkin.objects;
 
 class SwagCamera extends FlxCamera
 {

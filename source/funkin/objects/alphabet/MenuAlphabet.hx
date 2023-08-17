@@ -1,4 +1,4 @@
-package funkin.graphics.alphabet;
+package funkin.objects.alphabet;
 
 class MenuAlphabet extends Alphabet {
         //  Some variables you may need for special menus

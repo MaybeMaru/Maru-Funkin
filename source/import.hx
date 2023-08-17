@@ -33,29 +33,29 @@ import funkin.util.Stage;
 import funkin.util.SaveData;
 
 //Note
-import funkin.graphics.note.Note;
-import funkin.graphics.note.NoteSplash;
-import funkin.graphics.note.NoteStrum;
+import funkin.objects.note.Note;
+import funkin.objects.note.NoteSplash;
+import funkin.objects.note.NoteStrum;
 
 //PlayState Others
-import funkin.graphics.RatingGroup;
-import funkin.graphics.dialogue.DialogueBoxBase;
-import funkin.graphics.dialogue.PixelDialogueBox;
-import funkin.graphics.dialogue.NormalDialogueBox;
-import funkin.util.SwagCamera;
+import funkin.objects.RatingGroup;
+import funkin.objects.dialogue.DialogueBoxBase;
+import funkin.objects.dialogue.PixelDialogueBox;
+import funkin.objects.dialogue.NormalDialogueBox;
+import funkin.objects.SwagCamera;
+import funkin.objects.Character;
+import funkin.objects.HealthIcon;
 
 //Alphabet
-import funkin.graphics.alphabet.Alphabet;
-import funkin.graphics.alphabet.AlphabetCharacter;
-import funkin.graphics.alphabet.MenuAlphabet;
-import funkin.graphics.alphabet.TypedAlphabet;
+import funkin.objects.alphabet.Alphabet;
+import funkin.objects.alphabet.AlphabetCharacter;
+import funkin.objects.alphabet.MenuAlphabet;
+import funkin.objects.alphabet.TypedAlphabet;
 
 //Main graphics
 import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;
-import funkin.graphics.Character;
 import funkin.graphics.FunkinText;
-import funkin.graphics.HealthIcon;
 
 //Main states
 import funkin.states.LoadingState;

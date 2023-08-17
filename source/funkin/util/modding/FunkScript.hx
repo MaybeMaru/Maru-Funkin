@@ -53,8 +53,8 @@ class FunkScript extends SScript {
 		set('Controls', Controls);
 		set('Shader', Shader);
 
-		set('DialogueBox', funkin.graphics.dialogue.NormalDialogueBox);
-		set('PixelDialogueBox', funkin.graphics.dialogue.PixelDialogueBox);
+		set('DialogueBox', funkin.objects.dialogue.NormalDialogueBox);
+		set('PixelDialogueBox', funkin.objects.dialogue.PixelDialogueBox);
 		set('FunkinSprite', FunkinSprite);
 		set('FunkinText', FunkinText);
 		set('Character', Character);

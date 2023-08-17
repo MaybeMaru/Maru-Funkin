@@ -126,10 +126,10 @@ class FlxSpriteExt extends FlxSprite {
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
 			if(animOffsets.exists(animation.curAnim.name)) {
-				var daOffset:FlxPoint = animOffsets.get(animation.curAnim.name);
-				if ((daOffset.x != 0 && daOffset.y != 0) || forced) {
-					var OFFSET_XY:Array<Float> = [daOffset.x, daOffset.y];
-					offset.set(flippedOffsets ? -OFFSET_XY[0] : OFFSET_XY[0], OFFSET_XY[1]);
+				var animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
+				if (!animOffset.isZero() || forced) {
+					animOffset.x *= (flippedOffsets ? -1 : 1);
+					offset.set(animOffset.x, animOffset.y);
 				}
 			}
 		}
