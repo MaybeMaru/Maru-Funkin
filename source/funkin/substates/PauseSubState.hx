@@ -81,7 +81,7 @@ class PauseSubState extends MusicBeatSubstate {
 	var coolDown:Float = 0.1; //Controllers have a lil lag
 
 	override function update(elapsed:Float):Void {
-		if (pauseMusic.volume < 0.5) {
+		if (pauseMusic.volume < 0.5 && pauseMusic.playing) {
 			pauseMusic.volume += 0.01 * elapsed;
 		}
 
@@ -95,9 +95,10 @@ class PauseSubState extends MusicBeatSubstate {
 		} else {
 			if (getKey('ACCEPT-P')) {	
 				switch (menuItems[curSelected]) {
-					case "Resume":		
-						close();
+					case "Resume":	
 						CoolUtil.resumeSounds();
+						pauseMusic.stop();	
+						close();
 
 					case "Restart song":
 						PlayState.clearCache = false;

@@ -92,7 +92,6 @@ class NoteUtil {
 
 class Note extends FlxSpriteExt {
     public var noteData:Int = 0;
-    public var strumData:Int = 0;
     public var strumTime:Float = 0;
 
     public var initSusLength:Float = 0;
