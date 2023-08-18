@@ -225,10 +225,9 @@ class NotesGroup extends FlxGroup
         super.update(elapsed);
         updateConductor(elapsed);
 
-
         // Generate notes
         if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom) {
 				var dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);

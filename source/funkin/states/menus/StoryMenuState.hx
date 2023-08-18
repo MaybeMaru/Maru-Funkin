@@ -130,8 +130,6 @@ class StoryMenuState extends MusicBeatState {
 		txtWeekTitle.text = storyWeeks[curWeek].weekName.toUpperCase();
 		txtWeekTitle.x = FlxG.width - (txtWeekTitle.width + 10);
 
-		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeksNames[curWeek]);
-
 		if (!movedBack) {
 			if (!selectedWeek) {
 				if (getKey('UI_UP-P'))		changeWeek(-1);
@@ -148,6 +146,9 @@ class StoryMenuState extends MusicBeatState {
 				selectWeek();
 			}
 		}
+
+		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeksNames[curWeek]);
+		leftArrow.visible = rightArrow.visible = curWeekDiffs.length > 1;
 
 		if ((getKey('BACK-P')) && !movedBack && !selectedWeek) {
 			movedBack = true;

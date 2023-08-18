@@ -204,11 +204,11 @@ class Note extends FlxSpriteExt {
         drawSustain();
     }
 
-    function getCos(?_angle) {
+    public function getCos(?_angle) {
         return Math.cos(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
     }
 
-    function getSin(?_angle) {
+    public function getSin(?_angle) {
         return Math.sin(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
     }
 
@@ -279,26 +279,19 @@ class Note extends FlxSpriteExt {
 	public var willMiss:Bool = false;
 
 	public function calcHit():Void {
-		if (mustPress) {
-			if (willMiss && !wasGoodHit) {
-				tooLate = true;
-				canBeHit = false;
-			}
-			else {
-				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
-					if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset)
-						canBeHit = true;
-				}
-				else {
-					willMiss = true;
-					canBeHit = true;
-				}
-			}
+		if (willMiss && !wasGoodHit) {
+			tooLate = true;
+			canBeHit = false;
 		}
 		else {
-			canBeHit = false;
-			if (strumTime <= Conductor.songPosition)
-				wasGoodHit = true;
+			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
+				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset)
+					canBeHit = true;
+			}
+			else {
+				willMiss = true;
+				canBeHit = true;
+			}
 		}
 	}
 
