@@ -1,27 +1,22 @@
 {
 	"imagePath": "week7/bf-hold-gf-DEAD",
-	"isGF": false,
+	"icon": "bf",
 	"camOffsets": [
 		0,
 		0
 	],
-	"icon": "bf",
-	"scale": 1,
-	"charOffsets": [
-		0,
-		0
-	],
+	"isGF": false,
 	"anims": [
 		{
 			"offsets": [
 				21,
-				30
+				16
 			],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "RETRY confirm holding gf",
-			"animName": "deathConfirm"
+			"animFile": "BF Dies with GF",
+			"animName": "firstDeath"
 		},
 		{
 			"offsets": [
@@ -55,13 +50,13 @@
 		{
 			"offsets": [
 				21,
-				16
+				30
 			],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF Dies with GF",
-			"animName": "firstDeath"
+			"animFile": "RETRY confirm holding gf",
+			"animName": "deathConfirm"
 		},
 		{
 			"offsets": [
@@ -91,9 +86,14 @@
 			"animName": "deathLoopLeft"
 		}
 	],
-	"isPlayer": true,
+	"charOffsets": [
+		-30,
+		20
+	],
+	"scale": 1,
 	"flipX": true,
-	"gameOverChar": "bf-dead",
+	"isPlayer": true,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

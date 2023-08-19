@@ -88,7 +88,7 @@ class PauseSubState extends MusicBeatSubstate {
 		super.update(elapsed);
 
 		if (getKey('UI_UP-P')) 		changeSelection(-1);
-		if ( getKey('UI_DOWN-P')) 	changeSelection(1);
+		if (getKey('UI_DOWN-P')) 	changeSelection(1);
 
 		if (coolDown > 0) {
 			coolDown-=elapsed;

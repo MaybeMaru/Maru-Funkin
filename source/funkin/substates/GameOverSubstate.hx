@@ -42,6 +42,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 				FlxG.sound.music.stop();
 			}
 			ModdingUtil.addCall('exitGameOver');
+			PlayState.clearCache = true;
 			FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
 		}
 
@@ -97,6 +98,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			CoolUtil.playMusic('${skinFolder}gameOverEnd');
 			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
 				PlayState.game.camGame.fade(FlxColor.BLACK, 2, false, function() {
+					PlayState.clearCache = false;
 					LoadingState.loadAndSwitchState(new PlayState());
 				});
 			});

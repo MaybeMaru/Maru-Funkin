@@ -1,4 +1,4 @@
-importLib('HealthIcon', 'funkin.graphics');
+importLib('HealthIcon', 'funkin.objects');
 var gfIcon:HealthIcon;
 var doStuff:Bool = false; // Prevent null error
 

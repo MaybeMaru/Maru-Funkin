@@ -35,7 +35,7 @@ class NotesGroup extends FlxGroup
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
-        inBotplay = getPref('botplay');
+        inBotplay = getPref('botplay') && isPlayState;
 		if (isPlayState) return;
 
 		// Default values
@@ -302,11 +302,12 @@ class NotesGroup extends FlxGroup
 	public var controlArray:Array<Bool> = [false,false,false,false];
 
     private function controls():Void {
-		holdingArray = defaultHold.copy(); controlArray = defaultHold.copy();
-		if (!inBotplay) {
-			holdingArray = [getKey('NOTE_LEFT'), 	getKey('NOTE_DOWN'),	getKey('NOTE_UP'),   getKey('NOTE_RIGHT')];
-			controlArray = [getKey('NOTE_LEFT-P'), 	getKey('NOTE_DOWN-P'),	getKey('NOTE_UP-P'), getKey('NOTE_RIGHT-P')];
-		}
+		holdingArray = defaultHold.copy();
+		controlArray = defaultHold.copy();
+		if (inBotplay) return;
+		
+		holdingArray = Controls.getNoteKeys();
+		controlArray = Controls.getNoteKeys('-P');
 
 		if (generatedMusic) {
 			var possibleNotes:Array<Note> = [];
@@ -368,8 +369,6 @@ class NotesGroup extends FlxGroup
 	}
 
 	function checkStrumAnims():Void {
-		if (inBotplay) return;
-
 		for (strum in playerStrums) {
 			var strumAnim = strum.animation.curAnim;
 			if (strumAnim != null) {
