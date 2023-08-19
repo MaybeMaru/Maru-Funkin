@@ -202,7 +202,13 @@ class NotesGroup extends FlxGroup
 
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
-        if (!isPlayState) {
+		if (Conductor.inst.playing) {
+			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length) { // Prevent repeating vocals
+				Conductor.vocals.volume = 0;
+			}
+		}
+		
+		if (!isPlayState) {
             Conductor.songPosition += FlxG.elapsed * 1000;
 			if (!Conductor.inst.playing) Conductor.play();
 			if (Conductor.songPosition % Conductor.stepCrochet <= 5) {
@@ -221,17 +227,13 @@ class NotesGroup extends FlxGroup
         }
     }
 
-    override function update(elapsed:Float) {
-        super.update(elapsed);
-        updateConductor(elapsed);
-
-        // Generate notes
+	function spawnNotes() { // Generate notes
         if (unspawnNotes[0] != null) {
 			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom) {
 				var dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);
-				dunceNote.update(elapsed);
+				dunceNote.update(FlxG.elapsed);
 				notes.sort(function (order:Int, note1:Note, note2:Note):Int {
 					if (note1.strumTime == note2.strumTime) {
 						if (note1.isSustainNote && !note2.isSustainNote) return -1;
@@ -242,53 +244,52 @@ class NotesGroup extends FlxGroup
 				unspawnNotes.splice(unspawnNotes.indexOf(dunceNote), 1);
 			}
 		}
+	}
 
-        // Manage CPU played notes
-		if (generatedMusic) {
-			notes.forEachAlive(function(daNote:Note) {
-				// Manage botplay notes
-				if (inBotplay) {
-					if (daNote.mustPress) {
-						if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
-							if (daNote.isSustainNote) {
-								daNote.pressed = daNote.inSustain;
-                                if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
-							} else {
-								daNote.strumTime = Conductor.songPosition; // force sick rating (because lag)
-                                checkCallback(goodNoteHit, [daNote]);
-							}
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        updateConductor(elapsed);
+
+		if (!generatedMusic) return; // Stuff that needs notes
+		spawnNotes();
+
+		notes.forEachAlive(function(daNote:Note) {
+			// Manage botplay notes
+			if (inBotplay) {
+				if (daNote.mustPress) {
+					if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
+						if (daNote.isSustainNote) {
+							daNote.pressed = daNote.inSustain;
+                               if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
+						} else {
+							daNote.strumTime = Conductor.songPosition; // force sick rating (because lag)
+                               checkCallback(goodNoteHit, [daNote]);
 						}
 					}
 				}
+			}
 
-				// Manage opponent notes
-				if (!daNote.mustPress) {
-					if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
-						if (daNote.isSustainNote) {
-							daNote.pressed = daNote.inSustain ;
-                            if (daNote.pressed) checkCallback(opponentSustainPress, [daNote]);
-						} else {
-                            checkCallback(opponentNoteHit, [daNote]);
-                        }
-					}
-				}
-
-				//Remove missed Notes
-				if (!daNote.active) {
-					if (daNote.mustPress && daNote.mustHit) {
-                        checkCallback(noteMiss, [daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote]);
-					}
-					notes.remove(daNote, true);
-					daNote.destroy();
-				}
-			});
-
-			if (Conductor.inst.playing) {
-				if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length) { // Prevent repeating vocals
-					Conductor.vocals.volume = 0;
+			// Manage opponent notes
+			if (!daNote.mustPress) {
+				if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
+					if (daNote.isSustainNote) {
+						daNote.pressed = daNote.inSustain ;
+                        if (daNote.pressed) checkCallback(opponentSustainPress, [daNote]);
+					} else {
+                        checkCallback(opponentNoteHit, [daNote]);
+                    }
 				}
 			}
-		}
+
+			//Remove missed Notes
+			if (!daNote.active) {
+				if (daNote.mustPress && daNote.mustHit) {
+                    checkCallback(noteMiss, [daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote]);
+				}
+				notes.remove(daNote, true);
+				daNote.destroy();
+			}
+		});
 
         if (isPlayState) {
             if (PlayState.game.inCutscene) return; // No controls in cutscenes >:(
@@ -296,16 +297,15 @@ class NotesGroup extends FlxGroup
         controls();
     }
 
+	public static var defaultHold = [false,false,false,false];
     public var holdingArray:Array<Bool> = [false,false,false,false];
 	public var controlArray:Array<Bool> = [false,false,false,false];
-	public var releaseArray:Array<Bool> = [false,false,false,false];
 
     private function controls():Void {
-		holdingArray = [false,false,false,false]; controlArray = [false,false,false,false]; releaseArray = [true,true,true,true];
+		holdingArray = defaultHold.copy(); controlArray = defaultHold.copy();
 		if (!inBotplay) {
 			holdingArray = [getKey('NOTE_LEFT'), 	getKey('NOTE_DOWN'),	getKey('NOTE_UP'),   getKey('NOTE_RIGHT')];
 			controlArray = [getKey('NOTE_LEFT-P'), 	getKey('NOTE_DOWN-P'),	getKey('NOTE_UP-P'), getKey('NOTE_RIGHT-P')];
-			releaseArray = [getKey('NOTE_LEFT-R'), 	getKey('NOTE_DOWN-R'),	getKey('NOTE_UP-R'), getKey('NOTE_RIGHT-R')];
 		}
 
 		if (generatedMusic) {
@@ -368,36 +368,36 @@ class NotesGroup extends FlxGroup
 	}
 
 	function checkStrumAnims():Void {
-		if (!inBotplay) {
+		if (inBotplay) return;
+
+		for (strum in playerStrums) {
+			var strumAnim = strum.animation.curAnim;
+			if (strumAnim != null) {
+				if (controlArray[strum.noteData] && !strumAnim.name.startsWith('confirm'))
+					strum.playStrumAnim('pressed');
+				if (!holdingArray[strum.noteData])
+					strum.playStrumAnim('static');
+			}
+		}
+
+        if (!isPlayState) return;
+        if (PlayState.game.boyfriend == null) return;
+
+        var bf = PlayState.game.boyfriend;
+		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
+		&& bf.animation.curAnim.name.startsWith('sing')
+		&& !bf.animation.curAnim.name.endsWith('miss'));
+
+		if (overSinging) {
+			var isHolding:Bool = false;
 			for (strum in playerStrums) {
-				var strumAnim = strum.animation.curAnim;
-				if (strumAnim != null) {
-					if (controlArray[strum.noteData] && !strumAnim.name.startsWith('confirm'))
-						strum.playStrumAnim('pressed');
-					if (!holdingArray[strum.noteData])
-						strum.playStrumAnim('static');
+				if (strum.animation.curAnim.name.startsWith('confirm')) {
+					isHolding = true;
+					break;
 				}
 			}
-
-            if (!isPlayState) return;
-            if (PlayState.game.boyfriend == null) return;
-
-            var bf = PlayState.game.boyfriend;
-			var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
-			&& bf.animation.curAnim.name.startsWith('sing')
-			&& !bf.animation.curAnim.name.endsWith('miss'));
-
-			if (overSinging) {
-				var isHolding:Bool = false;
-				for (strum in playerStrums) {
-					if (strum.animation.curAnim.name.startsWith('confirm')) {
-						isHolding = true;
-						break;
-					}
-				}
-				if (!isHolding)
-					bf.dance();
-			}
+			if (!isHolding)
+				bf.dance();
 		}
 	}
 

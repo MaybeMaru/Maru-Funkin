@@ -44,7 +44,6 @@ class PlayState extends MusicBeatState {
 	public var strumLine(get,never):FlxSprite; function get_strumLine()return notesGroup.strumLine;
 	public var holdingArray(get,never):Array<Bool>; function get_holdingArray()return notesGroup.holdingArray;
 	public var controlArray(get,never):Array<Bool>; function get_controlArray()return notesGroup.controlArray;
-	public var releaseArray(get,never):Array<Bool>; function get_releaseArray()return notesGroup.releaseArray;
 	public var strumLineNotes(get,never):FlxTypedGroup<NoteStrum>; function get_strumLineNotes()return notesGroup.strumLineNotes;
 	public var playerStrums(get,never):FlxTypedGroup<NoteStrum>; function get_playerStrums()return notesGroup.playerStrums;
 	public var opponentStrums(get,never):FlxTypedGroup<NoteStrum>; function get_opponentStrums()return notesGroup.opponentStrums;
@@ -59,6 +58,8 @@ class PlayState extends MusicBeatState {
 	public var vocals(get, never):FlxSound; function get_vocals()return Conductor.vocals;
 	public var skipStrumIntro(get,set):Bool; function get_skipStrumIntro()return notesGroup.skipStrumIntro;
 	function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;
+	public var inBotplay(get,set):Bool; function get_inBotplay()return notesGroup.inBotplay;
+	function set_inBotplay(value)return notesGroup.inBotplay = value;
 
 	public var skipCountdown:Bool = false;
 	public var camZooming:Bool = false;

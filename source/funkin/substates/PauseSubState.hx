@@ -52,7 +52,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 	public function init() {
 		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
 		bg.alpha = 0;
 		levelInfo.alpha = 0;
@@ -81,7 +81,7 @@ class PauseSubState extends MusicBeatSubstate {
 	var coolDown:Float = 0.1; //Controllers have a lil lag
 
 	override function update(elapsed:Float):Void {
-		if (pauseMusic.volume < 0.5 && pauseMusic.playing) {
+		if (pauseMusic.volume < 0.5) {
 			pauseMusic.volume += 0.01 * elapsed;
 		}
 
