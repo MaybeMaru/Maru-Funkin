@@ -25,6 +25,7 @@ class NotesGroup extends FlxGroup
 	public var opponentStrumsInitPos:Array<FlxPoint> = [];
 
     public var inBotplay:Bool = false;
+	public var dadBotplay:Bool = true;
 	public var isPlayState:Bool = true;
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
@@ -246,49 +247,37 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
+	public function checkCpuNote(note:Note) {
+		if ((note.mustPress && !inBotplay) || (!note.mustPress && !dadBotplay)) return;
+		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
+			if (note.isSustainNote) {
+				note.pressed = note.inSustain;
+				if (note.pressed) checkCallback(note.mustPress ? goodSustainPress : opponentSustainPress, [note]);
+			} else {
+				note.strumTime = Conductor.songPosition; // force sick rating (because lag)
+				checkCallback(note.mustPress ? goodNoteHit : opponentNoteHit, [note]);
+			}
+		}
+	}
+
+	public function checkMissNote(note:Note) {
+		if (note.active) return;
+		if (note.mustPress && note.mustHit) {
+			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
+		}
+		notes.remove(note, true);
+		note.destroy();
+	}
+
     override function update(elapsed:Float) {
         super.update(elapsed);
         updateConductor(elapsed);
 
 		if (!generatedMusic) return; // Stuff that needs notes
 		spawnNotes();
-
 		notes.forEachAlive(function(daNote:Note) {
-			// Manage botplay notes
-			if (inBotplay) {
-				if (daNote.mustPress) {
-					if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
-						if (daNote.isSustainNote) {
-							daNote.pressed = daNote.inSustain;
-                               if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
-						} else {
-							daNote.strumTime = Conductor.songPosition; // force sick rating (because lag)
-                               checkCallback(goodNoteHit, [daNote]);
-						}
-					}
-				}
-			}
-
-			// Manage opponent notes
-			if (!daNote.mustPress) {
-				if (Conductor.songPosition >= daNote.strumTime && daNote.mustHit) {
-					if (daNote.isSustainNote) {
-						daNote.pressed = daNote.inSustain ;
-                        if (daNote.pressed) checkCallback(opponentSustainPress, [daNote]);
-					} else {
-                        checkCallback(opponentNoteHit, [daNote]);
-                    }
-				}
-			}
-
-			//Remove missed Notes
-			if (!daNote.active) {
-				if (daNote.mustPress && daNote.mustHit) {
-                    checkCallback(noteMiss, [daNote.noteData%Conductor.NOTE_DATA_LENGTH, daNote]);
-				}
-				notes.remove(daNote, true);
-				daNote.destroy();
-			}
+			checkCpuNote(daNote);
+			checkMissNote(daNote);
 		});
 
         if (isPlayState) {
