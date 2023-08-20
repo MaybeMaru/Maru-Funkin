@@ -3,32 +3,32 @@
         {
             "name": "lime",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "openfl",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "flixel",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "flixel-addons",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "flixel-ui",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "hxcpp",
             "type": "install",
-            "version": "null"
+            "version": null
         },
         {
             "name": "hxcpp-debug-server",
