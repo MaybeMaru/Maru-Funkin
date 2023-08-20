@@ -1,0 +1,39 @@
+# "Borrowed" the Windows part of the workflow from: https://github.com/CrowPlexus/Forever-Engine-Legacy/blob/master/.github/workflows/main.yml
+
+name: Action build
+
+on:
+  push:
+
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  windowsBuild:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@main
+        with:
+          submodules: true
+
+      - name: Install & Setup Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.1
+
+      - name: Install Libraries
+        run: |
+          haxe -cp ./actions -D analyzer-optimize -main Main --interp
+
+      - name: Build
+        run: haxelib run lime build windows
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Maru-Funkin
+          path: export/release/windows/bin
+          if-no-files-found: error
