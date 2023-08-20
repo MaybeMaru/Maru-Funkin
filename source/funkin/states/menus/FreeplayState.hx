@@ -81,13 +81,10 @@ class FreeplayState extends MusicBeatState {
 		add(diffText);
 
 		changeSelection();
-		bg.color = CoolUtil.hexToColor(coolColors.get(songs[curSelected].weekName));
-		for (song in grpSongs) {
-			song.setTargetPos();
-		}
-		for (icon in iconArray) {
-			icon.setSprTrackerPos();
-		}
+		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
+		
+		for (song in grpSongs)  song.setTargetPos();
+		for (icon in iconArray) icon.setSprTrackerPos();
 
 		super.create();
 	}
@@ -107,6 +104,12 @@ class FreeplayState extends MusicBeatState {
 		}
 	}
 
+	function getBgColor():FlxColor {
+		return FlxColor.fromString(coolColors.get(songs[curSelected].weekName));
+	}
+
+	var lerpColor:FlxColorFix;
+
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 		if (FlxG.sound.music.volume < 0.7) {
@@ -114,7 +117,8 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		lerpScore = Math.floor(CoolUtil.coolLerp(lerpScore, intendedScore, 0.4));
-		bg.color = FlxColor.interpolate(bg.color,  CoolUtil.hexToColor(coolColors.get(songs[curSelected].weekName)), CoolUtil.getLerp(0.045));
+		lerpColor.lerp(getBgColor(), 0.045, true);
+		bg.color = lerpColor.get();
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;

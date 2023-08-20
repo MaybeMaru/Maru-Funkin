@@ -29,11 +29,43 @@ class FlxColorFix {
 		return FlxColor.fromRGB(red,green,blue,alpha);
 	}
 
-	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, elpInterp:Bool = true):FlxColor {
-		return FlxColor.interpolate(color1,color2, elpInterp ? CoolUtil.getLerp(factor) : factor);
+	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
+		return FlxColor.interpolate(color1,color2, fpsLerp ? CoolUtil.getLerp(factor) : factor);
 	}
 
 	public static function fromInt(value:Int):FlxColor {
 		return FlxColor.fromInt(value);
+	}
+
+	public var R:Float = 0;
+	public var G:Float = 0;
+	public var B:Float = 0;
+	public var A:Float = 0;
+
+	public function new(R:Float = 255,G:Float = 255,B:Float = 255,A:Float = 255) {
+		set(R,G,B,A);
+	}
+
+	public static function fromFlxColor(color:FlxColor) {
+		return new FlxColorFix(color.red,color.green,color.blue);
+	}
+
+	public function set(R:Float = 255,G:Float = 255,B:Float = 255,A:Float = 255) {
+		this.R = R;
+		this.G = G;
+		this.B = B;
+		this.A = A;
+	}
+	
+	public function get():FlxColor {
+		return FlxColor.fromRGB(Std.int(R),Std.int(G),Std.int(B),Std.int(A));
+	}
+
+	public function lerp(target:FlxColor, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
+		var lerpVal = fpsLerp ? CoolUtil.getLerp(factor) : factor;
+		R = FlxMath.lerp(R, target.red, lerpVal);
+		G = FlxMath.lerp(G, target.green, lerpVal);
+		B = FlxMath.lerp(B, target.blue, lerpVal);
+		return get();
 	}
 }

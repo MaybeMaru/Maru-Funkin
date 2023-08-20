@@ -120,7 +120,14 @@ class StoryMenuState extends MusicBeatState {
 		add(txtWeekTitle);
 
 		changeWeek();
+		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
 		super.create();
+	}
+
+	var lerpColor:FlxColorFix;
+
+	function getBgColor():FlxColor {
+		return FlxColor.fromString(storyWeeks[curWeek].weekColor);
 	}
 
 	override function update(elapsed:Float):Void {
@@ -156,8 +163,9 @@ class StoryMenuState extends MusicBeatState {
 			FlxG.switchState(new MainMenuState());
 		}
 
-		var curWeekColor:String = storyWeeks[curWeek].weekColor;
-		storyBG.color = FlxColor.interpolate(storyBG.color,  CoolUtil.hexToColor(curWeekColor), CoolUtil.getLerp(0.045));
+		lerpColor.lerp(getBgColor(), 0.045, true);
+		storyBG.color = lerpColor.get();
+		
 		for (member in grpWeekCharacters) {
 			member.color = storyBG.color;
 		}
