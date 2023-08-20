@@ -398,5 +398,4 @@ class NotesGroup extends FlxGroup
 	}
 
     function getPref(pref:String):Dynamic return Preferences.getPref(pref);
-    function getKey(key:String):Bool return Controls.getKey(key);
 }

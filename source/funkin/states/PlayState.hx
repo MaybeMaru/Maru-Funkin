@@ -127,6 +127,7 @@ class PlayState extends MusicBeatState {
 
 		FlxG.camera.active = false;
 		FlxG.camera.visible = false;
+		FlxG.mouse.visible = false;
 		
 		camGame = new SwagCamera();
 		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;

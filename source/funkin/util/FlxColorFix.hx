@@ -4,7 +4,6 @@ package funkin.util;
  	Normal FlxColor doesnt work in Hscript sooooooo yeah
 */
 class FlxColorFix {
-    	//	Variables
 	public static var TRANSPARENT:FlxColor = 0x00000000;
 	public static var WHITE:FlxColor = 0xFFFFFFFF;
 	public static var GRAY:FlxColor = 0xFF808080;
@@ -22,14 +21,19 @@ class FlxColorFix {
 	public static var MAGENTA:FlxColor = 0xFFFF00FF;
 	public static var CYAN:FlxColor = 0xFF00FFFF;
 
-    	//	Functions
     public static function fromString(str:String):FlxColor {
 		return FlxColor.fromString(str);
 	}
+
     public static function fromRGB(red:Int, green:Int, blue:Int, alpha:Int = 255):FlxColor {
 		return FlxColor.fromRGB(red,green,blue,alpha);
 	}
+
 	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, elpInterp:Bool = true):FlxColor {
 		return FlxColor.interpolate(color1,color2, elpInterp ? CoolUtil.getLerp(factor) : factor);
+	}
+
+	public static function fromInt(value:Int):FlxColor {
+		return FlxColor.fromInt(value);
 	}
 }
