@@ -769,17 +769,8 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function recalculateSteps():Int {
-		var lastChange:BPMChangeEvent = {
-			stepTime: 0,
-			songTime: 0,
-			bpm: 0
-		}
-		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.songPosition > Conductor.bpmChangeMap[i].songTime) {
-				lastChange = Conductor.bpmChangeMap[i];
-			}
-		}
-
+		var lastChange:BPMChangeEvent = Conductor.getLastBpmChange();
+		if (Conductor.bpm != lastChange.bpm) Conductor.bpm = lastChange.bpm;
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
 		updateBeat();
 		return curStep;
@@ -880,21 +871,6 @@ class ChartingState extends MusicBeatState {
 		for (g in hitList) {
 			for (i in g.members)
 				i.kill();
-		}
-
-		var changeBPM:Null<Bool> = _song.notes[_curSection].changeBPM;
-		if (changeBPM != null || !changeBPM) {
-			if (changeBPM && _song.notes[_curSection].bpm > 0) {
-				Conductor.bpm = _song.notes[_curSection].bpm;
-				FlxG.log.add('CHANGED BPM!');
-			}
-		} else { // get last bpm
-			var daBPM:Float = _song.bpm;
-			for (i in 0..._curSection) {
-				if (_song.notes[i].changeBPM)
-					daBPM = _song.notes[i].bpm;
-			}
-			Conductor.bpm = daBPM;
 		}
 		
 		curSelectedNoteSpr = null;

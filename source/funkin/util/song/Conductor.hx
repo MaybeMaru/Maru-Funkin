@@ -67,6 +67,7 @@ class Conductor {
 		var curBPM:Float = song.bpm;
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
+
 		for (i in 0...song.notes.length) {
 			if(song.notes[i].changeBPM && song.notes[i].bpm != curBPM) {
 				curBPM = song.notes[i].bpm;
@@ -82,21 +83,30 @@ class Conductor {
 			totalSteps += deltaSteps;
 			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
 		}
+
+		if (bpmChangeMap.length > 0) {
+			bpmChangeMap.insert(0, {
+				stepTime: 0,
+				songTime: 0,
+				bpm: song.bpm
+			});
+		}
 		trace('new BPM map BUDDY $bpmChangeMap');
 	}
 
-	public static function getLastBpmChange(time:Float = 0):BPMChangeEvent {
-		if (bpmChangeMap.length > 0) {
-			for (i in 0...bpmChangeMap.length) {
-				if (time >= bpmChangeMap[i].songTime)
-					return bpmChangeMap[i];
-			}
-		}
-		return {
+	public static function getLastBpmChange(?time:Float):BPMChangeEvent {
+		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
 			bpm: bpm
-		};
+		}
+
+		time = (time != null ? time : songPosition);
+		for (i in bpmChangeMap) {
+			if (time >= i.songTime) lastChange = i;
+		}
+
+		return lastChange;
 	}
 
 	public static function setVolume(volume:Float = 1.0) {
