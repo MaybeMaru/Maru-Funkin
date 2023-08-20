@@ -1,7 +1,12 @@
-# Unfinished Readme
+# Maru-Funkin
 
 This engine is still in alpha state, this will eventually get updated when im not a lazy ass lol
 Dont steal code n shit without permission!!
+
+# Credits
+[LinkMain](https://github.com/xLinkmain) - Music
+[Mark-Zer0](https://twitter.com/MarkimusZer0) - Optimized GF export
+[cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 
 ## Build instructions
 
