@@ -134,7 +134,7 @@ class NotesGroup extends FlxGroup
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
 				var strumTime:Int = songNotes[0];
-				var sustainLength = songNotes[2];
+				var sustainLength:Null<Int> = songNotes[2];
 				if ((sustainLength != null ? strumTime + sustainLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
 				var noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
 				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
