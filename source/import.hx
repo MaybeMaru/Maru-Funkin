@@ -75,7 +75,7 @@ import funkin.states.menus.TitleState;
 import funkin.states.options.OptionsState;
 
 import funkin.states.editors.AnimationDebug;
-import funkin.states.editors.chart.ChartingState;
+import funkin.states.editors.ChartingState;
 
 //Haxeflixel shit
 import flixel.FlxG;

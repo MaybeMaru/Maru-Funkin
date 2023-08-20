@@ -72,11 +72,11 @@ class ChartPreview extends FlxSprite {
                 
                 // This is rly messy but bare with me
                 if ((moveConductor && (yDiff < FlxG.height) && (yDiff > -100)) || !moveConductor) {
-                    var noteRGB:Array<Int> = getNoteRGB(note);
-                    pixels.fillRect(new Rectangle(note[1]*NOTE_WIDTH, pY, NOTE_WIDTH, NOTE_HEIGHT), FlxColor.fromRGB(noteRGB[1],noteRGB[2],noteRGB[3],noteRGB[0]));
+                   var noteColor = getNoteColor(note);
+                    pixels.fillRect(new Rectangle(note[1]*NOTE_WIDTH, pY, NOTE_WIDTH, NOTE_HEIGHT), noteColor);
                     if (note[2] > 0) {
                         pixels.fillRect(new Rectangle(note[1] * NOTE_WIDTH + NOTE_WIDTH * 0.25, pY + NOTE_HEIGHT,
-                        Std.int(NOTE_WIDTH * 0.5), Std.int(note[2] * SIZE_CALC)), FlxColor.fromRGB(noteRGB[1],noteRGB[2],noteRGB[3], Std.int(255*0.6)));
+                        Std.int(NOTE_WIDTH * 0.5), Std.int(note[2] * SIZE_CALC)), FlxColor.fromRGB(noteColor.red, noteColor.green, noteColor.blue, Std.int(255*0.6)));
                     }
                 }
             }
@@ -84,7 +84,7 @@ class ChartPreview extends FlxSprite {
     } 
     private static var DEFAULT_COLORS:Array<String> = ['0xffc24b99', '0xff00ffff', '0xff12fa05', '0xfff9393f'];
     private static var skinColorArray:Map<String, Array<String>> = [];
-    private function getNoteRGB(note:Array<Dynamic>):Array<Int> {
+    private function getNoteColor(note:Array<Dynamic>):FlxColor {//:Array<Int> {
         var skin = NoteUtil.getTypeJson(NoteUtil.getTypeName(note[3])).skin;
         skin = (skin != null) ? skin : SkinUtil.curSkin;
         if (skinColorArray[skin] == null) {
@@ -96,18 +96,7 @@ class ChartPreview extends FlxSprite {
                 }
             }
         }
-        return hexToRGB(skinColorArray[skin][Std.int(note[1]%4)]);
-    }
-
-    public function hexToRGB(hex:String):Array<Int> {
-        if(hex.startsWith('0x'))
-            hex = hex.substr(2);
-        var rgb = [];
-        while(hex.length > 0) {
-            rgb.push(Std.parseInt('0x${hex.substr(0,2)}'));
-            hex = hex.substr(2);
-        }
-        return rgb;
+        return FlxColor.fromString(skinColorArray[skin][Std.int(note[1]%4)]);
     }
 
     override public function update(elapsed:Float):Void {

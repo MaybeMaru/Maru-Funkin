@@ -102,6 +102,7 @@ class Note extends FlxSpriteExt {
     public var targetSpr:NoteStrum = null;
     public var mustPress:Bool = false;
     public var parentNote:Note = null; // For sustain notes
+    public var childNote:Note = null; // For normal notes
 
     // Used for stamp() !!!
     var susPiece:FlxSprite;
