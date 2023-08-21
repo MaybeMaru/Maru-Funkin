@@ -1,23 +1,34 @@
 package funkin.states.editors;
 
+import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUICheckBox;
+import flixel.addons.ui.FlxUICheckBox;
+import openfl.net.FileReference;
+import funkin.states.editors.chart.ChartTabs;
 import funkin.states.editors.chart.ChartNote;
 import flixel.util.FlxStringUtil;
 import funkin.states.editors.chart.ChartGrid;
 
 class ChartingState extends MusicBeatState {
     public static var SONG:SwagSong;
+    public static var autoSaveChart:String;
+    public static var instance:ChartingState = null;
     public var sectionIndex:Int = 0;
 
-    var bg:FunkinSprite;
-    var noteTile:FlxSprite;
-    var strumBar:FlxSprite;
-    var songTxt:FunkinText;
-    var mainGrid:ChartGrid;
+    public var bg:FunkinSprite;
+    public var noteTile:FlxSprite;
+    public var strumBar:FlxSprite;
+    public var songTxt:FunkinText;
+    public var tabs:ChartTabs;
+    public var mainGrid:ChartGrid;
 
-    var camHUD:SwagCamera;
+    public var camHUD:SwagCamera;
     
     override function create() {
         super.create();
+        instance = this;
+        autoSaveChart = SaveData.getSave('autoSaveChart');
         bg = new FunkinSprite('menuDesat', [0,0], [0,0]);
 		bg.color = 0xFF242424;
         bg.setScale(1.1);
@@ -67,23 +78,51 @@ class ChartingState extends MusicBeatState {
         }
         add(songTxt);
 
-        for (i in [songTxt]) i.cameras = [camHUD];
+        tabs = new ChartTabs();
+        tabs.tab.setPosition(songTxt.x, songTxt.y + FlxG.height * 0.25);
+        tabs.tab.cameras = [camHUD];
+        add(tabs);
+
+        for (i in [songTxt, tabs]) i.cameras = [camHUD];
 
         changeSection();
     }
 
-    function checkBPM() {
-        var lastChange:BPMChangeEvent = Conductor.getLastBpmChange();
-		if (Conductor.bpm != lastChange.bpm) Conductor.bpm = lastChange.bpm;
+    function checkBPM(updateSec:Bool = false) {  // Check for BPM changes
+        var lastChange:BPMChangeEvent = Conductor.getLastBpmChange(Conductor.songPosition, SONG.bpm);
+		if (Conductor.bpm != lastChange.bpm) {
+            Conductor.bpm = lastChange.bpm;
+            if (updateSec) changeSection();
+        }
     }
 
     public function changeSection(change:Int = 0) {
         sectionIndex = Std.int(FlxMath.bound(sectionIndex + change, 0, SONG.notes.length - 1));
         Conductor.songPosition = getSecTime(sectionIndex);
         Conductor.autoSync();
+        if (SONG.notes[sectionIndex] == null) SONG.notes[sectionIndex] = Song.getDefaultSection(); // Make new section
         checkBPM();
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex);
         updateBar();
+        updateSectionTabUI();
+    }
+
+    public function updateIcons() {
+        
+    }
+
+    public function updateSectionTabUI():Void {
+		var sec = SONG.notes[sectionIndex];
+        if (sec == null) return;
+		tabs.check_mustHitSection.checked = sec.mustHitSection;
+		tabs.check_changeBPM.checked = sec.changeBPM;
+		tabs.stepperSectionBPM.value = sec.bpm;
+        updateIcons();
+	}
+
+    public function updateNoteTabUI():Void {
+        if (selectedNote == null || selectedNoteObject == null) return;
+        tabs.stepperSusLength.value = selectedNote[2];
     }
 
     var playing:Bool = false;
@@ -91,6 +130,7 @@ class ChartingState extends MusicBeatState {
         playing = true;
         Conductor.play();
         Conductor.sync();
+        checkBPM(true);
     }
 
     public function stop() {
@@ -148,6 +188,7 @@ class ChartingState extends MusicBeatState {
 
         if (FlxG.keys.justPressed.ENTER) {
             PlayState.SONG = SONG;
+            autosaveSong();
             Conductor.stop();
             Conductor.setPitch(1, false);
 			FlxG.switchState(new PlayState());
@@ -167,19 +208,19 @@ class ChartingState extends MusicBeatState {
         }
     }
 
-    var selectedNote:Array<Dynamic> = null;
-    var selectedNoteObject:ChartNote = null;
+    public var selectedNote:Array<Dynamic> = null;
+    public var selectedNoteObject:ChartNote = null;
 
-    function addNote() {
+    public function addNote() {
         var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
         var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / ChartGrid.GRID_SIZE);
-        var note:Array<Dynamic> = [strumTime, noteData];
+        var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         SONG.notes[sectionIndex].sectionNotes.push(note);
         selectedNote = note;
         selectedNoteObject = mainGrid.drawNote(note);
     }
 
-    function removeNote(note:ChartNote) {
+    public function removeNote(note:ChartNote) {
         var data = mainGrid.getNoteData(note);
         if (data == selectedNote || note == selectedNoteObject) {
             selectedNote = null;
@@ -189,12 +230,42 @@ class ChartingState extends MusicBeatState {
         mainGrid.clearNote(note);
     }
 
-    function changeNoteSus(value:Float = 0) {
+    public function changeNoteSus(value:Float = 0) {
         if (selectedNote == null || selectedNoteObject == null) return;
         selectedNote[2] = (selectedNote[2] == null ? 0 : selectedNote[2]);
         selectedNote[2] = Math.max(selectedNote[2] + value, 0);
         mainGrid.updateNote(selectedNoteObject, selectedNote);
     }
+
+    function updateSelectedNote() {
+        if (selectedNote == null || selectedNoteObject == null) return;
+        mainGrid.updateNote(selectedNoteObject, selectedNote);
+    }
+
+    public function clearSong() {
+        for (i in SONG.notes) {
+            i.sectionNotes == [];
+        }
+        clearSectionData();
+    }
+
+    public function clearSectionData() {
+        SONG.notes[sectionIndex].sectionNotes = [];
+        selectedNote = null;
+        selectedNoteObject = null;
+        mainGrid.clearSection();
+    }
+
+    public function copyLastSection(change:Int = 1):Void {
+        var copyData = SONG.notes[sectionIndex - change];
+        if (copyData == null || change == 0) return;
+        for (i in copyData.sectionNotes) {
+            var note:Array<Dynamic> = [i[0], i[1], i[2], i[3]]; // Make sure to not reuse it?? clone() don work :cries:
+            note[0] += Conductor.stepCrochet * (Conductor.STEPS_SECTION_LENGTH * change);
+            SONG.notes[sectionIndex].sectionNotes.push(note);
+            mainGrid.drawNote(note);
+        } 
+	}
 
     override function update(elapsed:Float) {
         super.update(elapsed);
@@ -227,4 +298,78 @@ class ChartingState extends MusicBeatState {
         }
         return time;
     }
+
+    public function loadJson(song:String):Void {
+		PlayState.SONG = Song.loadFromFile(PlayState.curDifficulty, song);
+		PlayState.SONG = Song.checkSong(PlayState.SONG);
+		FlxG.resetState();
+	}
+
+    public function loadAutosave():Void {
+		PlayState.SONG = Song.checkSong(Song.parseJson('', autoSaveChart));
+		FlxG.resetState();
+	}
+
+    public function autosaveSong():Void {
+		SONG = Song.checkSong(SONG);
+		autoSaveChart = getSongString();
+		SaveData.setSave('autoSaveChart', autoSaveChart);
+		SaveData.flushData();
+	}
+
+    public function getSongString(_:Null<String> = null) {
+		return Json.stringify({
+			"song": Song.optimizeJson(SONG)
+		}, _);
+	}
+
+    public function saveChart() {
+        SONG = Song.checkSong(SONG);
+		var data:String = getSongString("\t");
+		if (data.length > 0) {
+			var chartFile:FileReference = new FileReference();
+			chartFile.save(data.trim(), '${PlayState.curDifficulty}.json');
+		}
+    }
+
+    override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
+		if (id == FlxUICheckBox.CLICK_EVENT) {
+			var check:FlxUICheckBox = cast sender;
+			var label = check.getLabel().text;
+			switch (label) {
+				case 'Must hit section':
+					SONG.notes[sectionIndex].mustHitSection = check.checked;
+					updateIcons();
+				case 'Change BPM':
+					SONG.notes[sectionIndex].changeBPM = check.checked;
+					Conductor.mapBPMChanges(ChartingState.SONG);
+			}
+		}
+		else if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
+			var nums:FlxUINumericStepper = cast sender;
+			var wname = nums.name;
+			switch (wname) {
+				case 'song_speed': SONG.speed = nums.value;
+				case 'song_bpm':
+					Conductor.mapBPMChanges(SONG);
+					Conductor.bpm = nums.value;
+				case 'song_inst_offset':
+					var tempOffset:Int = Std.int(nums.value);
+					Conductor.songOffset[0] = tempOffset;
+					SONG.offsets[0] = tempOffset;
+				case 'song_vocals_offset':
+					var tempOffset:Int = Std.int(nums.value);
+					Conductor.songOffset[1] = tempOffset;
+					SONG.offsets[1] = tempOffset;
+				case 'note_susLength':
+					selectedNote[2] = nums.value;
+					updateSelectedNote();
+				case 'section_bpm':
+                    Conductor.mapBPMChanges(ChartingState.SONG);
+					SONG.notes[sectionIndex].bpm = Std.int(nums.value);
+                    changeSection();
+				case 'stepper_copy': //updatePreview();
+			}
+		}
+	}
 }

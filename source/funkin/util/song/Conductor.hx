@@ -94,11 +94,11 @@ class Conductor {
 		trace('new BPM map BUDDY $bpmChangeMap');
 	}
 
-	public static function getLastBpmChange(?time:Float):BPMChangeEvent {
+	public static function getLastBpmChange(?time:Float, ?autoBPM:Float):BPMChangeEvent {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
-			bpm: bpm
+			bpm: (autoBPM != null ? autoBPM : bpm)
 		}
 
 		time = (time != null ? time : songPosition);

@@ -166,7 +166,7 @@ class Character extends FlxSpriteExt {
 			_singHoldTimer = 0;
 		} else {
 			_singHoldTimer += FlxG.elapsed;
-			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {//Conductor.stepCrochet * 0.001) {
+			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {
 				playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
 				_singHoldTimer = 0;
 			}
@@ -174,7 +174,7 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function hey():Void {
-		playAnim(isGF ? 'cheer' : 'hey');
+		playAnim(isGF ? 'cheer' : 'hey', true);
 		specialAnim = true;
 		new FlxTimer().start(Conductor.stepCrochet * 0.001 * Conductor.STEPS_LENGTH, function(tmr:FlxTimer) {
 			specialAnim = false;
