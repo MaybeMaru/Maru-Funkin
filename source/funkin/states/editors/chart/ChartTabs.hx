@@ -13,8 +13,7 @@ import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 import funkin.substates.CharSelectSubstate;
 
-class ChartTabs extends FlxTypedGroup<Dynamic> {
-    public var tab:FlxUITabMenu;
+class ChartTabs extends FlxUITabMenu {
     public var tabs = [
 		{name: "Song", 		label: 'Song'},
 		{name: "Section", 	label: 'Section'},
@@ -23,10 +22,8 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 	];
     
     public function new() {
-        super();
-		tab = new FlxUITabMenu(null, tabs, true);
-		tab.resize(400, 400);
-		add(tab);
+        super(null, tabs, true);
+		resize(400, 400);
 
         addSongUI();
 		addSectionUI();
@@ -122,7 +119,7 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 				}});
 		difficultyDropDown.selectedLabel = PlayState.curDifficulty;
 		
-		var tab_group_song = new FlxUI(null, tab);
+		var tab_group_song = new FlxUI(null, this);
 		tab_group_song.name = "Song";
 		tab_group_song.add(songTitleInput);
 
@@ -155,7 +152,7 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 		tab_group_song.add(difficultyDropDown);
 		tab_group_song.add(stageDropDown);
 
-		tab.addGroup(tab_group_song);
+		addGroup(tab_group_song);
 	}
 
 	var stepperCopy:FlxUINumericStepper;
@@ -166,7 +163,7 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 	var sectionNoteTypesDropDown:FlxUIDropDownMenu;
 
 	function addSectionUI():Void {
-		var tab_group_section = new FlxUI(null, tab);
+		var tab_group_section = new FlxUI(null, this);
 		tab_group_section.name = 'Section';
 
 		stepperSectionBPM = new FlxUINumericStepper(10, 80, 1, Conductor.bpm, 0, 999, 0);
@@ -230,7 +227,7 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 		tab_group_section.add(setSectionNoteTypes);
 		tab_group_section.add(sectionNoteTypesDropDown);
 
-		tab.addGroup(tab_group_section);
+		addGroup(tab_group_section);
 	}
 
 	public var stepperSusLength:FlxUINumericStepper;
@@ -239,7 +236,7 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 	public static var curType:String = 'default';
 
 	function addNoteUI():Void {
-		var tab_group_note = new FlxUI(null, tab);
+		var tab_group_note = new FlxUI(null, this);
 		tab_group_note.name = 'Note';
 
 		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * Conductor.STEPS_SECTION_LENGTH);
@@ -263,15 +260,15 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 		tab_group_note.add(stepperSusLength);
 		tab_group_note.add(noteTypesDropDown);
 
-		tab.addGroup(tab_group_note);
+		addGroup(tab_group_note);
 	}
 
-	var check_hitsound:FlxUICheckBox;
-	var check_metronome:FlxUICheckBox;
-	var slider_pitch:FlxUISlider;
+	public var check_hitsound:FlxUICheckBox;
+	public var check_metronome:FlxUICheckBox;
+	public var slider_pitch:FlxUISlider;
 
 	function addEditorUI():Void {
-		var tab_group_editor = new FlxUI(null, tab);
+		var tab_group_editor = new FlxUI(null, this);
 		tab_group_editor.name = 'Editor';
 
 		var check_mute_inst = new FlxUICheckBox(10, 35, null, null, "Mute Instrumental", 100);
@@ -292,8 +289,17 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 		check_metronome = new FlxUICheckBox(check_mute_inst.x, check_hitsound.y + 30, null, null, "Use Metronome", 100);
 		check_metronome.checked = false;
 
-		var button_clearSong:FlxButton = new FlxButton(200, check_mute_inst.y, "Clear Song", ChartingState.instance.clearSong);
-		button_clearSong.color = FlxColor.RED;
+		var button_clearSongNotes:FlxButton = new FlxButton(250, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
+		button_clearSongNotes.color = FlxColor.RED;
+		button_clearSongNotes.scale.set(1.25,1.25);
+		button_clearSongNotes.label.color = FlxColor.WHITE;
+		button_clearSongNotes.label.fieldWidth = 0;
+
+		var button_clearSongFull:FlxButton = new FlxButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
+		button_clearSongFull.color = FlxColor.RED;
+		button_clearSongFull.scale.set(1.25,1.25);
+		button_clearSongFull.label.color = FlxColor.WHITE;
+		button_clearSongFull.label.fieldWidth = 0;
 
 		slider_pitch = new FlxUISlider(this, 'songPitch', check_metronome.x, check_metronome.y + 30, 0.25, 2, 290, null, 5, FlxColor.WHITE, FlxColor.BLACK);
 		slider_pitch.nameLabel.text = 'Pitch/Speed';
@@ -304,8 +310,10 @@ class ChartTabs extends FlxTypedGroup<Dynamic> {
 		tab_group_editor.add(check_hitsound);
 		tab_group_editor.add(check_metronome);
 		tab_group_editor.add(slider_pitch);
-		tab_group_editor.add(button_clearSong);
+		tab_group_editor.add(button_clearSongNotes);
+		
+		tab_group_editor.add(button_clearSongFull);
 
-		tab.addGroup(tab_group_editor);
+		addGroup(tab_group_editor);
 	}
 }

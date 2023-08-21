@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUICheckBox;
@@ -23,7 +24,7 @@ class ChartingState extends MusicBeatState {
     public var tabs:ChartTabs;
     public var mainGrid:ChartGrid;
 
-    public var camHUD:SwagCamera;
+    public var camTop:SwagCamera;
     
     override function create() {
         super.create();
@@ -33,13 +34,19 @@ class ChartingState extends MusicBeatState {
 		bg.color = 0xFF242424;
         bg.setScale(1.1);
 		bg.screenCenter();
+        bg._dynamic.update = function (elapsed) {
+            if (bg.scale.x <= 1.11) return;
+            bg.scale.set(
+                CoolUtil.coolLerp(bg.scale.x, 1.1, 0.25),
+                CoolUtil.coolLerp(bg.scale.y, 1.1, 0.25));
+        }
 		add(bg);
 
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
         FlxG.mouse.visible = true;
 
-        camHUD = new SwagCamera(); camHUD.bgColor.alpha = 0;
-        FlxG.cameras.add(camHUD, false);
+        camTop = new SwagCamera(); camTop.bgColor.alpha = 0;
+        FlxG.cameras.add(camTop, false);
         
         SONG = Song.checkSong(PlayState.SONG);
         Conductor.bpm = SONG.bpm;
@@ -79,11 +86,10 @@ class ChartingState extends MusicBeatState {
         add(songTxt);
 
         tabs = new ChartTabs();
-        tabs.tab.setPosition(songTxt.x, songTxt.y + FlxG.height * 0.25);
-        tabs.tab.cameras = [camHUD];
+        tabs.setPosition(songTxt.x, songTxt.y + FlxG.height * 0.25);
         add(tabs);
 
-        for (i in [songTxt, tabs]) i.cameras = [camHUD];
+        for (i in [songTxt, tabs]) i.scrollFactor.set();
 
         changeSection();
     }
@@ -105,6 +111,15 @@ class ChartingState extends MusicBeatState {
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex);
         updateBar();
         updateSectionTabUI();
+    }
+
+    override function beatHit() {
+        super.beatHit();
+        if (playing && tabs.check_metronome.checked) {
+            CoolUtil.playSound('chart/metronome_tick');
+			var scaleMult:Float = (curBeat % Conductor.BEATS_LENGTH == 0) ? 1.25 : 1.15;
+			bg.scale.set(scaleMult,scaleMult);
+        }
     }
 
     public function updateIcons() {
@@ -235,6 +250,7 @@ class ChartingState extends MusicBeatState {
         selectedNote[2] = (selectedNote[2] == null ? 0 : selectedNote[2]);
         selectedNote[2] = Math.max(selectedNote[2] + value, 0);
         mainGrid.updateNote(selectedNoteObject, selectedNote);
+        updateNoteTabUI();
     }
 
     function updateSelectedNote() {
@@ -242,11 +258,27 @@ class ChartingState extends MusicBeatState {
         mainGrid.updateNote(selectedNoteObject, selectedNote);
     }
 
-    public function clearSong() {
-        for (i in SONG.notes) {
-            i.sectionNotes == [];
-        }
-        clearSectionData();
+    public function clearSongNotes() {
+        stop();
+        openSubState(new PromptSubstate('Are you sure you want to\nclear this song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+            for (i in SONG.notes) i.sectionNotes = [];
+            clearSectionData();
+        }));
+    }
+
+    public function clearSongFull() {
+        stop();
+        openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+            for (i in SONG.notes) {
+                i.sectionNotes = [];
+                i.sectionEvents = [];
+                i.mustHitSection = false;
+                i.changeBPM = false;
+                i.bpm = 0;
+            }
+            clearSectionData();
+            updateSectionTabUI();
+        }));
     }
 
     public function clearSectionData() {
