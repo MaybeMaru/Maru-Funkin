@@ -65,16 +65,14 @@ class ModdingUtil {
 
     inline public static function addScript(path:String, global:Bool = false, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
-        if (scriptCode.length > 0) {
-            consoleTrace('[ADD] $path / $global', FlxColor.LIME);
-            var script:FunkScript = new FunkScript(scriptCode);
-            script.scriptID = path;
-    
-            scriptsMap.set(tag == null ? path : tag, script);
-            (global ? globalScripts : playStateScripts).push(script);
-            return script;
-        }
-        return null;
+        if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
+
+        consoleTrace('[ADD] $path / $global', FlxColor.LIME);
+        var script:FunkScript = new FunkScript(scriptCode);
+        script.scriptID = path;
+        scriptsMap.set(tag == null ? path : tag, script);
+        (global ? globalScripts : playStateScripts).push(script);
+        return script;
     }
 
     inline public static function setModFolder(modName:String, activated:Bool):Void {

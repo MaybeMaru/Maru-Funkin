@@ -113,6 +113,14 @@ class FunkScript extends SScript {
 			}
 		});
 
+		set('parseJson', function (value:String):Dynamic {
+			return Json.parse(value);
+		});
+
+		set('stringifyJson', function (value:Dynamic, pretty:Bool = true):String {
+			return Json.stringify(value, pretty ? "\t" : null);
+		});
+
 		set('getPref', function(pref:String):Dynamic {
 			return Preferences.getPref(pref);
 		});
