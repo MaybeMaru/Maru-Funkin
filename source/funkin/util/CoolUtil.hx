@@ -160,4 +160,14 @@ class CoolUtil {
     inline public static function getNoteDiff(daNote:Note):Float {
         return Math.abs(daNote.strumTime - Conductor.songPosition);
     }
+
+	inline public static function switchState(newState:FlxState) {
+		if (MusicBeatState.game == null) return;
+		MusicBeatState.game.switchState(newState);
+	}
+
+	inline public static function resetState() {
+		if (MusicBeatState.game == null) return;
+		MusicBeatState.game.resetState();
+	}
 }

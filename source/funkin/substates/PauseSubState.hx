@@ -90,10 +90,10 @@ class PauseSubState extends MusicBeatSubstate {
 		if (getKey('UI_UP-P')) 		changeSelection(-1);
 		if (getKey('UI_DOWN-P')) 	changeSelection(1);
 
-		if (coolDown > 0) {
-			coolDown-=elapsed;
-		} else {
-			if (getKey('ACCEPT-P')) {	
+		if (coolDown > 0) coolDown-=elapsed;
+		else {
+			if (getKey('ACCEPT-P')) {
+				CustomTransition.skipTrans = false;
 				switch (menuItems[curSelected]) {
 					case "Resume":	
 						CoolUtil.resumeSounds();
@@ -102,17 +102,17 @@ class PauseSubState extends MusicBeatSubstate {
 
 					case "Restart song":
 						PlayState.clearCache = false;
-						FlxG.resetState();
+						CoolUtil.resetState();
 
 					case "Options":			
 						PlayState.clearCache = false;
 						OptionsState.fromPlayState = true;
-						FlxG.switchState(new OptionsState());
+						CoolUtil.switchState(new OptionsState());
 
 					case "Exit to menu":
 						PlayState.clearCache = true;
 						PlayState.deathCounter = 0;
-						FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
+						CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
 				}
 			}
 		}

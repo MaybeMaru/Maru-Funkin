@@ -177,6 +177,7 @@ class Preloader extends flixel.FlxState {
                 fileIndex=0;
 
                 if (listIndex > cacheList.length-1) {
+                    CustomTransition.init();
                     FlxG.switchState(new SplashState());
                 }
             }

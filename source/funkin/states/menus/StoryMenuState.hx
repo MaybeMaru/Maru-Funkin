@@ -160,7 +160,7 @@ class StoryMenuState extends MusicBeatState {
 		if ((getKey('BACK-P')) && !movedBack && !selectedWeek) {
 			movedBack = true;
 			CoolUtil.playSound('cancelMenu');
-			FlxG.switchState(new MainMenuState());
+			switchState(new MainMenuState());
 		}
 
 		lerpColor.lerp(getBgColor(), 0.045, true);

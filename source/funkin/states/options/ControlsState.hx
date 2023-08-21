@@ -115,7 +115,7 @@ class ControlsState extends MusicBeatState {
 		if (getKey('BACK-P')) {
 			FlxG.gamepads.deviceConnected.remove(resetGamepad);
 			FlxG.gamepads.deviceDisconnected.remove(resetGamepad);
-			FlxG.switchState(new OptionsState());
+			switchState(new OptionsState());
 		}
 
 		if (getKey('ACCEPT-P')) {

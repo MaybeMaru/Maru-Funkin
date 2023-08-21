@@ -1,7 +1,6 @@
 package funkin.states;
 
 import funkin.objects.NotesGroup;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.ui.FlxBar;
 
 class PlayState extends MusicBeatState {
@@ -370,7 +369,7 @@ class PlayState extends MusicBeatState {
 		camFollowLerp = 0.04 * defaultCamSpeed;
 		camGame.follow(camFollow, LOCKON, camFollowLerp);
 		camGame.zoom = defaultCamZoom;
-		camGame.focusOn(camFollow.getPosition());
+		snapCamera();
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		FlxG.fixedTimestep = false;
@@ -640,11 +639,11 @@ class PlayState extends MusicBeatState {
 				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
 			}
 		} else if (FlxG.keys.justPressed.SEVEN) {
-			FlxG.switchState(new ChartingState());
+			switchState(new ChartingState());
 			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		} else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
-			FlxG.switchState(new AnimationDebug(SONG.players[1]));
+			switchState(new AnimationDebug(SONG.players[1]));
 			#if cpp DiscordClient.changePresence("Character Editor", null, null, true); #end
 		} else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
@@ -693,6 +692,10 @@ class PlayState extends MusicBeatState {
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
+
+	public function snapCamera() {
+		camGame.focusOn(camFollow.getPosition());
+	}
 	
 	public function cameraMovement():Void {
 		if (!notesGroup.generatedMusic || curSectionData == null) return;
@@ -720,9 +723,10 @@ class PlayState extends MusicBeatState {
 		Conductor.setVolume(0);
 		ModdingUtil.addCall('endSong');
 		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
+		CustomTransition.skipTrans = isStoryMode;
 
 		if (inChartEditor) {
-			FlxG.switchState(new ChartingState());
+			switchState(new ChartingState());
 			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		}
 		else {
@@ -735,7 +739,7 @@ class PlayState extends MusicBeatState {
 				trace('WENT BACK TO FREEPLAY??');
 				clearCache = true;
 				SkinUtil.setCurSkin('default');
-				FlxG.switchState(new FreeplayState());
+				switchState(new FreeplayState());
 			}
 		}
 	}
@@ -750,18 +754,15 @@ class PlayState extends MusicBeatState {
 
 		ModdingUtil.addCall('endWeek');
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 		clearCache = true;
 		SkinUtil.setCurSkin('default');
-		FlxG.switchState(new StoryMenuState());
+		CustomTransition.skipTrans = false;
+		switchState(new StoryMenuState());
 	}
 
 	function switchSong():Void {
 		trace('LOADING NEXT SONG [${PlayState.storyPlaylist[0]}-$curDifficulty]');
 
-		FlxTransitionableState.skipNextTransIn = true;
-		FlxTransitionableState.skipNextTransOut = true;
 		prevCamFollow = camFollow;
 
 		PlayState.SONG = Song.loadFromFile(curDifficulty, PlayState.storyPlaylist[0]);

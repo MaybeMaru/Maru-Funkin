@@ -31,6 +31,7 @@ import funkin.util.FlxColorFix;
 import funkin.util.JsonUtil;
 import funkin.util.Stage;
 import funkin.util.SaveData;
+import funkin.objects.CustomTransition;
 
 //Note
 import funkin.objects.note.Note;

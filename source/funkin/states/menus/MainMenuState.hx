@@ -24,9 +24,6 @@ class MainMenuState extends MusicBeatState {
 		if (!FlxG.sound.music.playing) {
 			CoolUtil.playMusic('freakyMenu');
 		}
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 		persistentUpdate = persistentDraw = true;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -93,7 +90,7 @@ class MainMenuState extends MusicBeatState {
 			}
 
 			if (getKey('BACK-P')) {
-				FlxG.switchState(new TitleState());
+				switchState(new TitleState());
 			}
 
 			if (getKey('ACCEPT-P')) {
@@ -126,14 +123,14 @@ class MainMenuState extends MusicBeatState {
 
 								switch (daChoice) {
 									case 'story mode':
-										FlxG.switchState(new StoryMenuState());
+										switchState(new StoryMenuState());
 									case 'freeplay':
 										FreeplayState.curSelected = 0;
 										FreeplayState.curDifficulty = 1;
-										FlxG.switchState(new FreeplayState());
+										switchState(new FreeplayState());
 									case 'options':
 										OptionsState.fromPlayState = false;
-										FlxG.switchState(new OptionsState());
+										switchState(new OptionsState());
 								}
 							});
 						}

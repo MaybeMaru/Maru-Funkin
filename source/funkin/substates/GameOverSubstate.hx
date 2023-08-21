@@ -38,12 +38,10 @@ class GameOverSubstate extends MusicBeatSubstate {
 		}
  
 		if (getKey('BACK-P')) {
-			if (FlxG.sound.music != null) {
-				FlxG.sound.music.stop();
-			}
-			ModdingUtil.addCall('exitGameOver');
+			if (FlxG.sound.music != null) FlxG.sound.music.stop();
 			PlayState.clearCache = true;
-			FlxG.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
+			ModdingUtil.addCall('exitGameOver');
+			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
 		}
 
 		if (char.animation.curAnim != null) {

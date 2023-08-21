@@ -47,7 +47,7 @@ class ModFoldersState extends MusicBeatState {
         SaveData.flushData();
         CoolUtil.init();
         CoolUtil.playMusic('freakyMenu');
-        FlxG.resetState();
+        CoolUtil.resetState();
     }
 
     function enableAll():Void {
@@ -70,7 +70,7 @@ class ModFoldersState extends MusicBeatState {
         super.update(elapsed);
         
         if (getKey('BACK-P')) {
-            FlxG.switchState(new OptionsState());
+            switchState(new OptionsState());
         }
 
         if(FlxG.mouse.wheel != 0 && (modFolderItems.length > 3)) {

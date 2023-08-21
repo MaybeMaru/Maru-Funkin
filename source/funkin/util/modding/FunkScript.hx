@@ -285,7 +285,7 @@ class FunkScript extends SScript {
 		}
 
 		var state = new CustomState().initScript(scriptCode, key);
-		FlxG.switchState(state);
+		CoolUtil.switchState(state);
 	}
 }
 
@@ -337,7 +337,7 @@ class CustomState extends MusicBeatState {
     }
     
     override public function update(elapsed:Float) {
-		if (FlxG.keys.justPressed.F4) FlxG.switchState(new StoryMenuState()); // emergency exit
+		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
 		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
 		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }

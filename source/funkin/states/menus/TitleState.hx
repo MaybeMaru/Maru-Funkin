@@ -29,8 +29,8 @@ class TitleState extends MusicBeatState {
 	var introJson:IntroJson = null;
 
 	override public function create():Void {
+		CustomTransition.skipTrans = false;
 		FlxG.mouse.visible = false;
-		super.create();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
@@ -75,6 +75,7 @@ class TitleState extends MusicBeatState {
 		add(spriteGroup);
 
 		initialized = true;
+		super.create();
 	}
 
 	var danceLeft:Bool = false;
@@ -132,8 +133,11 @@ class TitleState extends MusicBeatState {
 	var timeElp:Float = 0;
 
 	override function update(elapsed:Float):Void {
-		if (FlxG.sound.music != null)
+		if (FlxG.sound.music != null) {
 			Conductor.songPosition = FlxG.sound.music.time;
+			if (FlxG.sound.music.volume < 0.6) FlxG.sound.music.volume += elapsed * 0.1;
+		}
+
 
 		if (FlxG.keys.justPressed.F) {
 			FlxG.fullscreen = !FlxG.fullscreen;
@@ -161,7 +165,7 @@ class TitleState extends MusicBeatState {
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
 
 			new FlxTimer().start(2, function(tmr:FlxTimer) {
-				FlxG.switchState(new MainMenuState());
+				switchState(new MainMenuState());
 			});
 			}
 			else if (!skippedIntro) {

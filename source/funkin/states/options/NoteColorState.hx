@@ -114,7 +114,7 @@ class NoteColorState extends MusicBeatState
             }
             else
             {
-                FlxG.switchState(new OptionsState());
+                switchState(new OptionsState());
             }
 
         }

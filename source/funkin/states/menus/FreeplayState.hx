@@ -140,7 +140,7 @@ class FreeplayState extends MusicBeatState {
 		detectChangeSelection();
 
 		if (getKey('BACK-P')) {
-			FlxG.switchState(new MainMenuState());
+			switchState(new MainMenuState());
 		}
 
 		#if PRELOAD_ALL
@@ -151,7 +151,7 @@ class FreeplayState extends MusicBeatState {
 
 		if(FlxG.keys.justPressed.SEVEN) {
 			setupSong();
-			FlxG.switchState(new ChartingState());
+			switchState(new ChartingState());
 		}
 
 		if (getKey('ACCEPT-P')) {

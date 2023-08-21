@@ -27,7 +27,6 @@ class ChartingState extends MusicBeatState {
     public var camTop:SwagCamera;
     
     override function create() {
-        super.create();
         instance = this;
         autoSaveChart = SaveData.getSave('autoSaveChart');
         bg = new FunkinSprite('menuDesat', [0,0], [0,0]);
@@ -90,8 +89,9 @@ class ChartingState extends MusicBeatState {
         add(tabs);
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
-
         changeSection();
+
+        super.create();
     }
 
     function checkBPM(updateSec:Bool = false) {  // Check for BPM changes

@@ -137,12 +137,12 @@ function startCutscene()
     //Little Cunt
     new FlxTimer().start(31.2, function(tmr:FlxTimer)
     {
-        PlayState.boyfriend.playAnim('singUPmiss', true);
-
         //Snap the camera
         PlayState.camFollow.x = PlayState.boyfriend.x + 260;
         PlayState.camFollow.y = PlayState.boyfriend.y + 160;
+        PlayState.snapCamera();
 
+        PlayState.boyfriend.playAnim('singUPmiss', true);
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 0.25, {ease: FlxEase.elasticOut});
     });
 
@@ -206,6 +206,7 @@ function zoomBack()
 	PlayState.camFollow.x = 630;
     PlayState.camFollow.y = 425;
 	PlayState.camGame.zoom = 0.8;
+    PlayState.snapCamera();
 }
 
 var addedPico:Bool = false;
