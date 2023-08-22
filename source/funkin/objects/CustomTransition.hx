@@ -3,13 +3,13 @@ package funkin.objects;
 class CustomTransition extends FlxSprite {
     public static var skipTrans:Bool = false;
     public static var transGraphic(get, default):FlxGraphic = null;
-    public static var openTimes:Array<Float> = [0.4,0.3];
+    public static var openTimes:Array<Float> = [0.6,0.4];
 
     public static function get_transGraphic() {
         return (transGraphic == null ? init() : transGraphic);
     }
 
-    public static function set(?color:FlxColor, openTime:Float = 0.4, closeTime:Float = 0.3) {
+    public static function set(?color:FlxColor, openTime:Float = 0.6, closeTime:Float = 0.4) {
         openTimes = [openTime, closeTime];
         color = (color == null ? FlxColor.BLACK : color);
         transGraphic = FlxG.bitmap.create(FlxG.width, FlxG.height * 2, color, true, 'transition_graphic');
@@ -31,26 +31,13 @@ class CustomTransition extends FlxSprite {
             if (completeCallback != null) completeCallback();
             if (nextState != null) FlxG.switchState(nextState);
         }
-
-        if (skipTrans) {
-            _func();
-            return;
-        }
-        
         flipY = true;
-        visible = true;
-        y = -FlxG.height * 2;
-        FlxTween.tween(this, {y: 0}, openTimes[0], {
-            onComplete: _func
-        });
+        setupTrans(-FlxG.height * 2, 0, openTimes[0], _func);
     }
 
-    public function exitTrans() {
-        if (skipTrans) return;
+    public function exitTrans(?completeCallback:Dynamic) {
         flipY = false;
-        visible = true;
-        y = -FlxG.height;
-        FlxTween.tween(this, {y: FlxG.height}, openTimes[1]);
+        setupTrans(-FlxG.height, FlxG.height, openTimes[1], completeCallback);
     }
 
     public function new() {
@@ -58,5 +45,39 @@ class CustomTransition extends FlxSprite {
         loadGraphic(transGraphic);
         scrollFactor.set();
         y = FlxG.height;
+    }
+
+    function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic) {
+        y = startPosition = (skipTrans ? end : start);
+        visible = !skipTrans;
+        endPosition = end;
+        transDuration = time;
+        timeElapsed = 0;
+        finishCallback = callback;
+        transitioning = true;
+    }
+
+    var timeElapsed:Float = 0;
+    var transDuration:Float = 1.0;
+
+    var startPosition:Float = 0;
+    var endPosition:Float = 720;
+
+    var finishCallback:Dynamic = null;
+    var transitioning:Bool = false;
+
+    override public function update(elapsed:Float) {
+        if (!transitioning) return;
+
+        timeElapsed += elapsed;
+        var lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
+        y = FlxMath.lerp(startPosition, endPosition, lerpValue);
+    
+        if (Math.floor(y) == endPosition) {
+            if (finishCallback != null) finishCallback();
+            transitioning = false;
+        }
+
+        super.update(elapsed);
     }
 }

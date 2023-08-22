@@ -29,7 +29,6 @@ class TitleState extends MusicBeatState {
 	var introJson:IntroJson = null;
 
 	override public function create():Void {
-		CustomTransition.skipTrans = false;
 		FlxG.mouse.visible = false;
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -138,10 +137,7 @@ class TitleState extends MusicBeatState {
 			if (FlxG.sound.music.volume < 0.6) FlxG.sound.music.volume += elapsed * 0.1;
 		}
 
-
-		if (FlxG.keys.justPressed.F) {
-			FlxG.fullscreen = !FlxG.fullscreen;
-		}
+		if (FlxG.keys.justPressed.F) FlxG.fullscreen = !FlxG.fullscreen;
 
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
@@ -177,7 +173,12 @@ class TitleState extends MusicBeatState {
 		if (getKey('UI_RIGHT'))timeElp += elapsed;
 		Shader.setFloat('colorSwap', 'iTime', timeElp);
 
-		super.update(elapsed);
+		super.update(elapsed); // TODO fix random crash, error comes from here
+		/*
+			if someone knows where this comes from, HELP
+			error doesnt appear on debug builds, and apparently appears at random??
+			so i cant get the error path and im dying inside :cries:
+		*/
 	}
 
 	override function beatHit():Void {

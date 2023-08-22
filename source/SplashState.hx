@@ -2,9 +2,8 @@ package;
 
 import lime.app.Application;
 
-class SplashState extends MusicBeatState {
+class SplashState extends FlxState {
     override function create() {
-		CustomTransition.skipTrans = true;
         super.create();
 
         //Load Settings / Mods
@@ -56,7 +55,7 @@ class SplashState extends MusicBeatState {
 		}
 
 		gitFile.request();
-        openOutdated ? switchState(new funkin.states.OutdatedState()) : startGame();
+        openOutdated ? CoolUtil.switchState(new funkin.states.OutdatedState()) : startGame();
     }
 
     public static function startGame() {

@@ -98,12 +98,21 @@ class MusicBeatState extends FlxUIState {
 	public function getKey(key:String):Dynamic			return Controls.getKey(key);
 
 	public function switchState(newState:FlxState) {
-		if (!CustomTransition.skipTrans) openSubState(new FlxSubState());
+		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
 		transition.startTrans(newState);
 	}
 
 	public function resetState() {
-		if (!CustomTransition.skipTrans) openSubState(new FlxSubState());
+		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
 		transition.startTrans(null, function () FlxG.resetState());
+	}
+}
+
+class TransitionSubstate extends FlxSubState {
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		if (MusicBeatState.game == null) return;
+		if (MusicBeatState.game.transition == null) return;
+		MusicBeatState.game.transition.update(elapsed);
 	}
 }

@@ -33,8 +33,7 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		if 	(stage != null) init();
-		else 				addEventListener(Event.ADDED_TO_STAGE, init);
+		stage != null ? init() : addEventListener(Event.ADDED_TO_STAGE, init);
 	}
 
 	private function init(?E:Event):Void
