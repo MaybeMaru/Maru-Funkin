@@ -24,6 +24,7 @@ class StoryMenuState extends MusicBeatState {
 	var difficultySelectors:FlxGroup;
 	var storyBG:FlxSprite;
 	var sprDiff:FunkinSprite;
+	var diffText:FlxText;
 	var leftArrow:FunkinSprite;
 	var rightArrow:FunkinSprite;
 
@@ -88,6 +89,12 @@ class StoryMenuState extends MusicBeatState {
 		sprDiff.screenCenter(X);
 		sprDiff.x += FlxG.width*0.335;
 		difficultySelectors.add(sprDiff);
+
+		diffText = new FlxText(0,sprDiff.y,0,"test").setFormat(Paths.font("phantommuff"), 80);
+		diffText.screenCenter(X);
+		diffText.x += FlxG.width*0.335;
+		diffText.visible = false;
+		difficultySelectors.add(diffText);
 
 		leftArrow = new FunkinSprite('storymenu/menuArrows', [sprDiff.x, sprDiff.y]);
 		leftArrow.addAnim('idle', 'arrow left');
@@ -211,13 +218,29 @@ class StoryMenuState extends MusicBeatState {
 		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		intendedScore = Highscore.getWeekScore(storyWeeksNames[curWeek], curWeekDiffs[curDifficulty]);
 
-		sprDiff.loadGraphic(Paths.image('storymenu/difficulties/${curWeekDiffs[curDifficulty]}', null, false, true));
-		sprDiff.screenCenter(X);
-		sprDiff.x += FlxG.width*0.335;
+		var _spr:FlxSprite;
+		var diffPath = 'storymenu/difficulties/${curWeekDiffs[curDifficulty]}';
+		if (Paths.exists(Paths.image(diffPath, null, true, true), IMAGE)) {
+			sprDiff.loadImage(diffPath, true);
+			diffText.visible = false;
+			sprDiff.visible = true;
+			_spr = sprDiff;
+		} else {
+			diffText.text = curWeekDiffs[curDifficulty];
+			diffText.visible = true;
+			diffText.color = 0xc508ff;
+			sprDiff.visible = false;
+			diffText.offset.y = 10;
+			_spr = diffText;
+		}
+
+		_spr.screenCenter(X);
+		_spr.x += FlxG.width*0.335;
+		
 		if (curWeekDiffs[curDifficulty] != lastDiff) {
-			sprDiff.alpha = 0;
-			sprDiff.y = FlxG.height*0.685 - 15;
-			FlxTween.tween(sprDiff, {y: sprDiff.y + 15, alpha: 1}, 0.07);
+			_spr.alpha = 0;
+			_spr.y = FlxG.height*0.685 - 15;
+			FlxTween.tween(_spr, {y: _spr.y + 15, alpha: 1}, 0.07);
 		}
 	}
 

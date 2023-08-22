@@ -2,15 +2,16 @@ package funkin.states.menus;
 
 class MenuItem extends FlxSpriteGroup {
 	public var lockSpr:FunkinSprite;
-	public var weekSpr:FunkinSprite;
+	public var weekSpr:FlxSprite;
 
 	public var locked:Bool = false;
 	public var targetY:Float = 0;
 
 	public function new(targetY:Int = 0, weekName:String = 'week1'):Void {
 		super();
-		weekSpr = new FunkinSprite('storymenu/weeks/$weekName');
-		weekSpr.loadGraphic(Paths.image('storymenu/weeks/$weekName', null, false, true));
+		var imagePath = Paths.image('storymenu/weeks/$weekName', null, true, true);
+		weekSpr = (Paths.exists(imagePath, IMAGE) ? new FlxSpriteExt().loadImage('storymenu/weeks/$weekName', true) :
+													new FlxText(0,0,0,weekName).setFormat(Paths.font("phantommuff"), 80));
 		add(weekSpr);
 		screenCenter(X);
 
