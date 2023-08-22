@@ -24,14 +24,14 @@ typedef StageJson = {
 	var library:String;
     var skin:String;
 
-	var gfOffsets:Array<Int>;
-	var dadOffsets:Array<Int>;
-	var bfOffsets:Array<Int>;
+	var gfOffsets:Array<Float>;
+	var dadOffsets:Array<Float>;
+	var bfOffsets:Array<Float>;
 
-	var startCamOffsets:Array<Int>;
-	var gfCamOffsets:Array<Int>;
-	var dadCamOffsets:Array<Int>;
-	var bfCamOffsets:Array<Int>;
+	var startCamOffsets:Array<Float>;
+	var gfCamOffsets:Array<Float>;
+	var dadCamOffsets:Array<Float>;
+	var bfCamOffsets:Array<Float>;
 }
 
 class Stage {

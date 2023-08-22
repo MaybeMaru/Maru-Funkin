@@ -51,10 +51,10 @@ class CoolUtil {
 		return newSound;
 	}
 
-	inline public static function playSound(key:String, volume:Float = 1) {
+	inline public static function playSound(key:String, volume:Float = 1, ?pitch:Float) {
 		var sound = getSound(key);
 		sound.volume = volume;
-		sound.pitch = FlxG.timeScale;
+		sound.pitch = (pitch == null ? FlxG.timeScale : pitch);
 		sound.play();
 		return sound;
 	}

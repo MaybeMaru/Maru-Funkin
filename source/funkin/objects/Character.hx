@@ -28,6 +28,7 @@ class Character extends FlxSpriteExt {
 
 	//	Offsets
 	public var worldOffsets:FlxPoint;
+	public var stageOffsets:FlxPoint;
 	public var camOffsets:FlxPoint;
 	public var OG_X:Float = 0;
 	public var OG_Y:Float = 0;
@@ -55,12 +56,15 @@ class Character extends FlxSpriteExt {
 		return charJson;
 	}
 
+	public function updatePosition() {
+		setXY(OG_X, OG_Y);	
+	}
 	public function setX(value:Float = 0):Void {
-		x = value - worldOffsets.x;
+		x = value - worldOffsets.x - stageOffsets.x;
 		OG_X = value;
 	}
 	public function setY(value:Float = 0):Void {
-		y = value - worldOffsets.y;
+		y = value - worldOffsets.y - stageOffsets.y;
 		OG_Y = value;
 	}
 	public function setXY(valueX:Float = 0, valueY:Float = 0):Void {
@@ -86,10 +90,9 @@ class Character extends FlxSpriteExt {
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false, ?debugMode:Bool = false, ?inputJson:CharacterJson):Void {
 		super(x, y);
-		worldOffsets = new FlxPoint();
-		worldOffsets.set(0,0);
-		camOffsets = new FlxPoint();
-		camOffsets.set(0,0);
+		worldOffsets = new FlxPoint().set(0,0);
+		stageOffsets = new FlxPoint().set(0,0);
+		camOffsets = new FlxPoint().set(0,0);
 		curCharacter = character;
 		antialiasing = true;
 		this.isPlayer = isPlayer;
@@ -123,7 +126,8 @@ class Character extends FlxSpriteExt {
 
 	public function flipCharOffsets():Void {
 		flippedOffsets = true;
-		worldOffsets.x *= -1;
+		//worldOffsets.x *= -1; IDK
+		//stageOffsets.x *= -1;
 		camOffsets.x *= -1;
 		if (!debugMode) {
 			switchAnim('danceLeft', 'danceRight');

@@ -159,10 +159,14 @@ class PlayState extends MusicBeatState {
 		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
 		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
+		var GF_POS:FlxPoint = new FlxPoint(400,360);
+		var DAD_POS:FlxPoint = new FlxPoint(100, 450);
+		var BOYFRIEND_POS:FlxPoint = new FlxPoint(770, 450);
+
 		//MAKE CHARACTERS
-		gf = new Character(400, 360, SONG.players[2]);
-		dad = new Character(100, 450,SONG.players[1]);
-		boyfriend = new Character(770, 450, SONG.players[0], true);
+		gf = new Character(GF_POS.x, GF_POS.y, SONG.players[2]);
+		dad = new Character(DAD_POS.x, DAD_POS.y, SONG.players[1]);
+		boyfriend = new Character(BOYFRIEND_POS.x, BOYFRIEND_POS.y, SONG.players[0], true);
 
 		//Cache Gameover Character
 		var deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
@@ -175,15 +179,17 @@ class PlayState extends MusicBeatState {
 		SkinUtil.setCurSkin(stageJsonData.skin);
 		NoteUtil.initTypes();
 
+		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
+		dad.stageOffsets.set(stageJsonData.dadOffsets[0], stageJsonData.dadOffsets[1]);
+		gf.stageOffsets.set(stageJsonData.gfOffsets[0], stageJsonData.gfOffsets[1]);
+
 		//ADD CHARACTER OFFSETS
-		loadCharPos('bf');
-		loadCharPos('dad');
-		loadCharPos('gf');
+		boyfriend.setXY(BOYFRIEND_POS.x, BOYFRIEND_POS.y);
+		dad.setXY(DAD_POS.x, DAD_POS.y);
+		gf.setXY(GF_POS.x, GF_POS.y,);
 
 		//STAGE START CAM OFFSET
-		var camPos:FlxPoint = new FlxPoint();
-		camPos.x -= stageJsonData.startCamOffsets[0];
-		camPos.y -= stageJsonData.startCamOffsets[1];
+		var camPos:FlxPoint = new FlxPoint().set(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -704,7 +710,7 @@ class PlayState extends MusicBeatState {
 		var dadMidpointX:Float = dad.getMidpoint().x;
 		var bfMidpointX:Float = boyfriend.getMidpoint().x;
 		var intendedPos:Float = mustHit ? bfMidpointX - boyfriend.camOffsets.x - stageJsonData.bfCamOffsets[0] : dadMidpointX - dad.camOffsets.x - stageJsonData.dadCamOffsets[0];
-		var camOffsets:Array<Int> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
+		var camOffsets:Array<Float> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
 		
 		if (camFollow.x != intendedPos) {
 			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0]);
@@ -873,41 +879,34 @@ class PlayState extends MusicBeatState {
 		super.destroy();
 	}
 
-	private function loadCharPos(char:String):Void {
+	public function switchChar(type:String, newCharName:String) {
 		var targetChar:Character = boyfriend;
-		var targetOffsets:Array<Int> = stageJsonData.bfOffsets;
-		switch (char.toLowerCase().trim()) {
-			case 'dad': 				targetOffsets = stageJsonData.dadOffsets; targetChar = dad;
-			case 'girlfriend' | 'gf': 	targetOffsets = stageJsonData.gfOffsets; targetChar = gf;
-		}
-		targetChar.x -= targetOffsets[0];
-		targetChar.y -= targetOffsets[1];
-	}
-	
-	private function switchChar(type:String, newCharName:String):Void {
-		var targetChar:Character = boyfriend;
-		var targetOffsets:Array<Int> = stageJsonData.bfOffsets;
-		var targetGroup:FlxTypedSpriteGroup<Dynamic> = boyfriendGroup;
 		switch (type.toLowerCase().trim()) {
-			case 'dad':					targetOffsets = stageJsonData.dadOffsets; targetChar = dad; targetGroup = dadGroup;
-			case 'girlfriend' | 'gf': 	targetOffsets = stageJsonData.gfOffsets; targetChar = gf; targetGroup = gfGroup;
+			case 'dad': targetChar = dad;
+			case 'girlfriend' | 'gf': targetChar = gf;
 		}
 
 		var lastAnim:Null<String> = (targetChar.animation.curAnim != null) ? targetChar.animation.curAnim.name : null;
 		var lastFrame:Int = (lastAnim != null) ? targetChar.animation.curAnim.curFrame : 0;
-		var lastPos:Array<Float> = [targetChar.OG_X + targetOffsets[0], targetChar.OG_Y + targetOffsets[1]];
+		var targetIcon = targetChar.iconSpr;
 
 		targetChar.visible = false;
-		var newChar:Character = new Character(lastPos[0], lastPos[1], newCharName, true);
+		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, true);
+		newChar.group = targetChar.group;
+		newChar.iconSpr = targetChar.iconSpr;
+		newChar.holdTimer = targetChar.holdTimer;
+		newChar.specialAnim = targetChar.specialAnim;
+		targetChar.stageOffsets.copyTo(newChar.stageOffsets);
+		newChar.updatePosition();
 		if (lastAnim != null) newChar.playAnim(lastAnim, true, false, lastFrame);
-		targetGroup.add(newChar);
+		if (targetIcon != null) targetIcon.makeIcon(newChar.icon);
+		targetChar.group.add(newChar);
 
 		switch (type.toLowerCase().trim()) {
-			case 'dad': 				iconP2.makeIcon(newChar.icon); dad = newChar;
-			case 'girlfriend' | 'gf': 	gf = newChar;
-			default: 					iconP1.makeIcon(newChar.icon); boyfriend = newChar;
+			case 'dad': dad = newChar;
+			case 'girlfriend' | 'gf': gf = newChar;
+			default: boyfriend = newChar;
 		}
-		loadCharPos(type);
 		cameraMovement();
 	}
 

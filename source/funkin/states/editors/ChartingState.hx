@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUINumericStepper;
@@ -42,6 +43,7 @@ class ChartingState extends MusicBeatState {
 		add(bg);
 
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
+        PlayState.inChartEditor = true;
         FlxG.mouse.visible = true;
 
         camTop = new SwagCamera(); camTop.bgColor.alpha = 0;
@@ -98,7 +100,7 @@ class ChartingState extends MusicBeatState {
         var gray = FlxColor.fromRGB(180,150,180);
         mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
             if (note.strumTime + 0.1 <= Conductor.songPosition) {
-                if (note.color == FlxColor.WHITE && playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick');
+                if (note.color == FlxColor.WHITE && playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
                 note.color = gray;
                 if (note.childNote != null) note.childNote.color = gray;
             }
@@ -132,7 +134,7 @@ class ChartingState extends MusicBeatState {
     override function beatHit() {
         super.beatHit();
         if (playing && tabs.check_metronome.checked) {
-            CoolUtil.playSound('chart/metronome_tick');
+            CoolUtil.playSound('chart/metronome_tick', 1, 1);
 			var scaleMult:Float = (curBeat % Conductor.BEATS_LENGTH == 0) ? 1.25 : 1.15;
 			bg.scale.set(scaleMult,scaleMult);
         }
@@ -198,10 +200,22 @@ class ChartingState extends MusicBeatState {
         FlxG.camera.scroll.y = yPos - FlxG.height * 0.333;
     }
 
+    function openTestSubstate() {
+        Conductor.stop();
+        Conductor.songPitch = 1;
+		Conductor.setPitch(1, false);
+		openSubState(new NotesSubstate(SONG, Conductor.songPosition));
+    }
+
     function keys() {
         if (FlxG.keys.justPressed.SPACE) {
             playing ? stop() : play();
         }
+
+        if (FlxG.keys.justPressed.ESCAPE) {
+			openTestSubstate();
+			return;
+		}
 
         if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.A || FlxG.keys.pressed.W || FlxG.keys.pressed.S) {
             stop();
@@ -360,6 +374,11 @@ class ChartingState extends MusicBeatState {
         return time;
     }
 
+    public static inline function getSecBpm(index:Int = 0):Float {
+        Conductor.mapBPMChanges(SONG);
+        return Conductor.getLastBpmChange(getSecBpm(index), SONG.bpm).bpm;
+    }
+
     public function loadJson(song:String):Void {
 		PlayState.SONG = Song.loadFromFile(PlayState.curDifficulty, song);
 		PlayState.SONG = Song.checkSong(PlayState.SONG);
@@ -432,5 +451,11 @@ class ChartingState extends MusicBeatState {
 				case 'stepper_copy': //updatePreview();
 			}
 		}
+	}
+
+    override function destroy():Void {
+        Conductor.songPitch = 1;
+		Conductor.setPitch(1, false);
+		super.destroy();
 	}
 }

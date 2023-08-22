@@ -24,6 +24,7 @@ class ChartTabs extends FlxUITabMenu {
     public function new() {
         super(null, tabs, true);
 		resize(400, 400);
+		curType = 'default';
 
         addSongUI();
 		addSectionUI();
@@ -51,7 +52,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		var reloadSongJson:FlxButton = new FlxButton(saveButton.x + 100, saveButton.y, "Reload JSON", function() {
-			ChartingState.instance.loadJson(ChartingState.SONG.song);
+			ChartingState.instance.loadJson(songTitleInput.text);
 		});
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', ChartingState.instance.loadAutosave);
@@ -266,6 +267,14 @@ class ChartTabs extends FlxUITabMenu {
 	public var check_hitsound:FlxUICheckBox;
 	public var check_metronome:FlxUICheckBox;
 	public var slider_pitch:FlxUISlider;
+
+	var songPitch(default, set):Float = 1;
+	function set_songPitch(value:Float):Float {
+		value = FlxMath.roundDecimal(value,2);
+		songPitch = value;
+		Conductor.setPitch(value);
+		return value;
+	}
 
 	function addEditorUI():Void {
 		var tab_group_editor = new FlxUI(null, this);
