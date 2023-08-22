@@ -213,6 +213,9 @@ class TitleState extends MusicBeatState {
 		],
 		'lock' => [ // lock code
 			FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+		],
+		'keoiki' => [ // keoiki code
+			FlxKey.K,FlxKey.E,FlxKey.O,FlxKey.I, FlxKey.K,FlxKey.I,
 		]
 	];
 
@@ -221,26 +224,24 @@ class TitleState extends MusicBeatState {
 			codeIndex++;
 			if (codeIndex >= codes.get(curCode).length) {
 				codeIndex = 0;
+				CoolUtil.playSound('confirmMenu', 0.7);
 				switch(curCode) {
 					case 'konami':
-						if (!CoolUtil.debugMode) {
-							CoolUtil.playSound('confirmMenu', 0.7);
-							CoolUtil.debugMode = true;
-						}
+						CoolUtil.debugMode = true;
 					case 'unlock':
 						WeekSetup.getWeekList();
-						CoolUtil.playSound('confirmMenu', 0.7);
 						for (week in WeekSetup.vanillaWeekNameList) {
 							Highscore.setWeekUnlock(week, true);
 						}
 					case 'lock':
 						WeekSetup.getWeekList();
-						CoolUtil.playSound('confirmMenu', 0.7);
 						for (week in WeekSetup.vanillaWeekNameList) {
 							if (!WeekSetup.weekDataMap.get(week).startUnlocked) {
 								Highscore.setWeekUnlock(week, false);
 							}
 						}
+					case 'keoiki':
+						CustomTransition.set(null, 0.6, 0.4, Paths.image('keoiki'));
 				}
 			}
 		} else if (FlxG.keys.justPressed.ANY) {

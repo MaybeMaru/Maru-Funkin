@@ -83,6 +83,7 @@ class FunkScript extends SScript {
 		set('FlxGroup', flixel.group.FlxGroup);
 		set('FlxSound', flixel.sound.FlxSound);
 		set('FlxMath', flixel.math.FlxMath);
+		set('FlxAngle', flixel.math.FlxAngle);
 		set('FlxColor', FlxColorFix); //	xd
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);

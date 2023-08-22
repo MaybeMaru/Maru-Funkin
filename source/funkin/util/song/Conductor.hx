@@ -31,11 +31,13 @@ class Conductor {
 	static function get_inst() return inst == null ? inst = new FlxSound() : inst;
 	public static var vocals(get, default):FlxSound = null;
 	static function get_vocals() return vocals == null ? vocals = new FlxSound() : vocals;
+	public static var hasVocals:Bool = true;
 
 	public static inline function loadMusic(song:String) {
 		inst = new FlxSound().loadEmbedded(Paths.inst(song));
 		FlxG.sound.list.add(inst);
-		vocals = Paths.exists(Paths.voices(song, true), MUSIC) ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
+		hasVocals = Paths.exists(Paths.voices(song, true), MUSIC);
+		vocals = hasVocals ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
 		FlxG.sound.list.add(vocals);
 
 		inst.onComplete = function () {}

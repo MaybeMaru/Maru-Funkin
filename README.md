@@ -4,8 +4,8 @@ This engine is still in alpha state, this will eventually get updated when im no
 Dont steal code n shit without permission!!
 
 # Credits
-* [LinkMain](https://github.com/xLinkmain) - Music
-* [Rudyrue](https://www.youtube.com/channel/UC-hFOnf0ATzQRLqCsXino0w) - Base game song offsets
+* [LinkMain](https://www.youtube.com/@uppybuppy) - Music
+* [Rudyrue](https://www.youtube.com/@rudyrue3694) - Base game song offsets
 * [Mark-Zer0](https://twitter.com/MarkimusZer0) - Optimized GF export
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font

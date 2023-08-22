@@ -94,6 +94,21 @@ class ChartingState extends MusicBeatState {
         super.create();
     }
 
+    function checkNoteSound() {
+        var gray = FlxColor.fromRGB(180,150,180);
+        mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
+            if (note.strumTime + 0.1 <= Conductor.songPosition) {
+                if (note.color == FlxColor.WHITE && playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick');
+                note.color = gray;
+                if (note.childNote != null) note.childNote.color = gray;
+            }
+            else {
+                note.color = FlxColor.WHITE;
+                if (note.childNote != null) note.childNote.color = FlxColor.WHITE;
+            }
+        });
+    }
+
     function checkBPM(updateSec:Bool = false) {  // Check for BPM changes
         var lastChange:BPMChangeEvent = Conductor.getLastBpmChange(Conductor.songPosition, SONG.bpm);
 		if (Conductor.bpm != lastChange.bpm) {
@@ -104,6 +119,7 @@ class ChartingState extends MusicBeatState {
 
     public function changeSection(change:Int = 0) {
         sectionIndex = Std.int(FlxMath.bound(sectionIndex + change, 0, SONG.notes.length - 1));
+        if (change > 0) deselectNote();
         Conductor.songPosition = getSecTime(sectionIndex);
         Conductor.autoSync();
         if (SONG.notes[sectionIndex] == null) SONG.notes[sectionIndex] = Song.getDefaultSection(); // Make new section
@@ -224,7 +240,16 @@ class ChartingState extends MusicBeatState {
     }
 
     public var selectedNote:Array<Dynamic> = null;
-    public var selectedNoteObject:ChartNote = null;
+    public var selectedNoteObject(default, set):ChartNote = null;
+    function set_selectedNoteObject(value) {
+        if (value != null && selectedNoteObject != null && value != selectedNoteObject) {
+            value.blend = ADD;
+            selectedNoteObject.blend = NORMAL;
+        }
+        else if (value == null && selectedNoteObject != null) selectedNoteObject.blend = NORMAL;
+        else if (value != null && selectedNoteObject == null) value.blend = ADD;
+        return selectedNoteObject = value;
+    }
 
     public function addNote() {
         var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
@@ -238,8 +263,7 @@ class ChartingState extends MusicBeatState {
     public function removeNote(note:ChartNote) {
         var data = mainGrid.getNoteData(note);
         if (data == selectedNote || note == selectedNoteObject) {
-            selectedNote = null;
-            selectedNoteObject = null;
+            deselectNote();
         }
         SONG.notes[sectionIndex].sectionNotes.remove(data);
         mainGrid.clearNote(note);
@@ -283,9 +307,13 @@ class ChartingState extends MusicBeatState {
 
     public function clearSectionData() {
         SONG.notes[sectionIndex].sectionNotes = [];
+        deselectNote();
+        mainGrid.clearSection();
+    }
+
+    function deselectNote() {
         selectedNote = null;
         selectedNoteObject = null;
-        mainGrid.clearSection();
     }
 
     public function copyLastSection(change:Int = 1):Void {
@@ -302,6 +330,7 @@ class ChartingState extends MusicBeatState {
     override function update(elapsed:Float) {
         super.update(elapsed);
         updatePosition();
+        checkNoteSound();
         keys();
         mouse();
     }

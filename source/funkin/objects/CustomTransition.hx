@@ -9,13 +9,16 @@ class CustomTransition extends FlxSprite {
         return (transGraphic == null ? init() : transGraphic);
     }
 
-    public static function set(?color:FlxColor, openTime:Float = 0.6, closeTime:Float = 0.4) {
+    public static function set(?color:FlxColor, openTime:Float = 0.6, closeTime:Float = 0.4, ?asset:FlxGraphicAsset) {
         openTimes = [openTime, closeTime];
-        color = (color == null ? FlxColor.BLACK : color);
-        transGraphic = FlxG.bitmap.create(FlxG.width, FlxG.height * 2, color, true, 'transition_graphic');
-        for (i in 0...FlxG.height) {
-            var lineAlpha = FlxMath.remapToRange(i, 0, FlxG.height, 0, color.alpha);
-            transGraphic.bitmap.fillRect(new Rectangle(0, i, FlxG.width, 1), FlxColor.fromRGB(color.red,color.green,color.blue,Std.int(lineAlpha)));
+        if (asset != null) transGraphic = FlxG.bitmap.add(asset, true, 'transition_graphic');
+        else {
+            color = (color == null ? FlxColor.BLACK : color);
+            transGraphic = FlxG.bitmap.create(FlxG.width, FlxG.height * 2, color, true, 'transition_graphic');
+            for (i in 0...FlxG.height) {
+                var lineAlpha = FlxMath.remapToRange(i, 0, FlxG.height, 0, color.alpha);
+                transGraphic.bitmap.fillRect(new Rectangle(0, i, FlxG.width, 1), FlxColor.fromRGB(color.red,color.green,color.blue,Std.int(lineAlpha)));
+            }
         }
         transGraphic.persist = true;
         transGraphic.destroyOnNoUse = false;
@@ -43,6 +46,8 @@ class CustomTransition extends FlxSprite {
     public function new() {
         super();
         loadGraphic(transGraphic);
+        setGraphicSize(FlxG.width, FlxG.height * 2);
+        updateHitbox();
         scrollFactor.set();
         y = FlxG.height;
     }
