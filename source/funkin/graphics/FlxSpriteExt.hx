@@ -58,13 +58,15 @@ class FlxSpriteExt extends FlxSprite {
 		return this;
 	}
 
+	public var spriteJson:SpriteJson = null;
+
 	public function loadSpriteJson(path:String, folder:String = '', global:Bool = false) {
-		var spriteJson:SpriteJson = JsonUtil.getJson(path, folder, 'images');
+		spriteJson = JsonUtil.getJson(path, folder, 'images');
 		loadJsonInput(spriteJson, folder, global);
 	}
 
 	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String) {
-		var spriteJson:SpriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
+		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, spriteJson);
 
 		folder = folder.length > 0 ? '$folder/' : '';

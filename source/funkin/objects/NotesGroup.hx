@@ -393,7 +393,7 @@ class NotesGroup extends FlxGroup
 		var leStrum:NoteStrum = strumLineNotes.members[data];
 		if (leStrum != null) {
 			leStrum.playStrumAnim(anim, forced);
-			leStrum.staticTime = Conductor.stepCrochet/1000;
+			leStrum.staticTime = Conductor.stepCrochetMills;
 		}
 	}
 

@@ -35,15 +35,13 @@ class NoteStrum extends FlxSpriteExt {
 	}
 
 	public function applyOffsets():Void {
-		if (animation.curAnim != null) {
-			updateHitbox();
-			centerOffsets();
-			var getAnim = animOffsets.get(animation.curAnim.name);
-			if (getAnim != null) {
-				offset.x += getAnim.x;
-				offset.y += getAnim.y;
-			}
-		}
+		if (animation.curAnim == null) return;
+		updateHitbox();
+		centerOffsets();
+		var getAnim = animOffsets.get(animation.curAnim.name);
+		if (getAnim == null) return;
+		var scaleOff = scale.x / spriteJson.scale;
+		offset.add(getAnim.x * scaleOff, getAnim.y * scaleOff);
 	}
 
 	public function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {

@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUINumericStepper;
@@ -20,7 +21,7 @@ class ChartingState extends MusicBeatState {
 
     public var bg:FunkinSprite;
     public var noteTile:FlxSprite;
-    public var strumBar:FlxSprite;
+    public var strumBar:ChartStrumLine;
     public var songTxt:FunkinText;
     public var tabs:ChartTabs;
     public var mainGrid:ChartGrid;
@@ -71,7 +72,8 @@ class ChartingState extends MusicBeatState {
         }
         add(noteTile);
 
-        strumBar = new FlxSprite(mainGrid.grid.x, mainGrid.grid.y).makeGraphic(Std.int(mainGrid.grid.width), 4, FlxColor.WHITE);
+        strumBar = new ChartStrumLine();
+        strumBar.setPosition(mainGrid.grid.x, mainGrid.grid.y);
         add(strumBar);
 
         songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y, "coolswag", 25);
@@ -100,7 +102,10 @@ class ChartingState extends MusicBeatState {
         var gray = FlxColor.fromRGB(180,150,180);
         mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
             if (note.strumTime + 0.1 <= Conductor.songPosition) {
-                if (note.color == FlxColor.WHITE && playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
+                if (note.color == FlxColor.WHITE) {
+                    strumBar.pressStrum(note.gridNoteData);
+                    if (playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
+                } 
                 note.color = gray;
                 if (note.childNote != null) note.childNote.color = gray;
             }
@@ -109,6 +114,15 @@ class ChartingState extends MusicBeatState {
                 if (note.childNote != null) note.childNote.color = FlxColor.WHITE;
             }
         });
+
+        if (SONG.notes[sectionIndex] == null) return;
+        for (note in SONG.notes[sectionIndex].sectionNotes) {
+            if (note[2] > 0) {
+                if (Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + note[2]) {
+                    strumBar.pressStrum(note[1]);
+                }
+            }
+        }
     }
 
     function checkBPM(updateSec:Bool = false) {  // Check for BPM changes
@@ -201,7 +215,7 @@ class ChartingState extends MusicBeatState {
     }
 
     function openTestSubstate() {
-        Conductor.stop();
+        stop();
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
 		openSubState(new NotesSubstate(SONG, Conductor.songPosition));

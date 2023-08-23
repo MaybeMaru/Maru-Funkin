@@ -43,8 +43,8 @@ class NotesSubstate extends MusicBeatSubstate {
         if (tmr > 0) tmr -= elapsed;
         else {
             if (FlxG.keys.justPressed.ESCAPE || Conductor.songPosition >= Conductor.inst.length) {
-                Conductor.stop();
                 Conductor.songPosition = position;
+                Conductor.stop();
                 close();
             }
         }

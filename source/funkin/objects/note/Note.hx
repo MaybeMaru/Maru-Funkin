@@ -186,7 +186,7 @@ class Note extends FlxSpriteExt {
                 angle = approachAngle;
                 flipX = (approachAngle % 360) >= 180;
                 
-                inSustain = Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength + 17; // lil offset to be sure
+                inSustain = getInSustain(17); // lil offset to be sure
                 offset.y = 0;
 
                 if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
@@ -198,6 +198,10 @@ class Note extends FlxSpriteExt {
 
             active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
         }
+    }
+
+    public function getInSustain(extra:Float = 0):Bool {
+        return Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength + extra;
     }
 
     public function setSusPressed() {

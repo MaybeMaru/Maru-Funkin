@@ -55,7 +55,7 @@ class MenuItem extends FlxSpriteGroup {
 
 		if (isShaking || isFlashing) {
 			flashingInt++;
-			fakeFramerate = Math.round((1 / elapsed) / 10);
+			fakeFramerate = Std.int(Math.max(Math.round((1 / Math.max(elapsed, 0.001)) / 10), 1)); // prevent mod by 0 error???
 
 			if (isShaking) {
 				weekSpr.color = (flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2)) ? FlxColor.RED : FlxColor.WHITE;
