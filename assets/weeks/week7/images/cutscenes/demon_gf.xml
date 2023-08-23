@@ -3,159 +3,159 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="demon_gf.png" width="6968" height="5830">
-  <SubTexture name="DEMON_GF0071" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0089" x="592" y="4"  width="617" height="355" frameX="-823" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0069" x="1217" y="4"  width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0068" x="1861" y="4"  width="511" height="360" frameX="-895" frameY="-467" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0090" x="2380" y="4"  width="1093" height="388" frameX="-347" frameY="-415" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0125" x="3481" y="4" width="428" height="422" rotated="true"  frameX="-1026" frameY="-377" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0123" x="3917" y="4" width="474" height="432" rotated="true"  frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0124" x="4399" y="4" width="474" height="432" rotated="true"  frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="GF Dancing at Gunpoint0003" x="4881" y="4"  width="907" height="432" frameX="-2" frameY="-16" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0004" x="5796" y="4"  width="907" height="432" frameX="-2" frameY="-16" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="DEMON_GF0097" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0122" x="499" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0096" x="994" y="368" width="488" height="435" rotated="true"  frameX="-1021" frameY="-314" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0067" x="1490" y="372" width="498" height="453" rotated="true"  frameX="-969" frameY="-455" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="GF Dancing at Gunpoint0001" x="1996" y="400"  width="909" height="435" frameX="-1" frameY="-14" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0002" x="2913" y="434"  width="909" height="435" frameX="-1" frameY="-14" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0005" x="3830" y="444"  width="912" height="436" frameX="-0" frameY="-13" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0006" x="4750" y="444"  width="912" height="436" frameX="-0" frameY="-13" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0018" x="5670" y="444"  width="907" height="436" frameX="-2" frameY="-12" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0019" x="4" y="809"  width="907" height="436" frameX="-2" frameY="-12" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0016" x="919" y="833"  width="909" height="437" frameX="-1" frameY="-12" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0017" x="1836" y="843"  width="909" height="437" frameX="-1" frameY="-12" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0007" x="2753" y="877"  width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0020" x="3673" y="888"  width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0021" x="4593" y="888"  width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0022" x="5513" y="888"  width="912" height="440" frameX="-0" frameY="-9" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="DEMON_GF0058" x="6433" y="888" width="531" height="567" rotated="true"  frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0001" x="4" y="1253"  width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="GF Dancing at Gunpoint0026" x="915" y="1278"  width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="DEMON_GF0003" x="1835" y="1288"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="GF Dancing at Gunpoint0028" x="2750" y="1323"  width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0029" x="3670" y="1334"  width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0023" x="4590" y="1334"  width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0025" x="5510" y="1336"  width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0008" x="4" y="1729"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0011" x="924" y="1747"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0014" x="1844" y="1774"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="DEMON_GF0005" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0019" x="3679" y="1786"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0021" x="4594" y="1786"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0023" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0065" x="6430" y="1463" width="534" height="883" rotated="true"  frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0030" x="4" y="2186"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0032" x="919" y="2204"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0033" x="1834" y="2231"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0034" x="2749" y="2244"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0035" x="3664" y="2245"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0036" x="4579" y="2245"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0037" x="5494" y="2247"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0038" x="4" y="2645"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0039" x="919" y="2663"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0040" x="1834" y="2690"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0041" x="2749" y="2703"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0042" x="3664" y="2704"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0043" x="4579" y="2704"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0044" x="5494" y="2706"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0045" x="6409" y="2354" width="451" height="907" rotated="true"  frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0046" x="4" y="3104"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0047" x="919" y="3122"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0048" x="1834" y="3149"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0049" x="2749" y="3162"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0050" x="3664" y="3163"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0051" x="4579" y="3163"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0052" x="5494" y="3165"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0053" x="4" y="3563"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0091" x="919" y="3608"  width="1314" height="507" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0092" x="2241" y="3621"  width="1314" height="545" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0061" x="3563" y="3622"  width="928" height="590" frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0056" x="4499" y="3622" width="675" height="600" rotated="true"  frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0057" x="5182" y="3624" width="760" height="600" rotated="true"  frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0062" x="5950" y="3624"  width="922" height="620" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0093" x="4" y="4123"  width="1411" height="608" frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0063" x="1423" y="4174"  width="914" height="641" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0064" x="2345" y="4174"  width="912" height="645" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0060" x="3265" y="4220"  width="958" height="652" frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0116" x="4231" y="4232"  width="1198" height="652" frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0095" x="5437" y="4252"  width="1456" height="653" frameX="-0" frameY="-314" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0118" x="4" y="4739"  width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0120" x="1219" y="4827"  width="1213" height="667" frameX="-243" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0114" x="2440" y="4880"  width="1184" height="673" frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0113" x="3632" y="4892"  width="1171" height="739" frameX="-285" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0055" x="4811" y="4913"  width="907" height="810" frameX="-744" frameY="-103" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0054" x="5726" y="4913"  width="1134" height="913" frameX="-517" frameY="-0" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0002" x="4" y="1253"  width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0004" x="1835" y="1288"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0006" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0007" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0008" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0009" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0010" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0011" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0012" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0013" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0014" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0015" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0016" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0017" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0018" x="2764" y="1785"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0020" x="3679" y="1786"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0022" x="4594" y="1786"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0024" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0025" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0026" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0027" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0028" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0029" x="5509" y="1788"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0031" x="4" y="2186"  width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0059" x="6433" y="888" width="531" height="567" rotated="true"  frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0066" x="6430" y="1463" width="534" height="883" rotated="true"  frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0070" x="1217" y="4"  width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0072" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0073" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0074" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0075" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0076" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0077" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0078" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0079" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0080" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0081" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0082" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0083" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0084" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0085" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0086" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0087" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0088" x="4" y="4"  width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0094" x="4" y="4123"  width="1411" height="608" frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0098" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0099" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0100" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0101" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0102" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0103" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0104" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0105" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0106" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0107" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0108" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0109" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0110" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0111" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0112" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0121" x="4" y="367" width="487" height="434" rotated="true"  frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0115" x="2440" y="4880"  width="1184" height="673" frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0117" x="4231" y="4232"  width="1198" height="652" frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="DEMON_GF0119" x="4" y="4739"  width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157"/>
-  <SubTexture name="GF Dancing at Gunpoint0009" x="4" y="1729"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0010" x="4" y="1729"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0012" x="924" y="1747"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0013" x="924" y="1747"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0015" x="1844" y="1774"  width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0024" x="4590" y="1334"  width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0027" x="915" y="1278"  width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462"/>
-  <SubTexture name="GF Dancing at Gunpoint0030" x="3670" y="1334"  width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462"/>
+  <SubTexture name="DEMON_GF0071" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0089" x="592" y="4" width="617" height="355" frameX="-823" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0069" x="1217" y="4" width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0068" x="1861" y="4" width="511" height="360" frameX="-895" frameY="-467" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0090" x="2380" y="4" width="1093" height="388" frameX="-347" frameY="-415" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0125" x="3481" y="4" width="428" height="422" rotated="true" frameX="-1026" frameY="-377" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0123" x="3917" y="4" width="474" height="432" rotated="true" frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0124" x="4399" y="4" width="474" height="432" rotated="true" frameX="-1026" frameY="-328" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="GF Dancing at Gunpoint0003" x="4881" y="4" width="907" height="432" frameX="-2" frameY="-16" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0004" x="5796" y="4" width="907" height="432" frameX="-2" frameY="-16" frameWidth="912" frameHeight="462" />
+  <SubTexture name="DEMON_GF0097" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0122" x="499" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0096" x="994" y="368" width="488" height="435" rotated="true" frameX="-1021" frameY="-314" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0067" x="1490" y="372" width="498" height="453" rotated="true" frameX="-969" frameY="-455" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="GF Dancing at Gunpoint0001" x="1996" y="400" width="909" height="435" frameX="-1" frameY="-14" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0002" x="2913" y="434" width="909" height="435" frameX="-1" frameY="-14" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0005" x="3830" y="444" width="912" height="436" frameX="-0" frameY="-13" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0006" x="4750" y="444" width="912" height="436" frameX="-0" frameY="-13" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0018" x="5670" y="444" width="907" height="436" frameX="-2" frameY="-12" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0019" x="4" y="809" width="907" height="436" frameX="-2" frameY="-12" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0016" x="919" y="833" width="909" height="437" frameX="-1" frameY="-12" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0017" x="1836" y="843" width="909" height="437" frameX="-1" frameY="-12" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0007" x="2753" y="877" width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0020" x="3673" y="888" width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0021" x="4593" y="888" width="912" height="438" frameX="-0" frameY="-11" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0022" x="5513" y="888" width="912" height="440" frameX="-0" frameY="-9" frameWidth="912" frameHeight="462" />
+  <SubTexture name="DEMON_GF0058" x="6433" y="888" width="531" height="567" rotated="true" frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0001" x="4" y="1253" width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="GF Dancing at Gunpoint0026" x="915" y="1278" width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462" />
+  <SubTexture name="DEMON_GF0003" x="1835" y="1288" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="GF Dancing at Gunpoint0028" x="2750" y="1323" width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0029" x="3670" y="1334" width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0023" x="4590" y="1334" width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0025" x="5510" y="1336" width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0008" x="4" y="1729" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0011" x="924" y="1747" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0014" x="1844" y="1774" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="DEMON_GF0005" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0019" x="3679" y="1786" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0021" x="4594" y="1786" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0023" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0065" x="6430" y="1463" width="534" height="883" rotated="true" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0030" x="4" y="2186" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0032" x="919" y="2204" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0033" x="1834" y="2231" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0034" x="2749" y="2244" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0035" x="3664" y="2245" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0036" x="4579" y="2245" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0037" x="5494" y="2247" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0038" x="4" y="2645" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0039" x="919" y="2663" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0040" x="1834" y="2690" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0041" x="2749" y="2703" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0042" x="3664" y="2704" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0043" x="4579" y="2704" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0044" x="5494" y="2706" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0045" x="6409" y="2354" width="451" height="907" rotated="true" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0046" x="4" y="3104" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0047" x="919" y="3122" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0048" x="1834" y="3149" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0049" x="2749" y="3162" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0050" x="3664" y="3163" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0051" x="4579" y="3163" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0052" x="5494" y="3165" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0053" x="4" y="3563" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0091" x="919" y="3608" width="1314" height="507" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0092" x="2241" y="3621" width="1314" height="545" frameX="-151" frameY="-297" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0061" x="3563" y="3622" width="928" height="590" frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0056" x="4499" y="3622" width="675" height="600" rotated="true" frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0057" x="5182" y="3624" width="760" height="600" rotated="true" frameX="-1043" frameY="-268" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0062" x="5950" y="3624" width="922" height="620" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0093" x="4" y="4123" width="1411" height="608" frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0063" x="1423" y="4174" width="914" height="641" frameX="-951" frameY="-475" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0064" x="2345" y="4174" width="912" height="645" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0060" x="3265" y="4220" width="958" height="652" frameX="-945" frameY="-505" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0116" x="4231" y="4232" width="1198" height="652" frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0095" x="5437" y="4252" width="1456" height="653" frameX="-0" frameY="-314" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0118" x="4" y="4739" width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0120" x="1219" y="4827" width="1213" height="667" frameX="-243" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0114" x="2440" y="4880" width="1184" height="673" frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0113" x="3632" y="4892" width="1171" height="739" frameX="-285" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0055" x="4811" y="4913" width="907" height="810" frameX="-744" frameY="-103" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0054" x="5726" y="4913" width="1134" height="913" frameX="-517" frameY="-0" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0002" x="4" y="1253" width="903" height="451" frameX="-747" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0004" x="1835" y="1288" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0006" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0007" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0008" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0009" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0010" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0011" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0012" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0013" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0014" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0015" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0016" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0017" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0018" x="2764" y="1785" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0020" x="3679" y="1786" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0022" x="4594" y="1786" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0024" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0025" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0026" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0027" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0028" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0029" x="5509" y="1788" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0031" x="4" y="2186" width="907" height="451" frameX="-744" frameY="-462" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0059" x="6433" y="888" width="531" height="567" rotated="true" frameX="-1093" frameY="-294" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0066" x="6430" y="1463" width="534" height="883" rotated="true" frameX="-953" frameY="-471" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0070" x="1217" y="4" width="636" height="356" frameX="-828" frameY="-447" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0072" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0073" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0074" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0075" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0076" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0077" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0078" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0079" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0080" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0081" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0082" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0083" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0084" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0085" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0086" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0087" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0088" x="4" y="4" width="580" height="355" frameX="-860" frameY="-448" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0094" x="4" y="4123" width="1411" height="608" frameX="-45" frameY="-305" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0098" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0099" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0100" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0101" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0102" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0103" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0104" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0105" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0106" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0107" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0108" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0109" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0110" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0111" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0112" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0121" x="4" y="367" width="487" height="434" rotated="true" frameX="-1022" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0115" x="2440" y="4880" width="1184" height="673" frameX="-272" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0117" x="4231" y="4232" width="1198" height="652" frameX="-258" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="DEMON_GF0119" x="4" y="4739" width="1207" height="655" frameX="-249" frameY="-315" frameWidth="1903" frameHeight="1157" />
+  <SubTexture name="GF Dancing at Gunpoint0009" x="4" y="1729" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0010" x="4" y="1729" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0012" x="924" y="1747" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0013" x="924" y="1747" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0015" x="1844" y="1774" width="912" height="449" frameX="-0" frameY="-0" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0024" x="4590" y="1334" width="912" height="444" frameX="-0" frameY="-5" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0027" x="915" y="1278" width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462" />
+  <SubTexture name="GF Dancing at Gunpoint0030" x="3670" y="1334" width="912" height="443" frameX="-0" frameY="-6" frameWidth="912" frameHeight="462" />
 </TextureAtlas>

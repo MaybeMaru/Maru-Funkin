@@ -8,20 +8,19 @@ import openfl.events.Event;
 class Main extends Sprite
 {
 	var game = {
-		width: 1280, 					// Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
-		height: 720, 					// Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-		initialState:					// The FlxState the game starts with.
-		#if PRELOAD_ALL	funkin.Preloader
-		#else			SplashState	#end,
-		//funkin.states.TestingState,
-		zoom: -1.0, 					// If -1, zoom is automatically calculated to fit the window dimensions.
-		framerate: 60, 					// How many frames per second the game should run at.
-		skipSplash: true, 				// Whether to skip the flixel splash screen that appears in release mode.
-		startFullscreen: false 			// Whether to start the game in fullscreen on desktop targets
+		width: 1280, // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		height: 720, // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		initialState: // The FlxState the game starts with.
+		#if PRELOAD_ALL funkin.Preloader #else SplashState #end,
+		// funkin.states.TestingState,
+		zoom: -1.0, // If -1, zoom is automatically calculated to fit the window dimensions.
+		framerate: 60, // How many frames per second the game should run at.
+		skipSplash: true, // Whether to skip the flixel splash screen that appears in release mode.
+		startFullscreen: false // Whether to start the game in fullscreen on desktop targets
 	};
 
-	public static var fpsCounter:FPS_Mem; //The FPS display child
-	public static var engineVersion:String = "1.0.0-a.2"; //The engine version, if its not the same as the github one itll open OutdatedSubState
+	public static var fpsCounter:FPS_Mem; // The FPS display child
+	public static var engineVersion:String = "1.0.0-a.2"; // The engine version, if its not the same as the github one itll open OutdatedSubState
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -58,10 +57,11 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate,
+			game.skipSplash, game.startFullscreen));
 
 		#if !mobile
-		fpsCounter = new FPS_Mem(10,10,0xffffff);
+		fpsCounter = new FPS_Mem(10, 10, 0xffffff);
 		addChild(fpsCounter);
 		#end
 	}

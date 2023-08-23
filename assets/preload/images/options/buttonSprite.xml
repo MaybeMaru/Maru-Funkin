@@ -2,8 +2,8 @@
 <TextureAtlas imagePath="buttonSprite.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="buttonSprite0000" x="10" y="10" width="404" height="222" frameX="0" frameY="0" frameWidth="404" frameHeight="223"/>
-	<SubTexture name="buttonSprite0001" x="10" y="10" width="404" height="222" frameX="0" frameY="0" frameWidth="404" frameHeight="223"/>
-	<SubTexture name="buttonSprite0002" x="424" y="10" width="404" height="223"/>
-	<SubTexture name="buttonSprite0003" x="424" y="10" width="404" height="223"/>
+	<SubTexture name="buttonSprite0000" x="10" y="10" width="404" height="222" frameX="0" frameY="0" frameWidth="404" frameHeight="223" />
+	<SubTexture name="buttonSprite0001" x="10" y="10" width="404" height="222" frameX="0" frameY="0" frameWidth="404" frameHeight="223" />
+	<SubTexture name="buttonSprite0002" x="424" y="10" width="404" height="223" />
+	<SubTexture name="buttonSprite0003" x="424" y="10" width="404" height="223" />
 </TextureAtlas>

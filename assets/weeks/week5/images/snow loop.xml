@@ -3,44 +3,44 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="snow loop.png" width="7993" height="4295">
-  <SubTexture name="snow loop0031" x="0" y="0" width="453" height="2546" rotated="true"  frameX="-0" frameY="-6" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0032" x="0" y="2546"  width="2546" height="453" frameX="-0" frameY="-6" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0033" x="453" y="0" width="256" height="2487" rotated="true"  frameX="-36" frameY="-15" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0034" x="709" y="0" width="256" height="2487" rotated="true"  frameX="-36" frameY="-15" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0005" x="965" y="0" width="430" height="2481" rotated="true"  frameX="-0" frameY="-29" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0017" x="1395" y="0" width="312" height="2479" rotated="true"  frameX="-67" frameY="-6" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0018" x="1707" y="0" width="312" height="2479" rotated="true"  frameX="-67" frameY="-6" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0019" x="2019" y="0" width="311" height="2467" rotated="true"  frameX="-56" frameY="-15" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0020" x="2330" y="0" width="311" height="2467" rotated="true"  frameX="-56" frameY="-15" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0006" x="0" y="2999"  width="2459" height="430" frameX="-0" frameY="-29" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0004" x="0" y="3429"  width="2462" height="406" frameX="-19" frameY="-20" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0003" x="2459" y="2999"  width="2419" height="406" frameX="-19" frameY="-20" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0030" x="0" y="3835"  width="2462" height="399" frameX="-19" frameY="-27" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0029" x="2546" y="2467"  width="2392" height="399" frameX="-19" frameY="-27" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0021" x="4878" y="0" width="300" height="2455" rotated="true"  frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0022" x="2641" y="0" width="300" height="2455" rotated="true"  frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0035" x="2941" y="0" width="256" height="2455" rotated="true"  frameX="-43" frameY="-24" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0036" x="3197" y="0" width="254" height="2455" rotated="true"  frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0023" x="3451" y="0" width="298" height="2449" rotated="true"  frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0024" x="3749" y="0" width="298" height="2449" rotated="true"  frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0037" x="4047" y="0" width="261" height="2449" rotated="true"  frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0038" x="4308" y="0" width="261" height="2449" rotated="true"  frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0010" x="4569" y="0" width="307" height="2374" rotated="true"  frameX="-49" frameY="-25" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0001" x="5178" y="0"  width="2430" height="385" frameX="-16" frameY="-0" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0002" x="7608" y="0" width="385" height="2430" rotated="true"  frameX="-16" frameY="-0" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0025" x="5178" y="385"  width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0026" x="5178" y="686"  width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0039" x="5178" y="987"  width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0040" x="5178" y="1288"  width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0007" x="5178" y="1589"  width="2423" height="291" frameX="-36" frameY="-35" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0027" x="5178" y="1880" width="369" height="2415" rotated="true"  frameX="-16" frameY="-16" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0028" x="5547" y="1880" width="369" height="2415" rotated="true"  frameX="-16" frameY="-16" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0008" x="5916" y="1880" width="318" height="2400" rotated="true"  frameX="-36" frameY="-8" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0009" x="6234" y="1880" width="324" height="2387" rotated="true"  frameX="-49" frameY="-8" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0012" x="6558" y="1880" width="322" height="2378" rotated="true"  frameX="-61" frameY="-16" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0011" x="6880" y="1880" width="313" height="2378" rotated="true"  frameX="-61" frameY="-25" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0013" x="7193" y="1880" width="282" height="2371" rotated="true"  frameX="-75" frameY="-16" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0014" x="2462" y="3405"  width="2371" height="262" frameX="-75" frameY="-36" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0015" x="2462" y="3667"  width="2217" height="287" frameX="-229" frameY="-36" frameWidth="2546" frameHeight="459"/>
-  <SubTexture name="snow loop0016" x="2462" y="3954"  width="2217" height="273" frameX="-229" frameY="-50" frameWidth="2546" frameHeight="459"/>
+  <SubTexture name="snow loop0031" x="0" y="0" width="453" height="2546" rotated="true" frameX="-0" frameY="-6" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0032" x="0" y="2546" width="2546" height="453" frameX="-0" frameY="-6" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0033" x="453" y="0" width="256" height="2487" rotated="true" frameX="-36" frameY="-15" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0034" x="709" y="0" width="256" height="2487" rotated="true" frameX="-36" frameY="-15" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0005" x="965" y="0" width="430" height="2481" rotated="true" frameX="-0" frameY="-29" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0017" x="1395" y="0" width="312" height="2479" rotated="true" frameX="-67" frameY="-6" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0018" x="1707" y="0" width="312" height="2479" rotated="true" frameX="-67" frameY="-6" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0019" x="2019" y="0" width="311" height="2467" rotated="true" frameX="-56" frameY="-15" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0020" x="2330" y="0" width="311" height="2467" rotated="true" frameX="-56" frameY="-15" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0006" x="0" y="2999" width="2459" height="430" frameX="-0" frameY="-29" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0004" x="0" y="3429" width="2462" height="406" frameX="-19" frameY="-20" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0003" x="2459" y="2999" width="2419" height="406" frameX="-19" frameY="-20" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0030" x="0" y="3835" width="2462" height="399" frameX="-19" frameY="-27" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0029" x="2546" y="2467" width="2392" height="399" frameX="-19" frameY="-27" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0021" x="4878" y="0" width="300" height="2455" rotated="true" frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0022" x="2641" y="0" width="300" height="2455" rotated="true" frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0035" x="2941" y="0" width="256" height="2455" rotated="true" frameX="-43" frameY="-24" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0036" x="3197" y="0" width="254" height="2455" rotated="true" frameX="-43" frameY="-26" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0023" x="3451" y="0" width="298" height="2449" rotated="true" frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0024" x="3749" y="0" width="298" height="2449" rotated="true" frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0037" x="4047" y="0" width="261" height="2449" rotated="true" frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0038" x="4308" y="0" width="261" height="2449" rotated="true" frameX="-28" frameY="-34" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0010" x="4569" y="0" width="307" height="2374" rotated="true" frameX="-49" frameY="-25" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0001" x="5178" y="0" width="2430" height="385" frameX="-16" frameY="-0" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0002" x="7608" y="0" width="385" height="2430" rotated="true" frameX="-16" frameY="-0" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0025" x="5178" y="385" width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0026" x="5178" y="686" width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0039" x="5178" y="987" width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0040" x="5178" y="1288" width="2429" height="301" frameX="-21" frameY="-38" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0007" x="5178" y="1589" width="2423" height="291" frameX="-36" frameY="-35" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0027" x="5178" y="1880" width="369" height="2415" rotated="true" frameX="-16" frameY="-16" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0028" x="5547" y="1880" width="369" height="2415" rotated="true" frameX="-16" frameY="-16" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0008" x="5916" y="1880" width="318" height="2400" rotated="true" frameX="-36" frameY="-8" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0009" x="6234" y="1880" width="324" height="2387" rotated="true" frameX="-49" frameY="-8" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0012" x="6558" y="1880" width="322" height="2378" rotated="true" frameX="-61" frameY="-16" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0011" x="6880" y="1880" width="313" height="2378" rotated="true" frameX="-61" frameY="-25" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0013" x="7193" y="1880" width="282" height="2371" rotated="true" frameX="-75" frameY="-16" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0014" x="2462" y="3405" width="2371" height="262" frameX="-75" frameY="-36" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0015" x="2462" y="3667" width="2217" height="287" frameX="-229" frameY="-36" frameWidth="2546" frameHeight="459" />
+  <SubTexture name="snow loop0016" x="2462" y="3954" width="2217" height="273" frameX="-229" frameY="-50" frameWidth="2546" frameHeight="459" />
 </TextureAtlas>

@@ -6,13 +6,19 @@
         {
             "animName": "idle",
             "animFile": "idle",
-            "offsets": [25,15],
+            "offsets": [
+                25,
+                15
+            ],
             "loop": true
         },
         {
             "animName": "confirm",
             "animFile": "pressed",
-            "offsets": [25,20]
+            "offsets": [
+                25,
+                20
+            ]
         }
     ]
 }

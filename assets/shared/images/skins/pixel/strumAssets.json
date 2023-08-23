@@ -1,207 +1,535 @@
-{ "frames": [
-   {
-    "filename": "PIXEL STRUM 0.ase",
-    "frame": { "x": 1, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 1.ase",
-    "frame": { "x": 19, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 2.ase",
-    "frame": { "x": 37, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 3.ase",
-    "frame": { "x": 55, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 4.ase",
-    "frame": { "x": 1, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 5.ase",
-    "frame": { "x": 19, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 6.ase",
-    "frame": { "x": 37, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 7.ase",
-    "frame": { "x": 55, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 8.ase",
-    "frame": { "x": 1, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 9.ase",
-    "frame": { "x": 19, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 10.ase",
-    "frame": { "x": 37, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 11.ase",
-    "frame": { "x": 55, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 12.ase",
-    "frame": { "x": 1, "y": 55, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 13.ase",
-    "frame": { "x": 19, "y": 55, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 14.ase",
-    "frame": { "x": 37, "y": 55, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 15.ase",
-    "frame": { "x": 55, "y": 55, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 16.ase",
-    "frame": { "x": 1, "y": 73, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 17.ase",
-    "frame": { "x": 19, "y": 73, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 18.ase",
-    "frame": { "x": 37, "y": 73, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL STRUM 19.ase",
-    "frame": { "x": 55, "y": 73, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   }
- ],
- "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.1.6-dev",
-  "format": "I8",
-  "size": { "w": 73, "h": 91 },
-  "scale": "1",
-  "frameTags": [
-   { "name": "arrowLEFT", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "arrowDOWN", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "arrowUP", "from": 2, "to": 2, "direction": "forward" },
-   { "name": "arrowRIGHT", "from": 3, "to": 3, "direction": "forward" },
-   { "name": "left press", "from": 4, "to": 5, "direction": "forward" },
-   { "name": "down press", "from": 6, "to": 7, "direction": "forward" },
-   { "name": "up press", "from": 8, "to": 9, "direction": "forward" },
-   { "name": "right press", "from": 10, "to": 11, "direction": "forward" },
-   { "name": "left confirm", "from": 12, "to": 13, "direction": "forward" },
-   { "name": "down confirm", "from": 14, "to": 15, "direction": "forward" },
-   { "name": "up confirm", "from": 16, "to": 17, "direction": "forward" },
-   { "name": "right confirm", "from": 18, "to": 19, "direction": "forward" }
+{
+  "frames": [
+    {
+      "filename": "PIXEL STRUM 0.ase",
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 1.ase",
+      "frame": {
+        "x": 19,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 2.ase",
+      "frame": {
+        "x": 37,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 3.ase",
+      "frame": {
+        "x": 55,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 4.ase",
+      "frame": {
+        "x": 1,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 5.ase",
+      "frame": {
+        "x": 19,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 6.ase",
+      "frame": {
+        "x": 37,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 7.ase",
+      "frame": {
+        "x": 55,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 8.ase",
+      "frame": {
+        "x": 1,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 9.ase",
+      "frame": {
+        "x": 19,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 10.ase",
+      "frame": {
+        "x": 37,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 11.ase",
+      "frame": {
+        "x": 55,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 12.ase",
+      "frame": {
+        "x": 1,
+        "y": 55,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 13.ase",
+      "frame": {
+        "x": 19,
+        "y": 55,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 14.ase",
+      "frame": {
+        "x": 37,
+        "y": 55,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 15.ase",
+      "frame": {
+        "x": 55,
+        "y": 55,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 16.ase",
+      "frame": {
+        "x": 1,
+        "y": 73,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 17.ase",
+      "frame": {
+        "x": 19,
+        "y": 73,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 18.ase",
+      "frame": {
+        "x": 37,
+        "y": 73,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL STRUM 19.ase",
+      "frame": {
+        "x": 55,
+        "y": 73,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    }
   ],
-  "layers": [
-   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
-  ]
- }
+  "meta": {
+    "app": "http://www.aseprite.org/",
+    "version": "1.1.6-dev",
+    "format": "I8",
+    "size": {
+      "w": 73,
+      "h": 91
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "arrowLEFT",
+        "from": 0,
+        "to": 0,
+        "direction": "forward"
+      },
+      {
+        "name": "arrowDOWN",
+        "from": 1,
+        "to": 1,
+        "direction": "forward"
+      },
+      {
+        "name": "arrowUP",
+        "from": 2,
+        "to": 2,
+        "direction": "forward"
+      },
+      {
+        "name": "arrowRIGHT",
+        "from": 3,
+        "to": 3,
+        "direction": "forward"
+      },
+      {
+        "name": "left press",
+        "from": 4,
+        "to": 5,
+        "direction": "forward"
+      },
+      {
+        "name": "down press",
+        "from": 6,
+        "to": 7,
+        "direction": "forward"
+      },
+      {
+        "name": "up press",
+        "from": 8,
+        "to": 9,
+        "direction": "forward"
+      },
+      {
+        "name": "right press",
+        "from": 10,
+        "to": 11,
+        "direction": "forward"
+      },
+      {
+        "name": "left confirm",
+        "from": 12,
+        "to": 13,
+        "direction": "forward"
+      },
+      {
+        "name": "down confirm",
+        "from": 14,
+        "to": 15,
+        "direction": "forward"
+      },
+      {
+        "name": "up confirm",
+        "from": 16,
+        "to": 17,
+        "direction": "forward"
+      },
+      {
+        "name": "right confirm",
+        "from": 18,
+        "to": 19,
+        "direction": "forward"
+      }
+    ],
+    "layers": [
+      {
+        "name": "Sprite Sheet",
+        "opacity": 255,
+        "blendMode": "normal"
+      }
+    ]
+  }
 }

@@ -3,7 +3,7 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="tunnelLightsBlur.png" width="2931" height="539">
-  <SubTexture name="tunnelLightsBlur0003" x="4" y="4"  width="2923" height="166" frameX="-230" frameY="-7" frameWidth="3158" frameHeight="184"/>
-  <SubTexture name="tunnelLightsBlur0002" x="4" y="178"  width="2899" height="171" frameX="-121" frameY="-5" frameWidth="3158" frameHeight="184"/>
-  <SubTexture name="tunnelLightsBlur0001" x="4" y="357"  width="2897" height="178" frameX="-2" frameY="-1" frameWidth="3158" frameHeight="184"/>
+  <SubTexture name="tunnelLightsBlur0003" x="4" y="4" width="2923" height="166" frameX="-230" frameY="-7" frameWidth="3158" frameHeight="184" />
+  <SubTexture name="tunnelLightsBlur0002" x="4" y="178" width="2899" height="171" frameX="-121" frameY="-5" frameWidth="3158" frameHeight="184" />
+  <SubTexture name="tunnelLightsBlur0001" x="4" y="357" width="2897" height="178" frameX="-2" frameY="-1" frameWidth="3158" frameHeight="184" />
 </TextureAtlas>

@@ -3,18 +3,18 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="tankman.png" width="1834" height="238">
-  <SubTexture name="tankmanIdle0001" x="4" y="4" width="292" height="228" rotated="true"  frameX="-3" frameY="-10" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0005" x="304" y="4" width="295" height="228" rotated="true"  frameX="-1" frameY="-7" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0003" x="607" y="4" width="293" height="229" rotated="true"  frameX="-2" frameY="-9" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0007" x="908" y="4" width="302" height="229" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0008" x="1218" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0009" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0002" x="4" y="4" width="292" height="228" rotated="true"  frameX="-3" frameY="-10" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0004" x="607" y="4" width="293" height="229" rotated="true"  frameX="-2" frameY="-9" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0006" x="304" y="4" width="295" height="228" rotated="true"  frameX="-1" frameY="-7" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0010" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0011" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0012" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0013" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
-  <SubTexture name="tankmanIdle0014" x="1528" y="4" width="302" height="230" rotated="true"  frameX="-0" frameY="-0" frameWidth="231" frameHeight="302"/>
+  <SubTexture name="tankmanIdle0001" x="4" y="4" width="292" height="228" rotated="true" frameX="-3" frameY="-10" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0005" x="304" y="4" width="295" height="228" rotated="true" frameX="-1" frameY="-7" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0003" x="607" y="4" width="293" height="229" rotated="true" frameX="-2" frameY="-9" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0007" x="908" y="4" width="302" height="229" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0008" x="1218" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0009" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0002" x="4" y="4" width="292" height="228" rotated="true" frameX="-3" frameY="-10" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0004" x="607" y="4" width="293" height="229" rotated="true" frameX="-2" frameY="-9" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0006" x="304" y="4" width="295" height="228" rotated="true" frameX="-1" frameY="-7" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0010" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0011" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0012" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0013" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
+  <SubTexture name="tankmanIdle0014" x="1528" y="4" width="302" height="230" rotated="true" frameX="-0" frameY="-0" frameWidth="231" frameHeight="302" />
 </TextureAtlas>

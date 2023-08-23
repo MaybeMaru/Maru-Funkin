@@ -2,44 +2,44 @@
 <TextureAtlas imagePath="menuBoyfriend.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="idle0000" x="10" y="10" width="406" height="392" frameX="-1" frameY="-20" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0001" x="10" y="10" width="406" height="392" frameX="-1" frameY="-20" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0002" x="426" y="10" width="408" height="393" frameX="0" frameY="-19" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0003" x="426" y="10" width="408" height="393" frameX="0" frameY="-19" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0004" x="844" y="10" width="405" height="398" frameX="-3" frameY="-14" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0005" x="844" y="10" width="405" height="398" frameX="-3" frameY="-14" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0006" x="1259" y="10" width="410" height="411" frameX="-1" frameY="-1" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0007" x="1259" y="10" width="410" height="411" frameX="-1" frameY="-1" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0008" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0009" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0010" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0011" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0012" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="idle0013" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412"/>
-	<SubTexture name="pressed0000" x="428" y="431" width="395" height="416" frameX="0" frameY="0" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0001" x="428" y="431" width="395" height="416" frameX="0" frameY="0" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0002" x="833" y="431" width="413" height="410" frameX="-1" frameY="-8" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0003" x="833" y="431" width="413" height="410" frameX="-1" frameY="-8" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0004" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0005" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0006" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0007" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0008" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0009" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0010" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0011" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0012" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0013" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0014" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0015" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0016" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0017" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0018" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0019" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0020" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0021" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0022" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0023" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0024" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
-	<SubTexture name="pressed0025" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418"/>
+	<SubTexture name="idle0000" x="10" y="10" width="406" height="392" frameX="-1" frameY="-20" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0001" x="10" y="10" width="406" height="392" frameX="-1" frameY="-20" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0002" x="426" y="10" width="408" height="393" frameX="0" frameY="-19" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0003" x="426" y="10" width="408" height="393" frameX="0" frameY="-19" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0004" x="844" y="10" width="405" height="398" frameX="-3" frameY="-14" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0005" x="844" y="10" width="405" height="398" frameX="-3" frameY="-14" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0006" x="1259" y="10" width="410" height="411" frameX="-1" frameY="-1" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0007" x="1259" y="10" width="410" height="411" frameX="-1" frameY="-1" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0008" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0009" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0010" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0011" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0012" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="idle0013" x="10" y="431" width="408" height="412" frameX="-2" frameY="0" frameWidth="411" frameHeight="412" />
+	<SubTexture name="pressed0000" x="428" y="431" width="395" height="416" frameX="0" frameY="0" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0001" x="428" y="431" width="395" height="416" frameX="0" frameY="0" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0002" x="833" y="431" width="413" height="410" frameX="-1" frameY="-8" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0003" x="833" y="431" width="413" height="410" frameX="-1" frameY="-8" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0004" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0005" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0006" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0007" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0008" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0009" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0010" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0011" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0012" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0013" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0014" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0015" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0016" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0017" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0018" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0019" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0020" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0021" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0022" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0023" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0024" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
+	<SubTexture name="pressed0025" x="1256" y="431" width="414" height="412" frameX="-1" frameY="-6" frameWidth="415" frameHeight="418" />
 </TextureAtlas>

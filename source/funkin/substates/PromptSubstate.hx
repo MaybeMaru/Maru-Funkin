@@ -1,52 +1,60 @@
 package funkin.substates;
 
-class PromptSubstate extends MusicBeatSubstate {
-    var acceptFunction:Dynamic = null;
-    var acceptRequirement:Dynamic = null;
-    
-    public function new(text:String, ?acceptFunction:Dynamic, ?acceptRequirement:Dynamic, textScale:Float = 0.8) {
-        super();
-        this.acceptFunction = acceptFunction;
-        this.acceptRequirement = acceptRequirement;
+class PromptSubstate extends MusicBeatSubstate
+{
+	var acceptFunction:Dynamic = null;
+	var acceptRequirement:Dynamic = null;
 
-        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+	public function new(text:String, ?acceptFunction:Dynamic, ?acceptRequirement:Dynamic, textScale:Float = 0.8)
+	{
+		super();
+		this.acceptFunction = acceptFunction;
+		this.acceptRequirement = acceptRequirement;
+
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
 
-        var prompBox:FlxSprite = new FlxSprite().makeGraphic(1200, 500, 0xFFFAFD6D);
-        prompBox.screenCenter();
-        add(prompBox);
+		var prompBox:FlxSprite = new FlxSprite().makeGraphic(1200, 500, 0xFFFAFD6D);
+		prompBox.screenCenter();
+		add(prompBox);
 
-        var prompText:Alphabet = new Alphabet(FlxG.width/2,prompBox.y+75, text, true, 0, textScale);
-        prompText.alignment = CENTER;
-        add(prompText);
+		var prompText:Alphabet = new Alphabet(FlxG.width / 2, prompBox.y + 75, text, true, 0, textScale);
+		prompText.alignment = CENTER;
+		add(prompText);
 
-        cameras = [CoolUtil.getTopCam()];
-        bg.scrollFactor.set();
-        prompBox.scrollFactor.set();
-        prompText.scrollFactor.set();
-    }
+		cameras = [CoolUtil.getTopCam()];
+		bg.scrollFactor.set();
+		prompBox.scrollFactor.set();
+		prompText.scrollFactor.set();
+	}
 
-    var startTimer:Float = 0.333;
-    var canClick:Bool = false;
+	var startTimer:Float = 0.333;
+	var canClick:Bool = false;
 
-    override function update(elapsed:Float) {
-        super.update(elapsed);
-        if (startTimer > 0) {
-            startTimer -= elapsed;
-            if (startTimer <= 0) canClick = true;
-        }
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+		if (startTimer > 0)
+		{
+			startTimer -= elapsed;
+			if (startTimer <= 0)
+				canClick = true;
+		}
 
-        if (getKey('BACK-P')) {
-            close();
-            return;
-        }
+		if (getKey('BACK-P'))
+		{
+			close();
+			return;
+		}
 
-        if (canClick && (acceptRequirement == null ? getKey('ACCEPT-P') : acceptRequirement())) {
-            if (acceptFunction != null) {
-                acceptFunction();
-                close();
-            }
-        }
-    }
+		if (canClick && (acceptRequirement == null ? getKey('ACCEPT-P') : acceptRequirement()))
+		{
+			if (acceptFunction != null)
+			{
+				acceptFunction();
+				close();
+			}
+		}
+	}
 }

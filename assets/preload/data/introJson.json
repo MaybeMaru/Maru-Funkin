@@ -1,10 +1,8 @@
 {
     "bpm": 102,
-    "beats":
-    [
+    "beats": [
         {
-            "create":
-            [
+            "create": [
                 "ninjamuffin99",
                 "phantomArcade",
                 "kawaisprite",
@@ -19,8 +17,7 @@
             "clear": true
         },
         {
-            "create":
-            [
+            "create": [
                 "In association",
                 "with"
             ]

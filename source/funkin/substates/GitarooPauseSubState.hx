@@ -1,20 +1,23 @@
 package funkin.substates;
 
-class GitarooPauseSubState extends MusicBeatSubstate {
+class GitarooPauseSubState extends MusicBeatSubstate
+{
 	var replayButton:FunkinSprite;
 	var cancelButton:FunkinSprite;
 	var replaySelect:Bool = false;
 
-	public function new():Void {
+	public function new():Void
+	{
 		super();
 
-		if (FlxG.sound.music != null){
+		if (FlxG.sound.music != null)
+		{
 			FlxG.sound.music.stop();
 		}
 
 		add(new FunkinSprite('pauseAlt/pauseBG'));
-		
-		var bf:FunkinSprite = new FunkinSprite('pauseAlt/bfLol', [0,30]);
+
+		var bf:FunkinSprite = new FunkinSprite('pauseAlt/bfLol', [0, 30]);
 		bf.addAnim('lol', 'funnyThing', 13, true);
 		bf.playAnim('lol');
 		bf.screenCenter(X);
@@ -37,19 +40,23 @@ class GitarooPauseSubState extends MusicBeatSubstate {
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	override function update(elapsed:Float):Void {
-		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P')) {
+	override function update(elapsed:Float):Void
+	{
+		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P'))
+		{
 			changeThing();
 		}
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT-P'))
+		{
 			replaySelect ? FlxG.switchState(new PlayState()) : close();
 		}
 
 		super.update(elapsed);
 	}
 
-	function changeThing():Void {
+	function changeThing():Void
+	{
 		replaySelect = !replaySelect;
 		cancelButton.playAnim(replaySelect ? 'selected' : 'static');
 		replayButton.playAnim(replaySelect ? 'static' : 'selected');

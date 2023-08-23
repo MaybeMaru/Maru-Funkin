@@ -1,8 +1,5 @@
-/* 
-	Original from https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/commandline/commands/Update.hx
-	Sliced apart by Gabi/CrowPlexus (https://github.com/CrowPlexus/Forever-Engine-Legacy/blob/master/actions/Main.hx)
-*/
-
+// Original from https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/commandline/commands/Update.hx
+// Sliced apart by Gabi/CrowPlexus (https://github.com/CrowPlexus/Forever-Engine-Legacy/blob/master/actions/Main.hx)
 package;
 
 import haxe.Json;

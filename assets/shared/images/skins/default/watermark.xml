@@ -2,12 +2,12 @@
 <TextureAtlas imagePath="watermark.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="BOTPLAY0000" x="173" y="167" width="168" height="139" frameX="0" frameY="0" frameWidth="169" frameHeight="139"/>
-	<SubTexture name="BOTPLAY0001" x="173" y="167" width="168" height="139" frameX="0" frameY="0" frameWidth="169" frameHeight="139"/>
-	<SubTexture name="BOTPLAY0002" x="2" y="167" width="169" height="139"/>
-	<SubTexture name="BOTPLAY0003" x="2" y="167" width="169" height="139"/>
-	<SubTexture name="PRACTICE0000" x="2" y="2" width="161" height="163"/>
-	<SubTexture name="PRACTICE0001" x="2" y="2" width="161" height="163"/>
-	<SubTexture name="PRACTICE0002" x="165" y="2" width="160" height="163" frameX="-1" frameY="0" frameWidth="161" frameHeight="163"/>
-	<SubTexture name="PRACTICE0003" x="165" y="2" width="160" height="163" frameX="-1" frameY="0" frameWidth="161" frameHeight="163"/>
+	<SubTexture name="BOTPLAY0000" x="173" y="167" width="168" height="139" frameX="0" frameY="0" frameWidth="169" frameHeight="139" />
+	<SubTexture name="BOTPLAY0001" x="173" y="167" width="168" height="139" frameX="0" frameY="0" frameWidth="169" frameHeight="139" />
+	<SubTexture name="BOTPLAY0002" x="2" y="167" width="169" height="139" />
+	<SubTexture name="BOTPLAY0003" x="2" y="167" width="169" height="139" />
+	<SubTexture name="PRACTICE0000" x="2" y="2" width="161" height="163" />
+	<SubTexture name="PRACTICE0001" x="2" y="2" width="161" height="163" />
+	<SubTexture name="PRACTICE0002" x="165" y="2" width="160" height="163" frameX="-1" frameY="0" frameWidth="161" frameHeight="163" />
+	<SubTexture name="PRACTICE0003" x="165" y="2" width="160" height="163" frameX="-1" frameY="0" frameWidth="161" frameHeight="163" />
 </TextureAtlas>

@@ -1,45 +1,50 @@
 function createPost()
 {
-   if (GameVars.isStoryMode)
-        PlayState.inCutscene = true;
+	if (GameVars.isStoryMode)
+		PlayState.inCutscene = true;
 }
 
 function startCutscene()
 {
-    var red:FlxSprite = new FlxSprite(-400, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-    PlayState.add(red);
+	var red:FlxSprite = new FlxSprite(-400, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
+	PlayState.add(red);
 
-    var senpaiEvil:FunkinSprite = new FunkinSprite('weeb/senpaiCrazy', [0,0], [0,0]);
-    senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion instance 1', 24, false, [0]);
-    senpaiEvil.addAnim('cutscene', 'Senpai Pre Explosion instance 1');
-    senpaiEvil.playAnim('preCutscene');
-    senpaiEvil.setScale(6, false);
-    senpaiEvil.screenCenter();
-    senpaiEvil.x += 50;
-    senpaiEvil.alpha = 0;
-    PlayState.add(senpaiEvil);
+	var senpaiEvil:FunkinSprite = new FunkinSprite('weeb/senpaiCrazy', [0, 0], [0, 0]);
+	senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion instance 1', 24, false, [0]);
+	senpaiEvil.addAnim('cutscene', 'Senpai Pre Explosion instance 1');
+	senpaiEvil.playAnim('preCutscene');
+	senpaiEvil.setScale(6, false);
+	senpaiEvil.screenCenter();
+	senpaiEvil.x += 50;
+	senpaiEvil.alpha = 0;
+	PlayState.add(senpaiEvil);
 
-    PlayState.camHUD.visible = false;
+	PlayState.camHUD.visible = false;
 
-    new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
-    {
-        senpaiEvil.alpha += 0.15;
-        if (senpaiEvil.alpha < 1)   swagTimer.reset();
-        else {
-            senpaiEvil.playAnim('cutscene');
-            FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
-                senpaiEvil.destroy();
-                red.destroy();
-                PlayState.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
-                    PlayState.camHUD.visible = true;
-                    PlayState.createDialogue();
-                }, true);
-            });
-            new FlxTimer().start(3.2, function(deadTime:FlxTimer) {
-                PlayState.camGame.fade(FlxColor.WHITE, 1.6, false);
-            });
-        }
-    });
+	new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
+	{
+		senpaiEvil.alpha += 0.15;
+		if (senpaiEvil.alpha < 1)
+			swagTimer.reset();
+		else
+		{
+			senpaiEvil.playAnim('cutscene');
+			FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+			{
+				senpaiEvil.destroy();
+				red.destroy();
+				PlayState.camGame.fade(FlxColor.WHITE, 0.01, true, function()
+				{
+					PlayState.camHUD.visible = true;
+					PlayState.createDialogue();
+				}, true);
+			});
+			new FlxTimer().start(3.2, function(deadTime:FlxTimer)
+			{
+				PlayState.camGame.fade(FlxColor.WHITE, 1.6, false);
+			});
+		}
+	});
 }
 
 var bgFade:FlxSprite;
@@ -48,51 +53,51 @@ var face:FunkinSprite;
 
 function createDialogue()
 {
-    bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.fromRGB(25,0,5));
-    bgFade.scrollFactor.set();
-    bgFade.alpha = 0;
-    PlayState.add(bgFade);
+	bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.fromRGB(25, 0, 5));
+	bgFade.scrollFactor.set();
+	bgFade.alpha = 0;
+	PlayState.add(bgFade);
 
-    face = new FunkinSprite('weeb/spiritFaceForward', [320, 170]);
-    face.setScale(6, false);
-    face.cameras = [PlayState.camHUD];
-    PlayState.add(face);
+	face = new FunkinSprite('weeb/spiritFaceForward', [320, 170]);
+	face.setScale(6, false);
+	face.cameras = [PlayState.camHUD];
+	PlayState.add(face);
 
-    dialogueBox = new PixelDialogueBox('evil');
-    dialogueBox.cameras = [PlayState.camHUD];
+	dialogueBox = new PixelDialogueBox('evil');
+	dialogueBox.cameras = [PlayState.camHUD];
 
-    var handPos = dialogueBox.handSelect.getPosition();
-    dialogueBox.handSelect = new FunkinSprite('skins/pixel/evil_hand', [handPos.x,handPos.y], [0,0]);
-    dialogueBox.handSelect.addAnim('enter', 'nextLine', 12);
-    dialogueBox.handSelect.addAnim('load', 'waitLine', 12, true);
-    dialogueBox.handSelect.addAnim('click', 'clickLine', 12);
-    dialogueBox.handSelect.setScale(6 * 0.9);
-    dialogueBox.handSelect.playAnim('load');
-    dialogueBox.add(dialogueBox.handSelect);
+	var handPos = dialogueBox.handSelect.getPosition();
+	dialogueBox.handSelect = new FunkinSprite('skins/pixel/evil_hand', [handPos.x, handPos.y], [0, 0]);
+	dialogueBox.handSelect.addAnim('enter', 'nextLine', 12);
+	dialogueBox.handSelect.addAnim('load', 'waitLine', 12, true);
+	dialogueBox.handSelect.addAnim('click', 'clickLine', 12);
+	dialogueBox.handSelect.setScale(6 * 0.9);
+	dialogueBox.handSelect.playAnim('load');
+	dialogueBox.add(dialogueBox.handSelect);
 
-    dialogueBox.bgFade.visible = false;
-    dialogueBox.portraitLeft.alpha = 0;
-    dialogueBox.swagDialogue.color = FlxColor.WHITE;
-    dialogueBox.swagDialogue.borderColor = FlxColor.TRANSPARENT;
+	dialogueBox.bgFade.visible = false;
+	dialogueBox.portraitLeft.alpha = 0;
+	dialogueBox.swagDialogue.color = FlxColor.WHITE;
+	dialogueBox.swagDialogue.borderColor = FlxColor.TRANSPARENT;
 
-    PlayState.dialogueBox = dialogueBox;
-    PlayState.add(dialogueBox);
+	PlayState.dialogueBox = dialogueBox;
+	PlayState.add(dialogueBox);
 }
 
 function updatePost()
 {
-    if (dialogueBox != null)
-    {
-        face.alpha = dialogueBox.box.alpha;
-        bgFade.alpha = dialogueBox.bgFade.alpha;
-    }
+	if (dialogueBox != null)
+	{
+		face.alpha = dialogueBox.box.alpha;
+		bgFade.alpha = dialogueBox.bgFade.alpha;
+	}
 }
 
 function startCountdown()
 {
-    if (GameVars.isStoryMode)
-    {
-        face.destroy();
-        bgFade.destroy();
-    }
+	if (GameVars.isStoryMode)
+	{
+		face.destroy();
+		bgFade.destroy();
+	}
 }

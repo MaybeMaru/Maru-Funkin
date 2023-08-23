@@ -3,34 +3,34 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="tankmanBodyPart.png" width="568" height="517">
-  <SubTexture name="tankmanBody0005.png" x="7" y="7"  width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0001.png" x="7" y="268"  width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0003.png" x="287" y="7"  width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0007.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0002.png" x="7" y="268"  width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0016.png" x="7" y="268"  width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0017.png" x="7" y="268"  width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0004.png" x="287" y="7"  width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0018.png" x="287" y="7"  width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0019.png" x="287" y="7"  width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0006.png" x="7" y="7"  width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0020.png" x="7" y="7"  width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0021.png" x="7" y="7"  width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0008.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0009.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0010.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0011.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0012.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0013.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0014.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0015.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0022.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0023.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0024.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0025.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0026.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0027.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0028.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0029.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
-  <SubTexture name="tankmanBody0030.png" x="297" y="264"  width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250"/>
+  <SubTexture name="tankmanBody0005.png" x="7" y="7" width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0001.png" x="7" y="268" width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0003.png" x="287" y="7" width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0007.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0002.png" x="7" y="268" width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0016.png" x="7" y="268" width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0017.png" x="7" y="268" width="276" height="241" frameX="-0" frameY="-9" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0004.png" x="287" y="7" width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0018.png" x="287" y="7" width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0019.png" x="287" y="7" width="273" height="243" frameX="-0" frameY="-5" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0006.png" x="7" y="7" width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0020.png" x="7" y="7" width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0021.png" x="7" y="7" width="266" height="247" frameX="-5" frameY="-1" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0008.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0009.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0010.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0011.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0012.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0013.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0014.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0015.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0022.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0023.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0024.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0025.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0026.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0027.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0028.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0029.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
+  <SubTexture name="tankmanBody0030.png" x="297" y="264" width="264" height="246" frameX="-5" frameY="-0" frameWidth="276" frameHeight="250" />
 </TextureAtlas>

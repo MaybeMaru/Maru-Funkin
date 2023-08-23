@@ -2,18 +2,18 @@
 <TextureAtlas imagePath="optionCheckbox.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="close0000" x="689" y="179" width="172" height="114" frameX="-40" frameY="-85" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="close0001" x="471" y="430" width="208" height="104" frameX="-22" frameY="-97" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="close0002" x="259" y="286" width="202" height="201" frameX="-40" frameY="-13" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="close0003" x="10" y="286" width="239" height="237" frameX="-17" frameY="-13" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="close0004" x="10" y="10" width="271" height="266"/>
-	<SubTexture name="close0005" x="689" y="303" width="139" height="128" frameX="-58" frameY="-75" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="open0000" x="689" y="441" width="188" height="59" frameX="0" frameY="-147" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="open0001" x="259" y="497" width="173" height="65" frameX="-7" frameY="-141" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="open0002" x="447" y="10" width="122" height="200" frameX="-20" frameY="-1" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="open0003" x="471" y="220" width="120" height="200" frameX="-28" frameY="0" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="open0004" x="291" y="10" width="146" height="173" frameX="-24" frameY="-43" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="open0005" x="734" y="10" width="145" height="159" frameX="-22" frameY="-47" frameWidth="188" frameHeight="216"/>
-	<SubTexture name="staticClose0000" x="689" y="303" width="139" height="128" frameX="0" frameY="0" frameWidth="271" frameHeight="266"/>
-	<SubTexture name="staticOpen0000" x="579" y="10" width="145" height="159"/>
+	<SubTexture name="close0000" x="689" y="179" width="172" height="114" frameX="-40" frameY="-85" frameWidth="271" frameHeight="266" />
+	<SubTexture name="close0001" x="471" y="430" width="208" height="104" frameX="-22" frameY="-97" frameWidth="271" frameHeight="266" />
+	<SubTexture name="close0002" x="259" y="286" width="202" height="201" frameX="-40" frameY="-13" frameWidth="271" frameHeight="266" />
+	<SubTexture name="close0003" x="10" y="286" width="239" height="237" frameX="-17" frameY="-13" frameWidth="271" frameHeight="266" />
+	<SubTexture name="close0004" x="10" y="10" width="271" height="266" />
+	<SubTexture name="close0005" x="689" y="303" width="139" height="128" frameX="-58" frameY="-75" frameWidth="271" frameHeight="266" />
+	<SubTexture name="open0000" x="689" y="441" width="188" height="59" frameX="0" frameY="-147" frameWidth="188" frameHeight="216" />
+	<SubTexture name="open0001" x="259" y="497" width="173" height="65" frameX="-7" frameY="-141" frameWidth="188" frameHeight="216" />
+	<SubTexture name="open0002" x="447" y="10" width="122" height="200" frameX="-20" frameY="-1" frameWidth="188" frameHeight="216" />
+	<SubTexture name="open0003" x="471" y="220" width="120" height="200" frameX="-28" frameY="0" frameWidth="188" frameHeight="216" />
+	<SubTexture name="open0004" x="291" y="10" width="146" height="173" frameX="-24" frameY="-43" frameWidth="188" frameHeight="216" />
+	<SubTexture name="open0005" x="734" y="10" width="145" height="159" frameX="-22" frameY="-47" frameWidth="188" frameHeight="216" />
+	<SubTexture name="staticClose0000" x="689" y="303" width="139" height="128" frameX="0" frameY="0" frameWidth="271" frameHeight="266" />
+	<SubTexture name="staticOpen0000" x="579" y="10" width="145" height="159" />
 </TextureAtlas>

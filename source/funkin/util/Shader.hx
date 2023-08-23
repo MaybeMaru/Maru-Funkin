@@ -35,7 +35,8 @@ class Shader
 		trace('created shader $shader from $frag');
 	}
 
-	public static function clearShaders() {
+	public static function clearShaders()
+	{
 		shaderMap.clear();
 	}
 
@@ -111,7 +112,8 @@ class Shader
 
 	inline public static function setSampler2D(shader:String, prop:String, path:String, ?bitmap:BitmapData)
 	{
-		if (existsShader(shader)) {
+		if (existsShader(shader))
+		{
 			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : Paths.getBitmapData(Paths.image(path, null, true), true));
 		}
 	}

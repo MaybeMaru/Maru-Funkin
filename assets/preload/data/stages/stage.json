@@ -1,7 +1,19 @@
 {
-    "library": "",
-	"gfOffsets": [0,0],
-	"dadOffsets": [0,0],
-	"bfOffsets": [0,0],
-	"startCamOffsets": [-800,-400]
+	"library": "",
+	"gfOffsets": [
+		0,
+		0
+	],
+	"dadOffsets": [
+		0,
+		0
+	],
+	"bfOffsets": [
+		0,
+		0
+	],
+	"startCamOffsets": [
+		-800,
+		-400
+	]
 }

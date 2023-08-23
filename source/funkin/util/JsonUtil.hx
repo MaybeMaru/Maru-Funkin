@@ -5,55 +5,76 @@ import flixel.math.FlxPoint;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 
-typedef EngineVersion = {
+typedef EngineVersion =
+{
 	var version:String;
 	var patchNotes:Array<String>;
 }
 
-//Aseprite Json packer format
-typedef JsonFrame = {
+// Aseprite Json packer format
+typedef JsonFrame =
+{
 	var filename:String;
-	var frame:{x:Float, y:Float, w:Float, h:Float};
+	var frame:{
+		x:Float,
+		y:Float,
+		w:Float,
+		h:Float
+	};
 	var rotated:Bool;
 	var trimmed:Bool;
-	var spriteSourceSize:{x:Float, y:Float, w:Float, h:Float};
+	var spriteSourceSize:{
+		x:Float,
+		y:Float,
+		w:Float,
+		h:Float
+	};
 	var sourceSize:{w:Float, h:Float};
 	var duration:Float;
 }
-typedef JsonTag = {
+
+typedef JsonTag =
+{
 	var name:String;
 	var from:Int;
 	var to:Int;
 }
-typedef JsonSpritesheet = {
+
+typedef JsonSpritesheet =
+{
 	var frames:Array<JsonFrame>;
 	var meta:{frameTags:Array<JsonTag>};
 }
 
-//Default Json sprite format
-typedef SpriteAnimation = {
-    var animName:String;
+// Default Json sprite format
+typedef SpriteAnimation =
+{
+	var animName:String;
 	var animFile:String;
 	var offsets:Array<Float>;
-    var indices:Array<Int>;
+	var indices:Array<Int>;
 	var framerate:Int;
-    var loop:Bool;
+	var loop:Bool;
 }
-typedef SpriteJson = {
+
+typedef SpriteJson =
+{
 	var anims:Array<SpriteAnimation>;
-    var imagePath:String;
-    var scale:Float;
+	var imagePath:String;
+	var scale:Float;
 	var antialiasing:Bool;
 	var flipX:Bool;
 }
 
-//Story / Freeplay Format
-typedef SongList = {
+// Story / Freeplay Format
+typedef SongList =
+{
 	var songs:Array<String>;
 	var songIcon:Array<String>;
 }
 
-typedef WeekJson = {
+typedef WeekJson =
+{
 	var songList:SongList;
 	var weekDiffs:Array<String>;
 	var weekImage:String;
@@ -69,32 +90,34 @@ typedef WeekJson = {
 	var hideFreeplay:Bool;
 }
 
-class JsonUtil {
-	inline public static function getJsonList(folder:String = 'scripts/global',
-		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
-		fullPath:Bool = false, mainFolder:String = 'data'):Array<String> {
-		
-        var assetsList:Array<String> = [];
-        var modList:Array<String> = [];
+class JsonUtil
+{
+	inline public static function getJsonList(folder:String = 'scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true,
+			allMods:Bool = false, fullPath:Bool = false, mainFolder:String = 'data'):Array<String>
+	{
+		var assetsList:Array<String> = [];
+		var modList:Array<String> = [];
 
-        if (assets)
-            assetsList = Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder');
-        #if desktop
-        modList = Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods);
-        #end
+		if (assets)
+			assetsList = Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder');
+		#if desktop
+		modList = Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods);
+		#end
 
-        return assetsList.concat(modList);
+		return assetsList.concat(modList);
 	}
 
-	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic {
-		if (!getJsonList(folder,true,true,true,false,false,library).contains(path))
+	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic
+	{
+		if (!getJsonList(folder, true, true, true, false, false, library).contains(path))
 			return null;
 		var getJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
 		var returnJson:Dynamic = Json.parse(getJson);
 		return returnJson;
 	}
 
-	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
+	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames
+	{
 		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(Paths.file('images/$path.json', TEXT, library)));
 		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, false, false, gpu), false, Paths.image(path, library, true));
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
@@ -108,14 +131,18 @@ class JsonUtil {
 		var newFrameName:String = '_';
 
 		var isArray:Bool = jsonData.frames is Array;
-		var framesArray:Array<JsonFrame> = isArray ? jsonData.frames : Reflect.fields(jsonData.frames).map(function(field) return Reflect.field(jsonData.frames, field));
+		var framesArray:Array<JsonFrame> = isArray ? jsonData.frames : Reflect.fields(jsonData.frames)
+			.map(function(field) return Reflect.field(jsonData.frames, field));
 
-		for (i in 0...framesArray.length) {
+		for (i in 0...framesArray.length)
+		{
 			var frame = framesArray[i];
-			for (data in framesTagData) {
+			for (data in framesTagData)
+			{
 				if (i >= data[0] && i <= data[1]) // Get animation tag name
 					newFrameName = data[2];
-				if (frameName != newFrameName) {
+				if (frameName != newFrameName)
+				{
 					frameCount = 0;
 					frameName = newFrameName;
 				}
@@ -124,17 +151,21 @@ class JsonUtil {
 			frames.addAtlasFrame(rect, FlxPoint.get(rect.width, rect.height), FlxPoint.get(), '$frameName${CoolUtil.formatInt(frameCount, 5)}');
 			frameCount++;
 		}
-		
+
 		return frames;
 	}
 
-	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
+	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic
+	{
 		var defaults = Reflect.copy(defaultsInput);
-		if (input == null) return defaults;
+		if (input == null)
+			return defaults;
 
 		var props = Reflect.fields(defaults);
-		for (prop in props) {
-			if (Reflect.hasField(input, prop)) {
+		for (prop in props)
+		{
+			if (Reflect.hasField(input, prop))
+			{
 				var val = Reflect.field(input, prop);
 				if (val == null)
 					Reflect.setField(input, prop, Reflect.field(defaults, prop));
@@ -145,18 +176,21 @@ class JsonUtil {
 		return removeUnusedVars(defaults, input);
 	}
 
-	public static function removeUnusedVars(defaults:Dynamic, input:Dynamic):Dynamic {
+	public static function removeUnusedVars(defaults:Dynamic, input:Dynamic):Dynamic
+	{
 		var defProps = Reflect.fields(defaults);
 		var inputProps = Reflect.fields(input);
-		for (prop in inputProps) {
+		for (prop in inputProps)
+		{
 			if (!defProps.contains(prop))
 				Reflect.deleteField(input, prop);
 		}
 		return input;
 	}
 
-	public static function copyJson<T>(c:T):T {
+	public static function copyJson<T>(c:T):T
+	{
 		var serializedData = haxe.Serializer.run(c);
-        return haxe.Unserializer.run(serializedData);
+		return haxe.Unserializer.run(serializedData);
 	}
 }

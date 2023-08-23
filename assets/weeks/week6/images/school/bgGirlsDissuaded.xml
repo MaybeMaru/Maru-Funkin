@@ -3,34 +3,34 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="bgGirlsDissuaded.png" width="183" height="263">
-  <SubTexture name="BG Girls Dissuaded0015" x="4" y="4"  width="84" height="82" frameX="-9" frameY="-10" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0001" x="4" y="94"  width="83" height="76" frameX="-8" frameY="-16" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0003" x="96" y="4"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0007" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0017" x="4" y="178"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0021" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0002" x="4" y="94"  width="83" height="76" frameX="-8" frameY="-16" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0004" x="96" y="4"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0005" x="96" y="4"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0006" x="96" y="4"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0008" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0009" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0010" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0011" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0012" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0013" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0014" x="96" y="91"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0016" x="4" y="4"  width="84" height="82" frameX="-9" frameY="-10" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0018" x="4" y="178"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0019" x="4" y="178"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0020" x="4" y="178"  width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0022" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0023" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0024" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0025" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0026" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0027" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0028" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0029" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
-  <SubTexture name="BG Girls Dissuaded0030" x="95" y="180"  width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96"/>
+  <SubTexture name="BG Girls Dissuaded0015" x="4" y="4" width="84" height="82" frameX="-9" frameY="-10" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0001" x="4" y="94" width="83" height="76" frameX="-8" frameY="-16" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0003" x="96" y="4" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0007" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0017" x="4" y="178" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0021" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0002" x="4" y="94" width="83" height="76" frameX="-8" frameY="-16" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0004" x="96" y="4" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0005" x="96" y="4" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0006" x="96" y="4" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0008" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0009" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0010" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0011" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0012" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0013" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0014" x="96" y="91" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0016" x="4" y="4" width="84" height="82" frameX="-9" frameY="-10" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0018" x="4" y="178" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0019" x="4" y="178" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0020" x="4" y="178" width="83" height="81" frameX="-9" frameY="-11" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0022" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0023" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0024" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0025" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0026" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0027" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0028" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0029" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
+  <SubTexture name="BG Girls Dissuaded0030" x="95" y="180" width="83" height="79" frameX="-9" frameY="-13" frameWidth="100" frameHeight="96" />
 </TextureAtlas>

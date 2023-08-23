@@ -1,40 +1,51 @@
 {
     "noteData": {
-        "anims" : [
+        "anims": [
             {
                 "animName": "scrollLEFT",
                 "animFile": "purple0"
-            }, {
+            },
+            {
                 "animName": "scrollDOWN",
                 "animFile": "blue0"
-            }, {
+            },
+            {
                 "animName": "scrollUP",
                 "animFile": "green0"
-            }, {
+            },
+            {
                 "animName": "scrollRIGHT",
                 "animFile": "red0"
-            }, {
+            },
+            {
                 "animName": "holdLEFT",
                 "animFile": "purple hold piece"
-            }, {
+            },
+            {
                 "animName": "holdDOWN",
                 "animFile": "blue hold piece"
-            }, {
+            },
+            {
                 "animName": "holdUP",
                 "animFile": "green hold piece"
-            }, {
+            },
+            {
                 "animName": "holdRIGHT",
                 "animFile": "red hold piece"
-            }, {
+            },
+            {
                 "animName": "holdLEFT-end",
                 "animFile": "purple hold end"
-            }, {
+            },
+            {
                 "animName": "holdDOWN-end",
                 "animFile": "blue hold end"
-            }, {
+            },
+            {
                 "animName": "holdUP-end",
                 "animFile": "green hold end"
-            }, {
+            },
+            {
                 "animName": "holdRIGHT-end",
                 "animFile": "red hold end"
             }
@@ -42,44 +53,60 @@
         "imagePath": "noteAssets",
         "antialiasing": false,
         "scale": 6,
-        "noteColorArray" : ["0xffe276ff", "0xff3dcaff", "0xff71e300", "0xffff884e"]
+        "noteColorArray": [
+            "0xffe276ff",
+            "0xff3dcaff",
+            "0xff71e300",
+            "0xffff884e"
+        ]
     },
     "strumData": {
-        "anims" : [
+        "anims": [
             {
                 "animName": "staticLEFT",
                 "animFile": "arrowLEFT"
-            },{
+            },
+            {
                 "animName": "staticDOWN",
                 "animFile": "arrowDOWN"
-            },{
+            },
+            {
                 "animName": "staticUP",
                 "animFile": "arrowUP"
-            },{
+            },
+            {
                 "animName": "staticRIGHT",
                 "animFile": "arrowRIGHT"
-            }, {
+            },
+            {
                 "animName": "pressedLEFT",
                 "animFile": "left press"
-            },{
+            },
+            {
                 "animName": "pressedDOWN",
                 "animFile": "down press"
-            },{
+            },
+            {
                 "animName": "pressedUP",
                 "animFile": "up press"
-            },{
+            },
+            {
                 "animName": "pressedRIGHT",
                 "animFile": "right press"
-            },{
+            },
+            {
                 "animName": "confirmLEFT",
                 "animFile": "left confirm"
-            },{
+            },
+            {
                 "animName": "confirmDOWN",
                 "animFile": "down confirm"
-            },{
+            },
+            {
                 "animName": "confirmUP",
                 "animFile": "up confirm"
-            },{
+            },
+            {
                 "animName": "confirmRIGHT",
                 "animFile": "right confirm"
             }
@@ -89,27 +116,42 @@
         "scale": 6
     },
     "splashData": {
-        "anims" : [
+        "anims": [
             {
                 "animName": "splashLEFT",
                 "animFile": "splashPURPLE",
                 "framerate": 12,
-                "offsets": [-110, -80]
-            },{
+                "offsets": [
+                    -110,
+                    -80
+                ]
+            },
+            {
                 "animName": "splashDOWN",
                 "animFile": "splashBLUE",
                 "framerate": 12,
-                "offsets": [-110, -80]
-            },{
+                "offsets": [
+                    -110,
+                    -80
+                ]
+            },
+            {
                 "animName": "splashUP",
                 "animFile": "splashGREEN",
                 "framerate": 12,
-                "offsets": [-110, -80]
-            },{
+                "offsets": [
+                    -110,
+                    -80
+                ]
+            },
+            {
                 "animName": "splashRIGHT",
                 "animFile": "splashRED",
                 "framerate": 12,
-                "offsets": [-110, -80]
+                "offsets": [
+                    -110,
+                    -80
+                ]
             }
         ],
         "imagePath": "splashAssets",

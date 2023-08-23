@@ -1,7 +1,19 @@
 {
-    "library": "week2",
-	"gfOffsets": [0,0],
-	"dadOffsets": [50,0],
-	"bfOffsets": [-50,0],
-	"startCamOffsets": [-400,-600]
+	"library": "week2",
+	"gfOffsets": [
+		0,
+		0
+	],
+	"dadOffsets": [
+		50,
+		0
+	],
+	"bfOffsets": [
+		-50,
+		0
+	],
+	"startCamOffsets": [
+		-400,
+		-600
+	]
 }

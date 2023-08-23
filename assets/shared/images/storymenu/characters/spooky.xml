@@ -2,20 +2,20 @@
 <TextureAtlas imagePath="menuSpooky.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="spookyIdle0000" x="10" y="10" width="381" height="549" frameX="-50" frameY="0" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0001" x="10" y="10" width="381" height="549" frameX="-50" frameY="0" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0002" x="401" y="10" width="379" height="541" frameX="-55" frameY="-8" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0003" x="401" y="10" width="379" height="541" frameX="-55" frameY="-8" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0004" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0005" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0006" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0007" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0008" x="374" y="569" width="492" height="532" frameX="0" frameY="-16" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0009" x="374" y="569" width="492" height="532" frameX="0" frameY="-16" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0010" x="876" y="569" width="481" height="524" frameX="-7" frameY="-20" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0011" x="876" y="569" width="481" height="524" frameX="-7" frameY="-20" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0012" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0013" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0014" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549"/>
-	<SubTexture name="spookyIdle0015" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549"/>
+	<SubTexture name="spookyIdle0000" x="10" y="10" width="381" height="549" frameX="-50" frameY="0" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0001" x="10" y="10" width="381" height="549" frameX="-50" frameY="0" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0002" x="401" y="10" width="379" height="541" frameX="-55" frameY="-8" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0003" x="401" y="10" width="379" height="541" frameX="-55" frameY="-8" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0004" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0005" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0006" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0007" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0008" x="374" y="569" width="492" height="532" frameX="0" frameY="-16" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0009" x="374" y="569" width="492" height="532" frameX="0" frameY="-16" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0010" x="876" y="569" width="481" height="524" frameX="-7" frameY="-20" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0011" x="876" y="569" width="481" height="524" frameX="-7" frameY="-20" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0012" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0013" x="790" y="10" width="357" height="484" frameX="-79" frameY="-61" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0014" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549" />
+	<SubTexture name="spookyIdle0015" x="10" y="569" width="354" height="494" frameX="-78" frameY="-52" frameWidth="492" frameHeight="549" />
 </TextureAtlas>

@@ -116,7 +116,8 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			return;
 
 		var shader = shader != null ? shader : graphics.shader;
-		if (shader == null) {
+		if (shader == null)
+		{
 			trace('null null dum dum');
 			return;
 		}
@@ -124,7 +125,6 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		shader.bitmap.input = graphics.bitmap;
 		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
-
 
 		if (colored || hasColorOffsets)
 		{

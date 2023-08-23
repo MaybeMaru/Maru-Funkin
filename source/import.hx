@@ -1,15 +1,13 @@
 #if !macro
-//Main shit
+// Main shit
 import funkin.Controls;
 import funkin.Preferences;
-
-//Song
+// Song
 import funkin.util.song.Conductor;
 import funkin.util.song.Highscore;
 import funkin.util.song.Song;
 import funkin.util.song.WeekSetup;
-
-//Util
+// Util
 import funkin.util.Paths;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
@@ -32,13 +30,11 @@ import funkin.util.JsonUtil;
 import funkin.util.Stage;
 import funkin.util.SaveData;
 import funkin.objects.CustomTransition;
-
-//Note
+// Note
 import funkin.objects.note.Note;
 import funkin.objects.note.NoteSplash;
 import funkin.objects.note.NoteStrum;
-
-//PlayState Others
+// PlayState Others
 import funkin.objects.RatingGroup;
 import funkin.objects.dialogue.DialogueBoxBase;
 import funkin.objects.dialogue.PixelDialogueBox;
@@ -46,39 +42,32 @@ import funkin.objects.dialogue.NormalDialogueBox;
 import funkin.objects.SwagCamera;
 import funkin.objects.Character;
 import funkin.objects.HealthIcon;
-
-//Alphabet
+// Alphabet
 import funkin.objects.alphabet.Alphabet;
 import funkin.objects.alphabet.AlphabetCharacter;
 import funkin.objects.alphabet.MenuAlphabet;
 import funkin.objects.alphabet.TypedAlphabet;
-
-//Main graphics
+// Main graphics
 import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinText;
-
-//Main states
+// Main states
 import funkin.states.LoadingState;
 import funkin.states.MusicBeatState;
 import funkin.states.PlayState;
-
-//Main substates
+// Main substates
 import funkin.substates.MusicBeatSubstate;
 import funkin.substates.GameOverSubstate;
 import funkin.substates.PauseSubState;
-
-//States shorcuts
+// States shorcuts
 import funkin.states.menus.FreeplayState;
 import funkin.states.menus.MainMenuState;
 import funkin.states.menus.StoryMenuState;
 import funkin.states.menus.TitleState;
 import funkin.states.options.OptionsState;
-
 import funkin.states.editors.AnimationDebug;
 import funkin.states.editors.ChartingState;
-
-//Haxeflixel shit
+// Haxeflixel shit
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -103,7 +92,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 import flixel.input.keyboard.FlxKey;
-
 import haxe.Json;
 import flixel.graphics.frames.FlxFramesCollection;
 import tea.SScript;

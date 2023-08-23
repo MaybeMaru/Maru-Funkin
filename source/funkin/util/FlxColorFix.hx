@@ -1,9 +1,10 @@
 package funkin.util;
 
 /*
- 	Normal FlxColor doesnt work in Hscript sooooooo yeah
-*/
-class FlxColorFix {
+	Normal FlxColor doesnt work in Hscript sooooooo yeah
+ */
+class FlxColorFix
+{
 	public static var TRANSPARENT:FlxColor = 0x00000000;
 	public static var WHITE:FlxColor = 0xFFFFFFFF;
 	public static var GRAY:FlxColor = 0xFF808080;
@@ -21,19 +22,23 @@ class FlxColorFix {
 	public static var MAGENTA:FlxColor = 0xFFFF00FF;
 	public static var CYAN:FlxColor = 0xFF00FFFF;
 
-    public static function fromString(str:String):FlxColor {
+	public static function fromString(str:String):FlxColor
+	{
 		return FlxColor.fromString(str);
 	}
 
-    public static function fromRGB(red:Int, green:Int, blue:Int, alpha:Int = 255):FlxColor {
-		return FlxColor.fromRGB(red,green,blue,alpha);
+	public static function fromRGB(red:Int, green:Int, blue:Int, alpha:Int = 255):FlxColor
+	{
+		return FlxColor.fromRGB(red, green, blue, alpha);
 	}
 
-	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
-		return FlxColor.interpolate(color1,color2, fpsLerp ? CoolUtil.getLerp(factor) : factor);
+	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor
+	{
+		return FlxColor.interpolate(color1, color2, fpsLerp ? CoolUtil.getLerp(factor) : factor);
 	}
 
-	public static function fromInt(value:Int):FlxColor {
+	public static function fromInt(value:Int):FlxColor
+	{
 		return FlxColor.fromInt(value);
 	}
 
@@ -42,26 +47,31 @@ class FlxColorFix {
 	public var B:Float = 0;
 	public var A:Float = 0;
 
-	public function new(R:Float = 255,G:Float = 255,B:Float = 255,A:Float = 255) {
-		set(R,G,B,A);
+	public function new(R:Float = 255, G:Float = 255, B:Float = 255, A:Float = 255)
+	{
+		set(R, G, B, A);
 	}
 
-	public static function fromFlxColor(color:FlxColor) {
-		return new FlxColorFix(color.red,color.green,color.blue);
+	public static function fromFlxColor(color:FlxColor)
+	{
+		return new FlxColorFix(color.red, color.green, color.blue);
 	}
 
-	public function set(R:Float = 255,G:Float = 255,B:Float = 255,A:Float = 255) {
+	public function set(R:Float = 255, G:Float = 255, B:Float = 255, A:Float = 255)
+	{
 		this.R = R;
 		this.G = G;
 		this.B = B;
 		this.A = A;
 	}
-	
-	public function get():FlxColor {
-		return FlxColor.fromRGB(Std.int(R),Std.int(G),Std.int(B),Std.int(A));
+
+	public function get():FlxColor
+	{
+		return FlxColor.fromRGB(Std.int(R), Std.int(G), Std.int(B), Std.int(A));
 	}
 
-	public function lerp(target:FlxColor, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
+	public function lerp(target:FlxColor, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor
+	{
 		var lerpVal = fpsLerp ? CoolUtil.getLerp(factor) : factor;
 		R = FlxMath.lerp(R, target.red, lerpVal);
 		G = FlxMath.lerp(G, target.green, lerpVal);

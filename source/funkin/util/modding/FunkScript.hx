@@ -1,26 +1,35 @@
 package funkin.util.modding;
 
-enum HscriptFunctionCallback {
+enum HscriptFunctionCallback
+{
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript extends SScript {
+class FunkScript extends SScript
+{
 	public static var globalVariables:Map<String, Dynamic> = [];
+
 	public var scriptID:String = '';
 
-	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
-		if (!exists(method)) {
+	public function callback(method:String, ?args:Array<Dynamic>):Dynamic
+	{
+		if (!exists(method))
+		{
 			return CONTINUE_FUNCTION;
 		}
 		return callMethod(method, args == null ? [] : args);
 	}
 
-	public function callMethod(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
-		var call_ =  call(method, args);
-		if (!call_.succeeded) {
-			for (error in call_.exceptions) {
-				if (error != null) ModdingUtil.errorTrace('$scriptID / ${error.toString()}');
+	public function callMethod(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback
+	{
+		var call_ = call(method, args);
+		if (!call_.succeeded)
+		{
+			for (error in call_.exceptions)
+			{
+				if (error != null)
+					ModdingUtil.errorTrace('$scriptID / ${error.toString()}');
 			}
 			return CONTINUE_FUNCTION;
 		}
@@ -28,21 +37,23 @@ class FunkScript extends SScript {
 		return value == null ? CONTINUE_FUNCTION : value;
 	}
 
-	public function new(hscriptCode:String):Void {
+	public function new(hscriptCode:String):Void
+	{
 		super();
 		implement();
 		doString(hscriptCode);
 	}
 
-	public function implement():Void { //Preloaded Variables
+	public function implement():Void
+	{ // Preloaded Variables
 
 		// Wip
 
 		set('STOP_FUNCTION', STOP_FUNCTION);
 
-		//Mau engin
+		// Mau engin
 
-        set('PlayState', PlayState.game);
+		set('PlayState', PlayState.game);
 		set('GameVars', PlayState); // fuck
 		set('State', MusicBeatState.game);
 
@@ -64,18 +75,18 @@ class FunkScript extends SScript {
 		set('TypedAlphabet', TypedAlphabet);
 		set('MenuAlphabet', MenuAlphabet);
 
-		//Haxe
+		// Haxe
 
 		set('Std', Std);
 		set('Math', Math);
 		set('Type', Type);
 		set('StringTools', StringTools);
 		set('Reflect', Reflect);
-		
-		//Flixel
+
+		// Flixel
 
 		set('FlxG', flixel.FlxG);
-        set('FlxSpriteExt', funkin.graphics.FlxSpriteExt);	//	The cooler FlxSprite
+		set('FlxSpriteExt', funkin.graphics.FlxSpriteExt); //	The cooler FlxSprite
 		set('FlxSprite', flixel.FlxSprite);
 		set('FlxText', flixel.text.FlxText);
 		set('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
@@ -90,83 +101,124 @@ class FunkScript extends SScript {
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
-		//HScript Functions
+		// HScript Functions
 
-		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
-			if(packageStr != '') packageStr += '.';
-			if (customName != null && !exists(customName)) {
+		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void
+		{
+			if (packageStr != '')
+				packageStr += '.';
+			if (customName != null && !exists(customName))
+			{
 				set(customName, Type.resolveClass(packageStr + classStr));
 				return;
 			}
 			set(classStr, Type.resolveClass(packageStr + classStr));
 		});
 
-		set('getBlendMode', function(blendType:String):openfl.display.BlendMode {
-			switch(blendType.toLowerCase().trim()) {
-				case 'add': 		return ADD; 	case 'alpha': 		return ALPHA;
-				case 'darken': 		return DARKEN; 	case 'difference': 	return DIFFERENCE;
-				case 'erase': 		return ERASE; 	case 'hardlight': 	return HARDLIGHT;
-				case 'invert': 		return INVERT; 	case 'layer': 		return LAYER;
-				case 'lighten': 	return LIGHTEN; case 'multiply': 	return MULTIPLY;
-				case 'overlay': 	return OVERLAY; case 'screen': 		return SCREEN;
-				case 'shader': 		return SHADER; 	case 'subtract': 	return SUBTRACT;
-				default:			return NORMAL;
+		set('getBlendMode', function(blendType:String):openfl.display.BlendMode
+		{
+			switch (blendType.toLowerCase().trim())
+			{
+				case 'add':
+					return ADD;
+				case 'alpha':
+					return ALPHA;
+				case 'darken':
+					return DARKEN;
+				case 'difference':
+					return DIFFERENCE;
+				case 'erase':
+					return ERASE;
+				case 'hardlight':
+					return HARDLIGHT;
+				case 'invert':
+					return INVERT;
+				case 'layer':
+					return LAYER;
+				case 'lighten':
+					return LIGHTEN;
+				case 'multiply':
+					return MULTIPLY;
+				case 'overlay':
+					return OVERLAY;
+				case 'screen':
+					return SCREEN;
+				case 'shader':
+					return SHADER;
+				case 'subtract':
+					return SUBTRACT;
+				default:
+					return NORMAL;
 			}
 		});
 
-		set('parseJson', function (value:String):Dynamic {
+		set('parseJson', function(value:String):Dynamic
+		{
 			return Json.parse(value);
 		});
 
-		set('stringifyJson', function (value:Dynamic, pretty:Bool = true):String {
+		set('stringifyJson', function(value:Dynamic, pretty:Bool = true):String
+		{
 			return Json.stringify(value, pretty ? "\t" : null);
 		});
 
-		set('getPref', function(pref:String):Dynamic {
+		set('getPref', function(pref:String):Dynamic
+		{
 			return Preferences.getPref(pref);
 		});
 
-		set('getKey', function(key:String):Bool {
+		set('getKey', function(key:String):Bool
+		{
 			return Controls.getKey(key);
 		});
 
-		set('trace', function(text:String, ?color:Int):Void {
+		set('trace', function(text:String, ?color:Int):Void
+		{
 			ModdingUtil.consoleTrace(text, color);
 		});
 
-		set('getSound', function (key:String):FlxSound {
+		set('getSound', function(key:String):FlxSound
+		{
 			return CoolUtil.getSound(key);
 		});
 
-		set('playSound', function (key:String, volume:Float = 1) {
+		set('playSound', function(key:String, volume:Float = 1)
+		{
 			CoolUtil.playSound(key, volume);
 		});
 
-		set('pauseSounds', function () {
+		set('pauseSounds', function()
+		{
 			CoolUtil.pauseSounds();
 		});
 
 		// Needs pauseSounds() first
-		set('resumeSounds', function () {
+		set('resumeSounds', function()
+		{
 			CoolUtil.resumeSounds();
 		});
 
-		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
+		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void
+		{
 			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
 		});
-		
-		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
+
+		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false)
+		{
 			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.game.fgSpr.insert(order, spr) : PlayState.game.bgSpr.insert(order, spr);
 		});
 
-		set('getSpr', function(key:String):Null<Dynamic> {
-			return ScriptUtil.getSprite(key);					
+		set('getSpr', function(key:String):Null<Dynamic>
+		{
+			return ScriptUtil.getSprite(key);
 		});
 
-		set('getSprOrder', function(key:String):Int {
-			for (i in ['fg', 'bg']) {
+		set('getSprOrder', function(key:String):Int
+		{
+			for (i in ['fg', 'bg'])
+			{
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				if (PlayState.game.objMap.exists(sprKey))
 					return ScriptUtil.getGroup(i).members.indexOf(PlayState.game.objMap.get(sprKey));
@@ -175,77 +227,97 @@ class FunkScript extends SScript {
 			return 0;
 		});
 
-		set('existsSpr', function(key:String):Null<Dynamic> {
-			for (i in ['fg', 'bg']) {
-				if (PlayState.game.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
+		set('existsSpr', function(key:String):Null<Dynamic>
+		{
+			for (i in ['fg', 'bg'])
+			{
+				if (PlayState.game.objMap.exists(ScriptUtil.getSpriteKey(i, key)))
+				{
 					return true;
 				}
 			}
-			return false;						
+			return false;
 		});
 
-		set('removeSpr', function(key:String) {
-			for (i in ['fg', 'bg']) {
+		set('removeSpr', function(key:String)
+		{
+			for (i in ['fg', 'bg'])
+			{
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				var group = ScriptUtil.getGroup(i);
-				if (PlayState.game.objMap.exists(sprKey)) {
+				if (PlayState.game.objMap.exists(sprKey))
+				{
 					group.remove(ScriptUtil.getSprite(key));
 					PlayState.game.objMap.remove(sprKey);
 				}
 			}
 		});
 
-		set('makeGroup', function(key:String, ?order:Int):Void {
+		set('makeGroup', function(key:String, ?order:Int):Void
+		{
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
 			order != null ? PlayState.game.insert(order, newGroup) : PlayState.game.add(newGroup);
 			PlayState.game.objMap.set('_group_$key', newGroup);
 		});
 
-		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
+		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>>
+		{
 			if (PlayState.game.objMap.exists('_group_$key'))
 				return PlayState.game.objMap.get('_group_$key');
-			else {
+			else
+			{
 				ModdingUtil.errorTrace('Group not found: $key');
 				return null;
 			}
 		});
 
-		set('existsGroup', function(key:String):Bool {
-			return PlayState.game.objMap.exists('_group_$key');						
+		set('existsGroup', function(key:String):Bool
+		{
+			return PlayState.game.objMap.exists('_group_$key');
 		});
 
 		// Script functions
 
-		set('addScript', function(path:String, ?tag:String):Void {
+		set('addScript', function(path:String, ?tag:String):Void
+		{
 			ModdingUtil.addScript(path, false, tag);
 		});
 
-		set('getScriptVar', function(script:String, key:String):Dynamic {
+		set('getScriptVar', function(script:String, key:String):Dynamic
+		{
 			var script = ModdingUtil.scriptsMap.get(script);
-			if (script.exists(key)) {
+			if (script.exists(key))
+			{
 				return script.get(key);
 			}
 			return null;
 		});
 
-		set('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic {
+		set('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic
+		{
 			return ModdingUtil.scriptsMap.get(script).callback(func, args);
 		});
 
-		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
-			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts)) {
+		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false)
+		{
+			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts))
+			{
 				if (forced || !i.exists(key))
 					i.set(key, _var);
 			}
 		});
 
-		set('setGlobalVar', function (key:String, _var:Dynamic) {
+		set('setGlobalVar', function(key:String, _var:Dynamic)
+		{
 			globalVariables.set(key, _var);
 		});
 
-		set('getGlobalVar', function (key:String) {
-			if (globalVariables.exists(key)) return globalVariables.get(key);
-			else {
+		set('getGlobalVar', function(key:String)
+		{
+			if (globalVariables.exists(key))
+				return globalVariables.get(key);
+			else
+			{
 				ModdingUtil.errorTrace('Variable not found: $key');
 				return null;
 			}
@@ -253,42 +325,52 @@ class FunkScript extends SScript {
 
 		// Runtime shader functions
 
-		set('initShader', function (shader:String, ?tag:String, forced:Bool = false):Void {
+		set('initShader', function(shader:String, ?tag:String, forced:Bool = false):Void
+		{
 			Shader.initShader(shader, tag, forced);
 		});
 
-		set('setSpriteShader', function (sprite:FlxSprite, shader:String) {
+		set('setSpriteShader', function(sprite:FlxSprite, shader:String)
+		{
 			Shader.setSpriteShader(sprite, shader);
 		});
 
-		set('setCameraShader', function(camera:FlxCamera, shader:String) {
+		set('setCameraShader', function(camera:FlxCamera, shader:String)
+		{
 			Shader.setCameraShader(camera, shader);
 		});
 
-		set('setShaderSampler2D', function (shader:String, prop:String, path:String = "", ?bitmap:openfl.display.BitmapData) {
+		set('setShaderSampler2D', function(shader:String, prop:String, path:String = "", ?bitmap:openfl.display.BitmapData)
+		{
 			Shader.setSampler2D(shader, prop, path, bitmap);
 		});
 
-		set('setShaderFloat', function (shader:String, prop:String, value:Float) {
+		set('setShaderFloat', function(shader:String, prop:String, value:Float)
+		{
 			Shader.setFloat(shader, prop, value);
 		});
 
-		set('setShaderInt', function (shader:String, prop:String, value:Int) {
+		set('setShaderInt', function(shader:String, prop:String, value:Int)
+		{
 			Shader.setInt(shader, prop, value);
 		});
 
-		set('setShaderBool', function (shader:String, prop:String, value:Bool) {
+		set('setShaderBool', function(shader:String, prop:String, value:Bool)
+		{
 			Shader.setBool(shader, prop, value);
 		});
 
-		set('switchCustomState', function (key:String) {
+		set('switchCustomState', function(key:String)
+		{
 			switchCustomState(key);
 		});
 	}
 
-	public static function switchCustomState(key:String) {
+	public static function switchCustomState(key:String)
+	{
 		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
-		if (scriptCode.length <= 0) {
+		if (scriptCode.length <= 0)
+		{
 			ModdingUtil.errorTrace('Custom state script not found: $key');
 			return;
 		}
@@ -298,19 +380,23 @@ class FunkScript extends SScript {
 	}
 }
 
-typedef SuperMethod = {
+typedef SuperMethod =
+{
 	var callback:HscriptFunctionCallback;
 	var ?value:Dynamic;
 }
 
-class CustomState extends MusicBeatState {
+class CustomState extends MusicBeatState
+{
 	public var script:FunkScript;
+
 	private var _scriptKey:String;
 
 	var super_map:Map<String, SuperMethod> = [];
 	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit', 'destroy'];
 
-	public function initScript(scriptCode:String, stateTag:String) {
+	public function initScript(scriptCode:String, stateTag:String)
+	{
 		_scriptKey = stateTag;
 		script = new FunkScript(scriptCode);
 		script.scriptID = '_custom_state_$stateTag';
@@ -320,8 +406,10 @@ class CustomState extends MusicBeatState {
 		script.set('remove', function(object:Dynamic) remove(object));
 
 		// This method sucks, but it works, sooooooo yeah... sorry
-		for (i in super_methods) {
-			script.set('super_' + i, function(?value:Dynamic) {
+		for (i in super_methods)
+		{
+			script.set('super_' + i, function(?value:Dynamic)
+			{
 				super_map.set(i, {
 					callback: CONTINUE_FUNCTION,
 					value: value,
@@ -331,7 +419,8 @@ class CustomState extends MusicBeatState {
 		return this;
 	}
 
-	function superCallback(method:String, ?args:Dynamic) {
+	function superCallback(method:String, ?args:Dynamic)
+	{
 		super_map.set(method, {
 			callback: STOP_FUNCTION,
 			value: null,
@@ -340,19 +429,36 @@ class CustomState extends MusicBeatState {
 		return super_map.get(method).callback == CONTINUE_FUNCTION;
 	}
 
-    override public function create() {
+	override public function create()
+	{
 		ModdingUtil.consoleTrace('[ADD] $_scriptKey / Custom State', FlxColor.LIME);
-		if (superCallback('create')) super.create();
-    }
-    
-    override public function update(elapsed:Float) {
-		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
-		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
-		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
-    }
+		if (superCallback('create'))
+			super.create();
+	}
 
-	override public function stepHit() 		if (superCallback('stepHit', [curStep])) 		super.stepHit();
-	override public function beatHit() 		if (superCallback('beatHit', [curBeat])) 		super.beatHit();
-	override public function sectionHit() 	if (superCallback('sectionHit', [curSection])) 	super.sectionHit();
-	override public function destroy() 		if (superCallback('destroy')) 					super.destroy();
+	override public function update(elapsed:Float)
+	{
+		if (FlxG.keys.justPressed.F4)
+			switchState(new StoryMenuState()); // emergency exit
+		if (FlxG.keys.justPressed.F5)
+			FunkScript.switchCustomState(_scriptKey);
+		if (superCallback('update', [elapsed]))
+			super.update(super_map.get('update').value);
+	}
+
+	override public function stepHit()
+		if (superCallback('stepHit', [curStep]))
+			super.stepHit();
+
+	override public function beatHit()
+		if (superCallback('beatHit', [curBeat]))
+			super.beatHit();
+
+	override public function sectionHit()
+		if (superCallback('sectionHit', [curSection]))
+			super.sectionHit();
+
+	override public function destroy()
+		if (superCallback('destroy'))
+			super.destroy();
 }

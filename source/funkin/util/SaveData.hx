@@ -4,8 +4,7 @@ import flixel.util.FlxSave;
 
 /*
 	CLASS TAKEN FROM BEANBAGGER DX DEMO
-*/
-
+ */
 class SaveData
 {
 	public static var saves:Map<String, Dynamic> = [];

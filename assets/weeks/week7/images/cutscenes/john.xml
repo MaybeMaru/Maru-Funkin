@@ -3,88 +3,88 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="john.png" width="2586" height="1990">
-  <SubTexture name="JOHN0025" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0023" x="4" y="975" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0021" x="309" y="4" width="297" height="958" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0019" x="309" y="970" width="297" height="953" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0017" x="614" y="4"  width="935" height="297" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0015" x="1557" y="4"  width="924" height="286" frameX="-297" frameY="-557" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0013" x="1557" y="298"  width="759" height="439" frameX="-345" frameY="-404" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0005" x="614" y="309" width="753" height="494" rotated="true"  frameX="-146" frameY="-8" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0007" x="614" y="811"  width="412" height="702" frameX="-336" frameY="-148" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0006" x="614" y="1521" width="702" height="455" rotated="true"  frameX="-260" frameY="-148" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0011" x="1034" y="811" width="498" height="586" rotated="true"  frameX="-345" frameY="-345" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0009" x="1324" y="1405" width="470" height="581" rotated="true"  frameX="-345" frameY="-373" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0008" x="1540" y="745" width="491" height="581" rotated="true"  frameX="-345" frameY="-352" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0010" x="2039" y="745"  width="543" height="470" frameX="-345" frameY="-373" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0003" x="2039" y="1223" width="508" height="288" rotated="true"  frameX="-42" frameY="-12" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0001" x="1802" y="1519" width="508" height="323" rotated="true"  frameX="-0" frameY="-0" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0071" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0002" x="1802" y="1519" width="508" height="323" rotated="true"  frameX="-0" frameY="-0" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0004" x="2039" y="1223" width="508" height="288" rotated="true"  frameX="-42" frameY="-12" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0012" x="1034" y="811" width="498" height="586" rotated="true"  frameX="-345" frameY="-345" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0014" x="1557" y="298"  width="759" height="439" frameX="-345" frameY="-404" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0016" x="1557" y="4"  width="924" height="286" frameX="-297" frameY="-557" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0018" x="614" y="4"  width="935" height="297" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0020" x="309" y="970" width="297" height="953" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0022" x="309" y="4" width="297" height="958" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0024" x="4" y="975" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0026" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0027" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0028" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0029" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0030" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0031" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0032" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0033" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0034" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0035" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0036" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0037" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0038" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0039" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0040" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0041" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0042" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0043" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0044" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0045" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0046" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0047" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0048" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0049" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0050" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0051" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0052" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0053" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0054" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0055" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0056" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0057" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0058" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0059" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0060" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0061" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0062" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0063" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0064" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0065" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0066" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0067" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0068" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0069" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0070" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0072" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0073" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0075" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0077" x="4" y="4" width="297" height="963" rotated="true"  frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0074" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0076" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0078" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0079" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0080" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0081" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0082" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0083" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
-  <SubTexture name="JOHN0084" x="2555" y="1223"  width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850"/>
+  <SubTexture name="JOHN0025" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0023" x="4" y="975" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0021" x="309" y="4" width="297" height="958" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0019" x="309" y="970" width="297" height="953" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0017" x="614" y="4" width="935" height="297" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0015" x="1557" y="4" width="924" height="286" frameX="-297" frameY="-557" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0013" x="1557" y="298" width="759" height="439" frameX="-345" frameY="-404" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0005" x="614" y="309" width="753" height="494" rotated="true" frameX="-146" frameY="-8" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0007" x="614" y="811" width="412" height="702" frameX="-336" frameY="-148" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0006" x="614" y="1521" width="702" height="455" rotated="true" frameX="-260" frameY="-148" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0011" x="1034" y="811" width="498" height="586" rotated="true" frameX="-345" frameY="-345" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0009" x="1324" y="1405" width="470" height="581" rotated="true" frameX="-345" frameY="-373" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0008" x="1540" y="745" width="491" height="581" rotated="true" frameX="-345" frameY="-352" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0010" x="2039" y="745" width="543" height="470" frameX="-345" frameY="-373" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0003" x="2039" y="1223" width="508" height="288" rotated="true" frameX="-42" frameY="-12" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0001" x="1802" y="1519" width="508" height="323" rotated="true" frameX="-0" frameY="-0" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0071" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0002" x="1802" y="1519" width="508" height="323" rotated="true" frameX="-0" frameY="-0" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0004" x="2039" y="1223" width="508" height="288" rotated="true" frameX="-42" frameY="-12" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0012" x="1034" y="811" width="498" height="586" rotated="true" frameX="-345" frameY="-345" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0014" x="1557" y="298" width="759" height="439" frameX="-345" frameY="-404" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0016" x="1557" y="4" width="924" height="286" frameX="-297" frameY="-557" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0018" x="614" y="4" width="935" height="297" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0020" x="309" y="970" width="297" height="953" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0022" x="309" y="4" width="297" height="958" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0024" x="4" y="975" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0026" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0027" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0028" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0029" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0030" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0031" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0032" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0033" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0034" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0035" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0036" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0037" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0038" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0039" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0040" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0041" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0042" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0043" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0044" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0045" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0046" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0047" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0048" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0049" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0050" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0051" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0052" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0053" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0054" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0055" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0056" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0057" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0058" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0059" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0060" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0061" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0062" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0063" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0064" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0065" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0066" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0067" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0068" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0069" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0070" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0072" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0073" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0075" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0077" x="4" y="4" width="297" height="963" rotated="true" frameX="-298" frameY="-546" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0074" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0076" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0078" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0079" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0080" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0081" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0082" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0083" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
+  <SubTexture name="JOHN0084" x="2555" y="1223" width="20" height="14" frameX="-580" frameY="-756" frameWidth="1261" frameHeight="850" />
 </TextureAtlas>

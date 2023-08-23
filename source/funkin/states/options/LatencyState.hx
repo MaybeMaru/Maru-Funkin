@@ -8,7 +8,8 @@ class LatencyState extends MusicBeatState
 
 	override function create()
 	{
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 
 		var bg:FunkinSprite = new FunkinSprite('options/latencyDesat');
 		bg.color = 0xff2b2b2b;
@@ -24,11 +25,11 @@ class LatencyState extends MusicBeatState
 		offsetText.alignment = CENTER;
 		add(offsetText);
 
-		var txtLine:FlxSprite = new FlxSprite(0,25).makeGraphic(FlxG.width,70,FlxColor.BLACK);
+		var txtLine:FlxSprite = new FlxSprite(0, 25).makeGraphic(FlxG.width, 70, FlxColor.BLACK);
 		add(txtLine);
 
 		var txtStr = "Sync your beats by tapping the space bar in rhythm to measure your offset.\nHit enter when done to save your calculated offset.\nHit escape to exit without saving your calculated offset.";
-		var txt:FlxText = new FlxText(FlxG.width/5,27.5,0,txtStr,16);
+		var txt:FlxText = new FlxText(FlxG.width / 5, 27.5, 0, txtStr, 16);
 		txt.alignment = CENTER;
 		add(txt);
 
@@ -41,18 +42,22 @@ class LatencyState extends MusicBeatState
 		super.create();
 	}
 
-	function updateTxt() {
+	function updateTxt()
+	{
 		offsetText.text = "Offset:\n" + offset + "ms";
 	}
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.ENTER) {
+		if (FlxG.keys.justPressed.ENTER)
+		{
 			Conductor.settingOffset = offset;
 			SaveData.setSave('offset', Conductor.settingOffset);
 			SaveData.flushData();
 			exit();
-		} else if (FlxG.keys.justPressed.ESCAPE) {
+		}
+		else if (FlxG.keys.justPressed.ESCAPE)
+		{
 			exit();
 		}
 
@@ -65,7 +70,8 @@ class LatencyState extends MusicBeatState
 		super.update(elapsed);
 	}
 
-	function exit() {
+	function exit()
+	{
 		FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		switchState(new OptionsState());
 	}
@@ -74,20 +80,23 @@ class LatencyState extends MusicBeatState
 	var nextBeatTime:Float = 0;
 	var lastOffsets:Array<Float> = [];
 
-	function pushOffset() {
+	function pushOffset()
+	{
 		resync();
 		var off1_:Float = Math.abs(Conductor.songPosition - lastBeatTime);
-        var off2_:Float = Math.abs(Conductor.songPosition - nextBeatTime);
+		var off2_:Float = Math.abs(Conductor.songPosition - nextBeatTime);
 		var _off = (off1_ < off2_ ? Conductor.songPosition - lastBeatTime : Conductor.songPosition - nextBeatTime);
-		
+
 		lastOffsets.push(_off);
 		offset = getAverageOffset();
 		updateTxt();
 	}
 
-	function getAverageOffset() {
+	function getAverageOffset()
+	{
 		var averageOff:Float = 0;
-		for (i in lastOffsets) {
+		for (i in lastOffsets)
+		{
 			averageOff += i;
 		}
 		return Math.floor(averageOff / lastOffsets.length * 0.1);

@@ -1,12 +1,8 @@
 package funkin.substates;
 
-class PauseSubState extends MusicBeatSubstate {
-	var menuItems:Array<String> = [
-		'Resume',
-		'Restart song',
-		'Options',
-		'Exit to menu'
-	];
+class PauseSubState extends MusicBeatSubstate
+{
+	var menuItems:Array<String> = ['Resume', 'Restart song', 'Options', 'Exit to menu'];
 	var grpMenuShit:FlxTypedGroup<MenuAlphabet>;
 	var pauseMusic:FlxSound;
 
@@ -17,7 +13,8 @@ class PauseSubState extends MusicBeatSubstate {
 	var levelDifficulty:FunkinText;
 	var deathCounter:FunkinText;
 
-	public function new():Void {
+	public function new():Void
+	{
 		super();
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
@@ -27,13 +24,13 @@ class PauseSubState extends MusicBeatSubstate {
 		bg.scrollFactor.set();
 		add(bg);
 
-		levelInfo = new FunkinText(20,15,PlayState.SONG.song,32);
+		levelInfo = new FunkinText(20, 15, PlayState.SONG.song, 32);
 		add(levelInfo);
 
-		levelDifficulty = new FunkinText(20,15+32,(PlayState.curDifficulty.toUpperCase()),32);
+		levelDifficulty = new FunkinText(20, 15 + 32, (PlayState.curDifficulty.toUpperCase()), 32);
 		add(levelDifficulty);
 
-		deathCounter = new FunkinText(20,15+64,"Blue balled: " + PlayState.deathCounter,32);
+		deathCounter = new FunkinText(20, 15 + 64, "Blue balled: " + PlayState.deathCounter, 32);
 		add(deathCounter);
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
@@ -43,14 +40,16 @@ class PauseSubState extends MusicBeatSubstate {
 		grpMenuShit = new FlxTypedGroup<MenuAlphabet>();
 		add(grpMenuShit);
 
-		for (i in 0...menuItems.length) {
+		for (i in 0...menuItems.length)
+		{
 			var songText:MenuAlphabet = new MenuAlphabet(0, 0, menuItems[i], true);
 			songText.targetY = i;
 			grpMenuShit.add(songText);
 		}
 	}
 
-	public function init() {
+	public function init()
+	{
 		pauseMusic.volume = 0;
 		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
@@ -58,7 +57,7 @@ class PauseSubState extends MusicBeatSubstate {
 		levelInfo.alpha = 0;
 		levelDifficulty.alpha = 0;
 		deathCounter.alpha = 0;
-		
+
 		levelInfo.y = 15;
 		levelDifficulty.y = 15 + 32;
 		deathCounter.y = 15 + 64;
@@ -68,7 +67,8 @@ class PauseSubState extends MusicBeatSubstate {
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(deathCounter, {alpha: 1, y: deathCounter.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
-		for (i in 0...grpMenuShit.members.length) {
+		for (i in 0...grpMenuShit.members.length)
+		{
 			grpMenuShit.members[i].setPosition(-100 * i, (70 * i) + 200);
 		}
 
@@ -78,33 +78,41 @@ class PauseSubState extends MusicBeatSubstate {
 		cameras = [CoolUtil.getTopCam()];
 	}
 
-	var coolDown:Float = 0.1; //Controllers have a lil lag
+	var coolDown:Float = 0.1; // Controllers have a lil lag
 
-	override function update(elapsed:Float):Void {
-		if (pauseMusic.volume < 0.5) {
+	override function update(elapsed:Float):Void
+	{
+		if (pauseMusic.volume < 0.5)
+		{
 			pauseMusic.volume += 0.01 * elapsed;
 		}
 
 		super.update(elapsed);
 
-		if (getKey('UI_UP-P')) 		changeSelection(-1);
-		if (getKey('UI_DOWN-P')) 	changeSelection(1);
+		if (getKey('UI_UP-P'))
+			changeSelection(-1);
+		if (getKey('UI_DOWN-P'))
+			changeSelection(1);
 
-		if (coolDown > 0) coolDown-=elapsed;
-		else {
-			if (getKey('ACCEPT-P')) {
+		if (coolDown > 0)
+			coolDown -= elapsed;
+		else
+		{
+			if (getKey('ACCEPT-P'))
+			{
 				CustomTransition.skipTrans = false;
-				switch (menuItems[curSelected]) {
-					case "Resume":	
+				switch (menuItems[curSelected])
+				{
+					case "Resume":
 						CoolUtil.resumeSounds();
-						pauseMusic.stop();	
+						pauseMusic.stop();
 						close();
 
 					case "Restart song":
 						PlayState.clearCache = false;
 						CoolUtil.resetState();
 
-					case "Options":			
+					case "Options":
 						PlayState.clearCache = false;
 						OptionsState.fromPlayState = true;
 						CoolUtil.switchState(new OptionsState());
@@ -118,14 +126,17 @@ class PauseSubState extends MusicBeatSubstate {
 		}
 	}
 
-	override function destroy():Void {
+	override function destroy():Void
+	{
 		pauseMusic.destroy();
 		super.destroy();
 	}
 
-	function changeSelection(change:Int = 0):Void {
+	function changeSelection(change:Int = 0):Void
+	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
-		for (i in 0...grpMenuShit.members.length) {
+		for (i in 0...grpMenuShit.members.length)
+		{
 			var item = grpMenuShit.members[i];
 			item.targetY = i - curSelected;
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;

@@ -2,16 +2,16 @@
 <TextureAtlas imagePath="noteAssets.png">
 	<!-- Created with Adobe Animate version 22.0.5.191 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="blue0000" x="10" y="10" width="157" height="154"/>
-	<SubTexture name="blue hold end0000" x="177" y="10" width="50" height="64"/>
-	<SubTexture name="blue hold piece0000" x="237" y="10" width="50" height="44"/>
-	<SubTexture name="green0000" x="297" y="10" width="157" height="154"/>
-	<SubTexture name="green hold end0000" x="464" y="10" width="50" height="64"/>
-	<SubTexture name="green hold piece0000" x="524" y="10" width="50" height="44"/>
-	<SubTexture name="purple0000" x="10" y="174" width="154" height="157"/>
-	<SubTexture name="purple hold end0000" x="174" y="174" width="50" height="64"/>
-	<SubTexture name="purple hold piece0000" x="234" y="174" width="50" height="44"/>
-	<SubTexture name="red0000" x="294" y="174" width="154" height="157"/>
-	<SubTexture name="red hold end0000" x="458" y="174" width="50" height="64"/>
-	<SubTexture name="red hold piece0000" x="518" y="174" width="50" height="44"/>
+	<SubTexture name="blue0000" x="10" y="10" width="157" height="154" />
+	<SubTexture name="blue hold end0000" x="177" y="10" width="50" height="64" />
+	<SubTexture name="blue hold piece0000" x="237" y="10" width="50" height="44" />
+	<SubTexture name="green0000" x="297" y="10" width="157" height="154" />
+	<SubTexture name="green hold end0000" x="464" y="10" width="50" height="64" />
+	<SubTexture name="green hold piece0000" x="524" y="10" width="50" height="44" />
+	<SubTexture name="purple0000" x="10" y="174" width="154" height="157" />
+	<SubTexture name="purple hold end0000" x="174" y="174" width="50" height="64" />
+	<SubTexture name="purple hold piece0000" x="234" y="174" width="50" height="44" />
+	<SubTexture name="red0000" x="294" y="174" width="154" height="157" />
+	<SubTexture name="red hold end0000" x="458" y="174" width="50" height="64" />
+	<SubTexture name="red hold piece0000" x="518" y="174" width="50" height="44" />
 </TextureAtlas>

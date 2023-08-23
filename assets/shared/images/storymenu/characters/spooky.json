@@ -7,7 +7,10 @@
             "animName": "idle",
             "animFile": "spookyIdle",
             "loop": true,
-            "offsets": [165,60]
+            "offsets": [
+                165,
+                60
+            ]
         }
     ]
 }

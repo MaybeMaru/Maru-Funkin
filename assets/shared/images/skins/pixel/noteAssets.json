@@ -1,135 +1,359 @@
-{ "frames": [
-   {
-    "filename": "PIXEL NOTE 0.ase",
-    "frame": { "x": 1, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 1.ase",
-    "frame": { "x": 19, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 2.ase",
-    "frame": { "x": 37, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 3.ase",
-    "frame": { "x": 55, "y": 1, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 4.ase",
-    "frame": { "x": 1, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 5.ase",
-    "frame": { "x": 19, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 6.ase",
-    "frame": { "x": 37, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 7.ase",
-    "frame": { "x": 55, "y": 19, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 8.ase",
-    "frame": { "x": 1, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 9.ase",
-    "frame": { "x": 19, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 10.ase",
-    "frame": { "x": 37, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   },
-   {
-    "filename": "PIXEL NOTE 11.ase",
-    "frame": { "x": 55, "y": 37, "w": 17, "h": 17 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 17 },
-    "sourceSize": { "w": 17, "h": 17 },
-    "duration": 100
-   }
- ],
- "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.1.6-dev",
-  "format": "RGBA8888",
-  "size": { "w": 73, "h": 55 },
-  "scale": "1",
-  "frameTags": [
-   { "name": "purple", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "blue", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "green", "from": 2, "to": 2, "direction": "forward" },
-   { "name": "red", "from": 3, "to": 3, "direction": "forward" },
-   { "name": "purple hold piece", "from": 4, "to": 4, "direction": "forward" },
-   { "name": "blue hold piece", "from": 5, "to": 5, "direction": "forward" },
-   { "name": "green hold piece", "from": 6, "to": 6, "direction": "forward" },
-   { "name": "red hold piece", "from": 7, "to": 7, "direction": "forward" },
-   { "name": "purple hold end", "from": 8, "to": 8, "direction": "forward" },
-   { "name": "blue hold end", "from": 9, "to": 9, "direction": "forward" },
-   { "name": "green hold end", "from": 10, "to": 10, "direction": "forward" },
-   { "name": "red hold end", "from": 11, "to": 11, "direction": "forward" }
+{
+  "frames": [
+    {
+      "filename": "PIXEL NOTE 0.ase",
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 1.ase",
+      "frame": {
+        "x": 19,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 2.ase",
+      "frame": {
+        "x": 37,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 3.ase",
+      "frame": {
+        "x": 55,
+        "y": 1,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 4.ase",
+      "frame": {
+        "x": 1,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 5.ase",
+      "frame": {
+        "x": 19,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 6.ase",
+      "frame": {
+        "x": 37,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 7.ase",
+      "frame": {
+        "x": 55,
+        "y": 19,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 8.ase",
+      "frame": {
+        "x": 1,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 9.ase",
+      "frame": {
+        "x": 19,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 10.ase",
+      "frame": {
+        "x": 37,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    },
+    {
+      "filename": "PIXEL NOTE 11.ase",
+      "frame": {
+        "x": 55,
+        "y": 37,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 17
+      },
+      "duration": 100
+    }
   ],
-  "layers": [
-   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
-  ]
- }
+  "meta": {
+    "app": "http://www.aseprite.org/",
+    "version": "1.1.6-dev",
+    "format": "RGBA8888",
+    "size": {
+      "w": 73,
+      "h": 55
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "purple",
+        "from": 0,
+        "to": 0,
+        "direction": "forward"
+      },
+      {
+        "name": "blue",
+        "from": 1,
+        "to": 1,
+        "direction": "forward"
+      },
+      {
+        "name": "green",
+        "from": 2,
+        "to": 2,
+        "direction": "forward"
+      },
+      {
+        "name": "red",
+        "from": 3,
+        "to": 3,
+        "direction": "forward"
+      },
+      {
+        "name": "purple hold piece",
+        "from": 4,
+        "to": 4,
+        "direction": "forward"
+      },
+      {
+        "name": "blue hold piece",
+        "from": 5,
+        "to": 5,
+        "direction": "forward"
+      },
+      {
+        "name": "green hold piece",
+        "from": 6,
+        "to": 6,
+        "direction": "forward"
+      },
+      {
+        "name": "red hold piece",
+        "from": 7,
+        "to": 7,
+        "direction": "forward"
+      },
+      {
+        "name": "purple hold end",
+        "from": 8,
+        "to": 8,
+        "direction": "forward"
+      },
+      {
+        "name": "blue hold end",
+        "from": 9,
+        "to": 9,
+        "direction": "forward"
+      },
+      {
+        "name": "green hold end",
+        "from": 10,
+        "to": 10,
+        "direction": "forward"
+      },
+      {
+        "name": "red hold end",
+        "from": 11,
+        "to": 11,
+        "direction": "forward"
+      }
+    ],
+    "layers": [
+      {
+        "name": "Layer 1",
+        "opacity": 255,
+        "blendMode": "normal"
+      }
+    ]
+  }
 }

@@ -7,7 +7,10 @@
             "animName": "idle",
             "animFile": "dadIdle",
             "loop": true,
-            "offsets": [150,195]
+            "offsets": [
+                150,
+                195
+            ]
         }
     ]
 }

@@ -3,29 +3,29 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="speakers.png" width="1083" height="732">
-  <SubTexture name="speakers000.png" x="7" y="7"  width="703" height="352" frameX="-0" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers002.png" x="7" y="373"  width="698" height="352" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers003.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers001.png" x="7" y="7"  width="703" height="352" frameX="-0" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers004.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers005.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers006.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers007.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers008.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers009.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers010.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers011.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers012.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers013.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers014.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers015.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers016.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers017.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers018.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers019.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers020.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers021.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers022.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers023.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
-  <SubTexture name="speakers024.png" x="724" y="7" width="352" height="698" rotated="true"  frameX="-2" frameY="-0" frameWidth="703" frameHeight="352"/>
+  <SubTexture name="speakers000.png" x="7" y="7" width="703" height="352" frameX="-0" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers002.png" x="7" y="373" width="698" height="352" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers003.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers001.png" x="7" y="7" width="703" height="352" frameX="-0" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers004.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers005.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers006.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers007.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers008.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers009.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers010.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers011.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers012.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers013.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers014.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers015.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers016.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers017.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers018.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers019.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers020.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers021.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers022.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers023.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
+  <SubTexture name="speakers024.png" x="724" y="7" width="352" height="698" rotated="true" frameX="-2" frameY="-0" frameWidth="703" frameHeight="352" />
 </TextureAtlas>

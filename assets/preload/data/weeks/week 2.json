@@ -1,16 +1,23 @@
 {
-    "songList": 
-    {
-        "songs":["Spookeez", "South", "Monster"],
+    "songList": {
+        "songs": [
+            "Spookeez",
+            "South",
+            "Monster"
+        ],
         "weekNum": 2,
-        "songIcon": ["spooky","spooky","monster"]
+        "songIcon": [
+            "spooky",
+            "spooky",
+            "monster"
+        ]
     },
     "weekImage": "week2",
     "weekName": "Spooky Month",
     "weekColor": "0xFF223344",
     "storyBf": "bf",
-	"storyDad": "spooky",
-	"storyGf": "gf",
+    "storyDad": "spooky",
+    "storyGf": "gf",
     "startUnlocked": false,
     "unlockWeek": "week 3"
 }

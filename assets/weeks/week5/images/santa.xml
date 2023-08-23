@@ -3,18 +3,18 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="santa.png" width="2992" height="1989">
-  <SubTexture name="santa idle in fear0007" x="4" y="4" width="734" height="650" rotated="true"  frameX="-7" frameY="-13" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0008" x="746" y="4" width="734" height="650" rotated="true"  frameX="-7" frameY="-13" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0009" x="1488" y="4" width="745" height="650" rotated="true"  frameX="-7" frameY="-2" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0010" x="2241" y="4" width="747" height="650" rotated="true"  frameX="-7" frameY="-0" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0011" x="4" y="662" width="747" height="650" rotated="true"  frameX="-7" frameY="-0" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0012" x="759" y="662" width="747" height="650" rotated="true"  frameX="-7" frameY="-0" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0005" x="1514" y="662" width="730" height="652" rotated="true"  frameX="-6" frameY="-17" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0006" x="2252" y="662" width="730" height="652" rotated="true"  frameX="-6" frameY="-17" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0003" x="4" y="1320" width="723" height="659" rotated="true"  frameX="-2" frameY="-24" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0004" x="735" y="1320" width="723" height="659" rotated="true"  frameX="-2" frameY="-24" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0001" x="1466" y="1322" width="721" height="663" rotated="true"  frameX="-0" frameY="-26" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0002" x="2195" y="1322" width="721" height="663" rotated="true"  frameX="-0" frameY="-26" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0013" x="2241" y="4" width="747" height="650" rotated="true"  frameX="-7" frameY="-0" frameWidth="663" frameHeight="747"/>
-  <SubTexture name="santa idle in fear0014" x="4" y="662" width="747" height="650" rotated="true"  frameX="-7" frameY="-0" frameWidth="663" frameHeight="747"/>
+  <SubTexture name="santa idle in fear0007" x="4" y="4" width="734" height="650" rotated="true" frameX="-7" frameY="-13" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0008" x="746" y="4" width="734" height="650" rotated="true" frameX="-7" frameY="-13" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0009" x="1488" y="4" width="745" height="650" rotated="true" frameX="-7" frameY="-2" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0010" x="2241" y="4" width="747" height="650" rotated="true" frameX="-7" frameY="-0" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0011" x="4" y="662" width="747" height="650" rotated="true" frameX="-7" frameY="-0" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0012" x="759" y="662" width="747" height="650" rotated="true" frameX="-7" frameY="-0" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0005" x="1514" y="662" width="730" height="652" rotated="true" frameX="-6" frameY="-17" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0006" x="2252" y="662" width="730" height="652" rotated="true" frameX="-6" frameY="-17" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0003" x="4" y="1320" width="723" height="659" rotated="true" frameX="-2" frameY="-24" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0004" x="735" y="1320" width="723" height="659" rotated="true" frameX="-2" frameY="-24" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0001" x="1466" y="1322" width="721" height="663" rotated="true" frameX="-0" frameY="-26" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0002" x="2195" y="1322" width="721" height="663" rotated="true" frameX="-0" frameY="-26" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0013" x="2241" y="4" width="747" height="650" rotated="true" frameX="-7" frameY="-0" frameWidth="663" frameHeight="747" />
+  <SubTexture name="santa idle in fear0014" x="4" y="662" width="747" height="650" rotated="true" frameX="-7" frameY="-0" frameWidth="663" frameHeight="747" />
 </TextureAtlas>

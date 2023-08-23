@@ -3,88 +3,88 @@
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
 <TextureAtlas imagePath="steve.png" width="4911" height="3982">
-  <SubTexture name="STEVE0041" x="4" y="4"  width="672" height="1192" frameX="-63" frameY="-0" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0043" x="4" y="1204"  width="717" height="1166" frameX="-1" frameY="-32" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0042" x="684" y="4"  width="727" height="1163" frameX="-8" frameY="-32" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0040" x="4" y="2378"  width="694" height="1122" frameX="-83" frameY="-0" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0045" x="706" y="2378"  width="707" height="1097" frameX="-0" frameY="-102" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0044" x="729" y="1175"  width="712" height="1097" frameX="-0" frameY="-102" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0046" x="1419" y="4"  width="683" height="1089" frameX="-0" frameY="-110" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0048" x="1421" y="2280"  width="652" height="1071" frameX="-0" frameY="-128" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0039" x="1449" y="1101"  width="737" height="1049" frameX="-83" frameY="-87" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0038" x="2110" y="4"  width="737" height="1049" frameX="-83" frameY="-87" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0050" x="2081" y="2158"  width="649" height="1037" frameX="-0" frameY="-162" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0052" x="2194" y="1061"  width="649" height="935" frameX="-0" frameY="-264" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0035" x="2081" y="3203"  width="908" height="653" frameX="-72" frameY="-451" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0036" x="2738" y="2004"  width="745" height="861" frameX="-72" frameY="-243" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0037" x="2851" y="1061"  width="758" height="854" frameX="-59" frameY="-243" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0054" x="2855" y="4"  width="649" height="759" frameX="-0" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0056" x="3512" y="4"  width="649" height="662" frameX="-0" frameY="-537" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0063" x="1421" y="3359"  width="649" height="546" frameX="-0" frameY="-653" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0057" x="4169" y="4"  width="649" height="532" frameX="-0" frameY="-667" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0059" x="4169" y="544"  width="649" height="567" frameX="-0" frameY="-632" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0061" x="2997" y="2873"  width="649" height="565" frameX="-0" frameY="-634" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0062" x="3491" y="1923"  width="649" height="565" frameX="-0" frameY="-634" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0060" x="4148" y="1119"  width="649" height="567" frameX="-0" frameY="-632" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0065" x="706" y="3483"  width="649" height="493" frameX="-0" frameY="-706" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0067" x="4" y="3508"  width="649" height="420" frameX="-0" frameY="-779" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0068" x="3512" y="674"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0058" x="2997" y="3446"  width="649" height="532" frameX="-0" frameY="-667" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0070" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0031" x="3617" y="1035"  width="371" height="439" frameX="-605" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0027" x="4148" y="1694"  width="376" height="439" frameX="-600" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0029" x="4532" y="1694"  width="373" height="439" frameX="-603" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0030" x="4148" y="2141"  width="375" height="439" frameX="-601" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0028" x="4531" y="2141"  width="376" height="438" frameX="-600" frameY="-392" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0032" x="4531" y="2587"  width="375" height="438" frameX="-601" frameY="-392" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0001" x="3617" y="1482"  width="387" height="391" frameX="-712" frameY="-413" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0016" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0009" x="3654" y="2857"  width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0007" x="3967" y="2986"  width="307" height="388" frameX="-668" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0005" x="3654" y="3382"  width="312" height="388" frameX="-663" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0014" x="3974" y="3382"  width="383" height="387" frameX="-593" frameY="-444" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0003" x="4365" y="3033"  width="379" height="384" frameX="-708" frameY="-423" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0025" x="4365" y="3425"  width="365" height="380" frameX="-611" frameY="-450" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0078" x="2855" y="1035"  width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0002" x="3617" y="1482"  width="387" height="391" frameX="-712" frameY="-413" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0004" x="4365" y="3033"  width="379" height="384" frameX="-708" frameY="-423" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0006" x="3654" y="3382"  width="312" height="388" frameX="-663" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0008" x="3967" y="2986"  width="307" height="388" frameX="-668" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0010" x="3654" y="2857"  width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0011" x="3654" y="2857"  width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0012" x="3654" y="2857"  width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0013" x="3654" y="2857"  width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0015" x="3974" y="3382"  width="383" height="387" frameX="-593" frameY="-444" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0017" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0018" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0019" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0020" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0021" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0022" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0023" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0024" x="4148" y="2588"  width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0026" x="4365" y="3425"  width="365" height="380" frameX="-611" frameY="-450" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0033" x="4532" y="1694"  width="373" height="439" frameX="-603" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0034" x="4148" y="2141"  width="375" height="439" frameX="-601" frameY="-391" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0047" x="1419" y="4"  width="683" height="1089" frameX="-0" frameY="-110" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0049" x="1421" y="2280"  width="652" height="1071" frameX="-0" frameY="-128" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0051" x="2081" y="2158"  width="649" height="1037" frameX="-0" frameY="-162" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0053" x="2194" y="1061"  width="649" height="935" frameX="-0" frameY="-264" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0055" x="2855" y="4"  width="649" height="759" frameX="-0" frameY="-440" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0064" x="1421" y="3359"  width="649" height="546" frameX="-0" frameY="-653" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0066" x="706" y="3483"  width="649" height="493" frameX="-0" frameY="-706" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0069" x="3512" y="674"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0071" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0072" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0073" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0074" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0075" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0076" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0077" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0079" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0080" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0082" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0084" x="3491" y="2496"  width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0081" x="2855" y="1035"  width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199"/>
-  <SubTexture name="STEVE0083" x="2855" y="1035"  width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199"/>
+  <SubTexture name="STEVE0041" x="4" y="4" width="672" height="1192" frameX="-63" frameY="-0" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0043" x="4" y="1204" width="717" height="1166" frameX="-1" frameY="-32" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0042" x="684" y="4" width="727" height="1163" frameX="-8" frameY="-32" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0040" x="4" y="2378" width="694" height="1122" frameX="-83" frameY="-0" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0045" x="706" y="2378" width="707" height="1097" frameX="-0" frameY="-102" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0044" x="729" y="1175" width="712" height="1097" frameX="-0" frameY="-102" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0046" x="1419" y="4" width="683" height="1089" frameX="-0" frameY="-110" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0048" x="1421" y="2280" width="652" height="1071" frameX="-0" frameY="-128" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0039" x="1449" y="1101" width="737" height="1049" frameX="-83" frameY="-87" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0038" x="2110" y="4" width="737" height="1049" frameX="-83" frameY="-87" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0050" x="2081" y="2158" width="649" height="1037" frameX="-0" frameY="-162" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0052" x="2194" y="1061" width="649" height="935" frameX="-0" frameY="-264" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0035" x="2081" y="3203" width="908" height="653" frameX="-72" frameY="-451" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0036" x="2738" y="2004" width="745" height="861" frameX="-72" frameY="-243" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0037" x="2851" y="1061" width="758" height="854" frameX="-59" frameY="-243" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0054" x="2855" y="4" width="649" height="759" frameX="-0" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0056" x="3512" y="4" width="649" height="662" frameX="-0" frameY="-537" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0063" x="1421" y="3359" width="649" height="546" frameX="-0" frameY="-653" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0057" x="4169" y="4" width="649" height="532" frameX="-0" frameY="-667" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0059" x="4169" y="544" width="649" height="567" frameX="-0" frameY="-632" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0061" x="2997" y="2873" width="649" height="565" frameX="-0" frameY="-634" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0062" x="3491" y="1923" width="649" height="565" frameX="-0" frameY="-634" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0060" x="4148" y="1119" width="649" height="567" frameX="-0" frameY="-632" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0065" x="706" y="3483" width="649" height="493" frameX="-0" frameY="-706" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0067" x="4" y="3508" width="649" height="420" frameX="-0" frameY="-779" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0068" x="3512" y="674" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0058" x="2997" y="3446" width="649" height="532" frameX="-0" frameY="-667" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0070" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0031" x="3617" y="1035" width="371" height="439" frameX="-605" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0027" x="4148" y="1694" width="376" height="439" frameX="-600" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0029" x="4532" y="1694" width="373" height="439" frameX="-603" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0030" x="4148" y="2141" width="375" height="439" frameX="-601" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0028" x="4531" y="2141" width="376" height="438" frameX="-600" frameY="-392" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0032" x="4531" y="2587" width="375" height="438" frameX="-601" frameY="-392" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0001" x="3617" y="1482" width="387" height="391" frameX="-712" frameY="-413" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0016" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0009" x="3654" y="2857" width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0007" x="3967" y="2986" width="307" height="388" frameX="-668" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0005" x="3654" y="3382" width="312" height="388" frameX="-663" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0014" x="3974" y="3382" width="383" height="387" frameX="-593" frameY="-444" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0003" x="4365" y="3033" width="379" height="384" frameX="-708" frameY="-423" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0025" x="4365" y="3425" width="365" height="380" frameX="-611" frameY="-450" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0078" x="2855" y="1035" width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0002" x="3617" y="1482" width="387" height="391" frameX="-712" frameY="-413" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0004" x="4365" y="3033" width="379" height="384" frameX="-708" frameY="-423" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0006" x="3654" y="3382" width="312" height="388" frameX="-663" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0008" x="3967" y="2986" width="307" height="388" frameX="-668" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0010" x="3654" y="2857" width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0011" x="3654" y="2857" width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0012" x="3654" y="2857" width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0013" x="3654" y="2857" width="305" height="388" frameX="-670" frameY="-416" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0015" x="3974" y="3382" width="383" height="387" frameX="-593" frameY="-444" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0017" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0018" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0019" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0020" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0021" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0022" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0023" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0024" x="4148" y="2588" width="373" height="390" frameX="-603" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0026" x="4365" y="3425" width="365" height="380" frameX="-611" frameY="-450" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0033" x="4532" y="1694" width="373" height="439" frameX="-603" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0034" x="4148" y="2141" width="375" height="439" frameX="-601" frameY="-391" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0047" x="1419" y="4" width="683" height="1089" frameX="-0" frameY="-110" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0049" x="1421" y="2280" width="652" height="1071" frameX="-0" frameY="-128" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0051" x="2081" y="2158" width="649" height="1037" frameX="-0" frameY="-162" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0053" x="2194" y="1061" width="649" height="935" frameX="-0" frameY="-264" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0055" x="2855" y="4" width="649" height="759" frameX="-0" frameY="-440" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0064" x="1421" y="3359" width="649" height="546" frameX="-0" frameY="-653" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0066" x="706" y="3483" width="649" height="493" frameX="-0" frameY="-706" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0069" x="3512" y="674" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0071" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0072" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0073" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0074" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0075" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0076" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0077" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0079" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0080" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0082" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0084" x="3491" y="2496" width="649" height="353" frameX="-0" frameY="-846" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0081" x="2855" y="1035" width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199" />
+  <SubTexture name="STEVE0083" x="2855" y="1035" width="12" height="14" frameX="-341" frameY="-999" frameWidth="1099" frameHeight="1199" />
 </TextureAtlas>
