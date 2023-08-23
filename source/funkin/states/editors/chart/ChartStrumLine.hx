@@ -27,10 +27,19 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
 
     var midX = ChartGrid.GRID_SIZE * 2;
 
+    // Caching shit
+    var charIcons:Map<String, String> = [];
+    private function getCharIcon(char:String = "bf") {
+        if (charIcons.exists(char)) return charIcons.get(char);
+        var ico = Character.getCharData(char).icon;
+        charIcons.set(char, ico);
+        return ico;
+    }
+
     public function updateWithData() {
         var sectionData = ChartingState.SONG.notes[ChartingState.instance.sectionIndex];
         if (sectionData == null) return;
-        updateHeads(ChartingState.SONG.players[0], ChartingState.SONG.players[1], sectionData.mustHitSection);
+        updateHeads(getCharIcon(ChartingState.SONG.players[0]), getCharIcon(ChartingState.SONG.players[1]), sectionData.mustHitSection);
     }
 
     public function updateHeads(p1:String = "bf", p2:String = "dad", mustHit:Bool = true) {

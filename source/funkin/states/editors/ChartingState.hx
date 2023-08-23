@@ -1,6 +1,5 @@
 package funkin.states.editors;
 
-import funkin.states.editors.chart.ChartWaveform;
 import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
@@ -28,8 +27,6 @@ class ChartingState extends MusicBeatState {
     public var mainGrid:ChartGrid;
 
     public var camTop:SwagCamera;
-
-    var waveform:ChartWaveform;
     
     override function create() {
         instance = this;
@@ -97,10 +94,6 @@ class ChartingState extends MusicBeatState {
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
 
-        waveform = new ChartWaveform(Conductor.vocals);
-        waveform.soundOffset = Conductor.songOffset[1];
-        add(waveform);
-
         changeSection();
         super.create();
     }
@@ -148,10 +141,9 @@ class ChartingState extends MusicBeatState {
         if (SONG.notes[sectionIndex] == null) SONG.notes[sectionIndex] = Song.getDefaultSection(); // Make new section
         checkBPM();
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex);
+        mainGrid.updateWaveform();
         updateBar();
         updateSectionTabUI();
-        waveform.updateWaveform();
-        waveform.setPosition(mainGrid.grid.x, mainGrid.grid.y);
     }
 
     override function beatHit() {
@@ -460,10 +452,12 @@ class ChartingState extends MusicBeatState {
 					var tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[0] = tempOffset;
 					SONG.offsets[0] = tempOffset;
+                    mainGrid.updateWaveform();
 				case 'song_vocals_offset':
 					var tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[1] = tempOffset;
 					SONG.offsets[1] = tempOffset;
+                    mainGrid.updateWaveform();
 				case 'note_susLength':
 					selectedNote[2] = nums.value;
 					updateSelectedNote();

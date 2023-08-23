@@ -9,6 +9,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     public var notesGroup:FlxTypedGroup<ChartNote>;
     public var sustainsGroup:FlxTypedGroup<ChartNote>;
     public var textGroup:FlxTypedGroup<FunkinText>;
+    public var waveform:ChartWaveform;
     
     public function new() {
         super();
@@ -17,12 +18,23 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         grid.screenCenter();
         add(grid);
 
+        waveform = new ChartWaveform(Conductor.hasVocals ? Conductor.vocals : Conductor.inst);
+        add(waveform);
+
         notesGroup = new FlxTypedGroup<ChartNote>();
         sustainsGroup = new FlxTypedGroup<ChartNote>();
         textGroup = new FlxTypedGroup<FunkinText>();
         add(sustainsGroup);
         add(notesGroup);
         add(textGroup);
+
+        updateWaveform();
+    }
+
+    public function updateWaveform() {
+        waveform.soundOffset = Conductor.songOffset[Conductor.hasVocals ? 1 : 0];
+        waveform.updateWaveform();
+        waveform.setPosition(grid.x, grid.y);
     }
 
     public var sectionData(default, set):SwagSection;
