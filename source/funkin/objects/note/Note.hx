@@ -109,16 +109,28 @@ class Note extends FlxSpriteExt {
     var susEnd:FlxSprite;
     var refSprite:FlxSpriteExt;
 
+    public function updateAnims() {
+        var dir = CoolUtil.directionArray[noteData];
+        if (isSustainNote) {
+            susPiece.animation.play('hold$dir', true);
+            susPiece.updateHitbox();
+            susEnd.animation.play('hold$dir-end', true);
+            susEnd.updateHitbox();
+        } else {
+            playAnim('scroll$dir');
+        }
+    }
+
     public function createGraphic(init:Bool = true) {
         var dir = CoolUtil.directionArray[noteData];
 
         if (isSustainNote) {
             susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-            susPiece.animation.play('hold$dir', true);
-            susPiece.updateHitbox();
+            //susPiece.animation.play('hold$dir', true);
+            //susPiece.updateHitbox();
             susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
-            susEnd.animation.play('hold$dir-end', true);
-            susEnd.updateHitbox();
+            //susEnd.animation.play('hold$dir-end', true);
+            //susEnd.updateHitbox();
             
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
@@ -128,8 +140,10 @@ class Note extends FlxSpriteExt {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
             animDatas = refSprite.animDatas.copy();
-            playAnim('scroll$dir');
+            //playAnim('scroll$dir');
         }
+
+        updateAnims();
 
         scale.set(refSprite.scale.x, refSprite.scale.y);
         updateHitbox();

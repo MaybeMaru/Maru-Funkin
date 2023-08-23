@@ -15,7 +15,8 @@ class HealthIcon extends FlxSpriteExt {
 		makeIcon(char);
 	}
 
-	public function makeIcon(char:String = 'bf'):Void {
+	public function makeIcon(char:String = 'bf', forced:Bool = false):Void {
+		if (iconName == char && !forced) return; // skip loading shit
 		antialiasing = Preferences.getPref('antialiasing');
 		iconName = char;
 		if (char == 'senpai' || char == 'spirit' || char.contains('-pixel')) antialiasing = false;
@@ -29,7 +30,7 @@ class HealthIcon extends FlxSpriteExt {
 		if (_packer == IMAGE) {
 			singleAnim = !(width > height * 1.9);
 			if (!singleAnim) {
-				loadGraphic(icon, true, Math.floor(width / 2), Math.floor(height));
+				loadGraphic(icon, true, Math.floor(width * 0.5), cast height);
 				animation.add('healthy', [0], 0, false);
 				animation.add('dying', [1], 0, false);
 				addOffset('healthy', 0,0);

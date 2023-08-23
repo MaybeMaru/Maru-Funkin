@@ -40,8 +40,8 @@ class NoteStrum extends FlxSpriteExt {
 		centerOffsets();
 		var getAnim = animOffsets.get(animation.curAnim.name);
 		if (getAnim == null) return;
-		var scaleOff = scale.x / spriteJson.scale;
-		offset.add(getAnim.x * scaleOff, getAnim.y * scaleOff);
+		var scaleOff = getScaleDiff();
+		offset.add(getAnim.x * scaleOff.x, getAnim.y * scaleOff.y);
 	}
 
 	public function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {

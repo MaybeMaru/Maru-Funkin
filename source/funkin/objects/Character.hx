@@ -178,9 +178,12 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function hey():Void {
-		playAnim(isGF ? 'cheer' : 'hey', true);
+		var heyAnim = isGF ? 'cheer' : 'hey';
+		if (!existsOffsets(heyAnim)) return;
+
+		playAnim(heyAnim, true);
 		specialAnim = true;
-		new FlxTimer().start(Conductor.stepCrochet * 0.001 * Conductor.STEPS_LENGTH, function(tmr:FlxTimer) {
+		new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			specialAnim = false;
 			dance();
 		});

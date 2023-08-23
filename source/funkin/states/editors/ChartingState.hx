@@ -155,7 +155,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function updateIcons() {
-        
+        strumBar.updateWithData();
     }
 
     public function updateSectionTabUI():Void {
@@ -460,7 +460,7 @@ class ChartingState extends MusicBeatState {
 					updateSelectedNote();
 				case 'section_bpm':
                     Conductor.mapBPMChanges(ChartingState.SONG);
-					SONG.notes[sectionIndex].bpm = Std.int(nums.value);
+					SONG.notes[sectionIndex].bpm = nums.value;
                     changeSection();
 				case 'stepper_copy': //updatePreview();
 			}
