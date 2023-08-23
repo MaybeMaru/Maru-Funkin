@@ -126,12 +126,8 @@ class Note extends FlxSpriteExt {
 
         if (isSustainNote) {
             susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-            //susPiece.animation.play('hold$dir', true);
-            //susPiece.updateHitbox();
             susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
-            //susEnd.animation.play('hold$dir-end', true);
-            //susEnd.updateHitbox();
-            
+
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
                 initSusLength += _off / (NotesGroup.songSpeed * 2);
@@ -140,7 +136,6 @@ class Note extends FlxSpriteExt {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
             animDatas = refSprite.animDatas.copy();
-            //playAnim('scroll$dir');
         }
 
         updateAnims();

@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.states.editors.chart.ChartWaveform;
 import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
@@ -27,6 +28,8 @@ class ChartingState extends MusicBeatState {
     public var mainGrid:ChartGrid;
 
     public var camTop:SwagCamera;
+
+    var waveform:ChartWaveform;
     
     override function create() {
         instance = this;
@@ -93,8 +96,12 @@ class ChartingState extends MusicBeatState {
         add(tabs);
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
-        changeSection();
 
+        waveform = new ChartWaveform(Conductor.vocals);
+        waveform.soundOffset = Conductor.songOffset[1];
+        add(waveform);
+
+        changeSection();
         super.create();
     }
 
@@ -143,6 +150,8 @@ class ChartingState extends MusicBeatState {
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex);
         updateBar();
         updateSectionTabUI();
+        waveform.updateWaveform();
+        waveform.setPosition(mainGrid.grid.x, mainGrid.grid.y);
     }
 
     override function beatHit() {
