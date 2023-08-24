@@ -67,10 +67,10 @@ class Song {
 			var chartPath:String = Paths.chart(folder, diff, format);
 			if (Paths.exists(chartPath, TEXT)) {
 				switch (format) {
-					case 'json':			return checkSong(parseJson(chartPath));
-					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));
-					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));
-					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));
+					case 'json':			return checkSong(parseJson(chartPath));					// Funkin chart
+					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));		// Osu chart
+					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));		// Stepmania chart
+					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));		// Quaver chart
 				}
 			}
 		}
@@ -194,7 +194,7 @@ class Song {
 		for (letter in songParts) {
 			var formatLetter:String = letter.toLowerCase();
 			switch (formatLetter) {
-				case ".":		formatLetter = '';
+				case "." | "?": formatLetter = '';
 				case " " | ":":	formatLetter = '-';
 			}
 			returnSong += formatLetter;

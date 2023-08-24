@@ -44,8 +44,7 @@ class NotesGroup extends FlxGroup
 			if (note.wasGoodHit) return;
 			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 			note.wasGoodHit = true;
-			notes.remove(note, true);
-			note.destroy();
+			removeNote(note);
 
 			if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
 				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
@@ -58,8 +57,7 @@ class NotesGroup extends FlxGroup
 		}
 		opponentNoteHit = function (note:Note) {
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
-			notes.remove(note, true);
-			note.destroy();
+			removeNote(note);
 		}
 		opponentSustainPress = function (note:Note) {
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
@@ -201,6 +199,11 @@ class NotesGroup extends FlxGroup
         if (callback != null) Reflect.callMethod(this, callback, args != null ? args : []); // Prevent null
     }
 
+	public function removeNote(note:Note) {
+		notes.remove(note, true);
+		note.destroy();
+	}
+
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
 		if (Conductor.inst.playing) {
@@ -265,8 +268,7 @@ class NotesGroup extends FlxGroup
 		if (note.mustPress && note.mustHit) {
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		}
-		notes.remove(note, true);
-		note.destroy();
+		removeNote(note);
 	}
 
     override function update(elapsed:Float) {

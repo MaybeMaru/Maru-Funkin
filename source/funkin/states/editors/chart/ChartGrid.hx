@@ -140,4 +140,10 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 		return obj1.x > obj2.x && obj1.x < obj2.x + obj2.width
 		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
 	}
+
+    public static inline function getGridCoords(obj1:Dynamic, obj2:Dynamic, snapY:Bool = true) {
+        var tileX = obj2.x + Math.floor((obj1.x - obj2.x) / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE;
+        var tileY = snapY ? obj2.y + (Math.floor((obj1.y - obj2.y) / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE) : obj1.y;
+        return new FlxPoint(tileX, tileY);
+    }
 }

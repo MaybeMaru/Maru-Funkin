@@ -6,6 +6,7 @@ import flixel.ui.FlxBar;
 class PlayState extends MusicBeatState {
 	public static var game:PlayState;
 	public static var clearCache:Bool = true;
+	public static var clearCacheData:Null<CacheClearing> = null;
 
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
@@ -111,8 +112,9 @@ class PlayState extends MusicBeatState {
 	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
-		clearCache ? CoolUtil.clearCache() : FlxG.bitmap.clearUnused();
+		clearCache ? CoolUtil.clearCache(clearCacheData) : FlxG.bitmap.clearUnused();
 		clearCache = true;
+		clearCacheData = null;
 
 		game = this;
 		inPractice = getPref('practice');
@@ -266,7 +268,6 @@ class PlayState extends MusicBeatState {
 			if (note.wasGoodHit) return;
 
 			health += note.hitHealth[0];
-			boyfriend.holdTimer = 0;
 			boyfriend.sing(note.noteData, note.altAnim);
 			notesGroup.inBotplay ? notesGroup.playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm') :
 						notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
@@ -277,14 +278,11 @@ class PlayState extends MusicBeatState {
 			popUpScore(note.strumTime, note);
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
-	
-			notesGroup.notes.remove(note, true);
-			note.destroy();
+			notesGroup.removeNote(note);
 		}
 
 		notesGroup.goodSustainPress = function (note:Note) {
 			health += note.hitHealth[1] * (FlxG.elapsed * 5);
-			boyfriend.holdTimer = 0;
 			boyfriend.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
 	
@@ -339,21 +337,17 @@ class PlayState extends MusicBeatState {
 
 		notesGroup.opponentNoteHit = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim);
-			dad.holdTimer = 0;
 			Conductor.vocals.volume = 1;
 	
 			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 	
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
-	
-			notesGroup.notes.remove(note, true);
-			note.destroy();
+			notesGroup.removeNote(note);
 		}
 
 		notesGroup.opponentSustainPress = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim, false);
-			dad.holdTimer = 0;
 			Conductor.vocals.volume = 1;
 	
 			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
@@ -647,6 +641,7 @@ class PlayState extends MusicBeatState {
 				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
 			}
 		} else if (FlxG.keys.justPressed.SEVEN) {
+			clearCacheData = {sounds: false};
 			switchState(new ChartingState());
 			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		} else if (FlxG.keys.justPressed.EIGHT) {
@@ -878,7 +873,7 @@ class PlayState extends MusicBeatState {
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');
-		if (clearCache) CoolUtil.clearCache();
+		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		super.destroy();
 	}
 

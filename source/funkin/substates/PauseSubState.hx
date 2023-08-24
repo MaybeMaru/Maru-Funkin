@@ -111,6 +111,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 					case "Exit to menu":
 						PlayState.clearCache = true;
+						PlayState.clearCacheData = null;
 						PlayState.deathCounter = 0;
 						CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
 				}

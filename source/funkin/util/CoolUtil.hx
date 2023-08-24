@@ -2,6 +2,13 @@ package funkin.util;
 
 import openfl.system.System;
 
+typedef CacheClearing =  {
+	?bitmap:Bool,
+	?sustains:Bool,
+	?sounds:Bool,
+	?shaders:Bool
+}
+
 class CoolUtil {
 	public static var defaultDiffArray:Array<String> = 	['easy', 'normal', 'hard'];
 	public static var directionArray:Array<String> = 	['LEFT','DOWN','UP','RIGHT'];
@@ -36,11 +43,19 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	inline public static function clearCache() {
-		Paths.clearBitmapCache();
-		NoteUtil.clearSustainCache();
-		Paths.clearSoundCache(true);
-		Shader.clearShaders();
+	static var DEFAULT_CACHE_CLEARING:CacheClearing = {
+		bitmap: true,
+		sustains: true,
+		sounds: true,
+		shaders: true
+	}
+
+	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
+		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
+		if (cacheClear.bitmap) Paths.clearBitmapCache();
+		if (cacheClear.sustains) NoteUtil.clearSustainCache();
+		if (cacheClear.sounds) Paths.clearSoundCache(!softClear);
+		if (cacheClear.shaders) Shader.clearShaders();
 		System.gc();
 	}
 

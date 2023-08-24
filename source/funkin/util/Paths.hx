@@ -283,7 +283,6 @@ class Paths
 
 	inline public static function destroyGraphic(?graphic:FlxGraphic, key:String = "") {
 		if (graphic == null) return;
-		trace('DIE ' + key);
 		graphic.persist = false;
 		graphic.destroyOnNoUse = true;
 		graphic.destroy();
@@ -327,10 +326,9 @@ class Paths
 	public static var cachedSounds:Map<String, Sound> = [];
 	public static var excludeSounds:Array<String> = [];
 	inline public static function clearSoundCache(forced:Bool = false) {
-		var songKey = Song.formatSongFolder(Conductor._loadedSong);
 		for (key in cachedSounds.keys()) {
-			if (key.contains(songKey) && !forced) 	continue;
-			else									Conductor._loadedSong = "";
+			if (key.contains(Conductor._loadedSong) && !forced) continue;
+			else												Conductor._loadedSong = "";
 			cachedSounds.get(key).close();
 			LimeAssets.cache.clear(key);
 			OflAssets.cache.removeSound(key);

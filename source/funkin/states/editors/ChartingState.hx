@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.states.editors.chart.ChartEventsGrid;
 import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
@@ -24,7 +25,9 @@ class ChartingState extends MusicBeatState {
     public var strumBar:ChartStrumLine;
     public var songTxt:FunkinText;
     public var tabs:ChartTabs;
+
     public var mainGrid:ChartGrid;
+    public var eventsGrid:ChartEventsGrid;
 
     public var camTop:SwagCamera;
     
@@ -60,15 +63,18 @@ class ChartingState extends MusicBeatState {
         mainGrid = new ChartGrid();
         add(mainGrid);
 
-        noteTile = new FlxSprite().makeGraphic(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE, FlxColor.fromRGB(255,255,255,180));
+        eventsGrid = new ChartEventsGrid();
+        add(eventsGrid);
+
+        noteTile = new FlxSprite().makeGraphic(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE, FlxColor.WHITE);//FlxColor.fromRGB(255,255,255,180));
+        noteTile.alpha = 0.6;
         noteTile._dynamic.update = function (elapsed) {
-            if (ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid)) { // display dummy arrow
+            var eventsOverlap = ChartGrid.getGridOverlap(FlxG.mouse, eventsGrid.grid);
+            if (ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid) || eventsOverlap) {
                 noteTile.visible = true;
-                noteTile.x = Math.floor(FlxG.mouse.x / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE;
-                noteTile.y = (FlxG.keys.pressed.SHIFT) ? FlxG.mouse.y : Math.floor(FlxG.mouse.y / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE;
-            } else {
-                noteTile.visible = false;
-            }
+                var tilePos = ChartGrid.getGridCoords(FlxG.mouse, eventsOverlap ? eventsGrid.grid : mainGrid.grid, !FlxG.keys.pressed.SHIFT);
+                noteTile.setPosition(tilePos.x, tilePos.y);
+            } else noteTile.visible = false;
         }
         add(noteTile);
 
@@ -133,14 +139,34 @@ class ChartingState extends MusicBeatState {
         }
     }
 
+    /*public function getSectionData() {
+        //if ()
+        return 
+    }*/
+
+    public function checkSectionsInDistace(start:Int, end:Int) {
+        if (start == end || end < start) {
+            if (SONG.notes[start] == null) SONG.notes.push(Song.getDefaultSection());
+            return;
+        }
+        var i:Int = start;
+        while (i <= end) {
+            if (SONG.notes[i] == null) SONG.notes.push(Song.getDefaultSection()); // Make new sections
+            i++;
+        }
+    }
+
     public function changeSection(change:Int = 0) {
-        sectionIndex = Std.int(FlxMath.bound(sectionIndex + change, 0, SONG.notes.length - 1));
-        if (change > 0) deselectNote();
-        Conductor.songPosition = getSecTime(sectionIndex);
+        var newIndex = Std.int(Math.max(sectionIndex + change, 0));
+        if (sectionIndex != newIndex) deselectNote(); // Fr changed a section
+        checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
+        sectionIndex = newIndex;
+        
+        Conductor.songPosition = getSecTime(sectionIndex); // Bpm conductor crap
         Conductor.autoSync();
-        if (SONG.notes[sectionIndex] == null) SONG.notes[sectionIndex] = Song.getDefaultSection(); // Make new section
         checkBPM();
-        mainGrid.setData(SONG.notes[sectionIndex], sectionIndex);
+        
+        mainGrid.setData(SONG.notes[sectionIndex], sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
         updateBar();
         updateSectionTabUI();
@@ -473,8 +499,7 @@ class ChartingState extends MusicBeatState {
     override function destroy():Void {
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
-        Paths.clearSoundCache();
-        FlxG.bitmap.clearUnused();
+        CoolUtil.clearCache({sounds: false});
 		super.destroy();
 	}
 }

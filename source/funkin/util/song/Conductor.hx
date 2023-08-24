@@ -36,6 +36,7 @@ class Conductor {
 	public static var _loadedSong:String = "";
 
 	public static inline function loadMusic(song:String) {
+		song = Song.formatSongFolder(song);
 		if (_loadedSong != song) {
 			inst = new FlxSound().loadEmbedded(Paths.inst(song));
 			inst.persist = true;

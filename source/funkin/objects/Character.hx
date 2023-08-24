@@ -165,13 +165,17 @@ class Character extends FlxSpriteExt {
 	public var holdFrame:Int = 2;
 
 	public function sing(noteData:Int = 0, altAnim:String = '', hit:Bool = true):Void {
+		var singAnim = 'sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim';
+		if (!existsOffsets(singAnim)) return;
+		
+		holdTimer = 0;
 		if (hit) {
-			playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+			playAnim(singAnim, true);
 			_singHoldTimer = 0;
 		} else {
 			_singHoldTimer += FlxG.elapsed;
 			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {
-				playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+				playAnim(singAnim, true);
 				_singHoldTimer = 0;
 			}
 		}
