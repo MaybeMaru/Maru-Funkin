@@ -273,6 +273,7 @@ class Paths
 		for (key in cachedBitmaps.keys()) {
 			var bitmap = cachedBitmaps.get(key);
 			bitmap.dispose();
+			bitmap.disposeImage();
 			cachedBitmaps.remove(key);
 			@:privateAccess {
 				OflAssets.cache.removeBitmapData(key);
@@ -299,8 +300,10 @@ class Paths
 
 	public static var cachedSounds:Map<String, Sound> = [];
 	inline public static function clearSoundCache() {
+		FlxG.sound.list.clear();
 		for (key in cachedSounds.keys()) {
 			LimeAssets.cache.clear(key);
+			OflAssets.cache.removeSound(key);
 			cachedSounds.remove(key);
 		}
 		for (i in ['sounds', 'songs', 'music']) OflAssets.cache.clear(i);

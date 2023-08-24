@@ -512,6 +512,8 @@ class PlayState extends MusicBeatState {
 
 		var swagCounter:Int = 0;
 		var introSkin:String = SkinUtil.curSkin;
+		for (i in ['3','2','1','Go']) 	Paths.sound('skins/$introSkin/intro$i'); // Cache stuff
+		for (i in ['ready','set','go']) Paths.image('skins/$introSkin/$i');
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);

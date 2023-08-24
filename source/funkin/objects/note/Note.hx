@@ -82,6 +82,8 @@ class NoteUtil {
                     var obj = FlxG.bitmap.get(key);
                     if (obj != null) {
                         FlxG.bitmap.removeKey(key);
+                        obj.bitmap.dispose();
+                        obj.bitmap.disposeImage();
                         obj.destroy();
                     }
                 }
@@ -239,7 +241,7 @@ class Note extends FlxSpriteExt {
     }
 
     public var percentCut:Float = 1;
-    public static inline var susEndHeight:Int = 6; // 0
+    public static inline var susEndHeight:Int = 12; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
@@ -252,7 +254,7 @@ class Note extends FlxSpriteExt {
                     origin.set(width / 2, 0);
                     return;
                 } else {
-                    makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height$skin');
+                    makeGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, false, key);
                     origin.set(width / 2, 0);
         
                     // draw piece
@@ -263,7 +265,7 @@ class Note extends FlxSpriteExt {
                     //draw end
                     var endPos = _height - susEnd.height;
                     pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-                    stamp(susEnd, 0, Std.int(endPos));
+                    stamp(susEnd, 0, cast endPos);
                 }
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);

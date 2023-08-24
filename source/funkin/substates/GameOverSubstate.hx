@@ -15,6 +15,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
 
 		char = new Character(x, y, charName, true);
+		PlayState.game.boyfriend.stageOffsets.copyTo(char.stageOffsets);
+		char.setXY(x,y);
 		add(char);
 		
 		camFollow = new FlxObject(char.getGraphicMidpoint().x - char.camOffsets.x, char.getGraphicMidpoint().y - char.camOffsets.y, 1, 1);
@@ -39,6 +41,7 @@ class GameOverSubstate extends MusicBeatSubstate {
  
 		if (getKey('BACK-P')) {
 			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+			PlayState.deathCounter = 0;
 			PlayState.clearCache = true;
 			ModdingUtil.addCall('exitGameOver');
 			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());

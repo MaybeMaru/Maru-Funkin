@@ -473,6 +473,7 @@ class ChartingState extends MusicBeatState {
     override function destroy():Void {
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
+        Paths.clearSoundCache();
 		super.destroy();
 	}
 }
