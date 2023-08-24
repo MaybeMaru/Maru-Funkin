@@ -474,6 +474,7 @@ class ChartingState extends MusicBeatState {
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
         Paths.clearSoundCache();
+        FlxG.bitmap.clearUnused();
 		super.destroy();
 	}
 }

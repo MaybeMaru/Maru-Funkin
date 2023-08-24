@@ -39,7 +39,7 @@ class CoolUtil {
 	inline public static function clearCache() {
 		Paths.clearBitmapCache();
 		NoteUtil.clearSustainCache();
-		Paths.clearSoundCache();
+		Paths.clearSoundCache(true);
 		Shader.clearShaders();
 		System.gc();
 	}

@@ -12,58 +12,39 @@ import openfl.display3D.Context3D;
 	Credits to Rozebud
 */
 
-class TexAsset {
-	public var texture:Texture;
-	public var cacheKey:String;
-
-	public function new(texture:Texture, cacheKey:String) {
-		this.texture = texture;
-		this.cacheKey = cacheKey;
-	}
-}
-
 class Preloader extends flixel.FlxState {
-    public static var bitmapCache:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
-    public static var textureCache:Array<TexAsset> = new Array<TexAsset>();
+    public static var bitmapCache:Map<String,FlxGraphic> = [];
 
-    inline public static function createBitmap(path:String):BitmapData {
-        var bmp = Assets.getBitmapData(path, false);
+    inline public static function addBitmap(key:String) {
+        addFromBitmap(Assets.getBitmapData(key, false), key);
+    }
+
+    inline public static function getBitmap(key:String):FlxGraphic {
+        return bitmapCache.get(key);
+    }
+
+    inline public static function existsBitmap(key:String):Bool {
+        return bitmapCache.exists(key);
+    }
+
+    inline public static function addFromBitmap(bmp:BitmapData, key:String) {
 		var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, false);
 		_texture.uploadFromBitmapData(bmp);
 		bmp.dispose();
 		bmp.disposeImage();
-		var trackedTex = new TexAsset(_texture, path);
-		textureCache.push(trackedTex);
-		return BitmapData.fromTexture(_texture);
-    }
-
-    inline public static function addBitmap(path:String):Void {
-        var data:FlxGraphic = FlxGraphic.fromBitmapData(createBitmap(path));
-        data.persist = true;
-        data.destroyOnNoUse = false;
-        bitmapCache.set(path, data);
-    }
-
-    inline public static function getBitmap(path:String):FlxGraphic {
-        return bitmapCache.get(path);
-    }
-
-    inline public static function existsBitmap(path:String):Bool {
-        return bitmapCache.exists(path);
-    }
-
-    inline public static function addFromBitmap(bmp:BitmapData, path:String):Void {
-		var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, false);
-		_texture.uploadFromBitmapData(bmp);
-		bmp.dispose();
-		bmp.disposeImage();
-		var trackedTex = new TexAsset(_texture, path);
-		textureCache.push(trackedTex);
 
         var data:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         data.persist = true;
         data.destroyOnNoUse = false;
-        bitmapCache.set(path, data);
+        bitmapCache.set(key, data);
+        return data;
+    }
+
+    inline public static function removeByKey(key:String) {
+        if(!existsBitmap(key)) return;
+        var graphic = getBitmap(key);
+        bitmapCache.remove(key);
+        Paths.destroyGraphic(graphic, key);
     }
 
    // inline public static function textureFromBitmap

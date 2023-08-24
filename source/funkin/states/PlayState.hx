@@ -111,8 +111,7 @@ class PlayState extends MusicBeatState {
 	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
-		if (clearCache) CoolUtil.clearCache();
-		else 			FlxG.bitmap.clearUnused();
+		clearCache ? CoolUtil.clearCache() : FlxG.bitmap.clearUnused();
 		clearCache = true;
 
 		game = this;
@@ -875,6 +874,7 @@ class PlayState extends MusicBeatState {
 
 	override function destroy():Void {
 		Conductor.setPitch(1, false);
+		Conductor.stop();
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');

@@ -32,14 +32,20 @@ class Conductor {
 	public static var vocals(get, default):FlxSound = null;
 	static function get_vocals() return vocals == null ? vocals = new FlxSound() : vocals;
 	public static var hasVocals:Bool = true;
+	
+	public static var _loadedSong:String = "";
 
 	public static inline function loadMusic(song:String) {
-		inst = new FlxSound().loadEmbedded(Paths.inst(song));
-		FlxG.sound.list.add(inst);
-		hasVocals = Paths.exists(Paths.voices(song, true), MUSIC);
-		vocals = hasVocals ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
-		FlxG.sound.list.add(vocals);
-
+		if (_loadedSong != song) {
+			inst = new FlxSound().loadEmbedded(Paths.inst(song));
+			inst.persist = true;
+			FlxG.sound.list.add(inst);
+			hasVocals = Paths.exists(Paths.voices(song, true), MUSIC);
+			vocals = hasVocals ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
+			vocals.persist = true;
+			FlxG.sound.list.add(vocals);
+		}
+		_loadedSong = song;
 		inst.onComplete = function () {}
 		vocals.onComplete = function () {}
 	}

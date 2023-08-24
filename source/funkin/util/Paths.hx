@@ -252,8 +252,7 @@ class Paths
 			if (Preloader.existsBitmap(path)) return Preloader.getBitmap(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
-				Preloader.addFromBitmap(bitmap, path);
-				return Preloader.getBitmap(path);
+				return Preloader.addFromBitmap(bitmap, path);
 			}
 		} else return getBitmapData(path, true);
 		return path;
@@ -269,24 +268,35 @@ class Paths
 		for (key in cachedGraphics.keys()) {
 			removeGraphicByKey(key);
 		}
+		for (key in Preloader.bitmapCache.keys()) {
+			if (key.contains("mods")) Preloader.removeByKey(key);
+		}
 		FlxG.bitmap.clearCache();
 	}
 
 	inline public static function removeGraphicByKey(key:String) {
 		if (!existsGraphic(key)) return;
-		cachedGraphics.remove(key);
 		var obj = cachedGraphics.get(key);
-		if (obj != null) obj.destroy();
+		cachedGraphics.remove(key);
+		destroyGraphic(obj, key);
+	}
+
+	inline public static function destroyGraphic(?graphic:FlxGraphic, key:String = "") {
+		if (graphic == null) return;
+		trace('DIE ' + key);
+		graphic.persist = false;
+		graphic.destroyOnNoUse = true;
+		graphic.destroy();
 	}
 
 	static public function existsGraphic(key:String) {
 		return cachedGraphics.exists(key);
 	}
 
-	static public function addGraphic(width:Int, height:Int, color:FlxColor, unique:Bool = false, ?key:String) {
+	static public function addGraphic(width:Int, height:Int, color:FlxColor, ?key:String) {
 		if (existsGraphic(key)) return cachedGraphics.get(key);
-		var graphic = FlxGraphic.fromRectangle(width, height, color, unique, key);
-		graphic.persist = true;
+		var bitmap = new BitmapData(width, height, true, color);
+		var graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
 		cachedGraphics.set(key, graphic);
 		return graphic;
 	}
@@ -307,7 +317,7 @@ class Paths
 			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
 		}
 		#end
-		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key), key, cache);
+		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key, false), key, cache);
 	}
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
@@ -315,14 +325,17 @@ class Paths
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];
-	inline public static function clearSoundCache() {
-		FlxG.sound.list.clear();
+	public static var excludeSounds:Array<String> = [];
+	inline public static function clearSoundCache(forced:Bool = false) {
+		var songKey = Song.formatSongFolder(Conductor._loadedSong);
 		for (key in cachedSounds.keys()) {
+			if (key.contains(songKey) && !forced) 	continue;
+			else									Conductor._loadedSong = "";
+			cachedSounds.get(key).close();
 			LimeAssets.cache.clear(key);
 			OflAssets.cache.removeSound(key);
 			cachedSounds.remove(key);
 		}
-		for (i in ['sounds', 'songs', 'music']) OflAssets.cache.clear(i);
 	}
 
 	static public function getSound(key:String):FlxSoundAsset {

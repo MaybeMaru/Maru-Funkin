@@ -240,8 +240,7 @@ class Note extends FlxSpriteExt {
                     origin.set(width / 2, 0);
                     return;
                 } else {
-                    frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, false, key).imageFrame;
-                    FlxG.bitmap.get(key).persist = true;
+                    frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
                     origin.set(width / 2, 0);
         
                     // draw piece

@@ -9,7 +9,8 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     public var notesGroup:FlxTypedGroup<ChartNote>;
     public var sustainsGroup:FlxTypedGroup<ChartNote>;
     public var textGroup:FlxTypedGroup<FunkinText>;
-    public var waveform:ChartWaveform;
+    public var waveformVocals:ChartWaveform;
+    public var waveformInst:ChartWaveform;
     
     public function new() {
         super();
@@ -18,8 +19,13 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         grid.screenCenter();
         add(grid);
 
-        waveform = new ChartWaveform(Conductor.hasVocals ? Conductor.vocals : Conductor.inst);
-        add(waveform);
+        waveformInst = new ChartWaveform(Conductor.inst, 0x923c70);
+        waveformInst.visible = false;
+        add(waveformInst);
+
+        waveformVocals = new ChartWaveform(Conductor.vocals);
+        //waveformVocals.visible = false;
+        add(waveformVocals);
 
         notesGroup = new FlxTypedGroup<ChartNote>();
         sustainsGroup = new FlxTypedGroup<ChartNote>();
@@ -32,9 +38,12 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     }
 
     public function updateWaveform() {
-        waveform.soundOffset = Conductor.songOffset[Conductor.hasVocals ? 1 : 0];
-        waveform.updateWaveform();
-        waveform.setPosition(grid.x, grid.y);
+        waveformInst.soundOffset = Conductor.songOffset[0];
+        waveformVocals.soundOffset = Conductor.songOffset[1];
+        for (i in [waveformInst, waveformVocals]) {
+            i.updateWaveform();
+            i.setPosition(grid.x, grid.y);
+        }
     }
 
     public var sectionData(default, set):SwagSection;

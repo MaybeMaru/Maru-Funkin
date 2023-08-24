@@ -16,18 +16,26 @@ class ChartWaveform extends FlxSprite {
 	public var audioBytes:Bytes;
     public var soundOffset:Float = 0;
 
-    public function new(sound:FlxSound) {
+    public function new(sound:FlxSound, _color:FlxColor = 0x5e3c92) {
         super();
+        if (sound == null || sound.length <= 0) return;
         @:privateAccess {
             if (sound._sound == null || sound._sound.__buffer == null) return;
             audioBuffer = sound._sound.__buffer;
             audioBytes = sound._sound.__buffer.data.toBytes();
         }
         makeGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, FlxColor.TRANSPARENT);
+        antialiasing = false;
 
-        color = 0x5e3c92;
+        color = _color;
         alpha = 0.8;
         drawWaveform();
+    }
+
+    override function set_visible(value:Bool) {
+        super.set_visible(value);
+        if (!visible && value) updateWaveform();
+        return visible = value;
     }
 
     public function updateWaveform() {
