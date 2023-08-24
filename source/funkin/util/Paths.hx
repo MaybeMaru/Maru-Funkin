@@ -247,55 +247,71 @@ class Paths
 		#end
 	}
 
-	inline static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		var retImage:FlxGraphicAsset = path;
-
+	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		if (gpu) {
-			if (Preloader.existsBitmap(path)) retImage = Preloader.getBitmap(path);
+			if (Preloader.existsBitmap(path)) return Preloader.getBitmap(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
 				Preloader.addFromBitmap(bitmap, path);
-				retImage = Preloader.getBitmap(path);
+				return Preloader.getBitmap(path);
 			}
-		} else {
-			retImage = getBitmapData(path, true);
-		}
-
-		return retImage;
+		} else return getBitmapData(path, true);
+		return path;
 	}
 
 	/*
 		Used to get bitmaps without using gpu loading
 		Gpu loading is faster but breaks bitmap functions
 	*/
-	public static var cachedBitmaps:Map<String, BitmapData> = [];
+	public static var cachedGraphics:Map<String, FlxGraphic> = [];
+	
 	inline public static function clearBitmapCache() {
-		for (key in cachedBitmaps.keys()) {
-			var bitmap = cachedBitmaps.get(key);
-			bitmap.dispose();
-			bitmap.disposeImage();
-			cachedBitmaps.remove(key);
-			@:privateAccess {
-				OflAssets.cache.removeBitmapData(key);
-				if (FlxG.bitmap._cache.exists(key))  FlxG.bitmap._cache.remove(key);
-			}
+		for (key in cachedGraphics.keys()) {
+			removeGraphicByKey(key);
 		}
 		FlxG.bitmap.clearCache();
 	}
 
-	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
-		if (cachedBitmaps.exists(key)) return cachedBitmaps.get(key);
+	inline public static function removeGraphicByKey(key:String) {
+		if (!existsGraphic(key)) return;
+		cachedGraphics.remove(key);
+		var obj = cachedGraphics.get(key);
+		if (obj != null) obj.destroy();
+	}
+
+	static public function existsGraphic(key:String) {
+		return cachedGraphics.exists(key);
+	}
+
+	static public function addGraphic(width:Int, height:Int, color:FlxColor, unique:Bool = false, ?key:String) {
+		if (existsGraphic(key)) return cachedGraphics.get(key);
+		var graphic = FlxGraphic.fromRectangle(width, height, color, unique, key);
+		graphic.persist = true;
+		cachedGraphics.set(key, graphic);
+		return graphic;
+	}
+
+	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
+		var graphic = FlxGraphic.fromBitmapData(bitmap);
+		graphic.persist = cache;
+		graphic.destroyOnNoUse = cache;
+		if (cache) cachedGraphics.set(key, graphic);
+		return graphic;
+	}
+
+	static public function getGraphic(key:String, cache:Bool = false) {
+		if (existsGraphic(key)) return cachedGraphics.get(key);
 		#if desktop	
 		var fixPath = removeAssetLib(key);
 		if (!fixPath.startsWith('assets')) {
-			var bitmap = BitmapData.fromFile(fixPath);
-			if (cache) cachedBitmaps.set(key, bitmap);
-			return bitmap;
+			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
 		}
 		#end
-		var bitmap = OpenFlAssets.getBitmapData(key);
-		if (cache) cachedBitmaps.set(key, bitmap);
-		return bitmap;
+		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key), key, cache);
+	}
+
+	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
+		return getGraphic(key, cache).bitmap;
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];

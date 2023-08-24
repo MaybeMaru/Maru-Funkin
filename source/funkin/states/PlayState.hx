@@ -112,6 +112,7 @@ class PlayState extends MusicBeatState {
 
 	override public function create():Void {
 		if (clearCache) CoolUtil.clearCache();
+		else 			FlxG.bitmap.clearUnused();
 		clearCache = true;
 
 		game = this;

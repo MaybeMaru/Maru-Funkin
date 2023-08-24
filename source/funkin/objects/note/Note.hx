@@ -72,22 +72,8 @@ class NoteUtil {
 	}
 
     public static function clearSustainCache() {
-        @:privateAccess {
-            if (FlxG.bitmap._cache == null) {
-                FlxG.bitmap._cache = new Map();
-                return;
-            }
-            for (key in FlxG.bitmap._cache.keys()) {
-                if (key.startsWith('sus')) {
-                    var obj = FlxG.bitmap.get(key);
-                    if (obj != null) {
-                        FlxG.bitmap.removeKey(key);
-                        obj.bitmap.dispose();
-                        obj.bitmap.disposeImage();
-                        obj.destroy();
-                    }
-                }
-            }
+        for (key in Paths.cachedGraphics.keys()) {
+            if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
         }
     }
 }
@@ -249,12 +235,13 @@ class Note extends FlxSpriteExt {
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
                 var key:String = 'sus$noteData-$_height-$skin';
-                if (FlxG.bitmap.checkCache(key)) { // Save on drawing the graphic more than one time?
-                    frames = FlxG.bitmap.get(key).imageFrame;
+                if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
+                    frames = Paths.getGraphic(key).imageFrame;
                     origin.set(width / 2, 0);
                     return;
                 } else {
-                    makeGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, false, key);
+                    frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, false, key).imageFrame;
+                    FlxG.bitmap.get(key).persist = true;
                     origin.set(width / 2, 0);
         
                     // draw piece
