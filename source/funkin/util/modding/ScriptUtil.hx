@@ -22,4 +22,9 @@ class ScriptUtil {
     inline public static function getGroup(key:String) {
         return key == 'fg' ? PlayState.game.fgSpr : PlayState.game.bgSpr;
     }
+
+    inline public static function getCurStateInstance<T>():T {
+        var instance = MusicBeatState.game;
+        return cast instance;
+    }
 }

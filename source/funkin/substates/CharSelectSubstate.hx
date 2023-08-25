@@ -24,8 +24,11 @@ class CharSelectSubstate extends MusicBeatSubstate {
         folderTxt.alignment = RIGHT;
         folderTxt.color = FlxColor.YELLOW;
 
-        var vanillaChars:Array<String> = Paths.getFileList(TEXT, false, 'json', 'data/characters');
-        var modChars:Array<String> = Paths.getModFileList('data/characters', 'json', false);
+        var vanillaSort = CoolUtil.getFileContent(Paths.txt("characters/characters-sort", null, false)).split(",");
+        var modSort = CoolUtil.getFileContent(Paths.txt("characters/characters-sort")).split(',');
+       
+        var vanillaChars:Array<String> = CoolUtil.customSort(Paths.getFileList(TEXT, false, 'json', 'data/characters'), vanillaSort);
+        var modChars:Array<String> = CoolUtil.customSort(Paths.getModFileList('data/characters', 'json', false), modSort);
 
         var listsToAdd:Array<Array<String>> = [vanillaChars, modChars];
 

@@ -24,9 +24,13 @@ class NotesSubstate extends MusicBeatSubstate {
         Conductor.sync();
         add(notesGroup);
 
+        var lastStep = 0;
+
         var txt:FunkinText = new FunkinText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.1 : 0.8), "coolswag", 25, 0, "center");
         txt._dynamic.update = function (elapsed) {
             var curStep = Math.floor((Conductor.songPosition - Conductor.settingOffset) / Conductor.stepCrochet);
+            if (curStep != lastStep)  Conductor.autoSync();
+            lastStep = curStep;
             var curBeat = Math.floor(curStep / Conductor.BEATS_LENGTH);
             var curSection = Math.floor(curBeat / Conductor.BEATS_LENGTH);
             txt.text = 'Song Position: ${Math.floor(Conductor.songPosition)}\nCurrent Step: $curStep\nCurrent Beat: $curBeat\nCurrent Section: $curSection';

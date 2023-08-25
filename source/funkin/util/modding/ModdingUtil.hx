@@ -22,7 +22,7 @@ class ModdingUtil {
     inline public static function clearScripts(global:Bool = false):Void {
         scriptsMap = new Map<String, FunkScript>();
         FunkScript.globalVariables = new Map<String, Dynamic>();
-        global ? globalScripts : playStateScripts = [];
+        global ? globalScripts = [] : playStateScripts = [];
     }
 
     inline public static function reloadModFolders():Void {
@@ -86,7 +86,7 @@ class ModdingUtil {
 
     inline public static function consoleTrace(text:String, ?color:Int):Void {
         var console = MusicBeatState.game.scriptConsole;
-        console.exists ? console.consoleTrace(text, color) : console.addToTraceList(text, color);
+        console.exists ? console.consoleTrace(text, color) : ScriptConsole.addToTraceList(text, color);
     }
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>, global:Bool = false):Void {

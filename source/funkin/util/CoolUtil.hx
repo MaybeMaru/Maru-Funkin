@@ -115,6 +115,19 @@ class CoolUtil {
         else if (a > b) return 1;
         return 0;
     }
+
+	inline public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
+		var result:Array<String> = [];
+		for (i in customOrder) {
+			if (input.contains(i)) {
+				result.push(i);
+				input.remove(i);
+			}
+		}
+
+		input.sort(sortAlphabetically);
+		return result.concat(input);
+	}
 	
 	inline public static function formatClass(daClass:Dynamic, formatDir:Bool = true):String {
 		var className = Type.getClassName(Type.getClass(daClass));

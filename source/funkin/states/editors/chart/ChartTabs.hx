@@ -266,9 +266,22 @@ class ChartTabs extends FlxUITabMenu {
 		addGroup(tab_group_note);
 	}
 
+	var eventsDropDown:FlxUIDropDownMenu;
+
+	public static var curEvent:String = '';
+
 	function addEventUI():Void {
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';
+
+		var types:Array<String> = JsonUtil.getJsonList('events');
+		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
+			curEvent = types[Std.parseInt(type)];
+		});
+		eventsDropDown.selectedLabel = 'default';
+
+		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
+		tab_group_event.add(eventsDropDown);
 		
 		addGroup(tab_group_event);
 	}

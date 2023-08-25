@@ -50,7 +50,11 @@ class Character extends FlxSpriteExt {
 	public var forceDance:Bool = true;
 	public var group:FlxTypedSpriteGroup<Dynamic> = null;
 
-	public static function getCharData(char:String = 'bf'):CharacterJson {
+	/*inline public static function getCharList():Array<String> {
+		//customSort
+	}*/
+
+	inline public static function getCharData(char:String = 'bf'):CharacterJson {
 		var charJson:CharacterJson = JsonUtil.getJson(char, 'characters');
 		charJson = JsonUtil.checkJsonDefaults(DEFAULT_CHARACTER, charJson);
 		return charJson;

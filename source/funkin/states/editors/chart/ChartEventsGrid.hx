@@ -41,6 +41,24 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
         }
     }
 
+    public function getEventData(event:ChartEvent):Array<Dynamic> {
+        for (i in sectionData.sectionEvents) {
+            if (Math.floor(event.data.strumTime) == Math.floor(i[0])) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public function getEventObject(event:Array<Dynamic>):ChartEvent {
+        for (i in eventsGroup) {
+            if (Math.floor(event[0]) == Math.floor(i.data.strumTime)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     public function clearEvent(event:ChartEvent) {
         event.kill();
     }
@@ -66,9 +84,8 @@ class ChartEvent extends FlxSpriteExt {
     public function new() {
         super();
         loadImage("options/blankEvent");
-        //scale.set(10,10);
-        //setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
-        //updateHitbox();
+        setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
+        updateHitbox();
         scrollFactor.set(1,1);
         data = new Event();
     }

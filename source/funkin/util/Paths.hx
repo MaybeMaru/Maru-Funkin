@@ -100,9 +100,9 @@ class Paths
 		return getPath(file, type, library);
 	}
 
-	inline static public function txt(key:String, ?library:String):String
+	inline static public function txt(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('data/$key.txt', TEXT, library);
+		return getPath('data/$key.txt', TEXT, library, false, checkMods);
 	}
 
 	inline static public function xml(key:String, ?library:String):String

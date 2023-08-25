@@ -129,6 +129,11 @@ class ChartingState extends MusicBeatState {
                 }
             }
         }
+
+        eventsGrid.eventsGroup.forEachAlive(function (event:ChartEvent) {
+            if (event.data.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
+            else event.color = FlxColor.WHITE;
+        });
     }
 
     function checkBPM(updateSec:Bool = false) {  // Check for BPM changes
@@ -278,15 +283,23 @@ class ChartingState extends MusicBeatState {
     }
 
     function mouse() {
-        if (!ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid)) return;
+        var eventsOverlap = ChartGrid.getGridOverlap(FlxG.mouse, eventsGrid.grid);
+        if (!ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid) && !eventsOverlap) return;
         if (FlxG.mouse.justPressed) {
-            if (FlxG.mouse.overlaps(mainGrid.notesGroup)) { // Remove notes
-                mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
-                    if (FlxG.mouse.overlaps(note)) removeNote(note);
-                });
-            } else { // Add notes
-                addNote();
+            if (!eventsOverlap) {
+                if (FlxG.mouse.overlaps(mainGrid.notesGroup)) { // Remove notes
+                    mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
+                        if (FlxG.mouse.overlaps(note)) removeNote(note);
+                    });
+                } else addNote(); // Add notes
+            } else {
+                if (FlxG.mouse.overlaps(eventsGrid.eventsGroup)) { // Remove events
+                    eventsGrid.eventsGroup.forEachAlive(function (event:ChartEvent) {
+                        if (FlxG.mouse.overlaps(event)) removeEvent(event);
+                    });
+                } else addEvent(); // Add events
             }
+
         }
     }
 
@@ -318,6 +331,19 @@ class ChartingState extends MusicBeatState {
         }
         SONG.notes[sectionIndex].sectionNotes.remove(data);
         mainGrid.clearNote(note);
+    }
+
+    public function addEvent() {
+        var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, ['shit', 'ass', 'fuck']];
+        SONG.notes[sectionIndex].sectionEvents.push(event);
+        eventsGrid.drawEvent(event);
+    }
+
+    public function removeEvent(event:ChartEvent) {
+        var data = eventsGrid.getEventData(event);
+        SONG.notes[sectionIndex].sectionEvents.remove(data);
+        eventsGrid.clearEvent(event);
     }
 
     public function changeNoteSus(value:Float = 0) {

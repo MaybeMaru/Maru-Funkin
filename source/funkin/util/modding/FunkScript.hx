@@ -44,7 +44,7 @@ class FunkScript extends SScript {
 
         set('PlayState', PlayState.game);
 		set('GameVars', PlayState); // fuck
-		set('State', MusicBeatState.game);
+		set('State', ScriptUtil.getCurStateInstance());
 
 		set('CoolUtil', CoolUtil);
 		set('Conductor', Conductor);
