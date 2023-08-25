@@ -3,6 +3,7 @@ package funkin.states.editors.chart;
 class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     
     var strums:Array<NoteStrum> = [];
+    var eventBar:FlxSprite;
 
     var iconP1:HealthIcon;
     var iconP2:HealthIcon;
@@ -17,6 +18,9 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
             strums.push(strum);
             add(strum);
         }
+
+        eventBar = new FlxSprite(-ChartGrid.GRID_SIZE * 1.5, 0).makeGraphic(ChartGrid.GRID_SIZE, 4);
+        add(eventBar);
 
         iconP1 = new HealthIcon("bf");
         iconP2= new HealthIcon("dad");

@@ -5,6 +5,7 @@ class ChartNote extends Note {
     public function new() {
         super();
         scrollFactor.set(1,1);
+        active = false;
     }
 
     public var gridNoteData:Int = 0;

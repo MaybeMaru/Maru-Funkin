@@ -37,6 +37,7 @@ import funkin.objects.CustomTransition;
 import funkin.objects.note.Note;
 import funkin.objects.note.NoteSplash;
 import funkin.objects.note.NoteStrum;
+import funkin.objects.note.Event;
 
 //PlayState Others
 import funkin.objects.RatingGroup;

@@ -18,7 +18,10 @@ class ChartWaveform extends FlxSprite {
 
     public function new(sound:FlxSound, _color:FlxColor = 0x5e3c92) {
         super();
-        if (sound == null || sound.length <= 0) return;
+        if (sound == null || sound.length <= 0) {
+            visible = false;
+            return;
+        }
         @:privateAccess {
             if (sound._sound == null || sound._sound.__buffer == null) return;
             audioBuffer = sound._sound.__buffer;
@@ -62,6 +65,12 @@ class ChartWaveform extends FlxSprite {
         var lastBytes:Array<Int> = [];
         var useBytes:Array<Int> = [];
 
+        /*
+            TODO:
+            Instead of getting an average (which fucks up the min and max)
+            Divide em n shit idk ill do it later
+        */
+
         var i:Int = 0; // Get a scaled down average
         while(i < indexLength) {
             var byte:Int = audioBytes.getUInt16(i + startIndex);
@@ -80,26 +89,14 @@ class ChartWaveform extends FlxSprite {
         var points:Array<FlxPoint> = [new FlxPoint(mid,0)];
 
         i = 0;
-        var min:Float = 0;
-		var max:Float = 0;
         var _length = useBytes.length;  // Get draw points
         while(i < _length) {
             var byte = useBytes[i];
+            var sample:Float = (byte / 65535);
+            var lineWidth =  sample * 100;
             var lineY = FlxMath.remapToRange(i, 0, _length, 0, height);
-            if (byte > 0) {
-                if (byte > 65535 / 2) byte -= 65535;
-                var sample:Float = (byte / 65535);
-                if (sample > 0)         if (sample > max) max = sample;
-                else if (sample < 0)    if (sample < min) min = sample;
-    
-                var pixelsMin:Float = Math.abs(min * 300);
-                var pixelsMax:Float = max * 300;
-                min = max = 0;
-    
-                var lineWidth = (pixelsMin + pixelsMax) * 0.5;
-                points.push(new FlxPoint(mid + lineWidth, lineY));
-                points.push(new FlxPoint(mid - lineWidth, lineY));
-            } else points.push(new FlxPoint(mid, lineY));
+            points.push(new FlxPoint(mid + lineWidth, lineY));
+            points.push(new FlxPoint(mid - lineWidth, lineY));
             i++;
         }
         points.push(new FlxPoint(mid,height));

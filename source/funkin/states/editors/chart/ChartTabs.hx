@@ -18,6 +18,7 @@ class ChartTabs extends FlxUITabMenu {
 		{name: "Song", 		label: 'Song'},
 		{name: "Section", 	label: 'Section'},
 		{name: "Note", 		label: 'Note'},
+		{name: "Event",		label: 'Event'},
 		{name: "Editor", 	label: 'Editor'}
 	];
     
@@ -29,6 +30,7 @@ class ChartTabs extends FlxUITabMenu {
         addSongUI();
 		addSectionUI();
 		addNoteUI();
+		addEventUI();
 		addEditorUI();
     }
 
@@ -262,6 +264,13 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_note.add(noteTypesDropDown);
 
 		addGroup(tab_group_note);
+	}
+
+	function addEventUI():Void {
+		var tab_group_event = new FlxUI(null, this);
+		tab_group_event.name = 'Event';
+		
+		addGroup(tab_group_event);
 	}
 
 	public var check_hitsound:FlxUICheckBox;

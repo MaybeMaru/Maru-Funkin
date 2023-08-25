@@ -47,8 +47,8 @@ class QuaFormat {
         return null;
     }
 
-    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Dynamic>> {
-        var returnMap:Map<Int,Array<Dynamic>> = new Map<Int,Array<Dynamic>>();
+    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Array<Dynamic>>> {
+        var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
         var crochet:Float = (60 / getMapVar(map, 'Bpm')) * 1000;
 
         for (l in 0...map.length) {

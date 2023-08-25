@@ -163,6 +163,7 @@ class ChartingState extends MusicBeatState {
         
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
+        eventsGrid.setData(SONG.notes[sectionIndex], sectionIndex);
         updateBar();
         updateSectionTabUI();
     }
@@ -346,7 +347,7 @@ class ChartingState extends MusicBeatState {
             for (i in SONG.notes) {
                 i.sectionNotes = [];
                 i.sectionEvents = [];
-                i.mustHitSection = false;
+                i.mustHitSection = true;
                 i.changeBPM = false;
                 i.bpm = 0;
             }

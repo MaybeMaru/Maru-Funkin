@@ -172,29 +172,28 @@ class Note extends FlxSpriteExt {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (targetSpr != null) { // Move to strum
-            var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-            strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
-            strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
-            y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
-            x = targetSpr.x - (noteMove * -getSin(approachAngle));
+        if (targetSpr == null) return; // Move to strum
+        var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
+        strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
+        strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
+        y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
+        x = targetSpr.x - (noteMove * -getSin(approachAngle));
 
-            if (isSustainNote) { // Get if the sustain is between pressing bounds
-                angle = approachAngle;
-                flipX = (approachAngle % 360) >= 180;
+        if (isSustainNote) { // Get if the sustain is between pressing bounds
+            angle = approachAngle;
+            flipX = (approachAngle % 360) >= 180;
                 
-                inSustain = getInSustain(17); // lil offset to be sure
-                offset.y = 0;
+            inSustain = getInSustain(17); // lil offset to be sure
+            offset.y = 0;
 
-                if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
-                    setSusPressed();
-                }
-            } else {
-                calcHit();
+            if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
+                setSusPressed();
             }
-
-            active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
+        } else {
+            calcHit();
         }
+
+        active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
     }
 
     public function getInSustain(extra:Float = 0):Bool {

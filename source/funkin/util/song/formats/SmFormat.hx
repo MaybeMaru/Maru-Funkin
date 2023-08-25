@@ -42,12 +42,12 @@ class SmFormat {
         return null;
     }
 
-    inline private static function getMapNotes(map:Array<String>, bpm:Float):Map<Int,Array<Dynamic>> {
+    inline private static function getMapNotes(map:Array<String>, bpm:Float):Map<Int,Array<Array<Dynamic>>> {
         var crochet:Float = ((60 / bpm) * 1000); 	// beats in milliseconds
         var stepCrochet:Float = crochet / 4; 		// steps in milliseconds
         var sectionCrochet:Float = crochet * 4; 	// sections in milliseconds
         
-        var returnMap:Map<Int,Array<Dynamic>> = new Map<Int,Array<Dynamic>>();
+        var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
         var noteMeasures:Map<Int,Array<String>> = new Map<Int,Array<String>>();
         for (l in 0...map.length) {
             if (map[l].contains('// measure 1') || map[l].contains('// measure 0')) {

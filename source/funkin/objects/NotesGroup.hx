@@ -12,6 +12,7 @@ class NotesGroup extends FlxGroup
 
     public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
+	public var events:Array<Event> = [];
 	public var strumLine:FlxSprite;
 
     public var skipStrumIntro:Bool = false;
@@ -120,6 +121,7 @@ class NotesGroup extends FlxGroup
 		ModdingUtil.addCall('generateSong', [songData]);
 
 		unspawnNotes = [];
+		events = [];
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 	
@@ -131,8 +133,8 @@ class NotesGroup extends FlxGroup
 	
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
-				var strumTime:Int = songNotes[0];
-				var sustainLength:Null<Int> = songNotes[2];
+				var strumTime:Float = songNotes[0];
+				var sustainLength:Null<Float> = songNotes[2];
 				if ((sustainLength != null ? strumTime + sustainLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
 				var noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
 				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
@@ -169,11 +171,19 @@ class NotesGroup extends FlxGroup
 					songNotetypes.push(noteType);
 				}
 			}
+
+			for (songEvents in section.sectionEvents) {
+				var strumTime:Float = songEvents[0];
+				var eventName:String = songEvents[1];
+				var eventValues:Array<Dynamic> = songEvents[2];
+
+				var event:Event = new Event(strumTime, eventName, eventValues);
+				events.push(event);
+			}
 		}
 
-		unspawnNotes.sort(function(Obj1:Note, Obj2:Note):Int {
-			return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
-		});
+		unspawnNotes.sort(function(Obj1:Note, Obj2:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
+		events.sort(function(Obj1:Event, Obj2:Event):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
 		
 		//Notetype Scripts
 		var notetypeScripts:Array<String> = ModdingUtil.getScriptList('data/notetypes');
@@ -207,7 +217,7 @@ class NotesGroup extends FlxGroup
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
 		if (Conductor.inst.playing) {
-			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length) { // Prevent repeating vocals
+			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length && isPlayState) { // Prevent repeating vocals
 				Conductor.vocals.volume = 0;
 			}
 		}
@@ -250,6 +260,16 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
+	function checkEvents() {
+		if (events[0] != null) {
+			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
+				var dunceEvent:Event = events[0];
+				ModdingUtil.addCall('eventHit', [dunceEvent]);
+				events.splice(events.indexOf(dunceEvent), 1);
+			}
+		}
+	}
+
 	public function checkCpuNote(note:Note) {
 		if ((note.mustPress && !inBotplay) || (!note.mustPress && !dadBotplay)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
@@ -275,8 +295,9 @@ class NotesGroup extends FlxGroup
         super.update(elapsed);
         updateConductor(elapsed);
 
-		if (!generatedMusic) return; // Stuff that needs notes
+		if (!generatedMusic) return; // Stuff that needs notes / events
 		spawnNotes();
+		checkEvents();
 		notes.forEachAlive(function(daNote:Note) {
 			checkCpuNote(daNote);
 			checkMissNote(daNote);
