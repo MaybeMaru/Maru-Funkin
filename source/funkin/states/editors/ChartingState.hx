@@ -139,11 +139,6 @@ class ChartingState extends MusicBeatState {
         }
     }
 
-    /*public function getSectionData() {
-        //if ()
-        return 
-    }*/
-
     public function checkSectionsInDistace(start:Int, end:Int) {
         if (start == end || end < start) {
             if (SONG.notes[start] == null) SONG.notes.push(Song.getDefaultSection());
@@ -406,13 +401,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public static inline function getSecTime(index:Int = 0) {
-        var BPM:Float = SONG.bpm;
-        var time:Float = 0;
-        for (i in 0...index) {
-            if (SONG.notes[i].changeBPM) BPM = SONG.notes[i].bpm;
-			time += Conductor.BEATS_LENGTH * (1000 * 60 / BPM);
-        }
-        return time;
+        return Song.getSectionTime(SONG, index);
     }
 
     public static inline function getSecBpm(index:Int = 0):Float {

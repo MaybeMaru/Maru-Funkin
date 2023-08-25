@@ -35,16 +35,6 @@ class Song {
 		offsets: [0,0],
 		speed: 1,
 	}
-	/*
-		FORMAT IDEAS
-
-		notes: [
-			sectionEvents: [
-				[12345, 'changeBPM', 		100],
-				[67890, 'changeCharacter', 	bf, bf-pixel],
-			]
-		]
-	*/
 
 	public static var DEFAULT_SECTION:SwagSection = {
 		sectionNotes: [],
@@ -120,21 +110,66 @@ class Song {
 					players[playerIndex] = Reflect.field(song, field);
 					Reflect.setField(song, 'players', players);
 					Reflect.deleteField(song, field);
+				case 'events':
+					song = convertPsychChart(song);	
 			}
 		}
 		return song;
 	}
 
+	inline public static function convertPsychChart(song:SwagSong) {
+		for (s in song.notes) {
+			for (n in s.sectionNotes) {
+				if (n[1] < 0) s.sectionEvents.push([n[0], n[2], [n[3], n[4]]]);
+			}
+		}
+		//if (Reflect.field(song, 'events') == null) return;
+		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
+		var events:Array<Array<Dynamic>> = [];
+		for (e in psychEvents) {
+			var eventTime = e[0];
+			var _events:Array<Array<Dynamic>> = e[1];
+			for (i in _events) {
+				events.push([eventTime, i[0], [i[1], i[2]]]);
+			}
+		}
+
+		for (i in events) {
+			var eventSec = getTimeSection(song, i[0]);
+			song.notes[eventSec].sectionEvents.push(i);
+		}
+		return song;
+	}
+
+	inline public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
+		var BPM:Float = song.bpm;
+        var time:Float = 0;
+        for (i in 0...section) {
+            if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
+			time += Conductor.BEATS_LENGTH * (1000 * 60 / BPM);
+        }
+        return time;
+	}
+
+	inline public static function getTimeSection(song:SwagSong, time:Float):Int {
+		var lastSec:Int = 0;
+		var lastTime:Float = 0;
+		while (lastTime < time) {
+			lastTime = getSectionTime(song, lastSec);
+			lastSec++;
+		}
+		return lastSec;
+	}
+
 	//Removes unused variables for smaller size
 	inline public static function optimizeJson(input:SwagSong):SwagSong {
 		var song:SwagSong = JsonUtil.copyJson(input);
-		for (i in 0...song.notes.length) {
-			var sec = song.notes[i];
+		for (sec in song.notes) {
 			if (!sec.changeBPM) {
 				Reflect.deleteField(sec, 'changeBPM');
 				Reflect.deleteField(sec, 'bpm');
 			}
-			/*if (sec.sectionNotes.length <= 0) { // THIS CAUSED SOME BIG BUGS LOL, WOULD BE NICE BUT I DONT WANNA FIX ALL THIS SHIT
+			if (sec.sectionNotes.length <= 0) { // THIS CAUSED SOME BIG BUGS LOL, WOULD BE NICE BUT I DONT WANNA FIX ALL THIS SHIT
 				Reflect.deleteField(sec, 'sectionNotes');
 			} else {
 				for (n in 0...sec.sectionNotes.length) {
@@ -148,7 +183,10 @@ class Song {
 			}
 			if (sec.sectionEvents.length <= 0) {
 				Reflect.deleteField(sec, 'sectionEvents');
-			}*/
+			}
+			if (sec.mustHitSection) {
+				Reflect.deleteField(sec, 'mustHitSection');
+			}
 		}
 		return song;
 	}
