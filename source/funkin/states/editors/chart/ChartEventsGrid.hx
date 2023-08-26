@@ -78,20 +78,30 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
     }
 }
 
-class ChartEvent extends FlxSpriteExt {
+class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var data:Event;
+    public var sprite:FlxSpriteExt;
+    public var text:FunkinText;
     
     public function new() {
         super();
-        loadImage("options/blankEvent");
-        setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
-        updateHitbox();
+        sprite = new FlxSpriteExt().loadImage("options/blankEvent");
+        sprite.setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
+        sprite.updateHitbox();
+        add(sprite);
+        
+        text = new FunkinText(0,0,"",15);
+        text.offset.y = -ChartGrid.GRID_SIZE * 0.5 + text.height * 0.5;
+        add(text);
+
         scrollFactor.set(1,1);
         data = new Event();
     }
 
     public function init(strumTime:Float, name:String, values:Array<Dynamic>, position:FlxPoint) {
         setPosition(position.x,position.y);
+        text.text = values.toString() + " - " + name;
+        text.offset.x = text.width;
         data.strumTime = strumTime;
         data.name = name;
         data.values = values;

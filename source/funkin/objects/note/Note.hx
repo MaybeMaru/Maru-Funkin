@@ -9,6 +9,7 @@ typedef NoteTypeJson = {
 	var altAnim:String;
 	var ?skin:String;
 	var showText:Bool;
+    var hitMult:Float;
 }
 
 class NoteUtil {
@@ -21,7 +22,8 @@ class NoteUtil {
 		missHealth: [0.0475, 0.0118],
 		altAnim: '',
 		skin: null,	//should be 'default', but null for the stage skin to load
-		showText: true
+		showText: true,
+        hitMult: 1 // I recommend making this value smaller for fire-like notes
 	}
 
     public static var DEFAULT_NOTE_SKIN:NoteSkinData = {
@@ -166,6 +168,13 @@ class Note extends FlxSpriteExt {
     }
 
     public var pressed:Bool = false;
+    public var startedPress:Bool = false;
+    public var missedPress(default, set):Bool = false;
+    public function set_missedPress(value:Bool) {
+        color = (value && mustHit) ? FlxColor.fromRGB(200,200,200) : FlxColor.WHITE;
+        return missedPress = value;
+    } 
+
     public var inSustain:Bool = false;
     public var approachAngle:Float = 0;
     var strumCenter:Float = 0;
@@ -183,21 +192,21 @@ class Note extends FlxSpriteExt {
             angle = approachAngle;
             flipX = (approachAngle % 360) >= 180;
                 
-            inSustain = getInSustain(17); // lil offset to be sure
+            inSustain = getInSustain(20); // lil extra time to be sure
             offset.y = 0;
 
-            if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
+            if (Conductor.songPosition >= strumTime && pressed && !missedPress) { // Sustain is being pressed
                 setSusPressed();
             }
         } else {
             calcHit();
         }
 
-        active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
+        active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
-    public function getInSustain(extra:Float = 0):Bool {
-        return Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength + extra;
+    public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
+        return Conductor.songPosition >= strumTime + startExtra && Conductor.songPosition <= strumTime + initSusLength + endExtra;
     }
 
     public function setSusPressed() {
@@ -285,8 +294,8 @@ class Note extends FlxSpriteExt {
 			canBeHit = false;
 		}
 		else {
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
-				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset)
+			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset * hitMult) {
+				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset * hitMult)
 					canBeHit = true;
 			}
 			else {
@@ -334,6 +343,7 @@ class Note extends FlxSpriteExt {
 	public var altAnim:String = '';
 	public var hitHealth:Array<Float> = [0.025, 0.0125];
 	public var missHealth:Array<Float> = [0.0475, 0.02375];
+    public var hitMult:Float = 1;
 
 	public function set_noteType(value:String = 'default'):String {
 		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(value);
@@ -341,6 +351,7 @@ class Note extends FlxSpriteExt {
 		altAnim = noteJson.altAnim;
 		hitHealth = noteJson.hitHealth;
 		missHealth = noteJson.missHealth;
+        hitMult = FlxMath.bound(noteJson.hitMult, 0.01, 1);
 		return noteType = value;
 	}
 }

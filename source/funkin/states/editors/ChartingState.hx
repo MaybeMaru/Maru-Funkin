@@ -515,7 +515,7 @@ class ChartingState extends MusicBeatState {
     override function destroy():Void {
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
-        CoolUtil.clearCache({sounds: false});
+        //CoolUtil.clearCache({sounds: false, bitmap: false, sustains: false});
 		super.destroy();
 	}
 }

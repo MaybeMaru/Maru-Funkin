@@ -161,6 +161,7 @@ class NotesGroup extends FlxGroup
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
 						newSustain.parentNote = newNote;
+						newNote.childNote = newSustain;
 						unspawnNotes.push(newSustain);
 					}
 					else newSustain.destroy();  // clear too small sustains
@@ -285,10 +286,15 @@ class NotesGroup extends FlxGroup
 
 	public function checkMissNote(note:Note) {
 		if (note.active) return;
-		if (note.mustPress && note.mustHit) {
+		if (note.mustPress && note.mustHit && !note.isSustainNote)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
-		}
 		removeNote(note);
+	}
+
+	public function sustainMiss(note:Note) {
+		note.missedPress = true;
+		if (note.mustHit)
+			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 	}
 
     override function update(elapsed:Float) {
@@ -328,8 +334,27 @@ class NotesGroup extends FlxGroup
 
 			notes.forEachAlive(function(daNote:Note) {
 				if (daNote.isSustainNote) { // Handle sustain notes
-					daNote.pressed = holdingArray[daNote.noteData] && daNote.inSustain && daNote.mustPress;
-                    if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
+					if (daNote.mustPress) {
+						daNote.pressed = false;
+						if (!daNote.missedPress) {
+							if (daNote.getInSustain(0, Conductor.safeZoneOffset * 0.5) && !daNote.startedPress) {
+								sustainMiss(daNote);
+								return;
+							}
+							if (daNote.startedPress) {
+								var holding = holdingArray[daNote.noteData];
+								var pressing = holding && daNote.inSustain && daNote.mustPress;
+								if (!holding) { // Sustain stopped being pressed
+									sustainMiss(daNote); 
+									return;
+								}
+								else {
+									daNote.pressed = pressing; // Pressed sustain
+									if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
+								}
+							}
+						}
+					}
 				}
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {

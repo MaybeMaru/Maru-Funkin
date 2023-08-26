@@ -255,7 +255,8 @@ class ChartTabs extends FlxUITabMenu {
 			curNote[3] = curType;
 			ChartingState.instance.mainGrid.updateNote(curNoteObject, curNote);
 		});
-		noteTypesDropDown.selectedLabel = 'default';
+		curType = types[0];
+		noteTypesDropDown.selectedLabel = curType;
 
 		tab_group_note.add(new FlxText(stepperSusLength.x, stepperSusLength.y - 15, 0, 'Sustain Length:'));
 		tab_group_note.add(new FlxText(noteTypesDropDown.x, noteTypesDropDown.y - 15, 0, 'Note Type:'));
@@ -278,7 +279,8 @@ class ChartTabs extends FlxUITabMenu {
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			curEvent = types[Std.parseInt(type)];
 		});
-		eventsDropDown.selectedLabel = 'default';
+		curEvent = types[0];
+		eventsDropDown.selectedLabel = curEvent;
 
 		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
 		tab_group_event.add(eventsDropDown);

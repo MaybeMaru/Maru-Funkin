@@ -273,6 +273,7 @@ class PlayState extends MusicBeatState {
 						notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
 			Conductor.vocals.volume = 1;
 			combo++;
 			popUpScore(note.strumTime, note);
