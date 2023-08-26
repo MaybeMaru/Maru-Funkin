@@ -56,9 +56,9 @@ class FunkScript {
 
 		//Mau engin
 
-        set('PlayState', PlayState.game);
+        set('PlayState', PlayState.instance);
 		set('GameVars', PlayState); // fuck
-		set('State', ScriptUtil.getCurStateInstance());
+		set('State', cast MusicBeatState.instance);
 
 		set('CoolUtil', CoolUtil);
 		set('Conductor', Conductor);
@@ -166,13 +166,13 @@ class FunkScript {
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
-			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
+			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
+			OnTop ? PlayState.instance.fgSpr.add(spr) : PlayState.instance.bgSpr.add(spr);
 		});
 		
 		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
-			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.game.fgSpr.insert(order, spr) : PlayState.game.bgSpr.insert(order, spr);
+			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
+			OnTop ? PlayState.instance.fgSpr.insert(order, spr) : PlayState.instance.bgSpr.insert(order, spr);
 		});
 
 		set('getSpr', function(key:String):Null<Dynamic> {
@@ -182,8 +182,8 @@ class FunkScript {
 		set('getSprOrder', function(key:String):Int {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
-				if (PlayState.game.objMap.exists(sprKey))
-					return ScriptUtil.getGroup(i).members.indexOf(PlayState.game.objMap.get(sprKey));
+				if (PlayState.instance.objMap.exists(sprKey))
+					return ScriptUtil.getGroup(i).members.indexOf(PlayState.instance.objMap.get(sprKey));
 			}
 			ModdingUtil.errorTrace('Sprite not found: $key');
 			return 0;
@@ -191,7 +191,7 @@ class FunkScript {
 
 		set('existsSpr', function(key:String):Null<Dynamic> {
 			for (i in ['fg', 'bg']) {
-				if (PlayState.game.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
+				if (PlayState.instance.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
 					return true;
 				}
 			}
@@ -202,22 +202,22 @@ class FunkScript {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				var group = ScriptUtil.getGroup(i);
-				if (PlayState.game.objMap.exists(sprKey)) {
+				if (PlayState.instance.objMap.exists(sprKey)) {
 					group.remove(ScriptUtil.getSprite(key));
-					PlayState.game.objMap.remove(sprKey);
+					PlayState.instance.objMap.remove(sprKey);
 				}
 			}
 		});
 
 		set('makeGroup', function(key:String, ?order:Int):Void {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
-			order != null ? PlayState.game.insert(order, newGroup) : PlayState.game.add(newGroup);
-			PlayState.game.objMap.set('_group_$key', newGroup);
+			order != null ? PlayState.instance.insert(order, newGroup) : PlayState.instance.add(newGroup);
+			PlayState.instance.objMap.set('_group_$key', newGroup);
 		});
 
 		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
-			if (PlayState.game.objMap.exists('_group_$key'))
-				return PlayState.game.objMap.get('_group_$key');
+			if (PlayState.instance.objMap.exists('_group_$key'))
+				return PlayState.instance.objMap.get('_group_$key');
 			else {
 				ModdingUtil.errorTrace('Group not found: $key');
 				return null;
@@ -225,13 +225,13 @@ class FunkScript {
 		});
 
 		set('existsGroup', function(key:String):Bool {
-			return PlayState.game.objMap.exists('_group_$key');						
+			return PlayState.instance.objMap.exists('_group_$key');						
 		});
 
 		// Script functions
 
 		set('addScript', function(path:String, ?tag:String):Void {
-			ModdingUtil.addScript(path, false, tag);
+			ModdingUtil.addScript(path, tag);
 		});
 
 		set('getScriptVar', function(script:String, key:String):Dynamic {
@@ -247,7 +247,7 @@ class FunkScript {
 		});
 
 		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
-			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts)) {
+			for (i in ModdingUtil.scripts) {
 				if (forced || !i.exists(key))
 					i.set(key, _var);
 			}

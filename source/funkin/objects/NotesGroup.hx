@@ -232,7 +232,7 @@ class NotesGroup extends FlxGroup
             return;
         }
 
-        var game = PlayState.game;
+        var game = PlayState.instance;
         if ((game.startingSong || Conductor.inst.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
             Conductor.songPosition += FlxG.elapsed * 1000;
             if (game.startedCountdown && game.startingSong) {
@@ -310,7 +310,7 @@ class NotesGroup extends FlxGroup
 		});
 
         if (isPlayState) {
-            if (PlayState.game.inCutscene) return; // No controls in cutscenes >:(
+            if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
     }
@@ -417,9 +417,9 @@ class NotesGroup extends FlxGroup
 		}
 
         if (!isPlayState) return;
-        if (PlayState.game.boyfriend == null) return;
+        if (PlayState.instance.boyfriend == null) return;
 
-        var bf = PlayState.game.boyfriend;
+        var bf = PlayState.instance.boyfriend;
 		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
 		&& bf.animation.curAnim.name.startsWith('sing')
 		&& !bf.animation.curAnim.name.endsWith('miss'));

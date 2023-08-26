@@ -10,12 +10,12 @@ class GameOverSubstate extends MusicBeatSubstate {
 	public function new(x:Float, y:Float):Void {
 		super();
 
-		charName = PlayState.game.boyfriend.gameOverChar;
-		skinFolder = PlayState.game.boyfriend.gameOverSuffix;
+		charName = PlayState.instance.boyfriend.gameOverChar;
+		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
 		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
 
 		char = new Character(x, y, charName, true);
-		PlayState.game.boyfriend.stageOffsets.copyTo(char.stageOffsets);
+		PlayState.instance.boyfriend.stageOffsets.copyTo(char.stageOffsets);
 		char.setXY(x,y);
 		add(char);
 		
@@ -50,7 +50,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		if (char.animation.curAnim != null) {
 			if (char.animation.curAnim.name == 'firstDeath') {
 				if (char.animation.curAnim.curFrame == 12) {
-					PlayState.game.camGame.follow(camFollow, LOCKON, 0.01);
+					PlayState.instance.camGame.follow(camFollow, LOCKON, 0.01);
 				}
 		
 				if (char.animation.curAnim.finished) {
@@ -98,7 +98,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			}
 			CoolUtil.playMusic('${skinFolder}gameOverEnd');
 			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
-				PlayState.game.camGame.fade(FlxColor.BLACK, 2, false, function() {
+				PlayState.instance.camGame.fade(FlxColor.BLACK, 2, false, function() {
 					PlayState.clearCache = false;
 					LoadingState.loadAndSwitchState(new PlayState());
 				});

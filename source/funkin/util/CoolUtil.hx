@@ -189,18 +189,18 @@ class CoolUtil {
     }
 
 	inline public static function switchState(newState:FlxState) {
-		if (MusicBeatState.game == null) {
+		if (MusicBeatState.instance == null) {
 			FlxG.switchState(newState);
 			return;
 		}
-		MusicBeatState.game.switchState(newState);
+		MusicBeatState.instance.switchState(newState);
 	}
 
 	inline public static function resetState() {
-		if (MusicBeatState.game == null) {
+		if (MusicBeatState.instance == null) {
 			FlxG.resetState();
 			return;
 		}
-		MusicBeatState.game.resetState();
+		MusicBeatState.instance.resetState();
 	}
 }

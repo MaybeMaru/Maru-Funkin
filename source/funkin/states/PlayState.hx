@@ -4,7 +4,7 @@ import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
 
 class PlayState extends MusicBeatState {
-	public static var game:PlayState;
+	public static var instance:PlayState;
 	public static var clearCache:Bool = true;
 	public static var clearCacheData:Null<CacheClearing> = null;
 
@@ -116,7 +116,7 @@ class PlayState extends MusicBeatState {
 		clearCache = true;
 		clearCacheData = null;
 
-		game = this;
+		instance = this;
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');
@@ -200,7 +200,7 @@ class PlayState extends MusicBeatState {
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
-			for (char in [PlayState.game.boyfriend,PlayState.game.dad,PlayState.game.gf]) {
+			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].toLowerCase().split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
