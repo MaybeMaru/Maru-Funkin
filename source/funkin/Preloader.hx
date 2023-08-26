@@ -44,10 +44,8 @@ class Preloader extends flixel.FlxState {
         if(!existsBitmap(key)) return;
         var graphic = getBitmap(key);
         bitmapCache.remove(key);
-        Paths.destroyGraphic(graphic, key);
+        Paths.destroyGraphic(graphic);
     }
-
-   // inline public static function textureFromBitmap
 
     var imageCache:Array<String>    = [];
     var songCache:Array<String>     = [];

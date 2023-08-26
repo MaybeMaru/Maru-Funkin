@@ -96,7 +96,7 @@ class JsonUtil {
 
 	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
 		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(Paths.file('images/$path.json', TEXT, library)));
-		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, false, false, gpu), false, Paths.image(path, library, true));
+		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, false, false, gpu));
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
 		var framesTagData:Array<Array<Dynamic>> = [];
@@ -129,7 +129,7 @@ class JsonUtil {
 	}
 
 	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
-		var defaults = Reflect.copy(defaultsInput);
+		var defaults = copyJson(defaultsInput);
 		if (input == null) return defaults;
 
 		var props = Reflect.fields(defaults);

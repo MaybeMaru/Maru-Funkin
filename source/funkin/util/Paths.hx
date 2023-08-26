@@ -278,10 +278,10 @@ class Paths
 		if (!existsGraphic(key)) return;
 		var obj = cachedGraphics.get(key);
 		cachedGraphics.remove(key);
-		destroyGraphic(obj, key);
+		destroyGraphic(obj);
 	}
 
-	inline public static function destroyGraphic(?graphic:FlxGraphic, key:String = "") {
+	inline public static function destroyGraphic(?graphic:FlxGraphic) {
 		if (graphic == null) return;
 		graphic.persist = false;
 		graphic.destroyOnNoUse = true;
@@ -296,6 +296,7 @@ class Paths
 		if (existsGraphic(key)) return cachedGraphics.get(key);
 		var bitmap = new BitmapData(width, height, true, color);
 		var graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
+		graphic.destroyOnNoUse = false;
 		cachedGraphics.set(key, graphic);
 		return graphic;
 	}
@@ -303,7 +304,6 @@ class Paths
 	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
 		var graphic = FlxGraphic.fromBitmapData(bitmap);
 		graphic.persist = cache;
-		graphic.destroyOnNoUse = cache;
 		if (cache) cachedGraphics.set(key, graphic);
 		return graphic;
 	}
@@ -316,7 +316,7 @@ class Paths
 			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
 		}
 		#end
-		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key, false), key, cache);
+		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key), key, cache);
 	}
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {

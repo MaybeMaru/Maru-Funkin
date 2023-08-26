@@ -319,19 +319,18 @@ class Note extends FlxSpriteExt {
             skin = value;
             try { // Prevent null skins
                 skinJson = SkinUtil.getSkinData(skin).noteData;
-                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
             } catch(e) {
                 skin = '_missing_skin';
                 skinJson = SkinUtil.getSkinData(skin).noteData;
-                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
             }
+            skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
             refSprite = new FlxSpriteExt();
             refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
             refSprite.scale.set(skinJson.scale,skinJson.scale);
             refSprite.updateHitbox();
-            for (anim in skinJson.anims)
-                refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+            
+            for (anim in skinJson.anims) refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
         }
 		return value;
 	}

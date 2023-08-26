@@ -122,13 +122,8 @@ class PlayState extends MusicBeatState {
 		ghostTapEnabled = getPref('ghost-tap');
 		SkinUtil.initSkinData();
 
-		if (FlxG.sound.music != null) {
-			FlxG.sound.music.stop();
-		}
-
-		FlxG.camera.active = false;
-		FlxG.camera.visible = false;
-		FlxG.mouse.visible = false;
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new SwagCamera();
 		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;
@@ -297,8 +292,8 @@ class PlayState extends MusicBeatState {
 			ModdingUtil.addCall('sustainPress', [note, true]);
 		}
 
-		notesGroup.noteMiss = function(direction:Int = 1, ?noteMissed:Note):Void {
-			if (noteMissed == null) {
+		notesGroup.noteMiss = function(direction:Int = 1, ?note:Note):Void {
+			if (note == null) {
 				health -= 0.04;
 				songScore -= 10;
 				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -309,15 +304,15 @@ class PlayState extends MusicBeatState {
 
 				combo = 0;
 				Conductor.vocals.volume = 0;
-				var healthLoss = noteMissed.missHealth[noteMissed.isSustainNote ? 1 : 0];
-				var healthMult:Float = noteMissed.isSustainNote ? noteMissed.percentCut * (noteMissed.initSusLength / Conductor.stepCrochet) : 1;
+				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
+				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
 				health -= healthLoss * healthMult;
 				songScore -= Std.int(10 * healthMult);
 
 				noteCount++;
 				songMisses++;
 					
-				ModdingUtil.addCall('noteMiss', [noteMissed]);
+				ModdingUtil.addCall('noteMiss', [note]);
 			}
 
 			boyfriend.stunned = true;
