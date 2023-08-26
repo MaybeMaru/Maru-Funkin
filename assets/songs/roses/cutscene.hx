@@ -4,10 +4,6 @@ function createPost()
         PlayState.inCutscene = true;
 }
 
-function switchSong() {
-    GameVars.clearCache = true;
-}
-
 function startCutscene()
 {
     PlayState.createDialogue();
@@ -15,12 +11,7 @@ function startCutscene()
 
 function createDialogue()
 {
-    FlxG.sound.play(Paths.sound('ANGRY'));
+    playSound("ANGRY");
     PlayState.dialogueBox = new PixelDialogueBox('mad');
     PlayState.dialogueBox.portraitLeft.alpha = 0;
-}
-
-function updatePost()
-{
-    if (PlayState.inCutscene) FlxG.sound.music.volume = 0;
 }
