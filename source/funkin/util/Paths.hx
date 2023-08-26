@@ -316,7 +316,7 @@ class Paths
 			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
 		}
 		#end
-		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key), key, cache);
+		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key, false), key, cache);
 	}
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
