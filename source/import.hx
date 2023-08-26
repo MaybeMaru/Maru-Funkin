@@ -107,7 +107,6 @@ import flixel.input.keyboard.FlxKey;
 
 import haxe.Json;
 import flixel.graphics.frames.FlxFramesCollection;
-import tea.SScript;
 
 using StringTools;
 #end

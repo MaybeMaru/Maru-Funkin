@@ -32,23 +32,23 @@ function startTimer():Void {
     speaker.playAnim('speakers', true);
 }
 
-function updatePost(elapsed)
-{
-    if (picoNotes_.length > 0) {
-        updateTankmenBG(elapsed);
-        if(Conductor.songPosition > picoNotes_[0][0])
-        {
-            var shootAnim:Int = 1;
-            if (picoNotes_[0][1] >= 2)
-                shootAnim = 3;
-            shootAnim += FlxG.random.int(0, 1);
+function stepHit() {
+    if (picoNotes_.length <= 0) return;
+    var topNote = picoNotes_[0];
+    if(Conductor.songPosition > topNote[0]) {
+        var shootAnim:Int = 1;
+        if (topNote[1] >= 2) shootAnim = 3;
+        shootAnim += FlxG.random.int(0, 1);
 
-            ScriptChar.playAnim('shoot' + shootAnim, true);
-            ScriptChar.specialAnim = true;
-            ScriptChar.forceDance = false;
-            picoNotes_.shift();
-        }
+        ScriptChar.playAnim('shoot' + shootAnim, true);
+        ScriptChar.specialAnim = true;
+        ScriptChar.forceDance = false;
+        picoNotes_.shift();
     }
+}
+
+function updatePost(elapsed) {
+    updateTankmenBG(elapsed);
 }
 
 // Tankmen Run

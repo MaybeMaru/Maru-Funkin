@@ -268,9 +268,9 @@ class Paths
 		for (key in cachedGraphics.keys()) {
 			removeGraphicByKey(key);
 		}
-		for (key in Preloader.bitmapCache.keys()) {
+		/*for (key in Preloader.bitmapCache.keys()) {
 			if (key.contains("mods")) Preloader.removeByKey(key);
-		}
+		}*/
 		FlxG.bitmap.clearCache();
 	}
 

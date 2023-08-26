@@ -28,7 +28,7 @@
         {
             "name": "hxcpp",
             "type": "install",
-            "version": "4.3.0"
+            "version": null
         },
         {
             "name": "hxcpp-debug-server",
@@ -36,9 +36,9 @@
             "version": null
         },
         {
-            "name": "SScript",
+            "name": "hscript",
             "type": "install",
-            "version": "3.0.0"
+            "version": null
         },
         {
             "name": "discord_rpc",

@@ -1,37 +1,51 @@
 package funkin.util.modding;
 
+import hscript.Parser;
+import hscript.Interp;
+
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript extends SScript {
+class FunkScript {
+	public static var parser:Parser = new Parser();
+	public var interp:Interp;
+	public var variables(get, never):Map<String, Dynamic>;
+	public function get_variables() return interp.variables;
+
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
 	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
-		if (!exists(method)) {
-			return CONTINUE_FUNCTION;
-		}
-		return callMethod(method, args == null ? [] : args);
+		if (!exists(method)) return CONTINUE_FUNCTION;
+		return tryCall(method, (args == null ? [] : args));
 	}
 
-	public function callMethod(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
-		var call_ =  call(method, args);
-		if (!call_.succeeded) {
-			for (error in call_.exceptions) {
-				if (error != null) ModdingUtil.errorTrace('$scriptID / ${error.toString()}');
-			}
+	public function tryCall(method:String, args:Array<Dynamic>) {
+		var value = null;
+		try {
+			value = Reflect.callMethod(this, get(method), args);
+		} catch(e) {
+			errorTrace(e);
 			return CONTINUE_FUNCTION;
 		}
-		var value = call_.returnValue;
 		return value == null ? CONTINUE_FUNCTION : value;
 	}
 
 	public function new(hscriptCode:String):Void {
-		super();
+		interp = new Interp();
 		implement();
-		doString(hscriptCode);
+		try {
+			execute(hscriptCode);
+		}
+		catch(e) {
+			errorTrace(e);
+		} 
+	}
+
+	public function errorTrace(error:Any) {
+		ModdingUtil.errorTrace('$scriptID / ${Std.string(error)}');
 	}
 
 	public function implement():Void { //Preloaded Variables
@@ -282,19 +296,27 @@ class FunkScript extends SScript {
 		});
 
 		set('switchCustomState', function (key:String) {
-			switchCustomState(key);
+			ScriptUtil.switchCustomState(key);
 		});
 	}
 
-	public static function switchCustomState(key:String) {
-		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
-		if (scriptCode.length <= 0) {
-			ModdingUtil.errorTrace('Custom state script not found: $key');
-			return;
-		}
+	public function execute(codeToRun:String):Dynamic {
+		@:privateAccess
+		parser.line = 1;
+		parser.allowTypes = true;
+		return interp.execute(parser.parseString(codeToRun));
+	}
 
-		var state = new CustomState().initScript(scriptCode, key);
-		CoolUtil.switchState(state);
+	public function set(varName:String, varValue:Dynamic):Void {
+		interp.variables.set(varName, varValue);
+	}
+
+	public function get(field:String):Dynamic {
+		return interp.variables.get(field);
+	}
+
+	public function exists(field:String):Bool {
+		return interp.variables.exists(field);
 	}
 }
 
@@ -347,7 +369,7 @@ class CustomState extends MusicBeatState {
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
-		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
+		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey);
 		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }
 

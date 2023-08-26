@@ -27,4 +27,15 @@ class ScriptUtil {
         var instance = MusicBeatState.game;
         return cast instance;
     }
+
+    inline public static function switchCustomState(key:String) {
+		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
+		if (scriptCode.length <= 0) {
+			ModdingUtil.errorTrace('Custom state script not found: $key');
+			return;
+		}
+
+		var state = new CustomState().initScript(scriptCode, key);
+		CoolUtil.switchState(state);
+	}
 }
