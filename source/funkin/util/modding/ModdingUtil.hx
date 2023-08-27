@@ -15,14 +15,13 @@ class ModdingUtil {
     ];
     
     //Scripts
-    public static var playStateScripts:Array<FunkScript> = [];
-    public static var globalScripts:Array<FunkScript> = [];
+    public static var scripts:Array<FunkScript> = [];
     public static var scriptsMap:Map<String, FunkScript>;
 
-    inline public static function clearScripts(global:Bool = false):Void {
+    inline public static function clearScripts():Void {
         scriptsMap = new Map<String, FunkScript>();
         FunkScript.globalVariables = new Map<String, Dynamic>();
-        global ? globalScripts : playStateScripts = [];
+        scripts = [];
     }
 
     inline public static function reloadModFolders():Void {
@@ -63,16 +62,22 @@ class ModdingUtil {
 		return list;
 	}
 
-    inline public static function addScript(path:String, global:Bool = false, ?tag:String):Null<FunkScript> {
+    inline public static function addScript(path:String, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
         if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
-
-        consoleTrace('[ADD] $path / $global', FlxColor.LIME);
+        consoleTrace('[ADD] $path', FlxColor.LIME);
         var script:FunkScript = new FunkScript(scriptCode);
         script.scriptID = path;
         scriptsMap.set(tag == null ? path : tag, script);
-        (global ? globalScripts : playStateScripts).push(script);
+        scripts.push(script);
         return script;
+    }
+
+    inline public static function removeScript(tag:String) {
+        if (!scriptsMap.exists(tag)) return;
+        var script = scriptsMap.get(tag);
+        scriptsMap.remove(tag);
+        scripts.remove(script);
     }
 
     inline public static function setModFolder(modName:String, activated:Bool):Void {
@@ -85,12 +90,12 @@ class ModdingUtil {
     }
 
     inline public static function consoleTrace(text:String, ?color:Int):Void {
-        var console = MusicBeatState.game.scriptConsole;
-        console.exists ? console.consoleTrace(text, color) : console.addToTraceList(text, color);
+        var console = MusicBeatState.instance.scriptConsole;
+        console.exists ? console.consoleTrace(text, color) : ScriptConsole.addToTraceList(text, color);
     }
 
-    inline public static function addCall(name:String, ?args:Array<Dynamic>, global:Bool = false):Void {
-        for (script in (global ? globalScripts : playStateScripts)) {
+    inline public static function addCall(name:String, ?args:Array<Dynamic>):Void {
+        for (script in scripts) {
             script.callback(name, args);
         }
     }

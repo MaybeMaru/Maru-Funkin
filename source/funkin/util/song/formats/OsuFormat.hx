@@ -60,8 +60,8 @@ class OsuFormat {
         return [];
     }
 
-    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Dynamic>> {
-        var returnMap:Map<Int,Array<Dynamic>> = new Map<Int,Array<Dynamic>>();
+    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Array<Dynamic>>> {
+        var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
         var mapCircleSize = Std.parseInt(getMapVar(map, 'CircleSize'));
         var bpmMills = getMapTimingPoints(map)[1];
 

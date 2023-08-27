@@ -27,6 +27,7 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
             }
         }
         var newTrace:ConsoleTrace = recycle(ConsoleTrace);
+        newTrace.text = "";
         newTrace.init(text,color);
         traceTextArray.push(newTrace);
         add(newTrace);
@@ -37,7 +38,7 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
         traceTextArray.remove(member);
     }
 
-    public function addToTraceList(text:String, color:Int = 0xffffffff):Void {
+    public static function addToTraceList(text:String, color:Int = 0xffffffff):Void {
         var shit:Array<Dynamic> = [text, color];
         listToAdd.push(shit);
     }
@@ -50,7 +51,7 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
         if (listToAdd[0] != null) {
             while (listToAdd.length > 0) {
                 consoleTrace(listToAdd[0][0], listToAdd[0][1]);
-                listToAdd.splice(0, 1);
+                listToAdd.remove(listToAdd[0]);
             }
         }
 

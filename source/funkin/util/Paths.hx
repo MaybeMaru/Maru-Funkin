@@ -100,9 +100,9 @@ class Paths
 		return getPath(file, type, library);
 	}
 
-	inline static public function txt(key:String, ?library:String):String
+	inline static public function txt(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('data/$key.txt', TEXT, library);
+		return getPath('data/$key.txt', TEXT, library, false, checkMods);
 	}
 
 	inline static public function xml(key:String, ?library:String):String
@@ -247,63 +247,93 @@ class Paths
 		#end
 	}
 
-	inline static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		var retImage:FlxGraphicAsset = path;
-
+	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		if (gpu) {
-			if (Preloader.existsBitmap(path)) retImage = Preloader.getBitmap(path);
+			if (Preloader.existsBitmap(path)) return Preloader.getBitmap(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
-				Preloader.addFromBitmap(bitmap, path);
-				retImage = Preloader.getBitmap(path);
+				return Preloader.addFromBitmap(bitmap, path);
 			}
-		} else {
-			retImage = getBitmapData(path, true);
-		}
-
-		return retImage;
+		} else return getBitmapData(path, true);
+		return path;
 	}
 
 	/*
 		Used to get bitmaps without using gpu loading
 		Gpu loading is faster but breaks bitmap functions
 	*/
-	public static var cachedBitmaps:Map<String, BitmapData> = [];
+	public static var cachedGraphics:Map<String, FlxGraphic> = [];
+	
 	inline public static function clearBitmapCache() {
-		for (key in cachedBitmaps.keys()) {
-			var bitmap = cachedBitmaps.get(key);
-			bitmap.dispose();
-			cachedBitmaps.remove(key);
-			@:privateAccess {
-				OflAssets.cache.removeBitmapData(key);
-				if (FlxG.bitmap._cache.exists(key))  FlxG.bitmap._cache.remove(key);
-			}
+		for (key in cachedGraphics.keys()) {
+			removeGraphicByKey(key);
 		}
+		/*for (key in Preloader.bitmapCache.keys()) {
+			if (key.contains("mods")) Preloader.removeByKey(key);
+		}*/
 		FlxG.bitmap.clearCache();
 	}
 
-	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
-		if (cachedBitmaps.exists(key)) return cachedBitmaps.get(key);
+	inline public static function removeGraphicByKey(key:String) {
+		if (!existsGraphic(key)) return;
+		var obj = cachedGraphics.get(key);
+		cachedGraphics.remove(key);
+		destroyGraphic(obj);
+	}
+
+	inline public static function destroyGraphic(?graphic:FlxGraphic) {
+		if (graphic == null) return;
+		graphic.persist = false;
+		graphic.destroyOnNoUse = true;
+		graphic.destroy();
+	}
+
+	static public function existsGraphic(key:String) {
+		return cachedGraphics.exists(key);
+	}
+
+	static public function addGraphic(width:Int, height:Int, color:FlxColor, ?key:String) {
+		if (existsGraphic(key)) return cachedGraphics.get(key);
+		var bitmap = new BitmapData(width, height, true, color);
+		var graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
+		graphic.destroyOnNoUse = false;
+		cachedGraphics.set(key, graphic);
+		return graphic;
+	}
+
+	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
+		var graphic = FlxGraphic.fromBitmapData(bitmap);
+		graphic.persist = cache;
+		if (cache) cachedGraphics.set(key, graphic);
+		return graphic;
+	}
+
+	static public function getGraphic(key:String, cache:Bool = false) {
+		if (existsGraphic(key)) return cachedGraphics.get(key);
 		#if desktop	
 		var fixPath = removeAssetLib(key);
 		if (!fixPath.startsWith('assets')) {
-			var bitmap = BitmapData.fromFile(fixPath);
-			if (cache) cachedBitmaps.set(key, bitmap);
-			return bitmap;
+			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
 		}
 		#end
-		var bitmap = OpenFlAssets.getBitmapData(key);
-		if (cache) cachedBitmaps.set(key, bitmap);
-		return bitmap;
+		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key, false), key, cache);
+	}
+
+	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
+		return getGraphic(key, cache).bitmap;
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];
-	inline public static function clearSoundCache() {
+	public static var excludeSounds:Array<String> = [];
+	inline public static function clearSoundCache(forced:Bool = false) {
 		for (key in cachedSounds.keys()) {
+			if (key.contains(Conductor._loadedSong) && !forced) continue;
+			else												Conductor._loadedSong = "";
+			cachedSounds.get(key).close();
 			LimeAssets.cache.clear(key);
+			OflAssets.cache.removeSound(key);
 			cachedSounds.remove(key);
 		}
-		for (i in ['sounds', 'songs', 'music']) OflAssets.cache.clear(i);
 	}
 
 	static public function getSound(key:String):FlxSoundAsset {

@@ -30,12 +30,13 @@ function create()
 		tunnelLightsBlur.alpha -= alphaVal * 2.5;
 	}
 
-	// scale, speed, color
-	var cityData = [[0.6, 50, FlxColor.fromRGB(120, 105, 185)], [0.8, 100, FlxColor.WHITE]];
+	// scale, speed
+	var cityData = [[0.6, 50], [0.8, 100]];
 	for (i in 0...2) {
 		var cityLoop = new FlxBackdrop(Paths.image('blammed/cityLoop'), 0x01);
 		cityLoop.flipX = i == 0;
-		cityLoop.color = cityData[i][2];
+		cityLoop.color = (i == 0 ? FlxColor.fromRGB(120, 105, 185) : FlxColor.WHITE);
+		cityLoop.alpha = (i == 0 ? 0.8 : 1);
 		cityLoop.scale.set(cityData[i][0], cityData[i][0]);
 		cityLoop.updateHitbox();
 		cityLoop.y += 300 + (i * 50);

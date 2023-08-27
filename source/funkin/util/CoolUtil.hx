@@ -2,6 +2,13 @@ package funkin.util;
 
 import openfl.system.System;
 
+typedef CacheClearing =  {
+	?bitmap:Bool,
+	?sustains:Bool,
+	?sounds:Bool,
+	?shaders:Bool
+}
+
 class CoolUtil {
 	public static var defaultDiffArray:Array<String> = 	['easy', 'normal', 'hard'];
 	public static var directionArray:Array<String> = 	['LEFT','DOWN','UP','RIGHT'];
@@ -36,12 +43,19 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	inline public static function clearCache() {
-		Paths.clearBitmapCache();
-		NoteUtil.clearSustainCache();
-		FlxG.sound.list.clear();
-		Paths.clearSoundCache();
-		Shader.clearShaders();
+	static var DEFAULT_CACHE_CLEARING:CacheClearing = {
+		bitmap: true,
+		sustains: true,
+		sounds: true,
+		shaders: true
+	}
+
+	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
+		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
+		if (cacheClear.bitmap) Paths.clearBitmapCache();
+		if (cacheClear.sustains) NoteUtil.clearSustainCache();
+		if (cacheClear.sounds) Paths.clearSoundCache(!softClear);
+		if (cacheClear.shaders) Shader.clearShaders();
 		System.gc();
 	}
 
@@ -51,10 +65,10 @@ class CoolUtil {
 		return newSound;
 	}
 
-	inline public static function playSound(key:String, volume:Float = 1) {
+	inline public static function playSound(key:String, volume:Float = 1, ?pitch:Float) {
 		var sound = getSound(key);
 		sound.volume = volume;
-		sound.pitch = FlxG.timeScale;
+		sound.pitch = (pitch == null ? FlxG.timeScale : pitch);
 		sound.play();
 		return sound;
 	}
@@ -101,6 +115,19 @@ class CoolUtil {
         else if (a > b) return 1;
         return 0;
     }
+
+	inline public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
+		var result:Array<String> = [];
+		for (i in customOrder) {
+			if (input.contains(i)) {
+				result.push(i);
+				input.remove(i);
+			}
+		}
+
+		input.sort(sortAlphabetically);
+		return result.concat(input);
+	}
 	
 	inline public static function formatClass(daClass:Dynamic, formatDir:Bool = true):String {
 		var className = Type.getClassName(Type.getClass(daClass));
@@ -162,18 +189,18 @@ class CoolUtil {
     }
 
 	inline public static function switchState(newState:FlxState) {
-		if (MusicBeatState.game == null) {
+		if (MusicBeatState.instance == null) {
 			FlxG.switchState(newState);
 			return;
 		}
-		MusicBeatState.game.switchState(newState);
+		MusicBeatState.instance.switchState(newState);
 	}
 
 	inline public static function resetState() {
-		if (MusicBeatState.game == null) {
+		if (MusicBeatState.instance == null) {
 			FlxG.resetState();
 			return;
 		}
-		MusicBeatState.game.resetState();
+		MusicBeatState.instance.resetState();
 	}
 }

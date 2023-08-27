@@ -18,16 +18,19 @@ class ChartTabs extends FlxUITabMenu {
 		{name: "Song", 		label: 'Song'},
 		{name: "Section", 	label: 'Section'},
 		{name: "Note", 		label: 'Note'},
+		{name: "Event",		label: 'Event'},
 		{name: "Editor", 	label: 'Editor'}
 	];
     
     public function new() {
         super(null, tabs, true);
 		resize(400, 400);
+		curType = 'default';
 
         addSongUI();
 		addSectionUI();
 		addNoteUI();
+		addEventUI();
 		addEditorUI();
     }
 
@@ -51,7 +54,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		var reloadSongJson:FlxButton = new FlxButton(saveButton.x + 100, saveButton.y, "Reload JSON", function() {
-			ChartingState.instance.loadJson(ChartingState.SONG.song);
+			ChartingState.instance.loadJson(songTitleInput.text);
 		});
 
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', ChartingState.instance.loadAutosave);
@@ -252,7 +255,8 @@ class ChartTabs extends FlxUITabMenu {
 			curNote[3] = curType;
 			ChartingState.instance.mainGrid.updateNote(curNoteObject, curNote);
 		});
-		noteTypesDropDown.selectedLabel = 'default';
+		curType = types[0];
+		noteTypesDropDown.selectedLabel = curType;
 
 		tab_group_note.add(new FlxText(stepperSusLength.x, stepperSusLength.y - 15, 0, 'Sustain Length:'));
 		tab_group_note.add(new FlxText(noteTypesDropDown.x, noteTypesDropDown.y - 15, 0, 'Note Type:'));
@@ -263,9 +267,38 @@ class ChartTabs extends FlxUITabMenu {
 		addGroup(tab_group_note);
 	}
 
+	var eventsDropDown:FlxUIDropDownMenu;
+
+	public static var curEvent:String = '';
+
+	function addEventUI():Void {
+		var tab_group_event = new FlxUI(null, this);
+		tab_group_event.name = 'Event';
+
+		var types:Array<String> = JsonUtil.getJsonList('events');
+		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
+			curEvent = types[Std.parseInt(type)];
+		});
+		curEvent = types[0];
+		eventsDropDown.selectedLabel = curEvent;
+
+		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
+		tab_group_event.add(eventsDropDown);
+		
+		addGroup(tab_group_event);
+	}
+
 	public var check_hitsound:FlxUICheckBox;
 	public var check_metronome:FlxUICheckBox;
 	public var slider_pitch:FlxUISlider;
+
+	var songPitch(default, set):Float = 1;
+	function set_songPitch(value:Float):Float {
+		value = FlxMath.roundDecimal(value,2);
+		songPitch = value;
+		Conductor.setPitch(value);
+		return value;
+	}
 
 	function addEditorUI():Void {
 		var tab_group_editor = new FlxUI(null, this);

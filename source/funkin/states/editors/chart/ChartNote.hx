@@ -5,10 +5,12 @@ class ChartNote extends Note {
     public function new() {
         super();
         scrollFactor.set(1,1);
+        active = false;
     }
 
     public var gridNoteData:Int = 0;
     public var txt:FunkinText = null;
+    public var startInit:Bool = false;
 
     public function init(_time, _data, _xPos, _yPos, _sus, _skin, forceSus = false, ?_parent:Note) {
         strumTime = _time;
@@ -17,11 +19,14 @@ class ChartNote extends Note {
         isSustainNote = forceSus;
         _skin = _skin == null ? SkinUtil.curSkin : _skin;
         txt = null;
-        skin = _skin;
 
         alpha = isSustainNote ? 0.6 : 1;
         setPosition(_xPos, _yPos);
-        createGraphic(false);
+        if (skin != _skin || !startInit) {
+            skin = _skin;
+            createGraphic(false);
+            startInit = true;
+        } else updateAnims();
         updateHitbox();
 
         if (isSustainNote) {

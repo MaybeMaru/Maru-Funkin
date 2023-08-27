@@ -37,6 +37,7 @@ import funkin.objects.CustomTransition;
 import funkin.objects.note.Note;
 import funkin.objects.note.NoteSplash;
 import funkin.objects.note.NoteStrum;
+import funkin.objects.note.Event;
 
 //PlayState Others
 import funkin.objects.RatingGroup;
@@ -106,7 +107,6 @@ import flixel.input.keyboard.FlxKey;
 
 import haxe.Json;
 import flixel.graphics.frames.FlxFramesCollection;
-import tea.SScript;
 
 using StringTools;
 #end

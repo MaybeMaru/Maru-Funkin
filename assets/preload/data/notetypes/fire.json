@@ -3,5 +3,6 @@
     "hitHealth": [-0.1, -0.05],
     "missHealth": [0,0],
     "altAnim": "miss",
+    "hitMult": 0.25,
     "skin": "pixel"
 }

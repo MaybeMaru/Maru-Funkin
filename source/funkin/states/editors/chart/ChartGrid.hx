@@ -9,6 +9,8 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     public var notesGroup:FlxTypedGroup<ChartNote>;
     public var sustainsGroup:FlxTypedGroup<ChartNote>;
     public var textGroup:FlxTypedGroup<FunkinText>;
+    public var waveformVocals:ChartWaveform;
+    public var waveformInst:ChartWaveform;
     
     public function new() {
         super();
@@ -17,12 +19,31 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         grid.screenCenter();
         add(grid);
 
+        waveformInst = new ChartWaveform(Conductor.inst, 0x923c70);
+        waveformInst.visible = false;
+        add(waveformInst);
+
+        waveformVocals = new ChartWaveform(Conductor.vocals);
+        //waveformVocals.visible = false;
+        add(waveformVocals);
+
         notesGroup = new FlxTypedGroup<ChartNote>();
         sustainsGroup = new FlxTypedGroup<ChartNote>();
         textGroup = new FlxTypedGroup<FunkinText>();
         add(sustainsGroup);
         add(notesGroup);
         add(textGroup);
+
+        updateWaveform();
+    }
+
+    public function updateWaveform() {
+        waveformInst.soundOffset = Conductor.songOffset[0];
+        waveformVocals.soundOffset = Conductor.songOffset[1];
+        for (i in [waveformInst, waveformVocals]) {
+            i.updateWaveform();
+            i.setPosition(grid.x, grid.y);
+        }
     }
 
     public var sectionData(default, set):SwagSection;
@@ -119,4 +140,10 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 		return obj1.x > obj2.x && obj1.x < obj2.x + obj2.width
 		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
 	}
+
+    public static inline function getGridCoords(obj1:Dynamic, obj2:Dynamic, snapY:Bool = true) {
+        var tileX = obj2.x + Math.floor((obj1.x - obj2.x) / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE;
+        var tileY = snapY ? obj2.y + (Math.floor((obj1.y - obj2.y) / ChartGrid.GRID_SIZE) * ChartGrid.GRID_SIZE) : obj1.y;
+        return new FlxPoint(tileX, tileY);
+    }
 }

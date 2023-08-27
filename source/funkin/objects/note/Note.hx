@@ -9,6 +9,7 @@ typedef NoteTypeJson = {
 	var altAnim:String;
 	var ?skin:String;
 	var showText:Bool;
+    var hitMult:Float;
 }
 
 class NoteUtil {
@@ -21,7 +22,8 @@ class NoteUtil {
 		missHealth: [0.0475, 0.0118],
 		altAnim: '',
 		skin: null,	//should be 'default', but null for the stage skin to load
-		showText: true
+		showText: true,
+        hitMult: 1 // I recommend making this value smaller for fire-like notes
 	}
 
     public static var DEFAULT_NOTE_SKIN:NoteSkinData = {
@@ -72,20 +74,8 @@ class NoteUtil {
 	}
 
     public static function clearSustainCache() {
-        @:privateAccess {
-            if (FlxG.bitmap._cache == null) {
-                FlxG.bitmap._cache = new Map();
-                return;
-            }
-            for (key in FlxG.bitmap._cache.keys()) {
-                if (key.startsWith('sus')) {
-                    var obj = FlxG.bitmap.get(key);
-                    if (obj != null) {
-                        FlxG.bitmap.removeKey(key);
-                        obj.destroy();
-                    }
-                }
-            }
+        for (key in Paths.cachedGraphics.keys()) {
+            if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
         }
     }
 }
@@ -109,17 +99,25 @@ class Note extends FlxSpriteExt {
     var susEnd:FlxSprite;
     var refSprite:FlxSpriteExt;
 
+    public function updateAnims() {
+        var dir = CoolUtil.directionArray[noteData];
+        if (isSustainNote) {
+            susPiece.animation.play('hold$dir', true);
+            susPiece.updateHitbox();
+            susEnd.animation.play('hold$dir-end', true);
+            susEnd.updateHitbox();
+        } else {
+            playAnim('scroll$dir');
+        }
+    }
+
     public function createGraphic(init:Bool = true) {
         var dir = CoolUtil.directionArray[noteData];
 
         if (isSustainNote) {
             susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-            susPiece.animation.play('hold$dir', true);
-            susPiece.updateHitbox();
             susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
-            susEnd.animation.play('hold$dir-end', true);
-            susEnd.updateHitbox();
-            
+
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
                 initSusLength += _off / (NotesGroup.songSpeed * 2);
@@ -128,8 +126,9 @@ class Note extends FlxSpriteExt {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
             animDatas = refSprite.animDatas.copy();
-            playAnim('scroll$dir');
         }
+
+        updateAnims();
 
         scale.set(refSprite.scale.x, refSprite.scale.y);
         updateHitbox();
@@ -169,35 +168,45 @@ class Note extends FlxSpriteExt {
     }
 
     public var pressed:Bool = false;
+    public var startedPress:Bool = false;
+    public var missedPress(default, set):Bool = false;
+    public function set_missedPress(value:Bool) {
+        color = (value && mustHit) ? FlxColor.fromRGB(200,200,200) : FlxColor.WHITE;
+        return missedPress = value;
+    } 
+
     public var inSustain:Bool = false;
     public var approachAngle:Float = 0;
     var strumCenter:Float = 0;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (targetSpr != null) { // Move to strum
-            var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-            strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
-            strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
-            y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
-            x = targetSpr.x - (noteMove * -getSin(approachAngle));
+        if (targetSpr == null) return; // Move to strum
+        var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
+        strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
+        strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
+        y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
+        x = targetSpr.x - (noteMove * -getSin(approachAngle));
 
-            if (isSustainNote) { // Get if the sustain is between pressing bounds
-                angle = approachAngle;
-                flipX = (approachAngle % 360) >= 180;
+        if (isSustainNote) { // Get if the sustain is between pressing bounds
+            angle = approachAngle;
+            flipX = (approachAngle % 360) >= 180;
                 
-                inSustain = Conductor.songPosition >= strumTime && Conductor.songPosition <= strumTime + initSusLength + 17; // lil offset to be sure
-                offset.y = 0;
+            inSustain = getInSustain(20); // lil extra time to be sure
+            offset.y = 0;
 
-                if (Conductor.songPosition >= strumTime && pressed) { // Sustain is being pressed
-                    setSusPressed();
-                }
-            } else {
-                calcHit();
+            if (Conductor.songPosition >= strumTime && pressed && !missedPress) { // Sustain is being pressed
+                setSusPressed();
             }
-
-            active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));//(getPosMill(height * Math.max(scale.y, 1)) + 100));
+        } else {
+            calcHit();
         }
+
+        active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
+    }
+
+    public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
+        return Conductor.songPosition >= strumTime + startExtra && Conductor.songPosition <= strumTime + initSusLength + endExtra;
     }
 
     public function setSusPressed() {
@@ -226,7 +235,7 @@ class Note extends FlxSpriteExt {
     }
 
     public var percentCut:Float = 1;
-    public static inline var susEndHeight:Int = 6; // 0
+    public static inline var susEndHeight:Int = 12; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
@@ -234,12 +243,12 @@ class Note extends FlxSpriteExt {
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
                 var key:String = 'sus$noteData-$_height-$skin';
-                if (FlxG.bitmap.checkCache(key)) { // Save on drawing the graphic more than one time?
-                    frames = FlxG.bitmap.get(key).imageFrame;
+                if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
+                    frames = Paths.getGraphic(key).imageFrame;
                     origin.set(width / 2, 0);
                     return;
                 } else {
-                    makeGraphic(Std.int(susPiece.width), _height, FlxColor.TRANSPARENT, false, 'sus$noteData$_height$skin');
+                    frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
                     origin.set(width / 2, 0);
         
                     // draw piece
@@ -250,7 +259,7 @@ class Note extends FlxSpriteExt {
                     //draw end
                     var endPos = _height - susEnd.height;
                     pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-                    stamp(susEnd, 0, Std.int(endPos));
+                    stamp(susEnd, 0, cast endPos);
                 }
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
@@ -285,8 +294,8 @@ class Note extends FlxSpriteExt {
 			canBeHit = false;
 		}
 		else {
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
-				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset)
+			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset * hitMult) {
+				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset * hitMult)
 					canBeHit = true;
 			}
 			else {
@@ -310,19 +319,18 @@ class Note extends FlxSpriteExt {
             skin = value;
             try { // Prevent null skins
                 skinJson = SkinUtil.getSkinData(skin).noteData;
-                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
             } catch(e) {
                 skin = '_missing_skin';
                 skinJson = SkinUtil.getSkinData(skin).noteData;
-                skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
             }
+            skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
             refSprite = new FlxSpriteExt();
             refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
             refSprite.scale.set(skinJson.scale,skinJson.scale);
             refSprite.updateHitbox();
-            for (anim in skinJson.anims)
-                refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+            
+            for (anim in skinJson.anims) refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
         }
 		return value;
 	}
@@ -334,6 +342,7 @@ class Note extends FlxSpriteExt {
 	public var altAnim:String = '';
 	public var hitHealth:Array<Float> = [0.025, 0.0125];
 	public var missHealth:Array<Float> = [0.0475, 0.02375];
+    public var hitMult:Float = 1;
 
 	public function set_noteType(value:String = 'default'):String {
 		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(value);
@@ -341,6 +350,7 @@ class Note extends FlxSpriteExt {
 		altAnim = noteJson.altAnim;
 		hitHealth = noteJson.hitHealth;
 		missHealth = noteJson.missHealth;
+        hitMult = FlxMath.bound(noteJson.hitMult, 0.01, 1);
 		return noteType = value;
 	}
 }

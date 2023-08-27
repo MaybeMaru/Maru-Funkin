@@ -8,8 +8,8 @@ import funkin.util.song.formats.OsuFormat;
 import funkin.util.song.formats.SmFormat;
 
 typedef SwagSection = {
-	var sectionNotes:Array<Dynamic>;
-	var sectionEvents:Array<Dynamic>;
+	var sectionNotes:Array<Array<Dynamic>>;
+	var sectionEvents:Array<Array<Dynamic>>;
 	var mustHitSection:Bool;
 	var bpm:Float;
 	var changeBPM:Bool;
@@ -35,16 +35,6 @@ class Song {
 		offsets: [0,0],
 		speed: 1,
 	}
-	/*
-		FORMAT IDEAS
-
-		notes: [
-			sectionEvents: [
-				[12345, 'changeBPM', 		100],
-				[67890, 'changeCharacter', 	bf, bf-pixel],
-			]
-		]
-	*/
 
 	public static var DEFAULT_SECTION:SwagSection = {
 		sectionNotes: [],
@@ -67,10 +57,10 @@ class Song {
 			var chartPath:String = Paths.chart(folder, diff, format);
 			if (Paths.exists(chartPath, TEXT)) {
 				switch (format) {
-					case 'json':			return checkSong(parseJson(chartPath));
-					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));
-					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));
-					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));
+					case 'json':			return checkSong(parseJson(chartPath));					// Funkin chart
+					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));		// Osu chart
+					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));		// Stepmania chart
+					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));		// Quaver chart
 				}
 			}
 		}
@@ -81,9 +71,8 @@ class Song {
 	//Check null values and remove unused format variables
 	inline public static function checkSong(?song:SwagSong):SwagSong {
 		song = JsonUtil.checkJsonDefaults(getDefaultSong(), engineCheck(song));
-		for (i in 0...song.notes.length) {
-			song.notes[i] = checkSection(song.notes[i]);
-		}
+		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
+		for (i in song.notes) i = checkSection(i);
 		return song;
 	}
 
@@ -93,9 +82,7 @@ class Song {
 
 	//Fixes charts from other engines
 	inline public static function engineCheck(?song:SwagSong):SwagSong {
-		if (song == null) {
-			return null;
-		}
+		if (song == null) return null;
 
 		//Get special engine variables ready if missing
 		var specialFields:Array<Array<Dynamic>> = [
@@ -120,21 +107,75 @@ class Song {
 					players[playerIndex] = Reflect.field(song, field);
 					Reflect.setField(song, 'players', players);
 					Reflect.deleteField(song, field);
+				case 'events':
+					song = convertPsychChart(song);	
+					Reflect.deleteField(song, field);
 			}
 		}
 		return song;
 	}
 
+	inline public static function convertPsychChart(song:SwagSong) {
+		for (s in song.notes) {
+			s = checkSection();
+			for (n in s.sectionNotes) {
+				if (n[1] < 0) s.sectionEvents.push([n[0], n[2], [n[3], n[4]]]);
+			}
+		}
+		//if (Reflect.field(song, 'events') == null) return;
+		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
+		var events:Array<Array<Dynamic>> = [];
+		for (e in psychEvents) {
+			var eventTime = e[0];
+			var _events:Array<Array<Dynamic>> = e[1];
+			for (i in _events) events.push([eventTime, i[0], [i[1], i[2]]]);
+		}
+
+		for (i in events) {
+			var eventSec = getTimeSection(song, i[0]);
+			checkAddSections(song, eventSec);
+			song.notes[eventSec].sectionEvents.push(i);
+		}
+
+		return song;
+	}
+
+	inline public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
+		var BPM:Float = song.bpm;
+        var time:Float = 0;
+        for (i in 0...section) {
+			checkAddSections(song, i);
+			if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
+			time += Conductor.BEATS_LENGTH * (1000 * 60 / BPM);
+        }
+        return time;
+	}
+
+	inline public static function checkAddSections(song:SwagSong, index:Int) {
+		while(song.notes[index] == null) song.notes.push(getDefaultSection());
+	}
+
+	inline public static function getTimeSection(song:SwagSong, time:Float):Int {
+		var section:Int = 0;
+		var startTime:Float = 0;
+		var endTime:Float = getSectionTime(song, section+1);
+		while (!(time >= startTime && time < endTime)) {
+			section++;
+			startTime = getSectionTime(song, section);
+			endTime = getSectionTime(song, section+1);
+		}
+		return section;
+	}
+
 	//Removes unused variables for smaller size
 	inline public static function optimizeJson(input:SwagSong):SwagSong {
 		var song:SwagSong = JsonUtil.copyJson(input);
-		for (i in 0...song.notes.length) {
-			var sec = song.notes[i];
+		for (sec in song.notes) {
 			if (!sec.changeBPM) {
 				Reflect.deleteField(sec, 'changeBPM');
 				Reflect.deleteField(sec, 'bpm');
 			}
-			/*if (sec.sectionNotes.length <= 0) { // THIS CAUSED SOME BIG BUGS LOL, WOULD BE NICE BUT I DONT WANNA FIX ALL THIS SHIT
+			if (sec.sectionNotes.length <= 0) { // THIS CAUSED SOME BIG BUGS LOL, WOULD BE NICE BUT I DONT WANNA FIX ALL THIS SHIT
 				Reflect.deleteField(sec, 'sectionNotes');
 			} else {
 				for (n in 0...sec.sectionNotes.length) {
@@ -148,7 +189,10 @@ class Song {
 			}
 			if (sec.sectionEvents.length <= 0) {
 				Reflect.deleteField(sec, 'sectionEvents');
-			}*/
+			}
+			if (sec.mustHitSection) {
+				Reflect.deleteField(sec, 'mustHitSection');
+			}
 		}
 		return song;
 	}
@@ -194,7 +238,7 @@ class Song {
 		for (letter in songParts) {
 			var formatLetter:String = letter.toLowerCase();
 			switch (formatLetter) {
-				case ".":		formatLetter = '';
+				case "." | "?": formatLetter = '';
 				case " " | ":":	formatLetter = '-';
 			}
 			returnSong += formatLetter;

@@ -58,14 +58,15 @@ class FlxSpriteExt extends FlxSprite {
 		return this;
 	}
 
+	public var spriteJson:SpriteJson = null;
+
 	public function loadSpriteJson(path:String, folder:String = '', global:Bool = false) {
-		var spriteJson:SpriteJson = JsonUtil.getJson(path, folder, 'images');
+		spriteJson = JsonUtil.getJson(path, folder, 'images');
 		loadJsonInput(spriteJson, folder, global);
 	}
 
 	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String) {
-		var spriteJson:SpriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
-		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, spriteJson);
+		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
 		loadImage(specialImage != null ? specialImage : '$folder${spriteJson.imagePath}', global);
@@ -116,16 +117,20 @@ class FlxSpriteExt extends FlxSprite {
 	}
 
     public function playAnim(animName:String, forced:Bool = false, reversed:Bool = false, frame:Int = 0):Void {
-		if(animOffsets.exists(animName)) {
+		if(existsOffsets(animName)) {
 			specialAnim = false;
 			animation.play(animName, forced, reversed, frame);
 			applyCurOffset(true);
 		}
 	}
 
+	public function getScaleDiff() {
+		return new FlxPoint().set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
+	}
+
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
-			if(animOffsets.exists(animation.curAnim.name)) {
+			if(existsOffsets(animation.curAnim.name)) {
 				var animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
 				if (!animOffset.isZero() || forced) {
 					animOffset.x *= (flippedOffsets ? -1 : 1);
@@ -151,6 +156,10 @@ class FlxSpriteExt extends FlxSprite {
 			indices:animIndices,
 			offsets:animOffsets
 		});
+	}
+
+	public function existsOffsets(anim:String):Bool {
+		return animOffsets.exists(anim);
 	}
 
 	public function getAnimData(anim:String):SpriteAnimation {

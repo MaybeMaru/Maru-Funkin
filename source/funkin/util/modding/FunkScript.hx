@@ -1,37 +1,51 @@
 package funkin.util.modding;
 
+import hscript.Parser;
+import hscript.Interp;
+
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript extends SScript {
+class FunkScript {
+	public static var parser:Parser = new Parser();
+	public var interp:Interp;
+	public var variables(get, never):Map<String, Dynamic>;
+	public function get_variables() return interp.variables;
+
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
 	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
-		if (!exists(method)) {
-			return CONTINUE_FUNCTION;
-		}
-		return callMethod(method, args == null ? [] : args);
+		if (!exists(method)) return CONTINUE_FUNCTION;
+		return tryCall(method, (args == null ? [] : args));
 	}
 
-	public function callMethod(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
-		var call_ =  call(method, args);
-		if (!call_.succeeded) {
-			for (error in call_.exceptions) {
-				if (error != null) ModdingUtil.errorTrace('$scriptID / ${error.toString()}');
-			}
+	public function tryCall(method:String, args:Array<Dynamic>) {
+		var value = null;
+		try {
+			value = Reflect.callMethod(this, get(method), args);
+		} catch(e) {
+			errorTrace(e);
 			return CONTINUE_FUNCTION;
 		}
-		var value = call_.returnValue;
 		return value == null ? CONTINUE_FUNCTION : value;
 	}
 
 	public function new(hscriptCode:String):Void {
-		super();
+		interp = new Interp();
 		implement();
-		doString(hscriptCode);
+		try {
+			execute(hscriptCode);
+		}
+		catch(e) {
+			errorTrace(e);
+		} 
+	}
+
+	public function errorTrace(error:Any) {
+		ModdingUtil.errorTrace('$scriptID / ${Std.string(error)}');
 	}
 
 	public function implement():Void { //Preloaded Variables
@@ -42,9 +56,9 @@ class FunkScript extends SScript {
 
 		//Mau engin
 
-        set('PlayState', PlayState.game);
+        set('PlayState', PlayState.instance);
 		set('GameVars', PlayState); // fuck
-		set('State', MusicBeatState.game);
+		set('State', cast MusicBeatState.instance);
 
 		set('CoolUtil', CoolUtil);
 		set('Conductor', Conductor);
@@ -83,6 +97,7 @@ class FunkScript extends SScript {
 		set('FlxGroup', flixel.group.FlxGroup);
 		set('FlxSound', flixel.sound.FlxSound);
 		set('FlxMath', flixel.math.FlxMath);
+		set('FlxAngle', flixel.math.FlxAngle);
 		set('FlxColor', FlxColorFix); //	xd
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);
@@ -151,13 +166,17 @@ class FunkScript extends SScript {
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
-			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.game.fgSpr.add(spr) : PlayState.game.bgSpr.add(spr);
+			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
+			OnTop ? PlayState.instance.fgSpr.add(spr) : PlayState.instance.bgSpr.add(spr);
+		});
+
+		set('setObjMap', function(object:Dynamic, key:String) {
+			PlayState.instance.objMap.set(key, object);
 		});
 		
 		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
-			PlayState.game.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.game.fgSpr.insert(order, spr) : PlayState.game.bgSpr.insert(order, spr);
+			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
+			OnTop ? PlayState.instance.fgSpr.insert(order, spr) : PlayState.instance.bgSpr.insert(order, spr);
 		});
 
 		set('getSpr', function(key:String):Null<Dynamic> {
@@ -167,8 +186,8 @@ class FunkScript extends SScript {
 		set('getSprOrder', function(key:String):Int {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
-				if (PlayState.game.objMap.exists(sprKey))
-					return ScriptUtil.getGroup(i).members.indexOf(PlayState.game.objMap.get(sprKey));
+				if (PlayState.instance.objMap.exists(sprKey))
+					return ScriptUtil.getGroup(i).members.indexOf(PlayState.instance.objMap.get(sprKey));
 			}
 			ModdingUtil.errorTrace('Sprite not found: $key');
 			return 0;
@@ -176,7 +195,7 @@ class FunkScript extends SScript {
 
 		set('existsSpr', function(key:String):Null<Dynamic> {
 			for (i in ['fg', 'bg']) {
-				if (PlayState.game.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
+				if (PlayState.instance.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
 					return true;
 				}
 			}
@@ -187,22 +206,22 @@ class FunkScript extends SScript {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				var group = ScriptUtil.getGroup(i);
-				if (PlayState.game.objMap.exists(sprKey)) {
+				if (PlayState.instance.objMap.exists(sprKey)) {
 					group.remove(ScriptUtil.getSprite(key));
-					PlayState.game.objMap.remove(sprKey);
+					PlayState.instance.objMap.remove(sprKey);
 				}
 			}
 		});
 
 		set('makeGroup', function(key:String, ?order:Int):Void {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
-			order != null ? PlayState.game.insert(order, newGroup) : PlayState.game.add(newGroup);
-			PlayState.game.objMap.set('_group_$key', newGroup);
+			order != null ? PlayState.instance.insert(order, newGroup) : PlayState.instance.add(newGroup);
+			PlayState.instance.objMap.set('_group_$key', newGroup);
 		});
 
 		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
-			if (PlayState.game.objMap.exists('_group_$key'))
-				return PlayState.game.objMap.get('_group_$key');
+			if (PlayState.instance.objMap.exists('_group_$key'))
+				return PlayState.instance.objMap.get('_group_$key');
 			else {
 				ModdingUtil.errorTrace('Group not found: $key');
 				return null;
@@ -210,13 +229,17 @@ class FunkScript extends SScript {
 		});
 
 		set('existsGroup', function(key:String):Bool {
-			return PlayState.game.objMap.exists('_group_$key');						
+			return PlayState.instance.objMap.exists('_group_$key');						
 		});
 
 		// Script functions
 
 		set('addScript', function(path:String, ?tag:String):Void {
-			ModdingUtil.addScript(path, false, tag);
+			ModdingUtil.addScript(path, tag);
+		});
+
+		set('removeScript', function(tag:String):Void {
+			ModdingUtil.removeScript(tag);
 		});
 
 		set('getScriptVar', function(script:String, key:String):Dynamic {
@@ -232,7 +255,7 @@ class FunkScript extends SScript {
 		});
 
 		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
-			for (i in ModdingUtil.playStateScripts.concat(ModdingUtil.globalScripts)) {
+			for (i in ModdingUtil.scripts) {
 				if (forced || !i.exists(key))
 					i.set(key, _var);
 			}
@@ -281,19 +304,27 @@ class FunkScript extends SScript {
 		});
 
 		set('switchCustomState', function (key:String) {
-			switchCustomState(key);
+			ScriptUtil.switchCustomState(key);
 		});
 	}
 
-	public static function switchCustomState(key:String) {
-		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
-		if (scriptCode.length <= 0) {
-			ModdingUtil.errorTrace('Custom state script not found: $key');
-			return;
-		}
+	public function execute(codeToRun:String):Dynamic {
+		@:privateAccess
+		parser.line = 1;
+		parser.allowTypes = true;
+		return interp.execute(parser.parseString(codeToRun));
+	}
 
-		var state = new CustomState().initScript(scriptCode, key);
-		CoolUtil.switchState(state);
+	public function set(varName:String, varValue:Dynamic):Void {
+		interp.variables.set(varName, varValue);
+	}
+
+	public function get(field:String):Dynamic {
+		return interp.variables.get(field);
+	}
+
+	public function exists(field:String):Bool {
+		return interp.variables.exists(field);
 	}
 }
 
@@ -346,7 +377,7 @@ class CustomState extends MusicBeatState {
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
-		if (FlxG.keys.justPressed.F5) FunkScript.switchCustomState(_scriptKey);
+		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey);
 		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }
 

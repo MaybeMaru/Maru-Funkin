@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="halloweenBg.png" width="2119" height="3238">
+  <SubTexture name="strike0001" x="4" y="4"  width="2111" height="1072" frameX="-0" frameY="-0" frameWidth="2114" frameHeight="1076"/>
+  <SubTexture name="strike0003" x="4" y="1084"  width="2111" height="1072" frameX="-0" frameY="-0" frameWidth="2114" frameHeight="1076"/>
+  <SubTexture name="strike0002" x="4" y="2164"  width="2111" height="1070" frameX="-0" frameY="-0" frameWidth="2114" frameHeight="1076"/>
+</TextureAtlas>

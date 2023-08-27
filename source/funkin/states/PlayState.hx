@@ -4,8 +4,9 @@ import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
 
 class PlayState extends MusicBeatState {
-	public static var game:PlayState;
+	public static var instance:PlayState;
 	public static var clearCache:Bool = true;
+	public static var clearCacheData:Null<CacheClearing> = null;
 
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
@@ -111,22 +112,18 @@ class PlayState extends MusicBeatState {
 	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
-		if (clearCache) CoolUtil.clearCache();
+		clearCache ? CoolUtil.clearCache(clearCacheData) : FlxG.bitmap.clearUnused();
 		clearCache = true;
+		clearCacheData = null;
 
-		game = this;
+		instance = this;
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');
 		SkinUtil.initSkinData();
 
-		if (FlxG.sound.music != null) {
-			FlxG.sound.music.stop();
-		}
-
-		FlxG.camera.active = false;
-		FlxG.camera.visible = false;
-		FlxG.mouse.visible = false;
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new SwagCamera();
 		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;
@@ -159,10 +156,14 @@ class PlayState extends MusicBeatState {
 		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
 		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
+		var GF_POS:FlxPoint = new FlxPoint(400,360);
+		var DAD_POS:FlxPoint = new FlxPoint(100, 450);
+		var BOYFRIEND_POS:FlxPoint = new FlxPoint(770, 450);
+
 		//MAKE CHARACTERS
-		gf = new Character(400, 360, SONG.players[2]);
-		dad = new Character(100, 450,SONG.players[1]);
-		boyfriend = new Character(770, 450, SONG.players[0], true);
+		gf = new Character(GF_POS.x, GF_POS.y, SONG.players[2]);
+		dad = new Character(DAD_POS.x, DAD_POS.y, SONG.players[1]);
+		boyfriend = new Character(BOYFRIEND_POS.x, BOYFRIEND_POS.y, SONG.players[0], true);
 
 		//Cache Gameover Character
 		var deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
@@ -175,15 +176,17 @@ class PlayState extends MusicBeatState {
 		SkinUtil.setCurSkin(stageJsonData.skin);
 		NoteUtil.initTypes();
 
+		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
+		dad.stageOffsets.set(stageJsonData.dadOffsets[0], stageJsonData.dadOffsets[1]);
+		gf.stageOffsets.set(stageJsonData.gfOffsets[0], stageJsonData.gfOffsets[1]);
+
 		//ADD CHARACTER OFFSETS
-		loadCharPos('bf');
-		loadCharPos('dad');
-		loadCharPos('gf');
+		boyfriend.setXY(BOYFRIEND_POS.x, BOYFRIEND_POS.y);
+		dad.setXY(DAD_POS.x, DAD_POS.y);
+		gf.setXY(GF_POS.x, GF_POS.y,);
 
 		//STAGE START CAM OFFSET
-		var camPos:FlxPoint = new FlxPoint();
-		camPos.x -= stageJsonData.startCamOffsets[0];
-		camPos.y -= stageJsonData.startCamOffsets[1];
+		var camPos:FlxPoint = new FlxPoint().set(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -197,13 +200,14 @@ class PlayState extends MusicBeatState {
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
-			for (char in [PlayState.game.boyfriend,PlayState.game.dad,PlayState.game.gf]) {
+			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
+			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].toLowerCase().split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
 
 					if (char.curCharacter == charName) {
-						ModdingUtil.addScript(characterScripts[i]).set('ScriptChar', char);
+						ModdingUtil.addScript(characterScripts[i], '_charScript_${charMap.get(char)}').set('ScriptChar', char);
 						break;
 					}
 				}
@@ -260,25 +264,22 @@ class PlayState extends MusicBeatState {
 			if (note.wasGoodHit) return;
 
 			health += note.hitHealth[0];
-			boyfriend.holdTimer = 0;
 			boyfriend.sing(note.noteData, note.altAnim);
 			notesGroup.inBotplay ? notesGroup.playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm') :
 						notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
 			Conductor.vocals.volume = 1;
 			combo++;
 			popUpScore(note.strumTime, note);
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
-	
-			notesGroup.notes.remove(note, true);
-			note.destroy();
+			notesGroup.removeNote(note);
 		}
 
 		notesGroup.goodSustainPress = function (note:Note) {
 			health += note.hitHealth[1] * (FlxG.elapsed * 5);
-			boyfriend.holdTimer = 0;
 			boyfriend.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
 	
@@ -292,8 +293,8 @@ class PlayState extends MusicBeatState {
 			ModdingUtil.addCall('sustainPress', [note, true]);
 		}
 
-		notesGroup.noteMiss = function(direction:Int = 1, ?noteMissed:Note):Void {
-			if (noteMissed == null) {
+		notesGroup.noteMiss = function(direction:Int = 1, ?note:Note):Void {
+			if (note == null) {
 				health -= 0.04;
 				songScore -= 10;
 				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -304,15 +305,15 @@ class PlayState extends MusicBeatState {
 
 				combo = 0;
 				Conductor.vocals.volume = 0;
-				var healthLoss = noteMissed.missHealth[noteMissed.isSustainNote ? 1 : 0];
-				var healthMult:Float = noteMissed.isSustainNote ? noteMissed.percentCut * (noteMissed.initSusLength / Conductor.stepCrochet) : 1;
+				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
+				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
 				health -= healthLoss * healthMult;
 				songScore -= Std.int(10 * healthMult);
 
 				noteCount++;
 				songMisses++;
 					
-				ModdingUtil.addCall('noteMiss', [noteMissed]);
+				ModdingUtil.addCall('noteMiss', [note]);
 			}
 
 			boyfriend.stunned = true;
@@ -333,21 +334,17 @@ class PlayState extends MusicBeatState {
 
 		notesGroup.opponentNoteHit = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim);
-			dad.holdTimer = 0;
 			Conductor.vocals.volume = 1;
 	
 			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
 	
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
-	
-			notesGroup.notes.remove(note, true);
-			note.destroy();
+			notesGroup.removeNote(note);
 		}
 
 		notesGroup.opponentSustainPress = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim, false);
-			dad.holdTimer = 0;
 			Conductor.vocals.volume = 1;
 	
 			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
@@ -506,6 +503,8 @@ class PlayState extends MusicBeatState {
 
 		var swagCounter:Int = 0;
 		var introSkin:String = SkinUtil.curSkin;
+		for (i in ['3','2','1','Go']) 	Paths.sound('skins/$introSkin/intro$i'); // Cache stuff
+		for (i in ['ready','set','go']) Paths.image('skins/$introSkin/$i');
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
@@ -639,6 +638,7 @@ class PlayState extends MusicBeatState {
 				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
 			}
 		} else if (FlxG.keys.justPressed.SEVEN) {
+			clearCacheData = {sounds: false};
 			switchState(new ChartingState());
 			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		} else if (FlxG.keys.justPressed.EIGHT) {
@@ -704,7 +704,7 @@ class PlayState extends MusicBeatState {
 		var dadMidpointX:Float = dad.getMidpoint().x;
 		var bfMidpointX:Float = boyfriend.getMidpoint().x;
 		var intendedPos:Float = mustHit ? bfMidpointX - boyfriend.camOffsets.x - stageJsonData.bfCamOffsets[0] : dadMidpointX - dad.camOffsets.x - stageJsonData.dadCamOffsets[0];
-		var camOffsets:Array<Int> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
+		var camOffsets:Array<Float> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
 		
 		if (camFollow.x != intendedPos) {
 			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0]);
@@ -768,9 +768,11 @@ class PlayState extends MusicBeatState {
 		PlayState.SONG = Song.loadFromFile(curDifficulty, PlayState.storyPlaylist[0]);
 		Conductor.stop();
 
-		clearCache = false;
-		NoteUtil.clearSustainCache(); // Clear last song note cache
-		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to activate cache clear
+		clearCache = true;
+		clearCacheData = { // Clear last song audio and note cache
+			bitmap: false
+		}
+		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to change cache clear
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
@@ -866,48 +868,42 @@ class PlayState extends MusicBeatState {
 
 	override function destroy():Void {
 		Conductor.setPitch(1, false);
+		Conductor.stop();
 		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
 		FlxG.sound.music = null;
 		ModdingUtil.addCall('destroy');
-		if (clearCache) CoolUtil.clearCache();
+		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		super.destroy();
 	}
 
-	private function loadCharPos(char:String):Void {
+	public function switchChar(type:String, newCharName:String) {
 		var targetChar:Character = boyfriend;
-		var targetOffsets:Array<Int> = stageJsonData.bfOffsets;
-		switch (char.toLowerCase().trim()) {
-			case 'dad': 				targetOffsets = stageJsonData.dadOffsets; targetChar = dad;
-			case 'girlfriend' | 'gf': 	targetOffsets = stageJsonData.gfOffsets; targetChar = gf;
-		}
-		targetChar.x -= targetOffsets[0];
-		targetChar.y -= targetOffsets[1];
-	}
-	
-	private function switchChar(type:String, newCharName:String):Void {
-		var targetChar:Character = boyfriend;
-		var targetOffsets:Array<Int> = stageJsonData.bfOffsets;
-		var targetGroup:FlxTypedSpriteGroup<Dynamic> = boyfriendGroup;
 		switch (type.toLowerCase().trim()) {
-			case 'dad':					targetOffsets = stageJsonData.dadOffsets; targetChar = dad; targetGroup = dadGroup;
-			case 'girlfriend' | 'gf': 	targetOffsets = stageJsonData.gfOffsets; targetChar = gf; targetGroup = gfGroup;
+			case 'dad': targetChar = dad;
+			case 'girlfriend' | 'gf': targetChar = gf;
 		}
 
 		var lastAnim:Null<String> = (targetChar.animation.curAnim != null) ? targetChar.animation.curAnim.name : null;
 		var lastFrame:Int = (lastAnim != null) ? targetChar.animation.curAnim.curFrame : 0;
-		var lastPos:Array<Float> = [targetChar.OG_X + targetOffsets[0], targetChar.OG_Y + targetOffsets[1]];
+		var targetIcon = targetChar.iconSpr;
 
 		targetChar.visible = false;
-		var newChar:Character = new Character(lastPos[0], lastPos[1], newCharName, true);
+		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, true);
+		newChar.group = targetChar.group;
+		newChar.iconSpr = targetChar.iconSpr;
+		newChar.holdTimer = targetChar.holdTimer;
+		newChar.specialAnim = targetChar.specialAnim;
+		targetChar.stageOffsets.copyTo(newChar.stageOffsets);
+		newChar.updatePosition();
 		if (lastAnim != null) newChar.playAnim(lastAnim, true, false, lastFrame);
-		targetGroup.add(newChar);
+		if (targetIcon != null) targetIcon.makeIcon(newChar.icon);
+		targetChar.group.add(newChar);
 
 		switch (type.toLowerCase().trim()) {
-			case 'dad': 				iconP2.makeIcon(newChar.icon); dad = newChar;
-			case 'girlfriend' | 'gf': 	gf = newChar;
-			default: 					iconP1.makeIcon(newChar.icon); boyfriend = newChar;
+			case 'dad': dad = newChar;
+			case 'girlfriend' | 'gf': gf = newChar;
+			default: boyfriend = newChar;
 		}
-		loadCharPos(type);
 		cameraMovement();
 	}
 

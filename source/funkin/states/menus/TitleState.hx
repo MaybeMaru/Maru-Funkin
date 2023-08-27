@@ -83,7 +83,8 @@ class TitleState extends MusicBeatState {
 	var logoBump:FunkinSprite;
 
 	function makeIntroShit(index:Int):Void {
-		var nuggets:IntroPart = introJson.beats[index];
+		var nuggets:IntroPart = introJson.beats[Std.int(Math.max(index, 0))];
+		if (nuggets == null) return;
 		if (nuggets.sprite != null) {
 			var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height/2]);
 			introSpr.setGraphicSize(Std.int(introSpr.width*0.7));
@@ -173,12 +174,7 @@ class TitleState extends MusicBeatState {
 		if (getKey('UI_RIGHT'))timeElp += elapsed;
 		Shader.setFloat('colorSwap', 'iTime', timeElp);
 
-		super.update(elapsed); // TODO fix random crash, error comes from here
-		/*
-			if someone knows where this comes from, HELP
-			error doesnt appear on debug builds, and apparently appears at random??
-			so i cant get the error path and im dying inside :cries:
-		*/
+		super.update(elapsed);
 	}
 
 	override function beatHit():Void {
@@ -217,6 +213,9 @@ class TitleState extends MusicBeatState {
 		],
 		'lock' => [ // lock code
 			FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+		],
+		'keoiki' => [ // keoiki code
+			FlxKey.K,FlxKey.E,FlxKey.O,FlxKey.I, FlxKey.K,FlxKey.I,
 		]
 	];
 
@@ -225,26 +224,24 @@ class TitleState extends MusicBeatState {
 			codeIndex++;
 			if (codeIndex >= codes.get(curCode).length) {
 				codeIndex = 0;
+				CoolUtil.playSound('confirmMenu', 0.7);
 				switch(curCode) {
 					case 'konami':
-						if (!CoolUtil.debugMode) {
-							CoolUtil.playSound('confirmMenu', 0.7);
-							CoolUtil.debugMode = true;
-						}
+						CoolUtil.debugMode = true;
 					case 'unlock':
 						WeekSetup.getWeekList();
-						CoolUtil.playSound('confirmMenu', 0.7);
 						for (week in WeekSetup.vanillaWeekNameList) {
 							Highscore.setWeekUnlock(week, true);
 						}
 					case 'lock':
 						WeekSetup.getWeekList();
-						CoolUtil.playSound('confirmMenu', 0.7);
 						for (week in WeekSetup.vanillaWeekNameList) {
 							if (!WeekSetup.weekDataMap.get(week).startUnlocked) {
 								Highscore.setWeekUnlock(week, false);
 							}
 						}
+					case 'keoiki':
+						CustomTransition.set(null, 0.6, 0.4, Paths.image('keoiki'));
 				}
 			}
 		} else if (FlxG.keys.justPressed.ANY) {

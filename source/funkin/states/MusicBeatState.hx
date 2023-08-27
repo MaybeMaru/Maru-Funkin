@@ -3,7 +3,7 @@ package funkin.states;
 import flixel.addons.ui.FlxUIState;
 
 class MusicBeatState extends FlxUIState {
-	public static var game:MusicBeatState;
+	public static var instance:MusicBeatState;
 	public static var curState:String;
 	public var scriptConsole:ScriptConsole;
 
@@ -17,7 +17,7 @@ class MusicBeatState extends FlxUIState {
 	}
 
 	override function create():Void {
-		game = this;
+		instance = this;
 		curState = CoolUtil.formatClass(this, false);
 		super.create();
 		scriptConsole = new ScriptConsole();
@@ -29,16 +29,17 @@ class MusicBeatState extends FlxUIState {
 		transition.exitTrans();
 
 		//State Scripts
-		ModdingUtil.clearScripts(true);
+		if (curState == "funkin.states.PlayState") return;
+		ModdingUtil.clearScripts();
 		var globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
 		var curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
-		for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script, true);
-		ModdingUtil.addCall('stateCreate', [], true);
+		for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script);
+		ModdingUtil.addCall('stateCreate', []);
 	}
 
 	override function update(elapsed:Float):Void {
 		handleSteps();
-		ModdingUtil.addCall('stateUpdate', [elapsed], true);
+		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		if (FlxG.keys.justPressed.F1) scriptConsole.show = !scriptConsole.show;
 		super.update(elapsed);
 	}
@@ -76,21 +77,21 @@ class MusicBeatState extends FlxUIState {
 	}
 
 	public function stepHit():Void {
-		ModdingUtil.addCall('stateStepHit', [curStep], true);
+		ModdingUtil.addCall('stateStepHit', [curStep]);
 		if (curStep % Conductor.BEATS_LENGTH == 0) {
 			beatHit();
 		}
 	}
 
 	public function beatHit():Void {
-		ModdingUtil.addCall('stateBeatHit', [curBeat], true);
+		ModdingUtil.addCall('stateBeatHit', [curBeat]);
 		if (curBeat % Conductor.BEATS_LENGTH == 0) {
 			sectionHit();
 		}
 	}
 
 	public function sectionHit():Void {
-		ModdingUtil.addCall('stateSectionHit', [curSection], true);
+		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
 
 	//Just a quicker way to get settings
@@ -111,8 +112,7 @@ class MusicBeatState extends FlxUIState {
 class TransitionSubstate extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		if (MusicBeatState.game == null) return;
-		if (MusicBeatState.game.transition == null) return;
-		MusicBeatState.game.transition.update(elapsed);
+		MusicBeatState.instance == null ? return : MusicBeatState.instance.transition == null ? return :
+		MusicBeatState.instance.transition.update(elapsed);
 	}
 }

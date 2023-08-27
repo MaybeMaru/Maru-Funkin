@@ -12,6 +12,7 @@ class NotesGroup extends FlxGroup
 
     public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
+	public var events:Array<Event> = [];
 	public var strumLine:FlxSprite;
 
     public var skipStrumIntro:Bool = false;
@@ -44,8 +45,7 @@ class NotesGroup extends FlxGroup
 			if (note.wasGoodHit) return;
 			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 			note.wasGoodHit = true;
-			notes.remove(note, true);
-			note.destroy();
+			removeNote(note);
 
 			if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
 				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
@@ -58,8 +58,7 @@ class NotesGroup extends FlxGroup
 		}
 		opponentNoteHit = function (note:Note) {
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
-			notes.remove(note, true);
-			note.destroy();
+			removeNote(note);
 		}
 		opponentSustainPress = function (note:Note) {
 			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
@@ -122,6 +121,7 @@ class NotesGroup extends FlxGroup
 		ModdingUtil.addCall('generateSong', [songData]);
 
 		unspawnNotes = [];
+		events = [];
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 	
@@ -133,8 +133,8 @@ class NotesGroup extends FlxGroup
 	
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
-				var strumTime:Int = songNotes[0];
-				var sustainLength:Null<Int> = songNotes[2];
+				var strumTime:Float = songNotes[0];
+				var sustainLength:Null<Float> = songNotes[2];
 				if ((sustainLength != null ? strumTime + sustainLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
 				var noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
 				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
@@ -161,6 +161,7 @@ class NotesGroup extends FlxGroup
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
 						newSustain.parentNote = newNote;
+						newNote.childNote = newSustain;
 						unspawnNotes.push(newSustain);
 					}
 					else newSustain.destroy();  // clear too small sustains
@@ -171,11 +172,19 @@ class NotesGroup extends FlxGroup
 					songNotetypes.push(noteType);
 				}
 			}
+
+			for (songEvents in section.sectionEvents) {
+				var strumTime:Float = songEvents[0];
+				var eventName:String = songEvents[1];
+				var eventValues:Array<Dynamic> = songEvents[2];
+
+				var event:Event = new Event(strumTime, eventName, eventValues);
+				events.push(event);
+			}
 		}
 
-		unspawnNotes.sort(function(Obj1:Note, Obj2:Note):Int {
-			return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
-		});
+		unspawnNotes.sort(function(Obj1:Note, Obj2:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
+		events.sort(function(Obj1:Event, Obj2:Event):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
 		
 		//Notetype Scripts
 		var notetypeScripts:Array<String> = ModdingUtil.getScriptList('data/notetypes');
@@ -201,10 +210,15 @@ class NotesGroup extends FlxGroup
         if (callback != null) Reflect.callMethod(this, callback, args != null ? args : []); // Prevent null
     }
 
+	public function removeNote(note:Note) {
+		notes.remove(note, true);
+		note.destroy();
+	}
+
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
 		if (Conductor.inst.playing) {
-			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length) { // Prevent repeating vocals
+			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length && isPlayState) { // Prevent repeating vocals
 				Conductor.vocals.volume = 0;
 			}
 		}
@@ -218,7 +232,7 @@ class NotesGroup extends FlxGroup
             return;
         }
 
-        var game = PlayState.game;
+        var game = PlayState.instance;
         if ((game.startingSong || Conductor.inst.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
             Conductor.songPosition += FlxG.elapsed * 1000;
             if (game.startedCountdown && game.startingSong) {
@@ -247,6 +261,16 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
+	function checkEvents() {
+		if (events[0] != null) {
+			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
+				var dunceEvent:Event = events[0];
+				ModdingUtil.addCall('eventHit', [dunceEvent]);
+				events.splice(events.indexOf(dunceEvent), 1);
+			}
+		}
+	}
+
 	public function checkCpuNote(note:Note) {
 		if ((note.mustPress && !inBotplay) || (!note.mustPress && !dadBotplay)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
@@ -262,26 +286,31 @@ class NotesGroup extends FlxGroup
 
 	public function checkMissNote(note:Note) {
 		if (note.active) return;
-		if (note.mustPress && note.mustHit) {
+		if (note.mustPress && note.mustHit && !note.isSustainNote)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
-		}
-		notes.remove(note, true);
-		note.destroy();
+		removeNote(note);
+	}
+
+	public function sustainMiss(note:Note) {
+		note.missedPress = true;
+		if (note.mustHit)
+			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 	}
 
     override function update(elapsed:Float) {
         super.update(elapsed);
         updateConductor(elapsed);
 
-		if (!generatedMusic) return; // Stuff that needs notes
+		if (!generatedMusic) return; // Stuff that needs notes / events
 		spawnNotes();
+		checkEvents();
 		notes.forEachAlive(function(daNote:Note) {
 			checkCpuNote(daNote);
 			checkMissNote(daNote);
 		});
 
         if (isPlayState) {
-            if (PlayState.game.inCutscene) return; // No controls in cutscenes >:(
+            if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
     }
@@ -305,8 +334,27 @@ class NotesGroup extends FlxGroup
 
 			notes.forEachAlive(function(daNote:Note) {
 				if (daNote.isSustainNote) { // Handle sustain notes
-					daNote.pressed = holdingArray[daNote.noteData] && daNote.inSustain && daNote.mustPress;
-                    if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
+					if (daNote.mustPress) {
+						daNote.pressed = false;
+						if (!daNote.missedPress) {
+							if ((Conductor.songPosition > daNote.strumTime + Conductor.safeZoneOffset * daNote.hitMult) && !daNote.startedPress) {
+								sustainMiss(daNote);
+								return;
+							}
+							if (daNote.startedPress) {
+								var holding = holdingArray[daNote.noteData];
+								var pressing = holding && daNote.inSustain && daNote.mustPress;
+								if (!holding) { // Sustain stopped being pressed
+									sustainMiss(daNote); 
+									return;
+								}
+								else {
+									daNote.pressed = pressing; // Pressed sustain
+									if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
+								}
+							}
+						}
+					}
 				}
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {
@@ -369,9 +417,9 @@ class NotesGroup extends FlxGroup
 		}
 
         if (!isPlayState) return;
-        if (PlayState.game.boyfriend == null) return;
+        if (PlayState.instance.boyfriend == null) return;
 
-        var bf = PlayState.game.boyfriend;
+        var bf = PlayState.instance.boyfriend;
 		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
 		&& bf.animation.curAnim.name.startsWith('sing')
 		&& !bf.animation.curAnim.name.endsWith('miss'));
@@ -393,7 +441,7 @@ class NotesGroup extends FlxGroup
 		var leStrum:NoteStrum = strumLineNotes.members[data];
 		if (leStrum != null) {
 			leStrum.playStrumAnim(anim, forced);
-			leStrum.staticTime = Conductor.stepCrochet/1000;
+			leStrum.staticTime = Conductor.stepCrochetMills;
 		}
 	}
 

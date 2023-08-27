@@ -28,6 +28,7 @@ class Character extends FlxSpriteExt {
 
 	//	Offsets
 	public var worldOffsets:FlxPoint;
+	public var stageOffsets:FlxPoint;
 	public var camOffsets:FlxPoint;
 	public var OG_X:Float = 0;
 	public var OG_Y:Float = 0;
@@ -49,18 +50,21 @@ class Character extends FlxSpriteExt {
 	public var forceDance:Bool = true;
 	public var group:FlxTypedSpriteGroup<Dynamic> = null;
 
-	public static function getCharData(char:String = 'bf'):CharacterJson {
+	inline public static function getCharData(char:String = 'bf'):CharacterJson {
 		var charJson:CharacterJson = JsonUtil.getJson(char, 'characters');
 		charJson = JsonUtil.checkJsonDefaults(DEFAULT_CHARACTER, charJson);
 		return charJson;
 	}
 
+	public function updatePosition() {
+		setXY(OG_X, OG_Y);	
+	}
 	public function setX(value:Float = 0):Void {
-		x = value - worldOffsets.x;
+		x = value - worldOffsets.x - stageOffsets.x;
 		OG_X = value;
 	}
 	public function setY(value:Float = 0):Void {
-		y = value - worldOffsets.y;
+		y = value - worldOffsets.y - stageOffsets.y;
 		OG_Y = value;
 	}
 	public function setXY(valueX:Float = 0, valueY:Float = 0):Void {
@@ -86,10 +90,9 @@ class Character extends FlxSpriteExt {
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false, ?debugMode:Bool = false, ?inputJson:CharacterJson):Void {
 		super(x, y);
-		worldOffsets = new FlxPoint();
-		worldOffsets.set(0,0);
-		camOffsets = new FlxPoint();
-		camOffsets.set(0,0);
+		worldOffsets = new FlxPoint().set(0,0);
+		stageOffsets = new FlxPoint().set(0,0);
+		camOffsets = new FlxPoint().set(0,0);
 		curCharacter = character;
 		antialiasing = true;
 		this.isPlayer = isPlayer;
@@ -123,7 +126,8 @@ class Character extends FlxSpriteExt {
 
 	public function flipCharOffsets():Void {
 		flippedOffsets = true;
-		worldOffsets.x *= -1;
+		//worldOffsets.x *= -1; IDK
+		//stageOffsets.x *= -1;
 		camOffsets.x *= -1;
 		if (!debugMode) {
 			switchAnim('danceLeft', 'danceRight');
@@ -161,22 +165,29 @@ class Character extends FlxSpriteExt {
 	public var holdFrame:Int = 2;
 
 	public function sing(noteData:Int = 0, altAnim:String = '', hit:Bool = true):Void {
+		var singAnim = 'sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim';
+		if (!existsOffsets(singAnim)) return;
+		
+		holdTimer = 0;
 		if (hit) {
-			playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+			playAnim(singAnim, true);
 			_singHoldTimer = 0;
 		} else {
 			_singHoldTimer += FlxG.elapsed;
 			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {
-				playAnim('sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim', true);
+				playAnim(singAnim, true);
 				_singHoldTimer = 0;
 			}
 		}
 	}
 
 	public function hey():Void {
-		playAnim(isGF ? 'cheer' : 'hey', true);
+		var heyAnim = isGF ? 'cheer' : 'hey';
+		if (!existsOffsets(heyAnim)) return;
+
+		playAnim(heyAnim, true);
 		specialAnim = true;
-		new FlxTimer().start(Conductor.stepCrochet * 0.001 * Conductor.STEPS_LENGTH, function(tmr:FlxTimer) {
+		new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			specialAnim = false;
 			dance();
 		});

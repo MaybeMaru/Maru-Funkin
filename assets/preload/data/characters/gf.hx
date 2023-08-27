@@ -25,7 +25,7 @@ function startTimer():Void {
 function updatePost():Void {
     if (ScriptChar.animation.curAnim != null) {
         if (ScriptChar.forceDance) {
-            ScriptChar.forceDance = !StringTools.startsWith(ScriptChar.animation.curAnim.name, 'hair');
+            ScriptChar.forceDance = !ScriptChar.animation.curAnim.name.startsWith('hair');
         }
 
         switch (ScriptChar.animation.curAnim.name) {
