@@ -337,7 +337,7 @@ class NotesGroup extends FlxGroup
 					if (daNote.mustPress) {
 						daNote.pressed = false;
 						if (!daNote.missedPress) {
-							if (daNote.getInSustain(0, Conductor.safeZoneOffset * 0.5) && !daNote.startedPress) {
+							if ((Conductor.songPosition > daNote.strumTime + Conductor.safeZoneOffset * daNote.hitMult) && !daNote.startedPress) {
 								sustainMiss(daNote);
 								return;
 							}
