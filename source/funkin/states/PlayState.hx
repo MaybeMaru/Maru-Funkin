@@ -200,13 +200,14 @@ class PlayState extends MusicBeatState {
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
+			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
 			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].toLowerCase().split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
 
 					if (char.curCharacter == charName) {
-						ModdingUtil.addScript(characterScripts[i]).set('ScriptChar', char);
+						ModdingUtil.addScript(characterScripts[i], '_charScript_${charMap.get(char)}').set('ScriptChar', char);
 						break;
 					}
 				}

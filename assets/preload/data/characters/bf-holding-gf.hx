@@ -8,6 +8,7 @@ function createPost():Void {
         gfIcon = new HealthIcon('gf');
         gfIcon.cameras = [PlayState.camHUD];
         PlayState.iconGroup.add(gfIcon);
+        setObjMap(gfIcon, 'gfIcon');
     
         ScriptChar.iconSpr.staticSize = 0.75;
     }

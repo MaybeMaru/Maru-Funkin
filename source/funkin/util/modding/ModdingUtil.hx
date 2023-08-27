@@ -73,6 +73,13 @@ class ModdingUtil {
         return script;
     }
 
+    inline public static function removeScript(tag:String) {
+        if (!scriptsMap.exists(tag)) return;
+        var script = scriptsMap.get(tag);
+        scriptsMap.remove(tag);
+        scripts.remove(script);
+    }
+
     inline public static function setModFolder(modName:String, activated:Bool):Void {
         modFoldersMap.set(modName, activated);
         SaveData.flushData();

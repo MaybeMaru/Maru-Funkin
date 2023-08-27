@@ -169,6 +169,10 @@ class FunkScript {
 			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.instance.fgSpr.add(spr) : PlayState.instance.bgSpr.add(spr);
 		});
+
+		set('setObjMap', function(object:Dynamic, key:String) {
+			PlayState.instance.objMap.set(key, object);
+		});
 		
 		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
 			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
@@ -232,6 +236,10 @@ class FunkScript {
 
 		set('addScript', function(path:String, ?tag:String):Void {
 			ModdingUtil.addScript(path, tag);
+		});
+
+		set('removeScript', function(tag:String):Void {
+			ModdingUtil.removeScript(tag);
 		});
 
 		set('getScriptVar', function(script:String, key:String):Dynamic {

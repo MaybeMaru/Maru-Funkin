@@ -1,5 +1,6 @@
 var cutsceneTankman_Body:FunkinSprite;
 var cutsceneTankman_Head:FunkinSprite;
+var gfFaceplant:Bool = false;
 
 // Cutscene stuff
 var demonGf:FunkinSprite;
@@ -7,6 +8,7 @@ var john:FunkinSprite;
 var steve:FunkinSprite;
 var demonBg:FlxSprite;
 var beef:FlxSpriteExt;
+var geef:FunkinSprite;
 
 var loadedCutsceneAssets:Bool = false;
 
@@ -62,9 +64,26 @@ function create()
         setShaderFloat('demon_blur', 'u_size', 0);
         setShaderFloat('demon_blur', 'u_alpha', 0);
 
-        PlayState.boyfriend.visible = false;
-        beef = new FlxSpriteExt(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
-        PlayState.boyfriendGroup.add(beef);
+        gfFaceplant = FlxG.random.bool(10);
+        if (gfFaceplant) {
+            geef = new FunkinSprite("cutscenes/faceplantGf", [600,500], [1.1,1.1]);
+            geef.addAnim('faceplant', 'girlfriend face plant');
+            geef.visible = false;
+            addSpr(geef, 'gfFaceplant', true);
+        } else {
+            PlayState.boyfriend.visible = false;
+            beef = new FlxSpriteExt(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
+            PlayState.boyfriendGroup.add(beef);
+        }
+    }
+}
+
+function createPost() {
+    if (gfFaceplant && GameVars.isStoryMode) {
+        removeScript('_charScript_bf');
+        PlayState.switchChar('bf', 'bf'); // make sure its not bf holding gf
+        PlayState.boyfriend.iconSpr.staticSize = 1;
+        PlayState.objMap.get('gfIcon').alpha = 0;
     }
 }
 
@@ -235,13 +254,18 @@ function updatePost()
         
                 if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) { // Catch Geef
                     catchedGF = true;
-                    beef.visible = false;
-                    PlayState.boyfriend.visible = true;
-                    PlayState.boyfriend.playAnim('catch');
-                    new FlxTimer().start(1, function(tmr) {
-                        PlayState.boyfriend.dance();
-                        PlayState.boyfriend.animation.curAnim.finish();
-                    });
+                    if (gfFaceplant) {
+                        geef.visible = true;
+                        geef.playAnim('faceplant', true);
+                    } else {
+                        beef.visible = false;
+                        PlayState.boyfriend.visible = true;
+                        PlayState.boyfriend.playAnim('catch');
+                        new FlxTimer().start(1, function(tmr) {
+                            PlayState.boyfriend.dance();
+                            PlayState.boyfriend.animation.curAnim.finish();
+                        });
+                    }
                 }
             }
         }
