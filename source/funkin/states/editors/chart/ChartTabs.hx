@@ -292,7 +292,13 @@ class ChartTabs extends FlxUITabMenu {
 
 		var types:Array<String> = JsonUtil.getJsonList('events');
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
-			setCurEvent(types[Std.parseInt(type)]);
+			var newEvent = types[Std.parseInt(type)];
+			if (curEvent != newEvent) {
+				var _defValues = EventUtil.getEventData(newEvent).values.copy();
+				eventValueTab.setValues(_defValues);
+				setCurEvent(newEvent);
+				ChartingState.instance.setEventData(_defValues, newEvent); // Set defaults
+			}
 		});
 		setCurEvent(types[0]);
 		eventsDropDown.selectedLabel = types[0];
@@ -348,19 +354,19 @@ class ChartTabs extends FlxUITabMenu {
 
 		var button_clearSongNotes:FlxButton = new FlxButton(250, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
 		button_clearSongNotes.color = FlxColor.RED;
-		button_clearSongNotes.scale.set(1.25,1.25);
+		button_clearSongNotes.scale.set(1.3,1.25);
 		button_clearSongNotes.label.color = FlxColor.WHITE;
 		button_clearSongNotes.label.fieldWidth = 0;
 
 		var button_clearSongEvents:FlxButton = new FlxButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Events", ChartingState.instance.clearSongEvents);
 		button_clearSongEvents.color = FlxColor.RED;
-		button_clearSongEvents.scale.set(1.25,1.25);
+		button_clearSongEvents.scale.set(1.3,1.25);
 		button_clearSongEvents.label.color = FlxColor.WHITE;
 		button_clearSongEvents.label.fieldWidth = 0;
 
 		var button_clearSongFull:FlxButton = new FlxButton(button_clearSongEvents.x, button_clearSongEvents.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
 		button_clearSongFull.color = FlxColor.RED;
-		button_clearSongFull.scale.set(1.25,1.25);
+		button_clearSongFull.scale.set(1.3,1.25);
 		button_clearSongFull.label.color = FlxColor.WHITE;
 		button_clearSongFull.label.fieldWidth = 0;
 

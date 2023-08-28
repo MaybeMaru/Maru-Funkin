@@ -266,26 +266,7 @@ class Note extends FlxSpriteExt {
         var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
-                var key:String = 'sus$noteData-$_height-$skin';
-                if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
-                    frames = Paths.getGraphic(key).imageFrame;
-                    origin.set(width / 2, 0);
-                    return;
-                } else {
-                    updateSprites();
-                    frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
-                    origin.set(width / 2, 0);
-        
-                    // draw piece
-                    var loops = Math.floor(_height / susPiece.height) + 1;
-                    for (i in 0...loops)
-                        stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
-            
-                    //draw end
-                    var endPos = _height - susEnd.height;
-                    pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-                    stamp(susEnd, 0, cast endPos);
-                }
+                drawSustainCached(_height);
             } else {// Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
@@ -293,6 +274,29 @@ class Note extends FlxSpriteExt {
             }
         } else {
             kill();
+        }
+    }
+
+    public function drawSustainCached(_height:Int) {
+        var key:String = 'sus$noteData-$_height-$skin';
+        if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
+            frames = Paths.getGraphic(key).imageFrame;
+            origin.set(width / 2, 0);
+            return;
+        } else {
+            updateSprites();
+            frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
+            origin.set(width / 2, 0);
+        
+            // draw piece
+            var loops = Math.floor(_height / susPiece.height) + 1;
+            for (i in 0...loops)
+                    stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
+            
+            //draw end
+            var endPos = _height - susEnd.height;
+            pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
+            stamp(susEnd, 0, cast endPos);
         }
     }
 

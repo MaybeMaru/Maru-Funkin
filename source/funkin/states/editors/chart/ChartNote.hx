@@ -35,7 +35,7 @@ class ChartNote extends Note {
             updateHitbox();
             
             var _height = Math.floor(((FlxMath.remapToRange(_sus, 0, Conductor.stepCrochet * 16, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH)) + ChartGrid.GRID_SIZE / 2) / _scale);
-            drawSustain(true, _height);
+            drawSustainCached(_height);
             updateHitbox();
             offset.x -= ChartGrid.GRID_SIZE / 2 - width / 2.125;
             offset.y -= ChartGrid.GRID_SIZE / 2;

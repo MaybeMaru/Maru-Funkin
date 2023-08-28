@@ -783,12 +783,10 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
 		var score:Int = 0;
-		var setupSplash:Bool = false;
 		var noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
 
 		switch (noteRating) {
 			case 'sick':
-				setupSplash = true;
 				score = 350;
 				noteTotal++;
 			case 'good':
@@ -806,11 +804,8 @@ class PlayState extends MusicBeatState {
 
 		songScore += score;
 
-		if (setupSplash) {
-			var splash:NoteSplash = notesGroup.grpNoteSplashes.recycle(NoteSplash);
-			splash.setupNoteSplash(daNote.x, daNote.y, daNote.noteData, daNote);
-			notesGroup.grpNoteSplashes.add(splash);
-		}
+		if (noteRating == 'sick')
+			notesGroup.spawnSplash(daNote);
 
 		if (!getPref('stack-rating')) {
 			for (rating in ratingGroup)

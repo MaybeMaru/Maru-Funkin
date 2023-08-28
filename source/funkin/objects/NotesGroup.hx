@@ -29,6 +29,12 @@ class NotesGroup extends FlxGroup
     public var inBotplay:Bool = false;
 	public var dadBotplay:Bool = true;
 	public var isPlayState:Bool = true;
+
+	public function spawnSplash(note:Note) {
+		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+		splash.setupNoteSplash(note.x, note.y, note.noteData, note);
+		grpNoteSplashes.add(splash);
+	}
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
@@ -46,12 +52,11 @@ class NotesGroup extends FlxGroup
 			if (note.wasGoodHit) return;
 			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
 			removeNote(note);
 
 			if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
-				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-				splash.setupNoteSplash(note.x, note.y, note.noteData, note);
-				grpNoteSplashes.add(splash);
+				spawnSplash(note);
 			}
 		}
 		goodSustainPress = function (note:Note) {

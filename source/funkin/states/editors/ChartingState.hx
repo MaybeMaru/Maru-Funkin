@@ -364,6 +364,15 @@ class ChartingState extends MusicBeatState {
         selectedEventObject.updateText();
     }
 
+    public function setEventData(newData:Array<Dynamic>, name:String) {
+        if (selectedEvent == null || selectedEventObject == null) return;
+        selectedEvent[1] = name;
+        selectedEvent[2] = newData;
+        selectedEventObject.data.values = selectedEvent[2].copy();
+        selectedEventObject.data.name = selectedEvent[1];
+        selectedEventObject.updateText();
+    }
+
     public function removeEvent(event:ChartEvent) {
         var data = eventsGrid.getEventData(event);
         if (data == selectedEvent || event == selectedEventObject) {

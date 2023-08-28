@@ -536,7 +536,7 @@ class AnimationDebug extends MusicBeatState {
 		if (!checkFocus()) {
 			if (FlxG.keys.justPressed.ENTER){
 				openSubState(new PromptSubstate('Are you sure you want to exit?\nUnsaved characters\nwont be recovered\n\n\nPress back to cancel', function () {
-					FlxG.switchState(new PlayState());
+					switchState(new PlayState());
 				}));
 			}
 

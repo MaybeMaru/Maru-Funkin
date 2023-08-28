@@ -18,6 +18,7 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
 
     public function setValues(values:Array<Dynamic>) {
         clearGroup();
+        getValuesArray = [];
         curValues = values.copy();
 
         var i:Int = 1;
