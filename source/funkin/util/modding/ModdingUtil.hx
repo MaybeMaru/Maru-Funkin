@@ -16,11 +16,11 @@ class ModdingUtil {
     
     //Scripts
     public static var scripts:Array<FunkScript> = [];
-    public static var scriptsMap:Map<String, FunkScript>;
+    public static var scriptsMap:Map<String, FunkScript> = [];
 
     inline public static function clearScripts():Void {
-        scriptsMap = new Map<String, FunkScript>();
-        FunkScript.globalVariables = new Map<String, Dynamic>();
+        scriptsMap.clear();
+        FunkScript.globalVariables.clear();
         scripts = [];
     }
 

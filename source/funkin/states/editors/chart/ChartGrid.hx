@@ -15,6 +15,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     public function new() {
         super();
         grid = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, true, 0xff7c7c7c, 0xff6e6e6e);
+        for (i in 0...3) grid.pixels.fillRect(new Rectangle(0, GRID_SIZE*Conductor.BEATS_LENGTH*(i+1)-1, grid.width, 2), 0xff505050);
         grid.pixels.fillRect(new Rectangle(grid.width / 2 - 1, 0, 2, grid.height), FlxColor.BLACK);
         grid.screenCenter();
         add(grid);

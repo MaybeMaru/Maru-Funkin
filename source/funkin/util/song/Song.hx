@@ -77,7 +77,19 @@ class Song {
 	}
 
 	inline public static function checkSection(?section:SwagSection):SwagSection {
-		return JsonUtil.checkJsonDefaults(getDefaultSection(), section);
+		section = JsonUtil.checkJsonDefaults(getDefaultSection(), section);
+		var foundNotes:Map<String, Bool> = [];
+		var uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
+		for (i in section.sectionNotes) {
+			var key = '${Math.floor(i[0])}-${i[1]}';
+			if (!foundNotes.exists(key)) {
+				foundNotes.set(key, true);
+				uniqueNotes.push(i);
+			}// else trace('found duplicate ' + key);
+		}
+		section.sectionNotes = uniqueNotes;
+		foundNotes.clear();
+		return section;
 	}
 
 	//Fixes charts from other engines

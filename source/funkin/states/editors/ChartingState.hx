@@ -169,7 +169,7 @@ class ChartingState extends MusicBeatState {
         Conductor.songPosition = getSecTime(sectionIndex); // Bpm conductor crap
         Conductor.autoSync();
         checkBPM();
-        
+
         mainGrid.setData(SONG.notes[sectionIndex], sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
         eventsGrid.setData(SONG.notes[sectionIndex], sectionIndex);
