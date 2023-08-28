@@ -9,9 +9,16 @@ typedef BPMChangeEvent = {
 class Conductor {
 	inline public static var NOTE_DATA_LENGTH:Int = 4;
 	inline public static var STRUMS_LENGTH:Int = NOTE_DATA_LENGTH * 2;
-	inline public static var BEATS_LENGTH:Int = 4;
-	inline public static var STEPS_LENGTH:Int = 4;
-	inline public static var STEPS_SECTION_LENGTH:Int = STEPS_LENGTH * BEATS_LENGTH;
+	
+	public static var BEATS_LENGTH:Int = 4;
+	public static var STEPS_LENGTH:Int = 4;
+	public static var STEPS_SECTION_LENGTH:Int = STEPS_LENGTH * BEATS_LENGTH;
+
+	inline public function setSignature(top:Int = 4, bottom:Int = 4) {
+		BEATS_LENGTH = top;
+		STEPS_LENGTH = bottom;
+		STEPS_SECTION_LENGTH = BEATS_LENGTH * STEPS_LENGTH;
+	}
 
 	public static var bpm(default, set):Float = 100;
 	public static var crochetMills:Float = 60 / bpm;

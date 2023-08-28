@@ -82,7 +82,7 @@ class ChartingState extends MusicBeatState {
         strumBar.setPosition(mainGrid.grid.x, mainGrid.grid.y);
         add(strumBar);
 
-        songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y, "coolswag", 25);
+        songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y + 25, "coolswag", 25);
         songTxt._dynamic.update = function (elapsed) {
             var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(Conductor.inst.length / 1000, true) + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +
@@ -475,13 +475,21 @@ class ChartingState extends MusicBeatState {
         }
     }
 
+    public static inline function getQuant() {
+        return instance.mainGrid.curQuant;
+    }
+
     public static inline function getTimeY(strumTime:Float):Float {
-		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
+		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet, 0, ChartGrid.GRID_SIZE * getQuant());
 	}
 
-    public static inline function getYtime(y:Float):Float {
-        return FlxMath.remapToRange(y, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet);
+    public static inline function getYOff() {
+        return ChartGrid.GRID_SIZE * (getQuant() / 16);
     }
+
+    public static inline function getYtime(y:Float):Float {
+		return FlxMath.remapToRange(y + getYOff(), 0, ChartGrid.GRID_SIZE * getQuant(), 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet);
+	}
 
     public static inline function getSecTime(index:Int = 0) {
         return Song.getSectionTime(SONG, index);

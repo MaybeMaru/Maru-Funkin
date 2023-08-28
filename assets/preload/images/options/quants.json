@@ -1,0 +1,85 @@
+{ "frames": [
+   {
+    "filename": "Sprite-0001 0.",
+    "frame": { "x": 2, "y": 2, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 1.",
+    "frame": { "x": 43, "y": 2, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 2.",
+    "frame": { "x": 84, "y": 2, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 3.",
+    "frame": { "x": 125, "y": 2, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 4.",
+    "frame": { "x": 2, "y": 44, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 5.",
+    "frame": { "x": 43, "y": 44, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 6.",
+    "frame": { "x": 84, "y": 44, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0001 7.",
+    "frame": { "x": 125, "y": 44, "w": 39, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 39, "h": 40 },
+    "sourceSize": { "w": 39, "h": 40 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "size": { "w": 166, "h": 86 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 2", "opacity": 141, "blendMode": "normal" }
+  ]
+ }
+}

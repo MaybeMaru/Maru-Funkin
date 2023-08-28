@@ -1,6 +1,10 @@
 package funkin.states.editors.chart;
 
 class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
+    public static var quantColors(default, never):Array<FlxColor> = [
+        FlxColor.RED, FlxColor.BLUE, FlxColor.PURPLE, FlxColor.YELLOW,
+        FlxColor.PINK, FlxColor.ORANGE, FlxColor.CYAN, FlxColor.GREEN
+    ];
     
     var strums:Array<NoteStrum> = [];
     var eventBar:FlxSprite;

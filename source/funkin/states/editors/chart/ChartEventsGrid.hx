@@ -11,7 +11,7 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
         super();
         grid = FlxGridOverlay.create(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE,  ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, true, 0xff6e6e6e,  0xff7c7c7c);
         for (i in 0...3) grid.pixels.fillRect(new Rectangle(0, ChartGrid.GRID_SIZE*Conductor.BEATS_LENGTH*(i+1)-1, grid.width, 2), 0xff505050);
-        grid.screenCenter();
+        grid.screenCenter(X);
         grid.x -= ChartGrid.GRID_SIZE * 5;
         add(grid);
 

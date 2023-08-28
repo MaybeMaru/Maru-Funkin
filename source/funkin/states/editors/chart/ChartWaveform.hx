@@ -16,7 +16,7 @@ class ChartWaveform extends FlxSprite {
 	public var audioBytes:Bytes;
     public var soundOffset:Float = 0;
 
-    public function new(sound:FlxSound, _color:FlxColor = 0x5e3c92) {
+    public function new(sound:FlxSound, _color:FlxColor = 0x5e3c92, quant:Int = 16) {
         super();
         if (sound == null || sound.length <= 0) {
             visible = false;
@@ -27,7 +27,7 @@ class ChartWaveform extends FlxSprite {
             audioBuffer = sound._sound.__buffer;
             audioBytes = sound._sound.__buffer.data.toBytes();
         }
-        frames = Paths.addGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
+        frames = Paths.addGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * quant, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
         antialiasing = false;
 
         color = _color;
