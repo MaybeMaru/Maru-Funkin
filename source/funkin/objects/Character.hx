@@ -194,6 +194,8 @@ class Character extends FlxSpriteExt {
 	}
 
 	public var danced:Bool = false;
+	public var idleAlt:String = "";
+
 	public function dance():Void {
 		if (!debugMode && forceDance && !specialAnim) {
 			danceCheck();
@@ -201,12 +203,15 @@ class Character extends FlxSpriteExt {
 	}
 
 	function danceCheck():Void {
-		if (animOffsets.exists('danceRight') && animOffsets.exists('danceLeft')) {
+		var _danceRight = 'danceRight' + idleAlt;
+		var _danceLeft = 'danceLeft' + idleAlt;
+		var _idle = 'idle' + idleAlt;
+		if (animOffsets.exists(_danceRight) && animOffsets.exists(_danceLeft)) {
 			danced = !danced;
-			playAnim(danced ? 'danceRight' : 'danceLeft');
+			playAnim(danced ? _danceRight : _danceLeft);
 		}
-		else if (animOffsets.exists('idle')) {
-			playAnim('idle');
+		else if (animOffsets.exists(_idle)) {
+			playAnim(_idle);
 		}
 	}
 }
