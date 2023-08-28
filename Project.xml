@@ -79,6 +79,7 @@
 		NOT USING A DIRECT THING TO THE ASSET!!!
 	-->
 	<assets path="assets/fonts"/>
+	<assets path="assets/videos"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
@@ -86,6 +87,7 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="discord_rpc" if="cpp"/>
+	<haxelib name="hxCodec" if="cpp"/>
 	<haxelib name="hscript" />
 	<haxedef name="hscriptPos"/>
 

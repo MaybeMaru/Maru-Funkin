@@ -1,5 +1,9 @@
 package funkin.states;
 
+#if cpp
+import hxcodec.flixel.FlxVideo;
+#end
+import haxe.Constraints.Function;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
 
@@ -430,6 +434,21 @@ class PlayState extends MusicBeatState {
 		super.create();
 		destroySubStates = false;
 		pauseSubstate = new PauseSubState();
+	}
+
+	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
+		completeFunc = completeFunc == null ? startCountdown : completeFunc;
+		#if cpp
+		var video:FlxVideo = new FlxVideo();
+		var vidFunc = function () {
+			video.dispose();
+			completeFunc();
+		}
+		video.onEndReached.add(vidFunc);
+		video.play(Paths.video(path));
+		#else
+			completeFunc();
+		#end
 	}
 
 	function createDialogue():Void {

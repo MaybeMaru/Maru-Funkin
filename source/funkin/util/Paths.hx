@@ -172,6 +172,11 @@ class Paths
 		return getPath('fonts/$key.ttf', FONT, library);
 	}
 
+	inline static public function video(key:String, ?library:String):String
+		{
+			return getPath('videos/$key.mp4', BINARY, library);
+		}
+
 	inline static public function exists(file:String, type:AssetType):Bool {
 		#if desktop return FileSystem.exists(removeAssetLib(file));
 		#else		return OpenFlAssets.exists(file, type);			#end

@@ -36,13 +36,17 @@
             "version": null
         },
         {
+            "name": "hxCodec",
+            "type": "install",
+            "version": null
+        },
+        {
             "name": "hscript",
             "type": "git",
             "dir": null,
             "ref": "master",
             "url": "https://github.com/MaybeMaru/hscript"
         },
-        
         {
             "name": "discord_rpc",
             "type": "git",

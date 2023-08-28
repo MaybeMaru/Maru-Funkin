@@ -104,6 +104,11 @@ class FunkScript {
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
+		#if cpp
+		set('FlxVideo', hxcodec.flixel.FlxVideo);
+		set('FlxVideoSprite', hxcodec.flixel.FlxVideoSprite);
+		#end
+
 		//HScript Functions
 
 		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
