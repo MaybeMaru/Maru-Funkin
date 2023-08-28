@@ -41,6 +41,13 @@ class FlxSpriteExt extends FlxSprite {
 		}
 	}
 
+	public function loadFromSprite(sprite:FlxSpriteExt) {
+		loadGraphicFromSprite(sprite);
+		animOffsets = sprite.animOffsets.copy();
+		animDatas = sprite.animDatas.copy();
+		return this;
+	}
+
 	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteExt {
 		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
 		return this;

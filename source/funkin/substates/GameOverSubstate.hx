@@ -7,6 +7,14 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var skinFolder:String = 'default';
 	var charName:String = 'bf-dead';
 
+	public static function cacheSounds() {
+		var skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
+		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
+		Paths.sound('${skinFolder}fnf_loss_sfx');
+		Paths.music('${skinFolder}gameOverEnd');
+		Paths.music('${skinFolder}gameOver');
+	}
+
 	public function new(x:Float, y:Float):Void {
 		super();
 

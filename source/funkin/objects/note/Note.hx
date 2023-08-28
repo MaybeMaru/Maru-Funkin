@@ -150,9 +150,7 @@ class Note extends FlxSpriteExt {
                 initSusLength += _off / (NotesGroup.songSpeed * 2);
             }
         } else {
-            loadGraphicFromSprite(refSprite);
-            animOffsets = refSprite.animOffsets.copy();
-            animDatas = refSprite.animDatas.copy();
+            loadFromSprite(refSprite);
             updateAnims();
         }
 

@@ -167,6 +167,7 @@ class PlayState extends MusicBeatState {
 
 		//Cache Gameover Character
 		var deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
+		GameOverSubstate.cacheSounds();
 		//add(deadChar);
 
 		// GET THE STAGE JSON SHIT
