@@ -4,50 +4,27 @@ import flixel.addons.display.FlxGridOverlay;
 
 class ChartGrid extends FlxTypedGroup<Dynamic> {
     inline public static var GRID_SIZE:Int = 40;
-    public static var quants(default, never):Array<Int> = [4,8,12,16,24,32,48,64];
-
+    
     public var grid:FlxSprite;
     public var notesGroup:FlxTypedGroup<ChartNote>;
     public var sustainsGroup:FlxTypedGroup<ChartNote>;
     public var textGroup:FlxTypedGroup<FunkinText>;
     public var waveformVocals:ChartWaveform;
     public var waveformInst:ChartWaveform;
-
-    var quantGraphics:Map<Int, FlxSprite> = [];
-    public function createQuantGraphics() {
-        for (i in quants) {
-            var dummy = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * i, true, 0xff7c7c7c, 0xff6e6e6e);
-            for (i in 0...3) dummy.pixels.fillRect(new Rectangle(0, dummy.height/4 * (i+1), dummy.width, 2), 0xff505050);
-            dummy.pixels.fillRect(new Rectangle(dummy.width / 2 - 1, 0, 2, dummy.height), FlxColor.BLACK);
-            dummy.screenCenter(X);
-            quantGraphics.set(i, dummy);
-            add(dummy);
-        }
-    }
-
-    public var curQuant(default, set):Int = 0;
-    public function set_curQuant(value:Int) {
-        for (i in quants) {
-            var _grid = quantGraphics.get(i);
-            _grid.visible = false;
-            if (i == value) {
-                _grid.visible = true;
-                grid = _grid;
-            }
-        }
-        return curQuant = value;
-    }
     
     public function new() {
         super();
-        createQuantGraphics();
-        curQuant = 16;
+        grid = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, true, 0xff7c7c7c, 0xff6e6e6e);
+        for (i in 0...3) grid.pixels.fillRect(new Rectangle(0, GRID_SIZE*Conductor.BEATS_LENGTH*(i+1)-1, grid.width, 2), 0xff505050);
+        grid.pixels.fillRect(new Rectangle(grid.width / 2 - 1, 0, 2, grid.height), FlxColor.BLACK);
+        grid.screenCenter();
+        add(grid);
 
-        waveformInst = new ChartWaveform(Conductor.inst, 0x923c70, curQuant);
+        waveformInst = new ChartWaveform(Conductor.inst, 0x923c70);
         waveformInst.visible = false;
         add(waveformInst);
 
-        waveformVocals = new ChartWaveform(Conductor.vocals, 0x5e3c92, curQuant);
+        waveformVocals = new ChartWaveform(Conductor.vocals);
         //waveformVocals.visible = false;
         add(waveformVocals);
 
@@ -162,7 +139,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 
     public static inline function getGridOverlap(obj1:Dynamic, obj2:Dynamic):Bool {
 		return obj1.x > obj2.x && obj1.x < obj2.x + obj2.width
-		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * ChartingState.getQuant());
+		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
 	}
 
     public static inline function getGridCoords(obj1:Dynamic, obj2:Dynamic, snapY:Bool = true) {
