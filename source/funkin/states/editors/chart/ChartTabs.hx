@@ -34,20 +34,28 @@ class ChartTabs extends FlxUITabMenu {
 		addEditorUI();
     }
 
-    var typingShit:FlxInputText;
-
 	function selectChar(?selectFunction:Void->Void):Void {
 		Conductor.stop();
 		Conductor.setPitch(1, false);
 		ChartingState.instance.openSubState(new CharSelectSubstate(selectFunction));
 	}
 
+	public var focusList:Array<FlxUIInputText> = [];
+	public function getFocus():Bool {
+		for (i in focusList) if (i.hasFocus) return true;
+		return false;
+	}
+
     var p1Button:FlxButton;
 	var p2Button:FlxButton;
 	var p3Button:FlxButton;
+	var songTitleInput:FlxUIInputText;
 	function addSongUI():Void {
-		var songTitleInput = new FlxUIInputText(10, 20, 150, ChartingState.SONG.song, 8);
-		typingShit = songTitleInput;
+		songTitleInput = new FlxUIInputText(10, 20, 150, ChartingState.SONG.song, 8);
+		focusList.push(songTitleInput);
+		songTitleInput.callback = function(var1,var2) {
+			ChartingState.SONG.song = songTitleInput.text;
+		}
 
 		var saveButton:FlxButton = new FlxButton(songTitleInput.x, songTitleInput.y+25, "Save", function() {
 			ChartingState.instance.saveChart();
@@ -268,8 +276,15 @@ class ChartTabs extends FlxUITabMenu {
 	}
 
 	var eventsDropDown:FlxUIDropDownMenu;
+	public var eventValueTab:EventTab = null;
 
 	public static var curEvent:String = '';
+	public static var curEventValues:Array<Dynamic>;
+
+	function setCurEvent(event:String) {
+		curEvent = event;
+		curEventValues = eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy();
+	}
 
 	function addEventUI():Void {
 		var tab_group_event = new FlxUI(null, this);
@@ -277,13 +292,22 @@ class ChartTabs extends FlxUITabMenu {
 
 		var types:Array<String> = JsonUtil.getJsonList('events');
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
-			curEvent = types[Std.parseInt(type)];
+			setCurEvent(types[Std.parseInt(type)]);
 		});
-		curEvent = types[0];
-		eventsDropDown.selectedLabel = curEvent;
+		setCurEvent(types[0]);
+		eventsDropDown.selectedLabel = types[0];
 
 		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
 		tab_group_event.add(eventsDropDown);
+
+		postCreateFuncs.push(function () {
+			eventValueTab = new EventTab(150, 26, curEventValues);
+			eventValueTab.updateFunc = function (id:Int, value:Dynamic) {
+				//trace(id + " / " + value);
+				ChartingState.instance.updateEvent(id, value);
+			}
+			tab_group_event.add(eventValueTab);
+		});
 		
 		addGroup(tab_group_event);
 	}
@@ -348,5 +372,11 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_editor.add(button_clearSongFull);
 
 		addGroup(tab_group_editor);
+	}
+
+	var postCreateFuncs:Array<Dynamic> = [];
+	public function runPost() {
+		for (i in postCreateFuncs)
+			i();
 	}
 }

@@ -98,12 +98,16 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         data = new Event();
     }
 
+    public function updateText() {
+        text.text = data.values.toString() + " - " + data.name;
+        text.offset.x = text.width;
+    }
+
     public function init(strumTime:Float, name:String, values:Array<Dynamic>, position:FlxPoint) {
         setPosition(position.x,position.y);
-        text.text = values.toString() + " - " + name;
-        text.offset.x = text.width;
         data.strumTime = strumTime;
         data.name = name;
         data.values = values;
+        updateText();
     }
 }

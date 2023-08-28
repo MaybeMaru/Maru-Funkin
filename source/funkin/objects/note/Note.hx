@@ -16,7 +16,7 @@ class NoteUtil {
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var swagHeight:Float = 155 * 0.7;
 
-    public static var DEFAULT_NOTE_TYPE:NoteTypeJson = {
+    public static var DEFAULT_NOTE_TYPE(default, never):NoteTypeJson = {
 		mustHit: true,
 		hitHealth: [0.0237, 0.029],
 		missHealth: [0.0475, 0.0118],
@@ -26,7 +26,7 @@ class NoteUtil {
         hitMult: 1 // I recommend making this value smaller for fire-like notes
 	}
 
-    public static var DEFAULT_NOTE_SKIN:NoteSkinData = {
+    public static var DEFAULT_NOTE_SKIN(default, never):NoteSkinData = {
 		anims: [],
 		imagePath: "noteAssets",
 		scale: 0.7,
@@ -52,7 +52,7 @@ class NoteUtil {
 	}
 
     inline public static function getTypeJson(type:String = 'default'):NoteTypeJson {
-		if (noteTypesMap.get(type) != null) return noteTypesMap.get(type);
+		if (noteTypesMap.exists(type)) return noteTypesMap.get(type);
 		var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
 		typeJson = JsonUtil.checkJsonDefaults(DEFAULT_NOTE_TYPE, typeJson);
 		noteTypesMap.set(type, typeJson);

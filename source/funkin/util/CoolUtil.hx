@@ -19,6 +19,7 @@ class CoolUtil {
 	inline public static function init():Void {
 		SkinUtil.setCurSkin();
 		NoteUtil.initTypes();
+		EventUtil.initEvents();
 		#if desktop
 		ModdingUtil.reloadModFolders();
 		#end

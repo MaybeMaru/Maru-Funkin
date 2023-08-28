@@ -175,6 +175,7 @@ class PlayState extends MusicBeatState {
 		Paths.setCurrentLevel(stageJsonData.library);
 		SkinUtil.setCurSkin(stageJsonData.skin);
 		NoteUtil.initTypes();
+		EventUtil.initEvents();
 
 		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
 		dad.stageOffsets.set(stageJsonData.dadOffsets[0], stageJsonData.dadOffsets[1]);

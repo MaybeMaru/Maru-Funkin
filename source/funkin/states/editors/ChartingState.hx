@@ -96,6 +96,7 @@ class ChartingState extends MusicBeatState {
 
         tabs = new ChartTabs();
         tabs.setPosition(songTxt.x, songTxt.y + FlxG.height * 0.25);
+        tabs.runPost();
         add(tabs);
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
@@ -158,7 +159,10 @@ class ChartingState extends MusicBeatState {
 
     public function changeSection(change:Int = 0) {
         var newIndex = Std.int(Math.max(sectionIndex + change, 0));
-        if (sectionIndex != newIndex) deselectNote(); // Fr changed a section
+        if (sectionIndex != newIndex) {  // Fr changed a section
+            deselectNote();
+            deselectEvent();
+        }
         checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
         sectionIndex = newIndex;
         
@@ -333,15 +337,38 @@ class ChartingState extends MusicBeatState {
         mainGrid.clearNote(note);
     }
 
+    public var selectedEvent:Array<Dynamic> = null;
+    public var selectedEventObject(default, set):ChartEvent = null;
+    function set_selectedEventObject(value) {
+        if (value != null && selectedEventObject != null && value != selectedEventObject) {
+            value.blend = ADD;
+            selectedEventObject.blend = NORMAL;
+        }
+        else if (value == null && selectedEventObject != null) selectedEventObject.blend = NORMAL;
+        else if (value != null && selectedEventObject == null) value.blend = ADD;
+        return selectedEventObject = value;
+    }
+
     public function addEvent() {
         var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
-        var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, ['shit', 'ass', 'fuck']];
+        var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, ChartTabs.curEventValues];
         SONG.notes[sectionIndex].sectionEvents.push(event);
-        eventsGrid.drawEvent(event);
+        selectedEvent = event;
+        selectedEventObject = eventsGrid.drawEvent(event);
+    }
+
+    public function updateEvent(id:Int = 0, newValue:Dynamic) {
+        if (selectedEvent == null || selectedEventObject == null) return;
+        selectedEvent[id] = newValue;
+        selectedEventObject.data.values = selectedEvent.copy();
+        selectedEventObject.updateText();
     }
 
     public function removeEvent(event:ChartEvent) {
         var data = eventsGrid.getEventData(event);
+        if (data == selectedEvent || event == selectedEventObject) {
+            deselectEvent();
+        }
         SONG.notes[sectionIndex].sectionEvents.remove(data);
         eventsGrid.clearEvent(event);
     }
@@ -384,13 +411,20 @@ class ChartingState extends MusicBeatState {
 
     public function clearSectionData() {
         SONG.notes[sectionIndex].sectionNotes = [];
+        SONG.notes[sectionIndex].sectionEvents = [];
         deselectNote();
+        deselectEvent();
         mainGrid.clearSection();
     }
 
     function deselectNote() {
         selectedNote = null;
         selectedNoteObject = null;
+    }
+
+    function deselectEvent() {
+        selectedEvent = null;
+        selectedEventObject = null;
     }
 
     public function copyLastSection(change:Int = 1):Void {
@@ -408,7 +442,7 @@ class ChartingState extends MusicBeatState {
         super.update(elapsed);
         updatePosition();
         checkNoteSound();
-        keys();
+        if (!tabs.getFocus()) keys();
         mouse();
     }
 

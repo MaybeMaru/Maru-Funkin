@@ -1,8 +1,8 @@
 {
     "description": "this is a test event dum dum",
     "values": [
-        0.0,
-        "gay",
-        false
+        10,
+        true,
+        "fuck"
     ]
 }

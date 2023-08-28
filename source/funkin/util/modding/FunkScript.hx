@@ -306,6 +306,18 @@ class FunkScript {
 		set('switchCustomState', function (key:String) {
 			ScriptUtil.switchCustomState(key);
 		});
+
+		set('add', function(object:Dynamic) {
+			FlxG.state.add(object);
+		});
+
+		set('insert', function(position:Int, object:Dynamic) {
+			FlxG.state.insert(position, object);
+		});
+
+		set('remove', function(object:Dynamic) {
+			FlxG.state.remove(object);
+		});
 	}
 
 	public function execute(codeToRun:String):Dynamic {
@@ -344,7 +356,7 @@ class CustomState extends MusicBeatState {
 		_scriptKey = stateTag;
 		script = new FunkScript(scriptCode);
 		script.scriptID = '_custom_state_$stateTag';
-		script.set('Parent', this);
+		script.set('Parent', cast this);
 		script.set('add', function(object:Dynamic) add(object));
 		script.set('insert', function(position:Int, object:Dynamic) insert(position, object));
 		script.set('remove', function(object:Dynamic) remove(object));
