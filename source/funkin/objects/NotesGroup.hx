@@ -7,6 +7,7 @@ class NotesGroup extends FlxGroup
     public static var songSpeed:Float = 1.0;
     public var curSong:String = 'test';
     public var songNotetypes:Array<String> = [];
+	public var songEvents:Array<String> = [];
 
 	public var generatedMusic:Bool = false;
 
@@ -180,6 +181,11 @@ class NotesGroup extends FlxGroup
 
 				var event:Event = new Event(strumTime, eventName, eventValues);
 				events.push(event);
+
+				//	Add event for scripts
+				if (!songEvents.contains(eventName)) {	
+					songEvents.push(eventName);
+				}
 			}
 		}
 
@@ -190,6 +196,14 @@ class NotesGroup extends FlxGroup
 		var notetypeScripts:Array<String> = ModdingUtil.getScriptList('data/notetypes');
 		for (script in notetypeScripts) {
 			if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
+				ModdingUtil.addScript(script);
+			}
+		}
+
+		//Event Scripts
+		var eventScripts:Array<String> = ModdingUtil.getScriptList('data/events');
+		for (script in eventScripts) {
+			if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
 				ModdingUtil.addScript(script);
 			}
 		}

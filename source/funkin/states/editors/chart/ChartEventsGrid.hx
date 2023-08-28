@@ -98,8 +98,17 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         data = new Event();
     }
 
+    public function arrayString(array:Array<Dynamic>) {
+        var s:String = "[";
+        for (i in 0...array.length) {
+            s += Std.string(array[i]);
+            if (i < array.length-1) s += ", ";
+        }
+        return s += "]";
+    }
+
     public function updateText() {
-        text.text = data.values.toString() + " - " + data.name;
+        text.text = arrayString(data.values) + " - " + data.name;
         text.offset.x = text.width;
     }
 

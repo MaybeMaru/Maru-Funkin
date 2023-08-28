@@ -195,7 +195,7 @@ class ChartTabs extends FlxUITabMenu {
 		lastSectionPreview.scale.x *= 0.75;
 		lastSectionPreview.updateHitbox();
 
-		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", ChartingState.instance.clearSectionData);
+		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData);
 
 		var swapSection:FlxButton = new FlxButton(10, 170, "Swap section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
@@ -352,7 +352,13 @@ class ChartTabs extends FlxUITabMenu {
 		button_clearSongNotes.label.color = FlxColor.WHITE;
 		button_clearSongNotes.label.fieldWidth = 0;
 
-		var button_clearSongFull:FlxButton = new FlxButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
+		var button_clearSongEvents:FlxButton = new FlxButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Events", ChartingState.instance.clearSongEvents);
+		button_clearSongEvents.color = FlxColor.RED;
+		button_clearSongEvents.scale.set(1.25,1.25);
+		button_clearSongEvents.label.color = FlxColor.WHITE;
+		button_clearSongEvents.label.fieldWidth = 0;
+
+		var button_clearSongFull:FlxButton = new FlxButton(button_clearSongEvents.x, button_clearSongEvents.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
 		button_clearSongFull.color = FlxColor.RED;
 		button_clearSongFull.scale.set(1.25,1.25);
 		button_clearSongFull.label.color = FlxColor.WHITE;
@@ -367,8 +373,9 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_editor.add(check_hitsound);
 		tab_group_editor.add(check_metronome);
 		tab_group_editor.add(slider_pitch);
+
 		tab_group_editor.add(button_clearSongNotes);
-		
+		tab_group_editor.add(button_clearSongEvents);
 		tab_group_editor.add(button_clearSongFull);
 
 		addGroup(tab_group_editor);

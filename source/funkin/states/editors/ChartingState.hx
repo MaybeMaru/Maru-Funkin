@@ -359,8 +359,8 @@ class ChartingState extends MusicBeatState {
 
     public function updateEvent(id:Int = 0, newValue:Dynamic) {
         if (selectedEvent == null || selectedEventObject == null) return;
-        selectedEvent[id] = newValue;
-        selectedEventObject.data.values = selectedEvent.copy();
+        selectedEvent[2][id] = newValue;
+        selectedEventObject.data.values = selectedEvent[2].copy();
         selectedEventObject.updateText();
     }
 
@@ -386,11 +386,19 @@ class ChartingState extends MusicBeatState {
         mainGrid.updateNote(selectedNoteObject, selectedNote);
     }
 
+    public function clearSongEvents() {
+        stop();
+        openSubState(new PromptSubstate('Are you sure you want to\nclear this song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+            for (i in SONG.notes) i.sectionEvents = [];
+            clearSectionData(false, true);
+        }));
+    }
+
     public function clearSongNotes() {
         stop();
         openSubState(new PromptSubstate('Are you sure you want to\nclear this song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
             for (i in SONG.notes) i.sectionNotes = [];
-            clearSectionData();
+            clearSectionData(true, false);
         }));
     }
 
@@ -409,12 +417,17 @@ class ChartingState extends MusicBeatState {
         }));
     }
 
-    public function clearSectionData() {
-        SONG.notes[sectionIndex].sectionNotes = [];
-        SONG.notes[sectionIndex].sectionEvents = [];
-        deselectNote();
-        deselectEvent();
-        mainGrid.clearSection();
+    public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true) {
+        if (clearNotes) {
+            SONG.notes[sectionIndex].sectionNotes = [];
+            deselectNote();
+            mainGrid.clearSection();
+        }
+        if (clearEvents) {
+            SONG.notes[sectionIndex].sectionEvents = [];
+            deselectEvent();
+            eventsGrid.clearSection();
+        }
     }
 
     function deselectNote() {
