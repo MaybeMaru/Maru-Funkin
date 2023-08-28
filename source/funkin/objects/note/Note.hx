@@ -59,25 +59,61 @@ class NoteUtil {
 		return typeJson;
 	}
 
-	public static function setSwag(strumArray:Array<NoteStrum>):Void {
-		if (strumArray.length <= 0) {
-			return;
-		}
-		var leWidth:Float = 0;
-		var leHeight:Float = 0;
-		for (strum in strumArray) {
-			leWidth += strum.swagWidth;
-			leHeight += strum.swagHeight;
-		}
-		swagWidth = leWidth / strumArray.length;
-		swagHeight = leHeight / strumArray.length;
-	}
-
     public static function clearSustainCache() {
+        skinSpriteMap.clear();
         for (key in Paths.cachedGraphics.keys()) {
             if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
         }
     }
+
+    public static var skinSpriteMap:Map<String, SkinSpriteData> = [];
+    public static function setupSkinSprites(skin:String):SkinSpriteData {
+        if (skinSpriteMap.exists(skin)) return skinSpriteMap.get(skin);
+        var skinJson:NoteSkinData;
+        try { // Prevent null skins
+            skinJson = SkinUtil.getSkinData(skin).noteData;
+        } catch(e) {
+            skin = '_missing_skin';
+            skinJson = SkinUtil.getSkinData(skin).noteData;
+        }
+        skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+
+        var refSprite:FlxSpriteExt = new FlxSpriteExt();
+        refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
+        refSprite.scale.set(skinJson.scale,skinJson.scale);
+        refSprite.updateHitbox();
+        for (anim in skinJson.anims) refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+
+        var susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
+        var susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
+
+        var addMap:SkinSpriteData = {
+            baseSprite: refSprite,
+            susPiece: susPiece,
+            susEnd: susEnd,
+            skinJson: skinJson
+        }
+        skinSpriteMap.set(skin, addMap);
+        return addMap;
+    }
+    
+    public static function getSkinSprites(skin:String, noteData:Int = 0) {
+        var dir = CoolUtil.directionArray[noteData];
+        if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
+        var mapData:SkinSpriteData = skinSpriteMap.get(skin);
+        mapData.susPiece.animation.play('hold$dir', true);
+        mapData.susPiece.updateHitbox();
+        mapData.susEnd.animation.play('hold$dir-end', true);
+        mapData.susEnd.updateHitbox();
+        return mapData;
+    }
+}
+
+typedef SkinSpriteData = {
+    baseSprite:FlxSpriteExt,
+    susPiece:FlxSprite,
+    susEnd:FlxSprite,
+    skinJson:NoteSkinData
 }
 
 class Note extends FlxSpriteExt {
@@ -100,24 +136,15 @@ class Note extends FlxSpriteExt {
     var refSprite:FlxSpriteExt;
 
     public function updateAnims() {
+        if (isSustainNote) return;
         var dir = CoolUtil.directionArray[noteData];
-        if (isSustainNote) {
-            susPiece.animation.play('hold$dir', true);
-            susPiece.updateHitbox();
-            susEnd.animation.play('hold$dir-end', true);
-            susEnd.updateHitbox();
-        } else {
-            playAnim('scroll$dir');
-        }
+        playAnim('scroll$dir');
     }
 
     public function createGraphic(init:Bool = true) {
         var dir = CoolUtil.directionArray[noteData];
 
         if (isSustainNote) {
-            susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-            susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
-
             if (init) { // Offset sustain
                 var _off = getPosMill(NoteUtil.swagHeight * 0.5);
                 initSusLength += _off / (NotesGroup.songSpeed * 2);
@@ -126,9 +153,8 @@ class Note extends FlxSpriteExt {
             loadGraphicFromSprite(refSprite);
             animOffsets = refSprite.animOffsets.copy();
             animDatas = refSprite.animDatas.copy();
+            updateAnims();
         }
-
-        updateAnims();
 
         scale.set(refSprite.scale.x, refSprite.scale.y);
         updateHitbox();
@@ -205,20 +231,20 @@ class Note extends FlxSpriteExt {
         active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
-    public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
+    inline public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
         return Conductor.songPosition >= strumTime + startExtra && Conductor.songPosition <= strumTime + initSusLength + endExtra;
     }
 
-    public function setSusPressed() {
+    inline public function setSusPressed() {
         y = strumCenter;
         drawSustain();
     }
 
-    public function getCos(?_angle) {
+    inline public function getCos(?_angle) {
         return Math.cos(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
     }
 
-    public function getSin(?_angle) {
+    inline public function getSin(?_angle) {
         return Math.sin(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
     }
 
@@ -248,6 +274,7 @@ class Note extends FlxSpriteExt {
                     origin.set(width / 2, 0);
                     return;
                 } else {
+                    updateSprites();
                     frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
                     origin.set(width / 2, 0);
         
@@ -305,7 +332,7 @@ class Note extends FlxSpriteExt {
 		}
 	}
 
-    public function changeSkin(value:String = 'default') {
+    inline public function changeSkin(value:String = 'default') {
         skin = value;
         createGraphic(false);
         setupSustain();
@@ -315,27 +342,18 @@ class Note extends FlxSpriteExt {
     public var skinJson:NoteSkinData;
 	public function set_skin(value:String = 'default'):String {
 		value = (value == null ? SkinUtil.curSkin : value);
-		if (value != skin) {
-            skin = value;
-            try { // Prevent null skins
-                skinJson = SkinUtil.getSkinData(skin).noteData;
-            } catch(e) {
-                skin = '_missing_skin';
-                skinJson = SkinUtil.getSkinData(skin).noteData;
-            }
-            skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
-
-            refSprite = new FlxSpriteExt();
-            refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
-            refSprite.scale.set(skinJson.scale,skinJson.scale);
-            refSprite.updateHitbox();
-            
-            for (anim in skinJson.anims) refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-        }
-		return value;
+        skin = value;
+        updateSprites();
+        return value;
 	}
 
-    //function reloadRefSprite = 
+    public function updateSprites() {
+        var mapData = NoteUtil.getSkinSprites(skin, noteData);
+        refSprite = mapData.baseSprite;
+        susPiece = mapData.susPiece;
+        susEnd = mapData.susEnd;
+        skinJson = mapData.skinJson;
+    }
 
     public var noteType(default, set):String = '';
 	public var mustHit:Bool = true; // The note gets ignored if false
