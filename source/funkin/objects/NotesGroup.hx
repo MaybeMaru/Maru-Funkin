@@ -198,7 +198,7 @@ class NotesGroup extends FlxGroup
 		events.sort(function(Obj1:Event, Obj2:Event):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
 		
 		//Notetype Scripts
-		var notetypeScripts:Array<String> = ModdingUtil.getScriptList('data/notetypes');
+		var notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
 		for (script in notetypeScripts) {
 			if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
 				ModdingUtil.addScript(script);
@@ -206,7 +206,7 @@ class NotesGroup extends FlxGroup
 		}
 
 		//Event Scripts
-		var eventScripts:Array<String> = ModdingUtil.getScriptList('data/events');
+		var eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
 		for (script in eventScripts) {
 			if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
 				ModdingUtil.addScript(script);

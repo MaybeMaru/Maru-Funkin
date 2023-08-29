@@ -100,6 +100,14 @@ class ModdingUtil {
         }
     }
 
+    public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
+        subFolders = subFolders == null ? [] : subFolders;
+        var subFolderList:Array<String> = [];
+        for (i in subFolders)
+            subFolderList = subFolderList.concat(getScriptList(folder + "/" + i));
+        return getScriptList(folder).concat(subFolderList);
+    }
+
     public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
         #if !desktop return []; #end
         var scriptList:Array<String> = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];

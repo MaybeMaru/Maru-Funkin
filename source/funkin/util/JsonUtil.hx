@@ -70,6 +70,14 @@ typedef WeekJson = {
 }
 
 class JsonUtil {
+	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
+        subFolders = subFolders == null ? [] : subFolders;
+        var subFolderList:Array<String> = [];
+        for (i in subFolders)
+            subFolderList = subFolderList.concat(getJsonList(folder + "/" + i));
+        return getJsonList(folder).concat(subFolderList);
+    }
+
 	inline public static function getJsonList(folder:String = 'scripts/global',
 		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
 		fullPath:Bool = false, mainFolder:String = 'data'):Array<String> {

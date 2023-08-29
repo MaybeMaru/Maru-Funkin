@@ -134,16 +134,7 @@ class Song {
 		}
 		return song;
 	}
-
-	/*inline public static function convertForeverChart(song:SwagSong) {
-		for (s in song.notes) {
-			s = checkSection();
-			for (n in s.sectionNotes) {
-				if (n[])
-			}
-		}
-	}*/
-
+	
 	inline public static function convertPsychChart(song:SwagSong) {
 		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
 		if (psychEvents == null || psychEvents.length <= 0) return song;
