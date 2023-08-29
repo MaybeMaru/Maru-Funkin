@@ -95,6 +95,7 @@ class PlayState extends MusicBeatState {
 	var defaultCamSpeed:Float = 1;
 	var camFollowLerp:Float = 0.04;
 
+	public static var seenCutscene:Bool = false;
 	public var inCutscene:Bool = false;
 	public var inDialogue:Bool = true;
 	public var dialogueBox:DialogueBoxBase = null;
@@ -493,13 +494,14 @@ class PlayState extends MusicBeatState {
 		add(dialogueBox);
 	}
 
-	private var startTimer:FlxTimer;
+	public var startTimer:FlxTimer = null;
 
 	function startCountdown():Void {
 		showUI(true);
 		inCutscene = false;
 		inDialogue = false;
 		startedCountdown = true;
+		seenCutscene = true;
 
 		if (!notesGroup.skipStrumIntro) {
 			for (strum in notesGroup.strumLineNotes)
@@ -781,6 +783,7 @@ class PlayState extends MusicBeatState {
 		trace('LOADING NEXT SONG [${PlayState.storyPlaylist[0]}-$curDifficulty]');
 
 		prevCamFollow = camFollow;
+		seenCutscene = false;
 
 		PlayState.SONG = Song.loadFromFile(curDifficulty, PlayState.storyPlaylist[0]);
 		Conductor.stop();
@@ -834,7 +837,7 @@ class PlayState extends MusicBeatState {
 	override function stepHit():Void {
 		super.stepHit();
 		Conductor.autoSync();
-		ModdingUtil.addCall('stepHit', [curStep]);
+		ModdingUtil.addCall('stepHit', [curStep, curStepDecimal]);
 	}
 
 	override public function beatHit():Void {
@@ -857,7 +860,7 @@ class PlayState extends MusicBeatState {
 			if (curBeat % gfSpeed == 0 && !gf.animation.curAnim.name.startsWith("sing"))	gf.dance();
 		}
 
-		ModdingUtil.addCall('beatHit', [curBeat]);
+		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
 	}
 
 	override public function sectionHit():Void {
@@ -875,7 +878,7 @@ class PlayState extends MusicBeatState {
 			ghostTapEnabled = !curSectionData.mustHitSection;
 		}
 
-		ModdingUtil.addCall('sectionHit', [curSection]);
+		ModdingUtil.addCall('sectionHit', [curSection, curSectionDecimal]);
 	}
 
 	override function destroy():Void {

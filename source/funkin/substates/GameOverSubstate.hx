@@ -18,6 +18,11 @@ class GameOverSubstate extends MusicBeatSubstate {
 	public function new(x:Float, y:Float):Void {
 		super();
 
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (PlayState.instance.startTimer != null) {
+			PlayState.instance.startTimer.cancel();
+		}
+
 		charName = PlayState.instance.boyfriend.gameOverChar;
 		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
 		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
@@ -74,6 +79,15 @@ class GameOverSubstate extends MusicBeatSubstate {
 				Conductor.songPosition = FlxG.sound.music.time;
 			}
 		}
+
+		if (exitTimer > 0) {
+			exitTimer -= elapsed;
+			if (exitTimer <= 0) {
+				PlayState.clearCache = false;
+				SkinUtil.setCurSkin('default');
+				CoolUtil.switchState(new PlayState());
+			}
+		}
 	}
 
 	override function beatHit():Void {
@@ -96,20 +110,20 @@ class GameOverSubstate extends MusicBeatSubstate {
 	}
 
 	var isEnding:Bool = false;
+	var exitTimer:Float = 0;
 
 	function endBullshit():Void {
 		if (!isEnding) {
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
-			if (FlxG.sound.music != null) {
-				FlxG.sound.music.stop();
-			}
-			CoolUtil.playMusic('${skinFolder}gameOverEnd');
+			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+
+			var endSound = new FlxSound().loadEmbedded(Paths.music('${skinFolder}gameOverEnd'));
+			endSound.play();
+
 			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
-				PlayState.instance.camGame.fade(FlxColor.BLACK, 2, false, function() {
-					PlayState.clearCache = false;
-					LoadingState.loadAndSwitchState(new PlayState());
-				});
+				exitTimer = 2;
+				PlayState.instance.camGame.fade(FlxColor.BLACK, 2);
 			});
 		}
 	}

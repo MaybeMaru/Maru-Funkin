@@ -35,7 +35,7 @@ class ChartTabs extends FlxUITabMenu {
     }
 
 	function selectChar(?selectFunction:Void->Void):Void {
-		Conductor.stop();
+		ChartingState.instance.stop();
 		Conductor.setPitch(1, false);
 		ChartingState.instance.openSubState(new CharSelectSubstate(selectFunction));
 	}

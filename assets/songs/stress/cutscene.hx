@@ -14,7 +14,7 @@ var loadedCutsceneAssets:Bool = false;
 
 function create()
 {
-    if (GameVars.isStoryMode)
+    if (GameVars.isStoryMode && !GameVars.seenCutscene)
     {
         PlayState.inCutscene = true;
         var censored:Bool = !getPref('naughty');

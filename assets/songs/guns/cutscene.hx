@@ -3,7 +3,7 @@ var cutsceneTankman_Head:FunkinSprite;
 
 function create()
 {
-   if (GameVars.isStoryMode)
+   if (GameVars.isStoryMode && !GameVars.seenCutscene)
     {
         PlayState.inCutscene = true;
 

@@ -77,6 +77,7 @@ class WeekSetup {
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);
 		PlayState.inChartEditor = false;
+        PlayState.seenCutscene = false;
         PlayState.clearCache = true;
         curWeekDiffs = weekDataMap.get(weekName).weekDiffs;
 	}

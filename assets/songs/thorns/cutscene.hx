@@ -1,6 +1,6 @@
 function createPost()
 {
-   if (GameVars.isStoryMode)
+   if (GameVars.isStoryMode && !GameVars.seenCutscene)
         PlayState.inCutscene = true;
 }
 

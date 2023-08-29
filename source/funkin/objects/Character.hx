@@ -118,10 +118,11 @@ class Character extends FlxSpriteExt {
 	public function nullAnimCheck():Void {
 		danceCheck();
 		if(animation.curAnim == null) {
-			for (anim => charOffsets in animOffsets) {
+			for (anim in animOffsets.keys())
 				playAnim(anim);
-			}
 		}
+		if (animation.curAnim != null)
+			animation.curAnim.finish();
 	}
 
 	public function flipCharOffsets():Void {
