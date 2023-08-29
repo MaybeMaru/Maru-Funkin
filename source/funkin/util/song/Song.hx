@@ -85,9 +85,17 @@ class Song {
 			if (!foundNotes.exists(key)) {
 				foundNotes.set(key, true);
 				uniqueNotes.push(i);
-			}// else trace('found duplicate ' + key);
+			}
 		}
 		section.sectionNotes = uniqueNotes;
+		for (n in section.sectionNotes) {
+			if (n[1] < 0) {
+				section.sectionEvents.push([n[0], n[2], [n[3], n[4]]]);
+				section.sectionNotes.remove(n);
+			} else {
+				n[1] %= Conductor.STRUMS_LENGTH;
+			}
+		}
 		foundNotes.clear();
 		return section;
 	}
@@ -127,15 +135,19 @@ class Song {
 		return song;
 	}
 
-	inline public static function convertPsychChart(song:SwagSong) {
+	/*inline public static function convertForeverChart(song:SwagSong) {
 		for (s in song.notes) {
 			s = checkSection();
 			for (n in s.sectionNotes) {
-				if (n[1] < 0) s.sectionEvents.push([n[0], n[2], [n[3], n[4]]]);
+				if (n[])
 			}
 		}
-		//if (Reflect.field(song, 'events') == null) return;
+	}*/
+
+	inline public static function convertPsychChart(song:SwagSong) {
 		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
+		if (psychEvents == null || psychEvents.length <= 0) return song;
+
 		var events:Array<Array<Dynamic>> = [];
 		for (e in psychEvents) {
 			var eventTime = e[0];
@@ -146,6 +158,7 @@ class Song {
 		for (i in events) {
 			var eventSec = getTimeSection(song, i[0]);
 			checkAddSections(song, eventSec);
+			song.notes[eventSec] = checkSection(song.notes[eventSec]);
 			song.notes[eventSec].sectionEvents.push(i);
 		}
 
@@ -187,7 +200,7 @@ class Song {
 				Reflect.deleteField(sec, 'changeBPM');
 				Reflect.deleteField(sec, 'bpm');
 			}
-			if (sec.sectionNotes.length <= 0) { // THIS CAUSED SOME BIG BUGS LOL, WOULD BE NICE BUT I DONT WANNA FIX ALL THIS SHIT
+			if (sec.sectionNotes.length <= 0) {
 				Reflect.deleteField(sec, 'sectionNotes');
 			} else {
 				for (n in 0...sec.sectionNotes.length) {
@@ -214,7 +227,7 @@ class Song {
 			rawJson = CoolUtil.getFileContent(chartPath).trim();
 			while (!rawJson.endsWith("}"))	rawJson = rawJson.substr(0, rawJson.length - 1);
 		}
-		var swagShit:SwagSong = cast Json.parse(rawJson).song;
+		var swagShit:SwagSong = Json.parse(rawJson).song;
 		return swagShit;
 	}
 

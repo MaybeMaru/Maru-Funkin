@@ -61,6 +61,7 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     }
 
     public function pressStrum(data:Int = 0) {
+        data %= Conductor.STRUMS_LENGTH;
         var isStatic = strums[data].animation.curAnim.name.startsWith('static');
         isStatic ? strums[data].playStrumAnim("confirm", true) : strums[data].animation.curAnim.curFrame = 0;
         strums[data].staticTime = Conductor.stepCrochetMills;
