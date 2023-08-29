@@ -195,7 +195,7 @@ class ChartTabs extends FlxUITabMenu {
 		lastSectionPreview.scale.x *= 0.75;
 		lastSectionPreview.updateHitbox();
 
-		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData);
+		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
 
 		var swapSection:FlxButton = new FlxButton(10, 170, "Swap section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
@@ -250,7 +250,7 @@ class ChartTabs extends FlxUITabMenu {
 		var tab_group_note = new FlxUI(null, this);
 		tab_group_note.name = 'Note';
 
-		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * Conductor.STEPS_SECTION_LENGTH);
+		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE);
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
@@ -281,7 +281,7 @@ class ChartTabs extends FlxUITabMenu {
 	public static var curEvent:String = '';
 	public static var curEventValues:Array<Dynamic>;
 
-	function setCurEvent(event:String) {
+	public function setCurEvent(event:String) {
 		curEvent = event;
 		curEventValues = eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy();
 	}

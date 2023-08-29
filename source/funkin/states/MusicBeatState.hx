@@ -11,6 +11,10 @@ class MusicBeatState extends FlxUIState {
 	private var curBeat:Int = 0;
 	private var curSection:Int = 0;
 
+	private var curStepDecimal:Float = 0;
+	private var curBeatDecimal:Float = 0;
+	private var curSectionDecimal:Float = 0;
+
 	public var transition(get, default):CustomTransition = null;
 	function get_transition() {
 		return (transition != null ? transition : transition = new CustomTransition());
@@ -55,11 +59,13 @@ class MusicBeatState extends FlxUIState {
 	}
 
 	private function updateSection():Void {
-		curSection = Math.floor(curBeat / Conductor.BEATS_LENGTH);
+		curSectionDecimal = curBeatDecimal / Conductor.BEATS_PER_MEASURE;
+		curSection = Math.floor(curSectionDecimal);
 	}
 
 	private function updateBeat():Void {
-		curBeat = Math.floor(curStep / Conductor.BEATS_LENGTH);
+		curBeatDecimal = curStepDecimal / Conductor.STEPS_PER_BEAT;
+		curBeat = Math.floor(curBeatDecimal);
 	}
 
 	private function updateCurStep():Void {
@@ -69,23 +75,24 @@ class MusicBeatState extends FlxUIState {
 			bpm: 0
 		}
 		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.songPosition - Conductor.settingOffset >= Conductor.bpmChangeMap[i].songTime) {
+			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime) {
 				lastChange = Conductor.bpmChangeMap[i];
 			}
 		}
-		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - Conductor.settingOffset - lastChange.songTime) / Conductor.stepCrochet);
+		curStepDecimal = lastChange.stepTime + (Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet;
+		curStep = Math.floor(curStepDecimal);
 	}
 
 	public function stepHit():Void {
 		ModdingUtil.addCall('stateStepHit', [curStep]);
-		if (curStep % Conductor.BEATS_LENGTH == 0) {
+		if (curStep % Conductor.STEPS_PER_BEAT == 0) {
 			beatHit();
 		}
 	}
 
 	public function beatHit():Void {
 		ModdingUtil.addCall('stateBeatHit', [curBeat]);
-		if (curBeat % Conductor.BEATS_LENGTH == 0) {
+		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
 			sectionHit();
 		}
 	}

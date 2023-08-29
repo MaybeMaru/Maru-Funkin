@@ -259,7 +259,7 @@ class Note extends FlxSpriteExt {
     }
 
     public var percentCut:Float = 1;
-    public static inline var susEndHeight:Int = 12; // 0
+    public var susEndHeight:Int = 12; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;

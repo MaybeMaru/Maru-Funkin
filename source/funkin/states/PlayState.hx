@@ -1,9 +1,5 @@
 package funkin.states;
 
-#if cpp
-import hxcodec.flixel.FlxVideo;
-#end
-import haxe.Constraints.Function;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
 
@@ -549,7 +545,7 @@ class PlayState extends MusicBeatState {
 
 			CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
 			swagCounter++;
-		}, Conductor.BEATS_LENGTH);
+		}, 4);
 	}
 
 	public function startSong():Void {

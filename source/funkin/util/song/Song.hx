@@ -158,7 +158,7 @@ class Song {
         for (i in 0...section) {
 			checkAddSections(song, i);
 			if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
-			time += Conductor.BEATS_LENGTH * (1000 * 60 / BPM);
+			time += Conductor.BEATS_PER_MEASURE * (1000 * 60 / BPM);
         }
         return time;
 	}

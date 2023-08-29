@@ -55,6 +55,7 @@ class ChartingState extends MusicBeatState {
         
         SONG = Song.checkSong(PlayState.SONG);
         Conductor.bpm = SONG.bpm;
+        Conductor.setTimeSignature(4,4);
         Conductor.loadMusic(SONG.song);
         Conductor.mapBPMChanges(SONG);
 		Conductor.songOffset = SONG.offsets;
@@ -82,7 +83,7 @@ class ChartingState extends MusicBeatState {
         strumBar.setPosition(mainGrid.grid.x, mainGrid.grid.y);
         add(strumBar);
 
-        songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y, "coolswag", 25);
+        songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y + 25, "coolswag", 25);
         songTxt._dynamic.update = function (elapsed) {
             var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(Conductor.inst.length / 1000, true) + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +
@@ -181,7 +182,7 @@ class ChartingState extends MusicBeatState {
         super.beatHit();
         if (playing && tabs.check_metronome.checked) {
             CoolUtil.playSound('chart/metronome_tick', 1, 1);
-			var scaleMult:Float = (curBeat % Conductor.BEATS_LENGTH == 0) ? 1.25 : 1.15;
+			var scaleMult:Float = (curBeat % Conductor.BEATS_PER_MEASURE == 0) ? 1.25 : 1.15;
 			bg.scale.set(scaleMult,scaleMult);
         }
     }
@@ -242,7 +243,7 @@ class ChartingState extends MusicBeatState {
 
     function updateBar() {
         var yPos = getTimeY(Conductor.songPosition - getSecTime(sectionIndex));
-        strumBar.y = mainGrid.grid.y + yPos;
+        strumBar.y = yPos;
         FlxG.camera.scroll.y = yPos - FlxG.height * 0.333;
     }
 
@@ -320,7 +321,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
-        var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + getSecTime(sectionIndex) - Conductor.stepCrochet;
         var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / ChartGrid.GRID_SIZE);
         var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         SONG.notes[sectionIndex].sectionNotes.push(note);
@@ -350,7 +351,8 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addEvent() {
-        var strumTime:Float = getYtime(noteTile.y) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        tabs.setCurEvent(ChartTabs.curEvent); // Update values
         var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, convertEventValues(ChartTabs.curEventValues)];
         SONG.notes[sectionIndex].sectionEvents.push(event);
         selectedEvent = event;
@@ -466,7 +468,7 @@ class ChartingState extends MusicBeatState {
         if (copyData == null || change == 0) return;
         for (i in copyData.sectionNotes) {
             var note:Array<Dynamic> = [i[0], i[1], i[2], i[3]]; // Make sure to not reuse it?? clone() don work :cries:
-            note[0] += Conductor.stepCrochet * (Conductor.STEPS_SECTION_LENGTH * change);
+            note[0] += Conductor.stepCrochet * (Conductor.STEPS_PER_MEASURE * change);
             SONG.notes[sectionIndex].sectionNotes.push(note);
             mainGrid.drawNote(note);
         } 
@@ -488,11 +490,11 @@ class ChartingState extends MusicBeatState {
     }
 
     public static inline function getTimeY(strumTime:Float):Float {
-		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
+		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE);
 	}
 
     public static inline function getYtime(y:Float):Float {
-        return FlxMath.remapToRange(y, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, 0, Conductor.STEPS_SECTION_LENGTH * Conductor.stepCrochet);
+        return FlxMath.remapToRange(y, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet);
     }
 
     public static inline function getSecTime(index:Int = 0) {
@@ -505,6 +507,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function loadJson(song:String):Void {
+        stop();
 		PlayState.SONG = Song.loadFromFile(PlayState.curDifficulty, song);
 		PlayState.SONG = Song.checkSong(PlayState.SONG);
 		FlxG.resetState();

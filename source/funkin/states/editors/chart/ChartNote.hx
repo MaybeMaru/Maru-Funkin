@@ -5,6 +5,7 @@ class ChartNote extends Note {
     public function new() {
         super();
         scrollFactor.set(1,1);
+        susEndHeight = 0;
         active = false;
     }
 
@@ -34,7 +35,8 @@ class ChartNote extends Note {
             scale.set(_scale,_scale);
             updateHitbox();
             
-            var _height = Math.floor(((FlxMath.remapToRange(_sus, 0, Conductor.stepCrochet * 16, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_SECTION_LENGTH)) + ChartGrid.GRID_SIZE / 2) / _scale);
+            var _off = ChartingState.getYtime(ChartGrid.GRID_SIZE * 0.5);
+            var _height = Math.floor(((FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE))/* + ChartGrid.GRID_SIZE / 2*/) / _scale);
             drawSustainCached(_height);
             updateHitbox();
             offset.x -= ChartGrid.GRID_SIZE / 2 - width / 2.125;

@@ -31,8 +31,8 @@ class NotesSubstate extends MusicBeatSubstate {
             var curStep = Math.floor((Conductor.songPosition - Conductor.settingOffset) / Conductor.stepCrochet);
             if (curStep != lastStep)  Conductor.autoSync();
             lastStep = curStep;
-            var curBeat = Math.floor(curStep / Conductor.BEATS_LENGTH);
-            var curSection = Math.floor(curBeat / Conductor.BEATS_LENGTH);
+            var curBeat = Math.floor(curStep / Conductor.STEPS_PER_BEAT);
+            var curSection = Math.floor(curBeat / Conductor.BEATS_PER_MEASURE);
             txt.text = 'Song Position: ${Math.floor(Conductor.songPosition)}\nCurrent Step: $curStep\nCurrent Beat: $curBeat\nCurrent Section: $curSection';
             txt.screenCenter(X);
         }

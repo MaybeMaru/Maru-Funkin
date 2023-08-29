@@ -9,17 +9,34 @@ typedef BPMChangeEvent = {
 class Conductor {
 	inline public static var NOTE_DATA_LENGTH:Int = 4;
 	inline public static var STRUMS_LENGTH:Int = NOTE_DATA_LENGTH * 2;
-	inline public static var BEATS_LENGTH:Int = 4;
-	inline public static var STEPS_LENGTH:Int = 4;
-	inline public static var STEPS_SECTION_LENGTH:Int = STEPS_LENGTH * BEATS_LENGTH;
+
+	public static var BEATS_PER_MEASURE:Int = 4;
+	public static var STEPS_PER_BEAT:Int = 4;
+	public static var STEPS_PER_MEASURE:Int = STEPS_PER_BEAT * BEATS_PER_MEASURE;
+
+	public static function setTimeSignature(top:Int = 4, bottom:Int = 4, ?_bpm:Float) { // Is this how it works??
+		BEATS_PER_MEASURE = top;
+		STEPS_PER_BEAT = bottom;
+		set_bpm(_bpm != null ? _bpm : bpm); // Update values
+	}
 
 	public static var bpm(default, set):Float = 100;
 	public static var crochetMills:Float = 60 / bpm;
-	public static var stepCrochetMills:Float = crochetMills * 0.25;
-	public static var sectionCrochetMills:Float = crochetMills * 4;
+	public static var stepCrochetMills:Float = crochetMills / STEPS_PER_BEAT;
+	public static var sectionCrochetMills:Float = crochetMills * BEATS_PER_MEASURE;
 	public static var crochet:Float = crochetMills * 1000; 					// beats in milliseconds
 	public static var stepCrochet:Float = stepCrochetMills * 1000;			// steps in milliseconds
 	public static var sectionCrochet:Float = sectionCrochetMills * 1000;	// sections in milliseconds
+
+	public static function set_bpm(value:Float):Float {
+		crochetMills = 60 / value;
+		stepCrochetMills = crochetMills / STEPS_PER_BEAT;
+		sectionCrochetMills = crochetMills * BEATS_PER_MEASURE;
+		crochet = crochetMills * 1000;
+		stepCrochet = stepCrochetMills * 1000;
+		sectionCrochet = sectionCrochetMills * 1000;
+		return bpm = value;
+	}
 
 	public static var songPosition:Float;
 	public static var lastSongPos:Float;
@@ -58,16 +75,6 @@ class Conductor {
 		settingOffset = SaveData.getSave('offset');
 	}
 
-	public static function set_bpm(value:Float):Float {
-		crochetMills = 60 / value;
-		stepCrochetMills = crochetMills * 0.25;
-		sectionCrochetMills = crochetMills * 4;
-		crochet = crochetMills * 1000;
-		stepCrochet = stepCrochetMills * 1000;
-		sectionCrochet = sectionCrochetMills * 1000;
-		return bpm = value;
-	}
-
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
 	public static function mapBPMChanges(song:SwagSong):Void {
@@ -88,7 +95,7 @@ class Conductor {
 				bpmChangeMap.push(event);
 			}
 
-			var deltaSteps:Int = STEPS_SECTION_LENGTH;
+			var deltaSteps:Int = STEPS_PER_MEASURE;
 			totalSteps += deltaSteps;
 			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
 		}
@@ -140,7 +147,7 @@ class Conductor {
 
 	public static function sync():Void {
 		soundSync(inst, songOffset[0]);
-		soundSync(vocals, songOffset[1]);
+		if (hasVocals) soundSync(vocals, songOffset[1]);
 	}
 
 	public static function soundSync(?sound:FlxSound, offset:Float = 0) {
@@ -154,8 +161,10 @@ class Conductor {
 	public static function autoSync(minOff:Int = 20):Void {
 		var syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > minOff * songPitch;
 		if (syncInst) soundSync(inst, songOffset[0]);
-		var syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > minOff * songPitch;
-		if (syncVocals) soundSync(vocals, songOffset[1]);
+		if (hasVocals) {
+			var syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > minOff * songPitch;
+			if (syncVocals) soundSync(vocals, songOffset[1]);
+		}
 	}
 
 	public static function setPitch(pitch:Float = 1, forceVar:Bool = true, forceTime:Bool = true):Void {
@@ -163,6 +172,6 @@ class Conductor {
 		songPitch = (forceVar) ? pitch : songPitch;
 		FlxG.timeScale = (forceTime) ? pitch : FlxG.timeScale;
 		inst.pitch = pitch;
-		vocals.pitch = pitch;
+		if (hasVocals) vocals.pitch = pitch;
 	}
 }

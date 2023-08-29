@@ -14,10 +14,10 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
     
     public function new() {
         super();
-        grid = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_SECTION_LENGTH, true, 0xff7c7c7c, 0xff6e6e6e);
-        for (i in 0...3) grid.pixels.fillRect(new Rectangle(0, GRID_SIZE*Conductor.BEATS_LENGTH*(i+1)-1, grid.width, 2), 0xff505050);
+        grid = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff7c7c7c, 0xff6e6e6e);
+        for (i in 0...Conductor.BEATS_PER_MEASURE) grid.pixels.fillRect(new Rectangle(0, ((grid.height/Conductor.BEATS_PER_MEASURE) * i) - 1, grid.width, 2), 0xff505050);
         grid.pixels.fillRect(new Rectangle(grid.width / 2 - 1, 0, 2, grid.height), FlxColor.BLACK);
-        grid.screenCenter();
+        grid.screenCenter(X);
         add(grid);
 
         waveformInst = new ChartWaveform(Conductor.inst, 0x923c70);
@@ -139,7 +139,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 
     public static inline function getGridOverlap(obj1:Dynamic, obj2:Dynamic):Bool {
 		return obj1.x > obj2.x && obj1.x < obj2.x + obj2.width
-		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_SECTION_LENGTH);
+		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_PER_MEASURE);
 	}
 
     public static inline function getGridCoords(obj1:Dynamic, obj2:Dynamic, snapY:Bool = true) {

@@ -439,7 +439,7 @@ class NotesGroup extends FlxGroup
         if (PlayState.instance.boyfriend == null) return;
 
         var bf = PlayState.instance.boyfriend;
-		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_LENGTH)
+		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
 		&& bf.animation.curAnim.name.startsWith('sing')
 		&& !bf.animation.curAnim.name.endsWith('miss'));
 
