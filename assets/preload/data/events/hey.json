@@ -1,0 +1,10 @@
+{
+    "description": "Plays hey! animation to a character",
+    "values": [
+        [
+            "boyfriend",
+            "dad",
+            "girlfriend"
+        ]
+    ]
+}

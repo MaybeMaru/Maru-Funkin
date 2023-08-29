@@ -179,16 +179,16 @@ class NotesGroup extends FlxGroup
 				}
 			}
 
-			for (songEvents in section.sectionEvents) {
-				var strumTime:Float = songEvents[0];
-				var eventName:String = songEvents[1];
-				var eventValues:Array<Dynamic> = songEvents[2];
+			for (e in section.sectionEvents) {
+				var strumTime:Float = e[0];
+				var eventName:String = e[1];
+				var eventValues:Array<Dynamic> = e[2];
 
 				var event:Event = new Event(strumTime, eventName, eventValues);
 				events.push(event);
 
 				//	Add event for scripts
-				if (!songEvents.contains(eventName)) {	
+				if (!songEvents.contains(eventName)) {
 					songEvents.push(eventName);
 				}
 			}

@@ -3,6 +3,7 @@ package funkin.states.editors.chart;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUIDropDownMenu;
 
 class EventTab extends FlxTypedSpriteGroup<Dynamic> {
     public function new(?X:Float, ?Y:Float, ?values:Array<Dynamic>) {
@@ -26,8 +27,7 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
             var id:Int = i-1;
             var _X = (i <= 12 ? 0 : 1)*125;
             var _Y = (i <= 12 ? id : id-12)*30;
-            var type = Type.typeof(v);
-            switch (type) {
+            switch (Type.typeof(v)) {
                 case TInt | TFloat:
                     var stepper = new QuickStepper(_X,_Y,v);
                     stepper.callback = function()
@@ -42,6 +42,15 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
                         if (updateFunc != null) updateFunc(id, checkbox.checked);
                     getValuesArray.push(function () return checkbox.checked);
                     add(checkbox);
+
+                case TClass(Array):
+                    var dropdown = new FlxUIDropDownMenu(_X,_Y,FlxUIDropDownMenu.makeStrIdLabelArray(v, true), function(_value:String) {
+                        var value = v.copy()[Std.parseInt(_value)];
+                        updateFunc(id, value);
+                    });
+                    dropdown.selectedLabel = v[0];
+                    getValuesArray.push(function () return dropdown.selectedLabel);
+                    add(dropdown);
 
                 default: //TClass(String)
                     var input = new FlxUIInputText(_X, _Y, 100, Std.string(v), 8);

@@ -297,7 +297,7 @@ class ChartTabs extends FlxUITabMenu {
 				var _defValues = EventUtil.getEventData(newEvent).values.copy();
 				eventValueTab.setValues(_defValues);
 				setCurEvent(newEvent);
-				ChartingState.instance.setEventData(_defValues, newEvent); // Set defaults
+				ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
 			}
 		});
 		setCurEvent(types[0]);
