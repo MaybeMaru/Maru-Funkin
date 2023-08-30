@@ -1,6 +1,6 @@
 package funkin.objects.note;
 
-class NoteStrum extends FlxSpriteExt {
+class NoteStrum extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
 	public var swagWidth:Float = 100;
 	public var swagHeight:Float = 100;

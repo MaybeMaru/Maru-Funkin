@@ -1,6 +1,6 @@
 package funkin.objects.note;
 
-class NoteSplash extends FlxSpriteExt {
+class NoteSplash extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
     public var curSkin:String = '';
 
