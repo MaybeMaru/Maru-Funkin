@@ -35,12 +35,6 @@ class ChartWaveform extends FlxSprite {
         drawWaveform();
     }
 
-    override function set_visible(value:Bool) {
-        super.set_visible(value);
-        if (!visible && value) updateWaveform();
-        return visible = value;
-    }
-
     public function updateWaveform() {
         drawWaveform(ChartingState.getSecTime(ChartingState.instance.sectionIndex) - soundOffset, ChartingState.getSecTime(ChartingState.instance.sectionIndex + 1) - soundOffset);
     }

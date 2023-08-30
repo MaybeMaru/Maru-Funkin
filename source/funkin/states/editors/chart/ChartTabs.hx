@@ -355,13 +355,27 @@ class ChartTabs extends FlxUITabMenu {
 			Conductor.vocals.volume = check_mute_voices.checked ? 0 : 1;
 		};
 
+		var check_waveform_inst = new FlxUICheckBox(check_mute_inst.x + 125, check_mute_inst.y, null, null, "Instrumental Waveform", 100);
+		check_waveform_inst.checked = false;
+		check_waveform_inst.callback = function() {
+			ChartingState.instance.mainGrid.waveformInst.visible = check_waveform_inst.checked;
+			ChartingState.instance.mainGrid.waveformInst.updateWaveform();
+		};
+
+		var check_waveform_voices = new FlxUICheckBox(check_waveform_inst.x, check_waveform_inst.y + 30, null, null, "Voices Waveform", 100);
+		check_waveform_voices.checked = false;
+		check_waveform_voices.callback = function() {
+			ChartingState.instance.mainGrid.waveformVocals.visible = check_waveform_voices.checked;
+			ChartingState.instance.mainGrid.waveformVocals.updateWaveform();
+		};
+
 		check_hitsound = new FlxUICheckBox(check_mute_inst.x, check_mute_voices.y + 30, null, null, "Use Hitsounds", 100);
 		check_hitsound.checked = false;
 
 		check_metronome = new FlxUICheckBox(check_mute_inst.x, check_hitsound.y + 30, null, null, "Use Metronome", 100);
 		check_metronome.checked = false;
 
-		var button_clearSongNotes:FlxButton = new FlxButton(250, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
+		var button_clearSongNotes:FlxButton = new FlxButton(275, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
 		button_clearSongNotes.color = FlxColor.RED;
 		button_clearSongNotes.scale.set(1.3,1.25);
 		button_clearSongNotes.label.color = FlxColor.WHITE;
@@ -385,6 +399,8 @@ class ChartTabs extends FlxUITabMenu {
 
 		tab_group_editor.add(check_mute_inst);
 		tab_group_editor.add(check_mute_voices);
+		tab_group_editor.add(check_waveform_inst);
+		tab_group_editor.add(check_waveform_voices);
 		tab_group_editor.add(check_hitsound);
 		tab_group_editor.add(check_metronome);
 		tab_group_editor.add(slider_pitch);

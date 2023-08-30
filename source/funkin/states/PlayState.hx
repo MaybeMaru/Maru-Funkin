@@ -121,7 +121,10 @@ class PlayState extends MusicBeatState {
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');
+
 		SkinUtil.initSkinData();
+		NoteUtil.initTypes();
+		EventUtil.initEvents();
 
 		if (FlxG.sound.music != null) FlxG.sound.music.stop();
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
@@ -176,8 +179,6 @@ class PlayState extends MusicBeatState {
 		stageJsonData = Stage.getJsonData(curStage);
 		Paths.setCurrentLevel(stageJsonData.library);
 		SkinUtil.setCurSkin(stageJsonData.skin);
-		NoteUtil.initTypes();
-		EventUtil.initEvents();
 
 		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
 		dad.stageOffsets.set(stageJsonData.dadOffsets[0], stageJsonData.dadOffsets[1]);
@@ -852,13 +853,8 @@ class PlayState extends MusicBeatState {
 		iconP1.bumpIcon();
 		iconP2.bumpIcon();
 
-		if (boyfriend.animation.curAnim != null) {
-			if (!boyfriend.animation.curAnim.name.startsWith("sing")) 						boyfriend.dance();
-		} if (dad.animation.curAnim != null) {
-			if (!dad.animation.curAnim.name.startsWith("sing"))								dad.dance();
-		} if (gf.animation.curAnim != null) {
-			if (curBeat % gfSpeed == 0 && !gf.animation.curAnim.name.startsWith("sing"))	gf.dance();
-		}
+		for (i in [boyfriend, dad, gf])
+			i.danceCheck();
 
 		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
 	}

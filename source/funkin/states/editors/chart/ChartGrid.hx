@@ -25,7 +25,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         add(waveformInst);
 
         waveformVocals = new ChartWaveform(Conductor.vocals);
-        //waveformVocals.visible = false;
+        waveformVocals.visible = false;
         add(waveformVocals);
 
         notesGroup = new FlxTypedGroup<ChartNote>();

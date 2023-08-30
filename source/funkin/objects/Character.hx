@@ -116,7 +116,7 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function nullAnimCheck():Void {
-		danceCheck();
+		getDanceAnim();
 		if(animation.curAnim == null) {
 			for (anim in animOffsets.keys())
 				playAnim(anim);
@@ -197,13 +197,19 @@ class Character extends FlxSpriteExt {
 	public var danced:Bool = false;
 	public var idleAlt:String = "";
 
+	public function danceCheck() {
+		if (animation.curAnim == null) return;
+		if (!animation.curAnim.name.startsWith("sing"))
+			dance();
+	}
+
 	public function dance():Void {
 		if (!debugMode && forceDance && !specialAnim) {
-			danceCheck();
+			getDanceAnim();
 		}
 	}
 
-	function danceCheck():Void {
+	function getDanceAnim():Void {
 		var _danceRight = 'danceRight' + idleAlt;
 		var _danceLeft = 'danceLeft' + idleAlt;
 		var _idle = 'idle' + idleAlt;
