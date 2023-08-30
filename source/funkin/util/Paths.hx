@@ -1,5 +1,6 @@
 package funkin.util;
 
+import textureAtlas.TextureAtlas;
 import flixel.system.FlxAssets;
 import flash.media.Sound;
 import flixel.system.FlxAssets.FlxSoundAsset;
@@ -204,9 +205,10 @@ class Paths
 		return JsonUtil.getAsepritePacker(key, library, gpu);
 	}
 
-	/*inline static public function getAnimateAtlas(key:String, ?library:String):FlxFramesCollection {
-		return animateatlas.AtlasFrameMaker.construct(key);
-	}*/
+	inline static public function getTextureAtlas(key:String, ?library:String):FlxAtlasFrames {
+		trace(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
+		return TextureAtlas.fromAtlas(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
+	}
 
 	inline static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
 		var fileList:Array<String> = [];
@@ -313,15 +315,18 @@ class Paths
 		return graphic;
 	}
 
-	static public function getGraphic(key:String, cache:Bool = false) {
-		if (existsGraphic(key)) return cachedGraphics.get(key);
+	static public function getRawBitmap(key:String) {
 		#if desktop	
 		var fixPath = removeAssetLib(key);
-		if (!fixPath.startsWith('assets')) {
-			return addGraphicFromBitmap(BitmapData.fromFile(fixPath), key, cache);
-		}
+		if (!fixPath.startsWith('assets'))
+			return BitmapData.fromFile(fixPath);
 		#end
-		return addGraphicFromBitmap(OpenFlAssets.getBitmapData(key, false), key, cache);
+		return OpenFlAssets.getBitmapData(key, false);
+	}
+
+	static public function getGraphic(key:String, cache:Bool = false) {
+		if (existsGraphic(key)) return cachedGraphics.get(key);
+		return addGraphicFromBitmap(getRawBitmap(key), key, cache);
 	}
 
 	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
@@ -363,7 +368,7 @@ class Paths
 		if 		(exists(file('images/$key.xml', library), TEXT))				return SPARROW;
 		else if (exists(file('images/$key.txt', library), TEXT))				return SHEETPACKER;
 		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
-		//else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
+		else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
 		else																	return IMAGE;
 	}
 }

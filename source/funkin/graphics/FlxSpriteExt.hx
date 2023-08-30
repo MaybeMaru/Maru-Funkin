@@ -60,7 +60,7 @@ class FlxSpriteExt extends FlxSprite {
 			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, gpu);
 			case SHEETPACKER: 	frames = Paths.getPackerAtlas(path, library, gpu);
 			case JSON:			frames = Paths.getAsepriteAtlas(path, library, gpu);
-			//case ATLAS: 		frames = Paths.getAnimateAtlas(path);	
+			case ATLAS: 		frames = Paths.getTextureAtlas(path);	
 		}
 		return this;
 	}
