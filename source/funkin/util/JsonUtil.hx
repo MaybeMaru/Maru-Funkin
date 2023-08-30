@@ -82,15 +82,8 @@ class JsonUtil {
 		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
 		fullPath:Bool = false, mainFolder:String = 'data'):Array<String> {
 		
-        var assetsList:Array<String> = [];
-        var modList:Array<String> = [];
-
-        if (assets)
-            assetsList = Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder');
-        #if desktop
-        modList = Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods);
-        #end
-
+        var assetsList:Array<String> = assets ? Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder') : [];
+        var modList:Array<String> = #if desktop Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods); #else []; #end
         return assetsList.concat(modList);
 	}
 

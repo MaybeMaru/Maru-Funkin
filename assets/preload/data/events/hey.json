@@ -1,5 +1,5 @@
 {
-    "description": "Plays hey! animation to a character",
+    "description": "Plays hey! animation to a character\n\nValue 1: Character to hey",
     "values": [
         [
             "boyfriend",

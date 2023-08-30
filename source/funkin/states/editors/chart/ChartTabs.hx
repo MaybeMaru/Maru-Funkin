@@ -276,6 +276,7 @@ class ChartTabs extends FlxUITabMenu {
 	}
 
 	var eventsDropDown:FlxUIDropDownMenu;
+	var eventDescription:FlxText;
 	public var eventValueTab:EventTab = null;
 
 	public static var curEvent:String = '';
@@ -294,24 +295,32 @@ class ChartTabs extends FlxUITabMenu {
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var newEvent = types[Std.parseInt(type)];
 			if (curEvent != newEvent) {
-				var _defValues = EventUtil.getEventData(newEvent).values.copy();
+				var eventData = EventUtil.getEventData(newEvent);
+				var _defValues = eventData.values.copy();
+				eventDescription.text = eventData.description;
 				eventValueTab.setValues(_defValues);
 				setCurEvent(newEvent);
 				ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
 			}
 		});
-		setCurEvent(types[0]);
-		eventsDropDown.selectedLabel = types[0];
+
+		eventDescription = new FlxText(eventsDropDown.x,eventsDropDown.y+25,125,"ISNONEOINWPEOEGNPOEGPOMPEOWGPWG");
+		tab_group_event.add(eventDescription);
 
 		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
 		tab_group_event.add(eventsDropDown);
+	
+		var initEvent = types[0];
+		if (initEvent != null) {
+			setCurEvent(initEvent);
+			eventsDropDown.selectedLabel = initEvent;
+			eventDescription.text = EventUtil.getEventData(initEvent).description;
+		}
 
 		postCreateFuncs.push(function () {
 			eventValueTab = new EventTab(150, 26, curEventValues);
-			eventValueTab.updateFunc = function (id:Int, value:Dynamic) {
-				//trace(id + " / " + value);
+			eventValueTab.updateFunc = function (id:Int, value:Dynamic)
 				ChartingState.instance.updateEvent(id, value);
-			}
 			tab_group_event.add(eventValueTab);
 		});
 		
@@ -389,7 +398,6 @@ class ChartTabs extends FlxUITabMenu {
 
 	var postCreateFuncs:Array<Dynamic> = [];
 	public function runPost() {
-		for (i in postCreateFuncs)
-			i();
+		for (i in postCreateFuncs) i();
 	}
 }

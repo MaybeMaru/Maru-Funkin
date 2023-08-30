@@ -1,5 +1,5 @@
 {
-    "description": "Plays an animation to a character",
+    "description": "Plays an animation to a character\n\nValue 1: Character to play\nValue 2: Animation to play\nValue 3: Forced\nValue 4: Special animation",
     "values": [
         [
             "boyfriend",
