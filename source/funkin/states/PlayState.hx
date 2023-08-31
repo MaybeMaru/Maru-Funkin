@@ -271,7 +271,7 @@ class PlayState extends MusicBeatState {
 
 			health += note.hitHealth[0];
 			boyfriend.sing(note.noteData, note.altAnim);
-			notesGroup.inBotplay ? notesGroup.playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm') :
+			notesGroup.inBotplay ? notesGroup.playStrumAnim(note) :
 						notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 
 			note.wasGoodHit = true;
@@ -290,7 +290,7 @@ class PlayState extends MusicBeatState {
 			Conductor.vocals.volume = 1;
 	
 			if (notesGroup.inBotplay) 	{
-				notesGroup.playStrumAnim(note.noteData+Conductor.NOTE_DATA_LENGTH, 'confirm');
+				notesGroup.playStrumAnim(note);
 				note.setSusPressed();
 			}
 			else notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
@@ -342,7 +342,7 @@ class PlayState extends MusicBeatState {
 			dad.sing(note.noteData, note.altAnim);
 			Conductor.vocals.volume = 1;
 	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
 	
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
@@ -353,7 +353,7 @@ class PlayState extends MusicBeatState {
 			dad.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
 	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
 			note.setSusPressed();
 	
 			ModdingUtil.addCall('opponentSustainPress', [note]);

@@ -8,7 +8,7 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
     var offsetY:Float = 0;
 
     public function new(p:Int = 0, skipIntro:Bool = false, lanes:Int = Conductor.NOTE_DATA_LENGTH) {
-        super();
+        super(9);
         startX = NoteUtil.swagWidth * 0.666 + (FlxG.width / 2) * p;
         offsetY = Preferences.getPref('downscroll') ? 10 : -10;
         var isPlayer:Bool = p == 1;
@@ -27,6 +27,7 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
     ];
 
     public function addStrum(noteData:Int = 0, skipIntro:Bool = true) {
+        if (members.length >= 9) return null; // STOP
         var strumX:Float =  startX + (NoteUtil.swagWidth + 5) * noteData;
 		var strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
 		strumNote.ID = noteData;

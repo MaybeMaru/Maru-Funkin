@@ -69,11 +69,11 @@ class NotesGroup extends FlxGroup
 			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 		}
 		opponentNoteHit = function (note:Note) {
-			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			playStrumAnim(note);
 			removeNote(note);
 		}
 		opponentSustainPress = function (note:Note) {
-			playStrumAnim(note.noteData%Conductor.NOTE_DATA_LENGTH);
+			playStrumAnim(note);
 			note.setSusPressed();
 		}
     }
@@ -132,7 +132,7 @@ class NotesGroup extends FlxGroup
 				// Add note
 				var newNote:Note = new Note(noteData, strumTime, 0, skin);
 				newNote.noteSpeed = songSpeed;
-				newNote.targetSpr = targetStrum;
+				newNote.targetStrum = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
 				unspawnNotes.push(newNote);
@@ -142,7 +142,7 @@ class NotesGroup extends FlxGroup
 					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
 					if (newSustain.alive) {
 						newSustain.noteSpeed = songSpeed;
-						newSustain.targetSpr = targetStrum;
+						newSustain.targetStrum = targetStrum;
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
 						newSustain.parentNote = newNote;
@@ -434,13 +434,12 @@ class NotesGroup extends FlxGroup
 				bf.dance();
 		}
 	}
-
-    public function playStrumAnim(data:Int = 0, anim:String = 'confirm', forced:Bool = true):Void {
-		var leStrum:NoteStrum = strumLineNotes[data];
-		if (leStrum != null) {
-			leStrum.playStrumAnim(anim, forced);
-			leStrum.staticTime = Conductor.stepCrochetMills;
-		}
+	
+	public function playStrumAnim(note:Note, anim:String = 'confirm', forced:Bool = true) {
+		var strum = note.targetStrum;
+		if (strum == null) return;
+		strum.playStrumAnim(anim, forced);
+		strum.staticTime = Conductor.stepCrochetMills;
 	}
 
     inline function getPref(pref:String):Dynamic return Preferences.getPref(pref);

@@ -81,7 +81,7 @@ class Song {
 		var foundNotes:Map<String, Bool> = [];
 		var uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
 		for (i in section.sectionNotes) {
-			var key = '${Math.floor(i[0])}-${i[1]}';
+			var key = '${Math.floor(i[0])}-${i[1]}-${i[3]}';
 			if (!foundNotes.exists(key)) {
 				foundNotes.set(key, true);
 				uniqueNotes.push(i);

@@ -15,7 +15,7 @@ class Note extends FlxSpriteExt implements INoteData {
     public var isSustainNote:Bool = false;
 
     public var noteSpeed(default, set):Float = 1;
-    public var targetSpr:NoteStrum = null;
+    public var targetStrum:NoteStrum = null;
     public var mustPress:Bool = false;
     public var parentNote:Note = null; // For sustain notes
     public var childNote:Note = null; // For normal notes
@@ -95,12 +95,12 @@ class Note extends FlxSpriteExt implements INoteData {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (targetSpr == null) return; // Move to strum
+        if (targetStrum == null) return; // Move to strum
         var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-        strumCenter = targetSpr.y + targetSpr.swagHeight / 2; // Center of the target strum
+        strumCenter = targetStrum.y + targetStrum.swagHeight / 2; // Center of the target strum
         strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
         y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
-        x = targetSpr.x - (noteMove * -getSin(approachAngle));
+        x = targetStrum.x - (noteMove * -getSin(approachAngle));
 
         if (isSustainNote) { // Get if the sustain is between pressing bounds
             angle = approachAngle;
