@@ -19,12 +19,14 @@ class NotesGroup extends FlxGroup
 
     public var skipStrumIntro:Bool = false;
 
-	public var strumLineNotes:Array<NoteStrum> = [];
+	public var strumLineNotes(get, never):Array<NoteStrum>;
+	public function get_strumLineNotes() return opponentStrums.members.concat(playerStrums.members);
 	public var playerStrums:StrumLineGroup;
 	public var opponentStrums:StrumLineGroup;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
-	public var strumLineInitPos(default, never):Array<FlxPoint> = [];
+	public var strumLineInitPos(get, never):Array<FlxPoint>;
+	public function get_strumLineInitPos() return opponentStrums.initPos.concat(playerStrums.initPos);
 	public var playerStrumsInitPos(get, never):Array<FlxPoint>;
 	public function get_playerStrumsInitPos() return playerStrums.initPos;
 	public var opponentStrumsInitPos(get, never):Array<FlxPoint>;
@@ -86,13 +88,8 @@ class NotesGroup extends FlxGroup
     public function init(startPos:Float = -5000) {
 		StrumLineGroup.strumLineY = Preferences.getPref('downscroll') ? FlxG.height - 150 : 50;
 		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
-		for (i in opponentStrums) strumLineNotes.push(i);
-		strumLineInitPos.concat(opponentStrums.initPos);
 		add(opponentStrums);
-
 		playerStrums = new StrumLineGroup(1, skipStrumIntro);
-		for (i in playerStrums) strumLineNotes.push(i);
-		strumLineInitPos.concat(playerStrums.initPos);
 		add(playerStrums);
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
@@ -316,17 +313,17 @@ class NotesGroup extends FlxGroup
         controls();
     }
 
-	public static var defaultHold = [false,false,false,false];
-    public var holdingArray:Array<Bool> = [false,false,false,false];
-	public var controlArray:Array<Bool> = [false,false,false,false];
+    public var holdingArray:Array<Bool> = [];
+	public var controlArray:Array<Bool> = [];
 
     private function controls():Void {
-		holdingArray = defaultHold.copy();
-		controlArray = defaultHold.copy();
-		if (inBotplay) return;
-		
-		holdingArray = Controls.getNoteKeys();
-		controlArray = Controls.getNoteKeys('-P');
+		holdingArray = [];
+		controlArray = [];
+		for (i in playerStrums) {
+			holdingArray.push(inBotplay ? false : i.getControl());
+			controlArray.push(inBotplay ? false : i.getControl("-P"));
+			if (inBotplay) return;
+		}
 
 		if (generatedMusic) {
 			var possibleNotes:Array<Note> = [];
@@ -410,9 +407,9 @@ class NotesGroup extends FlxGroup
 		for (strum in playerStrums) {
 			var strumAnim = strum.animation.curAnim;
 			if (strumAnim != null) {
-				if (controlArray[strum.noteData] && !strumAnim.name.startsWith('confirm'))
+				if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
 					strum.playStrumAnim('pressed');
-				if (!holdingArray[strum.noteData])
+				if (!strum.getControl())
 					strum.playStrumAnim('static');
 			}
 		}

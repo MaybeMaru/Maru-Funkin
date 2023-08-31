@@ -93,6 +93,10 @@ class Song {
 				section.sectionEvents.push([n[0], n[2], [n[3], n[4]]]);
 				section.sectionNotes.remove(n);
 			} else {
+				if (n[1] > Conductor.STRUMS_LENGTH - 1) { // Convert extra key charts to 4 key
+					if (n[3] == null) n.push("default-extra");
+					else if (n[3] == 0) n[3] = "default-extra";
+				}
 				n[1] %= Conductor.STRUMS_LENGTH;
 			}
 		}

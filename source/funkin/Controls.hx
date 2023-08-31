@@ -115,8 +115,4 @@ class Controls {
         if (!controlBindings.exists(bind))          controlBindings.set(bind, keys);
         if (!controlGamepadBindings.exists(bind))   controlGamepadBindings.set(bind, gamepadKeys);
     }
-
-    inline public static function getNoteKeys(type:String = ""):Array<Bool> {
-        return [getKey('NOTE_LEFT$type'), getKey('NOTE_DOWN$type'), getKey('NOTE_UP$type'), getKey('NOTE_RIGHT$type')];
-    }
 }

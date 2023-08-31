@@ -7,6 +7,12 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	public var staticTime:Float = 0;
 	public var curSkin:String = '';
 
+	public var controlFunction:Dynamic = null;
+	public function getControl(type:String = "") {
+		if (controlFunction == null) return false;
+		return controlFunction(type);
+	}
+
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
 		super(x,y);
 		this.noteData = noteData;
