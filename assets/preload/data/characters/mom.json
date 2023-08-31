@@ -1,73 +1,55 @@
 {
 	"imagePath": "week4/Mom_Assets",
+	"isGF": false,
+	"camOffsets": [-150,0],
 	"icon": "mom",
-	"camOffsets": [
-		-150,
-		0
-	],
+	"scale": 1,
+	"charOffsets": [-40,410],
 	"anims": [
 		{
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0,0],
+			"indices": [],
 			"loop": false,
-			"animName": "idle",
 			"framerate": 24,
 			"animFile": "Mom Idle",
-			"indices": []
+			"animName": "idle"
 		},
 		{
-			"offsets": [
-				8,
-				-175
-			],
+			"offsets": [-52,-60],
+			"indices": [],
 			"loop": false,
-			"animName": "singDOWN",
-			"framerate": 24,
-			"animFile": "MOM DOWN POSE",
-			"indices": []
-		},
-		{
-			"offsets": [
-				-52,
-				-60
-			],
-			"loop": false,
-			"animName": "singRIGHT",
 			"framerate": 24,
 			"animFile": "Mom Pose Left",
-			"indices": []
+			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [
-				137,
-				-29
-			],
+			"offsets": [8,-175],
+			"indices": [],
 			"loop": false,
-			"animName": "singLEFT",
 			"framerate": 24,
-			"animFile": "Mom Left Pose",
-			"indices": []
+			"animFile": "MOM DOWN POSE",
+			"animName": "singDOWN"
 		},
 		{
-			"offsets": [
-				24,
-				66
-			],
+			"offsets": [24,66],
+			"indices": [],
 			"loop": false,
-			"animName": "singUP",
 			"framerate": 24,
 			"animFile": "Mom Up Pose",
-			"indices": []
+			"animName": "singUP"
+		},
+		{
+			"offsets": [137,-29],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Mom Left Pose",
+			"animName": "singLEFT"
 		}
 	],
-	"charOffsets": [
-		-40,
-		410
-	],
-	"scale": 1,
+	"isPlayer": false,
 	"flipX": false,
+	"gameOverChar": "bf-dead",
 	"antialiasing": true,
-	"packer": "Sparrow"
+	"gameOverSuffix": ""
 }

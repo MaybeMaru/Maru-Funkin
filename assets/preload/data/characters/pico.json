@@ -1,77 +1,11 @@
 {
 	"imagePath": "week3/Pico_FNF_assetss",
-	"camOffsets": [
-		-150,
-		75
-	],
-	"icon": "pico",
 	"isGF": false,
-	"scale": 1,
-	"charOffsets": [
-		40,
-		60
-	],
+	"icon": "pico",
+	"camOffsets": [-150,75],
 	"anims": [
 		{
-			"offsets": [
-				-47,
-				-42
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Down Note MISS0",
-			"animName": "singDOWNmiss"
-		},
-		{
-			"offsets": [
-				-47,
-				-83
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Down Note0",
-			"animName": "singDOWN"
-		},
-		{
-			"offsets": [
-				-26,
-				22
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "pico Up note0",
-			"animName": "singUP"
-		},
-		{
-			"offsets": [
-				61,
-				47
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Note Right Miss0",
-			"animName": "singLEFTmiss"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Idle Dance",
-			"animName": "idle"
-		},
-		{
-			"offsets": [
-				-72,
-				26
-			],
+			"offsets": [-72,26],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -79,10 +13,47 @@
 			"animName": "singRIGHTmiss"
 		},
 		{
-			"offsets": [
-				-81,
-				-11
-			],
+			"offsets": [-47,-83],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Down Note0",
+			"animName": "singDOWN"
+		},
+		{
+			"offsets": [-26,22],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "pico Up note0",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [61,47],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Note Right Miss0",
+			"animName": "singLEFTmiss"
+		},
+		{
+			"offsets": [0,0],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Idle Dance",
+			"animName": "idle"
+		},
+		{
+			"offsets": [-47,-42],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Down Note MISS0",
+			"animName": "singDOWNmiss"
+		},
+		{
+			"offsets": [-81,-11],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -90,31 +61,27 @@
 			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [
-				56,
-				1
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Pico Note Right0",
-			"animName": "singLEFT"
-		},
-		{
-			"offsets": [
-				-20,
-				58
-			],
+			"offsets": [-20,58],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "pico Up note miss0",
 			"animName": "singUPmiss"
+		},
+		{
+			"offsets": [56,1],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Pico Note Right0",
+			"animName": "singLEFT"
 		}
 	],
-	"flipX": true,
+	"charOffsets": [40,60],
+	"scale": 1,
 	"isPlayer": false,
-	"antialiasing": true,
+	"flipX": true,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }

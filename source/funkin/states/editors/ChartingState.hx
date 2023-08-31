@@ -526,7 +526,7 @@ class ChartingState extends MusicBeatState {
 	}
 
     public function getSongString(_:Null<String> = null) {
-		return Json.stringify({
+		return FunkyJson.stringify({
 			"song": Song.optimizeJson(SONG)
 		}, _);
 	}

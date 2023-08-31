@@ -1,57 +1,13 @@
 {
 	"imagePath": "week7/bf-hold-gf-DEAD",
-	"icon": "bf",
-	"camOffsets": [
-		0,
-		0
-	],
 	"isGF": false,
+	"camOffsets": [0,0],
+	"icon": "bf",
+	"scale": 1,
+	"charOffsets": [-30,20],
 	"anims": [
 		{
-			"offsets": [
-				21,
-				16
-			],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF Dies with GF",
-			"animName": "firstDeath"
-		},
-		{
-			"offsets": [
-				21,
-				-1
-			],
-			"indices": [
-				17,
-				18,
-				19,
-				20,
-				21,
-				22,
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29,
-				30,
-				31,
-				32,
-				33
-			],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF Dead with GF Loop",
-			"animName": "deathLoopRight"
-		},
-		{
-			"offsets": [
-				21,
-				30
-			],
+			"offsets": [21,30],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -59,41 +15,33 @@
 			"animName": "deathConfirm"
 		},
 		{
-			"offsets": [
-				21,
-				-1
-			],
-			"indices": [
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				12,
-				13,
-				14,
-				15,
-				16
-			],
+			"offsets": [21,-1],
+			"indices": [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF Dead with GF Loop",
+			"animName": "deathLoopRight"
+		},
+		{
+			"offsets": [21,16],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF Dies with GF",
+			"animName": "firstDeath"
+		},
+		{
+			"offsets": [21,-1],
+			"indices": [0,1,2,3,4,5,6,7,8,9,12,13,14,15,16],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "BF Dead with GF Loop",
 			"animName": "deathLoopLeft"
 		}
 	],
-	"charOffsets": [
-		-30,
-		20
-	],
-	"scale": 1,
-	"flipX": true,
 	"isPlayer": true,
-	"antialiasing": true,
+	"flipX": true,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }

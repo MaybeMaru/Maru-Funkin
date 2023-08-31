@@ -1,90 +1,63 @@
 {
-	"antialiasing": true,
 	"imagePath": "week2/Monster_Assets",
-	"camOffsets": [
-		-300,
-		100
-	],
+	"isGF": false,
 	"icon": "monster",
-	"scale": 1,
-	"charOffsets": [
-		90,
-		260
-	],
+	"camOffsets": [-300,100],
 	"anims": [
 		{
-			"animName": "idle",
+			"offsets": [0,0],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"framerate": 24,
 			"animFile": "monster idle0",
-			"framerate": 24,
-			"indices": []
+			"animName": "idle"
 		},
 		{
-			"animName": "idle-loop",
-			"loop": true,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "monster idle0",
-			"framerate": 24,
-			"indices": [
-				10,
-				11,
-				12,
-				13,
-				14,
-				15
-			]
-		},
-		{
-			"animName": "singDOWN",
+			"offsets": [-52,15],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				-60,
-				-90
-			],
-			"animFile": "monster down0",
 			"framerate": 24,
-			"indices": []
-		},
-		{
-			"animName": "singRIGHT",
-			"loop": false,
-			"offsets": [
-				-52,
-				15
-			],
 			"animFile": "Monster Right note0",
-			"framerate": 24,
-			"indices": []
+			"animName": "singRIGHT"
 		},
 		{
-			"animName": "singLEFT",
+			"offsets": [-60,-90],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				-36,
-				10
-			],
-			"animFile": "Monster left note0",
 			"framerate": 24,
-			"indices": []
+			"animFile": "monster down0",
+			"animName": "singDOWN"
 		},
 		{
-			"animName": "singUP",
+			"offsets": [0,0],
+			"indices": [10,11,12,13,14,15],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "monster idle0",
+			"animName": "idle-loop"
+		},
+		{
+			"offsets": [-28,92],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				-28,
-				92
-			],
+			"framerate": 24,
 			"animFile": "monster up note0",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [-36,10],
+			"indices": [],
+			"loop": false,
 			"framerate": 24,
-			"indices": []
+			"animFile": "Monster left note0",
+			"animName": "singLEFT"
 		}
 	],
-	"flipX": false
+	"charOffsets": [90,260],
+	"scale": 1,
+	"isPlayer": false,
+	"flipX": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
 }

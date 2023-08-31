@@ -1,104 +1,71 @@
 {
 	"imagePath": "week2/spookyKids",
-	"camOffsets": [
-		-150,
-		75
-	],
+	"isGF": false,
 	"icon": "spooky",
-	"scale": 1,
-	"charOffsets": [
-		-80,
-		140
-	],
+	"camOffsets": [-150,75],
 	"anims": [
 		{
-			"animName": "hey",
+			"offsets": [62,27],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				62,
-				27
-			],
 			"framerate": 24,
 			"animFile": "note hey",
-			"indices": []
+			"animName": "hey"
 		},
 		{
-			"animName": "danceLeft",
+			"offsets": [-129,-16],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "spooky dance idle",
-			"framerate": 12,
-			"indices": [
-				0,
-				2,
-				6
-			]
-		},
-		{
-			"animName": "danceRight",
-			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "spooky dance idle",
-			"framerate": 12,
-			"indices": [
-				8,
-				10,
-				12,
-				14
-			]
-		},
-		{
-			"animName": "singDOWN",
-			"loop": false,
-			"offsets": [
-				-20,
-				-142
-			],
-			"animFile": "spooky DOWN note",
 			"framerate": 24,
-			"indices": []
-		},
-		{
-			"animName": "singRIGHT",
-			"loop": false,
-			"offsets": [
-				-129,
-				-16
-			],
 			"animFile": "spooky sing right",
-			"framerate": 24,
-			"indices": []
+			"animName": "singRIGHT"
 		},
 		{
-			"animName": "singLEFT",
+			"offsets": [-20,-142],
+			"indices": [],
 			"loop": false,
-			"offsets": [
-				140,
-				-17
-			],
-			"animFile": "note sing left",
 			"framerate": 24,
-			"indices": []
+			"animFile": "spooky DOWN note",
+			"animName": "singDOWN"
 		},
 		{
-			"animName": "singUP",
+			"offsets": [0,0],
+			"indices": [8,10,12,14],
 			"loop": false,
-			"offsets": [
-				-14,
-				25
-			],
+			"framerate": 12,
+			"animFile": "spooky dance idle",
+			"animName": "danceRight"
+		},
+		{
+			"offsets": [-14,25],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
 			"animFile": "spooky UP NOTE",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [140,-17],
+			"indices": [],
+			"loop": false,
 			"framerate": 24,
-			"indices": []
+			"animFile": "note sing left",
+			"animName": "singLEFT"
+		},
+		{
+			"offsets": [0,0],
+			"indices": [0,2,6],
+			"loop": false,
+			"framerate": 12,
+			"animFile": "spooky dance idle",
+			"animName": "danceLeft"
 		}
 	],
-	"isPlayer": false,
+	"charOffsets": [-80,140],
+	"scale": 1,
 	"flipX": false,
-	"antialiasing": true
+	"isPlayer": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": true,
+	"gameOverSuffix": ""
 }

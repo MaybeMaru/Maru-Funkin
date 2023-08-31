@@ -592,7 +592,7 @@ class AnimationDebug extends MusicBeatState {
 	var _file:FileReference;
 	private function saveLevel():Void {
 		formatJsonChar();
-		var data:String = Json.stringify(character, "\t");
+		var data:String = FunkyJson.stringify(character, "\t");
 		if ((data != null) && (data.length > 0)) {
 			_file = new FileReference();
 			_file.save(data.trim(), '${displayChar.curCharacter}.json');

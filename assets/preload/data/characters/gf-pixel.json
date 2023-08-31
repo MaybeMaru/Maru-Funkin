@@ -1,72 +1,31 @@
 {
-	"antialiasing": false,
 	"imagePath": "week6/gfPixel",
-	"camOffsets": [
-		0,
-		0
-	],
+	"isGF": false,
 	"icon": "gf",
-	"scale": 6,
-	"charOffsets": [
-		-240,
-		-60
-	],
+	"camOffsets": [0,0],
 	"anims": [
 		{
-			"animName": "danceRight",
+			"offsets": [0,0],
+			"indices": [30,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "GF IDLE",
 			"framerate": 24,
-			"indices": [
-				15,
-				16,
-				17,
-				18,
-				19,
-				20,
-				21,
-				22,
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29
-			]
+			"animFile": "GF IDLE",
+			"animName": "danceLeft"
 		},
 		{
-			"animName": "danceLeft",
+			"offsets": [0,0],
+			"indices": [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"animFile": "GF IDLE",
 			"framerate": 24,
-			"indices": [
-				30,
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				10,
-				11,
-				12,
-				13,
-				14
-			]
+			"animFile": "GF IDLE",
+			"animName": "danceRight"
 		}
 	],
-	"flipX": false
+	"charOffsets": [-240,-60],
+	"scale": 6,
+	"isPlayer": false,
+	"flipX": false,
+	"gameOverChar": "bf-dead",
+	"antialiasing": false,
+	"gameOverSuffix": ""
 }

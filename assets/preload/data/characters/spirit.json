@@ -1,73 +1,55 @@
 {
 	"imagePath": "week6/spirit",
+	"isGF": false,
+	"camOffsets": [50,300],
 	"icon": "spirit",
-	"camOffsets": [
-		50,
-		300
-	],
+	"scale": 6,
+	"charOffsets": [-40,-20],
 	"anims": [
 		{
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0,0],
+			"indices": [],
 			"loop": false,
-			"animName": "idle",
 			"framerate": 24,
 			"animFile": "idle spirit_",
-			"indices": []
+			"animName": "idle"
 		},
 		{
-			"offsets": [
-				0,
-				60
-			],
+			"offsets": [396,378],
+			"indices": [],
 			"loop": false,
-			"animName": "singUP",
-			"framerate": 24,
-			"animFile": "up_",
-			"indices": []
-		},
-		{
-			"offsets": [
-				4,
-				-11
-			],
-			"loop": false,
-			"animName": "singLEFT",
-			"framerate": 24,
-			"animFile": "left_",
-			"indices": []
-		},
-		{
-			"offsets": [
-				-12,
-				6
-			],
-			"loop": false,
-			"animName": "singRIGHT",
-			"framerate": 24,
-			"animFile": "right_",
-			"indices": []
-		},
-		{
-			"offsets": [
-				396,
-				378
-			],
-			"loop": false,
-			"animName": "singDOWN",
 			"framerate": 24,
 			"animFile": "spirit down_",
-			"indices": []
+			"animName": "singDOWN"
+		},
+		{
+			"offsets": [-12,6],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "right_",
+			"animName": "singRIGHT"
+		},
+		{
+			"offsets": [0,60],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "up_",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [4,-11],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "left_",
+			"animName": "singLEFT"
 		}
 	],
-	"charOffsets": [
-		-40,
-		-20
-	],
-	"scale": 6,
+	"isPlayer": false,
 	"flipX": false,
+	"gameOverChar": "bf-dead",
 	"antialiasing": false,
-	"packer": "SheetPacker"
+	"gameOverSuffix": ""
 }
