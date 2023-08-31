@@ -1,1 +1,500 @@
-{"song":{"song":"Dadbattle","bpm":180,"sections":45,"notes":[{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[10667,2,0],[11000,0,0],[11333,2,0],[11750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[12000,2,0],[12167,3,0],[12333,0,0],[12667,2,0],[13083,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[13333.666666666666,2,0],[13666.666666666666,0,0],[13999.666666666666,2,0],[14416.666666666666,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[14666.666666666666,2,0],[14833.666666666666,3,0],[14999.666666666666,0,0],[15333.666666666666,2,0],[15749.666666666666,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[16000,1,0],[16333,0,0],[16917,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[17348,1,0],[17750,0,0],[18083,3,0],[18417,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[18666.666666666668,1,0],[18999.666666666668,0,0],[19583.666666666668,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[20014.666666666668,1,0],[20014.666666666668,1,0],[20416.666666666668,0,0],[20749.666666666668,3,0],[21083.666666666668,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[21750,2,0],[22083,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[22833,1,0],[23250,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[24417,2,0],[24750,1,0],[25000,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[25342,2,0],[25583,0,0],[25917,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[27083.333333333332,2,0],[27416.333333333332,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[28166.333333333332,1,0],[28583.333333333332,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[29750.333333333332,2,0],[30083.333333333332,1,0],[30333.333333333332,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[30675.333333333332,2,0],[30916.333333333332,0,0],[31250.333333333332,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[32167,0,0],[32750,1,0],[33000,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[33500,2,0],[34083,2,0],[34417,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[34669,0,0],[35000,1,0],[35333,3,0],[35667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[36008,2,0],[36333,3,0],[36750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[37583,1,0],[38083,0,0],[38333,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[38679,0,0],[39167,0,0],[39333,2,0],[39500,3,0],[39667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[40167,0,0],[40500,1,0],[40917,3,0],[41083,1,0],[41250,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[41337,4,0],[41750,6,0],[42083,6,0],[42417,4,0],[41348,0,0],[41750,0,0],[42167,2,0],[42333,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[42833.666666666664,0,0],[43416.666666666664,1,0],[43666.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[44166.666666666664,2,0],[44749.666666666664,2,0],[45083.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[45335.666666666664,0,0],[45666.666666666664,1,0],[45999.666666666664,3,0],[46333.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[46674.666666666664,2,0],[46999.666666666664,3,0],[47416.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[48249.666666666664,1,0],[48749.666666666664,0,0],[48999.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[49345.666666666664,0,0],[49833.666666666664,0,0],[49999.666666666664,2,0],[50166.666666666664,3,0],[50333.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[50833.666666666664,0,0],[51166.666666666664,1,0],[51583.666666666664,3,0],[51749.666666666664,1,0],[51916.666666666664,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[52014.666666666664,0,0],[52417,2,0],[52750,3,0],[53000,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[53333.666666666664,2,0],[53666.666666666664,0,0],[53999.666666666664,2,0],[54416.666666666664,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[54666.666666666664,2,0],[54833.666666666664,3,0],[54999.666666666664,0,0],[55333.666666666664,2,0],[55749.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[56000.33333333333,2,0],[56333.33333333333,0,0],[56666.33333333333,2,0],[57083.33333333333,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[57333.33333333333,2,0],[57500.33333333333,3,0],[57666.33333333333,0,0],[58000.33333333333,2,0],[58416.33333333333,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[58666.666666666664,1,0],[58999.666666666664,0,0],[59583.666666666664,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[60014.666666666664,1,0],[60416.666666666664,0,0],[60749.666666666664,3,0],[61083.666666666664,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[61333.33333333333,1,0],[61666.33333333333,0,0],[62250.33333333333,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[62681.33333333333,1,0],[63083.33333333333,0,0],[63416.33333333333,3,0],[63750.33333333333,3,0],[62667,4,0],[62833,5,0],[63000,6,0],[63167,7,0],[63333,6,0],[63500,5,0],[63667,4,0],[63833,5,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[64416.666666666664,2,0],[64583.666666666664,1,0],[64749.666666666664,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[65499.666666666664,1,0],[65666.66666666666,3,0],[65916.66666666666,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[67083.66666666666,2,0],[67666.66666666666,0,0],[67833.66666666666,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[68003.66666666666,4,0],[68416.66666666666,6,0],[68749.66666666666,6,0],[69083.66666666666,4,0],[68014.66666666666,0,0],[68416.66666666666,0,0],[68833.66666666666,2,0],[68999.66666666666,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[69750,2,0],[69917,1,0],[70083,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[70833,1,0],[71000,3,0],[71250,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[72417,2,0],[72750,1,0],[73000,0,0],[73167,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[73342,2,0],[73500,3,0],[73750,1,0],[73917,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[74667,2,0],[75000,0,0],[75333,2,0],[75750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[76000,2,0],[76333,0,0],[77000,2,0],[76667,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[77333.66666666667,2,0],[77666.66666666667,0,0],[77999.66666666667,2,0],[78416.66666666667,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[78666.66666666667,2,0],[78999.66666666667,0,0],[79333.66666666667,2,0],[79666.66666666667,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[80000,1,0],[80333,0,0],[80500,3,0],[80667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[81348,1,0],[81667,1,0],[82000,1,0]]},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[[82666.66666666667,1,0],[82999.66666666667,0,0],[83166.66666666667,3,0],[83333.66666666667,1,0]],"typeOfSection":0},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[[84014.66666666667,1,0],[84333.66666666667,1,0],[84666.66666666667,1,0]],"typeOfSection":0},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[],"typeOfSection":0}],"needsVoices":true,"speed":1.2999999999999998,"player1":"bf","player2":"dad"},"bpm":180,"sections":65,"notes":[{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[10667,2,0],[11000,0,0],[11333,2,0],[11750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[12000,2,0],[12167,3,0],[12333,0,0],[12667,2,0],[13083,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[13333.666666666666,2,0],[13666.666666666666,0,0],[13999.666666666666,2,0],[14416.666666666666,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[14666.666666666666,2,0],[14833.666666666666,3,0],[14999.666666666666,0,0],[15333.666666666666,2,0],[15749.666666666666,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[16000,1,0],[16333,0,0],[16917,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[17348,1,0],[17750,0,0],[18083,3,0],[18417,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[18666.666666666668,1,0],[18999.666666666668,0,0],[19583.666666666668,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[20014.666666666668,1,0],[20014.666666666668,1,0],[20416.666666666668,0,0],[20749.666666666668,3,0],[21083.666666666668,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[21750,2,0],[22083,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[22833,1,0],[23250,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[24417,2,0],[24750,1,0],[25000,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[25342,2,0],[25583,0,0],[25917,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[27083.333333333332,2,0],[27416.333333333332,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[28166.333333333332,1,0],[28583.333333333332,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[29750.333333333332,2,0],[30083.333333333332,1,0],[30333.333333333332,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[30675.333333333332,2,0],[30916.333333333332,0,0],[31250.333333333332,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[32167,0,0],[32750,1,0],[33000,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[33500,2,0],[34083,2,0],[34417,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[34669,0,0],[35000,1,0],[35333,3,0],[35667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[36008,2,0],[36333,3,0],[36750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[37583,1,0],[38083,0,0],[38333,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[38679,0,0],[39167,0,0],[39333,2,0],[39500,3,0],[39667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[40167,0,0],[40500,1,0],[40917,3,0],[41083,1,0],[41250,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[41337,4,0],[41750,6,0],[42083,6,0],[42417,4,0],[41348,0,0],[41750,0,0],[42167,2,0],[42333,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[42833.666666666664,0,0],[43416.666666666664,1,0],[43666.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[44166.666666666664,2,0],[44749.666666666664,2,0],[45083.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[45335.666666666664,0,0],[45666.666666666664,1,0],[45999.666666666664,3,0],[46333.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[46674.666666666664,2,0],[46999.666666666664,3,0],[47416.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[48249.666666666664,1,0],[48749.666666666664,0,0],[48999.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[49345.666666666664,0,0],[49833.666666666664,0,0],[49999.666666666664,2,0],[50166.666666666664,3,0],[50333.666666666664,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[50833.666666666664,0,0],[51166.666666666664,1,0],[51583.666666666664,3,0],[51749.666666666664,1,0],[51916.666666666664,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[52014.666666666664,0,0],[52417,2,0],[52750,3,0],[53000,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[53333.666666666664,2,0],[53666.666666666664,0,0],[53999.666666666664,2,0],[54416.666666666664,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[54666.666666666664,2,0],[54833.666666666664,3,0],[54999.666666666664,0,0],[55333.666666666664,2,0],[55749.666666666664,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[56000.33333333333,2,0],[56333.33333333333,0,0],[56666.33333333333,2,0],[57083.33333333333,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[57333.33333333333,2,0],[57500.33333333333,3,0],[57666.33333333333,0,0],[58000.33333333333,2,0],[58416.33333333333,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[58666.666666666664,1,0],[58999.666666666664,0,0],[59583.666666666664,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[60014.666666666664,1,0],[60416.666666666664,0,0],[60749.666666666664,3,0],[61083.666666666664,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[61333.33333333333,1,0],[61666.33333333333,0,0],[62250.33333333333,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[62681.33333333333,1,0],[63083.33333333333,0,0],[63416.33333333333,3,0],[63750.33333333333,3,0],[62667,4,0],[62833,5,0],[63000,6,0],[63167,7,0],[63333,6,0],[63500,5,0],[63667,4,0],[63833,5,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[64416.666666666664,2,0],[64583.666666666664,1,0],[64749.666666666664,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[65499.666666666664,1,0],[65666.66666666666,3,0],[65916.66666666666,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[67083.66666666666,2,0],[67666.66666666666,0,0],[67833.66666666666,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[68003.66666666666,4,0],[68416.66666666666,6,0],[68749.66666666666,6,0],[69083.66666666666,4,0],[68014.66666666666,0,0],[68416.66666666666,0,0],[68833.66666666666,2,0],[68999.66666666666,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[69750,2,0],[69917,1,0],[70083,3,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[70833,1,0],[71000,3,0],[71250,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[72417,2,0],[72750,1,0],[73000,0,0],[73167,1,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[73342,2,0],[73500,3,0],[73750,1,0],[73917,3,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[74667,2,0],[75000,0,0],[75333,2,0],[75750,0,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[76000,2,0],[76333,0,0],[77000,2,0],[76667,2,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[77333.66666666667,2,0],[77666.66666666667,0,0],[77999.66666666667,2,0],[78416.66666666667,0,0]]},{"mustHitSection":true,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[78666.66666666667,2,0],[78999.66666666667,0,0],[79333.66666666667,2,0],[79666.66666666667,2,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[80000,1,0],[80333,0,0],[80500,3,0],[80667,1,0]]},{"mustHitSection":false,"typeOfSection":0,"lengthInSteps":16,"sectionNotes":[[81348,1,0],[81667,1,0],[82000,1,0]]},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[[82666.66666666667,1,0],[82999.66666666667,0,0],[83166.66666666667,3,0],[83333.66666666667,1,0]],"typeOfSection":0},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[[84014.66666666667,1,0],[84333.66666666667,1,0],[84666.66666666667,1,0]],"typeOfSection":0},{"lengthInSteps":16,"bpm":180,"changeBPM":false,"mustHitSection":true,"sectionNotes":[],"typeOfSection":0}]}
+{
+	"song": {
+		"offsets": [-51,-63],
+		"song": "Dad Battle",
+		"notes": [
+			{},
+			{},
+			{},
+			{},
+			{},
+			{},
+			{},
+			{},
+			{
+				"sectionNotes": [
+					[10667,2,0],
+					[11000,0,0],
+					[11333,2,0],
+					[11666.6666666667,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[12000,2,0],
+					[12167,3,0],
+					[12333,0,0],
+					[12667,2,0],
+					[13000,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[13333.6666666667,2,0,0],
+					[13666.6666666667,0,0,0],
+					[13999.6666666667,2,0,0],
+					[14333.3333333333,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[14666.6666666667,2,0,0],
+					[14833.6666666667,3,0,0],
+					[14999.6666666667,0,0,0],
+					[15333.6666666667,2,0,0],
+					[15666.6666666667,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[16000,1,0],
+					[16333,0,0],
+					[16666.6666666667,0,0,"default"],
+					[17000,2,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[18000,3,0,"default"],
+					[18333.3333333333,3,0,"default"],
+					[17666.6666666667,0,0,"default"],
+					[17333.3333333333,1,0,"default"],
+					[17833.3333333333,0,0,"default"],
+					[18500,3,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[18666.6666666667,1,0,0],
+					[18999.6666666667,0,0,0],
+					[19333.3333333333,0,0,"default"],
+					[19666.6666666667,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[20666.6666666667,3,0,"default"],
+					[21000,3,0,"default"],
+					[20333.3333333333,0,0,"default"],
+					[20000,1,0,"default"],
+					[20500,0,0,"default"],
+					[21166.6666666667,3,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[21666.6666666667,2,0,"default"],
+					[21833.3333333333,3,0,"default"],
+					[22000,3,583.333333333333,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[22833.3333333333,1,0,"default"],
+					[23333.3333333333,0,583.333333333333,"default"],
+					[23000,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[25000,0,0],
+					[24333.3333333333,2,0,"default"],
+					[24666.6666666667,1,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[25333.3333333333,2,0,"default"],
+					[25666.6666666667,0,0,"default"],
+					[26000,3,583.333333333333,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[27000,2,0,"default"],
+					[27166.6666666667,3,0,"default"],
+					[27333.3333333333,3,583.333333333333,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[28166.6666666667,1,0,"default"],
+					[28666.6666666667,0,583.333333333333,"default"],
+					[28333.3333333333,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[30333.3333333333,0,0,0],
+					[29666.6666666667,2,0,"default"],
+					[30000,1,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[30666.6666666667,2,0,"default"],
+					[31000,0,0,"default"],
+					[31333.3333333333,3,583.333333333333,"default"],
+					[30666.6666666667,4,250,"default"],
+					[31000,6,250,"default"],
+					[31333.3333333333,4,250,"default"],
+					[31666.6666666667,6,250,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[32167,0,0],
+					[33000,0,0],
+					[32333.3333333333,1,0,"default"],
+					[32666.6666666667,3,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[33500,2,0],
+					[33666.6666666666,0,0,"default"],
+					[34000,2,0,"default"],
+					[34333.3333333333,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[34669,0,0],
+					[35000,1,0],
+					[35333,3,0],
+					[35667,1,0]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[36008,2,0],
+					[36333,3,0],
+					[36666.6666666667,0,583.333333333333,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[38333,1,0],
+					[37500,1,0,"default"],
+					[37666.6666666667,0,0,"default"],
+					[38000,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[39167,0,0],
+					[39333,2,0],
+					[39667,1,0],
+					[38666.6666666667,0,0,"default"],
+					[39500,2,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[40166.6666666667,0,0,"default"],
+					[40666.6666666667,3,0,"default"],
+					[40833.3333333333,1,0,"default"],
+					[41000,3,0,"default"],
+					[40500,1,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[41333.3333333333,4,250,"default"],
+					[41666.6666666667,6,250,"default"],
+					[42000,4,250,"default"],
+					[42333.3333333333,6,250,"default"],
+					[41333.3333333333,0,0,"default"],
+					[41666.6666666667,0,0,"default"],
+					[42000,2,250,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[42833.6666666667,0,0,0],
+					[43666.6666666667,0,0,0],
+					[43000,1,0,"default"],
+					[43333.3333333333,3,0,"default"]
+				]
+			},
+			{},
+			{
+				"sectionNotes": [
+					[45335.6666666667,0,0,0],
+					[45666.6666666667,1,0,0],
+					[45999.6666666667,3,0,0],
+					[46333.6666666667,1,0,0]
+				]
+			},
+			{
+				"sectionNotes": [
+					[46674.6666666667,2,0,0],
+					[46999.6666666667,3,0,0],
+					[47333.3333333333,0,583.333333333333,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[48999.6666666667,1,0,0],
+					[48166.6666666667,1,0,"default"],
+					[48333.3333333333,0,0,"default"],
+					[48666.6666666667,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[49833.6666666667,0,0,0],
+					[49999.6666666667,2,0,0],
+					[50333.6666666667,1,0,0],
+					[49333.3333333333,0,0,"default"],
+					[50166.6666666667,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[50833.3333333333,0,0,"default"],
+					[51333.3333333333,3,0,"default"],
+					[51500,1,0,"default"],
+					[51666.6666666667,3,0,"default"],
+					[51166.6666666667,1,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[52000,0,0,"default"],
+					[52333.3333333333,0,0,"default"],
+					[52666.6666666667,2,250,"default"],
+					[53000,0,0,"default"]
+				]
+			},
+			{
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[54666.6666666667,2,0,0],
+					[54833.6666666667,3,0,0],
+					[54999.6666666667,0,0,0],
+					[55333.6666666667,2,0,0],
+					[55666.6666666667,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[56000.3333333333,2,0,0],
+					[56333.3333333333,0,0,0],
+					[56666.3333333333,2,0,0],
+					[57000,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[57333.3333333333,2,0,0],
+					[57500.3333333333,3,0,0],
+					[57666.3333333333,0,0,0],
+					[58000.3333333333,2,0,0],
+					[58333.3333333333,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[58666.6666666667,1,0,0],
+					[58999.6666666667,0,0,0],
+					[59333.3333333333,0,0,"default"],
+					[59666.6666666667,2,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[60666.6666666667,3,0,"default"],
+					[61000,3,0,"default"],
+					[60333.3333333333,0,0,"default"],
+					[60000,1,0,"default"],
+					[60500,0,0,"default"],
+					[61166.6666666667,3,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[61333.3333333333,1,0,0],
+					[61666.3333333333,0,0,0],
+					[62000,0,0,"default"],
+					[62333.3333333333,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[63333.3333333333,3,0,"default"],
+					[63666.6666666667,3,0,"default"],
+					[63000,0,0,"default"],
+					[62666.6666666667,1,0,"default"],
+					[63166.6666666667,0,0,"default"],
+					[63833.3333333333,3,0,"default"],
+					[62666.6666666667,4,250,"default"],
+					[63000,6,250,"default"],
+					[63333.3333333334,4,250,"default"],
+					[63666.6666666667,6,250,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[64333.3333333333,2,0,"default"],
+					[64500,3,0,"default"],
+					[64666.6666666667,3,583.333333333333,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[65500,1,0,"default"],
+					[66000,0,583.333333333333,"default"],
+					[65666.6666666667,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[67666.6666666667,0,0,0],
+					[67000,2,0,"default"],
+					[67333.3333333333,1,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[68000,2,0,"default"],
+					[68333.3333333333,0,0,"default"],
+					[68666.6666666667,3,583.333333333333,"default"],
+					[68000,4,250,"default"],
+					[68333.3333333334,6,250,"default"],
+					[68666.6666666667,4,250,"default"],
+					[69000,6,250,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[69666.6666666667,2,0,"default"],
+					[69833.3333333333,3,0,"default"],
+					[70000,3,583.333333333333,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[70833.3333333333,1,0,"default"],
+					[71333.3333333333,0,583.333333333333,"default"],
+					[71000,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[73000,0,0,0],
+					[72333.3333333333,2,0,"default"],
+					[72666.6666666667,1,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[73342,2,0],
+					[73500,3,0],
+					[74000,2,583.333333333333,"default"],
+					[73833.3333333334,3,0,"default"],
+					[73666.6666666667,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[74667,2,0,0],
+					[75000,0,0,0],
+					[75333,2,0,0],
+					[75666.6666666667,0,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[76000,2,0,0],
+					[76167,3,0,0],
+					[76333,0,0,0],
+					[76667,2,0,0],
+					[77000,2,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[77333.6666666667,2,0,0],
+					[77666.6666666667,0,0,0],
+					[77999.6666666667,2,0,0],
+					[78333.3333333333,0,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[78666.6666666667,2,0,0],
+					[78833.6666666667,3,0,0],
+					[78999.6666666667,0,0,0],
+					[79333.6666666667,2,0,0],
+					[79666.6666666667,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[80000,1,0,0],
+					[80333,0,0,0],
+					[80666.6666666667,0,0,"default"],
+					[81000,2,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[81333.3333333333,1,0,"default"],
+					[81666.6666666667,1,0,"default"],
+					[82000,1,0,"default"]
+				],
+				"mustHitSection": false
+			},
+			{
+				"sectionNotes": [
+					[82666.6666666667,1,0,0],
+					[82999.6666666667,0,0,0],
+					[83333.3333333333,0,0,"default"],
+					[83666.6666666667,2,0,"default"]
+				]
+			},
+			{
+				"sectionNotes": [
+					[84000,1,0,"default"],
+					[84333.3333333333,1,0,"default"],
+					[84666.6666666667,1,0,"default"]
+				]
+			},
+			{},
+			{}
+		],
+		"stage": "stage",
+		"players": ["bf","dad","gf"],
+		"speed": 1.3,
+		"bpm": 180
+	}
+}

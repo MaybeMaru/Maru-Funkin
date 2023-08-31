@@ -194,13 +194,9 @@ class Song {
 			if (sec.sectionNotes.length <= 0) {
 				Reflect.deleteField(sec, 'sectionNotes');
 			} else {
-				for (n in 0...sec.sectionNotes.length) {
-					var note:Array<Dynamic> = sec.sectionNotes[n];
-					if (note[3] != null) {
-						if (note[3] == 'default' || note[3] == 0 || note[3] == '') {
-							note = [note[0],note[1],note[2]];
-						}
-					}
+				for (note in sec.sectionNotes) {
+					if (note[3] == null) continue;
+					if (note[3] == "default") note = note.pop(); 
 				}
 			}
 			if (sec.sectionEvents.length <= 0) {
