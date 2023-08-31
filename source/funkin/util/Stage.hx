@@ -1,20 +1,9 @@
 package funkin.util;
 
-// TODO stage json thing
-typedef StageProject = {
-    var layers:Array<StageLayer>;
-    var zoom:Float;
-    var scripts:Array<String>;
-}
-
-typedef StageLayer = {
-    var order:Int;
-    var objects:Array<StageObject>;
-    var camera:String;
-}
+import funkin.util.modding.ScriptUtil;
 
 typedef StageObject = {
-    var order:Int;
+    var tag:String;
     var position:Array<Float>;
     var scrolls:Array<Float>;
     var flipY:Bool;
@@ -22,6 +11,7 @@ typedef StageObject = {
 
 typedef StageJson = {
 	var library:String;
+    var zoom:Float;
     var skin:String;
 
 	var gfOffsets:Array<Float>;
@@ -32,13 +22,16 @@ typedef StageJson = {
 	var gfCamOffsets:Array<Float>;
 	var dadCamOffsets:Array<Float>;
 	var bfCamOffsets:Array<Float>;
+
+    var layers:Dynamic;
 }
 
 class Stage {
     public var curStage:String = 'stage';
-    public static var defaultStage:StageJson = {
+    public static var defaultStage(default, never):StageJson = {
         library: "",
         skin: "default",
+        zoom: 1.05,
 
         gfOffsets: [0,0],
         dadOffsets: [0,0],
@@ -48,6 +41,8 @@ class Stage {
         gfCamOffsets: [0,0],
         dadCamOffsets: [0,0],
         bfCamOffsets: [0,0],
+
+        layers: null,
     };
 
     public static function getJsonData(stage:String):StageJson {
@@ -56,5 +51,40 @@ class Stage {
             return JsonUtil.checkJsonDefaults(defaultStage, stageJson);
         }
         return defaultStage;
+    }
+
+    public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript) {
+        if (_layers == null) return;
+        var layers = cast _layers;  
+
+        for (layer in Reflect.fields(layers)) {
+            var objects:Array<StageObject> = Reflect.field(layers, layer);
+            for (object in objects) {
+                var sprite = quickSprite(object);
+                if (script != null) script.set(object.tag, sprite);
+                ScriptUtil.addSprite(sprite, object.tag, layer == 'fg');
+            }
+        }
+    }
+
+    public static var DEFAULT_STAGE_OBJECT:StageObject = {
+        tag: "coolswag",
+        imagePath: "keoiki",
+        position: [0,0],
+        scrolls: [1,1],
+        flipY: false,
+        flipX: false,
+        anims: [],
+        scale: 1,
+        antialiasing: true
+    }
+
+    static function quickSprite(input:StageObject) {
+        input = JsonUtil.checkJsonDefaults(DEFAULT_STAGE_OBJECT, input);
+        var sprite = new FunkinSprite("keoiki", input.position, input.scrolls);
+        sprite.loadJsonInput(input);
+        sprite.flipX = input.flipX;
+        sprite.flipY = input.flipY;
+        return sprite;
     }
 }

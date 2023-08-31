@@ -1,6 +1,11 @@
 package funkin.util.modding;
 
 class ScriptUtil {
+    public static function addSprite(sprite:Dynamic, key:String, onTop:Bool = false) {
+        PlayState.instance.objMap.set(formatSpriteKey(key, onTop), sprite);
+        onTop ? PlayState.instance.fgSpr.add(sprite) : PlayState.instance.bgSpr.add(sprite);
+    }
+    
     public static function getSprite(key:String) {
         for (i in ['fg', 'bg']) {
             var sprKey = '_${i}_sprite_$key';

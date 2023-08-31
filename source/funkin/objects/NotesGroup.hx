@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import funkin.objects.note.StrumLineGroup;
+
 class NotesGroup extends FlxGroup
 {
     public var SONG:SwagSong;
@@ -14,17 +16,19 @@ class NotesGroup extends FlxGroup
     public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var events:Array<Event> = [];
-	public var strumLine:FlxSprite;
 
     public var skipStrumIntro:Bool = false;
-    public var strumLineNotes:FlxTypedGroup<NoteStrum>;
-	public var playerStrums:FlxTypedGroup<NoteStrum>;
-	public var opponentStrums:FlxTypedGroup<NoteStrum>;
+
+	public var strumLineNotes:Array<NoteStrum> = [];
+	public var playerStrums:StrumLineGroup;
+	public var opponentStrums:StrumLineGroup;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
-	public var strumLineInitPos:Array<FlxPoint> = [];
-	public var playerStrumsInitPos:Array<FlxPoint> = [];
-	public var opponentStrumsInitPos:Array<FlxPoint> = [];
+	public var strumLineInitPos(default, never):Array<FlxPoint> = [];
+	public var playerStrumsInitPos(get, never):Array<FlxPoint>;
+	public function get_playerStrumsInitPos() return playerStrums.initPos;
+	public var opponentStrumsInitPos(get, never):Array<FlxPoint>;
+	public function get_opponentStrumsInitPos() return playerStrums.initPos;
 
     public var inBotplay:Bool = false;
 	public var dadBotplay:Bool = true;
@@ -80,47 +84,25 @@ class NotesGroup extends FlxGroup
 	}
 
     public function init(startPos:Float = -5000) {
-        strumLine = new FlxSprite(0, !getPref('downscroll') ? 50 : FlxG.height - 150).makeGraphic(FlxG.width, 10);
-		strumLine.scrollFactor.set();
-		strumLineNotes = new FlxTypedGroup<NoteStrum>();
-		add(strumLineNotes);
+		StrumLineGroup.strumLineY = Preferences.getPref('downscroll') ? FlxG.height - 150 : 50;
+		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
+		for (i in opponentStrums) strumLineNotes.push(i);
+		strumLineInitPos.concat(opponentStrums.initPos);
+		add(opponentStrums);
+
+		playerStrums = new StrumLineGroup(1, skipStrumIntro);
+		for (i in playerStrums) strumLineNotes.push(i);
+		strumLineInitPos.concat(playerStrums.initPos);
+		add(playerStrums);
+
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(grpNoteSplashes);
 		cacheSplash();
-		playerStrums = new FlxTypedGroup<NoteStrum>();
-		opponentStrums = new FlxTypedGroup<NoteStrum>();
-		for (i in 0...2) generateStrums(i);
 
         //Make Song
 		Conductor.songPosition = startPos;
 		generateSong();
     }
-
-    private function generateStrums(p:Int):Void {
-		var startX:Float = NoteUtil.swagWidth * 0.666 + (FlxG.width / 2) * p;
-		var startY:Float = strumLine.y;
-		var offsetY:Float = getPref('downscroll') ? 10 : -10;
-        var isPlayer:Bool = p == 1;
-		
-		for (i in 0...Conductor.NOTE_DATA_LENGTH) {
-			var strumX:Float = startX + (NoteUtil.swagWidth + 5) * i;
-			var strumNote:NoteStrum = new NoteStrum(strumX, startY, i);
-			strumNote.ID = i;
-			strumNote.updateHitbox();
-			strumNote.scrollFactor.set();
-			strumLineNotes.add(strumNote);
-			strumLineInitPos.push(strumNote.getPosition());
-			(isPlayer ? playerStrums : opponentStrums).add(strumNote);
-			(isPlayer ? playerStrumsInitPos : opponentStrumsInitPos).push(strumNote.getPosition());
-			
-			if (!skipStrumIntro) {
-				strumNote.alpha = 0;
-				strumNote.y += offsetY;
-			}
-
-			ModdingUtil.addCall('generateStrum', [strumNote, isPlayer]);
-		}
-	}
 
 	private function generateSong():Void {
 		var songData:SwagSong = SONG;
@@ -457,12 +439,12 @@ class NotesGroup extends FlxGroup
 	}
 
     public function playStrumAnim(data:Int = 0, anim:String = 'confirm', forced:Bool = true):Void {
-		var leStrum:NoteStrum = strumLineNotes.members[data];
+		var leStrum:NoteStrum = strumLineNotes[data];
 		if (leStrum != null) {
 			leStrum.playStrumAnim(anim, forced);
 			leStrum.staticTime = Conductor.stepCrochetMills;
 		}
 	}
 
-    function getPref(pref:String):Dynamic return Preferences.getPref(pref);
+    inline function getPref(pref:String):Dynamic return Preferences.getPref(pref);
 }

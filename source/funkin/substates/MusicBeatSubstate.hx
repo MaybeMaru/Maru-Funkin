@@ -48,15 +48,8 @@ class MusicBeatSubstate extends FlxSubState
 	}
 
 	//Just a quicker way to get settings
-	function getPref(pref:String)
-	{
-		return Preferences.getPref(pref);
-	}
-	function getKey(key:String)
-	{
-		return Controls.getKey(key);
-	}
-
+	inline function getPref(pref:String) return Preferences.getPref(pref);
+	inline function getKey(key:String) return Controls.getKey(key);
 
 	public function stepHit():Void
 	{

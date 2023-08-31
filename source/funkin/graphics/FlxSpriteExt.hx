@@ -82,9 +82,8 @@ class FlxSpriteExt extends FlxSprite {
 			anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 		}
-
-		scale.set(spriteJson.scale,spriteJson.scale);
-		updateHitbox();
+		
+		setScale(spriteJson.scale, true);
 
 		antialiasing = spriteJson.antialiasing;
 		antialiasing = antialiasing ? Preferences.getPref('antialiasing') : false;

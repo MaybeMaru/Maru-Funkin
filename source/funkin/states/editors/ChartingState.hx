@@ -59,7 +59,8 @@ class ChartingState extends MusicBeatState {
         Conductor.loadMusic(SONG.song);
         Conductor.mapBPMChanges(SONG);
 		Conductor.songOffset = SONG.offsets;
-        Conductor.stop();
+        Conductor.setVolume();
+        stop();
 
         mainGrid = new ChartGrid();
         add(mainGrid);

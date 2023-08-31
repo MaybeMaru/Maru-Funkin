@@ -170,9 +170,8 @@ class FunkScript {
 			CoolUtil.resumeSounds();
 		});
 
-		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false):Void {
-			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.instance.fgSpr.add(spr) : PlayState.instance.bgSpr.add(spr);
+		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
+			ScriptUtil.addSprite(spr,key,onTop);
 		});
 
 		set('setObjMap', function(object:Dynamic, key:String) {

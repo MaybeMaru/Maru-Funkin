@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
 
@@ -41,10 +42,9 @@ class PlayState extends MusicBeatState {
 	// For backwards compatibility and my own sanity, its ugly i know!!
 	public var notes(get,never):FlxTypedGroup<Note>; function get_notes()return notesGroup.notes;
 	public var unspawnNotes(get,never):Array<Note>; function get_unspawnNotes()return notesGroup.unspawnNotes;
-	public var strumLine(get,never):FlxSprite; function get_strumLine()return notesGroup.strumLine;
 	public var holdingArray(get,never):Array<Bool>; function get_holdingArray()return notesGroup.holdingArray;
 	public var controlArray(get,never):Array<Bool>; function get_controlArray()return notesGroup.controlArray;
-	public var strumLineNotes(get,never):FlxTypedGroup<NoteStrum>; function get_strumLineNotes()return notesGroup.strumLineNotes;
+	public var strumLineNotes(get,never):Array<NoteStrum>; function get_strumLineNotes()return notesGroup.strumLineNotes;
 	public var playerStrums(get,never):FlxTypedGroup<NoteStrum>; function get_playerStrums()return notesGroup.playerStrums;
 	public var opponentStrums(get,never):FlxTypedGroup<NoteStrum>; function get_opponentStrums()return notesGroup.opponentStrums;
 	public var strumLineInitPos(get,never):Array<FlxPoint>; function get_strumLineInitPos()return notesGroup.strumLineInitPos;
@@ -91,9 +91,9 @@ class PlayState extends MusicBeatState {
 
 	public static var campaignScore:Int = 0;
 
-	var defaultCamZoom:Float = 1.05;
-	var defaultCamSpeed:Float = 1;
-	var camFollowLerp:Float = 0.04;
+	public var defaultCamZoom:Float = 1.05;
+	public var defaultCamSpeed:Float = 1;
+	public var camFollowLerp:Float = 0.04;
 
 	public static var seenCutscene:Bool = false;
 	public var inCutscene:Bool = false;
@@ -177,6 +177,7 @@ class PlayState extends MusicBeatState {
 		// GET THE STAGE JSON SHIT
 		curStage = SONG.stage;
 		stageJsonData = Stage.getJsonData(curStage);
+		defaultCamZoom = stageJsonData.zoom;
 		Paths.setCurrentLevel(stageJsonData.library);
 		SkinUtil.setCurSkin(stageJsonData.skin);
 
@@ -199,7 +200,8 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.clearScripts(); //Clear any scripts left over
 
 		//Stage Script
-		ModdingUtil.addScript(Paths.script('stages/$curStage'));
+		var stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
+		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
@@ -506,7 +508,7 @@ class PlayState extends MusicBeatState {
 
 		if (!notesGroup.skipStrumIntro) {
 			for (strum in notesGroup.strumLineNotes)
-				FlxTween.tween(strum, {y: notesGroup.strumLine.y, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
+				FlxTween.tween(strum, {y: StrumLineGroup.strumLineY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
 		}
 
 		Conductor.songPosition = -Conductor.crochet * 5;
