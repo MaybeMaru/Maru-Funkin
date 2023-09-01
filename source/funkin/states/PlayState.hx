@@ -901,7 +901,7 @@ class PlayState extends MusicBeatState {
 		var targetIcon = targetChar.iconSpr;
 
 		targetChar.visible = false;
-		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, true);
+		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, targetChar.isPlayer);
 		newChar.group = targetChar.group;
 		newChar.iconSpr = targetChar.iconSpr;
 		newChar.holdTimer = targetChar.holdTimer;
