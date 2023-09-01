@@ -213,8 +213,7 @@ class ChartTabs extends FlxUITabMenu {
 			}
 		});
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('notetypes', [ChartingState.SONG.song]);
-		sectionNoteTypesDropDown = new FlxUIDropDownMenu(setSectionNoteTypes.x + 100, setSectionNoteTypes.y, FlxUIDropDownMenu.makeStrIdLabelArray(types, true));
+		sectionNoteTypesDropDown = new FlxUIDropDownMenu(setSectionNoteTypes.x + 100, setSectionNoteTypes.y, FlxUIDropDownMenu.makeStrIdLabelArray(NoteUtil.noteTypesArray.copy(), true));
 		sectionNoteTypesDropDown.selectedLabel = 'default';
 
 		check_mustHitSection = new FlxUICheckBox(10, 30, null, null, "Must hit section", 100);
@@ -254,7 +253,7 @@ class ChartTabs extends FlxUITabMenu {
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('notetypes', [ChartingState.SONG.song]);
+		var types:Array<String> = NoteUtil.noteTypesArray.copy();
 		noteTypesDropDown = new FlxUIDropDownMenu(stepperSusLength.x, stepperSusLength.y + 35, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var curNote = ChartingState.instance.selectedNote;
 			var curNoteObject = ChartingState.instance.selectedNoteObject;
@@ -291,7 +290,7 @@ class ChartTabs extends FlxUITabMenu {
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('events', [ChartingState.SONG.song]);
+		var types:Array<String> = EventUtil.eventsArray.copy();
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var newEvent = types[Std.parseInt(type)];
 			if (curEvent != newEvent) {

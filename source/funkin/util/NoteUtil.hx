@@ -40,16 +40,22 @@ class NoteUtil {
 		return (Std.isOfType(type, String)) ? type : noteTypesArray[type];
 	}
 
-    inline public static function initTypes():Void {
+    static function getList() {
+        var typesSort = CoolUtil.getFileContent(Paths.txt("notetypes/types-sort", null)).split(",");
+        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [PlayState.SONG != null ? PlayState.SONG.song : ""]);
+        return CoolUtil.customSort(typesList, typesSort);
+    }
+
+    public static function initTypes():Void {
 		noteTypesMap = new Map<String, NoteTypeJson>();
 		noteTypesArray = [];
-		for (type in JsonUtil.getJsonList('notetypes')) {
+		for (type in getList()) {
 			noteTypesArray.push(type);
             getTypeJson(type);
         }
 	}
 
-    inline public static function getTypeJson(type:String = 'default'):NoteTypeJson {
+    public static function getTypeJson(type:String = 'default'):NoteTypeJson {
 		if (noteTypesMap.exists(type)) return noteTypesMap.get(type);
 		var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
 		typeJson = JsonUtil.checkJsonDefaults(DEFAULT_NOTE_TYPE, typeJson);

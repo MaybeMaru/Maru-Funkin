@@ -46,6 +46,9 @@ class ChartingState extends MusicBeatState {
         }
 		add(bg);
 
+        NoteUtil.initTypes();
+        EventUtil.initEvents();
+
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
         PlayState.inChartEditor = true;
         FlxG.mouse.visible = true;

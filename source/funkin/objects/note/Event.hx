@@ -9,10 +9,16 @@ class EventUtil {
     public static var eventsMap:Map<String, EventData> = [];
 	public static var eventsArray:Array<String> = [];
 
-    inline public static function initEvents():Void {
+    static function getList() {
+        var eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
+        var eventList = JsonUtil.getSubFolderJsonList('events', [PlayState.SONG != null ? PlayState.SONG.song : ""]);
+        return CoolUtil.customSort(eventList, eventSort);
+    }
+
+    public static function initEvents():Void {
 		eventsMap = new Map<String, EventData>();
 		eventsArray = [];
-		for (e in JsonUtil.getJsonList('events')) {
+		for (e in getList()) {
 			eventsArray.push(e);
             getEventData(e);
         }
