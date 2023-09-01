@@ -340,7 +340,7 @@ class NotesGroup extends FlxGroup
 								return;
 							}
 							if (daNote.startedPress) {
-								var holding = holdingArray[daNote.noteData];
+								var holding = daNote.targetStrum.getControl();
 								var pressing = holding && daNote.inSustain && daNote.mustPress;
 								if (!holding) { // Sustain stopped being pressed
 									sustainMiss(daNote); 
@@ -391,7 +391,7 @@ class NotesGroup extends FlxGroup
                         if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
 					}
 					for (possibleNote in possibleNotes) {
-                        if (controlArray[possibleNote.noteData]) checkCallback(goodNoteHit, [possibleNote]);
+                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(goodNoteHit, [possibleNote]);
 					}
 				}
 				else {
@@ -404,7 +404,8 @@ class NotesGroup extends FlxGroup
 	}
 
 	function checkStrumAnims():Void {
-		for (strum in playerStrums) {
+		var checkStrums:Array<NoteStrum> = (inBotplay ? [] : playerStrums.members).concat(dadBotplay ? [] : opponentStrums.members);
+		for (strum in checkStrums) {
 			var strumAnim = strum.animation.curAnim;
 			if (strumAnim != null) {
 				if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
@@ -415,26 +416,27 @@ class NotesGroup extends FlxGroup
 		}
 
         if (!isPlayState) return;
-        if (PlayState.instance.boyfriend == null) return;
+		checkOverSinging(PlayState.instance.boyfriend, playerStrums);
+	}
 
-        var bf = PlayState.instance.boyfriend;
-		var overSinging:Bool = (bf.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
-		&& bf.animation.curAnim.name.startsWith('sing')
-		&& !bf.animation.curAnim.name.endsWith('miss'));
+	function checkOverSinging(char:Character, strums:StrumLineGroup) {
+		var overSinging:Bool = (char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
+		&& char.animation.curAnim.name.startsWith('sing')
+		&& !char.animation.curAnim.name.endsWith('miss'));
 
 		if (overSinging) {
 			var isHolding:Bool = false;
-			for (strum in playerStrums) {
+			for (strum in strums) {
 				if (strum.animation.curAnim.name.startsWith('confirm')) {
 					isHolding = true;
 					break;
 				}
 			}
 			if (!isHolding)
-				bf.dance();
+				char.dance();
 		}
 	}
-	
+
 	public function playStrumAnim(note:Note, anim:String = 'confirm', forced:Bool = true) {
 		var strum = note.targetStrum;
 		if (strum == null) return;
