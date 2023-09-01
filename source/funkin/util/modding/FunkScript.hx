@@ -138,7 +138,7 @@ class FunkScript {
 		});
 
 		set('stringifyJson', function (value:Dynamic, pretty:Bool = true):String {
-			return Json.stringify(value, pretty ? "\t" : null);
+			return FunkyJson.stringify(value, pretty ? "\t" : null);
 		});
 
 		set('getPref', function(pref:String):Dynamic {
@@ -331,15 +331,15 @@ class FunkScript {
 		return interp.execute(parser.parseString(codeToRun));
 	}
 
-	public function set(varName:String, varValue:Dynamic):Void {
+	inline public function set(varName:String, varValue:Dynamic):Void {
 		interp.variables.set(varName, varValue);
 	}
 
-	public function get(field:String):Dynamic {
+	inline public function get(field:String):Dynamic {
 		return interp.variables.get(field);
 	}
 
-	public function exists(field:String):Bool {
+	inline public function exists(field:String):Bool {
 		return interp.variables.exists(field);
 	}
 }
@@ -361,9 +361,6 @@ class CustomState extends MusicBeatState {
 		script = new FunkScript(scriptCode);
 		script.scriptID = '_custom_state_$stateTag';
 		script.set('Parent', cast this);
-		script.set('add', function(object:Dynamic) add(object));
-		script.set('insert', function(position:Int, object:Dynamic) insert(position, object));
-		script.set('remove', function(object:Dynamic) remove(object));
 
 		// This method sucks, but it works, sooooooo yeah... sorry
 		for (i in super_methods) {
