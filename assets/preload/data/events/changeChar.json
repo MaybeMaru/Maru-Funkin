@@ -1,0 +1,11 @@
+{
+    "description": "Changes a character to a new one\n\nValue 1: Character to change\nValue 2: New character name",
+    "values": [
+        [
+            "boyfriend",
+            "dad",
+            "girlfriend"
+        ],
+        "bf"
+    ]
+}
