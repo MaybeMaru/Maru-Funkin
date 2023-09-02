@@ -20,6 +20,8 @@ class ChartingState extends MusicBeatState {
     public static var autoSaveChart:String;
     public static var instance:ChartingState = null;
     public var sectionIndex:Int = 0;
+    public var sectionTime:Float = 0;
+    public var nextSectionTime:Float = 0;
 
     public var bg:FunkinSprite;
     public var noteTile:FlxSprite;
@@ -118,7 +120,7 @@ class ChartingState extends MusicBeatState {
     function checkNoteSound() {
         var gray = FlxColor.fromRGB(180,150,180);
         mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
-            if (note.strumTime + 0.1 <= Conductor.songPosition) {
+            if (note.strumTime + 0.1 <= Conductor.songPosition && note.strumTime + 0.1 >= sectionTime) {
                 if (note.color == FlxColor.WHITE) {
                     strumBar.pressStrum(note.gridNoteData);
                     if (playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
@@ -175,12 +177,14 @@ class ChartingState extends MusicBeatState {
         }
         checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
         sectionIndex = newIndex;
+        sectionTime = getSecTime(sectionIndex);
+        nextSectionTime = getSecTime(sectionIndex + 1);
         
-        Conductor.songPosition = getSecTime(sectionIndex); // Bpm conductor crap
+        Conductor.songPosition = sectionTime; // Bpm conductor crap
         Conductor.autoSync();
         checkBPM();
 
-        mainGrid.setData(SONG.notes[sectionIndex], sectionIndex); // Change visual stuff
+        mainGrid.setData(sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
         eventsGrid.setData(SONG.notes[sectionIndex], sectionIndex);
         updateBar();
@@ -231,10 +235,10 @@ class ChartingState extends MusicBeatState {
 
     function moveTime(elapsed:Float = 0) {
         Conductor.songPosition += elapsed * 1000; // Advance time
-        if (Conductor.songPosition >= getSecTime(sectionIndex + 1)) changeSection(1); // Go to next section
-        if (getTimeY(Conductor.songPosition - getSecTime(sectionIndex)) < 0 && sectionIndex > 0) { // Go to prev section
+        if (Conductor.songPosition >= nextSectionTime) changeSection(1); // Go to next section
+        if (getTimeY(Conductor.songPosition - sectionTime) < 0 && sectionIndex > 0) { // Go to prev section
             changeSection(-1);
-            Conductor.songPosition = getSecTime(sectionIndex + 1) - 1;
+            Conductor.songPosition = nextSectionTime - 1;
             Conductor.autoSync();
         }
         if (Conductor.songPosition > Conductor.inst.length) { // End song
@@ -252,7 +256,7 @@ class ChartingState extends MusicBeatState {
     }
 
     function updateBar() {
-        var yPos = getTimeY(Conductor.songPosition - getSecTime(sectionIndex));
+        var yPos = getTimeY(Conductor.songPosition - sectionTime);
         strumBar.y = yPos;
         FlxG.camera.scroll.y = yPos - FlxG.height * 0.333;
     }
@@ -304,12 +308,14 @@ class ChartingState extends MusicBeatState {
             if (!eventsOverlap) {
                 if (FlxG.mouse.overlaps(mainGrid.notesGroup)) { // Remove notes
                     mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
+                        if (note.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(note)) removeNote(note);
                     });
                 } else addNote(); // Add notes
             } else {
                 if (FlxG.mouse.overlaps(eventsGrid.eventsGroup)) { // Remove events
                     eventsGrid.eventsGroup.forEachAlive(function (event:ChartEvent) {
+                        if (event.data.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(event)) removeEvent(event);
                     });
                 } else addEvent(); // Add events
@@ -331,7 +337,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
-        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / ChartGrid.GRID_SIZE);
         var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         SONG.notes[sectionIndex].sectionNotes.push(note);
@@ -361,7 +367,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addEvent() {
-        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + getSecTime(sectionIndex) - Conductor.stepCrochet;
+        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         tabs.setCurEvent(ChartTabs.curEvent); // Update values
         var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, convertEventValues(ChartTabs.curEventValues)];
         SONG.notes[sectionIndex].sectionEvents.push(event);

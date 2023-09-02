@@ -1,16 +1,19 @@
 package funkin.states.editors.chart;
 
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
 class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
     
-    public var grid:FlxSprite;
+    public var grid:FlxBackdrop;
     public var eventsGroup:FlxTypedGroup<ChartEvent>;
 
     public function new() {
         super();
-        grid = FlxGridOverlay.create(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE,  ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff6e6e6e,  0xff7c7c7c);
-        for (i in 0...Conductor.BEATS_PER_MEASURE) grid.pixels.fillRect(new Rectangle(0, ((grid.height/Conductor.BEATS_PER_MEASURE) * i) - 1, grid.width, 2), 0xff505050);
+        var _gridBitmap:FlxSprite= FlxGridOverlay.create(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE,  ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff6e6e6e,  0xff7c7c7c);
+        for (i in 0...Conductor.BEATS_PER_MEASURE) _gridBitmap.pixels.fillRect(new Rectangle(0, ((_gridBitmap.height/Conductor.BEATS_PER_MEASURE) * i) - 1, _gridBitmap.width, 2), 0xff505050);
+        
+        grid = new FlxBackdrop(_gridBitmap.pixels, Y);
         grid.screenCenter(X);
         grid.x -= ChartGrid.GRID_SIZE * 5;
         add(grid);
@@ -24,9 +27,8 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
     public var sectionData(default, set):SwagSection;
     public function set_sectionData(value:SwagSection):SwagSection {
         clearSection();
-        for (i in value.sectionEvents) {
+        for (i in value.sectionEvents)
             drawEvent(i);
-        }
         return sectionData = value;
     }
 
@@ -37,9 +39,8 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
     }
 
     public function clearSection() {
-        for (i in eventsGroup) {
+        for (i in eventsGroup)
             clearEvent(i);
-        }
     }
 
     public function getEventData(event:ChartEvent):Array<Dynamic> {
