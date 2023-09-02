@@ -91,6 +91,7 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 
     public function clearNote(note:ChartNote) {
         note.kill();
+        note.x = -999;
         if (note.childNote != null) note.childNote.kill();
         if (note.txt != null) note.txt.kill();
     }
