@@ -173,6 +173,13 @@ class ChartTabs extends FlxUITabMenu {
 	var lastSectionPreview:ChartPreview;
 	var sectionNoteTypesDropDown:FlxUIDropDownMenu;
 
+	public function updatePreview() {
+		var index = Std.int(ChartingState.instance.sectionIndex - stepperCopy.value);
+		var copyData = ChartingState.SONG.notes[index];
+       	if (copyData == null || stepperCopy.value == 0) return;
+		lastSectionPreview.resetDraw(index);
+	}
+
 	function addSectionUI():Void {
 		var tab_group_section = new FlxUI(null, this);
 		tab_group_section.name = 'Section';
@@ -189,11 +196,10 @@ class ChartTabs extends FlxUITabMenu {
 		stepperCopy.y += copyButton.height/2 - stepperCopy.height/2;
 		stepperCopy.name = 'stepper_copy';
 
-		lastSectionPreview = new ChartPreview(false);
+		lastSectionPreview = new ChartPreview(ChartingState.SONG);
 		lastSectionPreview.setPosition(stepperCopy.x + 80, stepperCopy.y);
-		lastSectionPreview.scale.y *= 4;
-		lastSectionPreview.scale.x *= 0.75;
-		lastSectionPreview.updateHitbox();
+		lastSectionPreview.offset.x = -50;
+		updatePreview();
 
 		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
 
@@ -213,8 +219,7 @@ class ChartTabs extends FlxUITabMenu {
 			}
 		});
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('notetypes', [ChartingState.SONG.song]);
-		sectionNoteTypesDropDown = new FlxUIDropDownMenu(setSectionNoteTypes.x + 100, setSectionNoteTypes.y, FlxUIDropDownMenu.makeStrIdLabelArray(types, true));
+		sectionNoteTypesDropDown = new FlxUIDropDownMenu(setSectionNoteTypes.x + 100, setSectionNoteTypes.y, FlxUIDropDownMenu.makeStrIdLabelArray(NoteUtil.noteTypesArray.copy(), true));
 		sectionNoteTypesDropDown.selectedLabel = 'default';
 
 		check_mustHitSection = new FlxUICheckBox(10, 30, null, null, "Must hit section", 100);
@@ -226,7 +231,6 @@ class ChartTabs extends FlxUITabMenu {
 
 		tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
 
-		//tab_group_section.add(stepperLength);
 		tab_group_section.add(stepperSectionBPM);
 		tab_group_section.add(stepperCopy);
 		tab_group_section.add(lastSectionPreview);
@@ -254,7 +258,7 @@ class ChartTabs extends FlxUITabMenu {
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('notetypes', [ChartingState.SONG.song]);
+		var types:Array<String> = NoteUtil.noteTypesArray.copy();
 		noteTypesDropDown = new FlxUIDropDownMenu(stepperSusLength.x, stepperSusLength.y + 35, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var curNote = ChartingState.instance.selectedNote;
 			var curNoteObject = ChartingState.instance.selectedNoteObject;
@@ -291,7 +295,7 @@ class ChartTabs extends FlxUITabMenu {
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';
 
-		var types:Array<String> = JsonUtil.getSubFolderJsonList('events', [ChartingState.SONG.song]);
+		var types:Array<String> = EventUtil.eventsArray.copy();
 		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var newEvent = types[Std.parseInt(type)];
 			if (curEvent != newEvent) {

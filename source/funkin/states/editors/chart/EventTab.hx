@@ -61,6 +61,7 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
                     add(input);
             }
             //add(new FlxText(_X,_Y - 15, 0, 'Value $i:'));
+            sort(FlxSort.byY, FlxSort.DESCENDING);
             i++;
             if (i > 24) break; // Why would you need more you psycho?
         }
@@ -77,11 +78,11 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
 
     public function clearGroup() {
         var focusList = ChartingState.instance.tabs.focusList;
-        for (i in this) {
+        for (i in members) {
             if (focusList.contains(i)) focusList.remove(i);
-            remove(i);
             i.destroy();
         }
+        clear();
     }
 }
 

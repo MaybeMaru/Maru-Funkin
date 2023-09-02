@@ -91,6 +91,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public var inSustain:Bool = false;
     public var approachAngle:Float = 0;
+    public var spawnMult:Float = 1;
     var strumCenter:Float = 0;
 
     override function update(elapsed:Float) {

@@ -135,6 +135,7 @@ class NotesGroup extends FlxGroup
 				newNote.targetStrum = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
+				newNote.active = false;
 				unspawnNotes.push(newNote);
 
 				// Add note sustain
@@ -146,6 +147,7 @@ class NotesGroup extends FlxGroup
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
 						newSustain.parentNote = newNote;
+						newSustain.active = false;
 						newNote.childNote = newSustain;
 						unspawnNotes.push(newSustain);
 					}
@@ -242,10 +244,11 @@ class NotesGroup extends FlxGroup
 
 	function spawnNotes() { // Generate notes
         if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom * unspawnNotes[0].spawnMult) {
 				var dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);
+				dunceNote.active = true;
 				dunceNote.update(FlxG.elapsed);
 				notes.sort(function (order:Int, note1:Note, note2:Note):Int {
 					if (note1.strumTime == note2.strumTime) {
@@ -283,7 +286,7 @@ class NotesGroup extends FlxGroup
 	}
 
 	public function checkMissNote(note:Note) {
-		if (note.active) return;
+		if (note.active || Conductor.songPosition < note.strumTime) return;
 		if (note.mustPress && note.mustHit && !note.isSustainNote)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);

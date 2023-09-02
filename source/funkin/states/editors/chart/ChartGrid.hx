@@ -1,22 +1,26 @@
 package funkin.states.editors.chart;
 
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
 class ChartGrid extends FlxTypedGroup<Dynamic> {
     inline public static var GRID_SIZE:Int = 40;
-    
-    public var grid:FlxSprite;
+    public var grid:FlxBackdrop;
+    public var gridShadow:FlxSprite;
+
     public var notesGroup:FlxTypedGroup<ChartNote>;
     public var sustainsGroup:FlxTypedGroup<ChartNote>;
     public var textGroup:FlxTypedGroup<FunkinText>;
     public var waveformVocals:ChartWaveform;
     public var waveformInst:ChartWaveform;
-    
+
     public function new() {
         super();
-        grid = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff7c7c7c, 0xff6e6e6e);
-        for (i in 0...Conductor.BEATS_PER_MEASURE) grid.pixels.fillRect(new Rectangle(0, ((grid.height/Conductor.BEATS_PER_MEASURE) * i) - 1, grid.width, 2), 0xff505050);
-        grid.pixels.fillRect(new Rectangle(grid.width / 2 - 1, 0, 2, grid.height), FlxColor.BLACK);
+        var _gridBitmap:FlxSprite = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff7c7c7c, 0xff6e6e6e);
+        for (i in 0...Conductor.BEATS_PER_MEASURE) _gridBitmap.pixels.fillRect(new Rectangle(0, ((_gridBitmap.height/Conductor.BEATS_PER_MEASURE) * i) - 1, _gridBitmap.width, 2), 0xff505050);
+        _gridBitmap.pixels.fillRect(new Rectangle(_gridBitmap.width / 2 - 1, 0, 2, _gridBitmap.height), FlxColor.BLACK);
+        
+        grid = new FlxBackdrop(_gridBitmap.pixels, Y);
         grid.screenCenter(X);
         add(grid);
 
@@ -34,6 +38,12 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         add(sustainsGroup);
         add(notesGroup);
         add(textGroup);
+
+        gridShadow = new FlxSprite(grid.x,grid.y-grid.height);
+        gridShadow.makeGraphic(cast grid.width, cast grid.height*3, FlxColor.BLACK);
+        gridShadow.pixels.fillRect(new Rectangle(0, gridShadow.height / 3, grid.width, grid.height), FlxColor.fromRGB(0,0,0,1));
+        gridShadow.alpha = 0.6;
+        add(gridShadow);
 
         updateWaveform();
     }
@@ -53,28 +63,42 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 
     public function set_sectionData(value:SwagSection):SwagSection {
         clearSection();
-        for (i in value.sectionNotes) {
-            drawNote(i);
-        }
+        drawSectionData(value);
         return sectionData = value;
     }
 
-    public function setData(sectionData:SwagSection, sectionIndex:Int = 0) {
+    public function drawSectionData(value:SwagSection, cutHalf:Bool = false) {
+        if (value == null) return;
+        if (value.sectionNotes.length <= 0) return;
+        if (!cutHalf) {
+            for (i in value.sectionNotes)
+                drawNote(i);
+        } else {
+            value.sectionNotes.sort(function(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]));
+            for (i in Std.int(value.sectionNotes.length*0.5)...value.sectionNotes.length)
+                drawNote(value.sectionNotes[i]);
+        }
+    }
+
+    public function setData(sectionIndex:Int = 0) {
         this.sectionIndex = sectionIndex;
         sectionTime = ChartingState.getSecTime(sectionIndex);
-        this.sectionData = sectionData;
+        this.sectionData = ChartingState.SONG.notes[sectionIndex];
+
+        drawSectionData(ChartingState.SONG.notes[sectionIndex-1], true);
+        drawSectionData(ChartingState.SONG.notes[sectionIndex+1]);
     }
 
     public function clearNote(note:ChartNote) {
         note.kill();
+        note.x = -999;
         if (note.childNote != null) note.childNote.kill();
         if (note.txt != null) note.txt.kill();
     }
 
     public function clearSection() {
-        for (i in notesGroup) {
+        for (i in notesGroup)
             clearNote(i);
-        }
     }
 
     public function getNoteData(note:ChartNote):Array<Dynamic> {

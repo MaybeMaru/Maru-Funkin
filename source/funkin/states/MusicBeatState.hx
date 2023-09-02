@@ -2,7 +2,26 @@ package funkin.states;
 
 import flixel.addons.ui.FlxUIState;
 
-class MusicBeatState extends FlxUIState {
+interface IMusicBeat {
+	private var curStep:Int;
+	private var curBeat:Int;
+	private var curSection:Int;
+
+	private var curStepDecimal:Float;
+	private var curBeatDecimal:Float;
+	private var curSectionDecimal:Float;
+
+	private function handleSteps():Void;
+	private function updateStep():Void;
+	private function updateBeat():Void;
+	private function updateSection():Void;
+
+	public function stepHit():Void;
+	public function beatHit():Void;
+	public function sectionHit():Void;
+}
+
+class MusicBeatState extends FlxUIState implements IMusicBeat {
 	public static var instance:MusicBeatState;
 	public static var curState:String;
 	public var scriptConsole:ScriptConsole;
@@ -50,7 +69,7 @@ class MusicBeatState extends FlxUIState {
 
 	private function handleSteps():Void {
 		var oldStep:Int = curStep;
-		updateCurStep();
+		updateStep();
 		updateBeat();
 		updateSection();
 		if (oldStep != curStep && curStep >= 0) {
@@ -68,7 +87,7 @@ class MusicBeatState extends FlxUIState {
 		curBeat = Math.floor(curBeatDecimal);
 	}
 
-	private function updateCurStep():Void {
+	private function updateStep():Void {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
