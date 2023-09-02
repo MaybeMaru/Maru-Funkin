@@ -231,8 +231,8 @@ class Song {
 		return sortSections(sections);
 	}
 
-	public static function sortSections(sections:Array<SwagSection>):Array<Dynamic> {
-		var returnNotes:Array<Dynamic> = [];
+	public static function sortSections(sections:Array<SwagSection>):Array<Array<Dynamic>> {
+		var returnNotes:Array<Array<Dynamic>> = [];
 		for (s in 0...sections.length) {
 			if (sections[s].sectionNotes != null) {
 				for (n in 0...sections[s].sectionNotes.length) {

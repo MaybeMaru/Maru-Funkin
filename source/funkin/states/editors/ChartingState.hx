@@ -13,6 +13,7 @@ import funkin.states.editors.chart.ChartTabs;
 import funkin.states.editors.chart.ChartNote;
 import flixel.util.FlxStringUtil;
 import funkin.states.editors.chart.ChartGrid;
+import funkin.states.editors.chart.ChartPreview;
 
 class ChartingState extends MusicBeatState {
     public static var SONG:SwagSong;
@@ -25,6 +26,7 @@ class ChartingState extends MusicBeatState {
     public var strumBar:ChartStrumLine;
     public var songTxt:FunkinText;
     public var tabs:ChartTabs;
+    public var preview:ChartPreview;
 
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
@@ -64,6 +66,9 @@ class ChartingState extends MusicBeatState {
 		Conductor.songOffset = SONG.offsets;
         Conductor.setVolume();
         stop();
+
+        preview = new ChartPreview(SONG);
+        add(preview);
 
         mainGrid = new ChartGrid();
         add(mainGrid);
