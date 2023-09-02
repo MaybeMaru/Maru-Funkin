@@ -170,8 +170,15 @@ class ChartTabs extends FlxUITabMenu {
 	public var check_mustHitSection:FlxUICheckBox;
 	public var check_changeBPM:FlxUICheckBox;
 	public var stepperSectionBPM:FlxUINumericStepper;
-	//var lastSectionPreview:ChartPreview;
+	var lastSectionPreview:ChartPreview;
 	var sectionNoteTypesDropDown:FlxUIDropDownMenu;
+
+	public function updatePreview() {
+		var index = Std.int(ChartingState.instance.sectionIndex - stepperCopy.value);
+		var copyData = ChartingState.SONG.notes[index];
+       	if (copyData == null || stepperCopy.value == 0) return;
+		lastSectionPreview.resetDraw(index);
+	}
 
 	function addSectionUI():Void {
 		var tab_group_section = new FlxUI(null, this);
@@ -189,11 +196,10 @@ class ChartTabs extends FlxUITabMenu {
 		stepperCopy.y += copyButton.height/2 - stepperCopy.height/2;
 		stepperCopy.name = 'stepper_copy';
 
-		/*lastSectionPreview = new ChartPreview(false);
+		lastSectionPreview = new ChartPreview(ChartingState.SONG);
 		lastSectionPreview.setPosition(stepperCopy.x + 80, stepperCopy.y);
-		lastSectionPreview.scale.y *= 4;
-		lastSectionPreview.scale.x *= 0.75;
-		lastSectionPreview.updateHitbox();*/
+		lastSectionPreview.offset.x = -50;
+		updatePreview();
 
 		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
 
@@ -223,12 +229,11 @@ class ChartTabs extends FlxUITabMenu {
 		check_changeBPM = new FlxUICheckBox(10, 60, null, null, 'Change BPM', 100);
 		check_changeBPM.name = 'check_changeBPM';
 
-		//tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
+		tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
 
-		//tab_group_section.add(stepperLength);
 		tab_group_section.add(stepperSectionBPM);
 		tab_group_section.add(stepperCopy);
-		//tab_group_section.add(lastSectionPreview);
+		tab_group_section.add(lastSectionPreview);
 		tab_group_section.add(check_mustHitSection);
 		tab_group_section.add(check_changeBPM);
 		tab_group_section.add(copyButton);

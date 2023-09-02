@@ -26,7 +26,7 @@ class ChartingState extends MusicBeatState {
     public var strumBar:ChartStrumLine;
     public var songTxt:FunkinText;
     public var tabs:ChartTabs;
-    public var preview:ChartPreview;
+    //public var preview:ChartPreview;
 
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
@@ -67,8 +67,8 @@ class ChartingState extends MusicBeatState {
         Conductor.setVolume();
         stop();
 
-        preview = new ChartPreview(SONG);
-        add(preview);
+        //preview = new ChartPreview(SONG);
+        //add(preview);
 
         mainGrid = new ChartGrid();
         add(mainGrid);
@@ -206,6 +206,7 @@ class ChartingState extends MusicBeatState {
 		tabs.check_mustHitSection.checked = sec.mustHitSection;
 		tabs.check_changeBPM.checked = sec.changeBPM;
 		tabs.stepperSectionBPM.value = sec.bpm;
+        tabs.updatePreview();
         updateIcons();
 	}
 
@@ -587,7 +588,8 @@ class ChartingState extends MusicBeatState {
                     Conductor.mapBPMChanges(ChartingState.SONG);
 					SONG.notes[sectionIndex].bpm = nums.value;
                     changeSection();
-				case 'stepper_copy': //updatePreview();
+				case 'stepper_copy':
+                    tabs.updatePreview();
 			}
 		}
 	}
