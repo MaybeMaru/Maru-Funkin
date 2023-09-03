@@ -94,10 +94,14 @@ class ModdingUtil {
         console.exists ? console.consoleTrace(text, color) : ScriptConsole.addToTraceList(text, color);
     }
 
-    inline public static function addCall(name:String, ?args:Array<Dynamic>):Void {
+    inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
+        var calledStop:Bool = false;
         for (script in scripts) {
-            script.callback(name, args);
+            if (script.callback(name, args) == STOP_FUNCTION) {
+                calledStop = true;
+            }
         }
+        return calledStop;
     }
 
     public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
