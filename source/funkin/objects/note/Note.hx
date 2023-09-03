@@ -44,8 +44,7 @@ class Note extends FlxSpriteExt implements INoteData {
             updateAnims();
         }
 
-        scale.set(refSprite.scale.x, refSprite.scale.y);
-        updateHitbox();
+        setScale(skinJson.scale, true);
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
 
         if (!isSustainNote) {

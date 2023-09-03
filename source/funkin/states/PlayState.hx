@@ -272,7 +272,7 @@ class PlayState extends MusicBeatState {
 			health += note.hitHealth[0];
 			boyfriend.sing(note.noteData, note.altAnim);
 			notesGroup.inBotplay ? notesGroup.playStrumAnim(note) :
-						notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			note.targetStrum.playStrumAnim('confirm', true);
 
 			note.wasGoodHit = true;
 			if (note.childNote != null) note.childNote.startedPress = true;
@@ -293,7 +293,7 @@ class PlayState extends MusicBeatState {
 				notesGroup.playStrumAnim(note);
 				note.setSusPressed();
 			}
-			else notesGroup.playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			else note.targetStrum.playStrumAnim('confirm', true);
 	
 			ModdingUtil.addCall('goodSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, true]);
