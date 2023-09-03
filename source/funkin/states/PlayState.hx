@@ -687,32 +687,33 @@ class PlayState extends MusicBeatState {
 
 		// RESET -> Quick Game Over Screen
 		if (getKey('RESET-P') && !inCutscene) health = 0;
-
-		if (health > 2) health = 2;
-		else if (health <= 0) {
-			health = 0;
-			if (validScore) {
-				boyfriend.stunned = true;
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				paused = true;
-	
-				Conductor.stop();
-	
-				deathCounter++;
-				openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
-				
-				#if cpp // Game Over doesn't get his own variable because it's only used here
-				DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
-				#end
-			}
-		}
+		checkDeath();
 
 		if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 			endSong();
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
+	}
+
+	public function checkDeath() {
+		health = FlxMath.bound(health, 0, 2);
+		if (health > 0 || !validScore) return;
+		if (ModdingUtil.addCall("openGameOverSubstate", []))
+			return;
+		boyfriend.stunned = true;
+
+		persistentUpdate = false;
+		persistentDraw = false;
+		paused = true;
+
+		Conductor.stop();
+
+		deathCounter++;
+		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
+			
+		#if cpp // Game Over doesn't get his own variable because it's only used here
+		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
+		#end
 	}
 
 	public function snapCamera() {

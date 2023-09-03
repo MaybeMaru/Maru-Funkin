@@ -210,6 +210,15 @@ class Song {
 				Reflect.deleteField(sec, 'mustHitSection');
 			}
 		}
+		if (song.notes.length > 1) {
+			while (true) {
+				var lastSec = song.notes[song.notes.length-1];
+				if (lastSec == null) break;
+				if (Reflect.fields(lastSec).length <= 0) 	song.notes.pop();
+				else 										break;
+			}
+		}
+		
 		return song;
 	}
 
