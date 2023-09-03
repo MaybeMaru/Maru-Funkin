@@ -209,7 +209,7 @@ class PlayState extends MusicBeatState {
 			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
 			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
-					var charParts = characterScripts[i].toLowerCase().split('/');
+					var charParts = characterScripts[i].split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
 
 					if (char.curCharacter == charName) {
