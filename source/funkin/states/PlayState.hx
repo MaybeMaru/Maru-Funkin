@@ -209,7 +209,7 @@ class PlayState extends MusicBeatState {
 			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
 			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
-					var charParts = characterScripts[i].toLowerCase().split('/');
+					var charParts = characterScripts[i].split('/');
 					var charName:String = charParts[charParts.length-1].split('.')[0];
 
 					if (char.curCharacter == charName) {
@@ -339,10 +339,15 @@ class PlayState extends MusicBeatState {
 		}
 
 		notesGroup.opponentNoteHit = function (note:Note) {
+			if (note.wasGoodHit) return;
+			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
+
 			dad.sing(note.noteData, note.altAnim);
 			Conductor.vocals.volume = 1;
-	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
+
+			notesGroup.dadBotplay ? if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note) :
+			note.targetStrum.playStrumAnim('confirm', true);
 	
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
@@ -352,9 +357,12 @@ class PlayState extends MusicBeatState {
 		notesGroup.opponentSustainPress = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
-	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
-			note.setSusPressed();
+			
+			if (notesGroup.dadBotplay) 	{
+				if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
+				note.setSusPressed();
+			}
+			else note.targetStrum.playStrumAnim('confirm', true);
 	
 			ModdingUtil.addCall('opponentSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, false]);

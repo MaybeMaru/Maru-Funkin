@@ -4,8 +4,9 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
 class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
-    
     public var grid:FlxBackdrop;
+    public var gridShadow:FlxSprite;
+
     public var eventsGroup:FlxTypedGroup<ChartEvent>;
 
     public function new() {
@@ -20,6 +21,12 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
 
         eventsGroup = new FlxTypedGroup<ChartEvent>();
         add(eventsGroup);
+
+        gridShadow = new FlxSprite(grid.x,grid.y-grid.height);
+        gridShadow.makeGraphic(cast grid.width, cast grid.height*3, FlxColor.BLACK);
+        gridShadow.pixels.fillRect(new Rectangle(0, gridShadow.height / 3, grid.width, grid.height), FlxColor.fromRGB(0,0,0,1));
+        gridShadow.alpha = 0.6;
+        add(gridShadow);
     }
 
     public var sectionIndex:Int = 0;
@@ -27,15 +34,30 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
     public var sectionData(default, set):SwagSection;
     public function set_sectionData(value:SwagSection):SwagSection {
         clearSection();
-        for (i in value.sectionEvents)
-            drawEvent(i);
+        drawSectionData(value);
         return sectionData = value;
     }
 
-    public function setData(sectionData:SwagSection, sectionIndex:Int = 0) {
+    public function drawSectionData(value:SwagSection, cutHalf:Bool = false) {
+        if (value == null) return;
+        if (value.sectionEvents.length <= 0) return;
+        if (!cutHalf) {
+            for (i in value.sectionEvents)
+                drawEvent(i);
+        } else {
+            value.sectionEvents.sort(function(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]));
+            for (i in Std.int(value.sectionEvents.length*0.5)...value.sectionEvents.length)
+                drawEvent(value.sectionEvents[i]);
+        }
+    }
+
+    public function setData(sectionIndex:Int = 0) {
         this.sectionIndex = sectionIndex;
         sectionTime = ChartingState.getSecTime(sectionIndex);
-        this.sectionData = sectionData;
+        this.sectionData = ChartingState.SONG.notes[sectionIndex];
+
+        drawSectionData(ChartingState.SONG.notes[sectionIndex-1], true);
+        drawSectionData(ChartingState.SONG.notes[sectionIndex+1]);
     }
 
     public function clearSection() {
@@ -63,10 +85,10 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
 
     public function clearEvent(event:ChartEvent) {
         event.kill();
+        event.x = -999;
     }
 
     public function drawEvent(event:Array<Dynamic>):ChartEvent {
-        //trace(event);
         var strumTime:Float = event[0];
         var eventName:String = event[1];
         var eventValues:Array<Dynamic> = event[2];

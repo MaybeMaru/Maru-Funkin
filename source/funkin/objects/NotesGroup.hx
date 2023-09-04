@@ -66,7 +66,7 @@ class NotesGroup extends FlxGroup
 			}
 		}
 		goodSustainPress = function (note:Note) {
-			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			note.targetStrum.playStrumAnim('confirm', true);
 		}
 		opponentNoteHit = function (note:Note) {
 			playStrumAnim(note);
@@ -314,19 +314,29 @@ class NotesGroup extends FlxGroup
             if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
+		checkStrumAnims();
     }
 
     public var holdingArray:Array<Bool> = [];
 	public var controlArray:Array<Bool> = [];
 
+	function checkJudgeNote(note:Note) {
+		if (note.mustPress && inBotplay || !note.mustPress && dadBotplay) return false;
+		return true;
+	}
+
+	function pushControls(strums:StrumLineGroup, value:Bool) {
+		for (i in strums) {
+			holdingArray.push(value ? false : i.getControl());
+			controlArray.push(value ? false : i.getControl("-P"));
+		}
+	}
+
     private function controls():Void {
 		holdingArray = [];
 		controlArray = [];
-		for (i in playerStrums) {
-			holdingArray.push(inBotplay ? false : i.getControl());
-			controlArray.push(inBotplay ? false : i.getControl("-P"));
-			if (inBotplay) return;
-		}
+		pushControls(playerStrums, inBotplay);
+		pushControls(opponentStrums, dadBotplay);
 
 		if (generatedMusic) {
 			var possibleNotes:Array<Note> = [];
@@ -334,32 +344,32 @@ class NotesGroup extends FlxGroup
 			var removeList:Array<Note> = [];
 
 			notes.forEachAlive(function(daNote:Note) {
+				if (!checkJudgeNote(daNote)) return; // Skip Cpu notes
+
 				if (daNote.isSustainNote) { // Handle sustain notes
-					if (daNote.mustPress) {
-						daNote.pressed = false;
-						if (!daNote.missedPress) {
-							if ((Conductor.songPosition > daNote.strumTime + Conductor.safeZoneOffset * daNote.hitMult) && !daNote.startedPress) {
-								sustainMiss(daNote);
+					daNote.pressed = false;
+					if (!daNote.missedPress) {
+						if ((Conductor.songPosition > daNote.strumTime + Conductor.safeZoneOffset * daNote.hitMult) && !daNote.startedPress) {
+							sustainMiss(daNote);
+							return;
+						}
+						if (daNote.startedPress) {
+							var holding = daNote.targetStrum.getControl();
+							var pressing = holding && daNote.inSustain;
+							if (!holding) { // Sustain stopped being pressed
+								sustainMiss(daNote); 
 								return;
 							}
-							if (daNote.startedPress) {
-								var holding = daNote.targetStrum.getControl();
-								var pressing = holding && daNote.inSustain && daNote.mustPress;
-								if (!holding) { // Sustain stopped being pressed
-									sustainMiss(daNote); 
-									return;
-								}
-								else {
-									daNote.pressed = pressing; // Pressed sustain
-									if (daNote.pressed) checkCallback(goodSustainPress, [daNote]);
-								}
+							else {
+								daNote.pressed = pressing; // Pressed sustain
+								if (daNote.pressed) checkCallback(daNote.mustPress ? goodSustainPress : opponentSustainPress, [daNote]);
 							}
 						}
 					}
 				}
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {
-						if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit) {
+						if (daNote.canBeHit && !daNote.tooLate && !daNote.wasGoodHit) {
 							if (ignoreList.contains(daNote.noteData)) {
 								for (possibleNote in possibleNotes) {
 									if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10) {
@@ -382,19 +392,16 @@ class NotesGroup extends FlxGroup
 
 			if (controlArray.contains(true)) {
 				for (badNote in removeList) {
-					badNote.kill();
-					notes.remove(badNote, true);
-					badNote.destroy();
+					removeNote(badNote);
 				}
 		
 				possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-
 				if (possibleNotes.length > 0) {
 					for (i in 0...controlArray.length) {
                         if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
 					}
 					for (possibleNote in possibleNotes) {
-                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(goodNoteHit, [possibleNote]);
+                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
 					}
 				}
 				else {
@@ -402,8 +409,6 @@ class NotesGroup extends FlxGroup
 				}
 			}
 		}
-
-		checkStrumAnims();
 	}
 
 	function checkStrumAnims():Void {
@@ -420,6 +425,7 @@ class NotesGroup extends FlxGroup
 
         if (!isPlayState) return;
 		checkOverSinging(PlayState.instance.boyfriend, playerStrums);
+		checkOverSinging(PlayState.instance.dad, opponentStrums);
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup) {

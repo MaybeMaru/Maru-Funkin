@@ -261,7 +261,7 @@ class Paths
 				var bitmap:BitmapData = getBitmapData(path);
 				return Preloader.addFromBitmap(bitmap, path);
 			}
-		} else return getBitmapData(path, true);
+		} else return getGraphic(path, true);
 		return path;
 	}
 
