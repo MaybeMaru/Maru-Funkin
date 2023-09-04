@@ -257,6 +257,13 @@ callScriptFunction(scriptTag:String, scriptFunction:String, ?functionArgs:Array<
 addGlobalVar(variableName:String, variableValue:Dynamic, ?forceVariable:Bool);
 
 /*
+    Returns if the variable exists, DOESNT GET IT FROM THE SCRIPT!
+    @param variableName    --> Name of the variable to check
+*/
+existsGlobalVar(variableName:String);
+
+    
+/*
     Adds a variable for use with getGlobalVar(), DOESNT ADD IT TO THE SCRIPT!
     @param variableName    --> Name of the variable to add
     @param variableValue   --> Value of the variable to add
