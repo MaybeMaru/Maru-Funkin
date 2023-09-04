@@ -66,7 +66,7 @@ class NotesGroup extends FlxGroup
 			}
 		}
 		goodSustainPress = function (note:Note) {
-			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
+			note.targetStrum.playStrumAnim('confirm', true);
 		}
 		opponentNoteHit = function (note:Note) {
 			playStrumAnim(note);
