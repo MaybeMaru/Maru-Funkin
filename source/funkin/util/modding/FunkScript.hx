@@ -1,31 +1,25 @@
 package funkin.util.modding;
 
-import hscript.Parser;
-import hscript.Interp;
+import hscript.Script;
 
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript {
-	public static var parser:Parser = new Parser();
-	public var interp:Interp;
-	public var variables(get, never):Map<String, Dynamic>;
-	public function get_variables() return interp.variables;
-
+class FunkScript extends Script {
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
 	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
 		if (!exists(method)) return CONTINUE_FUNCTION;
-		return tryCall(method, (args == null ? [] : args));
+		return tryCall(method, args);
 	}
 
-	public function tryCall(method:String, args:Array<Dynamic>) {
+	public function tryCall(method:String, ?args:Array<Dynamic>) {
 		var value = null;
 		try {
-			value = Reflect.callMethod(this, get(method), args);
+			value = call(method, args);
 		} catch(e) {
 			errorTrace(e);
 			return CONTINUE_FUNCTION;
@@ -34,17 +28,17 @@ class FunkScript {
 	}
 
 	public function new(hscriptCode:String):Void {
-		interp = new Interp();
+		super();
 		implement();
 		try {
-			execute(hscriptCode);
+			executeString(hscriptCode);
 		}
 		catch(e) {
 			errorTrace(e);
 		} 
 	}
 
-	public function errorTrace(error:Any) {
+	inline public function errorTrace(error:Any) {
 		ModdingUtil.errorTrace('$scriptID / ${Std.string(error)}');
 	}
 
@@ -269,6 +263,10 @@ class FunkScript {
 			globalVariables.set(key, _var);
 		});
 
+		set('existsGlobalVar', function (key:String) {
+			return globalVariables.exists(key);
+		});
+
 		set('getGlobalVar', function (key:String) {
 			if (globalVariables.exists(key)) return globalVariables.get(key);
 			else {
@@ -322,25 +320,6 @@ class FunkScript {
 		set('remove', function(object:Dynamic) {
 			FlxG.state.remove(object);
 		});
-	}
-
-	public function execute(codeToRun:String):Dynamic {
-		@:privateAccess
-		parser.line = 1;
-		parser.allowTypes = true;
-		return interp.execute(parser.parseString(codeToRun));
-	}
-
-	inline public function set(varName:String, varValue:Dynamic):Void {
-		interp.variables.set(varName, varValue);
-	}
-
-	inline public function get(field:String):Dynamic {
-		return interp.variables.get(field);
-	}
-
-	inline public function exists(field:String):Bool {
-		return interp.variables.exists(field);
 	}
 }
 
