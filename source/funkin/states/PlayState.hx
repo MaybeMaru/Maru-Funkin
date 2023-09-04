@@ -339,10 +339,15 @@ class PlayState extends MusicBeatState {
 		}
 
 		notesGroup.opponentNoteHit = function (note:Note) {
+			if (note.wasGoodHit) return;
+			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
+
 			dad.sing(note.noteData, note.altAnim);
 			Conductor.vocals.volume = 1;
-	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
+
+			notesGroup.dadBotplay ? if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note) :
+			note.targetStrum.playStrumAnim('confirm', true);
 	
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
@@ -352,9 +357,12 @@ class PlayState extends MusicBeatState {
 		notesGroup.opponentSustainPress = function (note:Note) {
 			dad.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
-	
-			if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
-			note.setSusPressed();
+			
+			if (notesGroup.dadBotplay) 	{
+				if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
+				note.setSusPressed();
+			}
+			else note.targetStrum.playStrumAnim('confirm', true);
 	
 			ModdingUtil.addCall('opponentSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, false]);
