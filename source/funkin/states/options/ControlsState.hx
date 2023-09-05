@@ -8,18 +8,18 @@ import funkin.substates.PromptSubstate;
 
 class ControlsState extends MusicBeatState {
 	var controlItems:FlxTypedGroup<ControlItem>;
-	var menuItems:FlxTypedGroup<ControlItem>;
+	var menuItems:FlxTypedGroup<Alphabet>;
 	var curSelected:Int = 0;
 	var curBind:Int = 0;
 
 	public static var controlList:Array<String> = [];
 	private static var optionArray:Array<String> = ['LEFT','DOWN','UP','RIGHT','ACCEPT','BACK','PAUSE','RESET'];
 	private static var menuList:Array<String> =  [
-		'NOTE',
+				    'NOTE',
 		'LEFT', 'DOWN', 'UP', 'RIGHT',
-		'', 'UI',
+		'', 		 'UI',
 		'LEFT', 'DOWN', 'UP', 'RIGHT',
-		'', 'GENERAL',
+		'', 	   'GENERAL',
 		'ACCEPT', 'BACK', 'PAUSE', 'RESET',
 	];
 
@@ -27,69 +27,71 @@ class ControlsState extends MusicBeatState {
 		FlxG.resetState();
 	}
 
+	var menuCam:SwagCamera;
+	var camFollow:FlxObject;
+
 	override function create():Void {
 		FlxG.gamepads.deviceConnected.add(resetGamepad);
 		FlxG.gamepads.deviceDisconnected.add(resetGamepad);
+
+		menuCam = new SwagCamera();
+		FlxG.cameras.add(menuCam);
+		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
+		camFollow = new FlxObject(FlxG.width/2, 0);
 		
-		var bg:FunkinSprite = new FunkinSprite('menuBGBlue');
-        bg.setGraphicSize(Std.int(bg.width * 1.1));
-		bg.screenCenter();
+		var bg:FunkinSprite = new FunkinSprite('menuBGBlue', [0,0], [0,0]);
+		bg.setScale(1.1, false);
         add(bg);
 
 		controlItems = new FlxTypedGroup<ControlItem>();
 		add(controlItems);
-		menuItems = new FlxTypedGroup<ControlItem>();
+		menuItems = new FlxTypedGroup<Alphabet>();
 		add(menuItems);
 
 		reloadValues();
+		menuCam.follow(camFollow, null, 0.08);
+		
 		super.create();
 	}
 
+	function clearGroup(group:FlxTypedGroup<Dynamic>) {
+		for (i in group) {
+			group.remove(i);
+			i.destroy();
+		}
+		group.clear();
+	}
+
 	private function reloadValues():Void {
-		for (item in menuItems) {
-			item.visible = false;
-			item.kill();
-			item.destroy();
-			menuItems.remove(item);
-		}
+		clearGroup(menuItems);
+		clearGroup(controlItems);
 
-		for (item in controlItems) {
-			item.visible = false;
-			item.kill();
-			item.destroy();
-			controlItems.remove(item);
-		}
-
+		var c:Int = 0;
 		controlList = Controls.controlArray;
-		var leCount:Int = 0;
-		var realCount:Int = 0;
-		for (control in menuList) {
-			if (control != '') {
-				if (optionArray.contains(control)) {
-					var bindArray:Array<String> = Controls.getBinding(controlList[realCount]);
-					var bind1Name:String = InputFormatter.getKeyName(bindArray[0]);
-					var bind2Name:String = InputFormatter.getKeyName(bindArray[1]);
-					var controlItem:ControlItem = new ControlItem(control,
-					InputFormatter.shortenButtonName(bind1Name),
-					InputFormatter.shortenButtonName(bind2Name),
-					(leCount-curSelected-1+controlList.length/6)*75);
-					controlItem.indexID = realCount;
-					controlItem.orderID = leCount;
-					controlItem.bindSelected = curBind;
-					controlItem.x += 100;
-					controlItems.add(controlItem);
-					realCount++;
-				}
-				else {
-					var menuItem:ControlItem = new ControlItem(control, '', '', ((leCount-curSelected-1+controlList.length/6)*75)-(75/2), true);
-					menuItem.orderID = leCount;
-					menuItem.screenCenter(X);
-					menuItems.add(menuItem);
-				}
+		for (i in 0...menuList.length) {
+			var item = menuList[i];
+			if (item.length <= 0) continue;
+			var itemY = i * 75;
+			
+			if (optionArray.contains(item)) {
+				var bindArray:Array<String> = Controls.getBinding(controlList[c]);
+				var controlItem:ControlItem = new ControlItem(item,
+					InputFormatter.shortenButtonName(InputFormatter.getKeyName(bindArray[0])),
+					InputFormatter.shortenButtonName(InputFormatter.getKeyName(bindArray[1])),
+					itemY);
+				controlItem.ID = c;
+				controlItem.bindSelected = curBind;
+				controlItems.add(controlItem);
+				c++;
+			} else {
+				var titleTxt:Alphabet = new Alphabet(FlxG.width/2, itemY-50, item);
+				titleTxt.alignment = CENTER;
+				menuItems.add(titleTxt);
 			}
-			leCount++;
 		}
+
 		changeSelection();
+		menuCam.focusOn(camFollow.getPosition());
 	}
 
 	override function closeSubState():Void {
@@ -105,8 +107,7 @@ class ControlsState extends MusicBeatState {
 		if (getKey('UI_DOWN-P'))	changeSelection(1);
 
 		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P')) {
-			curBind++;
-			curBind = curBind%2;
+			curBind = (curBind + 1) % 2;
 			CoolUtil.playSound('scrollMenu');
 			for (item in controlItems.members)
 				item.bindSelected = curBind;
@@ -137,16 +138,11 @@ class ControlsState extends MusicBeatState {
 		if (change != 0)	CoolUtil.playSound('scrollMenu');
 
 		for (item in controlItems.members) {
-			item.targetY = (item.orderID - curSelected + (controlItems.length/6))*75;
 			item.selected = false;
-			if (curSelected == item.indexID) {
+			if (curSelected == item.ID) {
 				item.selected = true;
+				camFollow.y = item.targetY;
 			}
-		}
-
-		for (item in menuItems.members) {
-			item.targetY = (item.orderID - curSelected + (controlItems.length/6))*75;
-			item.targetY -= 75/2;
 		}
 	}
 }
