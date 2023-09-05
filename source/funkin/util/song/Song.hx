@@ -202,6 +202,7 @@ class Song {
 					if (note[3] == null) continue;
 					if (note[3] == "default") note = note.pop(); 
 				}
+				sec.sectionNotes.sort(sortNotes);
 			}
 			if (sec.sectionEvents.length <= 0) {
 				Reflect.deleteField(sec, 'sectionEvents');
