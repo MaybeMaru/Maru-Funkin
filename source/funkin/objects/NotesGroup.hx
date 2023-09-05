@@ -51,30 +51,121 @@ class NotesGroup extends FlxGroup
 		Conductor.songOffset = SONG.offsets;
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
-		if (isPlayState) return;
-
-		// Default values
+		
+		// Setup functions
+		var game:PlayState = isPlayState ? PlayState.instance : null;
+		
 		goodNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
-			playerStrums.members[note.noteData].playStrumAnim('confirm', true);
 			note.wasGoodHit = true;
 			if (note.childNote != null) note.childNote.startedPress = true;
-			removeNote(note);
 
-			if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick') {
-				spawnSplash(note);
+			if (isPlayState) {
+				game.health += note.hitHealth[0];
+				game.boyfriend.sing(note.noteData, note.altAnim);
+				Conductor.vocals.volume = 1;
+				game.combo++;
+				game.popUpScore(note.strumTime, note);
 			}
-		}
-		goodSustainPress = function (note:Note) {
+
+			inBotplay ? playStrumAnim(note) :
 			note.targetStrum.playStrumAnim('confirm', true);
-		}
-		opponentNoteHit = function (note:Note) {
-			playStrumAnim(note);
+
+			ModdingUtil.addCall('goodNoteHit', [note]);
+			ModdingUtil.addCall('noteHit', [note, true]);
 			removeNote(note);
 		}
+
+		goodSustainPress = function (note:Note) {
+			game.health += note.hitHealth[1] * (FlxG.elapsed * 5);
+			if (isPlayState) {
+				game.boyfriend.sing(note.noteData, note.altAnim, false);
+				Conductor.vocals.volume = 1;
+			}
+	
+			if (inBotplay) 	{
+				playStrumAnim(note);
+				note.setSusPressed();
+			}
+			else note.targetStrum.playStrumAnim('confirm', true);
+	
+			ModdingUtil.addCall('goodSustainPress', [note]);
+			ModdingUtil.addCall('sustainPress', [note, true]);
+		}
+
+		opponentNoteHit = function (note:Note) {
+			if (note.wasGoodHit) return;
+			note.wasGoodHit = true;
+			if (note.childNote != null) note.childNote.startedPress = true;
+
+			if (isPlayState) {
+				game.dad.sing(note.noteData, note.altAnim);
+				Conductor.vocals.volume = 1;
+			}
+
+			dadBotplay ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
+			note.targetStrum.playStrumAnim('confirm', true);
+	
+			ModdingUtil.addCall('opponentNoteHit', [note]);
+			ModdingUtil.addCall('noteHit', [note, false]);
+			removeNote(note);
+		}
+
 		opponentSustainPress = function (note:Note) {
-			playStrumAnim(note);
-			note.setSusPressed();
+			if (isPlayState) {
+				game.dad.sing(note.noteData, note.altAnim, false);
+				Conductor.vocals.volume = 1;
+			}
+			
+			if (dadBotplay) 	{
+				if (!getPref('vanilla-ui')) playStrumAnim(note);
+				note.setSusPressed();
+			}
+			else note.targetStrum.playStrumAnim('confirm', true);
+	
+			ModdingUtil.addCall('opponentSustainPress', [note]);
+			ModdingUtil.addCall('sustainPress', [note, false]);
+		}
+
+		if (!isPlayState) return;
+
+		noteMiss = function(direction:Int = 1, ?note:Note):Void {
+			if (note == null) {
+				game.health -= 0.04;
+				game.songScore -= 10;
+				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+				ModdingUtil.addCall('badNoteHit', [direction]);
+			}
+			else {
+				if (game.combo >= 5) game.gf.playAnim('sad');
+
+				game.combo = 0;
+				Conductor.vocals.volume = 0;
+				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
+				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
+				game.health -= healthLoss * healthMult;
+				game.songScore -= Std.int(10 * healthMult);
+
+				game.noteCount++;
+				game.songMisses++;
+					
+				ModdingUtil.addCall('noteMiss', [note]);
+			}
+
+			game.boyfriend.stunned = true;
+			new FlxTimer().start(5 / 60, function(tmr:FlxTimer) {
+				game.boyfriend.stunned = false;
+			});
+	
+			game.boyfriend.sing(direction, 'miss');
+			game.updateScore();
+		}
+
+		badNoteHit = function () {
+			for (i in 0...controlArray.length) {
+				if (controlArray[i] && !game.ghostTapEnabled)
+					checkCallback(noteMiss, [i]);
+			}
 		}
     }
 

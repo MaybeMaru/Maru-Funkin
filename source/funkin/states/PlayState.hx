@@ -66,11 +66,11 @@ class PlayState extends MusicBeatState {
 	public var startingSong:Bool = false;
 
 	private var gfSpeed:Int = 1;
-	private var health:Float = 1;
-	private var combo:Int = 0;
+	public var health:Float = 1;
+	public var combo:Int = 0;
 
-	private var noteCount:Int = 0;
-	private var noteTotal:Float = 0;
+	public var noteCount:Int = 0;
+	public var noteTotal:Float = 0;
 
 	private var healthBarBG:FunkinSprite;
 	public var healthBar:FlxBar;
@@ -84,8 +84,8 @@ class PlayState extends MusicBeatState {
 	public var camOther:SwagCamera;
 
 	public var songLength:Float = 0;
-	var songScore:Int = 0;
-	var songMisses:Int = 0;
+	public var songScore:Int = 0;
+	public var songMisses:Int = 0;
 	var scoreTxt:FunkinText;
 	var watermark:FunkinSprite;
 
@@ -264,109 +264,6 @@ class PlayState extends MusicBeatState {
 		boyfriendGroup.add(boyfriend);
 
 		add(fgSpr);
-
-		// Setup functions
-		notesGroup.goodNoteHit = function (note:Note) {
-			if (note.wasGoodHit) return;
-
-			health += note.hitHealth[0];
-			boyfriend.sing(note.noteData, note.altAnim);
-			notesGroup.inBotplay ? notesGroup.playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-			Conductor.vocals.volume = 1;
-			combo++;
-			popUpScore(note.strumTime, note);
-			ModdingUtil.addCall('goodNoteHit', [note]);
-			ModdingUtil.addCall('noteHit', [note, true]);
-			notesGroup.removeNote(note);
-		}
-
-		notesGroup.goodSustainPress = function (note:Note) {
-			health += note.hitHealth[1] * (FlxG.elapsed * 5);
-			boyfriend.sing(note.noteData, note.altAnim, false);
-			Conductor.vocals.volume = 1;
-	
-			if (notesGroup.inBotplay) 	{
-				notesGroup.playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('goodSustainPress', [note]);
-			ModdingUtil.addCall('sustainPress', [note, true]);
-		}
-
-		notesGroup.noteMiss = function(direction:Int = 1, ?note:Note):Void {
-			if (note == null) {
-				health -= 0.04;
-				songScore -= 10;
-				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-				ModdingUtil.addCall('badNoteHit', [direction]);
-			}
-			else {
-				if (combo >= 5) gf.playAnim('sad');
-
-				combo = 0;
-				Conductor.vocals.volume = 0;
-				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
-				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
-				health -= healthLoss * healthMult;
-				songScore -= Std.int(10 * healthMult);
-
-				noteCount++;
-				songMisses++;
-					
-				ModdingUtil.addCall('noteMiss', [note]);
-			}
-
-			boyfriend.stunned = true;
-			new FlxTimer().start(5 / 60, function(tmr:FlxTimer) {
-				boyfriend.stunned = false;
-			});
-	
-			boyfriend.sing(direction, 'miss');
-			updateScore();
-		}
-
-		notesGroup.badNoteHit = function () {
-			for (i in 0...notesGroup.controlArray.length) {
-				if (notesGroup.controlArray[i] && !ghostTapEnabled)
-					notesGroup.checkCallback(notesGroup.noteMiss, [i]);
-			}
-		}
-
-		notesGroup.opponentNoteHit = function (note:Note) {
-			if (note.wasGoodHit) return;
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-
-			dad.sing(note.noteData, note.altAnim);
-			Conductor.vocals.volume = 1;
-
-			notesGroup.dadBotplay ? if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('opponentNoteHit', [note]);
-			ModdingUtil.addCall('noteHit', [note, false]);
-			notesGroup.removeNote(note);
-		}
-
-		notesGroup.opponentSustainPress = function (note:Note) {
-			dad.sing(note.noteData, note.altAnim, false);
-			Conductor.vocals.volume = 1;
-			
-			if (notesGroup.dadBotplay) 	{
-				if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('opponentSustainPress', [note]);
-			ModdingUtil.addCall('sustainPress', [note, false]);
-		}
 
 		//Cam Follow
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -635,7 +532,7 @@ class PlayState extends MusicBeatState {
 	public var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
-	function updateScore():Void {
+	public function updateScore():Void {
 		var songAccuracy:Null<Float> = (noteCount > 0) ? 0 : null;
 		var songRating:String = '?';
 
@@ -808,7 +705,7 @@ class PlayState extends MusicBeatState {
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
-	private function popUpScore(strumtime:Float, daNote:Note):Void {
+	public function popUpScore(strumtime:Float, daNote:Note):Void {
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 

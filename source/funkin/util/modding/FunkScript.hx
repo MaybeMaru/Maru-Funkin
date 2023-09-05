@@ -83,8 +83,8 @@ class FunkScript extends Script {
 		//Flixel
 
 		set('FlxG', flixel.FlxG);
-        set('FlxSpriteExt', funkin.graphics.FlxSpriteExt);	//	The cooler FlxSprite
-		set('FlxSprite', flixel.FlxSprite);
+        set('FlxSpriteExt', funkin.graphics.FlxSpriteExt); // Both r the same lol, just for backwards compatibility
+		set('FlxSprite', funkin.graphics.FlxSpriteExt);
 		set('FlxText', flixel.text.FlxText);
 		set('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
 		set('FlxSpriteGroup', flixel.group.FlxSpriteGroup);
