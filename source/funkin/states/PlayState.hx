@@ -282,7 +282,7 @@ class PlayState extends MusicBeatState {
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FunkinSprite('skins/${SkinUtil.curSkin}/healthBar', [0,0], [0,0]);
+		healthBarBG = new FunkinSprite(SkinUtil.getAssetKey("healthBar"), [0,0], [0,0]);
 		healthBarBG.y = !getPref('downscroll') ? FlxG.height * 0.9 : FlxG.height * 0.1;
 		healthBarBG.screenCenter(X);
 		add(healthBarBG);
@@ -321,7 +321,7 @@ class PlayState extends MusicBeatState {
 		add(ratingGroup);
 		updateScore();
 
-		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, getPref('downscroll') ? 0 : FlxG.height], [0,0]);
+		watermark = new FunkinSprite(SkinUtil.getAssetKey("watermark"), [FlxG.width, getPref('downscroll') ? 0 : FlxG.height], [0,0]);
 		for (i in ['botplay', 'practice']) watermark.addAnim(i, i.toUpperCase(), 24, true);
 		watermark.playAnim(notesGroup.inBotplay ? 'botplay' : 'practice');
 		watermark.setScale(SkinUtil.curSkinData.scale * 0.7);
@@ -429,21 +429,20 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('startCountdown');
 
 		var swagCounter:Int = 0;
-		var introSkin:String = SkinUtil.curSkin;
-		for (i in ['3','2','1','Go']) 	Paths.sound('skins/$introSkin/intro$i'); // Cache stuff
-		for (i in ['ready','set','go']) Paths.image('skins/$introSkin/$i');
+		var countdownSprites = ['ready','set','go'];
+		var countdownSounds = ['intro3','intro2','intro1','introGo'];
+
+		for (i in countdownSounds) 	Paths.sound(SkinUtil.getAssetKey(i,SOUND));
+		for (i in countdownSprites) Paths.image(SkinUtil.getAssetKey(i));
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
-			dad.dance();
-			gf.dance();
-			boyfriend.dance();
-			iconP1.bumpIcon();
-			iconP2.bumpIcon();
+			for (i in [dad,gf,boyfriend]) i.dance();
+			for (i in [iconP1, iconP2]) i.bumpIcon();
 
 			if (swagCounter > 0) {
-				var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${['ready','set','go'][swagCounter-1]}');
-				countdownSpr.scale.set(SkinUtil.curSkinData.scale,SkinUtil.curSkinData.scale);
+				var countdownSpr:FunkinSprite = new FunkinSprite(SkinUtil.getAssetKey(countdownSprites[swagCounter-1]));
+				countdownSpr.setScale(SkinUtil.curSkinData.scale);
 				countdownSpr.screenCenter();
 				countdownSpr.cameras = [camHUD];
 				add(countdownSpr);
@@ -453,7 +452,7 @@ class PlayState extends MusicBeatState {
 				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
 			}
 
-			CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
+			CoolUtil.playSound(SkinUtil.getAssetKey(countdownSounds[swagCounter],SOUND),0.6);
 			swagCounter++;
 		}, 4);
 	}

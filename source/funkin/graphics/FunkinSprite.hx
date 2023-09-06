@@ -5,8 +5,14 @@ class FunkinSprite extends FlxSpriteExt {
     public var animated:Bool = true;
     public var danced:Bool = false;
 
-    public function new(path:String, ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
+    public function new(path:String = "", ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
         super();
+        coords = (coords != null) ? coords : [0,0];
+        scrolls = (scrolls != null) ? scrolls : [1,1];
+        setPosition(coords[0], coords[1]);
+        scrollFactor.set(scrolls[0], scrolls[1]);
+
+        if (path.length <= 0) return;
 
         loadImage(path);
         animated = _packer != IMAGE;
@@ -17,11 +23,6 @@ class FunkinSprite extends FlxSpriteExt {
         } else {
             antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
         }
-
-        coords = (coords != null) ? coords : [0,0];
-        scrolls = (scrolls != null) ? scrolls : [1,1];
-        setPosition(coords[0], coords[1]);
-        scrollFactor.set(scrolls[0], scrolls[1]);
     }
     
     public function dance():Void {

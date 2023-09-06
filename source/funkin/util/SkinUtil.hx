@@ -1,4 +1,5 @@
 package funkin.util;
+import openfl.utils.AssetType;
 
 typedef NoteSkinData = {
     var ?noteColorArray:Array<String>;
@@ -34,14 +35,22 @@ class SkinUtil {
 		return skinJson;
 	}
 
-    inline public static function getSkinData(?skin:String):SkinJson {
+    public static function getSkinData(?skin:String):SkinJson {
         skin = (skin != null) ? skin : curSkin;
-        if (dataMap == null) {
+        if (dataMap == null)
             initSkinData();
-        }
-        else if (dataMap.get(skin) == null) {
+        else if (dataMap.get(skin) == null)
             dataMap.set(skin, getSkinJsonData(skin));
-        }
+
         return dataMap.get(skin);
+    }
+
+    public static function getAssetKey(key:String, type:AssetType = IMAGE, ?skin:String) {
+        skin = skin == null ? SkinUtil.curSkin : skin;
+        var skinKey = 'skins/$skin/$key';
+        var defaultSkinKey = 'skins/default/$key';
+
+        var skinPath = Paths.getAssetPath(skinKey, type);
+        return Paths.exists(skinPath, type) ? skinKey :  defaultSkinKey;
     }
 }

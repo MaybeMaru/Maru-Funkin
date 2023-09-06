@@ -126,11 +126,10 @@ class Paths
 		return getPath('data/shaders/$key.frag', TEXT, library);
 	}
 
-	static public function sound(key:String, ?library:String, ?level:String):FlxSoundAsset
+	static public function sound(key:String, ?library:String, ?level:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library, false, true, level);
-		var soundFile:FlxSoundAsset = getSound(soundPath);
-		return soundFile;
+		return forcePath ? soundPath : getSound(soundPath);
 	}
 
 	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String):FlxSoundAsset
@@ -370,6 +369,13 @@ class Paths
 		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
 		else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
 		else																	return IMAGE;
+	}
+
+	inline static public function getAssetPath(key:String, type:AssetType = IMAGE):String {
+		switch (type) {
+			case SOUND: return cast sound(key, null, null, true);
+			default: 	return cast image(key, null, true);
+		}
 	}
 }
 

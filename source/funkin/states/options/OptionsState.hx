@@ -5,8 +5,7 @@ class OptionsState extends MusicBeatState {
 	public static var fromPlayState:Bool = false;
 	var optionItems:Array<String> = [
 		'Preferences', 
-		'Controls', 
-		//'Note Colors',
+		'Controls',
 		'Latency'
 	];
 	var grpOptionsItems:FlxTypedGroup<Alphabet>;
@@ -98,7 +97,6 @@ class OptionsState extends MusicBeatState {
 		switch (optionItems[curSelected]) {
 			case 'Preferences':	switchState(new funkin.states.options.PreferencesState());
 			case 'Controls':	switchState(new funkin.states.options.ControlsState());
-			//case 'Note Colors':	FlxG.switchState(new funkin.states.options.NoteColorState());
 			case 'Latency':		switchState(new funkin.states.options.LatencyState());
 			case 'Mod Folders':	switchState(new funkin.states.options.ModFoldersState());
 			default:			exitOptions();
