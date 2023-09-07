@@ -150,7 +150,7 @@ class LoadingState extends MusicBeatState
 	
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
-		Paths.setCurrentLevel(PlayState.storyWeek);
+		Paths.currentLevel = PlayState.storyWeek;
 		#if NO_PRELOAD_ALL
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!Paths.exists(getVocalPath(), MUSIC) || isSoundLoaded(getVocalPath()))
@@ -159,8 +159,10 @@ class LoadingState extends MusicBeatState
 		if (!loaded)
 			return new LoadingState(target, stopMusic);
 		#end
-		if (stopMusic && FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+		if (stopMusic) {
+			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+			Conductor.stop();
+		}
 		
 		return target;
 	}

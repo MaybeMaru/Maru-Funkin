@@ -178,7 +178,7 @@ class PlayState extends MusicBeatState {
 		curStage = SONG.stage;
 		stageJsonData = Stage.getJsonData(curStage);
 		defaultCamZoom = stageJsonData.zoom;
-		Paths.setCurrentLevel(stageJsonData.library);
+		Paths.currentLevel = stageJsonData.library;
 		SkinUtil.setCurSkin(stageJsonData.skin);
 
 		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);

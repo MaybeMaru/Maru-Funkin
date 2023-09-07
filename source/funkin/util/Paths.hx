@@ -18,11 +18,10 @@ import sys.FileSystem;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-	public static var currentLevel:String;
+	public static var currentLevel(default, set):String;
 
-	static public function setCurrentLevel(name:String) {
-		currentLevel = name.toLowerCase();
-	}
+	public static function set_currentLevel(value:String)
+		return currentLevel = value.toLowerCase();
 
 	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
