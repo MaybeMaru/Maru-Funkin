@@ -231,13 +231,18 @@ class Paths
 		var fileList:Array<String> = [];
 		var pushFile = function(folderPath:String) {
 			if (FileSystem.exists(folderPath)) {
+				var fileSort = CoolUtil.getFileContent('$folderPath/listSort.txt').split(",");
+				var curFolderList = [];
+				
 				for (filePath in FileSystem.readDirectory(folderPath)) {
 					if (filePath.endsWith(extension) || extension == null) {
 						var leFile:String = '$folderPath/$filePath';
 						leFile = fullPath ? leFile : leFile.split('/')[leFile.split('/').length-1].split('.')[0];
-						fileList.push(leFile);
+						curFolderList.push(leFile);
 					}
 				}
+
+				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));
 			}
 		};
 		if (global) pushFile(getModPath(folder));
