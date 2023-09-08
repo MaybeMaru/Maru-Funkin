@@ -3,6 +3,7 @@ package funkin.objects.note;
 typedef EventData = {
     var description:String;
     var values:Array<Dynamic>;
+    var image:String;
 }
 
 class EventUtil {
@@ -26,7 +27,8 @@ class EventUtil {
 
     public static var DEFAULT_EVENT(default, never):EventData = {
 		description: "This event has no description",
-        values: []
+        values: [],
+        image: "blankEvent"
 	}
 
     public static function getEventData(event:String):EventData {

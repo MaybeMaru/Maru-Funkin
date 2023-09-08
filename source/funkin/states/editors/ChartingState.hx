@@ -394,6 +394,7 @@ class ChartingState extends MusicBeatState {
         selectedEventObject.data.values = selectedEvent[2].copy();
         selectedEventObject.data.name = selectedEvent[1];
         selectedEventObject.updateText();
+        selectedEventObject.loadSettings();
     }
 
     public function removeEvent(event:ChartEvent) {
