@@ -4,7 +4,7 @@ class FreeplayState extends MusicBeatState {
 	var bg:FunkinSprite;
 
 	var songs:Array<SongMetadata> = [];
-	var coolColors:Map<String, String>;
+	var coolColors:Map<String, FlxColor>;
 	var curWeekDiffs:Array<String> = [
 		'easy',
 		'normal',
@@ -32,13 +32,18 @@ class FreeplayState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		coolColors = new Map<String, String>();
+		coolColors = new Map<String, FlxColor>();
 		for (i in 0...WeekSetup.getWeekList().length) {
 			var week:WeekJson = WeekSetup.weekList[i];
 			var weekName:String = WeekSetup.weekNameList[i];
 			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay) {
-				addWeek(week.songList.songs, week.songList.songIcon, weekName);
-				coolColors.set(weekName, week.weekColor);
+				addWeek(week.songList.songs, week.songList.songIcons, weekName);
+
+				var songColors = week.songList.songColors;
+				for (i in 0...week.songList.songs.length) {
+					var songColor = FlxColor.fromString(songColors[cast FlxMath.bound(i, 0, songColors.length-1)]);
+					coolColors.set(formatColor(weekName, i), songColor);
+				}
 			}
 		}
 
@@ -89,8 +94,8 @@ class FreeplayState extends MusicBeatState {
 		super.create();
 	}
 
-	public function addSong(songName:String, songCharacter:String, weekName:String):Void {
-		songs.push(new SongMetadata(songName, songCharacter, weekName));
+	public function addSong(songName:String, songCharacter:String, weekName:String, id:Int):Void {
+		songs.push(new SongMetadata(songName, songCharacter, weekName, id));
 	}
 
 	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String):Void {
@@ -99,13 +104,18 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		for (i in 0...songs.length) {
-			var songIcon:String = (i > songCharacters.length-1) ? songCharacters[songCharacters.length-1] : songCharacters[i];
-			addSong(songs[i], songIcon, week);
+			var songIcon:String = songCharacters[cast FlxMath.bound(i, 0, songCharacters.length-1)];
+			addSong(songs[i], songIcon, week, i);
 		}
 	}
 
+	inline function formatColor(weekName:String, id:Int) {
+		return '${weekName}_songID_$id';
+	}
+
 	function getBgColor():FlxColor {
-		return FlxColor.fromString(coolColors.get(songs[curSelected].weekName));
+		var curSongMeta = songs[curSelected];
+		return coolColors.get(formatColor(curSongMeta.weekName, curSongMeta.ID));
 	}
 
 	var lerpColor:FlxColorFix;
@@ -227,10 +237,12 @@ class SongMetadata {
 	public var songName:String = "";
 	public var weekName:String = "";
 	public var songCharacter:String = "";
+	public var ID:Int = 0;
 
-	public function new(song:String, songCharacter:String, weekName:String):Void {
+	public function new(song:String, songCharacter:String, weekName:String, ID:Int):Void {
 		this.songName = song;
 		this.songCharacter = songCharacter;
 		this.weekName = weekName;
+		this.ID = ID;
 	}
 }

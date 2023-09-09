@@ -5,7 +5,7 @@ package funkin.graphics;
 */
 class FlxSpriteExt extends FlxSprite {
 
-	public static var DEFAULT_SPRITE:SpriteJson = {
+	public static var DEFAULT_SPRITE(default, never):SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
 		scale: 1,
@@ -13,7 +13,7 @@ class FlxSpriteExt extends FlxSprite {
 		flipX: false,
 	}
 
-	public static var DEFAULT_ANIM:SpriteAnimation = {
+	public static var DEFAULT_ANIM(default, never):SpriteAnimation = {
 		animName: 'idle',
 		animFile: 'idle',
 		offsets: [0,0],
@@ -36,9 +36,8 @@ class FlxSpriteExt extends FlxSprite {
 
 	public function setScale(_scale:Float = 1, updateBox:Bool = true) {
 		scale.set(_scale,_scale);
-		if (updateBox) {
+		if (updateBox)
 			updateHitbox();
-		}
 	}
 
 	public function loadFromSprite(sprite:FlxSpriteExt) {

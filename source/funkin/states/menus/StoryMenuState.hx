@@ -33,11 +33,8 @@ class StoryMenuState extends MusicBeatState {
 
 	override function create():Void {
 		for (week in WeekSetup.getWeekList()) {
-			weekCharacters.push([week.storyDad, week.storyBf, week.storyGf]);
+			weekCharacters.push(week.storyCharacters);
 		}
-		
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		if (FlxG.sound.music == null) {
 			CoolUtil.playMusic('freakyMenu');

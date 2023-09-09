@@ -148,7 +148,8 @@ class Note extends FlxSpriteExt implements INoteData {
         return value;
     }
 
-    public var percentCut:Float = 1;
+    public var percentCut:Float = 0;
+    public var percentLeft:Float = 1;
     public var susEndHeight:Int = 12; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
@@ -161,6 +162,7 @@ class Note extends FlxSpriteExt implements INoteData {
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
+                percentLeft = _height / height;
             }
         } else {
             kill();
