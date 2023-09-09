@@ -109,7 +109,11 @@ class CoolUtil {
 		return FlxMath.lerp(a,b,getLerp(ratio));
 	}
 
-	inline public static function sortAlphabetically(a:String, b:String):Int {
+	public static function sortByStrumTime(a:Dynamic, b:Dynamic) {
+		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
+	}
+
+	public static function sortAlphabetically(a:String, b:String):Int {
         a = a.toUpperCase();
         b = b.toUpperCase();
         if 		(a < b) return -1;
@@ -117,7 +121,7 @@ class CoolUtil {
         return 0;
     }
 
-	inline public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
+	public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
 		var result:Array<String> = [];
 		for (i in customOrder) {
 			if (input.contains(i)) {
@@ -129,6 +133,16 @@ class CoolUtil {
 		input.sort(sortAlphabetically);
 		return result.concat(input);
 	}
+
+	public static function removeDuplicates(input:Array<String>):Array<String> {
+        var result:Array<String> = [];
+        for (i in input) {
+            if (!result.contains(i)) {
+                result.push(i);
+            }
+        }
+        return result;
+    }
 	
 	inline public static function formatClass(daClass:Dynamic, formatDir:Bool = true):String {
 		var className = Type.getClassName(Type.getClass(daClass));

@@ -1,5 +1,10 @@
 package funkin.util.modding;
 
+typedef ModFolderJson = {
+    var description:String;
+    var title:String;
+}
+
 class ModdingUtil {
     //Mod folders
     public static var curModFolder:String = "";

@@ -269,8 +269,8 @@ class NotesGroup extends FlxGroup
 			}
 		}
 
-		unspawnNotes.sort(function(Obj1:Note, Obj2:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
-		events.sort(function(Obj1:Event, Obj2:Event):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime));
+		unspawnNotes.sort(CoolUtil.sortByStrumTime);
+		events.sort(CoolUtil.sortByStrumTime);
 		
 		//Notetype Scripts
 		var notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
@@ -349,7 +349,7 @@ class NotesGroup extends FlxGroup
 						if (note1.isSustainNote && !note2.isSustainNote) return -1;
 						if (!note1.isSustainNote && note2.isSustainNote) return 1;
 					}
-					return FlxSort.byValues(order, note1.strumTime, note2.strumTime);
+					return CoolUtil.sortByStrumTime(note1,note2);
 				}, FlxSort.DESCENDING);
 				unspawnNotes.splice(unspawnNotes.indexOf(dunceNote), 1);
 			}
@@ -488,8 +488,8 @@ class NotesGroup extends FlxGroup
 				for (badNote in removeList) {
 					removeNote(badNote);
 				}
-		
-				possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
 					for (i in 0...controlArray.length) {
                         if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);

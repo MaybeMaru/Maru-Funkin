@@ -63,6 +63,7 @@ class WeekSetup {
         //Vanilla weeks go first >:)
         weeks = weeks.concat(global);
         weeks = weeks.concat(mod.map(week -> Paths.getFileMod(week)[1]));
+        weeks = CoolUtil.removeDuplicates(weeks);
 
 		modWeekMap = new Map<String,String>();
 		for (week in mod) {
