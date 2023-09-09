@@ -2,15 +2,13 @@
     "songList": 
     {
         "songs":["Pico", "Philly Nice", "Blammed"],
-        "weekNum": 3,
-        "songIcon": ["pico"]
+        "songIcons": ["pico"],
+        "songColors": ["0xFF941653"]
     },
     "weekImage": "week3",
-    "weekName": "PICO",
+    "weekName": "pico",
     "weekColor": "0xFF941653",
-    "storyBf": "bf",
-	"storyDad": "pico",
-	"storyGf": "gf",
+    "storyCharacters": ["pico","bf","gf"],
     "startUnlocked": false,
     "unlockWeek": "week 4"
 }

@@ -2,15 +2,13 @@
     "songList": 
     {
         "songs":["Senpai", "Roses", "Thorns"],
-        "weekNum": 6,
-        "songIcon": ["senpai","senpai","spirit"]
+        "songIcons": ["senpai","senpai","spirit"],
+        "songColors": ["0xFFFF78BF"]
     },
     "weekImage": "week6",
     "weekName": "hating simulator ft. moawling",
     "weekColor": "0xFFFF78BF",
-    "storyBf": "bf",
-	"storyDad": "senpai",
-	"storyGf": "gf",
+    "storyCharacters": ["senpai","bf","gf"],
     "startUnlocked": false,
     "unlockWeek": "week 7"
 }
