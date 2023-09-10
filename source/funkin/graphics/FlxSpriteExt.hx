@@ -1,5 +1,9 @@
 package funkin.graphics;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
+import openfl.display.Bitmap;
+
 /*
     Just FlxSprite but with helper functions
 */
@@ -182,5 +186,11 @@ class FlxSpriteExt extends FlxSprite {
 		var loop = newData.loop;
 
 		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
+	}
+
+	public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
+		var matrix:FlxMatrix = new FlxMatrix();
+		matrix.translate(X,Y);
+		graphic.bitmap.draw(Brush, matrix);
 	}
 }

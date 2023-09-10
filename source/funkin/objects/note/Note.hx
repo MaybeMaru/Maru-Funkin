@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
 import funkin.objects.NotesGroup;
 
 interface INoteData {
@@ -20,9 +22,9 @@ class Note extends FlxSpriteExt implements INoteData {
     public var parentNote:Note = null; // For sustain notes
     public var childNote:Note = null; // For normal notes
 
-    // Used for stamp() !!!
-    var susPiece:FlxSprite;
-    var susEnd:FlxSprite;
+    // Used for stampBitmap() !!!
+    var susPiece:BitmapData;
+    var susEnd:BitmapData;
     var refSprite:FlxSpriteExt;
 
     public function updateAnims() {
@@ -187,12 +189,12 @@ class Note extends FlxSpriteExt implements INoteData {
             // draw piece
             var loops = Math.floor(_height / susPiece.height) + 1;
             for (i in 0...loops)
-                    stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
+                stampBitmap(susPiece, 0, (_height - susEnd.height) - (i * susPiece.height));
             
             //draw end
             var endPos = _height - susEnd.height;
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-            stamp(susEnd, 0, cast endPos);
+            stampBitmap(susEnd, 0, endPos);
         }
     }
 
