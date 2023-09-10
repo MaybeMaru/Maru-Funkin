@@ -225,7 +225,6 @@ class NotesGroup extends FlxGroup
 
 				// Add note
 				var newNote:Note = new Note(noteData, strumTime, 0, skin);
-				newNote.noteSpeed = songSpeed;
 				newNote.targetStrum = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
@@ -236,7 +235,6 @@ class NotesGroup extends FlxGroup
 				if (sustainLength > 0) {
 					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
 					if (newSustain.alive) {
-						newSustain.noteSpeed = songSpeed;
 						newSustain.targetStrum = targetStrum;
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
@@ -269,6 +267,7 @@ class NotesGroup extends FlxGroup
 			}
 		}
 
+		scrollSpeed = songSpeed;
 		unspawnNotes.sort(CoolUtil.sortByStrumTime);
 		events.sort(CoolUtil.sortByStrumTime);
 		
@@ -290,6 +289,15 @@ class NotesGroup extends FlxGroup
 
 		FlxG.bitmap.clearUnused();
 		generatedMusic = true;
+	}
+
+	public var scrollSpeed(default, set):Float = 1.0; // Shortcut to change all notes scroll speed
+	public function set_scrollSpeed(value:Float = 1.0) {
+		for (i in unspawnNotes.concat(notes.members)) {
+			i.noteSpeed = value;
+		}
+		spawnNotes();
+		return scrollSpeed = value;
 	}
 
     public var goodNoteHit:Dynamic = null;

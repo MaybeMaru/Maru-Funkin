@@ -169,8 +169,12 @@ class Note extends FlxSpriteExt implements INoteData {
         }
     }
 
+    private var curKey:String = "";
+
     public function drawSustainCached(_height:Int) {
         var key:String = 'sus$noteData-$_height-$skin';
+        if (curKey == key) return;
+        curKey = key;
         if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
             frames = Paths.getGraphic(key).imageFrame;
             origin.set(width / 2, 0);
