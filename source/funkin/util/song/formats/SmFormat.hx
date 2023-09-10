@@ -49,22 +49,31 @@ class SmFormat {
         
         var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
         var noteMeasures:Map<Int,Array<String>> = new Map<Int,Array<String>>();
+
+        // Get the line measures actually start
+        var notesLine:Int = 0;
         for (l in 0...map.length) {
-            if (map[l].contains('// measure 1') || map[l].contains('// measure 0')) {
-                var lastMeasure:Int = 0;
-                for (i in (l+1)...map.length-2) {
-                    var noteLine = '${map[i]}'.trim();
-                    if (noteLine.length > 0 && noteLine != ';') {
-                        if (noteLine.startsWith(',')) {
-                            lastMeasure = Std.parseInt(noteLine.split('// measure ')[1]) + (map[l].contains('// measure 1') ? -1 : 0);
-                        } else {
-                            var lastMeasureData:Array<String> = noteMeasures.get(lastMeasure) != null ? noteMeasures.get(lastMeasure) : [];
-                            lastMeasureData.push(noteLine);
-                            noteMeasures.set(lastMeasure, lastMeasureData);
-                        }
-                    }
+            if (map[l].startsWith("#NOTES:")) {
+                for (i in l...map.length) {
+                    if (map[i].length == 4) { // STARTED NOTES, WOW!! (cries)
+                        notesLine = i;
+                        break;
+                    } 
                 }
                 break;
+            }
+        }
+
+        var measure:Int = 0;
+        for (l in notesLine...map.length) {
+            var noteLine = map[l].trim();
+            if (noteLine.length <= 0 || noteLine == ';') continue;
+            if (noteLine.startsWith(",")) { // new measure
+                measure++;
+            } else { // Push notes to measure
+                var lastMeasureData:Array<String> = noteMeasures.get(measure) != null ? noteMeasures.get(measure) : [];
+                lastMeasureData.push(noteLine);
+                noteMeasures.set(measure, lastMeasureData);
             }
         }
 
