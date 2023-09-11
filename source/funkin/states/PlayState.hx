@@ -704,7 +704,7 @@ class PlayState extends MusicBeatState {
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
-	public function popUpScore(strumtime:Float, daNote:Note):Void {
+	public function popUpScore(strumtime:Float, daNote:Note) {
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
@@ -730,9 +730,6 @@ class PlayState extends MusicBeatState {
 
 		songScore += score;
 
-		if (noteRating == 'sick')
-			notesGroup.spawnSplash(daNote);
-
 		if (!getPref('stack-rating')) {
 			for (rating in ratingGroup)
 				rating.kill();
@@ -740,6 +737,8 @@ class PlayState extends MusicBeatState {
 		
 		ratingGroup.drawComplete(noteRating, combo);
 		updateScore();
+
+		return noteRating;
 	}
 
 	override function stepHit():Void {

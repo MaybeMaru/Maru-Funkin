@@ -27,11 +27,13 @@ class Preloader extends flixel.FlxState {
         return bitmapCache.exists(key);
     }
 
-    inline public static function addFromBitmap(bmp:BitmapData, key:String) {
-		var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, false);
-		_texture.uploadFromBitmapData(bmp);
+    inline public static function addFromBitmap(bmp:BitmapData, key:String) {        
+        var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
+        _texture.uploadFromBitmapData(bmp);
+
 		bmp.dispose();
 		bmp.disposeImage();
+        bmp = null;
 
         var data:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         data.persist = true;

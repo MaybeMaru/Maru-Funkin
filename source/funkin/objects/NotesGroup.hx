@@ -65,10 +65,12 @@ class NotesGroup extends FlxGroup
 				game.boyfriend.sing(note.noteData, note.altAnim);
 				Conductor.vocals.volume = 1;
 				game.combo++;
-				game.popUpScore(note.strumTime, note);
-			} else {
-				if (CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note)) == 'sick')
-					spawnSplash(note);
+			}
+
+			if (!inBotplay) {
+				var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
+				CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
+				if (rating == "sick") spawnSplash(note); // Spawn splash
 			}
 
 			inBotplay ? playStrumAnim(note) :
@@ -104,6 +106,12 @@ class NotesGroup extends FlxGroup
 			if (isPlayState) {
 				game.dad.sing(note.noteData, note.altAnim);
 				Conductor.vocals.volume = 1;
+			}
+
+			if (!dadBotplay) {
+				var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
+				CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
+				if (rating == "sick") spawnSplash(note); // Spawn splash
 			}
 
 			dadBotplay ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
