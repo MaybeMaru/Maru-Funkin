@@ -41,6 +41,41 @@ class NotesGroup extends FlxGroup
 		splash.setupNoteSplash(note.x, note.y, note.noteData, note);
 		grpNoteSplashes.add(splash);
 	}
+
+	function hitNote(note:Note, character:Character, botplayCheck:Bool, ?game:PlayState) {
+		note.wasGoodHit = true;
+		if (note.childNote != null) note.childNote.startedPress = true;
+
+		if (isPlayState) {
+			character.sing(note.noteData, note.altAnim);
+			Conductor.vocals.volume = 1;
+		}
+
+		if (!botplayCheck) {
+			if (isPlayState) game.health += note.hitHealth[0];
+			var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
+			CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
+			if (rating == "sick") spawnSplash(note); // Spawn splash
+		}
+
+		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
+		note.targetStrum.playStrumAnim('confirm', true);
+	}
+
+	function pressNote(note:Note, character:Character, botplayCheck:Bool, ?game:PlayState) {
+		if (isPlayState) {
+			character.sing(note.noteData, note.altAnim, false);
+			Conductor.vocals.volume = 1;
+		}
+
+		if (!botplayCheck) {
+			if (isPlayState) game.health += note.hitHealth[1] * (FlxG.elapsed * 5);
+			note.targetStrum.playStrumAnim('confirm', true);
+		} else {
+			if (!getPref('vanilla-ui')) playStrumAnim(note);
+			note.setSusPressed();
+		}
+	}
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
@@ -57,83 +92,28 @@ class NotesGroup extends FlxGroup
 		
 		goodNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-
-			if (isPlayState) {
-				game.health += note.hitHealth[0];
-				game.boyfriend.sing(note.noteData, note.altAnim);
-				Conductor.vocals.volume = 1;
-				game.combo++;
-			}
-
-			if (!inBotplay) {
-				var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
-				CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
-				if (rating == "sick") spawnSplash(note); // Spawn splash
-			}
-
-			inBotplay ? playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-
+			hitNote(note, game.boyfriend, inBotplay, game);
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
 			removeNote(note);
 		}
 
 		goodSustainPress = function (note:Note) {
-			if (isPlayState) {
-				game.health += note.hitHealth[1] * (FlxG.elapsed * 5);
-				game.boyfriend.sing(note.noteData, note.altAnim, false);
-				Conductor.vocals.volume = 1;
-			}
-	
-			if (inBotplay) 	{
-				playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
+			pressNote(note, game.boyfriend, inBotplay, game);
 			ModdingUtil.addCall('goodSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, true]);
 		}
 
 		opponentNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-
-			if (isPlayState) {
-				game.dad.sing(note.noteData, note.altAnim);
-				Conductor.vocals.volume = 1;
-			}
-
-			if (!dadBotplay) {
-				var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
-				CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
-				if (rating == "sick") spawnSplash(note); // Spawn splash
-			}
-
-			dadBotplay ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-	
+			hitNote(note, game.dad, dadBotplay, game);
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
 			removeNote(note);
 		}
 
 		opponentSustainPress = function (note:Note) {
-			if (isPlayState) {
-				game.dad.sing(note.noteData, note.altAnim, false);
-				Conductor.vocals.volume = 1;
-			}
-			
-			if (dadBotplay) 	{
-				if (!getPref('vanilla-ui')) playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
+			pressNote(note, game.dad, dadBotplay, game);
 			ModdingUtil.addCall('opponentSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, false]);
 		}

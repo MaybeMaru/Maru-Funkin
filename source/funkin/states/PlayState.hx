@@ -705,6 +705,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function popUpScore(strumtime:Float, daNote:Note) {
+		combo++;
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
