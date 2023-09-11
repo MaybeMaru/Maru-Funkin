@@ -164,10 +164,10 @@ class ChartingState extends MusicBeatState {
 
     public function changeSection(change:Int = 0) {
         var newIndex = Std.int(Math.max(sectionIndex + change, 0));
-        if (sectionIndex != newIndex) {  // Fr changed a section
+        //if (sectionIndex != newIndex) {  // Fr changed a section
             deselectNote();
             deselectEvent();
-        }
+        //}
         checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
         sectionIndex = newIndex;
         sectionTime = getSecTime(sectionIndex);
@@ -572,8 +572,9 @@ class ChartingState extends MusicBeatState {
                     SONG.speed = nums.value;
 
 				case 'song_bpm':
+                    SONG.bpm = nums.value;
 					Conductor.mapBPMChanges(SONG);
-					Conductor.bpm = nums.value;
+                    changeSection();
 
 				case 'song_inst_offset':
 					var tempOffset:Int = Std.int(nums.value);
