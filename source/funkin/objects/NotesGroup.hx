@@ -32,9 +32,19 @@ class NotesGroup extends FlxGroup
 	public var opponentStrumsInitPos(get, never):Array<FlxPoint>;
 	public function get_opponentStrumsInitPos() return playerStrums.initPos;
 
-    public var inBotplay:Bool = false;
-	public var dadBotplay:Bool = true;
+    public var inBotplay(default,set):Bool = false;
+	public var dadBotplay(default,set):Bool = true;
 	public var isPlayState:Bool = true;
+
+	public function set_inBotplay(value:Bool) {
+		if (isPlayState) PlayState.instance.boyfriend.botMode = value;
+		return inBotplay = value;
+	}
+
+	public function set_dadBotplay(value:Bool) {
+		if (isPlayState) PlayState.instance.dad.botMode = value;
+		return dadBotplay = value;
+	}
 
 	public function spawnSplash(note:Note) {
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
@@ -42,7 +52,7 @@ class NotesGroup extends FlxGroup
 		grpNoteSplashes.add(splash);
 	}
 
-	function hitNote(note:Note, character:Character, botplayCheck:Bool, ?game:PlayState) {
+	function hitNote(note:Note, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		note.wasGoodHit = true;
 		if (note.childNote != null) note.childNote.startedPress = true;
 
@@ -51,9 +61,9 @@ class NotesGroup extends FlxGroup
 			Conductor.vocals.volume = 1;
 		}
 
-		if (!botplayCheck) {
-			if (isPlayState) game.health += note.hitHealth[0];
-			var rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
+		if (!botplayCheck || prefBot) {
+			if (isPlayState) PlayState.instance.health += note.hitHealth[0];
+			var rating:String = isPlayState ? PlayState.instance.popUpScore(note.strumTime, note) :
 			CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
 			if (rating == "sick") spawnSplash(note); // Spawn splash
 		}
@@ -62,19 +72,20 @@ class NotesGroup extends FlxGroup
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
-	function pressNote(note:Note, character:Character, botplayCheck:Bool, ?game:PlayState) {
+	function pressNote(note:Note, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		if (isPlayState) {
 			character.sing(note.noteData, note.altAnim, false);
 			Conductor.vocals.volume = 1;
 		}
 
-		if (!botplayCheck) {
-			if (isPlayState) game.health += note.hitHealth[1] * (FlxG.elapsed * 5);
-			note.targetStrum.playStrumAnim('confirm', true);
+		if (!botplayCheck || prefBot) {
+			if (isPlayState) PlayState.instance.health += note.hitHealth[1] * (FlxG.elapsed * 5);
 		} else {
-			if (!getPref('vanilla-ui')) playStrumAnim(note);
 			note.setSusPressed();
 		}
+
+		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
+		note.targetStrum.playStrumAnim('confirm', true);
 	}
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
@@ -92,28 +103,28 @@ class NotesGroup extends FlxGroup
 		
 		goodNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
-			hitNote(note, game.boyfriend, inBotplay, game);
+			hitNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
 			removeNote(note);
 		}
 
 		goodSustainPress = function (note:Note) {
-			pressNote(note, game.boyfriend, inBotplay, game);
+			pressNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, true]);
 		}
 
 		opponentNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
-			hitNote(note, game.dad, dadBotplay, game);
+			hitNote(note, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
 			removeNote(note);
 		}
 
 		opponentSustainPress = function (note:Note) {
-			pressNote(note, game.dad, dadBotplay, game);
+			pressNote(note, isPlayState ? game.dad :null, dadBotplay);
 			ModdingUtil.addCall('opponentSustainPress', [note]);
 			ModdingUtil.addCall('sustainPress', [note, false]);
 		}
