@@ -270,21 +270,22 @@ class NotesGroup extends FlxGroup
 		unspawnNotes.sort(CoolUtil.sortByStrumTime);
 		events.sort(CoolUtil.sortByStrumTime);
 		
-		//Notetype Scripts
-		var notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
-		for (script in notetypeScripts) {
-			if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
-				ModdingUtil.addScript(script);
+		if (isPlayState) {
+			var notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
+			for (script in notetypeScripts) { //Notetype Scripts
+				if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
+					ModdingUtil.addScript(script);
+				}
+			}
+			
+			var eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
+			for (script in eventScripts) { //Event Scripts
+				if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
+					ModdingUtil.addScript(script);
+				}
 			}
 		}
 
-		//Event Scripts
-		var eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
-		for (script in eventScripts) {
-			if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
-				ModdingUtil.addScript(script);
-			}
-		}
 
 		FlxG.bitmap.clearUnused();
 		generatedMusic = true;
