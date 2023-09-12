@@ -140,8 +140,8 @@ class NotesGroup extends FlxGroup
 			}
 			else {
 				if (game.combo >= 5) game.gf.playAnim('sad');
-
 				game.combo = 0;
+				
 				Conductor.vocals.volume = 0;
 				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
 				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
@@ -154,12 +154,13 @@ class NotesGroup extends FlxGroup
 				ModdingUtil.addCall('noteMiss', [note]);
 			}
 
-			game.boyfriend.stunned = true;
+			var missChar = note == null ? game.boyfriend : note.mustPress ? game.boyfriend : game.dad;
+			missChar.stunned = true;
+			missChar.sing(direction, 'miss');
 			new FlxTimer().start(5 / 60, function(tmr:FlxTimer) {
-				game.boyfriend.stunned = false;
+				missChar.stunned = false;
 			});
-	
-			game.boyfriend.sing(direction, 'miss');
+			
 			game.updateScore();
 		}
 
@@ -374,8 +375,12 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
+	public function isCpuNote(note:Note) {
+		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
+	}
+
 	public function checkCpuNote(note:Note) {
-		if ((note.mustPress && !inBotplay) || (!note.mustPress && !dadBotplay)) return;
+		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
 				note.pressed = note.inSustain;
@@ -389,7 +394,7 @@ class NotesGroup extends FlxGroup
 
 	public function checkMissNote(note:Note) {
 		if (note.active || Conductor.songPosition < note.strumTime) return;
-		if (note.mustPress && note.mustHit && !note.isSustainNote)
+		if (!isCpuNote(note) && !note.isSustainNote)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);
 	}
