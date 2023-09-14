@@ -37,7 +37,7 @@ Std
 Math
 Type
 Reflect
-StringTools
+StringTools // Scripts support StringTools now, u shouldnt need this much
 
 // Haxeflixel
 FlxG
@@ -61,11 +61,39 @@ FlxTrail
 
 /*
     Adds a class to the script
+    DEPRECATED!! (kinda) Youre now able to use ``import`` in scripts
+    Can still be used for custom class tags until I add ``as``
     @param className        --> Name of the class           EX: 'FlxSprite'
     @param classPackage     --> Package of the class        EX: 'flixel'
     @param customClassName  --> Custom tag for the class    (OPTIONAL) 
 */
 importLib(className:String, classPackage:String, ?customClassName:String);
+
+/*
+    Adds an object to the current state instance
+    @param object --> Object to add
+*/
+add(object:Dynamic);
+
+/*
+    Inserts an object to the current state instance
+    @param position --> Order to instert the object in
+    @param object   --> Object to insert
+*/
+insert(position:Int, object:Dynamic);
+
+/*
+    Removes an object to the current state instance
+    @param object --> Object to remove
+*/
+remove(object:Dynamic);
+
+/*
+    Sets an object to the PlayState instance object map
+    @param object       --> Object to set
+    @param objectTag    --> Tag of the object to set
+*/
+setObjMap(object:Dynamic, objectTag:String);
 
 /*
     Adds a sprite of any kind to the foreground or background of PlayState
@@ -234,6 +262,12 @@ switchCustomState(stateName:String);
 addScript(scriptPath:String, ?scriptTag:String, ?scriptKeys:Array<String>, ?scriptVars:Array<Dynamic>);
 
 /*
+    Removes a loaded script
+    @param scriptTag  --> Tag of the script
+*/
+removeScript(scriptTag:String);
+
+/*
     Returns a variable from a script
     @param scriptTag --> Path or tag of the script
     @param scriptVar --> Name of the variable to get
@@ -257,12 +291,11 @@ callScriptFunction(scriptTag:String, scriptFunction:String, ?functionArgs:Array<
 addGlobalVar(variableName:String, variableValue:Dynamic, ?forceVariable:Bool);
 
 /*
-    Returns if the variable exists, DOESNT GET IT FROM THE SCRIPT!
+    Returns if a variable added using setGlobalVar() exists, DOESNT GET IT FROM THE SCRIPT!
     @param variableName    --> Name of the variable to check
 */
 existsGlobalVar(variableName:String);
 
-    
 /*
     Adds a variable for use with getGlobalVar(), DOESNT ADD IT TO THE SCRIPT!
     @param variableName    --> Name of the variable to add
