@@ -1,11 +1,12 @@
 package funkin.util.song;
 
-import funkin.util.song.formats.QuaFormat;
 import haxe.Json;
 import flixel.util.FlxSort;
 
 import funkin.util.song.formats.OsuFormat;
 import funkin.util.song.formats.SmFormat;
+import funkin.util.song.formats.QuaFormat;
+import funkin.util.song.formats.FunkinFormat;
 
 typedef SwagSection = {
 	var sectionNotes:Array<Array<Dynamic>>;
@@ -70,7 +71,7 @@ class Song {
 
 	//Check null values and remove unused format variables
 	inline public static function checkSong(?song:SwagSong):SwagSong {
-		song = JsonUtil.checkJsonDefaults(getDefaultSong(), engineCheck(song));
+		song = JsonUtil.checkJsonDefaults(getDefaultSong(), FunkinFormat.engineCheck(song));
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
 		for (i in song.notes) i = checkSection(i);
 		return song;
@@ -102,62 +103,6 @@ class Song {
 		}
 		foundNotes.clear();
 		return section;
-	}
-
-	//Fixes charts from other engines
-	inline public static function engineCheck(?song:SwagSong):SwagSong {
-		if (song == null) return null;
-
-		//Get special engine variables ready if missing
-		var specialFields:Array<Array<Dynamic>> = [
-			['players', ['bf','dad','gf']]
-		];
-		for (field in specialFields) {
-			if (!Reflect.hasField(song, field[0])) {
-				Reflect.setField(song, field[0], field[1]);
-			}
-		}
-
-		for (field in Reflect.fields(song)) {
-			switch (field) {
-				case 'gfVersion' | 'gf' | 'player3' | 'player2' | 'player1':
-					var playerIndex:Int = 0;
-					switch(field) {
-						case 'player1': playerIndex = 0;
-						case 'player2': playerIndex = 1;
-						default:		playerIndex = 2;
-					}
-					var players:Array<String> = Reflect.field(song, 'players');
-					players[playerIndex] = Reflect.field(song, field);
-					Reflect.setField(song, 'players', players);
-					Reflect.deleteField(song, field);
-				case 'events':
-					song = convertPsychChart(song);	
-					Reflect.deleteField(song, field);
-			}
-		}
-		return song;
-	}
-	
-	inline public static function convertPsychChart(song:SwagSong) {
-		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
-		if (psychEvents == null || psychEvents.length <= 0) return song;
-
-		var events:Array<Array<Dynamic>> = [];
-		for (e in psychEvents) {
-			var eventTime = e[0];
-			var _events:Array<Array<Dynamic>> = e[1];
-			for (i in _events) events.push([eventTime, i[0], [i[1], i[2]]]);
-		}
-
-		for (i in events) {
-			var eventSec = getTimeSection(song, i[0]);
-			checkAddSections(song, eventSec);
-			song.notes[eventSec] = checkSection(song.notes[eventSec]);
-			song.notes[eventSec].sectionEvents.push(i);
-		}
-
-		return song;
 	}
 
 	inline public static function getSectionTime(song:SwagSong, section:Int = 0):Float {

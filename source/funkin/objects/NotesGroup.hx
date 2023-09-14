@@ -522,17 +522,16 @@ class NotesGroup extends FlxGroup
 		var checkStrums:Array<NoteStrum> = (inBotplay ? [] : playerStrums.members).concat(dadBotplay ? [] : opponentStrums.members);
 		for (strum in checkStrums) {
 			var strumAnim = strum.animation.curAnim;
-			if (strumAnim != null) {
-				if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
-					strum.playStrumAnim('pressed');
-				if (!strum.getControl())
-					strum.playStrumAnim('static');
-			}
+			if (strumAnim == null) continue; // Lil null check
+			if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
+				strum.playStrumAnim('pressed');
+			if (!strum.getControl())
+				strum.playStrumAnim('static');
 		}
 
-        if (!isPlayState) return;
-		checkOverSinging(PlayState.instance.boyfriend, playerStrums);
-		checkOverSinging(PlayState.instance.dad, opponentStrums);
+        if (!isPlayState) return; // Botplay handles sing anims and strums, not necessary
+		if (!inBotplay) checkOverSinging(PlayState.instance.boyfriend, playerStrums);
+		if (!dadBotplay) checkOverSinging(PlayState.instance.dad, opponentStrums);
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup) {
