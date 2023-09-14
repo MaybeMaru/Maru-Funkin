@@ -5,12 +5,44 @@
 	"camOffsets": [-150,100],
 	"anims": [
 		{
+			"offsets": [3,-30],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Dad Sing Note DOWN",
+			"animName": "singDOWN"
+		},
+		{
+			"offsets": [-9,52],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Dad Sing note UP",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [-5,11],
+			"indices": [3,4,5],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "dad sing note right",
+			"animName": "singLEFT-loop"
+		},
+		{
 			"offsets": [0,0],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "Dad idle dance",
 			"animName": "idle"
+		},
+		{
+			"offsets": [-3,27],
+			"indices": [3,4,5],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Dad Sing Note LEFT",
+			"animName": "singRIGHT-loop"
 		},
 		{
 			"offsets": [-3,27],
@@ -21,28 +53,28 @@
 			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [1,-31],
-			"indices": [],
-			"loop": false,
+			"offsets": [0,0],
+			"indices": [11,12,13],
+			"loop": true,
 			"framerate": 24,
-			"animFile": "Dad Sing Note DOWN",
-			"animName": "singDOWN"
+			"animFile": "Dad idle dance",
+			"animName": "idle-loop"
 		},
 		{
-			"offsets": [-9,50],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Dad Sing note UP",
-			"animName": "singUP"
-		},
-		{
-			"offsets": [-9,10],
+			"offsets": [-5,11],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "dad sing note right",
 			"animName": "singLEFT"
+		},
+		{
+			"offsets": [-9,52],
+			"indices": [3,4,5],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Dad Sing note UP",
+			"animName": "singUP-loop"
 		}
 	],
 	"charOffsets": [0,350],
