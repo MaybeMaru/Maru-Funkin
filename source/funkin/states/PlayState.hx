@@ -100,11 +100,10 @@ class PlayState extends MusicBeatState {
 	public var inDialogue:Bool = true;
 	public var dialogueBox:DialogueBoxBase = null;
 
-	#if cpp	// Discord RPC variables
+	// Discord RPC variables
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
-	#end
 
 	public var ghostTapEnabled:Bool = false;
 	public var inPractice:Bool = false;
@@ -126,7 +125,7 @@ class PlayState extends MusicBeatState {
 		NoteUtil.initTypes();
 		EventUtil.initEvents();
 
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		CoolUtil.stopMusic();
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new SwagCamera();
@@ -143,14 +142,12 @@ class PlayState extends MusicBeatState {
 
 		SONG = Song.checkSong(SONG);
 
-		#if cpp
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
 		if (Character.getCharData(SONG.players[1]) != null) {
 			iconRPC = Character.getCharData(SONG.players[1]).icon;
 		}
-		DiscordClient.changePresence(detailsText, '${SONG.song} ($curDifficulty)', iconRPC);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 
 		//FG & BG SPRITES
 		bgSpr = new FlxTypedGroup<Dynamic>();
@@ -460,8 +457,7 @@ class PlayState extends MusicBeatState {
 	public function startSong():Void {
 		camZooming = true;
 		startingSong = false;
-
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		CoolUtil.stopMusic();
 
 		ModdingUtil.addCall('startSong');
 
@@ -475,9 +471,7 @@ class PlayState extends MusicBeatState {
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
-		#if cpp // Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${curDifficulty})', iconRPC, true, songLength);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC, true, songLength);
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -486,10 +480,8 @@ class PlayState extends MusicBeatState {
 			persistentUpdate = false;
 			persistentDraw = true;
 			camGame.followLerp = 0;
-			if (!startingSong) {
-				Conductor.inst.pause();
-				Conductor.vocals.pause();
-			}
+			if (!startingSong)
+				Conductor.pause();
 			
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = false);
@@ -518,11 +510,9 @@ class PlayState extends MusicBeatState {
 				Conductor.play();
 			}
 
-			#if cpp
 			var presenceDetails = '${SONG.song} ($curDifficulty)';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
-			#end
 		}
 		super.closeSubState();
 	}
@@ -566,14 +556,14 @@ class PlayState extends MusicBeatState {
 		} else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
 			switchState(new ChartingState());
-			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
+			DiscordClient.changePresence("Chart Editor", null, null, true);
 		} else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
 			switchState(new AnimationDebug(SONG.players[1]));
-			#if cpp DiscordClient.changePresence("Character Editor", null, null, true); #end
+			DiscordClient.changePresence("Character Editor", null, null, true);
 		} else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
-			#if cpp DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC); #end
+			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC);
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -615,9 +605,8 @@ class PlayState extends MusicBeatState {
 		deathCounter++;
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 			
-		#if cpp // Game Over doesn't get his own variable because it's only used here
-		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
-		#end
+		// Game Over doesn't get his own variable because it's only used here
+		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 	}
 
 	public function snapCamera() {
@@ -654,7 +643,7 @@ class PlayState extends MusicBeatState {
 
 		if (inChartEditor) {
 			switchState(new ChartingState());
-			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
+			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else {
 			if (isStoryMode) {
@@ -787,8 +776,7 @@ class PlayState extends MusicBeatState {
 	override function destroy():Void {
 		Conductor.setPitch(1, false);
 		Conductor.stop();
-		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
-		FlxG.sound.music = null;
+		CoolUtil.destroyMusic();
 		ModdingUtil.addCall('destroy');
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		super.destroy();

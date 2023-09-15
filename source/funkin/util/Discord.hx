@@ -1,14 +1,15 @@
 package funkin.util;
 
+#if cpp
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
-
-using StringTools;
+#end
 
 class DiscordClient
 {
 	public function new()
 	{
+		#if cpp
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "814588678700924999",
@@ -26,21 +27,26 @@ class DiscordClient
 		}
 
 		DiscordRpc.shutdown();
+		#end
 	}
 
 	public static function shutdown()
 	{
+		#if cpp
 		DiscordRpc.shutdown();
+		#end
 	}
 	
 	static function onReady()
 	{
+		#if cpp
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "Friday Night Funkin'"
 		});
+		#end
 	}
 
 	static function onError(_code:Int, _message:String)
@@ -55,16 +61,18 @@ class DiscordClient
 
 	public static function initialize()
 	{
+		#if cpp
 		var DiscordDaemon = sys.thread.Thread.create(() ->
 		{
 			new DiscordClient();
 		});
 		trace("Discord Client initialized");
+		#end
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
 	{
-		#if desktop
+		#if cpp
 		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
 
 		if (endTimestamp > 0)

@@ -92,13 +92,26 @@ class CoolUtil {
 		lil shortcut to play music
 		itll also change the conductor bpm to the music's data text file thing
 	*/
-	inline public static function playMusic(music:String, volume:Float = 1, looped:Bool = true):Void {
+	public static function playMusic(music:String, volume:Float = 1, looped:Bool = true):Void {
 		FlxG.sound.playMusic(Paths.music(music), volume, looped);
 
 		var musicDataPath:String = Paths.getPath('music/$music-data.txt', MUSIC, null);
 		if (Paths.exists(musicDataPath, TEXT)) {
 			Conductor.bpm = Std.parseFloat(getFileContent(musicDataPath));
 		}
+	}
+
+	inline public static function stopMusic() {
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+	}
+
+	inline public static function formatStringUpper(string:String) {
+		return string.charAt(0).toUpperCase() + string.substr(1);
+	}
+
+	inline public static function destroyMusic() {
+		stopMusic();
+		FlxG.sound.music = null;
 	}
 
 	inline public static function getLerp(ratio:Float):Float {
