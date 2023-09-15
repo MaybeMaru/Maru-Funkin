@@ -112,11 +112,12 @@ class PlayState extends MusicBeatState {
 	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
+		instance = this;
+
 		clearCache ? CoolUtil.clearCache(clearCacheData) : FlxG.bitmap.clearUnused();
 		clearCache = true;
 		clearCacheData = null;
 
-		instance = this;
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');

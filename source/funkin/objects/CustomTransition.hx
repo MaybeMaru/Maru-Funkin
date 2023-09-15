@@ -75,6 +75,7 @@ class CustomTransition extends FlxSprite {
         if (!transitioning) return;
 
         timeElapsed += elapsed;
+        cameras = [CoolUtil.getTopCam()];
         var lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
         y = FlxMath.lerp(startPosition, endPosition, lerpValue);
     

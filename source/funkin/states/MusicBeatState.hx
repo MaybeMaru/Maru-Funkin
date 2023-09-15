@@ -46,8 +46,6 @@ class MusicBeatState extends FlxUIState implements IMusicBeat {
 		scriptConsole = new ScriptConsole();
 		add(scriptConsole);
 		
-		var topCam = CoolUtil.getTopCam();
-		if (topCam != null) transition.cameras = [topCam];
 		add(transition);
 		transition.exitTrans();
 
