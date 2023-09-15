@@ -375,7 +375,7 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
-	public function isCpuNote(note:Note) {
+	inline public function isCpuNote(note:Note) {
 		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
 	}
 
@@ -427,11 +427,6 @@ class NotesGroup extends FlxGroup
     public var holdingArray:Array<Bool> = [];
 	public var controlArray:Array<Bool> = [];
 
-	function checkJudgeNote(note:Note) {
-		if (note.mustPress && inBotplay || !note.mustPress && dadBotplay) return false;
-		return true;
-	}
-
 	function pushControls(strums:StrumLineGroup, value:Bool) {
 		for (i in strums) {
 			holdingArray.push(value ? false : i.getControl());
@@ -451,7 +446,7 @@ class NotesGroup extends FlxGroup
 			var removeList:Array<Note> = [];
 
 			notes.forEachAlive(function(daNote:Note) {
-				if (!checkJudgeNote(daNote)) return; // Skip Cpu notes
+				if (isCpuNote(daNote)) return; // Skip Cpu notes
 
 				if (daNote.isSustainNote) { // Handle sustain notes
 					daNote.pressed = false;

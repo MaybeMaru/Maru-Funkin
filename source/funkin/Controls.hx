@@ -10,12 +10,8 @@ class Controls {
     public static var gamepad:FlxGamepad = null;
 
     // Returns if the controler is being used
-	inline public static function inGamepad():Bool
-    {
-        var bool = gamepad == null;
-        if (!bool)
-            bool = gamepad.connected;
-        return !bool;
+	inline public static function inGamepad():Bool {
+        return (gamepad == null) ? false : gamepad.connected;
     }
 
     inline public static function addGamepad(newGamepad:FlxGamepad):Void {
@@ -76,18 +72,13 @@ class Controls {
     }
 
     inline private static function checkKey(bindType:String = '', bindArray:Array<FlxKey>, gamepadBindArray:Array<FlxGamepadInputID>):Bool {
-        if (inGamepad()) {
-            switch (bindType.toUpperCase().trim()) {
-                case 'R':   return gamepad.anyJustReleased(gamepadBindArray);    //  Release Key
-                case 'P':   return gamepad.anyJustPressed(gamepadBindArray);     //  Press Key
-                default:    return gamepad.anyPressed(gamepadBindArray);         //  Hold Key
-            }
-        } else {
-            switch (bindType.toUpperCase().trim()) {
-                case 'R':   return FlxG.keys.anyJustReleased(bindArray);    //  Release Key
-                case 'P':   return FlxG.keys.anyJustPressed(bindArray);     //  Press Key
-                default:    return FlxG.keys.anyPressed(bindArray);         //  Hold Key
-            }
+        var useGamepad = inGamepad();
+        var controller:Dynamic = useGamepad ? gamepad : FlxG.keys;
+        var binds:Array<Dynamic> = useGamepad ? gamepadBindArray : bindArray;
+        switch (bindType.toUpperCase().trim()) {
+            case 'R':   return controller.anyJustReleased(binds);    //  Release Key
+            case 'P':   return controller.anyJustPressed(binds);     //  Press Key
+            default:    return controller.anyPressed(binds);         //  Hold Key
         }
     }
 
