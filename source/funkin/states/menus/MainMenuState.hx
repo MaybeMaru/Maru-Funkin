@@ -93,6 +93,10 @@ class MainMenuState extends MusicBeatState {
 				switchState(new TitleState());
 			}
 
+			if (FlxG.keys.justPressed.SEVEN) {
+				switchState(new funkin.states.editors.ModSetupState());
+			}
+
 			if (getKey('ACCEPT-P')) {
 				if (optionShit[curSelected] == 'donate') {
 					var itchioUrl:String = 'https://ninja-muffin24.itch.io/funkin';
