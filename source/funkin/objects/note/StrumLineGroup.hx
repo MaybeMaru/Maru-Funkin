@@ -26,9 +26,22 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
         function (type) return Controls.getKey('NOTE_RIGHT$type'),
     ];
 
+    static var seperateWidth(default, never) = NoteUtil.swagWidth + 5;
+
+    public function insertStrum(position:Int = 0, skipIntro:Bool = true) {
+        if (members.length >= 9) return null; // STOP
+        for (i in position...members.length) {
+            var strum = members[i];
+            if (strum == null) continue;
+            strum.x += seperateWidth;
+            strum.ID++;
+        }
+        return addStrum(position, skipIntro);
+    }
+
     public function addStrum(noteData:Int = 0, skipIntro:Bool = true) {
         if (members.length >= 9) return null; // STOP
-        var strumX:Float =  startX + (NoteUtil.swagWidth + 5) * noteData;
+        var strumX:Float =  startX + seperateWidth * noteData;
 		var strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
 		strumNote.ID = noteData;
 		strumNote.updateHitbox();
