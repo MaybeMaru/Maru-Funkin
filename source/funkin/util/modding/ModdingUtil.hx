@@ -16,6 +16,7 @@ class ModdingUtil {
         'images',
         'music',
         'songs',
+        'videos',
         'sounds'
     ];
     
