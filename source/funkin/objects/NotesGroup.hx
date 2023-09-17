@@ -23,7 +23,7 @@ class NotesGroup extends FlxGroup
 	public function get_strumLineNotes() return opponentStrums.members.concat(playerStrums.members);
 	public var playerStrums:StrumLineGroup;
 	public var opponentStrums:StrumLineGroup;
-	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
+	public var grpNoteSplashes:SplashGroup;
 
 	public var strumLineInitPos(get, never):Array<FlxPoint>;
 	public function get_strumLineInitPos() return opponentStrums.initPos.concat(playerStrums.initPos);
@@ -47,9 +47,7 @@ class NotesGroup extends FlxGroup
 	}
 
 	public function spawnSplash(note:Note) {
-		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(note.x, note.y, note.noteData, note);
-		grpNoteSplashes.add(splash);
+		grpNoteSplashes.spawnSplash(note);
 	}
 
 	function hitNote(note:Note, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
@@ -172,13 +170,6 @@ class NotesGroup extends FlxGroup
 		}
     }
 
-	function cacheSplash() {
-		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(0, 0, 0);
-		grpNoteSplashes.add(splash);
-		splash.kill();
-	}
-
     public function init(startPos:Float = -5000) {
 		StrumLineGroup.strumLineY = Preferences.getPref('downscroll') ? FlxG.height - 150 : 50;
 		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
@@ -186,9 +177,8 @@ class NotesGroup extends FlxGroup
 		playerStrums = new StrumLineGroup(1, skipStrumIntro);
 		add(playerStrums);
 
-		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
+		grpNoteSplashes = new SplashGroup();
 		add(grpNoteSplashes);
-		cacheSplash();
 
         //Make Song
 		Conductor.songPosition = startPos;

@@ -1,5 +1,24 @@
 package funkin.objects.note;
 
+class SplashGroup extends FlxTypedGroup<NoteSplash> {
+    public function new(startCache:Int = 4) {
+        super();
+        for (i in 0...startCache) spawnSplash();
+        clearGroup();
+    }
+
+    public function clearGroup() {
+        for (i in this) i.kill();
+    }
+
+	public function spawnSplash(?note:Note) {
+		var splash:NoteSplash = recycle(NoteSplash);
+		if (note!=null) splash.setupNoteSplash(note.x, note.y, note.noteData, note);
+		add(splash);
+        return splash;
+	}
+}
+
 class NoteSplash extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
     public var curSkin:String = '';
