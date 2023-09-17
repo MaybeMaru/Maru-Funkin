@@ -5,14 +5,35 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import flixel.addons.ui.FlxUITabMenu;
 import sys.io.File;
 
+/*
+    Add WEEKS
+    Add SONGS
+ */
+
+class ModSetupTabs extends FlxUITabMenu {
+    public function new() {
+        super(null,[{name:"Setup Mod Folder", label: "Setup Mod Folder"}], true);
+        setPosition(50,50);
+        resize(400, 400);
+        selected_tab = 0;
+    }
+}
+
 class ModSetupState extends MusicBeatState {
+    var modTab:ModSetupTabs;
+    
     override function create() {
         var bg = new FunkinSprite("menuDesat");
-        bg.setScale(1.1,false);
+        bg.setScale(1.25,false);
         bg.color = 0xff353535;
         add(bg);
+
+        FlxG.mouse.visible = true;
+        modTab = new ModSetupTabs();
+        add(modTab);
 
         /*setOnDrop(function (path:String) {
             trace("DROPPED FILE FROM: " + Std.string(path));
@@ -20,7 +41,7 @@ class ModSetupState extends MusicBeatState {
             File.copy(path, newPath);
         });*/
         
-        setupModFolder('sexMod');
+        //setupModFolder('sexMod');
 
         super.create();
     }

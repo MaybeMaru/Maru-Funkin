@@ -171,7 +171,7 @@ class CoolUtil {
 		return result;
 	}
 
-	inline public static function hexToColor(hex:String):FlxColor {
+	public static function hexToColor(hex:String):FlxColor {
 		var rgb = [];
         if(hex.startsWith('0x')) {
             hex = hex.substr(2);
