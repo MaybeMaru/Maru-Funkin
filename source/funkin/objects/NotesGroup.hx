@@ -228,7 +228,7 @@ class NotesGroup extends FlxGroup
 				newNote.targetStrum = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
-				newNote.active = false;
+				newNote.hideNote();
 				unspawnNotes.push(newNote);
 
 				// Add note sustain
@@ -239,7 +239,7 @@ class NotesGroup extends FlxGroup
 						newSustain.mustPress = mustPress;
 						newSustain.noteType = noteType;
 						newSustain.parentNote = newNote;
-						newSustain.active = false;
+						newSustain.hideNote();
 						newNote.childNote = newSustain;
 						unspawnNotes.push(newSustain);
 					}
@@ -351,8 +351,7 @@ class NotesGroup extends FlxGroup
 				var dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);
-				dunceNote.active = true;
-				dunceNote.update(FlxG.elapsed);
+				dunceNote.initNote();
 				notes.sort(function (order:Int, note1:Note, note2:Note):Int {
 					if (note1.strumTime == note2.strumTime) {
 						if (note1.isSustainNote && !note2.isSustainNote) return -1;

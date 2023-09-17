@@ -544,25 +544,35 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('updateScore', [songScore]);
 	}
 
+	var oldIconID:Int = 0; // Old icon easter egg
+	public var allowIconEasterEgg:Bool = true;
+	function changeOldIcon() {
+		oldIconID = FlxMath.wrap(oldIconID + 1, 0, 2);
+		switch (oldIconID) {
+			default: 	iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
+			case 1: 	iconP1.makeIcon('bf-old'); 			iconP2.makeIcon('dad');
+			case 2: 	iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
+		}
+	}
+
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		ModdingUtil.addCall('update', [elapsed]);
 
-		if (FlxG.keys.justPressed.NINE) {
-			switch (iconP1.iconName) {
-				case 'bf-old': 	 iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
-				case 'bf-older': iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
-				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
-			}
-		} else if (FlxG.keys.justPressed.SEVEN) {
+		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
+			changeOldIcon();
+		}
+		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
-		} else if (FlxG.keys.justPressed.EIGHT) {
+		}
+		else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
 			switchState(new AnimationDebug(SONG.players[1]));
 			DiscordClient.changePresence("Character Editor", null, null, true);
-		} else if (getKey('PAUSE-P') && startedCountdown && canPause) {
+		}
+		else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
 			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC);
 		}
@@ -593,17 +603,15 @@ class PlayState extends MusicBeatState {
 	public function checkDeath() {
 		health = FlxMath.bound(health, 0, 2);
 		if (health > 0 || !validScore) return;
-		if (ModdingUtil.addCall("openGameOverSubstate", []))
-			return;
-		boyfriend.stunned = true;
-
+		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
+		
 		persistentUpdate = false;
 		persistentDraw = false;
+		boyfriend.stunned = true;
 		paused = true;
 
-		Conductor.stop();
-
 		deathCounter++;
+		Conductor.stop();
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 			
 		// Game Over doesn't get his own variable because it's only used here
@@ -800,6 +808,7 @@ class PlayState extends MusicBeatState {
 		newChar.iconSpr = targetChar.iconSpr;
 		newChar.holdTimer = targetChar.holdTimer;
 		newChar.specialAnim = targetChar.specialAnim;
+		newChar.botMode = targetChar.botMode;
 		targetChar.stageOffsets.copyTo(newChar.stageOffsets);
 		newChar.updatePosition();
 		if (lastAnim != null) newChar.playAnim(lastAnim, true, false, lastFrame);

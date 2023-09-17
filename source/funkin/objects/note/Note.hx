@@ -121,6 +121,21 @@ class Note extends FlxSpriteExt implements INoteData {
         active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
+    public var drawNote:Bool = true;
+    override function draw() { // This should help a bit on performance
+        if (!drawNote) return;
+        super.draw();
+    }
+
+    public function hideNote() {
+        active = drawNote = false;
+    }
+
+    public function initNote() {
+        active = drawNote = true;
+        update(FlxG.elapsed);
+    }
+
     inline public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
         return Conductor.songPosition >= strumTime + startExtra && Conductor.songPosition <= strumTime + initSusLength + endExtra;
     }
