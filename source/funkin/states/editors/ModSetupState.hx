@@ -38,13 +38,13 @@ class ModSetupTabs extends FlxUITabMenu {
         addGroup(tabGroup);
 
         modNameInput = new FlxUIInputText(25, 25, 300, "Template Mod");
-        addTxt(modNameInput, "Mod Name:", true);
+        addToGroup(modNameInput, "Mod Name:", true);
     }
 
-    function addTxt(object:Dynamic, txt:String, focusPush:Bool = false) {
+    function addToGroup(object:Dynamic, txt:String = "", focusPush:Bool = false) {
         if (focusPush && object is FlxUIInputText) focusList.push(object);
+        if (txt.length > 0) tabGroup.add(new FlxText(object.x - 50, object.y - 85, 0, txt));
         tabGroup.add(object);
-        tabGroup.add(new FlxText(object.x - 50, object.y - 85, 0, txt));
     }
 }
 

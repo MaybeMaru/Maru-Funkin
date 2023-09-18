@@ -106,7 +106,7 @@ class ChartingState extends MusicBeatState {
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
 
-        changeSection();
+        setSection(0, true);
         super.create();
     }
 
@@ -162,25 +162,41 @@ class ChartingState extends MusicBeatState {
         }
     }
 
+    function bpmPositionCheck(newPosition:Float = 0) {
+        Conductor.songPosition = newPosition; // Bpm conductor crap
+        Conductor.autoSync();
+        checkBPM();
+        updateBar();
+    }
+
     public function changeSection(change:Int = 0) {
         var newIndex = Std.int(Math.max(sectionIndex + change, 0));
-        //if (sectionIndex != newIndex) {  // Fr changed a section
-            deselectNote();
-            deselectEvent();
-        //}
+        setSection(newIndex);
+    }
+
+    public function setSection(newIndex:Int = 0, forced:Bool = false) {
+        if (!forced && sectionIndex == newIndex) { // Same section, doesnt need update
+            bpmPositionCheck(sectionTime);
+            return; 
+        }
+
+        deselectNote();
+        deselectEvent();
         checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
         sectionIndex = newIndex;
         sectionTime = getSecTime(sectionIndex);
         nextSectionTime = getSecTime(sectionIndex + 1);
+
+        if (sectionTime > Conductor.inst.length) {  // Set song bounds
+            setSection(Song.getTimeSection(SONG, Conductor.inst.length));
+            return;
+        }
         
-        Conductor.songPosition = sectionTime; // Bpm conductor crap
-        Conductor.autoSync();
-        checkBPM();
+        bpmPositionCheck(sectionTime);
 
         mainGrid.setData(sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
         eventsGrid.setData(sectionIndex);
-        updateBar();
         updateSectionTabUI();
     }
 
