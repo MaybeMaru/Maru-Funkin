@@ -165,6 +165,26 @@ class Character extends FlxSpriteExt {
 		super.update(elapsed);
 	}
 
+	public function copyStatusFrom(char:Character) {
+		return char.copyStatusTo(this);
+	}
+
+	public function copyStatusTo(char:Character) {
+		char.group = group;
+		char.iconSpr = iconSpr;
+		char.holdTimer = holdTimer;
+		char.specialAnim = specialAnim;
+		char.botMode = botMode;
+		stageOffsets.copyFrom(char.stageOffsets);
+		char.setXY(OG_X,OG_Y);
+
+		var lastAnim:Null<String> = (animation.curAnim != null) ? animation.curAnim.name : null;
+		var lastFrame:Int = (lastAnim != null) ? animation.curAnim.curFrame : 0;
+		if (lastAnim != null) char.playAnim(lastAnim, true, false, lastFrame);
+
+		return char;
+	}
+
 	public var _singHoldTimer:Float = 0;
 	public var holdFrame:Int = 2;
 

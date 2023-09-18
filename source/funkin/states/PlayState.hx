@@ -798,21 +798,9 @@ class PlayState extends MusicBeatState {
 			case 'girlfriend' | 'gf': targetChar = gf;
 		}
 
-		var lastAnim:Null<String> = (targetChar.animation.curAnim != null) ? targetChar.animation.curAnim.name : null;
-		var lastFrame:Int = (lastAnim != null) ? targetChar.animation.curAnim.curFrame : 0;
-		var targetIcon = targetChar.iconSpr;
-
 		targetChar.visible = false;
-		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, targetChar.isPlayer);
-		newChar.group = targetChar.group;
-		newChar.iconSpr = targetChar.iconSpr;
-		newChar.holdTimer = targetChar.holdTimer;
-		newChar.specialAnim = targetChar.specialAnim;
-		newChar.botMode = targetChar.botMode;
-		targetChar.stageOffsets.copyTo(newChar.stageOffsets);
-		newChar.updatePosition();
-		if (lastAnim != null) newChar.playAnim(lastAnim, true, false, lastFrame);
-		if (targetIcon != null) targetIcon.makeIcon(newChar.icon);
+		var newChar:Character = new Character(0,0,newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
+		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		targetChar.group.add(newChar);
 
 		switch (type.toLowerCase().trim()) {
