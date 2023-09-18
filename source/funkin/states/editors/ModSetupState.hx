@@ -5,7 +5,9 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
+import flixel.addons.ui.FlxUIInputText;
 import sys.io.File;
 
 /*
@@ -14,11 +16,35 @@ import sys.io.File;
  */
 
 class ModSetupTabs extends FlxUITabMenu {
+    var tabGroup:FlxUI;
+    
+    var modNameInput:FlxUIInputText;
+    var modDescInput:FlxUIInputText;
+
+    var focusList:Array<FlxUIInputText> = [];
+	public function getFocus():Bool {
+		for (i in focusList) if (i.hasFocus) return true;
+		return false;
+	}
+    
     public function new() {
         super(null,[{name:"Setup Mod Folder", label: "Setup Mod Folder"}], true);
         setPosition(50,50);
         resize(400, 400);
         selected_tab = 0;
+
+        tabGroup = new FlxUI(null, this);
+		tabGroup.name = "Setup Mod Folder";
+        addGroup(tabGroup);
+
+        modNameInput = new FlxUIInputText(25, 25, 300, "Template Mod");
+        addTxt(modNameInput, "Mod Name:", true);
+    }
+
+    function addTxt(object:Dynamic, txt:String, focusPush:Bool = false) {
+        if (focusPush && object is FlxUIInputText) focusList.push(object);
+        tabGroup.add(object);
+        tabGroup.add(new FlxText(object.x - 50, object.y - 85, 0, txt));
     }
 }
 
@@ -96,6 +122,7 @@ class ModSetupState extends MusicBeatState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        if (modTab.getFocus()) return;
         if (getKey('BACK-P')) {
             switchState(new MainMenuState());
         }

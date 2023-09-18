@@ -488,13 +488,17 @@ class NotesGroup extends FlxGroup
 					removeNote(badNote);
 				}
 
-				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
 					for (i in 0...controlArray.length) {
                         if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
 					}
-					for (possibleNote in possibleNotes) {
-                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
+
+					var i:Int = 0;
+					possibleNotes.sort(CoolUtil.sortByStrumTime);
+					while (i < possibleNotes.length) {
+						var possibleNote = possibleNotes[i++];
+						if (possibleNote.targetStrum.getControl("-P"))
+							checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
 					}
 				}
 				else {
