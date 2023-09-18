@@ -60,6 +60,11 @@ class CoolUtil {
 		System.gc();
 	}
 
+	inline public static function setGlobalManager(active:Bool = true) {
+		FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = active);
+		FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = active);
+	}
+
 	inline public static function getSound(key:String):FlxSound {
 		var newSound:FlxSound = new FlxSound().loadEmbedded(Paths.sound(key));
 		FlxG.sound.list.add(newSound);

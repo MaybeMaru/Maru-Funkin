@@ -60,9 +60,10 @@ class PreferencesState extends MusicBeatState {
                     switch (item.settingType) {
                         case 'bool':
                             if (accepted) {
-                                if (item.itemPref == 'naughty' && !item.prefValue)  //  Tankman easteregg
-                                    CoolUtil.playSound('chart/naughty_on');
-
+                                switch(item.itemPref) {
+                                    case 'naughty': if (!item.prefValue) CoolUtil.playSound('chart/naughty_on'); //  Tankman easteregg
+                                    case 'antialiasing': FlxSprite.defaultAntialiasing = !item.prefValue;
+                                }
                                 item.setValue(!item.prefValue);
                             }
                             

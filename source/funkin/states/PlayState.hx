@@ -493,8 +493,7 @@ class PlayState extends MusicBeatState {
 			if (!startingSong)
 				Conductor.pause();
 			
-			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = false);
-			FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = false);
+			CoolUtil.setGlobalManager(false);
 			CoolUtil.pauseSounds();
 	
 			pauseSubstate.init();
@@ -511,8 +510,7 @@ class PlayState extends MusicBeatState {
 		if (paused) {
 			paused = false;
 			camGame.followLerp = camFollowLerp;
-			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) {	if (!tmr.finished)	tmr.active = true; });
-			FlxTween.globalManager.forEach(function(twn:FlxTween) {	if (!twn.finished)	twn.active = true; });
+			CoolUtil.setGlobalManager(true);
 
 			if (!startingSong) {
 				Conductor.setPitch(Conductor.songPitch);
