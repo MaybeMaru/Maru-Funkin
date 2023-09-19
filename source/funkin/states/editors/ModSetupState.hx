@@ -37,13 +37,17 @@ class ModSetupTabs extends FlxUITabMenu {
 		tabGroup.name = "Setup Mod Folder";
         addGroup(tabGroup);
 
-        modNameInput = new FlxUIInputText(25, 25, 300, "Template Mod");
+        modNameInput = new FlxUIInputText(25, 25, 350, "Template Mod");
         addToGroup(modNameInput, "Mod Name:", true);
+
+        modDescInput = new FlxUIInputText(25, 75, 350, "Get silly on a friday night yeah");
+        modDescInput.lines = 999;
+        addToGroup(modDescInput, "Mod Description:", true);
     }
 
     function addToGroup(object:Dynamic, txt:String = "", focusPush:Bool = false) {
         if (focusPush && object is FlxUIInputText) focusList.push(object);
-        if (txt.length > 0) tabGroup.add(new FlxText(object.x - 50, object.y - 85, 0, txt));
+        if (txt.length > 0) tabGroup.add(new FlxText(object.x, object.y - 15, txt));
         tabGroup.add(object);
     }
 }
