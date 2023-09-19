@@ -2,15 +2,13 @@
     "songList": 
     {
         "songs":["Cocoa", "Eggnog", "Winter Horrorland"],
-        "weekNum": 5,
-        "songIcon": ["parents","parents","monster"]
+        "songIcons": ["parents","parents","monster"],
+        "songColors": ["0xFFA0D1FF"]
     },
     "weekImage": "week5",
-    "weekName": "RED SNOW",
+    "weekName": "red snow",
     "weekColor": "0xFFA0D1FF",
-    "storyBf": "bf",
-	"storyDad": "parents",
-	"storyGf": "gf",
+    "storyCharacters": ["parents","bf","gf"],
     "startUnlocked": false,
     "unlockWeek": "week 6"
 }

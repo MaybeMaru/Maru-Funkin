@@ -2,14 +2,12 @@
     "songList": 
     {
         "songs":["Ugh", "Guns", "Stress"],
-        "weekNum": 7,
-        "songIcon": ["tankman"]
+        "songIcons": ["tankman"],
+        "songColors": ["0xFFF6B604"]
     },
     "weekImage": "week7",
-    "weekName": "TANKMAN",
+    "weekName": "tankman",
     "weekColor": "0xFFF6B604",
-    "storyBf": "bf",
-	"storyDad": "tankman",
-	"storyGf": "gf",
+    "storyCharacters": ["tankman","bf","gf"],
     "startUnlocked": false
 }

@@ -60,6 +60,11 @@ class CoolUtil {
 		System.gc();
 	}
 
+	inline public static function setGlobalManager(active:Bool = true) {
+		FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = active);
+		FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = active);
+	}
+
 	inline public static function getSound(key:String):FlxSound {
 		var newSound:FlxSound = new FlxSound().loadEmbedded(Paths.sound(key));
 		FlxG.sound.list.add(newSound);
@@ -92,13 +97,26 @@ class CoolUtil {
 		lil shortcut to play music
 		itll also change the conductor bpm to the music's data text file thing
 	*/
-	inline public static function playMusic(music:String, volume:Float = 1, looped:Bool = true):Void {
+	public static function playMusic(music:String, volume:Float = 1, looped:Bool = true):Void {
 		FlxG.sound.playMusic(Paths.music(music), volume, looped);
 
 		var musicDataPath:String = Paths.getPath('music/$music-data.txt', MUSIC, null);
 		if (Paths.exists(musicDataPath, TEXT)) {
 			Conductor.bpm = Std.parseFloat(getFileContent(musicDataPath));
 		}
+	}
+
+	inline public static function stopMusic() {
+		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+	}
+
+	inline public static function formatStringUpper(string:String) {
+		return string.charAt(0).toUpperCase() + string.substr(1);
+	}
+
+	inline public static function destroyMusic() {
+		stopMusic();
+		FlxG.sound.music = null;
 	}
 
 	inline public static function getLerp(ratio:Float):Float {
@@ -109,7 +127,11 @@ class CoolUtil {
 		return FlxMath.lerp(a,b,getLerp(ratio));
 	}
 
-	inline public static function sortAlphabetically(a:String, b:String):Int {
+	public static function sortByStrumTime(a:Dynamic, b:Dynamic) {
+		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
+	}
+
+	public static function sortAlphabetically(a:String, b:String):Int {
         a = a.toUpperCase();
         b = b.toUpperCase();
         if 		(a < b) return -1;
@@ -117,7 +139,7 @@ class CoolUtil {
         return 0;
     }
 
-	inline public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
+	public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
 		var result:Array<String> = [];
 		for (i in customOrder) {
 			if (input.contains(i)) {
@@ -129,6 +151,16 @@ class CoolUtil {
 		input.sort(sortAlphabetically);
 		return result.concat(input);
 	}
+
+	public static function removeDuplicates(input:Array<String>):Array<String> {
+        var result:Array<String> = [];
+        for (i in input) {
+            if (!result.contains(i)) {
+                result.push(i);
+            }
+        }
+        return result;
+    }
 	
 	inline public static function formatClass(daClass:Dynamic, formatDir:Bool = true):String {
 		var className = Type.getClassName(Type.getClass(daClass));
@@ -144,7 +176,7 @@ class CoolUtil {
 		return result;
 	}
 
-	inline public static function hexToColor(hex:String):FlxColor {
+	public static function hexToColor(hex:String):FlxColor {
 		var rgb = [];
         if(hex.startsWith('0x')) {
             hex = hex.substr(2);

@@ -59,9 +59,7 @@ class Preferences {
     }
 
     inline public static function getPref(pref:String):Dynamic {
-        pref = pref.toLowerCase().trim();
-        var prefVar:Dynamic = preferences.get(pref);
-        return prefVar;
+        return cast preferences.get(pref.toLowerCase().trim());
     }
 
     inline public static function setPref(pref:String, value:Dynamic):Void {

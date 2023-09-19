@@ -83,8 +83,8 @@ class FunkScript extends Script {
 		//Flixel
 
 		set('FlxG', flixel.FlxG);
-        set('FlxSpriteExt', funkin.graphics.FlxSpriteExt);	//	The cooler FlxSprite
-		set('FlxSprite', flixel.FlxSprite);
+        set('FlxSpriteExt', funkin.graphics.FlxSpriteExt); // Both r the same lol, just for backwards compatibility
+		set('FlxSprite', funkin.graphics.FlxSpriteExt);
 		set('FlxText', flixel.text.FlxText);
 		set('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
 		set('FlxSpriteGroup', flixel.group.FlxSpriteGroup);
@@ -187,7 +187,7 @@ class FunkScript extends Script {
 				if (PlayState.instance.objMap.exists(sprKey))
 					return ScriptUtil.getGroup(i).members.indexOf(PlayState.instance.objMap.get(sprKey));
 			}
-			ModdingUtil.errorTrace('Sprite not found: $key');
+			errorTrace('Sprite not found: $key');
 			return 0;
 		});
 
@@ -221,7 +221,7 @@ class FunkScript extends Script {
 			if (PlayState.instance.objMap.exists('_group_$key'))
 				return PlayState.instance.objMap.get('_group_$key');
 			else {
-				ModdingUtil.errorTrace('Group not found: $key');
+				errorTrace('Group not found: $key');
 				return null;
 			}
 		});
@@ -270,7 +270,7 @@ class FunkScript extends Script {
 		set('getGlobalVar', function (key:String) {
 			if (globalVariables.exists(key)) return globalVariables.get(key);
 			else {
-				ModdingUtil.errorTrace('Variable not found: $key');
+				errorTrace('Variable not found: $key');
 				return null;
 			}
 		});

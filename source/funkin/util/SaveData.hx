@@ -44,20 +44,18 @@ class SaveData
 		getDataFile();
 		flushData();
 	}
-
+		
 	public static function getDataFile():Void
 	{
 		var makeNewSave:Bool = false;
 
 		if (saveFile.data.saves != null) // Check Null
 		{
-			for (key in saves.keys())
-			{
-				if (!saveFile.data.saves.exists(key)) // Check new values
-				{
-					makeNewSave = true;
-					break;
-				}
+			for (key in saves.keys()) { // Check new value
+				if (saveFile.data.saves.exists(key))
+					saves.set(key, saveFile.data.saves.get(key)); // Get saved value
+				else
+					saveFile.data.saves.set(key, saves.get(key)); // Add defaults
 			}
 		}
 		else

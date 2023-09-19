@@ -540,7 +540,7 @@ class AnimationDebug extends MusicBeatState {
 				}));
 			}
 
-			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
+			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : (FlxG.keys.pressed.CONTROL) ? 0.1 : 1;
 	
 				//	MOVE CAMERA
 			camFollow.velocity.y = (FlxG.keys.pressed.I || FlxG.keys.pressed.K) ? 90 * multiplier : 0;

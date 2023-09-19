@@ -47,28 +47,6 @@ typedef SpriteJson = {
 	var flipX:Bool;
 }
 
-//Story / Freeplay Format
-typedef SongList = {
-	var songs:Array<String>;
-	var songIcon:Array<String>;
-}
-
-typedef WeekJson = {
-	var songList:SongList;
-	var weekDiffs:Array<String>;
-	var weekImage:String;
-	var weekName:String;
-	var weekColor:String;
-	var storyBf:String;
-	var storyDad:String;
-	var storyGf:String;
-
-	var startUnlocked:Bool;
-	var unlockWeek:String;
-	var hideStory:Bool;
-	var hideFreeplay:Bool;
-}
-
 class JsonUtil {
 	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
         subFolders = subFolders == null ? [] : subFolders;

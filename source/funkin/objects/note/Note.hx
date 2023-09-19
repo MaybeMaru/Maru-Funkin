@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
 import funkin.objects.NotesGroup;
 
 interface INoteData {
@@ -20,9 +22,9 @@ class Note extends FlxSpriteExt implements INoteData {
     public var parentNote:Note = null; // For sustain notes
     public var childNote:Note = null; // For normal notes
 
-    // Used for stamp() !!!
-    var susPiece:FlxSprite;
-    var susEnd:FlxSprite;
+    // Used for stampBitmap() !!!
+    var susPiece:BitmapData;
+    var susEnd:BitmapData;
     var refSprite:FlxSpriteExt;
 
     public function updateAnims() {
@@ -119,6 +121,21 @@ class Note extends FlxSpriteExt implements INoteData {
         active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
+    public var drawNote:Bool = true;
+    override function draw() { // This should help a bit on performance
+        if (!drawNote) return;
+        super.draw();
+    }
+
+    public function hideNote() {
+        active = drawNote = alive = false;
+    }
+
+    public function initNote() {
+        active = drawNote = alive = true;
+        update(FlxG.elapsed);
+    }
+
     inline public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
         return Conductor.songPosition >= strumTime + startExtra && Conductor.songPosition <= strumTime + initSusLength + endExtra;
     }
@@ -148,7 +165,8 @@ class Note extends FlxSpriteExt implements INoteData {
         return value;
     }
 
-    public var percentCut:Float = 1;
+    public var percentCut:Float = 0;
+    public var percentLeft:Float = 1;
     public var susEndHeight:Int = 12; // 0
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
@@ -161,14 +179,19 @@ class Note extends FlxSpriteExt implements INoteData {
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
+                percentLeft = _height / height;
             }
         } else {
             kill();
         }
     }
 
+    private var curKey:String = "";
+
     public function drawSustainCached(_height:Int) {
         var key:String = 'sus$noteData-$_height-$skin';
+        if (curKey == key) return;
+        curKey = key;
         if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
             frames = Paths.getGraphic(key).imageFrame;
             origin.set(width / 2, 0);
@@ -181,12 +204,12 @@ class Note extends FlxSpriteExt implements INoteData {
             // draw piece
             var loops = Math.floor(_height / susPiece.height) + 1;
             for (i in 0...loops)
-                    stamp(susPiece, 0, Std.int((_height - susEnd.height) - (i * susPiece.height)));
+                stampBitmap(susPiece, 0, (_height - susEnd.height) - (i * susPiece.height));
             
             //draw end
             var endPos = _height - susEnd.height;
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-            stamp(susEnd, 0, cast endPos);
+            stampBitmap(susEnd, 0, endPos);
         }
     }
 

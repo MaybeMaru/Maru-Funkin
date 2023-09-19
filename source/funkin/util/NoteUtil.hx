@@ -1,5 +1,8 @@
 package funkin.util;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
+
 typedef NoteTypeJson = {
 	var mustHit:Bool;
 	var hitHealth:Array<Float>;
@@ -70,6 +73,10 @@ class NoteUtil {
         }
     }
 
+    /*
+     *  Setup the bitmaps for the sustains and the default note FlxSprite
+     */
+
     public static var skinSpriteMap:Map<String, SkinSpriteData> = [];
     public static function setupSkinSprites(skin:String):SkinSpriteData {
         if (skinSpriteMap.exists(skin)) return skinSpriteMap.get(skin);
@@ -86,36 +93,90 @@ class NoteUtil {
         refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
         refSprite.scale.set(skinJson.scale,skinJson.scale);
         refSprite.updateHitbox();
-        for (anim in skinJson.anims) refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+        for (anim in skinJson.anims)
+            refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
-        var susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-        var susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
+        var susPieceMap:Map<String, BitmapData> = [];
+        var susEndMap:Map<String, BitmapData> = [];
+
+        if (Paths.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
+            for (i in CoolUtil.directionArray) {
+                susPieceMap.set(i, Paths.getGraphic('sus-bitmap-$skin-hold-$i').bitmap);
+                susEndMap.set(i,Paths.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap);
+            }
+        }
+        else {
+            var susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
+            var susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
+
+            for (i in CoolUtil.directionArray) {
+                susPiece.animation.play('hold$i', true);
+                susPiece.updateHitbox();
+                susPiece.drawFrame();
+                //susPieceMap.set(i, createLoopBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
+                susPieceMap.set(i, Paths.addGraphicFromBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
+    
+                susEnd.animation.play('hold$i-end', true);
+                susEnd.updateHitbox();
+                susEnd.drawFrame();
+                susEndMap.set(i, Paths.addGraphicFromBitmap(susEnd.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
+            }
+    
+            // Wont need these anymore
+            susPiece.destroy();
+            susEnd.destroy();
+        }
 
         var addMap:SkinSpriteData = {
             baseSprite: refSprite,
-            susPiece: susPiece,
-            susEnd: susEnd,
+            susPieces: susPieceMap,
+            susEnds: susEndMap,
             skinJson: skinJson
         }
         skinSpriteMap.set(skin, addMap);
         return addMap;
     }
+
+    /*
+     *  Save on calculations????
+     */
+
+    /*static function createLoopBitmap(input:BitmapData, key:String):BitmapData { // Wont use until i fix clipping bitmaps
+        var loops:Int = Std.int(Math.max(input.height/12, 1));
+        var loopedBitmap:BitmapData = new BitmapData(input.width, input.height*loops, true, FlxColor.fromRGB(0,0,0,0));
+        for (i in 0...loops) {
+           var matrix:FlxMatrix = new FlxMatrix();
+           matrix.translate(0, i*input.height);
+           loopedBitmap.draw(input, matrix);
+        }
+        input.dispose();
+        input.disposeImage();
+        return Paths.addGraphicFromBitmap(loopedBitmap, key, true).bitmap;
+    }*/
     
-    public static function getSkinSprites(skin:String, noteData:Int = 0) {
-        var dir = CoolUtil.directionArray[noteData];
+    public static function getSkinSprites(skin:String, noteData:Int = 0):SkinMapData {
         if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
-        var mapData:SkinSpriteData = skinSpriteMap.get(skin);
-        mapData.susPiece.animation.play('hold$dir', true);
-        mapData.susPiece.updateHitbox();
-        mapData.susEnd.animation.play('hold$dir-end', true);
-        mapData.susEnd.updateHitbox();
-        return mapData;
+        var dir = CoolUtil.directionArray[noteData];
+        var spriteData:SkinSpriteData = skinSpriteMap.get(skin);
+        return {
+            baseSprite: spriteData.baseSprite,
+            susPiece: spriteData.susPieces.get(dir),
+            susEnd: spriteData.susEnds.get(dir),
+            skinJson: spriteData.skinJson
+        }
     }
+}
+
+typedef SkinMapData = {
+    baseSprite:FlxSpriteExt,
+    susPiece:BitmapData,
+    susEnd:BitmapData,
+    skinJson:NoteSkinData
 }
 
 typedef SkinSpriteData = {
     baseSprite:FlxSpriteExt,
-    susPiece:FlxSprite,
-    susEnd:FlxSprite,
+    susPieces:Map<String, BitmapData>,
+    susEnds:Map<String, BitmapData>,
     skinJson:NoteSkinData
 }

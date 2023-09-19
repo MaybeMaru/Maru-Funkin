@@ -18,11 +18,10 @@ import sys.FileSystem;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-	public static var currentLevel:String;
+	public static var currentLevel(default, set):String;
 
-	static public function setCurrentLevel(name:String) {
-		currentLevel = name.toLowerCase();
-	}
+	public static function set_currentLevel(value:String)
+		return currentLevel = value.toLowerCase();
 
 	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
@@ -126,11 +125,10 @@ class Paths
 		return getPath('data/shaders/$key.frag', TEXT, library);
 	}
 
-	static public function sound(key:String, ?library:String, ?level:String):FlxSoundAsset
+	static public function sound(key:String, ?library:String, ?level:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library, false, true, level);
-		var soundFile:FlxSoundAsset = getSound(soundPath);
-		return soundFile;
+		return forcePath ? soundPath : getSound(soundPath);
 	}
 
 	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String):FlxSoundAsset
@@ -232,13 +230,18 @@ class Paths
 		var fileList:Array<String> = [];
 		var pushFile = function(folderPath:String) {
 			if (FileSystem.exists(folderPath)) {
+				var fileSort = CoolUtil.getFileContent('$folderPath/listSort.txt').split(",");
+				var curFolderList = [];
+				
 				for (filePath in FileSystem.readDirectory(folderPath)) {
 					if (filePath.endsWith(extension) || extension == null) {
 						var leFile:String = '$folderPath/$filePath';
 						leFile = fullPath ? leFile : leFile.split('/')[leFile.split('/').length-1].split('.')[0];
-						fileList.push(leFile);
+						curFolderList.push(leFile);
 					}
 				}
+
+				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));
 			}
 		};
 		if (global) pushFile(getModPath(folder));
@@ -370,6 +373,13 @@ class Paths
 		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
 		else if (exists(file('images/$key/Animation.json', library), TEXT))		return ATLAS;
 		else																	return IMAGE;
+	}
+
+	inline static public function getAssetPath(key:String, type:AssetType = IMAGE):String {
+		switch (type) {
+			case SOUND: return cast sound(key, null, null, true);
+			default: 	return cast image(key, null, true);
+		}
 	}
 }
 

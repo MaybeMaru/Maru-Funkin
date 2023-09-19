@@ -21,7 +21,7 @@ class MainMenuState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		if (!FlxG.sound.music.playing) {
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
 			CoolUtil.playMusic('freakyMenu');
 		}
 		persistentUpdate = persistentDraw = true;
@@ -91,6 +91,10 @@ class MainMenuState extends MusicBeatState {
 
 			if (getKey('BACK-P')) {
 				switchState(new TitleState());
+			}
+
+			if (FlxG.keys.justPressed.SEVEN) {
+				switchState(new funkin.states.editors.ModSetupState());
 			}
 
 			if (getKey('ACCEPT-P')) {

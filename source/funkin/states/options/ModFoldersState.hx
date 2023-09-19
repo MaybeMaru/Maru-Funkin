@@ -10,24 +10,22 @@ class ModFoldersState extends MusicBeatState {
     override function create():Void {
         FlxG.mouse.visible = true;
 
-        var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
-		bg.updateHitbox();
-		bg.screenCenter();
+        var bg:FlxSpriteExt = new FlxSpriteExt().loadImage("menuBGBlue");
+        bg.setScale(1.1);
+        bg.screenCenter();
 		bg.scrollFactor.set(0, 0);
 		add(bg);
 
         modFolderItems = new FlxTypedGroup<ModItem>();
         add(modFolderItems);
 
-        var modIndex:Int = 0;
-        for (mod in ModdingUtil.modFolders) {
-            var newMod:ModItem = new ModItem(mod, modIndex);
+        for (i in 0...ModdingUtil.modFolders.length) {
+            var newMod:ModItem = new ModItem(ModdingUtil.modFolders[i]);
+            newMod.ID = i;
             newMod.x = 25;
             newMod.targetY = 0;
             newMod.y = newMod.targetY;
             modFolderItems.add(newMod);
-            modIndex++;
         }
 
         modFolderButtons = new FlxTypedGroup<SpriteButton>();
@@ -79,7 +77,7 @@ class ModFoldersState extends MusicBeatState {
 		}
 
         for (item in modFolderItems) {
-            item.targetY = 50 + (sliderPos-item.modID+modFolderItems.members.length-1)*200;
+            item.targetY = 50 + (sliderPos-item.ID+modFolderItems.members.length-1)*200;
         }
     }
 }

@@ -66,11 +66,11 @@ class PlayState extends MusicBeatState {
 	public var startingSong:Bool = false;
 
 	private var gfSpeed:Int = 1;
-	private var health:Float = 1;
-	private var combo:Int = 0;
+	public var health:Float = 1;
+	public var combo:Int = 0;
 
-	private var noteCount:Int = 0;
-	private var noteTotal:Float = 0;
+	public var noteCount:Int = 0;
+	public var noteTotal:Float = 0;
 
 	private var healthBarBG:FunkinSprite;
 	public var healthBar:FlxBar;
@@ -84,8 +84,8 @@ class PlayState extends MusicBeatState {
 	public var camOther:SwagCamera;
 
 	public var songLength:Float = 0;
-	var songScore:Int = 0;
-	var songMisses:Int = 0;
+	public var songScore:Int = 0;
+	public var songMisses:Int = 0;
 	var scoreTxt:FunkinText;
 	var watermark:FunkinSprite;
 
@@ -100,11 +100,10 @@ class PlayState extends MusicBeatState {
 	public var inDialogue:Bool = true;
 	public var dialogueBox:DialogueBoxBase = null;
 
-	#if cpp	// Discord RPC variables
+	// Discord RPC variables
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
-	#end
 
 	public var ghostTapEnabled:Bool = false;
 	public var inPractice:Bool = false;
@@ -113,11 +112,12 @@ class PlayState extends MusicBeatState {
 	public var pauseSubstate:PauseSubState;
 
 	override public function create():Void {
+		instance = this;
+
 		clearCache ? CoolUtil.clearCache(clearCacheData) : FlxG.bitmap.clearUnused();
 		clearCache = true;
 		clearCacheData = null;
 
-		instance = this;
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap');
@@ -126,7 +126,7 @@ class PlayState extends MusicBeatState {
 		NoteUtil.initTypes();
 		EventUtil.initEvents();
 
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		CoolUtil.stopMusic();
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new SwagCamera();
@@ -143,14 +143,12 @@ class PlayState extends MusicBeatState {
 
 		SONG = Song.checkSong(SONG);
 
-		#if cpp
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
 		if (Character.getCharData(SONG.players[1]) != null) {
 			iconRPC = Character.getCharData(SONG.players[1]).icon;
 		}
-		DiscordClient.changePresence(detailsText, '${SONG.song} ($curDifficulty)', iconRPC);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 
 		//FG & BG SPRITES
 		bgSpr = new FlxTypedGroup<Dynamic>();
@@ -178,7 +176,7 @@ class PlayState extends MusicBeatState {
 		curStage = SONG.stage;
 		stageJsonData = Stage.getJsonData(curStage);
 		defaultCamZoom = stageJsonData.zoom;
-		Paths.setCurrentLevel(stageJsonData.library);
+		Paths.currentLevel = stageJsonData.library;
 		SkinUtil.setCurSkin(stageJsonData.skin);
 
 		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
@@ -265,109 +263,6 @@ class PlayState extends MusicBeatState {
 
 		add(fgSpr);
 
-		// Setup functions
-		notesGroup.goodNoteHit = function (note:Note) {
-			if (note.wasGoodHit) return;
-
-			health += note.hitHealth[0];
-			boyfriend.sing(note.noteData, note.altAnim);
-			notesGroup.inBotplay ? notesGroup.playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-			Conductor.vocals.volume = 1;
-			combo++;
-			popUpScore(note.strumTime, note);
-			ModdingUtil.addCall('goodNoteHit', [note]);
-			ModdingUtil.addCall('noteHit', [note, true]);
-			notesGroup.removeNote(note);
-		}
-
-		notesGroup.goodSustainPress = function (note:Note) {
-			health += note.hitHealth[1] * (FlxG.elapsed * 5);
-			boyfriend.sing(note.noteData, note.altAnim, false);
-			Conductor.vocals.volume = 1;
-	
-			if (notesGroup.inBotplay) 	{
-				notesGroup.playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('goodSustainPress', [note]);
-			ModdingUtil.addCall('sustainPress', [note, true]);
-		}
-
-		notesGroup.noteMiss = function(direction:Int = 1, ?note:Note):Void {
-			if (note == null) {
-				health -= 0.04;
-				songScore -= 10;
-				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-				ModdingUtil.addCall('badNoteHit', [direction]);
-			}
-			else {
-				if (combo >= 5) gf.playAnim('sad');
-
-				combo = 0;
-				Conductor.vocals.volume = 0;
-				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
-				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
-				health -= healthLoss * healthMult;
-				songScore -= Std.int(10 * healthMult);
-
-				noteCount++;
-				songMisses++;
-					
-				ModdingUtil.addCall('noteMiss', [note]);
-			}
-
-			boyfriend.stunned = true;
-			new FlxTimer().start(5 / 60, function(tmr:FlxTimer) {
-				boyfriend.stunned = false;
-			});
-	
-			boyfriend.sing(direction, 'miss');
-			updateScore();
-		}
-
-		notesGroup.badNoteHit = function () {
-			for (i in 0...notesGroup.controlArray.length) {
-				if (notesGroup.controlArray[i] && !ghostTapEnabled)
-					notesGroup.checkCallback(notesGroup.noteMiss, [i]);
-			}
-		}
-
-		notesGroup.opponentNoteHit = function (note:Note) {
-			if (note.wasGoodHit) return;
-			note.wasGoodHit = true;
-			if (note.childNote != null) note.childNote.startedPress = true;
-
-			dad.sing(note.noteData, note.altAnim);
-			Conductor.vocals.volume = 1;
-
-			notesGroup.dadBotplay ? if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note) :
-			note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('opponentNoteHit', [note]);
-			ModdingUtil.addCall('noteHit', [note, false]);
-			notesGroup.removeNote(note);
-		}
-
-		notesGroup.opponentSustainPress = function (note:Note) {
-			dad.sing(note.noteData, note.altAnim, false);
-			Conductor.vocals.volume = 1;
-			
-			if (notesGroup.dadBotplay) 	{
-				if (!getPref('vanilla-ui')) notesGroup.playStrumAnim(note);
-				note.setSusPressed();
-			}
-			else note.targetStrum.playStrumAnim('confirm', true);
-	
-			ModdingUtil.addCall('opponentSustainPress', [note]);
-			ModdingUtil.addCall('sustainPress', [note, false]);
-		}
-
 		//Cam Follow
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(camPos.x, camPos.y);
@@ -385,7 +280,7 @@ class PlayState extends MusicBeatState {
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FunkinSprite('skins/${SkinUtil.curSkin}/healthBar', [0,0], [0,0]);
+		healthBarBG = new FunkinSprite(SkinUtil.getAssetKey("healthBar"), [0,0], [0,0]);
 		healthBarBG.y = !getPref('downscroll') ? FlxG.height * 0.9 : FlxG.height * 0.1;
 		healthBarBG.screenCenter(X);
 		add(healthBarBG);
@@ -424,7 +319,7 @@ class PlayState extends MusicBeatState {
 		add(ratingGroup);
 		updateScore();
 
-		watermark = new FunkinSprite('skins/${SkinUtil.curSkin}/watermark', [FlxG.width, getPref('downscroll') ? 0 : FlxG.height], [0,0]);
+		watermark = new FunkinSprite(SkinUtil.getAssetKey("watermark"), [FlxG.width, getPref('downscroll') ? 0 : FlxG.height], [0,0]);
 		for (i in ['botplay', 'practice']) watermark.addAnim(i, i.toUpperCase(), 24, true);
 		watermark.playAnim(notesGroup.inBotplay ? 'botplay' : 'practice');
 		watermark.setScale(SkinUtil.curSkinData.scale * 0.7);
@@ -532,21 +427,29 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('startCountdown');
 
 		var swagCounter:Int = 0;
-		var introSkin:String = SkinUtil.curSkin;
-		for (i in ['3','2','1','Go']) 	Paths.sound('skins/$introSkin/intro$i'); // Cache stuff
-		for (i in ['ready','set','go']) Paths.image('skins/$introSkin/$i');
+		var countdownSoundKeys:Array<String> = []; // Cache countdown assets
+		var countdownSpriteKeys:Array<String> = [];
+
+		for (i in ['intro3','intro2','intro1','introGo']) {
+			var soundKey = SkinUtil.getAssetKey(i,SOUND);
+			Paths.sound(soundKey);
+			countdownSoundKeys.push(soundKey);
+		}
+
+		for (i in ['ready','set','go']) {
+			var spriteKey = SkinUtil.getAssetKey(i,IMAGE);
+			Paths.image(spriteKey);
+			countdownSpriteKeys.push(spriteKey);
+		}
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
-			dad.dance();
-			gf.dance();
-			boyfriend.dance();
-			iconP1.bumpIcon();
-			iconP2.bumpIcon();
+			for (i in [dad,gf,boyfriend]) i.dance();
+			for (i in [iconP1, iconP2]) i.bumpIcon();
 
 			if (swagCounter > 0) {
-				var countdownSpr:FunkinSprite = new FunkinSprite('skins/$introSkin/${['ready','set','go'][swagCounter-1]}');
-				countdownSpr.scale.set(SkinUtil.curSkinData.scale,SkinUtil.curSkinData.scale);
+				var countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
+				countdownSpr.setScale(SkinUtil.curSkinData.scale);
 				countdownSpr.screenCenter();
 				countdownSpr.cameras = [camHUD];
 				add(countdownSpr);
@@ -556,7 +459,7 @@ class PlayState extends MusicBeatState {
 				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
 			}
 
-			CoolUtil.playSound('skins/$introSkin/intro${['3','2','1','Go'][swagCounter]}', 0.6);
+			CoolUtil.playSound(countdownSoundKeys[swagCounter],0.6);
 			swagCounter++;
 		}, 4);
 	}
@@ -564,8 +467,7 @@ class PlayState extends MusicBeatState {
 	public function startSong():Void {
 		camZooming = true;
 		startingSong = false;
-
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		CoolUtil.stopMusic();
 
 		ModdingUtil.addCall('startSong');
 
@@ -579,9 +481,7 @@ class PlayState extends MusicBeatState {
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
-		#if cpp // Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${curDifficulty})', iconRPC, true, songLength);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC, true, songLength);
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -590,13 +490,10 @@ class PlayState extends MusicBeatState {
 			persistentUpdate = false;
 			persistentDraw = true;
 			camGame.followLerp = 0;
-			if (!startingSong) {
-				Conductor.inst.pause();
-				Conductor.vocals.pause();
-			}
+			if (!startingSong)
+				Conductor.pause();
 			
-			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = false);
-			FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = false);
+			CoolUtil.setGlobalManager(false);
 			CoolUtil.pauseSounds();
 	
 			pauseSubstate.init();
@@ -613,8 +510,7 @@ class PlayState extends MusicBeatState {
 		if (paused) {
 			paused = false;
 			camGame.followLerp = camFollowLerp;
-			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) {	if (!tmr.finished)	tmr.active = true; });
-			FlxTween.globalManager.forEach(function(twn:FlxTween) {	if (!twn.finished)	twn.active = true; });
+			CoolUtil.setGlobalManager(true);
 
 			if (!startingSong) {
 				Conductor.setPitch(Conductor.songPitch);
@@ -622,11 +518,9 @@ class PlayState extends MusicBeatState {
 				Conductor.play();
 			}
 
-			#if cpp
 			var presenceDetails = '${SONG.song} ($curDifficulty)';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
-			#end
 		}
 		super.closeSubState();
 	}
@@ -635,7 +529,7 @@ class PlayState extends MusicBeatState {
 	public var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
-	function updateScore():Void {
+	public function updateScore():Void {
 		var songAccuracy:Null<Float> = (noteCount > 0) ? 0 : null;
 		var songRating:String = '?';
 
@@ -657,27 +551,37 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('updateScore', [songScore]);
 	}
 
+	var oldIconID:Int = 0; // Old icon easter egg
+	public var allowIconEasterEgg:Bool = true;
+	function changeOldIcon() {
+		oldIconID = FlxMath.wrap(oldIconID + 1, 0, 2);
+		switch (oldIconID) {
+			default: 	iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
+			case 1: 	iconP1.makeIcon('bf-old'); 			iconP2.makeIcon('dad');
+			case 2: 	iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
+		}
+	}
+
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		ModdingUtil.addCall('update', [elapsed]);
 
-		if (FlxG.keys.justPressed.NINE) {
-			switch (iconP1.iconName) {
-				case 'bf-old': 	 iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
-				case 'bf-older': iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
-				default: 		 iconP1.makeIcon('bf-old'); 		iconP2.makeIcon('dad');
-			}
-		} else if (FlxG.keys.justPressed.SEVEN) {
+		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
+			changeOldIcon();
+		}
+		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
 			switchState(new ChartingState());
-			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
-		} else if (FlxG.keys.justPressed.EIGHT) {
+			DiscordClient.changePresence("Chart Editor", null, null, true);
+		}
+		else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
 			switchState(new AnimationDebug(SONG.players[1]));
-			#if cpp DiscordClient.changePresence("Character Editor", null, null, true); #end
-		} else if (getKey('PAUSE-P') && startedCountdown && canPause) {
+			DiscordClient.changePresence("Character Editor", null, null, true);
+		}
+		else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
-			#if cpp DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC); #end
+			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC);
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -706,22 +610,19 @@ class PlayState extends MusicBeatState {
 	public function checkDeath() {
 		health = FlxMath.bound(health, 0, 2);
 		if (health > 0 || !validScore) return;
-		if (ModdingUtil.addCall("openGameOverSubstate", []))
-			return;
-		boyfriend.stunned = true;
-
+		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
+		
 		persistentUpdate = false;
 		persistentDraw = false;
+		boyfriend.stunned = true;
 		paused = true;
 
-		Conductor.stop();
-
 		deathCounter++;
+		Conductor.stop();
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 			
-		#if cpp // Game Over doesn't get his own variable because it's only used here
-		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${curDifficulty})', iconRPC);
-		#end
+		// Game Over doesn't get his own variable because it's only used here
+		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 	}
 
 	public function snapCamera() {
@@ -758,7 +659,7 @@ class PlayState extends MusicBeatState {
 
 		if (inChartEditor) {
 			switchState(new ChartingState());
-			#if cpp DiscordClient.changePresence("Chart Editor", null, null, true); #end
+			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else {
 			if (isStoryMode) {
@@ -808,7 +709,8 @@ class PlayState extends MusicBeatState {
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
-	private function popUpScore(strumtime:Float, daNote:Note):Void {
+	public function popUpScore(strumtime:Float, daNote:Note) {
+		combo++;
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
@@ -834,9 +736,6 @@ class PlayState extends MusicBeatState {
 
 		songScore += score;
 
-		if (noteRating == 'sick')
-			notesGroup.spawnSplash(daNote);
-
 		if (!getPref('stack-rating')) {
 			for (rating in ratingGroup)
 				rating.kill();
@@ -844,6 +743,8 @@ class PlayState extends MusicBeatState {
 		
 		ratingGroup.drawComplete(noteRating, combo);
 		updateScore();
+
+		return noteRating;
 	}
 
 	override function stepHit():Void {
@@ -891,8 +792,7 @@ class PlayState extends MusicBeatState {
 	override function destroy():Void {
 		Conductor.setPitch(1, false);
 		Conductor.stop();
-		if (FlxG.sound.music != null)	FlxG.sound.music.stop();
-		FlxG.sound.music = null;
+		CoolUtil.destroyMusic();
 		ModdingUtil.addCall('destroy');
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		super.destroy();
@@ -905,20 +805,9 @@ class PlayState extends MusicBeatState {
 			case 'girlfriend' | 'gf': targetChar = gf;
 		}
 
-		var lastAnim:Null<String> = (targetChar.animation.curAnim != null) ? targetChar.animation.curAnim.name : null;
-		var lastFrame:Int = (lastAnim != null) ? targetChar.animation.curAnim.curFrame : 0;
-		var targetIcon = targetChar.iconSpr;
-
 		targetChar.visible = false;
-		var newChar:Character = new Character(targetChar.OG_X, targetChar.OG_Y, newCharName, targetChar.isPlayer);
-		newChar.group = targetChar.group;
-		newChar.iconSpr = targetChar.iconSpr;
-		newChar.holdTimer = targetChar.holdTimer;
-		newChar.specialAnim = targetChar.specialAnim;
-		targetChar.stageOffsets.copyTo(newChar.stageOffsets);
-		newChar.updatePosition();
-		if (lastAnim != null) newChar.playAnim(lastAnim, true, false, lastFrame);
-		if (targetIcon != null) targetIcon.makeIcon(newChar.icon);
+		var newChar:Character = new Character(0,0,newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
+		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		targetChar.group.add(newChar);
 
 		switch (type.toLowerCase().trim()) {

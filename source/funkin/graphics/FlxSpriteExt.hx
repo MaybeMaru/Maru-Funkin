@@ -1,11 +1,15 @@
 package funkin.graphics;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
+import openfl.display.Bitmap;
+
 /*
     Just FlxSprite but with helper functions
 */
 class FlxSpriteExt extends FlxSprite {
 
-	public static var DEFAULT_SPRITE:SpriteJson = {
+	public static var DEFAULT_SPRITE(default, never):SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
 		scale: 1,
@@ -13,7 +17,7 @@ class FlxSpriteExt extends FlxSprite {
 		flipX: false,
 	}
 
-	public static var DEFAULT_ANIM:SpriteAnimation = {
+	public static var DEFAULT_ANIM(default, never):SpriteAnimation = {
 		animName: 'idle',
 		animFile: 'idle',
 		offsets: [0,0],
@@ -36,9 +40,8 @@ class FlxSpriteExt extends FlxSprite {
 
 	public function setScale(_scale:Float = 1, updateBox:Bool = true) {
 		scale.set(_scale,_scale);
-		if (updateBox) {
+		if (updateBox)
 			updateHitbox();
-		}
 	}
 
 	public function loadFromSprite(sprite:FlxSpriteExt) {
@@ -183,5 +186,11 @@ class FlxSpriteExt extends FlxSprite {
 		var loop = newData.loop;
 
 		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
+	}
+
+	public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
+		var matrix:FlxMatrix = new FlxMatrix();
+		matrix.translate(X,Y);
+		graphic.bitmap.draw(Brush, matrix);
 	}
 }

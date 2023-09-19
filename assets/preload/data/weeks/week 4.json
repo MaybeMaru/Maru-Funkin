@@ -2,15 +2,13 @@
     "songList": 
     {
         "songs":["Satin Panties", "High", "M.I.L.F"],
-        "weekNum": 4,
-        "songIcon": ["mom"]
+        "songIcons": ["mom"],
+        "songColors": ["0xFFFC96D7"]
     },
     "weekImage": "week4",
-    "weekName": "MOMMY MUST MURDER",
+    "weekName": "mommy must murder",
     "weekColor": "0xFFFC96D7",
-    "storyBf": "bf",
-	"storyDad": "mom",
-	"storyGf": "gf",
+    "storyCharacters": ["mom","bf","gf"],
     "startUnlocked": false,
     "unlockWeek": "week 5"
 }

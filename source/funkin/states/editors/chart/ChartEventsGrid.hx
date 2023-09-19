@@ -45,9 +45,10 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
             for (i in value.sectionEvents)
                 drawEvent(i);
         } else {
-            value.sectionEvents.sort(function(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]));
-            for (i in Std.int(value.sectionEvents.length*0.5)...value.sectionEvents.length)
-                drawEvent(value.sectionEvents[i]);
+            var secEvents = value.sectionEvents.copy();
+            secEvents.sort(function(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]));
+            for (i in Std.int(secEvents.length*0.5)...secEvents.length)
+                drawEvent(secEvents[i]);
         }
     }
 
@@ -85,7 +86,6 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
 
     public function clearEvent(event:ChartEvent) {
         event.kill();
-        event.x = -999;
     }
 
     public function drawEvent(event:Array<Dynamic>):ChartEvent {
@@ -106,12 +106,13 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var data:Event;
     public var sprite:FlxSpriteExt;
     public var text:FunkinText;
+
+    var img:String = "blankEvent";
     
     public function new() {
         super();
-        sprite = new FlxSpriteExt().loadImage("options/blankEvent");
-        sprite.setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
-        sprite.updateHitbox();
+        sprite = new FlxSpriteExt();
+        loadImage(img);
         add(sprite);
         
         text = new FunkinText(0,0,"",15);
@@ -120,6 +121,20 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
 
         scrollFactor.set(1,1);
         data = new Event();
+    }
+
+    public function loadSettings() {
+        var eventData = EventUtil.getEventData(data.name);
+        if (img != eventData.image) {
+            loadImage(eventData.image);
+        }
+    }
+
+    public function loadImage(image:String) {
+        sprite.loadImage("events/" + image);
+        sprite.setGraphicSize(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE);
+        sprite.updateHitbox();
+        img = image;
     }
 
     public function arrayString(array:Array<Dynamic>) {
@@ -142,5 +157,6 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         data.name = name;
         data.values = values;
         updateText();
+        loadSettings();
     }
 }

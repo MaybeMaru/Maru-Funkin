@@ -85,7 +85,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			if (exitTimer <= 0) {
 				PlayState.clearCache = false;
 				SkinUtil.setCurSkin('default');
-				CoolUtil.switchState(new PlayState());
+				FlxG.resetState();
 			}
 		}
 	}

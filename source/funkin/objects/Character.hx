@@ -32,7 +32,10 @@ class Character extends FlxSpriteExt {
 	public var camOffsets:FlxPoint;
 	public var OG_X:Float = 0;
 	public var OG_Y:Float = 0;
+
+	//Extra
 	public var debugMode:Bool = false;
+	public var botMode:Bool = false;
 
 	//	Display
 	public var icon:String = 'face';
@@ -88,17 +91,17 @@ class Character extends FlxSpriteExt {
 		}
 	}
 
-	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false, ?debugMode:Bool = false, ?inputJson:CharacterJson):Void {
-		super(x, y);
+	public function new(?X:Float, ?Y:Float, character:String = "bf", isPlayer:Bool = false, debugMode:Bool = false, ?inputJson:CharacterJson):Void {
+		super(X,Y);
 		worldOffsets = new FlxPoint().set(0,0);
 		stageOffsets = new FlxPoint().set(0,0);
 		camOffsets = new FlxPoint().set(0,0);
-		curCharacter = character;
-		antialiasing = true;
-		this.isPlayer = isPlayer;
-		this.debugMode = debugMode;
 
-		var charJson:CharacterJson = getCharData(curCharacter);
+		this.debugMode = debugMode;
+		this.isPlayer = isPlayer;
+		botMode = !isPlayer;
+
+		var charJson:CharacterJson = getCharData(curCharacter = character);
 		loadCharJson(charJson);
 		worldOffsets.set(charJson.charOffsets[0], charJson.charOffsets[1]);
 		camOffsets.set(charJson.camOffsets[0], charJson.camOffsets[1]);
@@ -146,11 +149,11 @@ class Character extends FlxSpriteExt {
 					playAnim(loopAnim);
 			}
 
-			if (_curAnim.name.startsWith('sing') && !specialAnim) {
+			if (_curAnim.name.startsWith('sing') && !specialAnim && !debugMode) {
 				holdTimer += elapsed;
 
-				var finishAnim:Bool = (Preferences.getPref('botplay') || !isPlayer) ? (holdTimer >= Conductor.crochetMills) :
-				(_curAnim.name.endsWith('miss') &&_curAnim.finished && !debugMode);
+				var finishAnim:Bool = botMode ? (holdTimer >= Conductor.crochetMills) :
+				(_curAnim.name.endsWith('miss') && _curAnim.finished && !debugMode);
 
 				if (finishAnim) {
 					dance();
@@ -160,6 +163,26 @@ class Character extends FlxSpriteExt {
 		}
 
 		super.update(elapsed);
+	}
+
+	public function copyStatusFrom(char:Character) {
+		return char.copyStatusTo(this);
+	}
+
+	public function copyStatusTo(char:Character) {
+		char.group = group;
+		char.iconSpr = iconSpr;
+		char.holdTimer = holdTimer;
+		char.specialAnim = specialAnim;
+		char.botMode = botMode;
+		stageOffsets.copyFrom(char.stageOffsets);
+		char.setXY(OG_X,OG_Y);
+
+		var lastAnim:Null<String> = (animation.curAnim != null) ? animation.curAnim.name : null;
+		var lastFrame:Int = (lastAnim != null) ? animation.curAnim.curFrame : 0;
+		if (lastAnim != null) char.playAnim(lastAnim, true, false, lastFrame);
+
+		return char;
 	}
 
 	public var _singHoldTimer:Float = 0;

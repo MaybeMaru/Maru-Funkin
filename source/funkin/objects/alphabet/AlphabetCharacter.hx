@@ -23,7 +23,7 @@ class AlphabetCharacter extends FlxSpriteExt {
         {offsetBold:[0,0],offsetLowerNormal:[0,0],offsetUpperNormal:[0,0]}
     */
     
-    public static var characters:Map<String, Null<LetterData>> =  [
+    public static var characters(default, never):Map<String, Null<LetterData>> =  [
         //  Alphabet
         "a"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},  "b"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 0],offsetUpperNormal:[ 0, 0]},
         "c"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,15],offsetUpperNormal:[ 0, 0]},  "d"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 0],offsetUpperNormal:[ 0, 0]},

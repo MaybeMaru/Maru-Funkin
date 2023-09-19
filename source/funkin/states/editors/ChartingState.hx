@@ -5,12 +5,9 @@ import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUINumericStepper;
-import flixel.addons.ui.FlxUINumericStepper;
-import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUICheckBox;
 import openfl.net.FileReference;
 import funkin.states.editors.chart.ChartTabs;
-import funkin.states.editors.chart.ChartNote;
 import flixel.util.FlxStringUtil;
 import funkin.states.editors.chart.ChartGrid;
 import funkin.states.editors.chart.ChartPreview;
@@ -28,7 +25,6 @@ class ChartingState extends MusicBeatState {
     public var strumBar:ChartStrumLine;
     public var songTxt:FunkinText;
     public var tabs:ChartTabs;
-    //public var preview:ChartPreview;
 
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
@@ -68,9 +64,6 @@ class ChartingState extends MusicBeatState {
 		Conductor.songOffset = SONG.offsets;
         Conductor.setVolume();
         stop();
-
-        //preview = new ChartPreview(SONG);
-        //add(preview);
 
         mainGrid = new ChartGrid();
         add(mainGrid);
@@ -113,7 +106,7 @@ class ChartingState extends MusicBeatState {
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
 
-        changeSection();
+        setSection(0, true);
         super.create();
     }
 
@@ -169,25 +162,41 @@ class ChartingState extends MusicBeatState {
         }
     }
 
+    function bpmPositionCheck(newPosition:Float = 0) {
+        Conductor.songPosition = newPosition; // Bpm conductor crap
+        Conductor.autoSync();
+        checkBPM();
+        updateBar();
+    }
+
     public function changeSection(change:Int = 0) {
         var newIndex = Std.int(Math.max(sectionIndex + change, 0));
-        if (sectionIndex != newIndex) {  // Fr changed a section
-            deselectNote();
-            deselectEvent();
+        setSection(newIndex);
+    }
+
+    public function setSection(newIndex:Int = 0, forced:Bool = false) {
+        if (!forced && sectionIndex == newIndex) { // Same section, doesnt need update
+            bpmPositionCheck(sectionTime);
+            return; 
         }
+
+        deselectNote();
+        deselectEvent();
         checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
         sectionIndex = newIndex;
         sectionTime = getSecTime(sectionIndex);
         nextSectionTime = getSecTime(sectionIndex + 1);
+
+        if (sectionTime > Conductor.inst.length) {  // Set song bounds
+            setSection(Song.getTimeSection(SONG, Conductor.inst.length));
+            return;
+        }
         
-        Conductor.songPosition = sectionTime; // Bpm conductor crap
-        Conductor.autoSync();
-        checkBPM();
+        bpmPositionCheck(sectionTime);
 
         mainGrid.setData(sectionIndex); // Change visual stuff
         mainGrid.updateWaveform();
         eventsGrid.setData(sectionIndex);
-        updateBar();
         updateSectionTabUI();
     }
 
@@ -401,6 +410,7 @@ class ChartingState extends MusicBeatState {
         selectedEventObject.data.values = selectedEvent[2].copy();
         selectedEventObject.data.name = selectedEvent[1];
         selectedEventObject.updateText();
+        selectedEventObject.loadSettings();
     }
 
     public function removeEvent(event:ChartEvent) {
@@ -564,6 +574,7 @@ class ChartingState extends MusicBeatState {
 				case 'Must hit section':
 					SONG.notes[sectionIndex].mustHitSection = check.checked;
 					updateIcons();
+
 				case 'Change BPM':
 					SONG.notes[sectionIndex].changeBPM = check.checked;
 					Conductor.mapBPMChanges(ChartingState.SONG);
@@ -573,27 +584,35 @@ class ChartingState extends MusicBeatState {
 			var nums:FlxUINumericStepper = cast sender;
 			var wname = nums.name;
 			switch (wname) {
-				case 'song_speed': SONG.speed = nums.value;
+				case 'song_speed':
+                    SONG.speed = nums.value;
+
 				case 'song_bpm':
+                    SONG.bpm = nums.value;
 					Conductor.mapBPMChanges(SONG);
-					Conductor.bpm = nums.value;
+                    changeSection();
+
 				case 'song_inst_offset':
 					var tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[0] = tempOffset;
 					SONG.offsets[0] = tempOffset;
                     mainGrid.updateWaveform();
+
 				case 'song_vocals_offset':
 					var tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[1] = tempOffset;
 					SONG.offsets[1] = tempOffset;
                     mainGrid.updateWaveform();
+
 				case 'note_susLength':
 					selectedNote[2] = nums.value;
 					updateSelectedNote();
+
 				case 'section_bpm':
                     Conductor.mapBPMChanges(ChartingState.SONG);
 					SONG.notes[sectionIndex].bpm = nums.value;
                     changeSection();
+
 				case 'stepper_copy':
                     tabs.updatePreview();
 			}
