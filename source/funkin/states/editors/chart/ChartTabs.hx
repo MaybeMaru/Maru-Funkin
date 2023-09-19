@@ -138,7 +138,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(new FlxText(stepperBPM.x, stepperBPM.y - 15, 0, 'BPM:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
 		tab_group_song.add(new FlxText(stepperOffsetInst.x, stepperOffsetInst.y - 15, 0, 'Inst Offset (MS):'));
-		tab_group_song.add(new FlxText(stepperOffsetVocals.x, stepperOffsetVocals.y - 15, 0, 'Vocals Offset (MS):'));
+		if (Conductor.hasVocals) tab_group_song.add(new FlxText(stepperOffsetVocals.x, stepperOffsetVocals.y - 15, 0, 'Vocals Offset (MS):'));
 
 		tab_group_song.add(new FlxText(difficultyDropDown.x, difficultyDropDown.y - 15, 0, 'Difficulty:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
@@ -148,7 +148,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(new FlxText(p3Button.x, p3Button.y - 15, 0, 'Girlfriend:'));
 
 		tab_group_song.add(stepperOffsetInst);
-		tab_group_song.add(stepperOffsetVocals);
+		if (Conductor.hasVocals) tab_group_song.add(stepperOffsetVocals);
 
 		tab_group_song.add(saveButton);
 		tab_group_song.add(reloadSongJson);
@@ -402,9 +402,9 @@ class ChartTabs extends FlxUITabMenu {
 		slider_pitch.name = 'song_pitch';
 
 		tab_group_editor.add(check_mute_inst);
-		tab_group_editor.add(check_mute_voices);
+		if (Conductor.hasVocals) tab_group_editor.add(check_mute_voices);
 		tab_group_editor.add(check_waveform_inst);
-		tab_group_editor.add(check_waveform_voices);
+		if (Conductor.hasVocals) tab_group_editor.add(check_waveform_voices);
 		tab_group_editor.add(check_hitsound);
 		tab_group_editor.add(check_metronome);
 		tab_group_editor.add(slider_pitch);

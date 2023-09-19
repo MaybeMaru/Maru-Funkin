@@ -303,13 +303,9 @@ class NotesGroup extends FlxGroup
         if (callback != null) Reflect.callMethod(this, callback, args != null ? args : []); // Prevent null
     }
 
-	//public var destroyedNotes:Array<Note> = [];
-
 	public function removeNote(note:Note) {
 		notes.remove(note, true);
 		note.destroy();
-		//destroyedNotes.push(note);
-		//note.hideNote();
 	}
 
     //Makes the conductor song go vroom vroom
@@ -373,7 +369,7 @@ class NotesGroup extends FlxGroup
 	}
 
 	public function checkCpuNote(note:Note) {
-		//if (!isCpuNote(note)) return;
+		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
 				note.pressed = note.inSustain;
@@ -386,11 +382,10 @@ class NotesGroup extends FlxGroup
 	}
 
 	public function checkMissNote(note:Note) {
-		if (note.active || Conductor.songPosition < note.strumTime) return false;
+		if (note.active || Conductor.songPosition < note.strumTime) return;
 		if (!isCpuNote(note) && !note.isSustainNote)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);
-		return true;
 	}
 
 	public function sustainMiss(note:Note) {
@@ -406,7 +401,16 @@ class NotesGroup extends FlxGroup
 		if (!generatedMusic) return; // Stuff that needs notes / events
 		spawnNotes();
 		checkEvents();
+		notes.forEachAlive(function(daNote:Note) {
+			checkCpuNote(daNote);
+			checkMissNote(daNote);
+		});
+
+        if (isPlayState) {
+            if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
+        }
         controls();
+		checkStrumAnims();
     }
 
     public var holdingArray:Array<Bool> = [];
@@ -420,8 +424,6 @@ class NotesGroup extends FlxGroup
 	}
 
     private function controls():Void {
-		if (isPlayState && PlayState.instance.inCutscene) return;
-		
 		holdingArray = [];
 		controlArray = [];
 		pushControls(playerStrums, inBotplay);
@@ -433,11 +435,7 @@ class NotesGroup extends FlxGroup
 			var removeList:Array<Note> = [];
 
 			notes.forEachAlive(function(daNote:Note) {
-				if (checkMissNote(daNote)) return; // Skip Cpu / Missed notes
-				else if (isCpuNote(daNote)) {
-					checkCpuNote(daNote);
-					return;
-				}
+				if (isCpuNote(daNote)) return; // Skip Cpu notes
 
 				if (daNote.isSustainNote) { // Handle sustain notes
 					daNote.pressed = false;
@@ -488,17 +486,13 @@ class NotesGroup extends FlxGroup
 					removeNote(badNote);
 				}
 
+				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
 					for (i in 0...controlArray.length) {
                         if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
 					}
-
-					var i:Int = 0;
-					possibleNotes.sort(CoolUtil.sortByStrumTime);
-					while (i < possibleNotes.length) {
-						var possibleNote = possibleNotes[i++];
-						if (possibleNote.targetStrum.getControl("-P"))
-							checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
+					for (possibleNote in possibleNotes) {
+                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
 					}
 				}
 				else {
@@ -506,8 +500,6 @@ class NotesGroup extends FlxGroup
 				}
 			}
 		}
-			
-		checkStrumAnims();
 	}
 
 	function checkStrumAnims():Void {
