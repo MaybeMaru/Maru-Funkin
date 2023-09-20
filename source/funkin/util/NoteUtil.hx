@@ -166,9 +166,13 @@ class NoteUtil {
         }
     }
 
+    public static var DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
+    public static var DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
+    public static var DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
+
     public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>) {
         sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),
-		new openfl.filters.ColorMatrixFilter(NoteUtil.getColorMatrix(red,green,blue)));
+		new openfl.filters.ColorMatrixFilter(getColorMatrix(red,green,blue)));
     }
 
     public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {
@@ -178,12 +182,10 @@ class NoteUtil {
             b[i] /= 255;
         }
 
-        trace(r,g,b);
-
         return [
-			r[0], r[1], r[2], 0, 0,
-			g[0], g[1], g[2], 0, 0,
-			b[0], b[1], b[2], 0, 0,
+			r[0], g[0], b[0], 0, 0,
+			r[1], g[1], b[1], 0, 0,
+			r[2], g[2], b[2], 0, 0,
 			0, 0, 0, 1, 0,
 		];
     }
