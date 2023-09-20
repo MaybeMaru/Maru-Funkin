@@ -71,6 +71,11 @@ class MainMenuState extends MusicBeatState {
 
 		changeItem();
 
+		// IN TESTING!!
+		/*var test = new FlxSpriteExt(500,200).loadImage("skins/default/coloredNoteAssets", false, false);
+		NoteUtil.applyColorFilter(test, [255,0,0], [255,0,0], [255,0,0]);
+		add(test);*/
+
 		super.create();
 	}
 

@@ -165,6 +165,28 @@ class NoteUtil {
             skinJson: spriteData.skinJson
         }
     }
+
+    public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>) {
+        sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),
+		new openfl.filters.ColorMatrixFilter(NoteUtil.getColorMatrix(red,green,blue)));
+    }
+
+    public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {
+        for (i in 0...3) {
+            r[i] /= 255;
+            g[i] /= 255;
+            b[i] /= 255;
+        }
+
+        trace(r,g,b);
+
+        return [
+			r[0], r[1], r[2], 0, 0,
+			g[0], g[1], g[2], 0, 0,
+			b[0], b[1], b[2], 0, 0,
+			0, 0, 0, 1, 0,
+		];
+    }
 }
 
 typedef SkinMapData = {

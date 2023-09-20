@@ -157,7 +157,8 @@ class Paths
 
 	inline static public function chart(song:String, diff:String, ext:String = 'json'):String
 	{
-		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}.$ext', TEXT, 'songs');
+		ext = ext.startsWith('/') ? ext : '.$ext';
+		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
 	}
 
 	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset
@@ -204,11 +205,10 @@ class Paths
 	}
 
 	inline static public function getTextureAtlas(key:String, ?library:String):FlxAtlasFrames {
-		trace(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
 		return TextureAtlas.fromAtlas(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
 	}
 
-	inline static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
+	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
 		var fileList:Array<String> = [];
 		for (file in OpenFlAssets.list(type)) {
 			if (file.startsWith('assets/')) {
@@ -224,7 +224,7 @@ class Paths
 		return fileList;
 	}
 
-	inline static public function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
+	static public function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
 		#if !desktop return [];
 		#else
 		var fileList:Array<String> = [];
