@@ -82,7 +82,7 @@ class MainMenuState extends MusicBeatState {
 		var noteBitmap = Paths.getRawBitmap(Paths.image("skins/default/coloredStrumAssets", null, true));
 		for (i in 0...4) {
 			var test = new FlxSprite(200, 200 + 200 * i, noteBitmap.clone());
-			NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], NoteUtil.DEFAULT_COLORS_OUTER[i]);
+			NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], [0,0,0]);//NoteUtil.DEFAULT_COLORS_OUTER[i]);
 			add(test);
 		}
 		noteBitmap.dispose();
