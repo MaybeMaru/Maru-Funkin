@@ -160,6 +160,7 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     function set_noteSpeed(value:Float):Float {
+        if (noteSpeed == value) return value;
         noteSpeed = value;
         drawSustain();
         return value;

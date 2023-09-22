@@ -164,7 +164,7 @@ class NotesGroup extends FlxGroup
 
 		badNoteHit = function () {
 			for (i in 0...controlArray.length) {
-				if (controlArray[i] && !game.ghostTapEnabled)
+				if (controlArray[i])
 					checkCallback(noteMiss, [i]);
 			}
 		}
@@ -482,23 +482,34 @@ class NotesGroup extends FlxGroup
 			});
 
 			if (controlArray.contains(true)) {
-				for (badNote in removeList) {
-					removeNote(badNote);
-				}
+				forEachArray(removeList, function (badNote) removeNote(badNote));
+				var onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : getPref('ghost-tap');
 
 				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
-					for (i in 0...controlArray.length) {
-                        if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
+					if (!onGhost) {
+						for (i in 0...controlArray.length) {
+							if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
+						}
 					}
-					for (possibleNote in possibleNotes) {
-                        if (possibleNote.targetStrum.getControl("-P")) checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
-					}
+
+					forEachArray(possibleNotes, function (possibleNote) {
+						if (possibleNote.targetStrum.getControl("-P"))
+							checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
+					});
 				}
-				else {
+				else if (!onGhost) {
                     checkCallback(badNoteHit);
 				}
 			}
+		}
+	}
+
+	function forEachArray(array:Array<Dynamic>, func:Dynamic) {
+		var i:Int = 0;
+		while (i < array.length) {
+			func(array[i]);
+			i++;
 		}
 	}
 
