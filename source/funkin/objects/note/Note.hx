@@ -214,15 +214,15 @@ class Note extends FlxSpriteExt implements INoteData {
         }
     }
 
-    public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
+    inline public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
         return pos / (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
+    inline public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
         return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getSusLeft():Float {
+    inline public function getSusLeft():Float {
         return Math.min(Math.max((strumTime + initSusLength) - Conductor.songPosition, 0), initSusLength);
     }
 

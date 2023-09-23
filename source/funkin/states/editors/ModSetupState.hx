@@ -5,6 +5,7 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
@@ -47,7 +48,28 @@ class ModSetupTabs extends FlxUITabMenu {
         addToGroup(modDescInput, "Mod Description:", true);
 
         createButton = new FlxUIButton(310, 350, "Create Folder", function () {
-            ModSetupState.setupModFolder(modNameInput.text);
+            var modName = modNameInput.text;
+            var keys:Array<String> = [];
+            for (i in ModSetupState.modFolderDirs.keys()) keys.push(i);
+            if (keys.contains(modName)) {
+                CoolUtil.playSound("rejectMenu");
+                return; // Invalid folder name
+            }
+            
+            var createFunc = function () {
+                ModSetupState.setupModFolder(modName);
+                File.saveContent('mods/$modName/info.txt', modDescInput.text);
+                CoolUtil.playSound('confirmMenu');
+            }
+
+            if (FileSystem.exists('mods/$modName')) {
+                FlxG.state.openSubState(new PromptSubstate(
+                    'Mod folder\n$modName\nalready exists\n\nAre you sure you want to\noverwrite this folder?',
+                    createFunc));
+            }
+            else {
+                createFunc();
+            }
         });
         tabGroup.add(createButton);
     }
@@ -83,7 +105,7 @@ class ModSetupState extends MusicBeatState {
         super.create();
     }
 
-    static var modFolderDirs(default, never):Map<String, Array<String>> = [
+    public static var modFolderDirs(default, never):Map<String, Array<String>> = [
         "images" => ["characters", "skins", "storymenu"],
         "data" => ["characters", "notetypes", "scripts", "stages", "weeks", "events", "skins"],
         "songs" => [],
