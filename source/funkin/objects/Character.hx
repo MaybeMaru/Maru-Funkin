@@ -178,9 +178,9 @@ class Character extends FlxSpriteExt {
 		stageOffsets.copyFrom(char.stageOffsets);
 		char.setXY(OG_X,OG_Y);
 
-		var lastAnim:Null<String> = (animation.curAnim != null) ? animation.curAnim.name : null;
-		var lastFrame:Int = (lastAnim != null) ? animation.curAnim.curFrame : 0;
-		if (lastAnim != null) char.playAnim(lastAnim, true, false, lastFrame);
+		var lastAnim = animation.curAnim;
+		if (lastAnim != null)
+			char.playAnim(lastAnim.name, true, false, lastAnim.curFrame);
 
 		return char;
 	}

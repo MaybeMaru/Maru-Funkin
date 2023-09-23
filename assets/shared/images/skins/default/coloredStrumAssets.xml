@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="coloredStrumAssets.png" width="1136" height="230">
+  <SubTexture name="strumPress0001" x="4" y="4"  width="139" height="141" frameX="-4" frameY="-3" frameWidth="146" frameHeight="148"/>
+  <SubTexture name="strumPress0003" x="151" y="4"  width="146" height="148" frameX="-0" frameY="-0" frameWidth="146" frameHeight="148"/>
+  <SubTexture name="strumStatic" x="305" y="4"  width="154" height="157" frameX="-0" frameY="-0" frameWidth="154" frameHeight="157"/>
+  <SubTexture name="strumConfirm0002" x="467" y="4"  width="211" height="213" frameX="-7" frameY="-7" frameWidth="228" frameHeight="231"/>
+  <SubTexture name="strumConfirm0003" x="686" y="4"  width="217" height="217" frameX="-5" frameY="-4" frameWidth="228" frameHeight="231"/>
+  <SubTexture name="strumConfirm0001" x="911" y="4"  width="221" height="222" frameX="-2" frameY="-2" frameWidth="228" frameHeight="231"/>
+  <SubTexture name="strumConfirm0004" x="686" y="4"  width="217" height="217" frameX="-5" frameY="-4" frameWidth="228" frameHeight="231"/>
+  <SubTexture name="strumPress0002" x="4" y="4"  width="139" height="141" frameX="-4" frameY="-3" frameWidth="146" frameHeight="148"/>
+  <SubTexture name="strumPress0004" x="151" y="4"  width="146" height="148" frameX="-0" frameY="-0" frameWidth="146" frameHeight="148"/>
+</TextureAtlas>

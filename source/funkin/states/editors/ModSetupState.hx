@@ -5,6 +5,7 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUIInputText;
@@ -20,6 +21,7 @@ class ModSetupTabs extends FlxUITabMenu {
     
     var modNameInput:FlxUIInputText;
     var modDescInput:FlxUIInputText;
+    var createButton:FlxUIButton;
 
     var focusList:Array<FlxUIInputText> = [];
 	public function getFocus():Bool {
@@ -37,13 +39,22 @@ class ModSetupTabs extends FlxUITabMenu {
 		tabGroup.name = "Setup Mod Folder";
         addGroup(tabGroup);
 
-        modNameInput = new FlxUIInputText(25, 25, 300, "Template Mod");
+        modNameInput = new FlxUIInputText(25, 25, 350, "Template Mod");
         addToGroup(modNameInput, "Mod Name:", true);
+
+        modDescInput = new FlxUIInputText(25, 75, 350, "Get silly on a friday night yeah");
+        modDescInput.lines = 999;
+        addToGroup(modDescInput, "Mod Description:", true);
+
+        createButton = new FlxUIButton(310, 350, "Create Folder", function () {
+            ModSetupState.setupModFolder(modNameInput.text);
+        });
+        tabGroup.add(createButton);
     }
 
     function addToGroup(object:Dynamic, txt:String = "", focusPush:Bool = false) {
         if (focusPush && object is FlxUIInputText) focusList.push(object);
-        if (txt.length > 0) tabGroup.add(new FlxText(object.x - 50, object.y - 85, 0, txt));
+        if (txt.length > 0) tabGroup.add(new FlxText(object.x, object.y - 15, txt));
         tabGroup.add(object);
     }
 }
@@ -83,7 +94,7 @@ class ModSetupState extends MusicBeatState {
     ];
 
     // Creates a mod folder template
-    function setupModFolder(name:String) {
+    public static function setupModFolder(name:String) {
         for (k in modFolderDirs.keys()) {
             var keyArr = modFolderDirs.get(k);
             createFolderWithTxt('$name/$k');
@@ -91,13 +102,13 @@ class ModSetupState extends MusicBeatState {
         }
     }
 
-    function createFolderWithTxt(path:String) {
+    static function createFolderWithTxt(path:String) {
         var pathParts = path.split("/");
         createFolder(path);
         File.saveContent('mods/$path/${pathParts[pathParts.length-1]}-go-here.txt', "");
     }
 
-    function createFolder(path:String) {
+    static function createFolder(path:String) {
         var dirs = path.split("/");
         var lastDir = "mods/";
         for (i in dirs) {
@@ -109,7 +120,7 @@ class ModSetupState extends MusicBeatState {
         }
     }
 
-    function setOnDrop(func:Dynamic) {
+    static function setOnDrop(func:Dynamic) {
         FlxG.stage.window.onDropFile.removeAll();
         FlxG.stage.window.onDropFile.add(func);
     }

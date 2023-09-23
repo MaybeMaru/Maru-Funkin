@@ -44,6 +44,7 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
         this.noteData = noteData;
         setPosition(X,Y);
         playAnim('splash${CoolUtil.directionArray[noteData]}');
+        active = true;
 		x -= width * 0.5;
 		y -= height * 0.5;
 	}
@@ -66,6 +67,7 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
         if (animation.curAnim != null) {
             if (animation.curAnim.finished) {
                 kill();
+                active = false;
             }
         }
 	}

@@ -128,11 +128,11 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     public function hideNote() {
-        active = drawNote = alive = false;
+        active = drawNote = false;
     }
 
     public function initNote() {
-        active = drawNote = alive = true;
+        active = drawNote = true;
         update(FlxG.elapsed);
     }
 
@@ -160,6 +160,7 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     function set_noteSpeed(value:Float):Float {
+        if (noteSpeed == value) return value;
         noteSpeed = value;
         drawSustain();
         return value;

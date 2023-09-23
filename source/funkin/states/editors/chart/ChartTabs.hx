@@ -1,7 +1,6 @@
 package funkin.states.editors.chart;
 
-import flixel.ui.FlxButton;
-import flixel.addons.ui.FlxInputText;
+import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIDropDownMenu;
@@ -9,7 +8,6 @@ import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUISlider;
 import flixel.addons.ui.FlxUITabMenu;
-import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 import funkin.substates.CharSelectSubstate;
 
@@ -46,9 +44,9 @@ class ChartTabs extends FlxUITabMenu {
 		return false;
 	}
 
-    var p1Button:FlxButton;
-	var p2Button:FlxButton;
-	var p3Button:FlxButton;
+    var p1Button:FlxUIButton;
+	var p2Button:FlxUIButton;
+	var p3Button:FlxUIButton;
 	var songTitleInput:FlxUIInputText;
 	function addSongUI():Void {
 		songTitleInput = new FlxUIInputText(10, 20, 150, ChartingState.SONG.song, 8);
@@ -57,15 +55,15 @@ class ChartTabs extends FlxUITabMenu {
 			ChartingState.SONG.song = songTitleInput.text;
 		}
 
-		var saveButton:FlxButton = new FlxButton(songTitleInput.x, songTitleInput.y+25, "Save", function() {
+		var saveButton:FlxUIButton = new FlxUIButton(songTitleInput.x, songTitleInput.y+25, "Save", function() {
 			ChartingState.instance.saveChart();
 		});
 
-		var reloadSongJson:FlxButton = new FlxButton(saveButton.x + 100, saveButton.y, "Reload JSON", function() {
+		var reloadSongJson:FlxUIButton = new FlxUIButton(saveButton.x + 100, saveButton.y, "Reload JSON", function() {
 			ChartingState.instance.loadJson(songTitleInput.text);
 		});
 
-		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', ChartingState.instance.loadAutosave);
+		var loadAutosaveBtn:FlxUIButton = new FlxUIButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', ChartingState.instance.loadAutosave);
 
 		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 85, 1, 1, 1, 339, 1);
 		stepperBPM.value = Conductor.bpm;
@@ -84,35 +82,35 @@ class ChartTabs extends FlxUITabMenu {
 		stepperOffsetVocals.value = Conductor.songOffset[1];
 		stepperOffsetVocals.name = 'song_vocals_offset';
 
-		p1Button = new FlxButton(10, 155, "Boyfriend", function() {
+		p1Button = new FlxUIButton(10, 155, "Boyfriend", function() {
 			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
-				p1Button.text = newChar;
+				p1Button.label.text = newChar;
 				ChartingState.SONG.players[0] = newChar;
 				ChartingState.instance.updateIcons();
 			});
 		});
-		p1Button.text = ChartingState.SONG.players[0];
+		p1Button.label.text = ChartingState.SONG.players[0];
 
-		p2Button = new FlxButton(stepperOffsetInst.x, p1Button.y, "Dad", function() {
+		p2Button = new FlxUIButton(stepperOffsetInst.x, p1Button.y, "Dad", function() {
 			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
-				p2Button.text = newChar;
+				p2Button.label.text = newChar;
 				ChartingState.SONG.players[1] = newChar;
 				ChartingState.instance.updateIcons();
 			});
 		});
-		p2Button.text = ChartingState.SONG.players[1];
+		p2Button.label.text = ChartingState.SONG.players[1];
 
-		p3Button = new FlxButton(loadAutosaveBtn.x, p2Button.y, "Girlfriend", function() {
+		p3Button = new FlxUIButton(loadAutosaveBtn.x, p2Button.y, "Girlfriend", function() {
 			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
-				p3Button.text = newChar;
+				p3Button.label.text = newChar;
 				ChartingState.SONG.players[2] = newChar;
 				//ChartingState.instance.updateIcons();
 			});
 		});
-		p3Button.text = ChartingState.SONG.players[2];
+		p3Button.label.text = ChartingState.SONG.players[2];
 
 		var stages:Array<String> = JsonUtil.getJsonList('stages');
 		var stageDropDown = new FlxUIDropDownMenu(p1Button.x, p1Button.y + 40, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String) {
@@ -138,7 +136,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(new FlxText(stepperBPM.x, stepperBPM.y - 15, 0, 'BPM:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
 		tab_group_song.add(new FlxText(stepperOffsetInst.x, stepperOffsetInst.y - 15, 0, 'Inst Offset (MS):'));
-		tab_group_song.add(new FlxText(stepperOffsetVocals.x, stepperOffsetVocals.y - 15, 0, 'Vocals Offset (MS):'));
+		if (Conductor.hasVocals) tab_group_song.add(new FlxText(stepperOffsetVocals.x, stepperOffsetVocals.y - 15, 0, 'Vocals Offset (MS):'));
 
 		tab_group_song.add(new FlxText(difficultyDropDown.x, difficultyDropDown.y - 15, 0, 'Difficulty:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
@@ -148,7 +146,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(new FlxText(p3Button.x, p3Button.y - 15, 0, 'Girlfriend:'));
 
 		tab_group_song.add(stepperOffsetInst);
-		tab_group_song.add(stepperOffsetVocals);
+		if (Conductor.hasVocals) tab_group_song.add(stepperOffsetVocals);
 
 		tab_group_song.add(saveButton);
 		tab_group_song.add(reloadSongJson);
@@ -188,7 +186,7 @@ class ChartTabs extends FlxUITabMenu {
 		stepperSectionBPM.value = Conductor.bpm;
 		stepperSectionBPM.name = 'section_bpm';
 
-		var copyButton:FlxButton = new FlxButton(10, 130, "Copy last", function() {
+		var copyButton:FlxUIButton = new FlxUIButton(10, 130, "Copy last", function() {
 			ChartingState.instance.copyLastSection(Std.int(stepperCopy.value));
 		});
 
@@ -201,9 +199,9 @@ class ChartTabs extends FlxUITabMenu {
 		lastSectionPreview.offset.x = -50;
 		updatePreview();
 
-		var clearSectionButton:FlxButton = new FlxButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
+		var clearSectionButton:FlxUIButton = new FlxUIButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
 
-		var swapSection:FlxButton = new FlxButton(10, 170, "Swap section", function() {
+		var swapSection:FlxUIButton = new FlxUIButton(10, 170, "Swap section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
 				var noteObject = ChartingState.instance.mainGrid.getNoteObject(note);
 				note[1] = (note[1] + Conductor.NOTE_DATA_LENGTH) % Conductor.STRUMS_LENGTH;
@@ -211,7 +209,7 @@ class ChartTabs extends FlxUITabMenu {
 			}
 		});
 
-		var setSectionNoteTypes:FlxButton = new FlxButton(swapSection.x, swapSection.y + 125, "Set types", function() {
+		var setSectionNoteTypes:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 125, "Set types", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
 				var noteObject = ChartingState.instance.mainGrid.getNoteObject(note);
 				note[3] = sectionNoteTypesDropDown.selectedLabel;
@@ -379,32 +377,31 @@ class ChartTabs extends FlxUITabMenu {
 		check_metronome = new FlxUICheckBox(check_mute_inst.x, check_hitsound.y + 30, null, null, "Use Metronome", 100);
 		check_metronome.checked = false;
 
-		var button_clearSongNotes:FlxButton = new FlxButton(275, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
-		button_clearSongNotes.color = FlxColor.RED;
-		button_clearSongNotes.scale.set(1.3,1.25);
-		button_clearSongNotes.label.color = FlxColor.WHITE;
-		button_clearSongNotes.label.fieldWidth = 0;
+		var formatButton = function (btn:FlxUIButton) {
+			btn.color = FlxColor.RED;
+			btn.scale.set(1.3,1.25);
+			btn.label.color = FlxColor.WHITE;
+			btn.label.offset.y = -5;
+			btn.label.fieldWidth = 0;
+		}
 
-		var button_clearSongEvents:FlxButton = new FlxButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Events", ChartingState.instance.clearSongEvents);
-		button_clearSongEvents.color = FlxColor.RED;
-		button_clearSongEvents.scale.set(1.3,1.25);
-		button_clearSongEvents.label.color = FlxColor.WHITE;
-		button_clearSongEvents.label.fieldWidth = 0;
+		var button_clearSongNotes:FlxUIButton = new FlxUIButton(275, check_mute_inst.y, "Clear Song Notes", ChartingState.instance.clearSongNotes);
+		formatButton(button_clearSongNotes);
 
-		var button_clearSongFull:FlxButton = new FlxButton(button_clearSongEvents.x, button_clearSongEvents.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
-		button_clearSongFull.color = FlxColor.RED;
-		button_clearSongFull.scale.set(1.3,1.25);
-		button_clearSongFull.label.color = FlxColor.WHITE;
-		button_clearSongFull.label.fieldWidth = 0;
+		var button_clearSongEvents:FlxUIButton = new FlxUIButton(button_clearSongNotes.x, button_clearSongNotes.y + 30, "Clear Song Events", ChartingState.instance.clearSongEvents);
+		formatButton(button_clearSongEvents);
+
+		var button_clearSongFull:FlxUIButton = new FlxUIButton(button_clearSongEvents.x, button_clearSongEvents.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
+		formatButton(button_clearSongFull);
 
 		slider_pitch = new FlxUISlider(this, 'songPitch', check_metronome.x, check_metronome.y + 30, 0.25, 2, 290, null, 5, FlxColor.WHITE, FlxColor.BLACK);
 		slider_pitch.nameLabel.text = 'Pitch/Speed';
 		slider_pitch.name = 'song_pitch';
 
 		tab_group_editor.add(check_mute_inst);
-		tab_group_editor.add(check_mute_voices);
+		if (Conductor.hasVocals) tab_group_editor.add(check_mute_voices);
 		tab_group_editor.add(check_waveform_inst);
-		tab_group_editor.add(check_waveform_voices);
+		if (Conductor.hasVocals) tab_group_editor.add(check_waveform_voices);
 		tab_group_editor.add(check_hitsound);
 		tab_group_editor.add(check_metronome);
 		tab_group_editor.add(slider_pitch);

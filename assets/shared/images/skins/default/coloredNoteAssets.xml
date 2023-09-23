@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="coloredNoteAssets.png" width="162" height="223">
+  <SubTexture name="note" x="4" y="4"  width="154" height="157" frameX="-0" frameY="-0" frameWidth="154" frameHeight="157"/>
+  <SubTexture name="noteHoldEnd" x="4" y="169" width="64" height="50" rotated="true"  frameX="-0" frameY="-0" frameWidth="50" frameHeight="64"/>
+  <SubTexture name="noteHoldPiece" x="76" y="169"  width="50" height="44" frameX="-0" frameY="-0" frameWidth="50" frameHeight="44"/>
+</TextureAtlas>

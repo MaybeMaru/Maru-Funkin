@@ -46,10 +46,11 @@ class Song {
 	}
 
 	private static var CHART_FORMATS = [
-		'json',
-		'osu',
-		'sm', 'ssc',
-		'qua'
+		'json', 					// Vanilla FNF
+		'osu', 						// Osu! Mania
+		'sm', 'ssc', 				// Stepmania
+		'qua', 						// Quaver
+		//'/meta.json' 				// Ludum Dare Prototype FNF
 	];
 
 	public static function loadFromFile(diff:String, ?folder:String):SwagSong {
