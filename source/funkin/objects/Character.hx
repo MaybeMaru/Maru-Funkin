@@ -133,10 +133,14 @@ class Character extends FlxSpriteExt {
 		//worldOffsets.x *= -1; IDK
 		//stageOffsets.x *= -1;
 		camOffsets.x *= -1;
-		if (!debugMode) {
+		if (!debugMode) { // Switch anims
 			switchAnim('danceLeft', 'danceRight');
-			switchAnim('singRIGHT', 'singLEFT');
-			switchAnim('singRIGHTmiss', 'singLEFTmiss');
+			for (i in animOffsets.keys()) {
+				if (i.startsWith("singRIGHT")) {
+					var prefix = i.split("singRIGHT")[1];
+					switchAnim('singRIGHT$prefix', 'singLEFT$prefix');
+				}
+			}
 		}
 	}
 

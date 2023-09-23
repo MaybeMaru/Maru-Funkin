@@ -6,7 +6,7 @@ import flixel.addons.display.FlxBackdrop;
 import funkin.substates.CharSelectSubstate;
 import flixel.addons.display.FlxGridOverlay;
 
-import flixel.ui.FlxButton;
+import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUINumericStepper;
@@ -108,7 +108,7 @@ class AnimationDebug extends MusicBeatState {
 		super.create();
 	}
 
-	var charButton:FlxButton;
+	var charButton:FlxUIButton;
 	var input_imagePath:FlxUIInputText;
 	var input_icon:FlxUIInputText;
 	var check_antialiasing:FlxUICheckBox;
@@ -125,17 +125,17 @@ class AnimationDebug extends MusicBeatState {
 		var tab_group_char = new FlxUI(null, UI_box);
 		tab_group_char.name = 'Character';
 
-		charButton = new FlxButton(10, 20, "Boyfriend", function() {
+		charButton = new FlxUIButton(10, 20, "Boyfriend", function() {
 			var getChar = function () {
 				var newChar:String = CharSelectSubstate.lastChar;
-				charButton.text = newChar;
+				charButton.label.text = newChar;
 				loadCharacter(newChar);
 			}
 			openSubState(new CharSelectSubstate(getChar));
 		});
-		charButton.text = createChar;
+		charButton.label.text = createChar;
 
-		var reloadButton:FlxButton = new FlxButton(charButton.x,charButton.y+30, "Reload Image", function () {
+		var reloadButton:FlxUIButton = new FlxUIButton(charButton.x,charButton.y+30, "Reload Image", function () {
 			formatJsonChar();
 			var lastGhostAnim:Null<String> = (ghostChar.animation.curAnim != null) ? ghostChar.animation.curAnim.name : null;
 			displayChar.loadCharJson(character);
@@ -183,7 +183,7 @@ class AnimationDebug extends MusicBeatState {
 			character.antialiasing = check_antialiasing.checked;
 		};
 
-		var saveButton:FlxButton = new FlxButton(charButton.x, UI_box.height, "Save JSON", function() {
+		var saveButton:FlxUIButton = new FlxUIButton(charButton.x, UI_box.height, "Save JSON", function() {
 			saveLevel();
 		});
 		saveButton.y -= saveButton.height*2.25;
@@ -225,8 +225,8 @@ class AnimationDebug extends MusicBeatState {
 	var stepper_animFramerate:FlxUINumericStepper;
 	var check_loop:FlxUICheckBox;
 	var input_indices:FlxUIInputText;
-	var updateButton:FlxButton;
-	var removeButton:FlxButton;
+	var updateButton:FlxUIButton;
+	var removeButton:FlxUIButton;
 
 	var dropDown_anims:FlxUIDropDownMenu;
 
@@ -240,7 +240,7 @@ class AnimationDebug extends MusicBeatState {
 		check_loop = new FlxUICheckBox(stepper_animFramerate.x + 80, stepper_animFramerate.y, null, null, "Loop Anim", 100);
 		input_indices = new FlxUIInputText(stepper_animFramerate.x, stepper_animFramerate.y + 35, 200, '', 8);
 
-		updateButton = new FlxButton(input_indices.x, input_indices.y + 25, "Update / Add", function() {
+		updateButton = new FlxUIButton(input_indices.x, input_indices.y + 25, "Update / Add", function() {
 			var lastAnim = dropDown_anims.selectedLabel;
 			if (!displayChar.animOffsets.exists(input_animName.text)) {
 				var animData = getUpdatedAnimData();
@@ -258,7 +258,7 @@ class AnimationDebug extends MusicBeatState {
 			setAnimUIValues();
 		});
 
-		removeButton = new FlxButton(updateButton.x + 100, updateButton.y, 'Remove', function () {
+		removeButton = new FlxUIButton(updateButton.x + 100, updateButton.y, 'Remove', function () {
 			if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(dropDown_anims.selectedLabel)) {
 				displayChar.animOffsets.remove(dropDown_anims.selectedLabel);
 				ghostChar.animOffsets.remove(dropDown_anims.selectedLabel);
