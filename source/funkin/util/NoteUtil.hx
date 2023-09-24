@@ -76,7 +76,6 @@ class NoteUtil {
                 var texture = Preloader.cachedTextures.get(key);
                 Preloader.cachedTextures.remove(key);
                 texture.dispose();
-                trace(key);
             }
         }
     }

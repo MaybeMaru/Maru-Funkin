@@ -209,15 +209,23 @@ class Character extends FlxSpriteExt {
 		}
 	}
 
+	var heyTimer:FlxTimer = null;
+
 	public function hey():Void {
 		var heyAnim = isGF ? 'cheer' : 'hey';
 		if (!existsOffsets(heyAnim)) return;
 
 		playAnim(heyAnim, true);
 		specialAnim = true;
-		new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
+		if (heyTimer != null)
+			heyTimer.cancel();
+
+		heyTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			specialAnim = false;
-			dance();
+			var curAnim = animation.curAnim;
+			if (curAnim == null) return;
+			if (curAnim.name == 'hey' || curAnim.name == 'cheer')		
+				dance();
 		});
 	}
 
