@@ -71,6 +71,14 @@ class NoteUtil {
         for (key in Paths.cachedGraphics.keys()) {
             if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
         }
+        for (key in Preloader.cachedTextures.keys()) {
+            if (key.startsWith('sus')) {
+                var texture = Preloader.cachedTextures.get(key);
+                Preloader.cachedTextures.remove(key);
+                texture.dispose();
+                trace(key);
+            }
+        }
     }
 
     /*

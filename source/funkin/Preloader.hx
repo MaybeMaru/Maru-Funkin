@@ -14,6 +14,7 @@ import openfl.display3D.Context3D;
 
 class Preloader extends flixel.FlxState {
     public static var cachedGraphics:Map<String,FlxGraphic> = [];
+    public static var cachedTextures:Map<String,Texture> = [];
 
     inline public static function addBitmap(key:String) {
         addFromBitmap(Assets.getBitmapData(key, false), key);
@@ -27,9 +28,10 @@ class Preloader extends flixel.FlxState {
         return cachedGraphics.exists(key);
     }
 
-    public static function uploadTexture(bmp:BitmapData) {
+    public static function uploadTexture(bmp:BitmapData, key:String) {
         var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
         _texture.uploadFromBitmapData(bmp);
+        cachedTextures.set(key, _texture);
         Paths.disposeBitmap(bmp);
         var graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         graphic.persist = true;
@@ -38,7 +40,7 @@ class Preloader extends flixel.FlxState {
     }
 
     public static function addFromBitmap(bmp:BitmapData, key:String) {        
-        var graphic:FlxGraphic = uploadTexture(bmp);
+        var graphic:FlxGraphic = uploadTexture(bmp, key);
         cachedGraphics.set(key, graphic);
         return graphic;
     }

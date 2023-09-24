@@ -307,13 +307,6 @@ class Paths
 	inline public static function disposeBitmap(bitmap:BitmapData) {
 		bitmap.dispose();
 		bitmap.disposeImage();
-		@:privateAccess {
-			if (bitmap.__texture != null) {
-				bitmap.__texture.dispose();
-				bitmap.__texture = null;
-				bitmap.__textureContext = null;
-			}
-		}
 	}
 
 	inline static public function existsGraphic(key:String) {
@@ -357,7 +350,7 @@ class Paths
 	static public function uploadGraphicGPU(key:String) {
 		if (!existsGraphic(key)) return null;
 		var graphic = getGraphic(key);
-		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap);
+		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
 		removeGraphicByKey(key);
 		cachedGraphics.set(key, gpuGraphic);
 		return gpuGraphic;
