@@ -53,7 +53,7 @@ class WeekSetup {
         hideFreeplay: false,
 	}
 
-    inline public static function getWeekList():Array<WeekJson> {
+    public static function getWeekList():Array<WeekJson> {
         //Load week Jsons
         var weeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
@@ -112,7 +112,7 @@ class WeekSetup {
         if (Reflect.hasField(week.songList, "songIcon"))
             week.songList.songIcons = Reflect.field(week.songList, "songIcon");
 
-        return  JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
+        return JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
     }
 
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {

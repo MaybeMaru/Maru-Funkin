@@ -231,14 +231,18 @@ class Paths
 		var pushFile = function(folderPath:String) {
 			if (FileSystem.exists(folderPath)) {
 				var fileSort = CoolUtil.getFileContent('$folderPath/listSort.txt').split(",");
+				for (i in 0...fileSort.length) {
+					var sortPrefix = fullPath ? '$folderPath/' : '';
+					var sortSuffix = extension == null || !fullPath ? "" : '.$extension';
+					fileSort[i] = '$sortPrefix${fileSort[i]}$sortSuffix';
+				}
+
 				var curFolderList = [];
-				
-				for (filePath in FileSystem.readDirectory(folderPath)) {
-					if (filePath.endsWith(extension) || extension == null) {
-						var leFile:String = '$folderPath/$filePath';
-						leFile = fullPath ? leFile : leFile.split('/')[leFile.split('/').length-1].split('.')[0];
-						curFolderList.push(leFile);
-					}
+				var dirRead = FileSystem.readDirectory(folderPath);
+				dirRead.sort(CoolUtil.sortAlphabetically);
+				for (i in dirRead) {
+					if (i.endsWith(extension) || extension == null)
+						curFolderList.push(fullPath ? '$folderPath/$i' : i.split('.')[0]);
 				}
 
 				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));
@@ -252,7 +256,7 @@ class Paths
 					pushFile(getModPath('$modFolder/$folder'));
 			}
 		}
-		fileList.sort(CoolUtil.sortAlphabetically);
+		
 		return fileList;
 		#end
 	}

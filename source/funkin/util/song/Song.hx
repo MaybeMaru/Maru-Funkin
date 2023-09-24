@@ -71,15 +71,14 @@ class Song {
 	}
 
 	//Check null values and remove unused format variables
-	inline public static function checkSong(?song:SwagSong):SwagSong {
+	public static function checkSong(?song:SwagSong):SwagSong {
 		song = JsonUtil.checkJsonDefaults(getDefaultSong(), FunkinFormat.engineCheck(song));
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
-		var spamCount:Int = 0; // Fuck off
 		for (i in song.notes) {
 			i = checkSection(i);
-			if (i.sectionNotes.length > spamCount) spamCount = i.sectionNotes.length;
+			if (i.sectionNotes.length > 100) return getDefaultSong(); // Fuck off
 		}
-		return spamCount > 100 ? getDefaultSong() : song;
+		return song;
 	}
 
 	inline public static function checkSection(?section:SwagSection):SwagSection {

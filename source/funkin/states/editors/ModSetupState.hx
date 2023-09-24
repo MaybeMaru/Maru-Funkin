@@ -124,7 +124,7 @@ class ModSetupState extends MusicBeatState {
     }
 
     public static var modFolderDirs(default, never):Map<String, Array<String>> = [
-        "images" => ["characters", "skins", "storymenu"],
+        "images" => ["characters", "skins", "storymenu", "icons"],
         "data" => ["characters", "notetypes", "scripts", "stages", "weeks", "events", "skins"],
         "songs" => [],
         "music" => [],
