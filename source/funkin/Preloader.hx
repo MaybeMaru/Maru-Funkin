@@ -13,39 +13,40 @@ import openfl.display3D.Context3D;
 */
 
 class Preloader extends flixel.FlxState {
-    public static var bitmapCache:Map<String,FlxGraphic> = [];
+    public static var cachedGraphics:Map<String,FlxGraphic> = [];
 
     inline public static function addBitmap(key:String) {
         addFromBitmap(Assets.getBitmapData(key, false), key);
     }
 
-    inline public static function getBitmap(key:String):FlxGraphic {
-        return bitmapCache.get(key);
+    inline public static function getGraphic(key:String):FlxGraphic {
+        return cachedGraphics.get(key);
     }
 
-    inline public static function existsBitmap(key:String):Bool {
-        return bitmapCache.exists(key);
+    inline public static function existsGraphic(key:String):Bool {
+        return cachedGraphics.exists(key);
     }
 
-    inline public static function addFromBitmap(bmp:BitmapData, key:String) {        
+    public static function uploadTexture(bmp:BitmapData) {
         var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
         _texture.uploadFromBitmapData(bmp);
-
-		bmp.dispose();
-		bmp.disposeImage();
-        bmp = null;
-
-        var data:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
-        data.persist = true;
-        data.destroyOnNoUse = false;
-        bitmapCache.set(key, data);
-        return data;
+        Paths.disposeBitmap(bmp);
+        var graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
+        graphic.persist = true;
+        graphic.destroyOnNoUse = false;
+        return graphic;
     }
 
-    inline public static function removeByKey(key:String) {
-        if(!existsBitmap(key)) return;
-        var graphic = getBitmap(key);
-        bitmapCache.remove(key);
+    public static function addFromBitmap(bmp:BitmapData, key:String) {        
+        var graphic:FlxGraphic = uploadTexture(bmp);
+        cachedGraphics.set(key, graphic);
+        return graphic;
+    }
+
+    public static function removeByKey(key:String) {
+        if(!existsGraphic(key)) return;
+        var graphic = getGraphic(key);
+        cachedGraphics.remove(key);
         Paths.destroyGraphic(graphic);
     }
 

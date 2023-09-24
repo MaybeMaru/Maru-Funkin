@@ -263,7 +263,7 @@ class Paths
 
 	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		if (gpu) {
-			if (Preloader.existsBitmap(path)) return Preloader.getBitmap(path);
+			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
 				return Preloader.addFromBitmap(bitmap, path);
@@ -307,6 +307,13 @@ class Paths
 	inline public static function disposeBitmap(bitmap:BitmapData) {
 		bitmap.dispose();
 		bitmap.disposeImage();
+		@:privateAccess {
+			if (bitmap.__texture != null) {
+				bitmap.__texture.dispose();
+				bitmap.__texture = null;
+				bitmap.__textureContext = null;
+			}
+		}
 	}
 
 	inline static public function existsGraphic(key:String) {
@@ -343,8 +350,17 @@ class Paths
 		return addGraphicFromBitmap(getRawBitmap(key), key, cache);
 	}
 
-	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
+	inline static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
 		return getGraphic(key, cache).bitmap;
+	}
+
+	static public function uploadGraphicGPU(key:String) {
+		if (!existsGraphic(key)) return null;
+		var graphic = getGraphic(key);
+		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap);
+		removeGraphicByKey(key);
+		cachedGraphics.set(key, gpuGraphic);
+		return gpuGraphic;
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];
