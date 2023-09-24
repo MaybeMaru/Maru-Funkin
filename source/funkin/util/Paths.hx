@@ -284,21 +284,28 @@ class Paths
 		FlxG.bitmap.clearCache();
 	}
 
-	inline public static function removeGraphicByKey(key:String) {
+	public static function removeGraphicByKey(key:String) {
 		if (!existsGraphic(key)) return;
 		var obj = cachedGraphics.get(key);
 		cachedGraphics.remove(key);
 		destroyGraphic(obj);
 	}
 
-	inline public static function destroyGraphic(?graphic:FlxGraphic) {
+	public static function destroyGraphic(?graphic:FlxGraphic) {
 		if (graphic == null) return;
 		graphic.persist = false;
 		graphic.destroyOnNoUse = true;
+		disposeBitmap(graphic.bitmap);
+		graphic.bitmap = null;
 		graphic.destroy();
 	}
 
-	static public function existsGraphic(key:String) {
+	inline public static function disposeBitmap(bitmap:BitmapData) {
+		bitmap.dispose();
+		bitmap.disposeImage();
+	}
+
+	inline static public function existsGraphic(key:String) {
 		return cachedGraphics.exists(key);
 	}
 

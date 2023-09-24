@@ -5,6 +5,7 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import flixel.addons.ui.FlxUICheckBox;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
@@ -24,11 +25,15 @@ class ModSetupTabs extends FlxUITabMenu {
     var modDescInput:FlxUIInputText;
     var createButton:FlxUIButton;
 
+    var templatesCheck:FlxUICheckBox;
+
     var focusList:Array<FlxUIInputText> = [];
 	public function getFocus():Bool {
 		for (i in focusList) if (i.hasFocus) return true;
 		return false;
 	}
+
+    static var invalidFolderCharacters(default, never):Array<String> = ["/",":","*","?",'"',"<",">","|"];
     
     public function new() {
         super(null,[{name:"Setup Mod Folder", label: "Setup Mod Folder"}], true);
@@ -49,11 +54,19 @@ class ModSetupTabs extends FlxUITabMenu {
 
         createButton = new FlxUIButton(310, 350, "Create Folder", function () {
             var modName = modNameInput.text;
+            
             var keys:Array<String> = [];
             for (i in ModSetupState.modFolderDirs.keys()) keys.push(i);
             if (keys.contains(modName)) {
                 CoolUtil.playSound("rejectMenu");
                 return; // Invalid folder name
+            }
+            
+            for (i in invalidFolderCharacters) {
+                if (modName.contains(i)) {
+                    CoolUtil.playSound("rejectMenu");
+                    return; // Invalid folder character
+                }
             }
             
             var createFunc = function () {
@@ -72,6 +85,11 @@ class ModSetupTabs extends FlxUITabMenu {
             }
         });
         tabGroup.add(createButton);
+
+        // If to include template character json, week json, songs, etc
+        templatesCheck = new FlxUICheckBox(25, 250, null, null, "Include template files");
+        templatesCheck.checked = false;
+        tabGroup.add(templatesCheck);
     }
 
     function addToGroup(object:Dynamic, txt:String = "", focusPush:Bool = false) {

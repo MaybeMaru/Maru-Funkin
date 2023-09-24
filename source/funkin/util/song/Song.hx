@@ -74,8 +74,12 @@ class Song {
 	inline public static function checkSong(?song:SwagSong):SwagSong {
 		song = JsonUtil.checkJsonDefaults(getDefaultSong(), FunkinFormat.engineCheck(song));
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
-		for (i in song.notes) i = checkSection(i);
-		return song;
+		var spamCount:Int = 0; // Fuck off
+		for (i in song.notes) {
+			i = checkSection(i);
+			if (i.sectionNotes.length > spamCount) spamCount = i.sectionNotes.length;
+		}
+		return spamCount > 100 ? getDefaultSong() : song;
 	}
 
 	inline public static function checkSection(?section:SwagSection):SwagSection {
