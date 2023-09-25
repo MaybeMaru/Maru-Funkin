@@ -106,7 +106,7 @@ class FlxSpriteExt extends FlxSprite {
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {
 		if (flippedOffsets) {
 			scale.x *= -1;
-			var bounds = super.getScreenBounds(rect, cam);
+			final bounds = super.getScreenBounds(rect, cam);
 			scale.x *= -1;
 			return bounds;
 		}
@@ -115,8 +115,8 @@ class FlxSpriteExt extends FlxSprite {
 
     public function switchAnim(anim1:String, anim2:String):Void {
 		if (animation.getByName(anim1) != null && animation.getByName(anim2) != null) {
-			var oldAnim1 = animation.getByName(anim1).frames;
-			var oldOffset1 = animOffsets[anim1];
+			final oldAnim1 = animation.getByName(anim1).frames;
+			final oldOffset1 = animOffsets[anim1];
 	
 			animation.getByName(anim1).frames = animation.getByName(anim2).frames;
 			animOffsets[anim1] = animOffsets[anim2];
@@ -140,7 +140,7 @@ class FlxSpriteExt extends FlxSprite {
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
 			if(existsOffsets(animation.curAnim.name)) {
-				var animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
+				final animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
 				if (!animOffset.isZero() || forced) {
 					animOffset.x *= (flippedOffsets ? -1 : 1);
 					offset.set(animOffset.x, animOffset.y);
@@ -149,7 +149,7 @@ class FlxSpriteExt extends FlxSprite {
 		}
 	}
 
-	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void {
+	inline public function addOffset(name:String, x:Float = 0, y:Float = 0):Void {
 		animOffsets[name] = new FlxPoint(x, y);
 	}
 
@@ -167,11 +167,11 @@ class FlxSpriteExt extends FlxSprite {
 		});
 	}
 
-	public function existsOffsets(anim:String):Bool {
+	inline public function existsOffsets(anim:String):Bool {
 		return animOffsets.exists(anim);
 	}
 
-	public function getAnimData(anim:String):SpriteAnimation {
+	inline public function getAnimData(anim:String):SpriteAnimation {
 		return animDatas.exists(anim) ? animDatas.get(anim) : Reflect.copy(DEFAULT_ANIM);
 	}
 
@@ -179,11 +179,11 @@ class FlxSpriteExt extends FlxSprite {
 		animDatas[anim] = newData;
 		addOffset(anim, newData.offsets[0], newData.offsets[1]);
 
-		var name = newData.animName;
-		var file = newData.animFile;
-		var indices = newData.indices;
-		var fps = newData.framerate;
-		var loop = newData.loop;
+		final name = newData.animName;
+		final file = newData.animFile;
+		final indices = newData.indices;
+		final fps = newData.framerate;
+		final loop = newData.loop;
 
 		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
 	}

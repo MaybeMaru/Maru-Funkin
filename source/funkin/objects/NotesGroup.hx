@@ -383,7 +383,7 @@ class NotesGroup extends FlxGroup
 
 	public function checkMissNote(note:Note) {
 		if (note.active || Conductor.songPosition < note.strumTime) return;
-		if (!isCpuNote(note) && !note.isSustainNote)
+		if (!isCpuNote(note) && !note.isSustainNote && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);
 	}

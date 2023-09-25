@@ -128,8 +128,10 @@ class Character extends FlxSpriteExt {
 			for (anim in animOffsets.keys())
 				playAnim(anim);
 		}
-		if (animation.curAnim != null)
-			animation.curAnim.finish();
+		if (animation.curAnim != null) {
+			if (!getAnimData(animation.curAnim.name).loop)
+				animation.curAnim.finish();
+		}
 	}
 
 	public function flipCharOffsets():Void {

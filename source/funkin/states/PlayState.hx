@@ -709,32 +709,39 @@ class PlayState extends MusicBeatState {
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
+	static final ratingMap:Map<String, Dynamic> = [
+		"sick" => {
+			score: 350,
+			note: 1,
+			ghostLoss: 0
+		},
+		"good" => {
+			score: 200,
+			note: 0.8,
+			ghostLoss: 0
+		},
+		"bad" => {
+			score: 100,
+			note: 0.5,
+			ghostLoss: 0.06
+		},
+		"shit" => {
+			score: 50,
+			note: 0.25,
+			ghostLoss: 0.1
+		}
+	];
+
 	public function popUpScore(strumtime:Float, daNote:Note) {
 		combo++;
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
-		var score:Int = 0;
-		var noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
-
-		switch (noteRating) {
-			case 'sick':
-				score = 350;
-				noteTotal++;
-			case 'good':
-				score = 200;
-				noteTotal+=0.8;
-			case 'bad':
-				score = 100;
-				noteTotal+=0.5;
-				health -= ghostTapEnabled ? 0.06 : 0;
-			case 'shit':
-				score = 50;
-				noteTotal+=0.25;
-				health -= ghostTapEnabled ? 0.1 : 0;
-		}
-
-		songScore += score;
+		final noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
+		final ratingData = ratingMap[noteRating];
+		songScore += ratingData.score;
+		noteTotal += ratingData.note;
+		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
 
 		if (!getPref('stack-rating')) {
 			for (rating in ratingGroup)
