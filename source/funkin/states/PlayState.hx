@@ -444,7 +444,7 @@ class PlayState extends MusicBeatState {
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
-			for (i in [dad,gf,boyfriend]) i.dance();
+			for (i in [dad,gf,boyfriend]) i.danceInBeat();
 			for (i in [iconP1, iconP2]) i.bumpIcon();
 
 			if (swagCounter > 0) {
@@ -766,7 +766,7 @@ class PlayState extends MusicBeatState {
 		iconP2.bumpIcon();
 
 		for (i in [boyfriend, dad, gf])
-			i.danceCheck();
+			i.danceInBeat();
 
 		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
 	}

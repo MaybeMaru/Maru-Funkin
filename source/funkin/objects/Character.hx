@@ -115,6 +115,8 @@ class Character extends FlxSpriteExt {
 		setXY(x,y);
 		antialiasing = charJson.antialiasing ? Preferences.getPref('antialiasing') : false;
 		icon = charJson.icon;
+
+		curDanceBeat = danceBeat = isDoubleDancer() ? 0 : 1;
 		nullAnimCheck(); //	Find an anim to play to not have null curAnim
 	}
 
@@ -224,24 +226,41 @@ class Character extends FlxSpriteExt {
 			specialAnim = false;
 			var curAnim = animation.curAnim;
 			if (curAnim == null) return;
-			if (curAnim.name == 'hey' || curAnim.name == 'cheer')		
-				dance();
+			if (curAnim.name == 'hey' || curAnim.name == 'cheer')
+				danceInBeat();	
 		});
 	}
 
-	public var danced:Bool = false;
+	public var danceBeat:Int = 0;
 	public var idleAlt:String = "";
 
-	public function danceCheck() {
-		if (animation.curAnim == null) return;
-		if (!animation.curAnim.name.startsWith("sing"))
-			dance();
-	}
+	public var danced:Bool = false;
+	public var curDanceBeat:Int = 0;
 
-	public function dance():Void {
+	public function dance() {
 		if (!debugMode && forceDance && !specialAnim) {
 			getDanceAnim();
 		}
+	}
+
+	public function danceInBeat() {
+		var curAnim = animation.curAnim;
+		if (curAnim == null) return;
+		if (!animation.curAnim.name.startsWith("sing")) {
+			curDanceBeat--;
+			if (curDanceBeat < 0) {
+				curDanceBeat = danceBeat;
+				dance();
+			}
+		}
+	}
+
+	function isDoubleDancer() {
+		for(i in animOffsets.keys()) {
+			if (i.startsWith("danceRight"))
+				return true;
+		}
+		return false;
 	}
 
 	function getDanceAnim():Void {
@@ -250,10 +269,10 @@ class Character extends FlxSpriteExt {
 		var _idle = 'idle' + idleAlt;
 		if (animOffsets.exists(_danceRight) && animOffsets.exists(_danceLeft)) {
 			danced = !danced;
-			playAnim(danced ? _danceRight : _danceLeft);
+			playAnim(danced ? _danceRight : _danceLeft, true);
 		}
 		else if (animOffsets.exists(_idle)) {
-			playAnim(_idle);
+			playAnim(_idle, true);
 		}
 	}
 }
