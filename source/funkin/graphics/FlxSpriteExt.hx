@@ -38,7 +38,7 @@ class FlxSpriteExt extends FlxSprite {
         super(X,Y);
     }
 
-	public function setScale(_scale:Float = 1, updateBox:Bool = true) {
+	inline public function setScale(_scale:Float = 1, updateBox:Bool = true) {
 		scale.set(_scale,_scale);
 		if (updateBox)
 			updateHitbox();
@@ -133,7 +133,7 @@ class FlxSpriteExt extends FlxSprite {
 		}
 	}
 
-	public function getScaleDiff() {
+	inline public function getScaleDiff() {
 		return new FlxPoint().set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
 	}
 
@@ -189,7 +189,7 @@ class FlxSpriteExt extends FlxSprite {
 	}
 
 	public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
-		var matrix:FlxMatrix = new FlxMatrix();
+		final matrix:FlxMatrix = new FlxMatrix();
 		matrix.translate(X,Y);
 		graphic.bitmap.draw(Brush, matrix);
 	}
