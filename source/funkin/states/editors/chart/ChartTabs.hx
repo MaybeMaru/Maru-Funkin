@@ -1,5 +1,6 @@
 package funkin.states.editors.chart;
 
+import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
@@ -55,15 +56,23 @@ class ChartTabs extends FlxUITabMenu {
 			ChartingState.SONG.song = songTitleInput.text;
 		}
 
+		//*
 		var saveButton:FlxUIButton = new FlxUIButton(songTitleInput.x, songTitleInput.y+25, "Save", function() {
 			ChartingState.instance.saveChart();
 		});
+		//*/
 
-		var reloadSongJson:FlxUIButton = new FlxUIButton(saveButton.x + 100, saveButton.y, "Reload JSON", function() {
+		var reloadSongJson:FlxUIButton = new FlxUIButton(songTitleInput.x, songTitleInput.y+25, "Reload JSON", function() {
 			ChartingState.instance.loadJson(songTitleInput.text);
 		});
 
-		var loadAutosaveBtn:FlxUIButton = new FlxUIButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', ChartingState.instance.loadAutosave);
+		var autoSaveFunc = function () {
+			ChartingState.instance.openSubState(new PromptSubstate('Are you sure you want to\nload the song autosave?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+				ChartingState.instance.loadAutosave();
+			}));
+		}
+
+		var loadAutosaveBtn:FlxUIButton = new FlxUIButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', autoSaveFunc);
 
 		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 85, 1, 1, 1, 339, 1);
 		stepperBPM.value = Conductor.bpm;
@@ -102,7 +111,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 		p2Button.label.text = ChartingState.SONG.players[1];
 
-		p3Button = new FlxUIButton(loadAutosaveBtn.x, p2Button.y, "Girlfriend", function() {
+		p3Button = new FlxUIButton(p2Button.x + 100, p2Button.y, "Girlfriend", function() {
 			selectChar(function () {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p3Button.label.text = newChar;
@@ -148,7 +157,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(stepperOffsetInst);
 		if (Conductor.hasVocals) tab_group_song.add(stepperOffsetVocals);
 
-		tab_group_song.add(saveButton);
+		tab_group_song.add(saveButton); // TODO add meta crap
 		tab_group_song.add(reloadSongJson);
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(stepperBPM);

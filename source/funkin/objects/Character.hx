@@ -166,7 +166,7 @@ class Character extends FlxSpriteExt {
 				(_curAnim.name.endsWith('miss') && _curAnim.finished && !debugMode);
 
 				if (finishAnim) {
-					if (!inIdle()) dance();
+					restartDance();
 					holdTimer = 0;
 				}
 			}
@@ -231,8 +231,13 @@ class Character extends FlxSpriteExt {
 			final curAnim = animation.curAnim;
 			if (curAnim == null) return;
 			if (curAnim.name == 'hey' || curAnim.name == 'cheer')
-				danceInBeat();	
+				restartDance();
 		});
+	}
+
+	public function restartDance() {
+		dance();
+		curDanceBeat = danceBeat + (curDanceBeat <= 0 ? 1 : 0); // Restart dance anim
 	}
 
 	public var danceBeat:Int = 0;

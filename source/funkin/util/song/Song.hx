@@ -159,7 +159,7 @@ class Song {
 	}
 
 	//Removes unused variables for smaller size
-	inline public static function optimizeJson(input:SwagSong):SwagSong {
+	inline public static function optimizeJson(input:SwagSong, metaClear:Bool = false):SwagSong {
 		var song:SwagSong = JsonUtil.copyJson(input);
 		for (sec in song.notes) {
 			if (!sec.changeBPM) {
@@ -175,7 +175,7 @@ class Song {
 				}
 				sec.sectionNotes.sort(sortNotes);
 			}
-			if (sec.sectionEvents.length <= 0) {
+			if (sec.sectionEvents.length <= 0 || metaClear) {
 				Reflect.deleteField(sec, 'sectionEvents');
 			}
 			if (sec.mustHitSection) {
@@ -189,6 +189,10 @@ class Song {
 				if (Reflect.fields(lastSec).length <= 0) 	song.notes.pop();
 				else 										break;
 			}
+		}
+		if (metaClear) {
+			Reflect.deleteField(song, 'offsets');
+			//Reflect.deleteField(song, 'bpm');
 		}
 		
 		return song;
