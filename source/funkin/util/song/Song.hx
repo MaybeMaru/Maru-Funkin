@@ -26,6 +26,13 @@ typedef SwagSong = {
 	var players:Array<String>;
 }
 
+typedef SongMeta = {
+	var events:Array<SwagSection>;
+	var offsets:Array<Int>;
+	var diffs:Array<String>;
+	//var bpm:Float;
+}
+
 class Song {
 	public static var DEFAULT_SONG:SwagSong = {
 		song: 'Test',
@@ -56,13 +63,16 @@ class Song {
 	public static function loadFromFile(diff:String, ?folder:String):SwagSong {
 		folder = formatSongFolder(folder);
 		for (format in CHART_FORMATS) {
-			var chartPath:String = Paths.chart(folder, diff, format);
+			final chartPath:String = Paths.chart(folder, diff, format);
+			var meta = getSongMeta(folder);
+			if (meta != null) meta = meta.diffs.contains(diff) ? meta : null; // Only use if diff is included
+
 			if (Paths.exists(chartPath, TEXT)) {
 				switch (format) {
-					case 'json':			return checkSong(parseJson(chartPath));					// Funkin chart
-					case 'osu':				return checkSong(OsuFormat.convertSong(chartPath));		// Osu chart
-					case 'sm' | 'ssc':		return checkSong(SmFormat.convertSong(chartPath));		// Stepmania chart
-					case 'qua': 			return checkSong(QuaFormat.convertSong(chartPath));		// Quaver chart
+					case 'json':		return checkSong(parseJson(chartPath), meta);					// Funkin chart
+					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);		// Osu chart
+					case 'sm' | 'ssc': 	return checkSong(SmFormat.convertSong(chartPath), meta);		// Stepmania chart
+					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);		// Quaver chart
 				}
 			}
 		}
@@ -70,13 +80,25 @@ class Song {
 		return loadFromFile('hard','tutorial');
 	}
 
+	inline public static function getSongMeta(song:String):Null<SongMeta> {
+		var meta = CoolUtil.getFileContent(Paths.songMeta(song));
+		return meta.length > 0 ? cast Json.parse(meta) : null;
+	}
+
 	//Check null values and remove unused format variables
-	public static function checkSong(?song:SwagSong):SwagSong {
+	public static function checkSong(?song:SwagSong, ?meta:SongMeta):SwagSong {
 		song = JsonUtil.checkJsonDefaults(getDefaultSong(), FunkinFormat.engineCheck(song));
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
 		for (i in song.notes) {
 			i = checkSection(i);
 			if (i.sectionNotes.length > 100) return getDefaultSong(); // Fuck off
+		}
+		if (meta != null) { // Apply song metaData
+			song.offsets = meta.offsets.copy();
+			for (s in 0...meta.events.length) {
+				for (i in meta.events[s].sectionEvents.copy())
+					song.notes[s].sectionEvents.push(i);
+			}
 		}
 		return song;
 	}

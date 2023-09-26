@@ -155,27 +155,27 @@ class Paths
 		return forcePath ? instPath : getSound(instPath);
 	}
 
-	inline static public function chart(song:String, diff:String, ext:String = 'json'):String
-	{
+	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
 		ext = ext.startsWith('/') ? ext : '.$ext';
 		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
 	}
 
-	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset
-	{
+	inline static public function songMeta(song:String) {
+		return getPath('${Song.formatSongFolder(song)}/charts/songMeta.json', TEXT, 'songs');
+	}
+
+	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset {
 		var imagePath:String = getPath('images/$key.png', IMAGE, library, allMods);
 		return forcePath ? imagePath : getImage(imagePath, gpu);
 	}
 
-	inline static public function font(key:String, ?library:String):String
-	{
+	inline static public function font(key:String, ?library:String):String {
 		return getPath('fonts/$key.ttf', FONT, library);
 	}
 
-	inline static public function video(key:String, ?library:String):String
-		{
-			return getPath('videos/$key.mp4', BINARY, library);
-		}
+	inline static public function video(key:String, ?library:String):String {
+		return getPath('videos/$key.mp4', BINARY, library);
+	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
 		#if desktop return FileSystem.exists(removeAssetLib(file));
