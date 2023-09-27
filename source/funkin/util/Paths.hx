@@ -282,9 +282,12 @@ class Paths
 		for (key in cachedGraphics.keys()) {
 			removeGraphicByKey(key);
 		}
-		/*for (key in Preloader.bitmapCache.keys()) {
-			if (key.contains("mods")) Preloader.removeByKey(key);
-		}*/
+		if (Preferences.getPref('clear-gpu')) {
+			for (key in Preloader.cachedTextures.keys()) {
+				if (key.startsWith('mods/'))
+					Preloader.removeByKey(key, true);
+			}
+		}
 		FlxG.bitmap.clearCache();
 	}
 

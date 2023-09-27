@@ -32,9 +32,13 @@ class Preloader extends flixel.FlxState {
     }
 
     public static function uploadTexture(bmp:BitmapData, key:String) {
-        var _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
-        _texture.uploadFromBitmapData(bmp);
-        cachedTextures.set(key, _texture);
+        var _texture = null;
+        if (cachedTextures.exists(key)) _texture = cachedTextures.get(key);
+        else {
+            _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
+            _texture.uploadFromBitmapData(bmp);
+            cachedTextures.set(key, _texture);
+        }
         Paths.disposeBitmap(bmp);
         var graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         graphic.persist = true;
@@ -48,11 +52,19 @@ class Preloader extends flixel.FlxState {
         return graphic;
     }
 
-    public static function removeByKey(key:String) {
+    public static function removeByKey(key:String, disposeTex:Bool = false) {
         if(!existsGraphic(key)) return;
         var graphic = getGraphic(key);
         cachedGraphics.remove(key);
         Paths.destroyGraphic(graphic);
+        if (disposeTex) disposeTexture(key);
+    }
+
+    public static function disposeTexture(key:String) {
+        if (!cachedTextures.exists(key)) return;
+        var texture = cachedTextures.get(key);
+        cachedTextures.remove(key);
+        texture.dispose();
     }
     
     function fixFileList(list:Array<String>, typeFolder:String = 'images/', noLibFolder:String = 'assets/weeks'):Array<String> {

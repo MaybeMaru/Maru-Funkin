@@ -72,11 +72,8 @@ class NoteUtil {
             if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
         }
         for (key in Preloader.cachedTextures.keys()) {
-            if (key.startsWith('sus')) {
-                var texture = Preloader.cachedTextures.get(key);
-                Preloader.cachedTextures.remove(key);
-                texture.dispose();
-            }
+            if (key.startsWith('sus'))
+                Preloader.disposeTexture(key);
         }
     }
 
