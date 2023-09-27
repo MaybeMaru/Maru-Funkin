@@ -45,7 +45,7 @@ class NoteUtil {
 
     static function getList() {
         var typesSort = CoolUtil.getFileContent(Paths.txt("notetypes/types-sort", null)).split(",");
-        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [PlayState.SONG != null ? PlayState.SONG.song : ""]);
+        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [Song.formatSongFolder(PlayState?.SONG?.song ?? "")]);
         return CoolUtil.customSort(typesList, typesSort);
     }
 

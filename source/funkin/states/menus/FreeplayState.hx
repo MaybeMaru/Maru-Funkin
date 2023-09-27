@@ -32,6 +32,10 @@ class FreeplayState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		#if debug
+		addSong('test','bf','test',-1);
+		#end
+
 		coolColors = new Map<String, FlxColor>();
 		for (i in 0...WeekSetup.getWeekList().length) {
 			var week:WeekJson = WeekSetup.weekList[i];
@@ -208,11 +212,11 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	function changeSelection(change:Int = 0):Void {
-		var lastWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;
+		var lastWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
 		curSelected = FlxMath.wrap(curSelected += change, 0, songs.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-		curWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;
+		curWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
 		if (lastWeekDiffs != curWeekDiffs) {	//	FIND MATCHES
 			if (curWeekDiffs.contains(lastWeekDiffs[curDifficulty])) {
 				curDifficulty = curWeekDiffs.indexOf(lastWeekDiffs[curDifficulty]);
@@ -226,9 +230,7 @@ class FreeplayState extends MusicBeatState {
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;
 		}
 
-		for (i in 0...iconArray.length) {
-			iconArray[i].alpha = 0.6;
-		}
+		for (i in iconArray) i.alpha = 0.6;
 		iconArray[curSelected].alpha = 1;
 	}
 }

@@ -115,6 +115,14 @@ class WeekSetup {
         return JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
     }
 
+    public static inline function getWeekDiffs(week:String) {
+		return getData(week)?.weekDiffs ?? CoolUtil.defaultDiffArray.copy();
+	}
+
+    public static inline function getData(week:String) {
+        return weekDataMap.get(week);
+    }
+
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
         var modFolder:Null<String> = modWeekMap.get(weekName);
         if (modFolder == null) ModdingUtil.curModFolder = "";   // In base game
@@ -125,9 +133,8 @@ class WeekSetup {
         PlayState.storyWeek = weekName;
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);
-		PlayState.inChartEditor = false;
-        PlayState.seenCutscene = false;
+		PlayState.inChartEditor = PlayState.seenCutscene = false;
         PlayState.clearCache = true;
-        curWeekDiffs = weekDataMap.get(weekName).weekDiffs;
+        curWeekDiffs = getWeekDiffs(weekName);
 	}
 }
