@@ -1,5 +1,6 @@
 package funkin.states.editors.chart;
 
+import flixel.addons.ui.FlxUIGroup;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
@@ -56,11 +57,13 @@ class ChartTabs extends FlxUITabMenu {
 			ChartingState.SONG.song = songTitleInput.text;
 		}
 
-		//*
-		var saveButton:FlxUIButton = new FlxUIButton(songTitleInput.x, songTitleInput.y+25, "Save", function() {
+		var saveSongButton:FlxUIButton = new FlxUIButton(songTitleInput.x + 300, songTitleInput.y, "Save", function() {
 			ChartingState.instance.saveChart();
 		});
-		//*/
+
+		var saveMetaButton:FlxUIButton = new FlxUIButton(saveSongButton.x, songTitleInput.y+35, "Save Meta", function() {
+			ChartingState.instance.saveMeta();
+		});
 
 		var reloadSongJson:FlxUIButton = new FlxUIButton(songTitleInput.x, songTitleInput.y+25, "Reload JSON", function() {
 			ChartingState.instance.loadJson(songTitleInput.text);
@@ -157,20 +160,16 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_song.add(stepperOffsetInst);
 		if (Conductor.hasVocals) tab_group_song.add(stepperOffsetVocals);
 
-		tab_group_song.add(saveButton); // TODO add meta crap
-		tab_group_song.add(reloadSongJson);
-		tab_group_song.add(loadAutosaveBtn);
-		tab_group_song.add(stepperBPM);
-		tab_group_song.add(stepperSpeed);
+		addGrpObj([
+			saveSongButton, saveMetaButton, reloadSongJson, loadAutosaveBtn, stepperBPM,stepperSpeed,
+			p3Button, p1Button, p2Button,
+			difficultyDropDown, stageDropDown
+		], tab_group_song);
+	}
 
-		tab_group_song.add(p3Button);
-		tab_group_song.add(p1Button);
-		tab_group_song.add(p2Button);
-
-		tab_group_song.add(difficultyDropDown);
-		tab_group_song.add(stageDropDown);
-
-		addGroup(tab_group_song);
+	function addGrpObj(arr:Array<Dynamic>, grp:FlxUIGroup) {
+		for (i in arr) grp.add(i);
+		addGroup(grp);
 	}
 
 	var stepperCopy:FlxUINumericStepper;
@@ -238,18 +237,8 @@ class ChartTabs extends FlxUITabMenu {
 
 		tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
 
-		tab_group_section.add(stepperSectionBPM);
-		tab_group_section.add(stepperCopy);
-		tab_group_section.add(lastSectionPreview);
-		tab_group_section.add(check_mustHitSection);
-		tab_group_section.add(check_changeBPM);
-		tab_group_section.add(copyButton);
-		tab_group_section.add(clearSectionButton);
-		tab_group_section.add(swapSection);
-		tab_group_section.add(setSectionNoteTypes);
-		tab_group_section.add(sectionNoteTypesDropDown);
-
-		addGroup(tab_group_section);
+		addGrpObj([stepperSectionBPM,stepperCopy,lastSectionPreview,check_mustHitSection,check_changeBPM,
+			copyButton,clearSectionButton, swapSection,setSectionNoteTypes,sectionNoteTypesDropDown], tab_group_section);
 	}
 
 	public var stepperSusLength:FlxUINumericStepper;
@@ -280,10 +269,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_note.add(new FlxText(stepperSusLength.x, stepperSusLength.y - 15, 0, 'Sustain Length:'));
 		tab_group_note.add(new FlxText(noteTypesDropDown.x, noteTypesDropDown.y - 15, 0, 'Note Type:'));
 
-		tab_group_note.add(stepperSusLength);
-		tab_group_note.add(noteTypesDropDown);
-
-		addGroup(tab_group_note);
+		addGrpObj([stepperSusLength, noteTypesDropDown], tab_group_note);
 	}
 
 	var eventsDropDown:FlxUIDropDownMenu;
@@ -407,19 +393,12 @@ class ChartTabs extends FlxUITabMenu {
 		slider_pitch.nameLabel.text = 'Pitch/Speed';
 		slider_pitch.name = 'song_pitch';
 
-		tab_group_editor.add(check_mute_inst);
-		if (Conductor.hasVocals) tab_group_editor.add(check_mute_voices);
-		tab_group_editor.add(check_waveform_inst);
-		if (Conductor.hasVocals) tab_group_editor.add(check_waveform_voices);
-		tab_group_editor.add(check_hitsound);
-		tab_group_editor.add(check_metronome);
-		tab_group_editor.add(slider_pitch);
+		if (Conductor.hasVocals) for (i in [check_mute_voices,check_waveform_voices])
+			tab_group_editor.add(i);
 
-		tab_group_editor.add(button_clearSongNotes);
-		tab_group_editor.add(button_clearSongEvents);
-		tab_group_editor.add(button_clearSongFull);
-
-		addGroup(tab_group_editor);
+		addGrpObj([check_mute_inst,check_waveform_inst,
+			check_hitsound,check_metronome,slider_pitch,
+			button_clearSongNotes, button_clearSongEvents, button_clearSongFull], tab_group_editor);
 	}
 
 	var postCreateFuncs:Array<Dynamic> = [];

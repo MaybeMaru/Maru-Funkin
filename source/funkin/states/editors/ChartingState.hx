@@ -557,13 +557,38 @@ class ChartingState extends MusicBeatState {
 		}, _);
 	}
 
+    function saveJson(input:Any, fileName:String) {
+        var data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
+        if (data.length > 0) {
+			var chartFile:FileReference = new FileReference();
+			chartFile.save(data.trim(), '$fileName.json');
+		}
+    }
+
     public function saveChart() {
         SONG = Song.checkSong(SONG);
-		var data:String = getSongString("\t");
-		if (data.length > 0) {
-			var chartFile:FileReference = new FileReference();
-			chartFile.save(data.trim(), '${PlayState.curDifficulty}.json');
-		}
+        saveJson(getSongString("\t"), PlayState.curDifficulty);
+    }
+
+    public function saveMeta() {
+        var metaEvents:Array<SwagSection> = [];
+        for (i in SONG.notes) {
+            if (i.sectionEvents.length > 0) {
+                metaEvents.push({
+                    sectionEvents: i.sectionEvents.copy()
+                });
+            } else {
+                metaEvents.push({});
+            }
+        }
+        
+        var meta:SongMeta = {
+            diffs: [PlayState.curDifficulty],
+            offsets: SONG.offsets.copy(),
+            events: metaEvents
+        }
+
+        saveJson(meta, "songMeta");
     }
 
     override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

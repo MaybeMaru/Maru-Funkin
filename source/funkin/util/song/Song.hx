@@ -9,11 +9,11 @@ import funkin.util.song.formats.QuaFormat;
 import funkin.util.song.formats.FunkinFormat;
 
 typedef SwagSection = {
-	var sectionNotes:Array<Array<Dynamic>>;
-	var sectionEvents:Array<Array<Dynamic>>;
-	var mustHitSection:Bool;
-	var bpm:Float;
-	var changeBPM:Bool;
+	var ?sectionNotes:Array<Array<Dynamic>>;
+	var ?sectionEvents:Array<Array<Dynamic>>;
+	var ?mustHitSection:Bool;
+	var ?bpm:Float;
+	var ?changeBPM:Bool;
 }
 
 typedef SwagSong = {
