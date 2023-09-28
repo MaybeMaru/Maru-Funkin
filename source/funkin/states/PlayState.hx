@@ -204,7 +204,7 @@ class PlayState extends MusicBeatState {
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
-			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
+			final charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
 			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].split('/');
@@ -625,7 +625,7 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 	}
 
-	public function snapCamera() {
+	inline public function snapCamera() {
 		camGame.focusOn(camFollow.getPosition());
 	}
 	
@@ -662,11 +662,7 @@ class PlayState extends MusicBeatState {
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else {
-			if (inCutscene) {
-				ModdingUtil.addCall('startCutscene', [true]);
-			} else {
-				exitSong();
-			}
+			inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 		}
 	}
 
@@ -687,7 +683,7 @@ class PlayState extends MusicBeatState {
 	public function endWeek() {
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
-			var weekData = WeekSetup.weekDataMap.get(storyWeek);
+			final weekData = WeekSetup.weekDataMap.get(storyWeek);
 			if (WeekSetup.weekDataMap.exists(weekData.unlockWeek))
 				Highscore.setWeekUnlock(weekData.unlockWeek, true);
 		}
@@ -701,19 +697,20 @@ class PlayState extends MusicBeatState {
 	}
 
 	function switchSong():Void {
-		trace('LOADING NEXT SONG [${PlayState.storyPlaylist[0]}-$curDifficulty]');
+		final nextSong:String = PlayState.storyPlaylist[0];
+		trace('LOADING NEXT SONG [$nextSong-$curDifficulty]');
 
 		prevCamFollow = camFollow;
 		seenCutscene = false;
 
-		PlayState.SONG = Song.loadFromFile(curDifficulty, PlayState.storyPlaylist[0]);
+		PlayState.SONG = Song.loadFromFile(curDifficulty, nextSong);
 		Conductor.stop();
 
 		clearCache = true;
 		clearCacheData = { // Clear last song audio and note cache
 			bitmap: false
 		}
-		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to change cache clear
+		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 

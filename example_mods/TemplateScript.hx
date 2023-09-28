@@ -42,7 +42,7 @@ StringTools // Scripts support StringTools now, u shouldnt need this much
 // Haxeflixel
 FlxG
 FlxSpriteExt
-FlxSprite
+FlxSprite // Same as FlxSpriteExt, duplicate for backwards compatibility and shortcuts
 FlxText
 FlxTypedGroup
 FlxSpriteGroup
@@ -434,6 +434,16 @@ function endSong()
     //  Called when the song is finished
 }
 
+function endWeek() {
+    //  Called when the week is finished on story mode
+}
+
+function switchSong(nextSongName:String, nextSongDifficulty:String) {
+    // Called when the next song on the story mode playlist is loaded
+    //   nextSongName --> The next song's name
+    //   nextSongDifficulty --> The song's difficulty
+}
+
 function generateStaticArrow(babyArrow:NoteStrum)
 {
    //   Called when a strumline note is created
@@ -530,4 +540,30 @@ function sectionHit(curSection:Int)
 {
     //  Called every time there is a section hit in the song
     //  curSection --> The current section number
+}
+
+function openGameOverSubstate() {
+    // Called when the game over substate is about to be opened
+    // You can use ``return STOP_FUNCTION;`` to cancel the game over
+}
+
+function startGameOver() {
+    // Called when the game over substate is created
+}
+
+function musicGameOver() {
+    // Called when the game over music starts playing
+}
+
+function resetGameOver() {
+    // Called when the player restarts the song on game over
+}
+
+function exitGameOver() {
+    // Called when the player exits the song on game over
+}
+
+function beatHitGameOver(curBeat:Int) {
+    //  Called every time there is a beat hit in the game over music
+    //  curBeat --> The current beat number
 }
