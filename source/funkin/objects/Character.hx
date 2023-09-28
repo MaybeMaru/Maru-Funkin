@@ -235,9 +235,9 @@ class Character extends FlxSpriteExt {
 		});
 	}
 
-	public function restartDance() {
+	inline public function restartDance() {
 		dance();
-		curDanceBeat = danceBeat + (curDanceBeat <= 0 ? 1 : 0); // Restart dance anim
+		curDanceBeat = danceBeat;
 	}
 
 	public var danceBeat:Int = 0;

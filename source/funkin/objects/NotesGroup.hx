@@ -300,7 +300,7 @@ class NotesGroup extends FlxGroup
     public var opponentSustainPress:Dynamic = null;
 
     public function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
-        if (callback != null) Reflect.callMethod(this, callback, args != null ? args : []); // Prevent null
+        if (callback != null) Reflect.callMethod(this, callback, args ?? []); // Prevent null
     }
 
 	public function removeNote(note:Note) {
@@ -542,8 +542,7 @@ class NotesGroup extends FlxGroup
 					break;
 				}
 			}
-			if (!isHolding)
-				char.dance();
+			if (!isHolding) char.restartDance();
 		}
 	}
 

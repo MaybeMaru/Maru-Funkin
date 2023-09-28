@@ -483,8 +483,8 @@ class AnimationDebug extends MusicBeatState {
 		character.camOffsets = offsetValues;
 		cam_offset.setPosition(displayChar.getMidpoint().x,displayChar.getMidpoint().y);
 		cam_offset.x -= displayChar.flippedOffsets ? -offsetValues[0] : offsetValues[0];
-		cam_offset.flipX = (displayChar.flippedOffsets != check_isPlayer.checked);
 		cam_offset.y -= offsetValues[1];
+		cam_offset.flipX = (displayChar.flippedOffsets != check_isPlayer.checked);
 	}
 
 	function updateWorldOffsets():Void {

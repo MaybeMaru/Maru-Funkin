@@ -103,10 +103,7 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String):Void {
-		if (songCharacters == null) {
-			songCharacters = ['bf'];
-		}
-
+		songCharacters = songCharacters ?? ['bf'];
 		for (i in 0...songs.length) {
 			var songIcon:String = songCharacters[cast FlxMath.bound(i, 0, songCharacters.length-1)];
 			addSong(songs[i], songIcon, week, i);

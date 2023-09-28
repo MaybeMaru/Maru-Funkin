@@ -662,21 +662,29 @@ class PlayState extends MusicBeatState {
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else {
-			if (isStoryMode) {
-				campaignScore += songScore;
-				storyPlaylist.remove(storyPlaylist[0]);
-				inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : (storyPlaylist.length <= 0 ? endWeek() : switchSong());
-			}
-			else {
-				trace('WENT BACK TO FREEPLAY??');
-				clearCache = true;
-				SkinUtil.setCurSkin('default');
-				switchState(new FreeplayState());
+			if (inCutscene) {
+				ModdingUtil.addCall('startCutscene', [true]);
+			} else {
+				exitSong();
 			}
 		}
 	}
 
-	function endWeek() {
+	public function exitSong() {
+		if (isStoryMode) {
+			campaignScore += songScore;
+			storyPlaylist.remove(storyPlaylist[0]);
+			storyPlaylist.length <= 0 ? endWeek() : switchSong();
+		}
+		else {
+			trace('WENT BACK TO FREEPLAY??');
+			clearCache = true;
+			SkinUtil.setCurSkin('default');
+			switchState(new FreeplayState());
+		}
+	}
+
+	public function endWeek() {
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
 			var weekData = WeekSetup.weekDataMap.get(storyWeek);
