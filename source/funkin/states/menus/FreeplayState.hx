@@ -120,6 +120,7 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	var lerpColor:FlxColorFix;
+	var _lastMusic:String = "";
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
@@ -156,7 +157,18 @@ class FreeplayState extends MusicBeatState {
 
 		#if PRELOAD_ALL
 		if(FlxG.keys.justPressed.ONE) {
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+			final targetMusic = songs[curSelected].songName;
+			if (targetMusic != _lastMusic) {
+				if (FlxG.sound.music != null)
+					FlxG.sound.music.stop();
+				FunkThread.runThread(function () { // Make a new thread to load the music
+					FlxG.sound.playMusic(Paths.inst(targetMusic, false, true), 0);
+				});
+				_lastMusic = targetMusic;
+
+			} else if (FlxG.sound.music != null) {
+				FlxG.sound.music.time = FlxG.sound.music.volume = 0;
+			}
 		}
 		#end
 

@@ -27,14 +27,14 @@ class ControlsState extends MusicBeatState {
 		FlxG.resetState();
 	}
 
-	var menuCam:SwagCamera;
+	var menuCam:FlxCamera;
 	var camFollow:FlxObject;
 
 	override function create():Void {
 		FlxG.gamepads.deviceConnected.add(resetGamepad);
 		FlxG.gamepads.deviceDisconnected.add(resetGamepad);
 
-		menuCam = new SwagCamera();
+		menuCam = new FlxCamera();
 		FlxG.cameras.add(menuCam);
 		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
 		camFollow = new FlxObject(FlxG.width/2, 0);

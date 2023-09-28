@@ -57,7 +57,7 @@ class MainMenuState extends MusicBeatState {
 			menuItem.ID = i;
 		}
 
-		var menuCam:SwagCamera = new SwagCamera();
+		var menuCam:FlxCamera = new FlxCamera();
 		FlxG.cameras.add(menuCam);
 		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
 		menuCam.follow(camFollow, null, 0.06);
@@ -72,9 +72,12 @@ class MainMenuState extends MusicBeatState {
 		changeItem();
 
 		// IN TESTING!!
-		/*var noteBitmap = Paths.getRawBitmap(Paths.image("skins/default/coloredNoteAssets", null, true));
+		/*var noteBitmap = Paths.getRawBitmap(Paths.image("skins/pixel/coloredNoteAssets", null, true));
 		for (i in 0...4) {
-			var test = new FlxSprite(500 + 150 * i, 200, noteBitmap.clone());
+			var test = new FlxSprite(250 + 200 * i, 200, noteBitmap.clone());
+			test.scale.set(6,6);
+			test.updateHitbox();
+			test.antialiasing = false;
 			NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], NoteUtil.DEFAULT_COLORS_OUTER[i]);
 			add(test);
 		}

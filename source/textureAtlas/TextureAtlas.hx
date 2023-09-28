@@ -145,7 +145,7 @@ class TextureAtlas extends FlxAtlasFrames
 					}
 				}
 				graphic.addFrameCollection(spritemapFrames);
-				frames.concat(spritemapFrames);
+				frames._concat(spritemapFrames);
 			}
 			else
 				FlxG.log.error('the image called "${curJson.meta.image}" does not exist in Path $Path, maybe you changed the image Path somewhere else?');
@@ -168,7 +168,7 @@ class TextureAtlas extends FlxAtlasFrames
 					}
 				}
 				graphic.addFrameCollection(spritemapFrames);
-				frames.concat(spritemapFrames);
+				frames._concat(spritemapFrames);
 			}
 			else
 				FlxG.log.error('the image called "${curJson.meta.image}" does not exist in Path $Path, maybe you changed the image Path somewhere else?');
@@ -182,7 +182,7 @@ class TextureAtlas extends FlxAtlasFrames
 		return frames;
 	}
 
-	function concat(frames:FlxFramesCollection)
+	function _concat(frames:FlxFramesCollection)
 	{
 		for (frame in frames.frames)
 			pushFrame(frame);

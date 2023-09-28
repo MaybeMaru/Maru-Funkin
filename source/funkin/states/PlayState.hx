@@ -79,9 +79,9 @@ class PlayState extends MusicBeatState {
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
 
-	public var camGame:SwagCamera;
-	public var camHUD:SwagCamera;
-	public var camOther:SwagCamera;
+	public var camGame:FlxCamera;
+	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
 
 	public var songLength:Float = 0;
 	public var songScore:Int = 0;
@@ -129,9 +129,9 @@ class PlayState extends MusicBeatState {
 		CoolUtil.stopMusic();
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
-		camGame = new SwagCamera();
-		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;
-		camOther = new SwagCamera(); camOther.bgColor.alpha = 0;
+		camGame = new FlxCamera();
+		camHUD = new FlxCamera();	 camHUD.bgColor.alpha = 0;
+		camOther = new FlxCamera(); camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.add(camGame);
 		FlxG.cameras.add(camHUD, false);
@@ -444,8 +444,7 @@ class PlayState extends MusicBeatState {
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
-			for (i in [dad,gf,boyfriend]) i.danceInBeat();
-			for (i in [iconP1, iconP2]) i.bumpIcon();
+			beatCharacters();
 
 			if (swagCounter > 0) {
 				var countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
@@ -765,6 +764,11 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('stepHit', [curStep, curStepDecimal]);
 	}
 
+	inline function beatCharacters() {
+		for (i in [iconP1, iconP2]) i.bumpIcon();
+		for (i in [dad, gf, boyfriend]) i.danceInBeat();
+	}
+
 	override public function beatHit():Void {
 		super.beatHit();
 		if (curSectionData != null) {
@@ -774,12 +778,7 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		iconP1.bumpIcon();
-		iconP2.bumpIcon();
-
-		for (i in [boyfriend, dad, gf])
-			i.danceInBeat();
-
+		beatCharacters();
 		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
 	}
 

@@ -29,7 +29,7 @@ class ChartingState extends MusicBeatState {
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
 
-    public var camTop:SwagCamera;
+    public var camTop:FlxCamera;
     
     override function create() {
         instance = this;
@@ -53,7 +53,7 @@ class ChartingState extends MusicBeatState {
         PlayState.inChartEditor = true;
         FlxG.mouse.visible = true;
 
-        camTop = new SwagCamera(); camTop.bgColor.alpha = 0;
+        camTop = new FlxCamera(); camTop.bgColor.alpha = 0;
         FlxG.cameras.add(camTop, false);
         
         SONG = Song.checkSong(PlayState.SONG);

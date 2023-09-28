@@ -149,9 +149,9 @@ class Paths
 		return forcePath ? voicesPath : getSound(voicesPath);
 	}
 
-	inline static public function inst(song:String, forcePath:Bool = false):FlxSoundAsset
+	inline static public function inst(song:String, forcePath:Bool = false, global:Bool = false):FlxSoundAsset
 	{
-		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs');
+		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs', global);
 		return forcePath ? instPath : getSound(instPath);
 	}
 
@@ -360,16 +360,21 @@ class Paths
 	}
 
 	public static var cachedSounds:Map<String, Sound> = [];
-	public static var excludeSounds:Array<String> = [];
-	inline public static function clearSoundCache(forced:Bool = false) {
+
+	public static function clearSoundCache(forced:Bool = false) {
 		for (key in cachedSounds.keys()) {
 			if (key.contains(Conductor._loadedSong) && !forced) continue;
 			else												Conductor._loadedSong = "";
-			cachedSounds.get(key).close();
-			LimeAssets.cache.clear(key);
-			OflAssets.cache.removeSound(key);
-			cachedSounds.remove(key);
+			removeSoundByKey(key);
 		}
+	}
+
+	static public inline function removeSoundByKey(key:String) {
+		if (!cachedSounds.exists(key)) return;
+		cachedSounds.get(key).close();
+		LimeAssets.cache.clear(key);
+		OflAssets.cache.removeSound(key);
+		cachedSounds.remove(key);
 	}
 
 	static public function getSound(key:String):FlxSoundAsset {
