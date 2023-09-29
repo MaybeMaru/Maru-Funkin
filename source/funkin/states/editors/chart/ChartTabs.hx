@@ -207,7 +207,7 @@ class ChartTabs extends FlxUITabMenu {
 		lastSectionPreview.offset.x = -50;
 		updatePreview();
 
-		var clearSectionButton:FlxUIButton = new FlxUIButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData());
+		var clearSectionButton:FlxUIButton = new FlxUIButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData(true, true, false));
 
 		var swapSection:FlxUIButton = new FlxUIButton(10, 170, "Swap section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {

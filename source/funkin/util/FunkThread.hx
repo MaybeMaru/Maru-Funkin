@@ -20,7 +20,6 @@ class FunkThread {
         //#if sys
         if (threadsMap.exists(id)) {
             final thread = getThread(id);
-            //if (thread.events.progress() == Now) thread.events.cancel(); ???
             thread.events.runPromised(() -> {
                 func();
             });

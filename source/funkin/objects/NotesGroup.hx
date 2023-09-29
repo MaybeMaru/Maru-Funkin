@@ -142,7 +142,13 @@ class NotesGroup extends FlxGroup
 				
 				Conductor.vocals.volume = 0;
 				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
-				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 3 : 4) : 1;
+
+				var healthMult = 1.0;
+				if (note.isSustainNote) {
+					var notePercent = note.startedPress ? note.percentCut : 1;
+					healthMult = notePercent * (note.initSusLength / Conductor.stepCrochet) * 4;
+				}
+
 				game.health -= healthLoss * healthMult;
 				game.songScore -= Std.int(10 * healthMult);
 

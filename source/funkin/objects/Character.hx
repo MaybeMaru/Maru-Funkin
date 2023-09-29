@@ -122,6 +122,16 @@ class Character extends FlxSpriteExt {
 		nullAnimCheck(); //	Find an anim to play to not have null curAnim
 	}
 
+	public function getAnimationPrefixes():Array<String> {
+		var prefixes:Array<String> = [];
+		if (frames == null) return prefixes;
+		for (i in frames.frames) {
+			var anim = i.name.split('0')[0];
+			if (!prefixes.contains(anim)) prefixes.push(anim);
+		}
+		return prefixes;
+	}
+
 	public function nullAnimCheck():Void {
 		getDanceAnim();
 		if(animation.curAnim == null) {

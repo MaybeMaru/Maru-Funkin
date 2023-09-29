@@ -19,6 +19,10 @@ import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 
+/*
+	TODO create animations from prefixes automatic
+*/
+
 class AnimationDebug extends MusicBeatState {
 	var UI_box:FlxUITabMenu;
 	var tabs = [
@@ -53,9 +57,9 @@ class AnimationDebug extends MusicBeatState {
 
 	override function create():Void {
 		FlxG.mouse.visible = true;
-		if (FlxG.sound.music != null) {
+		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-		}
+		
 		camChar = new FlxCamera();
 		camUI = new FlxCamera();
 		camChar.bgColor.alpha = 0;
@@ -64,7 +68,7 @@ class AnimationDebug extends MusicBeatState {
 		FlxG.cameras.add(camUI);
 		FlxG.cameras.setDefaultDrawTarget(camUI, true);
 
-		var gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40, 40, true, 0xff7c7c7c,0xff6e6e6e).pixels);
+		var gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
 		gridBG.cameras = [camChar];
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
@@ -225,8 +229,10 @@ class AnimationDebug extends MusicBeatState {
 	var stepper_animFramerate:FlxUINumericStepper;
 	var check_loop:FlxUICheckBox;
 	var input_indices:FlxUIInputText;
+
 	var updateButton:FlxUIButton;
 	var removeButton:FlxUIButton;
+	var autoButton:FlxUIButton;
 
 	var dropDown_anims:FlxUIDropDownMenu;
 
@@ -241,35 +247,29 @@ class AnimationDebug extends MusicBeatState {
 		input_indices = new FlxUIInputText(stepper_animFramerate.x, stepper_animFramerate.y + 35, 200, '', 8);
 
 		updateButton = new FlxUIButton(input_indices.x, input_indices.y + 25, "Update / Add", function() {
-			var lastAnim = dropDown_anims.selectedLabel;
-			if (!displayChar.animOffsets.exists(input_animName.text)) {
-				var animData = getUpdatedAnimData();
-				displayChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
-				ghostChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
-				lastAnim = animData.animName;
-			} else {
-				displayChar.setAnimData(lastAnim, getUpdatedAnimData());
-				ghostChar.setAnimData(lastAnim, getUpdatedAnimData());
-			}
-			set_dropDown_anims(lastAnim);
-			updateOffsetText(true);
-			updateGhostAnims();
-			formatJsonChar();
-			setAnimUIValues();
+			var existsInputAnim = displayChar.animOffsets.exists(input_animName.text);
+			existsInputAnim ? updateAnimation(dropDown_anims.selectedLabel, getUpdatedAnimData()) : addAnimation(getUpdatedAnimData());
 		});
 
 		removeButton = new FlxUIButton(updateButton.x + 100, updateButton.y, 'Remove', function () {
-			if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(dropDown_anims.selectedLabel)) {
-				displayChar.animOffsets.remove(dropDown_anims.selectedLabel);
-				ghostChar.animOffsets.remove(dropDown_anims.selectedLabel);
-				displayChar.animDatas.remove(dropDown_anims.selectedLabel);
-				ghostChar.animDatas.remove(dropDown_anims.selectedLabel);
-			}
-			set_dropDown_anims();
-			updateOffsetText(true);
-			updateGhostAnims();
-			formatJsonChar();
-			setAnimUIValues();
+			removeAnimation(dropDown_anims.selectedLabel);
+		});
+
+		autoButton = new FlxUIButton(removeButton.x + 100, removeButton.y, 'Auto Anims', function () {
+			openSubState(new PromptSubstate('Are you sure you want to\nuse auto animations?\nPreviously created animations\nwill be deleted\n\n\nPress back to cancel', function () {
+				for (i in displayChar.animDatas.keys()) removeAnimation(i);
+				final prefixes = displayChar.getAnimationPrefixes();
+				for (i in prefixes) {
+					addAnimation({
+						animName: i,
+						animFile: i,
+						offsets: [0,0],
+						framerate: Std.int(stepper_animFramerate.value),
+						indices: [],
+						loop: false
+					});
+				}
+			}));
 		});
 
 		dropDown_anims = new FlxUIDropDownMenu(input_animName.x + 210, input_animName.y, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), function(anim:String) {
@@ -288,18 +288,51 @@ class AnimationDebug extends MusicBeatState {
 		tab_group_anim.add(stepper_animFramerate);
 		tab_group_anim.add(check_loop);
 		tab_group_anim.add(input_indices);
+
 		tab_group_anim.add(updateButton);
 		tab_group_anim.add(removeButton);
+		tab_group_anim.add(autoButton);
+		
 		tab_group_anim.add(dropDown_anims);
 
 		UI_box.addGroup(tab_group_anim);
 	}
 
+	function addAnimation(animData:SpriteAnimation) {
+		displayChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
+		ghostChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
+		updateAnimUI(animData.animName);
+	}
+
+	function updateAnimation(anim:String, animData:SpriteAnimation) {
+		displayChar.setAnimData(anim, animData);
+		ghostChar.setAnimData(anim, animData);
+		updateAnimUI(anim);
+	}
+
+	function updateAnimUI(?lastAnim) {
+		set_dropDown_anims(lastAnim);
+		updateOffsetText(true);
+		updateGhostAnims();
+		formatJsonChar();
+		setAnimUIValues();
+	}
+
+	function removeAnimation(label:String) {
+		if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(label)) {
+			displayChar.animOffsets.remove(label);
+			ghostChar.animOffsets.remove(label);
+			displayChar.animDatas.remove(label);
+			ghostChar.animDatas.remove(label);
+		}
+		updateAnimUI(null);
+	}
+
 	function pushJsonAnims() {
 		character.anims = [];
 		for (anim in displayChar.animDatas.keys()) {
-			var animData = displayChar.animDatas.get(anim);
-			var animOffset = displayChar.animOffsets.get(anim);
+			final animData = displayChar.animDatas.get(anim);
+			final animOffset = displayChar.animOffsets.get(anim);
 			character.anims.push({
 				animName: animData.animName,
 				animFile: animData.animFile,
@@ -400,8 +433,8 @@ class AnimationDebug extends MusicBeatState {
 
 	function getUpdatedAnimData():SpriteAnimation {
 		var curAnim:String = dropDown_anims.selectedLabel;
-		var newAnimData = Reflect.copy(displayChar.getAnimData(curAnim));
-		var animOffsets:FlxPoint = displayChar.animOffsets.get(curAnim);
+		var newAnimData = JsonUtil.copyJson(displayChar.getAnimData(curAnim));
+		var animOffsets:FlxPoint = displayChar.animOffsets.get(curAnim) ?? new FlxPoint();
 		newAnimData.animName = input_animName.text;
 		newAnimData.animFile = input_animFile.text;
 		newAnimData.framerate = Std.int(stepper_animFramerate.value);
@@ -423,9 +456,8 @@ class AnimationDebug extends MusicBeatState {
 
 	function indicesToTxt(indices:Array<Int>):String {
 		var retStr:String = '';
-		for (i in 0...indices.length) {
+		for (i in 0...indices.length)
 			retStr += '${indices[i]}' + (i < indices.length - 1 ? ',' : '');
-		}
 		return retStr;
 	}
 

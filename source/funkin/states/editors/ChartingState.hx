@@ -289,11 +289,11 @@ class ChartingState extends MusicBeatState {
 
         if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.A || FlxG.keys.pressed.W || FlxG.keys.pressed.S) {
             stop();
-            var mult = (FlxG.keys.pressed.SHIFT ? 4 : 1);
+            final mult = (FlxG.keys.pressed.SHIFT ? 4 : 1);
             if (FlxG.keys.justPressed.D) changeSection(1 * mult);
             if (FlxG.keys.justPressed.A) changeSection(-1 * mult);
-            if (FlxG.keys.pressed.W) moveTime(-FlxG.elapsed* mult);
-            if (FlxG.keys.pressed.S) moveTime(FlxG.elapsed* mult);
+            if (FlxG.keys.pressed.W) moveTime(-FlxG.elapsed * mult / FlxG.timeScale);
+            if (FlxG.keys.pressed.S) moveTime(FlxG.elapsed * mult / FlxG.timeScale);
         }
 
         if (FlxG.keys.justPressed.E || FlxG.keys.justPressed.Q) {
@@ -466,11 +466,11 @@ class ChartingState extends MusicBeatState {
         }));
     }
 
-    public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true) {
+    public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true, full:Bool = true) {
         if (clearNotes) {
             SONG.notes[sectionIndex].sectionNotes = [];
             deselectNote();
-            mainGrid.clearSection();
+            mainGrid.clearSection(full);
         }
         if (clearEvents) {
             SONG.notes[sectionIndex].sectionEvents = [];
