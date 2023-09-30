@@ -19,10 +19,6 @@ import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 
-/*
-	TODO create animations from prefixes automatic
-*/
-
 class AnimationDebug extends MusicBeatState {
 	var UI_box:FlxUITabMenu;
 	var tabs = [
@@ -59,7 +55,7 @@ class AnimationDebug extends MusicBeatState {
 		FlxG.mouse.visible = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-		
+
 		camChar = new FlxCamera();
 		camUI = new FlxCamera();
 		camChar.bgColor.alpha = 0;
@@ -249,26 +245,33 @@ class AnimationDebug extends MusicBeatState {
 		updateButton = new FlxUIButton(input_indices.x, input_indices.y + 25, "Update / Add", function() {
 			var existsInputAnim = displayChar.animOffsets.exists(input_animName.text);
 			existsInputAnim ? updateAnimation(dropDown_anims.selectedLabel, getUpdatedAnimData()) : addAnimation(getUpdatedAnimData());
+			changeCurAnim();
 		});
+		updateButton.color = FlxColor.LIME;
+		updateButton.label.color = FlxColor.WHITE;
 
 		removeButton = new FlxUIButton(updateButton.x + 100, updateButton.y, 'Remove', function () {
 			removeAnimation(dropDown_anims.selectedLabel);
+			changeCurAnim();
 		});
+		removeButton.color = FlxColor.RED;
+		removeButton.label.color = FlxColor.WHITE;
 
-		autoButton = new FlxUIButton(removeButton.x + 100, removeButton.y, 'Auto Anims', function () {
+		autoButton = new FlxUIButton(updateButton.x, removeButton.y + 45, 'Auto Anims', function () {
 			openSubState(new PromptSubstate('Are you sure you want to\nuse auto animations?\nPreviously created animations\nwill be deleted\n\n\nPress back to cancel', function () {
-				for (i in displayChar.animDatas.keys()) removeAnimation(i);
 				final prefixes = displayChar.getAnimationPrefixes();
+				for (i in displayChar.animDatas.keys()) removeAnimation(i);
 				for (i in prefixes) {
 					addAnimation({
 						animName: i,
 						animFile: i,
-						offsets: [0,0],
+						offsets: [0.0,0.0],
 						framerate: Std.int(stepper_animFramerate.value),
 						indices: [],
 						loop: false
 					});
 				}
+				changeCurAnim();
 			}));
 		});
 
@@ -462,9 +465,7 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function txtToIndices(text:String):Array<Int> {
-		if (text.length <= 0) {
-			return [];
-		}
+		if (text.length <= 0) return [];
         var intArray:Array<Int> = [];
         for (str in text.split(",")) {
             var value:Null<Int> = Std.parseInt(str);
@@ -564,6 +565,14 @@ class AnimationDebug extends MusicBeatState {
 		return false;
 	}
 
+	function changeCurAnim(change:Int = 0) {
+		if (animsList.length <= 0) return;
+		curAnimIndex += change;
+		curAnimIndex = FlxMath.wrap(curAnimIndex, 0, animsList.length-1);
+		displayChar.playAnim(animsList[curAnimIndex], true);
+		updateOffsetText();
+	}
+
 	override function update(elapsed:Float):Void {
 		if (!checkFocus()) {
 			if (FlxG.keys.justPressed.ENTER){
@@ -573,33 +582,26 @@ class AnimationDebug extends MusicBeatState {
 			}
 
 			var multiplier:Float = (FlxG.keys.pressed.SHIFT) ? 5 : (FlxG.keys.pressed.CONTROL) ? 0.1 : 1;
-	
-				//	MOVE CAMERA
-			camFollow.velocity.y = (FlxG.keys.pressed.I || FlxG.keys.pressed.K) ? 90 * multiplier : 0;
-			camFollow.velocity.y *= (FlxG.keys.pressed.I) ? -1 : 1;
-			camFollow.velocity.x = (FlxG.keys.pressed.J || FlxG.keys.pressed.L) ? 90 * multiplier : 0;
-			camFollow.velocity.x *= (FlxG.keys.pressed.J) ? -1 : 1;
+			final pressI = FlxG.keys.pressed.I;
+			final pressJ = FlxG.keys.pressed.J;
+
+			// Move the camera
+			camFollow.velocity.y = (pressI || FlxG.keys.pressed.K) ? 90 * multiplier : 0;
+			camFollow.velocity.y *= pressI ? -1 : 1;
+			camFollow.velocity.x = (pressJ || FlxG.keys.pressed.L) ? 90 * multiplier : 0;
+			camFollow.velocity.x *= pressJ ? -1 : 1;
 			if (FlxG.keys.pressed.E)	camChar.zoom += 0.01 * multiplier * camChar.zoom;
 			if (FlxG.keys.pressed.Q)	camChar.zoom -= 0.01 * multiplier * camChar.zoom;
-			camChar.zoom = Math.max(Math.min(camChar.zoom, 10), 0.25);
+			camChar.zoom = FlxMath.bound(camChar.zoom, 0.25, 10);
 	
-				// CHANGE ANIM
-			if ((FlxG.keys.justPressed.W || FlxG.keys.justPressed.S) && animsList.length > 0) {
-				if (FlxG.keys.justPressed.W) curAnimIndex--;
-				if (FlxG.keys.justPressed.S) curAnimIndex++;
-				curAnimIndex = FlxMath.wrap(curAnimIndex, 0, animsList.length-1);
-				displayChar.playAnim(animsList[curAnimIndex], true);
-				updateOffsetText();
-			}
-	
-			if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE) {
-				displayChar.playAnim(animsList[curAnimIndex], true);
-			}
+			// Change / update playing animation
+			if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE)
+				changeCurAnim(FlxG.keys.justPressed.W ? -1 : FlxG.keys.justPressed.S ? 1 : 0);
 
-			var upP:Bool = FlxG.keys.justPressed.UP;
-			var rightP:Bool = FlxG.keys.justPressed.RIGHT;
-			var downP:Bool = FlxG.keys.justPressed.DOWN;
-			var leftP:Bool = FlxG.keys.justPressed.LEFT;
+			final upP:Bool = FlxG.keys.justPressed.UP;
+			final rightP:Bool = FlxG.keys.justPressed.RIGHT;
+			final downP:Bool = FlxG.keys.justPressed.DOWN;
+			final leftP:Bool = FlxG.keys.justPressed.LEFT;
 	
 			if (upP || downP || leftP || rightP) {
 				multiplier *= (multiplier > 1) ? 2 : 1;
@@ -617,8 +619,9 @@ class AnimationDebug extends MusicBeatState {
 		}
 		super.update(elapsed);
 
-		curAnimText.text = (displayChar.animation.curAnim != null) ? displayChar.animation.curAnim.name : 'NULL_ANIM';
-		curAnimText.color = (displayChar.animation.curAnim != null) ? FlxColor.WHITE : FlxColor.RED;
+		final hasAnim = displayChar.animation.curAnim != null && animsList.length > 0;
+		curAnimText.text = hasAnim ? displayChar.animation.curAnim.name : 'NULL_ANIM';
+		curAnimText.color = hasAnim ? FlxColor.WHITE : FlxColor.RED;
 	}
 
 	var _file:FileReference;
