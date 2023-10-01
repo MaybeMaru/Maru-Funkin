@@ -41,7 +41,7 @@ class AnimationDebug extends MusicBeatState {
 	var camChar:FlxCamera;
 	var camFollow:FlxObject;
 
-	var animsText:FlxTypedGroup<FlxText>;
+	var animsText:FlxTypedGroup<FunkinText>;
 	var curAnimText:FunkinText;
 	var charGroup:FlxSpriteGroup;
 
@@ -69,7 +69,7 @@ class AnimationDebug extends MusicBeatState {
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
 
-		animsText = new FlxTypedGroup<FlxText>();
+		animsText = new FlxTypedGroup<FunkinText>();
 		add(animsText);
 
 		curAnimText = new FunkinText(10, 45, 'NULL_ANIM', 26);
@@ -385,35 +385,34 @@ class AnimationDebug extends MusicBeatState {
 		}
 	}
 
+	function clearOffsetText() {
+		animsList = [];
+		for (i in animsText) i.kill();
+	}
+
 	function updateOffsetText(create:Bool = false):Void {
-		if (create) {
-			animsList = [];
-			for (text in animsText) {
-				text.visible = false;
-				text.kill();
-				animsText.remove(text);
-				text.destroy();
-			}
-		}
+		if (create) clearOffsetText();
 		var i:Int = 0;
 		for (anim => charOffsets in displayChar.animOffsets) {
 			var offsetText:String = '$anim: [${charOffsets.x}, ${charOffsets.y}]';
+			final isCurAnim = i == curAnimIndex;
 			if (create) {
-				var animText:FunkinText = new FunkinText(10, curAnimText.y+40+(22*i), offsetText, 20);
-				animText.alpha = (i == curAnimIndex) ? 1 : 0.6;
-				animText.color = (i == curAnimIndex) ? FlxColor.YELLOW : FlxColor.WHITE;
+				var animText:FunkinText = animsText.recycle(FunkinText);
+				animText.setPosition(10, curAnimText.y+40+(22*i));
+				animText.text = offsetText;
+				animText.alpha = isCurAnim ? 1 : 0.6;
+				animText.color = isCurAnim ? FlxColor.YELLOW : FlxColor.WHITE;
 				animsText.add(animText);
 				animsList.push(anim);
 			}
 			else {
 				if (animsText.members[i] != null) {
-					animsText.members[i].alpha = (i == curAnimIndex) ? 1 : 0.6;
-					animsText.members[i].color = (i == curAnimIndex) ? FlxColor.YELLOW : FlxColor.WHITE;
+					animsText.members[i].alpha = isCurAnim ? 1 : 0.6;
+					animsText.members[i].color = isCurAnim ? FlxColor.YELLOW : FlxColor.WHITE;
 					animsText.members[i].text = offsetText;
 				}
-				if (animsList[i] != null) {
+				if (animsList[i] != null)
 					animsList[i] = anim;
-				}
 			}
 			i++;
 		}
@@ -477,7 +476,7 @@ class AnimationDebug extends MusicBeatState {
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
 		if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
-				//	SCALE STEPPER
+			// Scale stepper
 			if (sender == stepper_scale) {
 				character.scale = stepper_scale.value;
 				displayChar.scale.set(stepper_scale.value,stepper_scale.value);
@@ -486,18 +485,18 @@ class AnimationDebug extends MusicBeatState {
 				ghostChar.updateHitbox();
 				updateGhostAnims();
 			}
-				//	WORLD OFFSET STEPPERS
+			// World offset steppers
 			else if ((sender == stepper_offsetX) || (sender == stepper_offsetY)) {
 				updateFlips();
 				updateWorldOffsets();
 			}
-				// CAMERA OFFSET STEPPERS
+			// Camera offset steppers
 			else if ((sender == stepper_camX) || (sender == stepper_camY)) {
 				updateCamOffsets();
 			}
 		}
 		if (id == FlxUIInputText.INPUT_EVENT && (sender is FlxUIInputText)) {
-				// ICON INPUT
+			// Icon text input
 			if ((sender == input_icon)) {
 				makeIcon();
 			}
@@ -567,8 +566,12 @@ class AnimationDebug extends MusicBeatState {
 
 	function changeCurAnim(change:Int = 0) {
 		if (animsList.length <= 0) return;
-		curAnimIndex += change;
-		curAnimIndex = FlxMath.wrap(curAnimIndex, 0, animsList.length-1);
+
+		final animLength = animsList.length-1;
+		curAnimIndex = change != 0 ?
+		FlxMath.wrap(curAnimIndex + change, 0, animLength) :
+		cast FlxMath.bound(curAnimIndex, 0, animLength);
+
 		displayChar.playAnim(animsList[curAnimIndex], true);
 		updateOffsetText();
 	}
