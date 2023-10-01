@@ -1,5 +1,11 @@
 package funkin.states;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
+import openfl.display.PNGEncoderOptions;
+import openfl.utils.ByteArray;
+import lime.utils.Bytes;
+import flixel.addons.util.PNGEncoder;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;

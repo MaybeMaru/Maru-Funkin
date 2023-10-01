@@ -279,6 +279,10 @@ class Character extends FlxSpriteExt {
 		}
 	}
 
+	public inline function danceCheck() { // Backwards compatibility lol
+		danceInBeat();
+	}
+
 	function isDoubleDancer() {
 		for(i in animOffsets.keys()) {
 			if (i.startsWith("danceRight"))

@@ -188,12 +188,13 @@ class AnimationDebug extends MusicBeatState {
 		});
 		saveButton.y -= saveButton.height*2.25;
 
-		tab_group_char.add(new FlxText(charButton.x, charButton.y - 15, 0, 'Select Character:'));
-		tab_group_char.add(new FlxText(input_imagePath.x, input_imagePath.y - 15, 0, 'Image Path:'));
-		tab_group_char.add(new FlxText(input_icon.x, input_icon.y - 15, 0, 'Icon:'));
-		tab_group_char.add(new FlxText(stepper_scale.x, stepper_scale.y - 15, 0, 'Scale:'));
-		tab_group_char.add(new FlxText(stepper_offsetX.x, stepper_offsetX.y - 15, 0, 'Character Offsets:'));
-		tab_group_char.add(new FlxText(stepper_camX.x, stepper_camX.y - 15, 0, 'Camera Offsets:'));
+		final _tab = tab_group_char;
+		addTabTxt(_tab, charButton, "Select Character:");
+		addTabTxt(_tab, input_imagePath, "Image Path:");
+		addTabTxt(_tab, input_icon, "Icon:");
+		addTabTxt(_tab, stepper_scale, "Scale:");
+		addTabTxt(_tab, stepper_offsetX, "Character Offsets:");
+		addTabTxt(_tab, stepper_camX, "Camera Offsets:");
 
 		tab_group_char.add(charButton);		tab_group_char.add(input_icon);
 		tab_group_char.add(reloadButton);	tab_group_char.add(input_imagePath);
@@ -228,7 +229,6 @@ class AnimationDebug extends MusicBeatState {
 
 	var updateButton:FlxUIButton;
 	var removeButton:FlxUIButton;
-	var autoButton:FlxUIButton;
 
 	var dropDown_anims:FlxUIDropDownMenu;
 
@@ -257,7 +257,7 @@ class AnimationDebug extends MusicBeatState {
 		removeButton.color = FlxColor.RED;
 		removeButton.label.color = FlxColor.WHITE;
 
-		autoButton = new FlxUIButton(updateButton.x, removeButton.y + 45, 'Auto Anims', function () {
+		var autoButton:FlxUIButton = new FlxUIButton(updateButton.x, removeButton.y + 45, 'Auto Anims', function () {
 			openSubState(new PromptSubstate('Are you sure you want to\nuse auto animations?\nPreviously created animations\nwill be deleted\n\n\nPress back to cancel', function () {
 				final prefixes = displayChar.getAnimationPrefixes();
 				for (i in displayChar.animDatas.keys()) removeAnimation(i);
@@ -275,16 +275,26 @@ class AnimationDebug extends MusicBeatState {
 			}));
 		});
 
+		var loopButton:FlxUIButton = new FlxUIButton(autoButton.x + 100, autoButton.y, 'Create Loop Anim', function () {
+			var uiAnimData = getUpdatedAnimData();
+			uiAnimData.indices = [3,4,5];
+			uiAnimData.offsets =  getOffsetFromChar(displayChar, uiAnimData.animName);
+			uiAnimData.animName += '-loop';
+			uiAnimData.loop = true;
+			addAnimation(uiAnimData);
+		});
+
 		dropDown_anims = new FlxUIDropDownMenu(input_animName.x + 210, input_animName.y, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), function(anim:String) {
 			dropDown_anims.selectedLabel = anim;
 			setAnimUIValues();
 		});
 
-		tab_group_anim.add(new FlxText(input_animName.x, input_animName.y - 15, 0, 'Animation Name:'));
-		tab_group_anim.add(new FlxText(input_animFile.x, input_animFile.y - 15, 0, 'Animation Name In File:'));
-		tab_group_anim.add(new FlxText(stepper_animFramerate.x, stepper_animFramerate.y - 15, 0, 'Framerate:'));
-		tab_group_anim.add(new FlxText(input_indices.x, input_indices.y - 15, 0, 'Animation Indices:'));
-		tab_group_anim.add(new FlxText(dropDown_anims.x, dropDown_anims.y - 15, 0, 'Select Animation:'));
+		final _tab = tab_group_anim;
+		addTabTxt(_tab, input_animName, 'Animation Name:');
+		addTabTxt(_tab, input_animFile, 'Animation Name In File:');
+		addTabTxt(_tab, stepper_animFramerate, 'Framerate:');
+		addTabTxt(_tab, input_indices, 'Animation Indices:');
+		addTabTxt(_tab, dropDown_anims, 'Select Animation:');
 
 		tab_group_anim.add(input_animName);
 		tab_group_anim.add(input_animFile);
@@ -294,16 +304,30 @@ class AnimationDebug extends MusicBeatState {
 
 		tab_group_anim.add(updateButton);
 		tab_group_anim.add(removeButton);
-		tab_group_anim.add(autoButton);
+
+		tab_group_anim.add(autoButton); // For lazy people (like me)
+		tab_group_anim.add(loopButton);
 		
 		tab_group_anim.add(dropDown_anims);
 
 		UI_box.addGroup(tab_group_anim);
 	}
 
+	inline static function pointToArray(point:FlxPoint) {
+		return [point.x, point.y];
+	}
+
+	inline static function getOffsetFromChar(char:Character, anim:String) {
+		return char.animOffsets.exists(anim) ? pointToArray(char.animOffsets.get(anim)) : [0.0, 0.0];
+	}
+
+	inline function addTabTxt(_tab:FlxUI, _obj:FlxSprite, txt:String) {
+		_tab.add(new FlxText(_obj.x, _obj.y - 15, 0, txt));
+	}
+
 	function addAnimation(animData:SpriteAnimation) {
-		displayChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
-		ghostChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices);
+		displayChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices, animData.offsets);
+		ghostChar.addAnim(animData.animName, animData.animFile, animData.framerate, animData.loop, animData.indices, animData.offsets);
 		updateAnimUI(animData.animName);
 	}
 

@@ -1,10 +1,10 @@
 {
 	"imagePath": "week6/spirit",
 	"isGF": false,
-	"camOffsets": [50,300],
+	"camOffsets": [-50,400],
 	"icon": "spirit",
 	"scale": 6,
-	"charOffsets": [-40,-20],
+	"charOffsets": [-40,-100],
 	"anims": [
 		{
 			"offsets": [0,0],
@@ -15,7 +15,7 @@
 			"animName": "idle"
 		},
 		{
-			"offsets": [396,378],
+			"offsets": [0,12],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -23,7 +23,7 @@
 			"animName": "singDOWN"
 		},
 		{
-			"offsets": [-12,6],
+			"offsets": [0,0],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -31,7 +31,7 @@
 			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [0,60],
+			"offsets": [-24,120],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
@@ -39,7 +39,7 @@
 			"animName": "singUP"
 		},
 		{
-			"offsets": [4,-11],
+			"offsets": [12,-12],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,

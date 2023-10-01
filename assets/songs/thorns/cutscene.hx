@@ -1,11 +1,9 @@
-function createPost()
-{
-   if (GameVars.isStoryMode && !GameVars.seenCutscene)
+function createPost() {
+    if (GameVars.isStoryMode && !GameVars.seenCutscene)
         PlayState.inCutscene = true;
 }
 
-function startCutscene()
-{
+function startCutscene() {
     var red:FlxSprite = new FlxSprite(-400, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
     PlayState.add(red);
 
@@ -21,8 +19,7 @@ function startCutscene()
 
     PlayState.camHUD.visible = false;
 
-    new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
-    {
+    new FlxTimer().start(0.3, function(swagTimer:FlxTimer) {
         senpaiEvil.alpha += 0.15;
         if (senpaiEvil.alpha < 1)   swagTimer.reset();
         else {
@@ -46,8 +43,7 @@ var bgFade:FlxSprite;
 var dialogueBox:PixelDialogueBox;
 var face:FunkinSprite;
 
-function createDialogue()
-{
+function createDialogue() {
     bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.fromRGB(25,0,5));
     bgFade.scrollFactor.set();
     bgFade.alpha = 0;
@@ -57,6 +53,11 @@ function createDialogue()
     face.setScale(6, false);
     face.cameras = [PlayState.camHUD];
     PlayState.add(face);
+
+    initShader('thornsBg', 'faceShader');
+    setShaderInt('faceShader', 'effectType', 1);
+    setShaderFloat('faceShader', 'uFrequency', 10);
+    setSpriteShader(face, 'faceShader');
 
     dialogueBox = new PixelDialogueBox('evil');
     dialogueBox.cameras = [PlayState.camHUD];
@@ -79,19 +80,22 @@ function createDialogue()
     PlayState.add(dialogueBox);
 }
 
-function updatePost()
-{
-    if (dialogueBox != null)
-    {
+var timeElapsed:Float = 0;
+function update(elapsed) {
+    timeElapsed += elapsed;
+    setShaderFloat(i, 'faceShader', timeElapsed);
+}
+
+function updatePost() {
+    if (dialogueBox != null) {
         face.alpha = dialogueBox.box.alpha;
+        face.offset.y = FlxMath.roundDecimal(Math.sin(timeElapsed), 1) * 10;
         bgFade.alpha = dialogueBox.bgFade.alpha;
     }
 }
 
-function startCountdown()
-{
-    if (GameVars.isStoryMode)
-    {
+function startCountdown() {
+    if (GameVars.isStoryMode) {
         face.destroy();
         bgFade.destroy();
     }
