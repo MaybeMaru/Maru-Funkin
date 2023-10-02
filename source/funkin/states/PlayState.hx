@@ -71,9 +71,17 @@ class PlayState extends MusicBeatState {
 	public var camZooming:Bool = false;
 	public var startingSong:Bool = false;
 
-	private var gfSpeed:Int = 1;
-	public var health:Float = 1;
+	public var gfSpeed:Int = 1;
+	public var health(default, set):Float = 1;
 	public var combo:Int = 0;
+
+	function set_health(value:Float) {
+		value = FlxMath.bound(value, 0, 2);
+		if (value <= 0 && validScore) {
+			openGameOverSubstate();
+		}
+		return health = value;
+	}
 
 	public var noteCount:Int = 0;
 	public var noteTotal:Float = 0;
@@ -604,7 +612,6 @@ class PlayState extends MusicBeatState {
 
 		// RESET -> Quick Game Over Screen
 		if (getKey('RESET-P') && !inCutscene) health = 0;
-		checkDeath();
 
 		if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 			endSong();
@@ -612,9 +619,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
 
-	public function checkDeath() {
-		health = FlxMath.bound(health, 0, 2);
-		if (health > 0 || !validScore) return;
+	public function openGameOverSubstate() {
 		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
 		
 		persistentUpdate = false;
@@ -772,7 +777,8 @@ class PlayState extends MusicBeatState {
 
 	inline function beatCharacters() {
 		for (i in [iconP1, iconP2]) i.bumpIcon();
-		for (i in [dad, gf, boyfriend]) i.danceInBeat();
+		for (i in [dad, boyfriend]) i.danceInBeat();
+		if (curBeat % gfSpeed == 0) gf.danceInBeat();
 	}
 
 	override public function beatHit():Void {

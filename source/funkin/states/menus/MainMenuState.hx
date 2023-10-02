@@ -120,12 +120,7 @@ class MainMenuState extends MusicBeatState {
 
 			if (getKey('ACCEPT-P')) {
 				if (optionShit[curSelected] == 'donate') {
-					var itchioUrl:String = 'https://ninja-muffin24.itch.io/funkin';
-					#if linux
-					Sys.command('/usr/bin/xdg-open', [itchioUrl, "&"]);
-					#else
-					FlxG.openURL(itchioUrl);
-					#end
+					FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
 				}
 				else {
 					selectedSomethin = true;
@@ -137,7 +132,7 @@ class MainMenuState extends MusicBeatState {
 							FlxTween.tween(spr, {alpha: 0}, 0.4, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween) {
-									spr.kill();
+									spr.destroy();
 								}
 							});
 						}

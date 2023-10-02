@@ -81,7 +81,13 @@ class OptionsState extends MusicBeatState {
 						FlxFlicker.flicker(item, 0.6, 0.06, false, false, function(flick:FlxFlicker) {
 							openOptions();
 						});
-						break;
+					} else {
+						FlxTween.tween(item, {alpha: 0}, 0.4, {
+							ease: FlxEase.quadOut,
+							onComplete: function(twn:FlxTween) {
+								item.destroy();
+							}
+						});
 					}
 				}
 			}
