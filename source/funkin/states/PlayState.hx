@@ -368,40 +368,33 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 
+	public var openDialogueFunc:Dynamic = null;
+
 	function createDialogue():Void {
 		showUI(false);
-		ModdingUtil.addCall('createDialogue');
-		
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
-		
-		if(dialogueBox != null && dialogueBox.skipIntro) black.alpha = 0;
-		switch (SkinUtil.curSkin) {
-			case 'pixel':
-				new FlxTimer().start(0.3, function(tmr:FlxTimer) {
-					black.alpha -= 0.15;
-					if (black.alpha > 0)	tmr.reset(0.3);
-					else {
-						quickDialogueBox();
-						remove(black);
-					}
-				});
-			default:
-				if (black.alpha > 0) {
-					FlxTween.tween(black, {alpha: 0}, 1.5, { ease: FlxEase.circOut,
-					onComplete: function(twn:FlxTween) {
-						quickDialogueBox();
-						remove(black);
-				}});
-				} else {
+		ModdingUtil.addCall('createDialogue'); // Setup dialogue box
+		ModdingUtil.addCall('postCreateDialogue'); // Setup transitions
+
+		openDialogueFunc = openDialogueFunc ?? function () { // Default transition
+			var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			black.scrollFactor.set();
+			add(black);
+
+			if (black.alpha > 0) {
+				FlxTween.tween(black, {alpha: 0}, 1.5, { ease: FlxEase.circOut,
+				onComplete: function(twn:FlxTween) {
 					quickDialogueBox();
 					remove(black);
-				}
+			}});
+			} else {
+				quickDialogueBox();
+				remove(black);
+			}
 		}
+		openDialogueFunc();
 	}
 
-	function quickDialogueBox():Void {
+	public function quickDialogueBox():Void {
 		if (dialogueBox == null) {
 			switch (SkinUtil.curSkin) {
 				case 'pixel':	dialogueBox = new PixelDialogueBox();
