@@ -412,6 +412,32 @@ function createDialogue()
     //  You can add custom ones changing PlayState.dialogueBox when this callback is called
 }
 
+function postCreateDialogue()
+{
+    //  Called after dialogue boxes are created
+    //  Useful for adding custom dialogue transitions changing PlayState.openDialogueFunc
+}
+
+function startDialogue()
+{
+    // Called when the dialogue box finishes opening and dialogue starts
+}
+
+function nextDialogueLine()
+{
+    // Called when the user goes to the next dialogue section
+}
+
+function skipDialogueLine()
+{
+    // Called when a dialogue section is skipped in the middle of talking
+}
+
+function endDialogue()
+{
+    // Called when the last dialogue section is pressed
+}
+
 function startCountdown()
 {
    //   Called when the countdown is about to start
@@ -576,24 +602,4 @@ function beatHitGameOver(curBeat:Int)
 {
     //  Called every time there is a beat hit in the game over music
     //  curBeat --> The current beat number
-}
-
-function startDialogue()
-{
-    // Called when the dialogue box finishes opening and dialogue starts
-}
-
-function nextDialogueLine()
-{
-    // Called when the user goes to the next dialogue section
-}
-
-function skipDialogueLine()
-{
-    // Called when a dialogue section is skipped in the middle of talking
-}
-
-function endDialogue()
-{
-    // Called when the last dialogue section is pressed
 }
