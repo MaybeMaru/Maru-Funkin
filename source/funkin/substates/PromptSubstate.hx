@@ -39,6 +39,7 @@ class PromptSubstate extends MusicBeatSubstate {
 
         if (getKey('BACK-P')) {
             close();
+            CoolUtil.playSound("cancelMenu");
             return;
         }
 

@@ -200,7 +200,6 @@ class Note extends FlxSpriteExt implements INoteData {
         } else {
             updateSprites();
             frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
-            origin.set(width / 2, 0);
         
             // draw piece
             var loops = Math.floor(_height / susPiece.height) + 1;
@@ -211,18 +210,22 @@ class Note extends FlxSpriteExt implements INoteData {
             var endPos = _height - susEnd.height;
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
             stampBitmap(susEnd, 0, endPos);
+            
+            var gpuGraphic = Paths.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
+            frames = gpuGraphic.imageFrame;
+            origin.set(width / 2, 0);
         }
     }
 
-    public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
+    inline public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
         return pos / (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
+    inline public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
         return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
     }
 
-    public function getSusLeft():Float {
+    inline public function getSusLeft():Float {
         return Math.min(Math.max((strumTime + initSusLength) - Conductor.songPosition, 0), initSusLength);
     }
 

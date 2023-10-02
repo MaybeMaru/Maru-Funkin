@@ -58,11 +58,13 @@ class Stage {
         var layers = cast _layers;  
 
         for (layer in Reflect.fields(layers)) {
-            var objects:Array<StageObject> = Reflect.field(layers, layer);
-            for (object in objects) {
+            var objects:Array<Dynamic> = cast Reflect.field(layers, layer);
+            for (i in objects) {
+                var object:Dynamic = i;
+                var objectTag = Reflect.field(object, "tag");
                 var sprite = quickSprite(object);
-                if (script != null) script.set(object.tag, sprite);
-                ScriptUtil.addSprite(sprite, object.tag, layer == 'fg');
+                if (script != null) script.set(objectTag, sprite);
+                ScriptUtil.addSprite(sprite, objectTag, layer == 'fg');
             }
         }
     }

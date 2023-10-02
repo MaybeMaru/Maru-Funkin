@@ -33,6 +33,7 @@ import funkin.util.JsonUtil;
 import funkin.util.Stage;
 import funkin.util.SaveData;
 import funkin.objects.CustomTransition;
+import funkin.util.FunkThread;
 
 //Note
 import funkin.objects.note.Note;
@@ -46,7 +47,6 @@ import funkin.objects.RatingGroup;
 import funkin.objects.dialogue.DialogueBoxBase;
 import funkin.objects.dialogue.PixelDialogueBox;
 import funkin.objects.dialogue.NormalDialogueBox;
-import funkin.objects.SwagCamera;
 import funkin.objects.Character;
 import funkin.objects.HealthIcon;
 

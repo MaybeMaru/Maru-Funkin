@@ -32,6 +32,10 @@ class FreeplayState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		#if debug
+		addSong('test','bf','test',-1);
+		#end
+
 		coolColors = new Map<String, FlxColor>();
 		for (i in 0...WeekSetup.getWeekList().length) {
 			var week:WeekJson = WeekSetup.weekList[i];
@@ -99,10 +103,7 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String):Void {
-		if (songCharacters == null) {
-			songCharacters = ['bf'];
-		}
-
+		songCharacters = songCharacters ?? ['bf'];
 		for (i in 0...songs.length) {
 			var songIcon:String = songCharacters[cast FlxMath.bound(i, 0, songCharacters.length-1)];
 			addSong(songs[i], songIcon, week, i);
@@ -119,6 +120,7 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	var lerpColor:FlxColorFix;
+	var _lastMusic:String = "";
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
@@ -155,7 +157,18 @@ class FreeplayState extends MusicBeatState {
 
 		#if PRELOAD_ALL
 		if(FlxG.keys.justPressed.ONE) {
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+			final targetMusic = songs[curSelected].songName;
+			if (targetMusic != _lastMusic) {
+				if (FlxG.sound.music != null)
+					FlxG.sound.music.stop();
+				FunkThread.runThread(function () { // Make a new thread to load the music
+					FlxG.sound.playMusic(Paths.inst(targetMusic, false, true), 0);
+				});
+				_lastMusic = targetMusic;
+
+			} else if (FlxG.sound.music != null) {
+				FlxG.sound.music.time = FlxG.sound.music.volume = 0;
+			}
 		}
 		#end
 
@@ -208,11 +221,11 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	function changeSelection(change:Int = 0):Void {
-		var lastWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;
+		var lastWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
 		curSelected = FlxMath.wrap(curSelected += change, 0, songs.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-		curWeekDiffs = WeekSetup.weekDataMap.get(songs[curSelected].weekName).weekDiffs;
+		curWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
 		if (lastWeekDiffs != curWeekDiffs) {	//	FIND MATCHES
 			if (curWeekDiffs.contains(lastWeekDiffs[curDifficulty])) {
 				curDifficulty = curWeekDiffs.indexOf(lastWeekDiffs[curDifficulty]);
@@ -226,9 +239,7 @@ class FreeplayState extends MusicBeatState {
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;
 		}
 
-		for (i in 0...iconArray.length) {
-			iconArray[i].alpha = 0.6;
-		}
+		for (i in iconArray) i.alpha = 0.6;
 		iconArray[curSelected].alpha = 1;
 	}
 }

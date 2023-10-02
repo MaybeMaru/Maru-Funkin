@@ -63,20 +63,18 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
 
     public function set_sectionData(value:SwagSection):SwagSection {
         clearSection();
-        drawSectionData(value);
+        drawSectionData(value, false, true);
         return sectionData = value;
     }
 
-    public function drawSectionData(value:SwagSection, cutHalf:Bool = false) {
+    public function drawSectionData(value:SwagSection, cutHalf:Bool = false, pushList:Bool = false) {
         if (value == null) return;
-        if (value.sectionNotes.length <= 0) return;
-        if (!cutHalf) {
-            for (i in value.sectionNotes)
-                drawNote(i);
-        } else {
-            value.sectionNotes.sort(function(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]));
-            for (i in Std.int(value.sectionNotes.length*0.5)...value.sectionNotes.length)
-                drawNote(value.sectionNotes[i]);
+        final secMidTime = ChartingState.getSecTime(sectionIndex-1) + Conductor.sectionCrochet * 0.625; // lol
+        for (i in value.sectionNotes) {
+            if (!cutHalf || (i[0] + i[2]) >= secMidTime) {
+                final note = drawNote(i);
+                if (pushList) curSecNotes.push(note); // Only clear sec notes on clear sec button
+            }
         }
     }
 
@@ -96,9 +94,13 @@ class ChartGrid extends FlxTypedGroup<Dynamic> {
         if (note.txt != null) note.txt.kill();
     }
 
-    public function clearSection() {
-        for (i in notesGroup)
+    var curSecNotes:Array<ChartNote> = [];
+
+    public function clearSection(full:Bool = true) {
+        var notesArray:Array<ChartNote> = full ? notesGroup.members : curSecNotes;
+        for (i in notesArray)
             clearNote(i);
+        curSecNotes = [];
     }
 
     public function getNoteData(note:ChartNote):Array<Dynamic> {

@@ -34,7 +34,9 @@ class Preferences {
         addPref('vanilla-ui',     'vanilla ui',      false);
         addPref('flashing-light', 'flashing lights', true);
         addPref('camera-zoom',    'camera zooms',    true);
+        
         addPref('antialiasing',   'antialiasing',    true);
+        addPref('clear-gpu',      'clear gpu cache', false);
 
         SaveData.flushData();
         effectPrefs();

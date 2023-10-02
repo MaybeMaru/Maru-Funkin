@@ -29,7 +29,7 @@ class ChartingState extends MusicBeatState {
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
 
-    public var camTop:SwagCamera;
+    public var camTop:FlxCamera;
     
     override function create() {
         instance = this;
@@ -53,7 +53,7 @@ class ChartingState extends MusicBeatState {
         PlayState.inChartEditor = true;
         FlxG.mouse.visible = true;
 
-        camTop = new SwagCamera(); camTop.bgColor.alpha = 0;
+        camTop = new FlxCamera(); camTop.bgColor.alpha = 0;
         FlxG.cameras.add(camTop, false);
         
         SONG = Song.checkSong(PlayState.SONG);
@@ -289,11 +289,11 @@ class ChartingState extends MusicBeatState {
 
         if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.A || FlxG.keys.pressed.W || FlxG.keys.pressed.S) {
             stop();
-            var mult = (FlxG.keys.pressed.SHIFT ? 4 : 1);
+            final mult = (FlxG.keys.pressed.SHIFT ? 4 : 1);
             if (FlxG.keys.justPressed.D) changeSection(1 * mult);
             if (FlxG.keys.justPressed.A) changeSection(-1 * mult);
-            if (FlxG.keys.pressed.W) moveTime(-FlxG.elapsed* mult);
-            if (FlxG.keys.pressed.S) moveTime(FlxG.elapsed* mult);
+            if (FlxG.keys.pressed.W) moveTime(-FlxG.elapsed * mult / FlxG.timeScale);
+            if (FlxG.keys.pressed.S) moveTime(FlxG.elapsed * mult / FlxG.timeScale);
         }
 
         if (FlxG.keys.justPressed.E || FlxG.keys.justPressed.Q) {
@@ -466,11 +466,11 @@ class ChartingState extends MusicBeatState {
         }));
     }
 
-    public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true) {
+    public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true, full:Bool = true) {
         if (clearNotes) {
             SONG.notes[sectionIndex].sectionNotes = [];
             deselectNote();
-            mainGrid.clearSection();
+            mainGrid.clearSection(full);
         }
         if (clearEvents) {
             SONG.notes[sectionIndex].sectionEvents = [];
@@ -557,13 +557,38 @@ class ChartingState extends MusicBeatState {
 		}, _);
 	}
 
+    function saveJson(input:Any, fileName:String) {
+        var data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
+        if (data.length > 0) {
+			var chartFile:FileReference = new FileReference();
+			chartFile.save(data.trim(), '$fileName.json');
+		}
+    }
+
     public function saveChart() {
         SONG = Song.checkSong(SONG);
-		var data:String = getSongString("\t");
-		if (data.length > 0) {
-			var chartFile:FileReference = new FileReference();
-			chartFile.save(data.trim(), '${PlayState.curDifficulty}.json');
-		}
+        saveJson(getSongString("\t"), PlayState.curDifficulty);
+    }
+
+    public function saveMeta() {
+        var metaEvents:Array<SwagSection> = [];
+        for (i in SONG.notes) {
+            if (i.sectionEvents.length > 0) {
+                metaEvents.push({
+                    sectionEvents: i.sectionEvents.copy()
+                });
+            } else {
+                metaEvents.push({});
+            }
+        }
+        
+        var meta:SongMeta = {
+            diffs: [PlayState.curDifficulty],
+            offsets: SONG.offsets.copy(),
+            events: metaEvents
+        }
+
+        saveJson(meta, "songMeta");
     }
 
     override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

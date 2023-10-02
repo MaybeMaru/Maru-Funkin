@@ -142,7 +142,13 @@ class NotesGroup extends FlxGroup
 				
 				Conductor.vocals.volume = 0;
 				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
-				var healthMult:Float = 	note.isSustainNote ?  note.percentCut * (note.initSusLength / Conductor.stepCrochet) * (note.startedPress ? 2 : 4) : 1;
+
+				var healthMult = 1.0;
+				if (note.isSustainNote) {
+					var notePercent = note.startedPress ? note.percentCut : 1;
+					healthMult = notePercent * (note.initSusLength / Conductor.stepCrochet) * 4;
+				}
+
 				game.health -= healthLoss * healthMult;
 				game.songScore -= Std.int(10 * healthMult);
 
@@ -300,7 +306,7 @@ class NotesGroup extends FlxGroup
     public var opponentSustainPress:Dynamic = null;
 
     public function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
-        if (callback != null) Reflect.callMethod(this, callback, args != null ? args : []); // Prevent null
+        if (callback != null) Reflect.callMethod(this, callback, args ?? []); // Prevent null
     }
 
 	public function removeNote(note:Note) {
@@ -383,7 +389,7 @@ class NotesGroup extends FlxGroup
 
 	public function checkMissNote(note:Note) {
 		if (note.active || Conductor.songPosition < note.strumTime) return;
-		if (!isCpuNote(note) && !note.isSustainNote)
+		if (!isCpuNote(note) && !note.isSustainNote && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);
 	}
@@ -542,8 +548,7 @@ class NotesGroup extends FlxGroup
 					break;
 				}
 			}
-			if (!isHolding)
-				char.dance();
+			if (!isHolding) char.restartDance();
 		}
 	}
 

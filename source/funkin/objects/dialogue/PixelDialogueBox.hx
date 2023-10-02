@@ -23,17 +23,18 @@ class PixelDialogueBox extends DialogueBoxBase {
 	public var handSelect:FunkinSprite;
 	public var bgFade:FlxSprite;
 
+	public var clickSound:FlxSound = null;
+
 	public function new(skin:String = 'pixel'):Void {
 		super();
 
 		bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), 0xFFB3DFd8);
 		bgFade.alpha = 0;
+		bgFade.blend = OVERLAY;
 		add(bgFade);
 
-		new FlxTimer().start(0.83, function(tmr:FlxTimer) {
-			bgFade.alpha += (1 / 5) * 0.7;
-			if (bgFade.alpha > 0.7)
-				bgFade.alpha = 0.7;
+		new FlxTimer().start(0.4, function(tmr:FlxTimer) {
+			bgFade.alpha = FlxMath.bound(bgFade.alpha + (1 / 5) * 0.7, 0, 0.7);
 		}, 5);
 
 		portraitGroup = new FlxSpriteGroup();
@@ -77,6 +78,9 @@ class PixelDialogueBox extends DialogueBoxBase {
         endCallback = clickDialogue;
         nextCallback = clickDialogue;
 		startCallback = function nothing() {};
+
+		clickSound = CoolUtil.getSound("clickText");
+		clickSound.volume = 0.8;
 	}
 
     override public function update(elapsed:Float):Void {
@@ -123,31 +127,21 @@ class PixelDialogueBox extends DialogueBoxBase {
     }
 
     function clickDialogue():Void {
-        FlxG.sound.play(Paths.sound('clickText'), 0.8);
-        //handSelect.animation.play('click', true);
+		clickSound.play(true);
 		handSelect.playAnim('click', true);
     }
 
     override public function startDialogue():Void  {
         super.startDialogue();
-
         swagDialogue.resetText(targetDialogue);
 		swagDialogue.start(0.04, true);
 		handSelect.alpha = 1;
 
-        switch (curCharData) {
-			case 0:
-				portraitRight.visible = false;
-				if (!portraitLeft.visible) {
-					portraitLeft.visible = true;
-					portraitLeft.animation.play('enter');
-				}
-			case 1:
-				portraitLeft.visible = false;
-				if (!portraitRight.visible) {
-					portraitRight.visible = true;
-					portraitRight.animation.play('enter');
-				}
+		final targetPortrait = curCharData == 0 ? portraitLeft : portraitRight;
+		(curCharData == 0 ? portraitRight : portraitLeft).visible = false; // Other portrait
+		if (!targetPortrait.visible) {
+			targetPortrait.visible = true;
+			targetPortrait.animation.play('enter');
 		}
     }
 }

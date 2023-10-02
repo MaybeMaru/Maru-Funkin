@@ -12,11 +12,10 @@ function startCutscene(onEnd)
         PlayState.add(blackScreen);
         blackScreen.scrollFactor.set();
         PlayState.camHUD.visible = false;
-        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+        playSound("Lights_Shut_off");
 
-        new FlxTimer().start(2, function(tmr:FlxTimer)
-        {
-            PlayState.switchSong();
+        new FlxTimer().start(2, function(tmr:FlxTimer) {
+            PlayState.exitSong();
         });
     }
 }

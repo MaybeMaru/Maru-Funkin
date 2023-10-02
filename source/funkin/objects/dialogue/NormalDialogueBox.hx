@@ -136,11 +136,10 @@ class NormalPortrait extends FunkinSprite {
 
         x = -faceJsonData.offset[0];
         y = -faceJsonData.offset[1];
-        for (anim in faceJsonData.anims) {
+        for (anim in faceJsonData.anims)
             addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-        }
 
-        scale.set(faceJsonData.smallScale,faceJsonData.smallScale);
+        setScale(faceJsonData.smallScale, false);
         color = FlxColor.GRAY;
     }
 
@@ -160,8 +159,8 @@ class NormalPortrait extends FunkinSprite {
 
         playAnim(anim);
         color = FlxColor.interpolate(color, targetColor, CoolUtil.getLerp(0.3));
-        var scaleLerp = CoolUtil.coolLerp(scale.x, targetScale, 0.3);
-        scale.set(scaleLerp, scaleLerp);
+        final scaleLerp = CoolUtil.coolLerp(scale.x, targetScale, 0.3);
+        setScale(scaleLerp, false);
         y = CoolUtil.coolLerp(y, targetY, 0.3);
         updateHitbox();
     }

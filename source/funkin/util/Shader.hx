@@ -48,9 +48,7 @@ class Shader
 	inline public static function setCameraShader(camera:FlxCamera, shader:String)
 	{
 		if (existsShader(shader))
-		{
-			camera.setFilters([new ShaderFilter(getShader(shader))]);
-		}
+			camera.filters = [new ShaderFilter(getShader(shader))];
 	}
 
 	inline public static function copyShader(shader:String, tag:String)

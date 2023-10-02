@@ -1,5 +1,11 @@
 package funkin.states;
 
+import flixel.math.FlxMatrix;
+import openfl.display.BitmapData;
+import openfl.display.PNGEncoderOptions;
+import openfl.utils.ByteArray;
+import lime.utils.Bytes;
+import flixel.addons.util.PNGEncoder;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
@@ -79,9 +85,9 @@ class PlayState extends MusicBeatState {
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
 
-	public var camGame:SwagCamera;
-	public var camHUD:SwagCamera;
-	public var camOther:SwagCamera;
+	public var camGame:FlxCamera;
+	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
 
 	public var songLength:Float = 0;
 	public var songScore:Int = 0;
@@ -129,9 +135,9 @@ class PlayState extends MusicBeatState {
 		CoolUtil.stopMusic();
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
-		camGame = new SwagCamera();
-		camHUD = new SwagCamera();	 camHUD.bgColor.alpha = 0;
-		camOther = new SwagCamera(); camOther.bgColor.alpha = 0;
+		camGame = new FlxCamera();
+		camHUD = new FlxCamera();	 camHUD.bgColor.alpha = 0;
+		camOther = new FlxCamera(); camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.add(camGame);
 		FlxG.cameras.add(camHUD, false);
@@ -204,7 +210,7 @@ class PlayState extends MusicBeatState {
 		//Character Scripts
 		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
 		if (characterScripts.length > 0) {
-			var charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
+			final charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
 			for (char in [boyfriend, dad, gf]) {
 				for (i in 0...characterScripts.length) {
 					var charParts = characterScripts[i].split('/');
@@ -444,8 +450,7 @@ class PlayState extends MusicBeatState {
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			ModdingUtil.addCall('startTimer', [swagCounter]);
-			for (i in [dad,gf,boyfriend]) i.dance();
-			for (i in [iconP1, iconP2]) i.bumpIcon();
+			beatCharacters();
 
 			if (swagCounter > 0) {
 				var countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
@@ -625,7 +630,7 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
 	}
 
-	public function snapCamera() {
+	inline public function snapCamera() {
 		camGame.focusOn(camFollow.getPosition());
 	}
 	
@@ -662,24 +667,28 @@ class PlayState extends MusicBeatState {
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else {
-			if (isStoryMode) {
-				campaignScore += songScore;
-				storyPlaylist.remove(storyPlaylist[0]);
-				inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : (storyPlaylist.length <= 0 ? endWeek() : switchSong());
-			}
-			else {
-				trace('WENT BACK TO FREEPLAY??');
-				clearCache = true;
-				SkinUtil.setCurSkin('default');
-				switchState(new FreeplayState());
-			}
+			inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 		}
 	}
 
-	function endWeek() {
+	public function exitSong() {
+		if (isStoryMode) {
+			campaignScore += songScore;
+			storyPlaylist.remove(storyPlaylist[0]);
+			storyPlaylist.length <= 0 ? endWeek() : switchSong();
+		}
+		else {
+			trace('WENT BACK TO FREEPLAY??');
+			clearCache = true;
+			SkinUtil.setCurSkin('default');
+			switchState(new FreeplayState());
+		}
+	}
+
+	public function endWeek() {
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
-			var weekData = WeekSetup.weekDataMap.get(storyWeek);
+			final weekData = WeekSetup.weekDataMap.get(storyWeek);
 			if (WeekSetup.weekDataMap.exists(weekData.unlockWeek))
 				Highscore.setWeekUnlock(weekData.unlockWeek, true);
 		}
@@ -693,48 +702,56 @@ class PlayState extends MusicBeatState {
 	}
 
 	function switchSong():Void {
-		trace('LOADING NEXT SONG [${PlayState.storyPlaylist[0]}-$curDifficulty]');
+		final nextSong:String = PlayState.storyPlaylist[0];
+		trace('LOADING NEXT SONG [$nextSong-$curDifficulty]');
 
 		prevCamFollow = camFollow;
 		seenCutscene = false;
 
-		PlayState.SONG = Song.loadFromFile(curDifficulty, PlayState.storyPlaylist[0]);
+		PlayState.SONG = Song.loadFromFile(curDifficulty, nextSong);
 		Conductor.stop();
 
 		clearCache = true;
 		clearCacheData = { // Clear last song audio and note cache
 			bitmap: false
 		}
-		ModdingUtil.addCall('switchSong', [PlayState.storyPlaylist[0], curDifficulty]); // Could be used to change cache clear
+		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
+
+	static final ratingMap:Map<String, Dynamic> = [
+		"sick" => {
+			score: 350,
+			note: 1,
+			ghostLoss: 0
+		},
+		"good" => {
+			score: 200,
+			note: 0.8,
+			ghostLoss: 0
+		},
+		"bad" => {
+			score: 100,
+			note: 0.5,
+			ghostLoss: 0.06
+		},
+		"shit" => {
+			score: 50,
+			note: 0.25,
+			ghostLoss: 0.1
+		}
+	];
 
 	public function popUpScore(strumtime:Float, daNote:Note) {
 		combo++;
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
-		var score:Int = 0;
-		var noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
-
-		switch (noteRating) {
-			case 'sick':
-				score = 350;
-				noteTotal++;
-			case 'good':
-				score = 200;
-				noteTotal+=0.8;
-			case 'bad':
-				score = 100;
-				noteTotal+=0.5;
-				health -= ghostTapEnabled ? 0.06 : 0;
-			case 'shit':
-				score = 50;
-				noteTotal+=0.25;
-				health -= ghostTapEnabled ? 0.1 : 0;
-		}
-
-		songScore += score;
+		final noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
+		final ratingData = ratingMap[noteRating];
+		songScore += ratingData.score;
+		noteTotal += ratingData.note;
+		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
 
 		if (!getPref('stack-rating')) {
 			for (rating in ratingGroup)
@@ -753,6 +770,11 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('stepHit', [curStep, curStepDecimal]);
 	}
 
+	inline function beatCharacters() {
+		for (i in [iconP1, iconP2]) i.bumpIcon();
+		for (i in [dad, gf, boyfriend]) i.danceInBeat();
+	}
+
 	override public function beatHit():Void {
 		super.beatHit();
 		if (curSectionData != null) {
@@ -762,12 +784,7 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		iconP1.bumpIcon();
-		iconP2.bumpIcon();
-
-		for (i in [boyfriend, dad, gf])
-			i.danceCheck();
-
+		beatCharacters();
 		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
 	}
 

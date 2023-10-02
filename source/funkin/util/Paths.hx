@@ -149,33 +149,33 @@ class Paths
 		return forcePath ? voicesPath : getSound(voicesPath);
 	}
 
-	inline static public function inst(song:String, forcePath:Bool = false):FlxSoundAsset
+	inline static public function inst(song:String, forcePath:Bool = false, global:Bool = false):FlxSoundAsset
 	{
-		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs');
+		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs', global);
 		return forcePath ? instPath : getSound(instPath);
 	}
 
-	inline static public function chart(song:String, diff:String, ext:String = 'json'):String
-	{
+	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
 		ext = ext.startsWith('/') ? ext : '.$ext';
 		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
 	}
 
-	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset
-	{
+	inline static public function songMeta(song:String) {
+		return getPath('${Song.formatSongFolder(song)}/charts/songMeta.json', TEXT, 'songs');
+	}
+
+	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset {
 		var imagePath:String = getPath('images/$key.png', IMAGE, library, allMods);
 		return forcePath ? imagePath : getImage(imagePath, gpu);
 	}
 
-	inline static public function font(key:String, ?library:String):String
-	{
+	inline static public function font(key:String, ?library:String):String {
 		return getPath('fonts/$key.ttf', FONT, library);
 	}
 
-	inline static public function video(key:String, ?library:String):String
-		{
-			return getPath('videos/$key.mp4', BINARY, library);
-		}
+	inline static public function video(key:String, ?library:String):String {
+		return getPath('videos/$key.mp4', BINARY, library);
+	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
 		#if desktop return FileSystem.exists(removeAssetLib(file));
@@ -231,14 +231,18 @@ class Paths
 		var pushFile = function(folderPath:String) {
 			if (FileSystem.exists(folderPath)) {
 				var fileSort = CoolUtil.getFileContent('$folderPath/listSort.txt').split(",");
+				for (i in 0...fileSort.length) {
+					var sortPrefix = fullPath ? '$folderPath/' : '';
+					var sortSuffix = extension == null || !fullPath ? "" : '.$extension';
+					fileSort[i] = '$sortPrefix${fileSort[i]}$sortSuffix';
+				}
+
 				var curFolderList = [];
-				
-				for (filePath in FileSystem.readDirectory(folderPath)) {
-					if (filePath.endsWith(extension) || extension == null) {
-						var leFile:String = '$folderPath/$filePath';
-						leFile = fullPath ? leFile : leFile.split('/')[leFile.split('/').length-1].split('.')[0];
-						curFolderList.push(leFile);
-					}
+				var dirRead = FileSystem.readDirectory(folderPath);
+				dirRead.sort(CoolUtil.sortAlphabetically);
+				for (i in dirRead) {
+					if (i.endsWith(extension) || extension == null)
+						curFolderList.push(fullPath ? '$folderPath/$i' : i.split('.')[0]);
 				}
 
 				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));
@@ -252,14 +256,14 @@ class Paths
 					pushFile(getModPath('$modFolder/$folder'));
 			}
 		}
-		fileList.sort(CoolUtil.sortAlphabetically);
+		
 		return fileList;
 		#end
 	}
 
 	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		if (gpu) {
-			if (Preloader.existsBitmap(path)) return Preloader.getBitmap(path);
+			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
 			else if (exists(path, IMAGE)) {
 				var bitmap:BitmapData = getBitmapData(path);
 				return Preloader.addFromBitmap(bitmap, path);
@@ -278,27 +282,37 @@ class Paths
 		for (key in cachedGraphics.keys()) {
 			removeGraphicByKey(key);
 		}
-		/*for (key in Preloader.bitmapCache.keys()) {
-			if (key.contains("mods")) Preloader.removeByKey(key);
-		}*/
+		if (Preferences.getPref('clear-gpu')) {
+			for (key in Preloader.cachedTextures.keys()) {
+				if (key.startsWith('mods/'))
+					Preloader.removeByKey(key, true);
+			}
+		}
 		FlxG.bitmap.clearCache();
 	}
 
-	inline public static function removeGraphicByKey(key:String) {
+	public static function removeGraphicByKey(key:String) {
 		if (!existsGraphic(key)) return;
 		var obj = cachedGraphics.get(key);
 		cachedGraphics.remove(key);
 		destroyGraphic(obj);
 	}
 
-	inline public static function destroyGraphic(?graphic:FlxGraphic) {
+	public static function destroyGraphic(?graphic:FlxGraphic) {
 		if (graphic == null) return;
 		graphic.persist = false;
 		graphic.destroyOnNoUse = true;
+		disposeBitmap(graphic.bitmap);
+		graphic.bitmap = null;
 		graphic.destroy();
 	}
 
-	static public function existsGraphic(key:String) {
+	inline public static function disposeBitmap(bitmap:BitmapData) {
+		bitmap.dispose();
+		bitmap.disposeImage();
+	}
+
+	inline static public function existsGraphic(key:String) {
 		return cachedGraphics.exists(key);
 	}
 
@@ -332,21 +346,35 @@ class Paths
 		return addGraphicFromBitmap(getRawBitmap(key), key, cache);
 	}
 
-	static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
+	inline static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
 		return getGraphic(key, cache).bitmap;
 	}
 
+	static public function uploadGraphicGPU(key:String) {
+		if (!existsGraphic(key)) return null;
+		var graphic = getGraphic(key);
+		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
+		removeGraphicByKey(key);
+		cachedGraphics.set(key, gpuGraphic);
+		return gpuGraphic;
+	}
+
 	public static var cachedSounds:Map<String, Sound> = [];
-	public static var excludeSounds:Array<String> = [];
-	inline public static function clearSoundCache(forced:Bool = false) {
+
+	public static function clearSoundCache(forced:Bool = false) {
 		for (key in cachedSounds.keys()) {
 			if (key.contains(Conductor._loadedSong) && !forced) continue;
 			else												Conductor._loadedSong = "";
-			cachedSounds.get(key).close();
-			LimeAssets.cache.clear(key);
-			OflAssets.cache.removeSound(key);
-			cachedSounds.remove(key);
+			removeSoundByKey(key);
 		}
+	}
+
+	static public inline function removeSoundByKey(key:String) {
+		if (!cachedSounds.exists(key)) return;
+		cachedSounds.get(key).close();
+		LimeAssets.cache.clear(key);
+		OflAssets.cache.removeSound(key);
+		cachedSounds.remove(key);
 	}
 
 	static public function getSound(key:String):FlxSoundAsset {

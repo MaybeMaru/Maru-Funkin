@@ -74,7 +74,7 @@ class ModdingUtil {
         consoleTrace('[ADD] $path', FlxColor.LIME);
         var script:FunkScript = new FunkScript(scriptCode);
         script.scriptID = path;
-        scriptsMap.set(tag == null ? path : tag, script);
+        scriptsMap.set(tag ?? path, script);
         scripts.push(script);
         return script;
     }
@@ -111,7 +111,7 @@ class ModdingUtil {
     }
 
     public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
-        subFolders = subFolders == null ? [] : subFolders;
+        subFolders = subFolders ?? [];
         var subFolderList:Array<String> = [];
         for (i in subFolders)
             subFolderList = subFolderList.concat(getScriptList(folder + "/" + i));

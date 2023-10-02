@@ -26,9 +26,8 @@ class HealthIcon extends FlxSpriteExt {
 			icon = Paths.image('icons/$char', null, false, true);
 
 		loadImage('icons/$char', true);	//	Load it first to get the width and height
-		singleAnim = false;
 		if (_packer == IMAGE) {
-			singleAnim = !(width > height * 1.9);
+			singleAnim = !(width >= height * 1.25); // Id make it 2 but theres some weird ass resolutions out there
 			if (!singleAnim) {
 				loadGraphic(icon, true, Math.floor(width * 0.5), cast height);
 				animation.add('healthy', [0], 0, false);
@@ -38,6 +37,7 @@ class HealthIcon extends FlxSpriteExt {
 			}
 		}
 		else {
+			singleAnim = false;
 			addAnim('healthy', 'healthy', 24, true);
 			addAnim('dying', 'dying', 24, true);
 		}

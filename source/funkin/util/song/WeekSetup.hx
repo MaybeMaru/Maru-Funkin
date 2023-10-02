@@ -53,7 +53,7 @@ class WeekSetup {
         hideFreeplay: false,
 	}
 
-    inline public static function getWeekList():Array<WeekJson> {
+    public static function getWeekList():Array<WeekJson> {
         //Load week Jsons
         var weeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
@@ -112,7 +112,15 @@ class WeekSetup {
         if (Reflect.hasField(week.songList, "songIcon"))
             week.songList.songIcons = Reflect.field(week.songList, "songIcon");
 
-        return  JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
+        return JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
+    }
+
+    public static inline function getWeekDiffs(week:String) {
+		return getData(week)?.weekDiffs ?? CoolUtil.defaultDiffArray.copy();
+	}
+
+    public static inline function getData(week:String) {
+        return weekDataMap.get(week);
     }
 
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
@@ -125,9 +133,8 @@ class WeekSetup {
         PlayState.storyWeek = weekName;
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);
-		PlayState.inChartEditor = false;
-        PlayState.seenCutscene = false;
+		PlayState.inChartEditor = PlayState.seenCutscene = false;
         PlayState.clearCache = true;
-        curWeekDiffs = weekDataMap.get(weekName).weekDiffs;
+        curWeekDiffs = getWeekDiffs(weekName);
 	}
 }

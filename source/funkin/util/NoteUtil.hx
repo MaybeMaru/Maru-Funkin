@@ -45,7 +45,7 @@ class NoteUtil {
 
     static function getList() {
         var typesSort = CoolUtil.getFileContent(Paths.txt("notetypes/types-sort", null)).split(",");
-        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [PlayState.SONG != null ? PlayState.SONG.song : ""]);
+        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [Song.formatSongFolder(PlayState?.SONG?.song ?? "")]);
         return CoolUtil.customSort(typesList, typesSort);
     }
 
@@ -70,6 +70,10 @@ class NoteUtil {
         skinSpriteMap.clear();
         for (key in Paths.cachedGraphics.keys()) {
             if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
+        }
+        for (key in Preloader.cachedTextures.keys()) {
+            if (key.startsWith('sus'))
+                Preloader.disposeTexture(key);
         }
     }
 
@@ -169,6 +173,7 @@ class NoteUtil {
     public static var DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
     public static var DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
     public static var DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
+    public static var DEFAULT_NOTE_ANGLES:Array<Float>= [0, -90, 90, 180];
 
     public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>) {
         sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),
