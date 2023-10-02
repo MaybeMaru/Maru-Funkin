@@ -137,7 +137,7 @@ class AnimationDebug extends MusicBeatState {
 
 		var reloadButton:FlxUIButton = new FlxUIButton(charButton.x,charButton.y+30, "Reload Image", function () {
 			formatJsonChar();
-			var lastGhostAnim:Null<String> = (ghostChar.animation.curAnim != null) ? ghostChar.animation.curAnim.name : null;
+			final lastGhostAnim = ghostChar.animation.curAnim?.name ?? null;
 			displayChar.loadCharJson(character);
 			ghostChar.loadCharJson(character);
 			displayChar.playAnim(animsList[curAnimIndex], true);
@@ -278,7 +278,7 @@ class AnimationDebug extends MusicBeatState {
 		var loopButton:FlxUIButton = new FlxUIButton(autoButton.x + 100, autoButton.y, 'Create Loop Anim', function () {
 			var uiAnimData = getUpdatedAnimData();
 			uiAnimData.indices = [3,4,5];
-			uiAnimData.offsets =  getOffsetFromChar(displayChar, uiAnimData.animName);
+			uiAnimData.offsets = getOffsetFromChar(displayChar, uiAnimData.animName);
 			uiAnimData.animName += '-loop';
 			uiAnimData.loop = true;
 			addAnimation(uiAnimData);
@@ -375,6 +375,7 @@ class AnimationDebug extends MusicBeatState {
 		var anims:Array<String> = [];
 		for (anim => charOffsets in displayChar.animOffsets) anims.push(anim);
 		anims = anims.length > 0 ? anims : ['newAnim']; // Prevent null
+		anims.sort(CoolUtil.sortAlphabetically);
 		dropDown_anims.setData(FlxUIDropDownMenu.makeStrIdLabelArray(anims, true));
 
 		if (lastAnim != null && anims.contains(lastAnim))
@@ -415,9 +416,14 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function updateOffsetText(create:Bool = false):Void {
+		var _anims:Array<String> = [];
+		for (i in displayChar.animOffsets.keys()) _anims.push(i);
+		_anims.sort(CoolUtil.sortAlphabetically);
+		
 		if (create) clearOffsetText();
 		var i:Int = 0;
-		for (anim => charOffsets in displayChar.animOffsets) {
+		for (anim in _anims) {
+			final charOffsets = displayChar.animOffsets.get(anim);
 			var offsetText:String = '$anim: [${charOffsets.x}, ${charOffsets.y}]';
 			final isCurAnim = i == curAnimIndex;
 			if (create) {
@@ -546,7 +552,7 @@ class AnimationDebug extends MusicBeatState {
 	function updateWorldOffsets():Void {
 		var offsetValues:Array<Int> = [Std.int(stepper_offsetX.value),Std.int(stepper_offsetY.value)];
 		character.charOffsets = offsetValues;
-		offsetValues[0] *= (displayChar.flippedOffsets) ? -1 : 1;
+		//offsetValues[0] *= (displayChar.flippedOffsets) ? -1 : 1;
 		displayChar.worldOffsets.set(offsetValues[0], offsetValues[1]);
 		ghostChar.worldOffsets.set(offsetValues[0], offsetValues[1]);
 		ghostChar.setXY(bf_offset.x,bf_offset.y);
@@ -561,16 +567,15 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function updateGhostAnims(?forcedAnim:String):Void {
-		var updateAnim:Null<String> = (displayChar.animation.curAnim != null) ? displayChar.animation.curAnim.name : null;
-		var ghostAnim:Null<String> = (ghostChar.animation.curAnim != null) ? ghostChar.animation.curAnim.name : null;
-		if (forcedAnim != null) {
-			updateAnim = forcedAnim;
-		}
+		var updateAnim = displayChar.animation.curAnim?.name ?? null;
+		var ghostAnim = ghostChar.animation.curAnim?.name ?? null;
+		if (forcedAnim != null) updateAnim = forcedAnim;
+
 		if (updateAnim != null) {
 			displayChar.playAnim(updateAnim, true);
 			if (ghostAnim == null) ghostAnim = updateAnim;
 		}
-		ghostChar.animOffsets = displayChar.animOffsets;
+		ghostChar.animOffsets = displayChar.animOffsets.copy();
 		ghostChar.playAnim(ghostAnim, true);
 	}
 
