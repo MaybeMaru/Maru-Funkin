@@ -72,9 +72,9 @@ class ModdingUtil {
         var scriptCode:String = CoolUtil.getFileContent(path);
         if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
         consoleTrace('[ADD] $path', FlxColor.LIME);
-        var script:FunkScript = new FunkScript(scriptCode);
-        script.scriptID = path;
-        scriptsMap.set(tag ?? path, script);
+        final scriptID = tag ?? path;
+        var script:FunkScript = new FunkScript(scriptCode, scriptID);
+        scriptsMap.set(scriptID, script);
         scripts.push(script);
         return script;
     }
@@ -93,6 +93,10 @@ class ModdingUtil {
 
     inline public static function errorTrace(text:String):Void {
         consoleTrace('[ERROR] $text', FlxColor.RED);
+    }
+
+    inline public static function deprecatedTrace(text:String):Void {
+        consoleTrace('[DEPRECATED] $text', FlxColor.ORANGE);
     }
 
     inline public static function consoleTrace(text:String, ?color:Int):Void {

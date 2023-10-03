@@ -71,6 +71,7 @@ class ConsoleTrace extends FlxText {
     public var alphaTime:Float = time;
     public function new() {
         super(20,50,Std.int(FlxG.width/2.25),"",10);
+        antialiasing = false;
     }
     public function init(text:String, color:Int) {
         setPosition(20,50);

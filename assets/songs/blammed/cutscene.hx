@@ -1,4 +1,4 @@
-importLib('FlxBackdrop', 'flixel.addons.display');
+import flixel.addons.display.FlxBackdrop;
 
 function create()
 {
