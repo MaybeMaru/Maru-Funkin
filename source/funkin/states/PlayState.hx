@@ -139,21 +139,19 @@ class PlayState extends MusicBeatState {
 		SkinUtil.initSkinData();
 		NoteUtil.initTypes();
 		EventUtil.initEvents();
-
 		CoolUtil.stopMusic();
-		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new FlxCamera();
-		camHUD = new FlxCamera();	 camHUD.bgColor.alpha = 0;
-		camOther = new FlxCamera(); camOther.bgColor.alpha = 0;
+		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
+		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
+		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 
 		FlxG.cameras.add(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
-
-		persistentUpdate = true;
-		persistentDraw = true;
+		persistentUpdate = persistentDraw = true;
 
 		SONG = Song.checkSong(SONG);
 
@@ -216,20 +214,15 @@ class PlayState extends MusicBeatState {
 		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
 		//Character Scripts
-		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
-		if (characterScripts.length > 0) {
-			final charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
-			for (char in [boyfriend, dad, gf]) {
-				for (i in 0...characterScripts.length) {
-					var charParts = characterScripts[i].split('/');
-					var charName:String = charParts[charParts.length-1].split('.')[0];
-
-					if (char.curCharacter == charName) {
-						ModdingUtil.addScript(characterScripts[i], '_charScript_${charMap.get(char)}').set('ScriptChar', char);
-						break;
-					}
-				}
-			}	
+		var characterScripts = ModdingUtil.getScriptList('data/characters');
+		for (char => _char in [boyfriend => 'bf', dad => 'dad', gf => 'gf']) {
+   			for (script in characterScripts) {
+        		final charName = script.split('/').pop().split('.')[0];
+        		if (char.curCharacter == charName) {
+            		ModdingUtil.addScript(script, '_charScript_$_char').set('ScriptChar', char);
+            		break;
+        		}
+    		}
 		}
 
 		//Song Scripts

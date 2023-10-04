@@ -176,6 +176,10 @@ class FunkScript extends Script {
 			CoolUtil.resumeSounds();
 		});
 
+		set('makeCutsceneManager', function (?targetSound:FlxSound) {
+			return CutsceneManager.makeManager(targetSound);
+		});
+
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
 			ScriptUtil.addSprite(spr,key,onTop);
 		});

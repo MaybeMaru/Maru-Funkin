@@ -75,6 +75,8 @@ function create()
             beef = new FlxSpriteExt(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
             PlayState.boyfriendGroup.add(beef);
         }
+    } else {
+        closeScript();
     }
 }
 
