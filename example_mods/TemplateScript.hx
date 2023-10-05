@@ -603,3 +603,28 @@ function beatHitGameOver(curBeat:Int)
     //  Called every time there is a beat hit in the game over music
     //  curBeat --> The current beat number
 }
+
+function stateCreate()
+{
+    
+}
+
+function stateUpdate(elapsed:Float)
+{
+    
+}
+
+function stateStepHit()
+{
+    
+}
+
+function stateBeatHit()
+{
+    
+}
+
+function stateSectionHit()
+{
+    
+}
