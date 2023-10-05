@@ -1,10 +1,11 @@
-function createPost()
-{
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-        PlayState.inCutscene = true;
+function createPost() {
+    GameVars.isStoryMode && !GameVars.seenCutscene ? PlayState.inCutscene = true : closeScript();
 }
 
-function startCutscene()
-{
+function startCutscene() {
     PlayState.createDialogue();
+}
+
+function startCountdown() {
+    closeScript();
 }

@@ -1,12 +1,9 @@
-function startSong()
-{
+function startSong() {
 	PlayState.camZooming = false;
 }
 
-function beatHit(curBeat)
-{
-	switch (curBeat)
-	{
+function beatHit(curBeat) {
+	switch (curBeat) {
 		case 16:
 			PlayState.camZooming = true;
 			PlayState.gfSpeed = 2;
