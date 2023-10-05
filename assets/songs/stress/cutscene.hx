@@ -12,10 +12,8 @@ var geef:FunkinSprite;
 
 var loadedCutsceneAssets:Bool = false;
 
-function create()
-{
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-    {
+function create() {
+    if (GameVars.isStoryMode && !GameVars.seenCutscene) {
         PlayState.inCutscene = true;
         var censored:Bool = !getPref('naughty');
         var censorStr:String = censored ? '-censor' : '';
@@ -48,8 +46,8 @@ function create()
         PlayState.dadGroup.add(cutsceneTankman_Body);
         PlayState.dadGroup.add(cutsceneTankman_Head);
 
-        PlayState.add(john);
-        PlayState.add(steve);
+        add(john);
+        add(steve);
         PlayState.gfGroup.add(demonGf);
 
         john.visible = steve.visible = false;
@@ -100,11 +98,12 @@ function startCutscene() {
     PlayState.camFollow.y = PlayState.dad.y + 170;
     FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
 
-    var manager = makeCutsceneManager(stressCutscene);
+    var manager = makeCutsceneManager();
 
     manager.pushEvent(0.1, function () { // God effing damn it
         cutsceneTankman_Body.playAnim('godEffingDamnIt', true);
         cutsceneTankman_Head.playAnim('godEffingDamnIt', true);
+        manager.setSound(stressCutscene);
     });
 
     manager.pushEvent(15.2, function () { // Zoom to gf

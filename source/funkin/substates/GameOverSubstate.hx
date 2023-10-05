@@ -6,6 +6,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 	var skinFolder:String = 'default';
 	var charName:String = 'bf-dead';
+	var deathSound:FlxSound = null;
+	var lockedOn:Bool = false;
 
 	public static function cacheSounds() {
 		var skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
@@ -38,10 +40,15 @@ class GameOverSubstate extends MusicBeatSubstate {
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;
 
-		CoolUtil.playSound('${skinFolder}fnf_loss_sfx');
+		deathSound = CoolUtil.playSound('${skinFolder}fnf_loss_sfx');
 		char.playAnim('firstDeath');
 
 		ModdingUtil.addCall('startGameOver');
+	}
+
+	function lockCamToChar() {
+		PlayState.instance.camGame.follow(camFollow, LOCKON, 0.01);
+		lockedOn = true;
 	}
 
 	override function update(elapsed:Float):Void {
@@ -63,7 +70,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		if (char.animation.curAnim != null) {
 			if (char.animation.curAnim.name == 'firstDeath') {
 				if (char.animation.curAnim.curFrame == 12) {
-					PlayState.instance.camGame.follow(camFollow, LOCKON, 0.01);
+					lockCamToChar();
 				}
 		
 				if (char.animation.curAnim.finished) {
@@ -88,6 +95,11 @@ class GameOverSubstate extends MusicBeatSubstate {
 				FlxG.resetState();
 			}
 		}
+	}
+
+	override function destroy() {
+		super.destroy();
+		CustomTransition.skipTrans = false;
 	}
 
 	override function beatHit():Void {
@@ -120,6 +132,9 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 			var endSound = new FlxSound().loadEmbedded(Paths.music('${skinFolder}gameOverEnd'));
 			endSound.play();
+			deathSound.stop();
+
+			if (!lockedOn) lockCamToChar();
 
 			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
 				exitTimer = 2;

@@ -177,7 +177,7 @@ class FunkScript extends Script {
 		});
 
 		set('makeCutsceneManager', function (?targetSound:FlxSound) {
-			return CutsceneManager.makeManager(targetSound);
+			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {

@@ -1,4 +1,4 @@
-package funkin.util;
+package funkin.util.frontend;
 
 /*
  	Normal FlxColor doesnt work in Hscript sooooooo yeah

@@ -1,4 +1,4 @@
-package funkin.util;
+package funkin.util.backend;
 
 #if cpp
 import Sys.sleep;

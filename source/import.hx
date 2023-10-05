@@ -13,10 +13,10 @@ import funkin.util.song.WeekSetup;
 import funkin.util.Paths;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
-import funkin.util.Shader;
+import funkin.util.frontend.Shader;
 #if desktop
-import funkin.util.Discord;
-import funkin.util.Discord.DiscordClient;
+import funkin.util.backend.Discord;
+import funkin.util.backend.Discord.DiscordClient;
 #if cpp
 import hxcodec.flixel.FlxVideo;
 #end
@@ -28,12 +28,12 @@ import funkin.util.modding.ScriptConsole;
 import funkin.util.modding.ModdingUtil;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
-import funkin.util.FlxColorFix;
+import funkin.util.frontend.FlxColorFix;
 import funkin.util.JsonUtil;
 import funkin.util.Stage;
-import funkin.util.SaveData;
+import funkin.util.backend.SaveData;
 import funkin.objects.CustomTransition;
-import funkin.util.FunkThread;
+import funkin.util.backend.FunkThread;
 
 //Note
 import funkin.objects.note.Note;

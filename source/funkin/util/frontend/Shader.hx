@@ -1,4 +1,4 @@
-package funkin.util;
+package funkin.util.frontend;
 
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.display.BitmapData;

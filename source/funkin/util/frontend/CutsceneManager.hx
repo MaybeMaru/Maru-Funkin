@@ -1,4 +1,4 @@
-package funkin.util;
+package funkin.util.frontend;
 
 typedef CutsceneEvent = {
     var time:Float;
@@ -6,7 +6,6 @@ typedef CutsceneEvent = {
 }
 
 class CutsceneManager extends flixel.FlxBasic {
-    
     public var targetSound:FlxSound = null;
     public var events:Array<CutsceneEvent> = [];
     public var soundPosition:Float = 0;
@@ -63,7 +62,7 @@ class CutsceneManager extends flixel.FlxBasic {
     function syncSound() {
         if (targetSound == null || targetSound.time <= 0) return;
         final _time = soundPosition - startSoundOffset;
-        final _resync = Math.abs(_time - targetSound.time) > (20 * FlxG.timeScale);
+        final _resync = Math.abs(_time - targetSound.time) > (40 * FlxG.timeScale);
         if (_resync) {
             targetSound.pause();
             targetSound.time = _time;
