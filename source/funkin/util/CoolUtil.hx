@@ -1,5 +1,6 @@
 package funkin.util;
 
+import funkin.util.backend.SongZip;
 import openfl.system.System;
 
 typedef CacheClearing =  {
@@ -17,12 +18,13 @@ class CoolUtil {
 	public static var debugMode:Bool = false;
 
 	inline public static function init():Void {
+		#if desktop
+		ModdingUtil.reloadModFolders();
+		SongZip.init();
+		#end
 		SkinUtil.setCurSkin();
 		NoteUtil.initTypes();
 		EventUtil.initEvents();
-		#if desktop
-		ModdingUtil.reloadModFolders();
-		#end
 	}
 
 	inline public static function coolTextFile(path:String):Array<String> {

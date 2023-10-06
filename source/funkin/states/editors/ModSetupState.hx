@@ -148,11 +148,11 @@ class ModSetupState extends MusicBeatState {
         File.saveContent('mods/$path/${pathParts[pathParts.length-1]}-go-here.txt', "");
     }
 
-    static function createFolder(path:String) {
+    public static function createFolder(path:String, prefix:String = "mods/") {
         var dirs = path.split("/");
-        var lastDir = "mods/";
+        var lastDir = prefix;
         for (i in dirs) {
-            if (i == null) continue;
+            if (i == null || i.contains(".")) continue;
             lastDir += '$i/';
             if (!FileSystem.exists(lastDir)) {  // Create subdirectories
                 FileSystem.createDirectory(lastDir);
