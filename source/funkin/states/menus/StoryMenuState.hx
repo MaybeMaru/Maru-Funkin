@@ -130,7 +130,7 @@ class StoryMenuState extends MusicBeatState {
 
 	var lerpColor:FlxColorFix;
 
-	function getBgColor():FlxColor {
+	inline function getBgColor():FlxColor {
 		return FlxColor.fromString(storyWeeks[curWeek].weekColor);
 	}
 
@@ -171,7 +171,8 @@ class StoryMenuState extends MusicBeatState {
 		storyBG.color = lerpColor.get();
 		
 		for (member in grpWeekCharacters) {
-			member.color = storyBG.color;
+			if (member.lerpColor)
+				member.color = storyBG.color;
 		}
 
 		super.update(elapsed);

@@ -54,7 +54,5 @@ class FPS_Mem extends TextField
 			text = 
 			'FPS: $fps\n' +
 			'RAM: $mem mb/$memPeak mb';
-		else
-			text = "";
 	}
 }

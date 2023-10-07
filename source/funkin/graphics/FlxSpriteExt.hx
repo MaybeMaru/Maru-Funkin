@@ -2,7 +2,6 @@ package funkin.graphics;
 
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
-import openfl.display.Bitmap;
 
 /*
     Just FlxSprite but with helper functions

@@ -27,8 +27,9 @@ class FunkScript extends Script {
 		return value == null ? CONTINUE_FUNCTION : value;
 	}
 
-	public function new(hscriptCode:String):Void {
+	public function new(hscriptCode:String, scriptID:String):Void {
 		super();
+		this.scriptID = scriptID;
 		implement();
 		try {
 			executeString(hscriptCode);
@@ -40,6 +41,10 @@ class FunkScript extends Script {
 
 	inline public function errorTrace(error:Any) {
 		ModdingUtil.errorTrace('$scriptID / ${Std.string(error)}');
+	}
+
+	inline public function deprecatedTrace(text:String) {
+		ModdingUtil.deprecatedTrace('$scriptID / $text');
 	}
 
 	public function implement():Void { //Preloaded Variables
@@ -105,13 +110,20 @@ class FunkScript extends Script {
 
 		//HScript Functions
 
+		// DEPRECATED
 		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
 			if(packageStr != '') packageStr += '.';
 			if (customName != null && !exists(customName)) {
+				deprecatedTrace('importLib() is deprecated, use ``import as`` instead');
 				set(customName, Type.resolveClass(packageStr + classStr));
 				return;
 			}
+			deprecatedTrace('importLib() is deprecated, use ``import`` instead!');
 			set(classStr, Type.resolveClass(packageStr + classStr));
+		});
+
+		set('closeScript', function () {
+			ModdingUtil.removeScript(scriptID);
 		});
 
 		set('getBlendMode', function(blendType:String):openfl.display.BlendMode {
@@ -162,6 +174,10 @@ class FunkScript extends Script {
 		// Needs pauseSounds() first
 		set('resumeSounds', function () {
 			CoolUtil.resumeSounds();
+		});
+
+		set('makeCutsceneManager', function (?targetSound:FlxSound) {
+			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
@@ -337,8 +353,7 @@ class CustomState extends MusicBeatState {
 
 	public function initScript(scriptCode:String, stateTag:String) {
 		_scriptKey = stateTag;
-		script = new FunkScript(scriptCode);
-		script.scriptID = '_custom_state_$stateTag';
+		script = new FunkScript(scriptCode, '_custom_state_$stateTag');
 		script.set('Parent', cast this);
 
 		// This method sucks, but it works, sooooooo yeah... sorry

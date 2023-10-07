@@ -5,7 +5,7 @@ function createPost() {
 
 function startCutscene() {
     var red:FlxSprite = new FlxSprite(-400, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-    PlayState.add(red);
+    add(red);
 
     var senpaiEvil:FunkinSprite = new FunkinSprite('weeb/senpaiCrazy', [0,0], [0,0]);
     senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion instance 1', 24, false, [0]);
@@ -15,7 +15,7 @@ function startCutscene() {
     senpaiEvil.screenCenter();
     senpaiEvil.x += 50;
     senpaiEvil.alpha = 0;
-    PlayState.add(senpaiEvil);
+    add(senpaiEvil);
 
     PlayState.camHUD.visible = false;
 
@@ -42,17 +42,18 @@ function startCutscene() {
 var bgFade:FlxSprite;
 var dialogueBox:PixelDialogueBox;
 var face:FunkinSprite;
+var inDialogue:Bool = false;
 
 function createDialogue() {
     bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.fromRGB(25,0,5));
     bgFade.scrollFactor.set();
     bgFade.alpha = 0;
-    PlayState.add(bgFade);
+    add(bgFade);
 
     face = new FunkinSprite('weeb/spiritFaceForward', [320, 170]);
     face.setScale(6, false);
     face.cameras = [PlayState.camHUD];
-    PlayState.add(face);
+    add(face);
 
     initShader('thornsBg', 'faceShader');
     setShaderInt('faceShader', 'effectType', 1);
@@ -77,25 +78,24 @@ function createDialogue() {
     dialogueBox.swagDialogue.borderColor = FlxColor.TRANSPARENT;
 
     PlayState.dialogueBox = dialogueBox;
-    PlayState.add(dialogueBox);
+    add(dialogueBox);
+    inDialogue = true;
 }
 
 var timeElapsed:Float = 0;
-function update(elapsed) {
-    timeElapsed += elapsed;
-    setShaderFloat(i, 'faceShader', timeElapsed);
-}
-
-function updatePost() {
-    if (dialogueBox != null) {
+function updatePost(elapsed) {
+    if (dialogueBox != null && inDialogue) {
         face.alpha = dialogueBox.box.alpha;
+        timeElapsed += elapsed;
         face.offset.y = FlxMath.roundDecimal(Math.sin(timeElapsed), 1) * 10;
+        setShaderFloat('faceShader', 'iTime', timeElapsed);
         bgFade.alpha = dialogueBox.bgFade.alpha;
     }
 }
 
 function startCountdown() {
-    if (GameVars.isStoryMode) {
+    if (GameVars.isStoryMode && inDialogue) {
+        inDialogue = false;
         face.destroy();
         bgFade.destroy();
     }

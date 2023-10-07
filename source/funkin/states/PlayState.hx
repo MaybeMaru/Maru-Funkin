@@ -71,9 +71,17 @@ class PlayState extends MusicBeatState {
 	public var camZooming:Bool = false;
 	public var startingSong:Bool = false;
 
-	private var gfSpeed:Int = 1;
-	public var health:Float = 1;
+	public var gfSpeed:Int = 1;
+	public var health(default, set):Float = 1;
 	public var combo:Int = 0;
+
+	function set_health(value:Float) {
+		value = FlxMath.bound(value, 0, 2);
+		if (value <= 0 && validScore) {
+			openGameOverSubstate();
+		}
+		return health = value;
+	}
 
 	public var noteCount:Int = 0;
 	public var noteTotal:Float = 0;
@@ -131,21 +139,19 @@ class PlayState extends MusicBeatState {
 		SkinUtil.initSkinData();
 		NoteUtil.initTypes();
 		EventUtil.initEvents();
-
 		CoolUtil.stopMusic();
-		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 		
 		camGame = new FlxCamera();
-		camHUD = new FlxCamera();	 camHUD.bgColor.alpha = 0;
-		camOther = new FlxCamera(); camOther.bgColor.alpha = 0;
+		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
+		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
+		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 
 		FlxG.cameras.add(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
-
-		persistentUpdate = true;
-		persistentDraw = true;
+		persistentUpdate = persistentDraw = true;
 
 		SONG = Song.checkSong(SONG);
 
@@ -208,20 +214,15 @@ class PlayState extends MusicBeatState {
 		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
 		//Character Scripts
-		var characterScripts:Array<String> = ModdingUtil.getScriptList('data/characters');
-		if (characterScripts.length > 0) {
-			final charMap:Map<Character, String> = [boyfriend => 'bf', dad => 'dad', gf => 'gf'];
-			for (char in [boyfriend, dad, gf]) {
-				for (i in 0...characterScripts.length) {
-					var charParts = characterScripts[i].split('/');
-					var charName:String = charParts[charParts.length-1].split('.')[0];
-
-					if (char.curCharacter == charName) {
-						ModdingUtil.addScript(characterScripts[i], '_charScript_${charMap.get(char)}').set('ScriptChar', char);
-						break;
-					}
-				}
-			}	
+		var characterScripts = ModdingUtil.getScriptList('data/characters');
+		for (char => _char in [boyfriend => 'bf', dad => 'dad', gf => 'gf']) {
+   			for (script in characterScripts) {
+        		final charName = script.split('/').pop().split('.')[0];
+        		if (char.curCharacter == charName) {
+            		ModdingUtil.addScript(script, '_charScript_$_char').set('ScriptChar', char);
+            		break;
+        		}
+    		}
 		}
 
 		//Song Scripts
@@ -360,40 +361,33 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 
+	public var openDialogueFunc:Dynamic = null;
+
 	function createDialogue():Void {
 		showUI(false);
-		ModdingUtil.addCall('createDialogue');
-		
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
-		
-		if(dialogueBox != null && dialogueBox.skipIntro) black.alpha = 0;
-		switch (SkinUtil.curSkin) {
-			case 'pixel':
-				new FlxTimer().start(0.3, function(tmr:FlxTimer) {
-					black.alpha -= 0.15;
-					if (black.alpha > 0)	tmr.reset(0.3);
-					else {
-						quickDialogueBox();
-						remove(black);
-					}
-				});
-			default:
-				if (black.alpha > 0) {
-					FlxTween.tween(black, {alpha: 0}, 1.5, { ease: FlxEase.circOut,
-					onComplete: function(twn:FlxTween) {
-						quickDialogueBox();
-						remove(black);
-				}});
-				} else {
+		ModdingUtil.addCall('createDialogue'); // Setup dialogue box
+		ModdingUtil.addCall('postCreateDialogue'); // Setup transitions
+
+		openDialogueFunc = openDialogueFunc ?? function () { // Default transition
+			var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			black.scrollFactor.set();
+			add(black);
+
+			if (black.alpha > 0) {
+				FlxTween.tween(black, {alpha: 0}, 1.5, { ease: FlxEase.circOut,
+				onComplete: function(twn:FlxTween) {
 					quickDialogueBox();
 					remove(black);
-				}
+			}});
+			} else {
+				quickDialogueBox();
+				remove(black);
+			}
 		}
+		openDialogueFunc();
 	}
 
-	function quickDialogueBox():Void {
+	public function quickDialogueBox():Void {
 		if (dialogueBox == null) {
 			switch (SkinUtil.curSkin) {
 				case 'pixel':	dialogueBox = new PixelDialogueBox();
@@ -604,7 +598,6 @@ class PlayState extends MusicBeatState {
 
 		// RESET -> Quick Game Over Screen
 		if (getKey('RESET-P') && !inCutscene) health = 0;
-		checkDeath();
 
 		if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 			endSong();
@@ -612,9 +605,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
 
-	public function checkDeath() {
-		health = FlxMath.bound(health, 0, 2);
-		if (health > 0 || !validScore) return;
+	public function openGameOverSubstate() {
 		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
 		
 		persistentUpdate = false;
@@ -772,7 +763,8 @@ class PlayState extends MusicBeatState {
 
 	inline function beatCharacters() {
 		for (i in [iconP1, iconP2]) i.bumpIcon();
-		for (i in [dad, gf, boyfriend]) i.danceInBeat();
+		for (i in [dad, boyfriend]) i.danceInBeat();
+		if (curBeat % gfSpeed == 0) gf.danceInBeat();
 	}
 
 	override public function beatHit():Void {

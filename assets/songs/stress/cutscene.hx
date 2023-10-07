@@ -12,10 +12,8 @@ var geef:FunkinSprite;
 
 var loadedCutsceneAssets:Bool = false;
 
-function create()
-{
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-    {
+function create() {
+    if (GameVars.isStoryMode && !GameVars.seenCutscene) {
         PlayState.inCutscene = true;
         var censored:Bool = !getPref('naughty');
         var censorStr:String = censored ? '-censor' : '';
@@ -44,18 +42,15 @@ function create()
         steve = new FunkinSprite('cutscenes/steve' + censorStr, [PlayState.gf.x - 887.5, PlayState.gf.y - 345], [0.95, 0.95]);
         steve.addAnim('steve', 'STEVE');
 
-        PlayState.dad.visible = false;
+        PlayState.dad.visible = PlayState.gf.visible = false;
         PlayState.dadGroup.add(cutsceneTankman_Body);
         PlayState.dadGroup.add(cutsceneTankman_Head);
 
-        PlayState.add(john);
-        PlayState.add(steve);
+        add(john);
+        add(steve);
         PlayState.gfGroup.add(demonGf);
 
-        john.visible = false;
-        steve.visible = false;
-
-        PlayState.gf.visible = false;
+        john.visible = steve.visible = false;
         demonGf.playAnim('dancing');
 
         loadedCutsceneAssets = true;
@@ -75,11 +70,13 @@ function create()
             beef = new FlxSpriteExt(PlayState.boyfriend.x, PlayState.boyfriend.y).loadImage('cutscenes/beef');
             PlayState.boyfriendGroup.add(beef);
         }
+    } else {
+        closeScript();
     }
 }
 
 function createPost() {
-    if (gfFaceplant && GameVars.isStoryMode) {
+    if (gfFaceplant) {
         removeScript('_charScript_bf');
         PlayState.switchChar('bf', 'bf'); // make sure its not bf holding gf
         PlayState.boyfriend.iconSpr.staticSize = 1;
@@ -87,32 +84,29 @@ function createPost() {
     }
 }
 
-function startCutscene()
-{
+function startCutscene() {
     PlayState.showUI(false);
-
     var stressCutscene:FlxSound = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
     FlxG.sound.list.add(stressCutscene);
-
-    PlayState.camFollow.x = PlayState.dad.x + 400;
-    PlayState.camFollow.y = PlayState.dad.y + 170;
-    FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
-
-    // God effing damn it
-    new FlxTimer().start(0.1, function(tmr:FlxTimer) {
-        cutsceneTankman_Body.playAnim('godEffingDamnIt', true);
-        cutsceneTankman_Head.playAnim('godEffingDamnIt', true);
-        stressCutscene.play(true);
-    });
 
     demonBg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.BLACK);
     demonBg.scrollFactor.set();
     demonBg.alpha = 0;
     addSpr(demonBg, 'demonBg');
 
-    // Zoom to GF
-    new FlxTimer().start(15.2, function(tmr:FlxTimer)
-    {
+    PlayState.camFollow.x = PlayState.dad.x + 400;
+    PlayState.camFollow.y = PlayState.dad.y + 170;
+    FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
+
+    var manager = makeCutsceneManager();
+
+    manager.pushEvent(0.1, function () { // God effing damn it
+        cutsceneTankman_Body.playAnim('godEffingDamnIt', true);
+        cutsceneTankman_Head.playAnim('godEffingDamnIt', true);
+        manager.setSound(stressCutscene);
+    });
+
+    manager.pushEvent(15.2, function () { // Zoom to gf
         demonGf.playAnim('demonGf');
         FlxTween.tween(PlayState.camFollow, {x: 700, y: 300}, 1, {ease: FlxEase.sineOut});
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
@@ -120,108 +114,88 @@ function startCutscene()
         setCameraShader(PlayState.camGame, 'demon_blur');
     });
 
-    // Pico appears
-    new FlxTimer().start(17.5, function(tmr:FlxTimer)
-    {
+    manager.pushEvent(17.5, function () { // Pico appears
         demonBg.alpha = 0;
         PlayState.camGame.setFilters([]);
         zoomBack();
     });
 
-    // Look who it is
-    new FlxTimer().start(19.5, function(tmr:FlxTimer)
-    {
+    manager.pushEvent(19.5, function () { // Look who it is
         cutsceneTankman_Body.playAnim('lookWhoItIs', true);
         cutsceneTankman_Head.playAnim('lookWhoItIs', true);
         cutsceneTankman_Head.visible = true;
     });
 
-    //Focus to tankman
-    new FlxTimer().start(20, function(tmr:FlxTimer)
-    {
-        PlayState.camFollow.x = PlayState.dad.x + 500;
-        PlayState.camFollow.y = PlayState.dad.y + 170;
+    manager.pushEvent(20, function () { // Focus to tankman
+        PlayState.camFollow.setPosition(PlayState.dad.x + 500, PlayState.dad.y + 170);
     });
 
-    //Small anticipation
-    new FlxTimer().start(21, function(tmr:FlxTimer) {
+    manager.pushEvent(21, function () { // Small anticipation
         PlayState.gf.dance();
     });
 
-    //Little friend
-    new FlxTimer().start(21.5, function(tmr:FlxTimer) {
+    manager.pushEvent(21.5, function () { // Little friend
         PlayState.gf.playAnim('shoot1-loop');
     });
 
-    //Little Cunt
-    new FlxTimer().start(31.2, function(tmr:FlxTimer)
-    {
-        //Snap the camera
-        PlayState.camFollow.x = PlayState.boyfriend.x + 260;
-        PlayState.camFollow.y = PlayState.boyfriend.y + 160;
+    manager.pushEvent(31.2, function () { // Little cunt
+        PlayState.camFollow.setPosition(PlayState.boyfriend.x + 260, PlayState.boyfriend.y + 160);
         PlayState.snapCamera();
 
         PlayState.boyfriend.playAnim('singUPmiss', true);
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2}, 0.25, {ease: FlxEase.elasticOut});
     });
 
-    new FlxTimer().start(32.2, function(tmr:FlxTimer)
-    {
+    manager.pushEvent(32.2, function () { // Bf back to idle
         PlayState.boyfriend.dance();
         PlayState.boyfriend.animation.curAnim.finish();
         zoomBack();
     });
 
-    //Fade Sound
-    new FlxTimer().start(34.5, function(tmr:FlxTimer)
-    {
+    manager.pushEvent(34.5, function () { // Fade sound
         stressCutscene.fadeOut(1.5, 0);
     });
 
-    //End Cutscene
-    new FlxTimer().start(35.5, function(tmr:FlxTimer)
-    {
+    manager.pushEvent(35.5, function () { // End cutscene
         PlayState.dad.visible = true;
-        cutsceneTankman_Body.visible = false;
-        cutsceneTankman_Head.visible = false;
+        cutsceneTankman_Body.visible = cutsceneTankman_Head.visible = false;
         FlxTween.tween(PlayState.camGame, {zoom: PlayState.defaultCamZoom}, Conductor.crochet / 255, {ease: FlxEase.cubeInOut});
         PlayState.startCountdown();
+        closeScript();
     });
 
-    if (!getPref('naughty'))
-    {
+    manager.start();
+
+    if (!getPref('naughty')) {
         var censorBar:FunkinSprite = new FunkinSprite('censor', [300,450], [1,1]);
         censorBar.addAnim('mouth censor', 'mouth censor', 24, true);
         censorBar.addOffset('mouth censor', 75, 0);
         censorBar.playAnim('mouth censor', true);
         censorBar.visible = false;
-        PlayState.add(censorBar);
-    
+        add(censorBar);
+
         var censorTimes:Array<Dynamic> = [
-            [4.63,true,[300,450]],      [4.77,false],   //SHIT
-            [25,true,[275,435]],        [25.27,false],  //SCHOOL
+            [4.63,true,[300,450]],      [4.77,false],   //Shit
+            [25,true,[275,435]],        [25.27,false],  //School
             [25.38,true],               [25.86,false],
-            [30.68,true,[375,475]],     [31.06,false],  //CUNT
+            [30.68,true,[375,475]],     [31.06,false],  //Cunt
             [33.79,true,[300,450]],     [34.28,false],
         ];
-    
-        for (censorThing in censorTimes)
-        {
-            new FlxTimer().start(censorThing[0], function(tmr:FlxTimer)
-            {
-                censorBar.visible = censorThing[1];
-                if (censorThing[2] != null)
-                {
-                    censorBar.x = censorThing[2][0];
-                    censorBar.y = censorThing[2][1];
+        var censorManager = makeCutsceneManager();
+        for (i in censorTimes) {
+            censorManager.pushEvent(i[0], function () {
+                censorBar.visible = i[1];
+                if (i[2] != null) {
+                    censorBar.x = i[2][0];
+                    censorBar.y = i[2][1];
                 }
             });
         }
+        censorManager.start();
     }
 }
 
-function zoomBack()
-{
+function zoomBack() {
 	PlayState.camFollow.x = 630;
     PlayState.camFollow.y = 425;
 	PlayState.camGame.zoom = 0.8;
@@ -232,8 +206,7 @@ var addedPico:Bool = false;
 var killedDudes:Bool = false;
 var catchedGF:Bool = false;
 
-function updatePost()
-{
+function updatePost() {
     if (loadedCutsceneAssets) {
         if (demonGf.animation.curAnim != null) {
             if (demonGf.animation.curAnim.name == 'demonGf') {

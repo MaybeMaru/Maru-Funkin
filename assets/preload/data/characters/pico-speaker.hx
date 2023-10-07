@@ -1,4 +1,4 @@
-importLib('Song', 'funkin.util.song');
+import funkin.util.song.Song;
 
 var speaker:FlxSpriteExt;
 var picoNotes_ = [];
