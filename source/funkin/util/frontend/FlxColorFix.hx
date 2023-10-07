@@ -69,7 +69,10 @@ class FlxColorFix {
 		return get();
 	}
 
-	public inline function toRGB (color:FlxColor) {
-		return [(color >> 16 & 0xFF), (color >> 8 & 0xFF), (color & 0xFF)];
+	public static inline function toRGBA (color:FlxColor) {
+		return [(color >> 16 & 0xFF), (color >> 8 & 0xFF), (color & 0xFF), (color & 0xFF) << 24, ((color & 0xFF) << 24)];
+	}
+	public static inline function toRGBAFloat (color:FlxColor) {
+		return [(color >> 16 & 0xFF) / 255, (color >> 8 & 0xFF) / 255, (color & 0xFF) / 255, ((color & 0xFF) << 24) / 255];
 	}
 }

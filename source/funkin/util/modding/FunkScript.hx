@@ -321,7 +321,7 @@ class FunkScript extends Script {
 			Shader.setBool(shader, prop, value);
 		});
 
-		set('setShaderVector', function (shader:String, prop:String, value:Array<Int, Float, Bool>) {
+		set('setShaderVector', function (shader:String, prop:String, value:Array<Dynamic>) {
 			Shader.setVector(shader, prop, value);
 		});
 
