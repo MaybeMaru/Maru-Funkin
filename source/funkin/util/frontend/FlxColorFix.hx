@@ -68,4 +68,8 @@ class FlxColorFix {
 		B = FlxMath.lerp(B, target.blue, lerpVal);
 		return get();
 	}
+
+	public inline function toRGB (color:FlxColor) {
+		return [(color >> 16 & 0xFF), (color >> 8 & 0xFF), (color & 0xFF)];
+	}
 }

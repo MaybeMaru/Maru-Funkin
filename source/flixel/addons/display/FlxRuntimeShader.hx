@@ -650,6 +650,22 @@ class FlxRuntimeShader extends FlxShader
 	}
 
 	/**
+	 * Modify a vector parameter of the shader.
+	 * @param name The name of the parameter to modify.
+	 * @param value The new value to use.
+	 */
+	public function setVector(name:String, value:Array<Int, Float, Bool>):Void
+	{
+		var prop:ShaderParameter<Int, Float, Bool> = Reflect.field(this.data, name);
+		if (prop == null)
+		{
+			trace('[WARN] Shader vector[] property ${name} not found.');
+			return;
+		}
+		prop.value = value;
+	}
+	
+	/**
 	 * Set or modify a sampler2D input of the shader.
 	 * @param name The name of the shader input to modify.
 	 * @param value The texture to use as the sampler2D input.
@@ -750,6 +766,21 @@ class FlxRuntimeShader extends FlxShader
 		if (prop == null)
 		{
 			trace('[WARN] Shader bool[] property ${name} not found.');
+			return null;
+		}
+		return prop.value;
+	}
+	
+	/**
+	 * Retrieve a Vector parameter of the shader.
+	 * @param name The name of the parameter to retrieve.
+	 */
+	public function getVector (name:String):Null<Array<Int, Float, Bool>>
+	{
+		var prop:ShaderParameter<Array<Int, Float, Bool>> = Reflect.field(this.data, name);
+		if (prop == null)
+		{
+			trace('[WARN] Shader vector[] property ${name} not found.');
 			return null;
 		}
 		return prop.value;
