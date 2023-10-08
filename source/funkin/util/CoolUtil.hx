@@ -19,8 +19,11 @@ class CoolUtil {
 
 	inline public static function init():Void {
 		#if desktop
+		FunkThread.runThread(function () {
+			SongZip.init();
+			ModdingUtil.reloadModFolders();
+		}, 1);
 		ModdingUtil.reloadModFolders();
-		SongZip.init();
 		#end
 		SkinUtil.setCurSkin();
 		NoteUtil.initTypes();

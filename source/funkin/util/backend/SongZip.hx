@@ -53,34 +53,39 @@ class SongZip {
     }
 
     static function unzipOsu(zipFiles:Array<String>, modPath:String) {
-        var _audios:Array<String> = [];
         var _charts:Array<String> = [];
         
         for (i in zipFiles) {
             switch (i.split(".")[1]) {
-                case "mp3" | "wav": _audios.push(i);
                 case "osu": _charts.push(i);
                 default: removeQueue.push(i);
             }
         }
 
-        var _songs:Array<String> = [];
+        var _songDiffs:Map<String, Array<String>> = [];
 
         for (i in _charts) {
-            var osuChart = OsuFormat.convertSong(i);
-            final formatSong = Song.formatSongFolder(osuChart.song);
-            createSongFolder('$modPath/songs/$formatSong', formatSong, osuChart, _audios[0]);
-            _songs.push(osuChart.song);
+            var osuMap = new OsuFormat(i);
+            final _title = osuMap.getVar('Title');
+            final osuTitle = Song.formatSongFolder(_title);
+
+            final osuDiff:String = osuMap.getVar("Version").toLowerCase();
+            final osuAudio:String = '$modPath/${osuMap.getVar("AudioFilename")}';
+
+            if (_songDiffs.exists(_title)) _songDiffs.get(_title).push(osuDiff);
+            else _songDiffs.set(_title, [osuDiff]);
+            
+            var osuChart = OsuFormat.convertSong("", osuMap);
+            createSongFolder('$modPath/songs/$osuTitle', osuTitle, osuChart, osuAudio, osuDiff);
             removeQueue.push(i);
         }
 
-        // This is REALLY bad but i just wanna get it done as a experiment
-        var weekJson:WeekJson = JsonUtil.copyJson(WeekSetup.DEFAULT_WEEK);
-        weekJson.weekDiffs = ["hard"];
-        weekJson.songList.songs = _songs.copy();
-
-        final weekName = Song.formatSongFolder(modPath.split("mods/")[1]);
-        saveJson(weekJson, '$modPath/data/weeks/$weekName.json');
+        for (i in _songDiffs.keys()) {
+            var weekJson:WeekJson = JsonUtil.copyJson(WeekSetup.DEFAULT_WEEK);
+            weekJson.weekDiffs = CoolUtil.customSort(_songDiffs.get(i), ['easy', 'normal', 'hard']);
+            weekJson.songList.songs = [i];
+            saveJson(weekJson, '$modPath/data/weeks/${Song.formatSongFolder(i)}.json');
+        }
     }
 
     static function saveJson(input:Dynamic, path:String) {
@@ -88,21 +93,23 @@ class SongZip {
         File.saveContent(path, jsonString);
     }
 
-    static function createSongFolder(prefix:String, song:String, chart:SwagSong, audio:String) {
+    static function createSongFolder(prefix:String, song:String, chart:SwagSong, audio:String, diff:String = 'hard') {
         for (i in ["charts", "audio"]) ModSetupState.createFolder('$prefix/$i', "");
-        saveJson({song: Song.optimizeJson(chart)}, '$prefix/charts/hard.json');
+        saveJson({song: Song.optimizeJson(chart)}, '$prefix/charts/$diff.json');
         final finalAudio = '$prefix/audio/Inst.ogg';
-        if (audio.endsWith(".ogg")) {
-            FileSystem.rename(audio, finalAudio); // Is an ogg, just rename it
-        } else {
-            audioToOgg(audio, finalAudio);
+        if (!FileSystem.exists(finalAudio)) {
+            if (audio.endsWith(".ogg")) {
+                FileSystem.rename(audio, finalAudio); // Is an ogg, just rename it
+            } else {
+                audioToOgg(audio, finalAudio);
+            }
         }
     }
 
     static public function audioToOgg(path:String, output:String) {
         ModSetupState.createFolder(output, "");
         Sys.command("assets/data/ffmpeg.exe", ['-y', '-loglevel', '0', '-i', path,
-        '-c:a', 'libvorbis', '-b:a', '320k', '-map', 'a', output]);
+        '-c:a', 'libvorbis', '-b:a', '64k', '-map', 'a', output]);
         removeQueue.push(path);
     }
 

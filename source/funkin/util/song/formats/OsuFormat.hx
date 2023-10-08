@@ -6,21 +6,26 @@ package funkin.util.song.formats;
 */
 
 class OsuFormat {
-    inline public static function convertSong(path:String):SwagSong {
-        var osuMap:Array<String> = CoolUtil.getFileContent(path).split('\n');
+    public var map:Array<String> = [];
+    public function new(path:String) {
+        map = CoolUtil.getFileContent(path).split('\n');
+    }
+    
+    inline public static function convertSong(path:String, ?input:OsuFormat):SwagSong {
+        var osuMap:OsuFormat = input ?? new OsuFormat(path);
         var fnfMap:SwagSong = Song.getDefaultSong();
 
         //  Check if its not an osu!mania map
-        if (getMapVar(osuMap, 'Mode') != 3)
+        if (osuMap.getVar('Mode') != 3)
             return fnfMap;
 
-        var title = getMapVar(osuMap, 'Title');
-        var version = getMapVar(osuMap, 'Version');
-        var timingPoints = getMapTimingPoints(osuMap);
+        var title = osuMap.getVar('Title');
+        var version = osuMap.getVar('Version');
+        var timingPoints = osuMap.getTimingPoints();
         var offset = timingPoints[0];
         var bpm = FlxMath.roundDecimal(60000 / timingPoints[1], 1);
-        var speed = getMapVar(osuMap, 'OverallDifficulty');
-        var hitObjects =  getMapHitObjects(osuMap);
+        var speed = osuMap.getVar('OverallDifficulty');
+        var hitObjects =  osuMap.getHitObjects();
 
         var sections:Array<SwagSection> = [];
         for (i in 0...Lambda.count(hitObjects)) {
@@ -38,7 +43,7 @@ class OsuFormat {
         return fnfMap;
     }
 
-    private static function getMapVar(map:Array<String>, mapVar:String):Dynamic {
+    public function getVar(mapVar:String):Dynamic {
         for (line in map) {
             if (line.startsWith(mapVar)) {
                 var retVar:String = line.split('$mapVar:')[1].trim();
@@ -48,7 +53,7 @@ class OsuFormat {
         return null;
     }
 
-    private static function getMapTimingPoints(map:Array<String>):Array<Dynamic> {
+    public function getTimingPoints():Array<Dynamic> {
         for (i in 0...map.length) {
             if (map[i].startsWith('[TimingPoints]')) {
                 var returnArray:Array<Dynamic> = [];
@@ -60,10 +65,10 @@ class OsuFormat {
         return [];
     }
 
-    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Array<Dynamic>>> {
+    public function getHitObjects():Map<Int,Array<Array<Dynamic>>> {
         var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
-        var mapCircleSize = Std.parseInt(getMapVar(map, 'CircleSize'));
-        var bpmMills = getMapTimingPoints(map)[1];
+        var mapCircleSize = Std.parseInt(getVar('CircleSize'));
+        var bpmMills = getTimingPoints()[1];
 
         for (l in 0...map.length) {
             if (map[l].startsWith('[HitObjects]')) {
