@@ -29,8 +29,6 @@ haxelib install flixel-ui
 haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp/
 haxelib git hscript https://github.com/MaybeMaru/hscript
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
-
 ```
 You should have everything ready for compiling the game!
 For the rest follow the [base game compile guide](https://github.com/FunkinCrew/Funkin#compiling-game)
