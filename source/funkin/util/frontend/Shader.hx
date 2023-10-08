@@ -76,6 +76,19 @@ class Shader
 		return 0;
 	}
 
+	inline public static function setVector (shader:String, prop:String, value:Array<Dynamic>):Void
+	{
+		if (existsShader(shader))
+			getShader(shader).setVector(prop, value);
+	}
+	
+	public static function getVector (shader:String, prop:String):Null<Array<Dynamic>>
+	{
+		if (existsShader(shader))
+			return getShader(shader).getVector(prop);
+		return null;
+	}
+
 	inline public static function setFloat(shader:String, prop:String, value:Float):Void
 	{
 		if (existsShader(shader))

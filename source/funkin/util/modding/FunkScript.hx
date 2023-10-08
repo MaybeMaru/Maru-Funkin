@@ -321,6 +321,10 @@ class FunkScript extends Script {
 			Shader.setBool(shader, prop, value);
 		});
 
+		set('setShaderVector', function (shader:String, prop:String, value:Array<Dynamic>) {
+			Shader.setVector(shader, prop, value);
+		});
+
 		set('switchCustomState', function (key:String) {
 			ScriptUtil.switchCustomState(key);
 		});

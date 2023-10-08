@@ -366,8 +366,15 @@ setShaderInt(shaderTag:String, variableName:String, intValue:Int);
     @param variableName     --> Name of the variable to set
     @param boolValue        --> Bool value to set the variable to
 */
-setShaderBool(shaderTag:String, prop:String, boolValue:Bool);
+setShaderBool(shaderTag:String, variableName:String, boolValue:Bool);
 
+/*
+    Sets a vector to a shader variable
+    @param shaderTag        --> Name or tag of the shader
+    @param variableName     --> Name of the variable to set
+    @param vectorValue        --> vector value to set the variable to
+*/
+setShaderVector(shaderTag:String, variableName:String, vectorValue:Array<Int, Float, Bool>);
 
 /*
     HSCRIPT PLAYSTATE CALLBACKS
