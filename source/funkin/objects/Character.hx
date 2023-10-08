@@ -195,7 +195,7 @@ class Character extends FlxSpriteExt {
 		char.holdTimer = holdTimer;
 		char.specialAnim = specialAnim;
 		char.botMode = botMode;
-		stageOffsets.copyFrom(char.stageOffsets);
+		char.stageOffsets.copyFrom(stageOffsets);
 		char.setXY(OG_X,OG_Y);
 
 		final lastAnim = animation.curAnim;
