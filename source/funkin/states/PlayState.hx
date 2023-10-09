@@ -1,11 +1,5 @@
 package funkin.states;
 
-import flixel.math.FlxMatrix;
-import openfl.display.BitmapData;
-import openfl.display.PNGEncoderOptions;
-import openfl.utils.ByteArray;
-import lime.utils.Bytes;
-import flixel.addons.util.PNGEncoder;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
@@ -570,11 +564,13 @@ class PlayState extends MusicBeatState {
 		}
 		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
+			CustomTransition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else if (FlxG.keys.justPressed.EIGHT) {
 			SkinUtil.setCurSkin('default');
+			CustomTransition.skipTrans = false;
 			switchState(new AnimationDebug(SONG.players[1]));
 			DiscordClient.changePresence("Character Editor", null, null, true);
 		}
@@ -627,16 +623,16 @@ class PlayState extends MusicBeatState {
 	
 	public function cameraMovement():Void {
 		if (!notesGroup.generatedMusic || curSectionData == null) return;
-		
-		var mustHit:Bool = curSectionData.mustHitSection;
-		var dadMidpointX:Float = dad.getMidpoint().x;
-		var bfMidpointX:Float = boyfriend.getMidpoint().x;
-		var intendedPos:Float = mustHit ? bfMidpointX - boyfriend.camOffsets.x - stageJsonData.bfCamOffsets[0] : dadMidpointX - dad.camOffsets.x - stageJsonData.dadCamOffsets[0];
+		final dadMidpoint = dad.getMidpoint();
+		final bfMidpoint = boyfriend.getMidpoint();
+		final mustHit:Bool = curSectionData.mustHitSection;
+
+		var intendedPos:Float = mustHit ? bfMidpoint.x - boyfriend.camOffsets.x - stageJsonData.bfCamOffsets[0] : dadMidpoint.x - dad.camOffsets.x - stageJsonData.dadCamOffsets[0];
 		var camOffsets:Array<Float> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
 		
 		if (camFollow.x != intendedPos) {
 			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0]);
-			camFollow.setPosition(mustHit ? bfMidpointX : dadMidpointX, mustHit ? boyfriend.getMidpoint().y : dad.getMidpoint().y);
+			camFollow.setPosition(mustHit ? bfMidpoint.x : dadMidpoint.x, mustHit ? bfMidpoint.y : dadMidpoint.y);
 			camFollow.x -= mustHit ? boyfriend.camOffsets.x : dad.camOffsets.x;
 			camFollow.y -= mustHit ? boyfriend.camOffsets.y : dad.camOffsets.y;
 	
@@ -654,6 +650,7 @@ class PlayState extends MusicBeatState {
 		CustomTransition.skipTrans = isStoryMode;
 
 		if (inChartEditor) {
+			CustomTransition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
@@ -711,26 +708,10 @@ class PlayState extends MusicBeatState {
 	}
 
 	static final ratingMap:Map<String, Dynamic> = [
-		"sick" => {
-			score: 350,
-			note: 1,
-			ghostLoss: 0
-		},
-		"good" => {
-			score: 200,
-			note: 0.8,
-			ghostLoss: 0
-		},
-		"bad" => {
-			score: 100,
-			note: 0.5,
-			ghostLoss: 0.06
-		},
-		"shit" => {
-			score: 50,
-			note: 0.25,
-			ghostLoss: 0.1
-		}
+		"sick" => {score: 350, note: 1, ghostLoss: 0},
+		"good" => {score: 200, note: 0.8, ghostLoss: 0},
+		"bad" => {score: 100, note: 0.5, ghostLoss: 0.06},
+		"shit" => {score: 50, note: 0.25, ghostLoss: 0.1}
 	];
 
 	public function popUpScore(strumtime:Float, daNote:Note) {

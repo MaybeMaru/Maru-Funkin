@@ -19,24 +19,29 @@ function startCutscene() {
 
     PlayState.camHUD.visible = false;
 
-    new FlxTimer().start(0.3, function(swagTimer:FlxTimer) {
+    var manager = makeCutsceneManager(); 
+
+    for (i in 0...8) manager.pushEvent(i*0.3, function () {
         senpaiEvil.alpha += 0.15;
-        if (senpaiEvil.alpha < 1)   swagTimer.reset();
-        else {
-            senpaiEvil.playAnim('cutscene');
-            FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
-                senpaiEvil.destroy();
-                red.destroy();
-                PlayState.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
-                    PlayState.camHUD.visible = true;
-                    PlayState.createDialogue();
-                }, true);
-            });
-            new FlxTimer().start(3.2, function(deadTime:FlxTimer) {
-                PlayState.camGame.fade(FlxColor.WHITE, 1.6, false);
-            });
-        }
     });
+
+    manager.pushEvent(2, function () {
+        senpaiEvil.playAnim('cutscene');
+        FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
+            senpaiEvil.destroy();
+            red.destroy();
+            PlayState.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
+                PlayState.camHUD.visible = true;
+                PlayState.createDialogue();
+            }, true);
+        });
+    });
+
+    manager.pushEvent(5.3, function () {
+        PlayState.camGame.fade(FlxColor.WHITE, 1.6, false);
+    });
+
+    manager.start();
 }
 
 var bgFade:FlxSprite;

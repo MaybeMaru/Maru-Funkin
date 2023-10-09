@@ -46,8 +46,8 @@ class FlxColorFix {
 		set(R,G,B,A);
 	}
 
-	public static function fromFlxColor(color:FlxColor) {
-		return new FlxColorFix(color.red,color.green,color.blue);
+	public static inline function fromFlxColor(color:FlxColor) {
+		return new FlxColorFix(color.red,color.green,color.blue,color.alpha);
 	}
 
 	public function set(R:Float = 255,G:Float = 255,B:Float = 255,A:Float = 255) {
@@ -57,7 +57,7 @@ class FlxColorFix {
 		this.A = A;
 	}
 	
-	public function get():FlxColor {
+	public inline function get():FlxColor {
 		return FlxColor.fromRGB(Std.int(R),Std.int(G),Std.int(B),Std.int(A));
 	}
 
@@ -72,6 +72,7 @@ class FlxColorFix {
 	public static inline function toRGBA (color:FlxColor) {
 		return [(color >> 16 & 0xFF), (color >> 8 & 0xFF), (color & 0xFF), (color & 0xFF) << 24, ((color & 0xFF) << 24)];
 	}
+	
 	public static inline function toRGBAFloat (color:FlxColor) {
 		return [(color >> 16 & 0xFF) / 255, (color >> 8 & 0xFF) / 255, (color & 0xFF) / 255, ((color & 0xFF) << 24) / 255];
 	}

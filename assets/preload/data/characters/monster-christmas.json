@@ -5,6 +5,46 @@
 	"camOffsets": [-300,100],
 	"anims": [
 		{
+			"offsets": [-60,-90],
+			"indices": [12,13,14],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "monster down0",
+			"animName": "singDOWN-loop"
+		},
+		{
+			"offsets": [-60,-90],
+			"indices": [0,1,2,3,4,5,6,7,8,9,10,11],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "monster down0",
+			"animName": "singDOWN"
+		},
+		{
+			"offsets": [-28,56],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "monster up note0",
+			"animName": "singUP"
+		},
+		{
+			"offsets": [-36,10],
+			"indices": [12,13,14],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Monster left note0",
+			"animName": "singLEFT-loop"
+		},
+		{
+			"offsets": [-52,11],
+			"indices": [12,13,14],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "Monster Right note0",
+			"animName": "singRIGHT-loop"
+		},
+		{
 			"offsets": [0,0],
 			"indices": [],
 			"loop": false,
@@ -21,20 +61,12 @@
 			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [-60,-90],
-			"indices": [],
-			"loop": false,
+			"offsets": [0,0],
+			"indices": [12,13,14],
+			"loop": true,
 			"framerate": 24,
-			"animFile": "monster down0",
-			"animName": "singDOWN"
-		},
-		{
-			"offsets": [-28,56],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "monster up note0",
-			"animName": "singUP"
+			"animFile": "monster idle0",
+			"animName": "idle-loop"
 		},
 		{
 			"offsets": [-36,10],
@@ -43,6 +75,14 @@
 			"framerate": 24,
 			"animFile": "Monster left note0",
 			"animName": "singLEFT"
+		},
+		{
+			"offsets": [-28,56],
+			"indices": [12,13,14],
+			"loop": true,
+			"framerate": 24,
+			"animFile": "monster up note0",
+			"animName": "singUP-loop"
 		}
 	],
 	"charOffsets": [90,290],

@@ -61,12 +61,11 @@ FlxTrail
 
 /*
     Adds a class to the script
-    DEPRECATED!! (kinda) Youre now able to use ``import`` in scripts
-    Can still be used for custom class tags until I add ``as``
     @param className        --> Name of the class           EX: 'FlxSprite'
     @param classPackage     --> Package of the class        EX: 'flixel'
     @param customClassName  --> Custom tag for the class    (OPTIONAL) 
 */
+@:deprecated //importLib() is deprecated, use import instead
 importLib(className:String, classPackage:String, ?customClassName:String);
 
 /*
@@ -613,25 +612,29 @@ function beatHitGameOver(curBeat:Int)
 
 function stateCreate()
 {
-    
+    //  Called after the state has created essentials like the transition graphic
 }
 
 function stateUpdate(elapsed:Float)
 {
-    
+    //   Called every frame in a state
+    //   elapsed --> amount of time elapsed since the last frame
 }
 
-function stateStepHit()
+function stateStepHit(curStep:Int)
 {
-    
+    //  Called every time there is a step hit in the state
+    //  curStep --> The current step number
 }
 
-function stateBeatHit()
+function stateBeatHit(curBeat:Int)
 {
-    
+    //  Called every time there is a beat hit in the state
+    //  curBeat --> The current beat number
 }
 
-function stateSectionHit()
+function stateSectionHit(curSection:Int)
 {
-    
+    //  Called every time there is a section hit in the state
+    //  curSection --> The current section number
 }

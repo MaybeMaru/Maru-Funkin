@@ -154,7 +154,7 @@ class Song {
 		var endTime:Float = getSectionTime(song, 1);
 		while (!(time >= startTime && time < endTime)) {
 			section++;
-			startTime = getSectionTime(song, section);
+			startTime = Reflect.copy(endTime);
 			endTime = getSectionTime(song, section+1);
 		}
 		return section;

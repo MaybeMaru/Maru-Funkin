@@ -279,6 +279,7 @@ class Character extends FlxSpriteExt {
 		}
 	}
 
+	@:deprecated("danceCheck() is deprecated, use danceInBeat() instead")
 	public inline function danceCheck() { // Backwards compatibility lol
 		danceInBeat();
 	}

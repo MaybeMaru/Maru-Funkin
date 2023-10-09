@@ -35,7 +35,7 @@ class Shader
 		trace('created shader $shader from $frag');
 	}
 
-	public static function clearShaders() {
+	public static inline function clearShaders() {
 		shaderMap.clear();
 	}
 
@@ -107,6 +107,7 @@ class Shader
 			if (existsShader(shader))
 				setFloat(shader, prop, getFloat(shader, prop) + value);
 	}*/
+
 	inline public static function setBool(shader:String, prop:String, value:Bool):Void
 	{
 		if (existsShader(shader))
