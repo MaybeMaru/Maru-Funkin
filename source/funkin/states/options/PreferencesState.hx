@@ -44,12 +44,7 @@ class PreferencesState extends MusicBeatState {
         }
     }
 
-    override function update(elapsed:Float):Void {
-        super.update(elapsed);
-
-		if (getKey('UI_UP-P'))    changeSelection(-1);
-		if (getKey('UI_DOWN-P'))  changeSelection(1);
-        
+    function selectPref() {
         var leftP = getKey('UI_LEFT-P');
 		var rightP = getKey('UI_RIGHT-P');
 		var accepted = getKey('ACCEPT-P');
@@ -82,10 +77,22 @@ class PreferencesState extends MusicBeatState {
                 }
             }
         }
+    }
 
-        if (getKey('BACK-P')) {
-            SaveData.flushData();
-            switchState(new OptionsState());
+    var hitBack:Bool = false;
+
+    override function update(elapsed:Float):Void {
+        super.update(elapsed);
+        if (!hitBack) {
+            if (getKey('UI_UP-P'))    changeSelection(-1);
+            if (getKey('UI_DOWN-P'))  changeSelection(1);
+            selectPref();
+    
+            if (getKey('BACK-P')) {
+                SaveData.flushData();
+                hitBack = true;
+                switchState(new OptionsState());
+            }
         }
     }
 }

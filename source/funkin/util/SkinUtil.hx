@@ -18,7 +18,6 @@ class SkinUtil {
 
     inline public static function initSkinData():Void { //  Cache skin data
         dataMap = new Map<String, SkinJson>();
-
         for (skin in JsonUtil.getJsonList('skins')) {
             dataMap.set(skin, getSkinJsonData(skin));
         }
@@ -36,10 +35,10 @@ class SkinUtil {
 	}
 
     public static function getSkinData(?skin:String):SkinJson {
-        skin = (skin != null) ? skin : curSkin;
+        skin = skin ?? curSkin;
         if (dataMap == null)
             initSkinData();
-        else if (dataMap.get(skin) == null)
+        else if (!dataMap.exists(skin))
             dataMap.set(skin, getSkinJsonData(skin));
 
         return dataMap.get(skin);

@@ -6,19 +6,24 @@ package funkin.util.song.formats;
 */
 
 class QuaFormat {
-    inline public static function convertSong(path:String):SwagSong {
-        var quaMap:Array<String> = CoolUtil.getFileContent(path).split('\n');
+    public var map:Array<String> = [];
+    public function new(path:String) {
+        map = CoolUtil.getFileContent(path).split('\n');
+    }
+    
+    public static function convertSong(path:String):SwagSong {
+        var quaMap:QuaFormat = new QuaFormat(path);
         var fnfMap:SwagSong = Song.getDefaultSong();
 
         // Check if map is above 4 keys
-        if (getMapVar(quaMap, 'Mode') != 'Keys4') {
+        if (quaMap.getVar('Mode') != 'Keys4') {
             return fnfMap;
         }
 
-        var title = getMapVar(quaMap, 'Title');
-        var bpm = FlxMath.roundDecimal(getMapVar(quaMap, 'Bpm'), 1);
-        var speed = getMapVar(quaMap, 'InitialScrollVelocity');
-        var hitObjects =  getMapHitObjects(quaMap);
+        var title = quaMap.getVar('Title');
+        var bpm = FlxMath.roundDecimal(quaMap.getVar('Bpm'), 1);
+        var speed = quaMap.getVar('InitialScrollVelocity');
+        var hitObjects = quaMap.getHitObjects();
 
         var sections:Array<SwagSection> = [];
         for (i in 0...Lambda.count(hitObjects)) {
@@ -37,7 +42,7 @@ class QuaFormat {
         return fnfMap;
     }
 
-    private static function getMapVar(map:Array<String>, mapVar:String):Dynamic {
+    public function getVar(mapVar:String):Dynamic {
         for (line in map) {
             if (line.startsWith('$mapVar: ') || line.startsWith('- $mapVar: ') || line.startsWith('  $mapVar:')) {
                 var retVar:String = line.split('$mapVar: ')[1].trim();
@@ -47,9 +52,9 @@ class QuaFormat {
         return null;
     }
 
-    inline private static function getMapHitObjects(map:Array<String>):Map<Int,Array<Array<Dynamic>>> {
+    public function getHitObjects():Map<Int,Array<Array<Dynamic>>> {
         var returnMap:Map<Int,Array<Array<Dynamic>>> = new Map<Int,Array<Array<Dynamic>>>();
-        var crochet:Float = (60 / getMapVar(map, 'Bpm')) * 1000;
+        var crochet:Float = (60 / getVar('Bpm')) * 1000;
 
         for (l in 0...map.length) {
             if (map[l].startsWith('- StartTime: ')) {

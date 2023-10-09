@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import flixel.util.FlxArrayUtil;
+import flixel.util.FlxDestroyUtil;
 import funkin.states.editors.chart.ChartEventsGrid;
 import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
@@ -468,14 +470,20 @@ class ChartingState extends MusicBeatState {
 
     public function clearSectionData(clearNotes:Bool = true, clearEvents:Bool = true, full:Bool = true) {
         if (clearNotes) {
-            SONG.notes[sectionIndex].sectionNotes = [];
+            //SONG.notes[sectionIndex].sectionNotes = [];
+            //FlxDestroyUtil.putArray()
+            FlxArrayUtil.clearArray(SONG.notes[sectionIndex].sectionNotes);
             deselectNote();
-            mainGrid.clearSection(full);
+            mainGrid.setData(sectionIndex);
+            //mainGrid.setData(SONG.notes[sectionIndex].sectionNotes);
+            //mainGrid.clearSection(full);
         }
         if (clearEvents) {
-            SONG.notes[sectionIndex].sectionEvents = [];
+            //SONG.notes[sectionIndex].sectionEvents = [];
+            FlxArrayUtil.clearArray(SONG.notes[sectionIndex].sectionEvents);
             deselectEvent();
-            eventsGrid.clearSection();
+            eventsGrid.setData(sectionIndex);
+            //eventsGrid.clearSection();
         }
     }
 

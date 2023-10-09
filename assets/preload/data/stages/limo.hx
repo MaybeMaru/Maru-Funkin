@@ -10,6 +10,7 @@ var goreSound:FlxSound;
 
 function create():Void {
     PlayState.defaultCamZoom = 0.9;
+	PlayState.camGame.bgColor = 0xff516bdf;
 	metalPos = new FlxSpriteExt(-400, 125);
 
 	var skyBG:FunkinSprite = new FunkinSprite('limo/limoSunset', [-120,-50],[0.1,0.1]);

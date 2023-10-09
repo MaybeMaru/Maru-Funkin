@@ -27,8 +27,7 @@ typedef StageJson = {
 }
 
 class Stage {
-    public var curStage:String = 'stage';
-    public static var defaultStage(default, never):StageJson = {
+    public static var DEFAULT_STAGE(default, never):StageJson = {
         library: "",
         skin: "default",
         zoom: 1.05,
@@ -48,9 +47,9 @@ class Stage {
     public static function getJsonData(stage:String):StageJson {
         if (Paths.exists(Paths.json('stages/$stage'), TEXT)) {
             var stageJson:StageJson = JsonUtil.getJson(stage, 'stages');
-            return JsonUtil.checkJsonDefaults(defaultStage, stageJson);
+            return JsonUtil.checkJsonDefaults(DEFAULT_STAGE, stageJson);
         }
-        return defaultStage;
+        return DEFAULT_STAGE;
     }
 
     public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript) {
@@ -59,9 +58,8 @@ class Stage {
 
         for (layer in Reflect.fields(layers)) {
             var objects:Array<Dynamic> = cast Reflect.field(layers, layer);
-            for (i in objects) {
-                var object:Dynamic = i;
-                var objectTag = Reflect.field(object, "tag");
+            for (object in objects) {
+                final objectTag = object.tag;
                 var sprite = quickSprite(object);
                 if (script != null) script.set(objectTag, sprite);
                 ScriptUtil.addSprite(sprite, objectTag, layer == 'fg');
@@ -69,7 +67,7 @@ class Stage {
         }
     }
 
-    public static var DEFAULT_STAGE_OBJECT:StageObject = {
+    public static var DEFAULT_STAGE_OBJECT(default, never):StageObject = {
         tag: "coolswag",
         imagePath: "keoiki",
         position: [0,0],

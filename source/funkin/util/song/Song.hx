@@ -6,6 +6,7 @@ import flixel.util.FlxSort;
 import funkin.util.song.formats.OsuFormat;
 import funkin.util.song.formats.SmFormat;
 import funkin.util.song.formats.QuaFormat;
+import funkin.util.song.formats.GhFormat;
 import funkin.util.song.formats.FunkinFormat;
 
 typedef SwagSection = {
@@ -57,7 +58,7 @@ class Song {
 		'osu', 						// Osu! Mania
 		'sm', 'ssc', 				// Stepmania
 		'qua', 						// Quaver
-		//'/meta.json' 				// Ludum Dare Prototype FNF
+		'chart'						// Guitar Hero
 	];
 
 	public static function loadFromFile(diff:String, ?folder:String):SwagSong {
@@ -69,10 +70,11 @@ class Song {
 
 			if (Paths.exists(chartPath, TEXT)) {
 				switch (format) {
-					case 'json':		return checkSong(parseJson(chartPath), meta);					// Funkin chart
-					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);		// Osu chart
-					case 'sm' | 'ssc': 	return checkSong(SmFormat.convertSong(chartPath), meta);		// Stepmania chart
-					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);		// Quaver chart
+					case 'json':		return checkSong(parseJson(chartPath), meta);				// Funkin chart
+					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);	// Osu chart
+					case 'sm' | 'ssc': 	return checkSong(SmFormat.convertSong(chartPath), meta);	// Stepmania chart
+					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);	// Quaver chart
+					case 'chart':		return checkSong(GhFormat.convertSong(chartPath), meta);	// Guitar hero chart
 				}
 			}
 		}
@@ -103,7 +105,7 @@ class Song {
 		return song;
 	}
 
-	inline public static function checkSection(?section:SwagSection):SwagSection {
+	public static function checkSection(?section:SwagSection):SwagSection {
 		section = JsonUtil.checkJsonDefaults(getDefaultSection(), section);
 		var foundNotes:Map<String, Bool> = [];
 		var uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
@@ -131,13 +133,13 @@ class Song {
 		return section;
 	}
 
-	inline public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
+	public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
 		var BPM:Float = song.bpm;
         var time:Float = 0;
         for (i in 0...section) {
 			checkAddSections(song, i);
 			if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
-			time += Conductor.BEATS_PER_MEASURE * (1000 * 60 / BPM);
+			time += Conductor.BEATS_PER_MEASURE * (60000 / BPM);
         }
         return time;
 	}
@@ -146,10 +148,10 @@ class Song {
 		while(song.notes[index] == null) song.notes.push(getDefaultSection());
 	}
 
-	inline public static function getTimeSection(song:SwagSong, time:Float):Int {
+	public static function getTimeSection(song:SwagSong, time:Float):Int {
 		var section:Int = 0;
 		var startTime:Float = 0;
-		var endTime:Float = getSectionTime(song, section+1);
+		var endTime:Float = getSectionTime(song, 1);
 		while (!(time >= startTime && time < endTime)) {
 			section++;
 			startTime = getSectionTime(song, section);
@@ -159,7 +161,7 @@ class Song {
 	}
 
 	//Removes unused variables for smaller size
-	inline public static function optimizeJson(input:SwagSong, metaClear:Bool = false):SwagSong {
+	public static function optimizeJson(input:SwagSong, metaClear:Bool = false):SwagSong {
 		var song:SwagSong = JsonUtil.copyJson(input);
 		for (sec in song.notes) {
 			if (!sec.changeBPM) {
@@ -211,7 +213,7 @@ class Song {
 		Use this function to get the sorted notes from a song as an array
 		Used for pico in Stress, but you can use it on other cool stuff
 	*/
-	public static function getSongNotes(diff:String, song:String):Array<Dynamic> {
+	inline public static function getSongNotes(diff:String, song:String):Array<Dynamic> {
 		var sections:Array<SwagSection> = loadFromFile(diff, song).notes;
 		return sortSections(sections);
 	}
@@ -233,7 +235,7 @@ class Song {
 		return FlxSort.byValues(FlxSort.ASCENDING,  Obj1[0], Obj2[0]);
 	}
 
-	inline public static function formatSongFolder(songName:String):String {
+	public static function formatSongFolder(songName:String):String {
 		var returnSong:String = "";
 		var songParts:Array<String> = songName.split("");
 		for (letter in songParts) {
@@ -251,6 +253,7 @@ class Song {
 	inline public static function getDefaultSong():SwagSong {
 		return JsonUtil.copyJson(DEFAULT_SONG);
 	}
+
 	inline public static function getDefaultSection():SwagSection {
 		return JsonUtil.copyJson(DEFAULT_SECTION);
 	}

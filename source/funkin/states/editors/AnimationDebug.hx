@@ -275,7 +275,7 @@ class AnimationDebug extends MusicBeatState {
 			}));
 		});
 
-		var loopButton:FlxUIButton = new FlxUIButton(autoButton.x + 100, autoButton.y, 'Create Loop Anim', function () {
+		var loopButton:FlxUIButton = new FlxUIButton(autoButton.x + 100, autoButton.y, 'Loop Anim', function () {
 			var uiAnimData = getUpdatedAnimData();
 			uiAnimData.indices = [3,4,5];
 			uiAnimData.offsets = getOffsetFromChar(displayChar, uiAnimData.animName);
