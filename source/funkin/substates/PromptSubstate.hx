@@ -22,9 +22,7 @@ class PromptSubstate extends MusicBeatSubstate {
         add(prompText);
 
         cameras = [CoolUtil.getTopCam()];
-        bg.scrollFactor.set();
-        prompBox.scrollFactor.set();
-        prompText.scrollFactor.set();
+        for (i in [bg,prompBox,prompText]) i.scrollFactor.set();
     }
 
     var startTimer:Float = 0.333;

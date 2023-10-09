@@ -109,8 +109,10 @@ class ControlsState extends MusicBeatState {
 		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P')) {
 			curBind = (curBind + 1) % 2;
 			CoolUtil.playSound('scrollMenu');
-			for (item in controlItems.members)
+			for (item in controlItems.members) {
 				item.bindSelected = curBind;
+				item.updateDisplay();
+			}
 		}
 
 		if (getKey('BACK-P')) {
@@ -143,6 +145,7 @@ class ControlsState extends MusicBeatState {
 				item.selected = true;
 				camFollow.y = item.targetY;
 			}
+			item.updateDisplay();
 		}
 	}
 }

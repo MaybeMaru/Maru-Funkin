@@ -25,19 +25,18 @@ class ControlItem extends FlxSpriteGroup {
         setPosition(150, targetY);
     }
 
-    override public function update(elapsed:Float):Void {
-        super.update(elapsed);
-
-        keyText.color = FlxColor.WHITE;
-        keyText.alpha = bind1Text.alpha = bind2Text.alpha = 0.6;
-
+    public function updateDisplay() {
         if (selected) {
             keyText.color = FlxColor.YELLOW;
             keyText.alpha = 1;
+            bind1Text.alpha = bind2Text.alpha = 0.6;
 
-            var bindText:Alphabet = (bindSelected == 0) ? bind1Text : bind2Text;
+            final bindText = (bindSelected == 0) ? bind1Text : bind2Text;
             bindText.alpha = 1;
             curBind = bindText.text.toUpperCase().trim();
+        } else {
+            keyText.color = FlxColor.WHITE;
+            keyText.alpha = bind1Text.alpha = bind2Text.alpha = 0.6;
         }
     }
 }

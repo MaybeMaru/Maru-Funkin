@@ -347,10 +347,10 @@ class AnimationDebug extends MusicBeatState {
 
 	function removeAnimation(label:String) {
 		if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(label)) {
-			displayChar.animOffsets.remove(label);
-			ghostChar.animOffsets.remove(label);
-			displayChar.animDatas.remove(label);
-			ghostChar.animDatas.remove(label);
+			for (i in [displayChar, ghostChar]) {
+				i.animDatas.remove(label);
+				i.animOffsets.remove(label);
+			}
 		}
 		updateAnimUI(null);
 	}
@@ -415,6 +415,11 @@ class AnimationDebug extends MusicBeatState {
 		for (i in animsText) i.kill();
 	}
 
+	function funcColor (txt:FunkinText, isCurAnim:Bool) {
+		txt.alpha = isCurAnim ? 1 : 0.6;
+		txt.color = isCurAnim ? FlxColor.YELLOW : FlxColor.WHITE;
+	}
+
 	function updateOffsetText(create:Bool = false):Void {
 		var _anims:Array<String> = [];
 		for (i in displayChar.animOffsets.keys()) _anims.push(i);
@@ -430,15 +435,13 @@ class AnimationDebug extends MusicBeatState {
 				var animText:FunkinText = animsText.recycle(FunkinText);
 				animText.setPosition(10, curAnimText.y+40+(22*i));
 				animText.text = offsetText;
-				animText.alpha = isCurAnim ? 1 : 0.6;
-				animText.color = isCurAnim ? FlxColor.YELLOW : FlxColor.WHITE;
+				funcColor(animText, isCurAnim);
 				animsText.add(animText);
 				animsList.push(anim);
 			}
 			else {
 				if (animsText.members[i] != null) {
-					animsText.members[i].alpha = isCurAnim ? 1 : 0.6;
-					animsText.members[i].color = isCurAnim ? FlxColor.YELLOW : FlxColor.WHITE;
+					funcColor(animsText.members[i], isCurAnim);
 					animsText.members[i].text = offsetText;
 				}
 				if (animsList[i] != null)
@@ -486,22 +489,13 @@ class AnimationDebug extends MusicBeatState {
 		input_indices.text = indicesToTxt(curAnimData.indices);
 	}
 
-	function indicesToTxt(indices:Array<Int>):String {
-		var retStr:String = '';
-		for (i in 0...indices.length)
-			retStr += '${indices[i]}' + (i < indices.length - 1 ? ',' : '');
-		return retStr;
+	inline function indicesToTxt(indices:Array<Int>):String {
+		return indices.map(function(i) return Std.string(i)).join(",");
 	}
 
-	function txtToIndices(text:String):Array<Int> {
+	inline function txtToIndices(text:String):Array<Int> {
 		if (text.length <= 0) return [];
-        var intArray:Array<Int> = [];
-        for (str in text.split(",")) {
-            var value:Null<Int> = Std.parseInt(str);
-            if (value != null)
-                intArray.push(value);
-        }
-        return intArray;
+		return text.split(",").map(function(str) return Std.parseInt(str)).filter(function(value) return value != null);
 	}
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

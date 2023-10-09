@@ -35,7 +35,7 @@ class CharSelectSubstate extends MusicBeatSubstate {
         for (f in 0...listsToAdd.length) {
             for (i in 0...listsToAdd[f].length) {
                 var list = listsToAdd[f];
-                var charText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, list[i], true);
+                var charText:MenuAlphabet = new MenuAlphabet(5, (70 * i) + 30, list[i], true);
                 charText.scrollFactor.set();
                 charText.targetY = i;
                 charText.forceX = false;
@@ -74,42 +74,36 @@ class CharSelectSubstate extends MusicBeatSubstate {
     }
 
     function changeFolder(change:Int = 0):Void {
-        try {
-            curFolder = FlxMath.wrap(curFolder + change, 0, curSelected.length - 1);
-            if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+        if (curSelected.length <= 0) return;
+        
+        curFolder = FlxMath.wrap(curFolder + change, 0, curSelected.length - 1);
+        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
     
-            switch(curFolder) {
-                case 0: folderTxt.text = 'Base game';
-                case 1: folderTxt.text = 'Mods';
-            }
+        switch(curFolder) {
+            case 0: folderTxt.text = 'Base game';
+            case 1: folderTxt.text = 'Mods';
+        }
     
-            for (f in 0...charArray.length) {
-                var showBool:Bool = (f == curFolder);
-                for (i in 0...charArray[f].length) {
-                    charArray[f][i].visible = showBool;
-                    iconArray[f][i].visible = showBool;
-                }
+        for (f in 0...charArray.length) {
+            var showBool:Bool = (f == curFolder);
+            for (i in 0...charArray[f].length) {
+                charArray[f][i].visible = showBool;
+                iconArray[f][i].visible = showBool;
             }
-            changeSelection();
         }
-        catch(e) {
-            trace('EMPTY FOLDER');
-        }
+        changeSelection();
     }
 
     function changeSelection(change:Int = 0):Void {
-        try {
-            curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
-            if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+        if (charArray[curFolder].length <= 0) return;
 
-            for (i in 0...charArray[curFolder].length) {
-                charArray[curFolder][i].targetY = i - curSelected[curFolder];
-                charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
-                iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
-            }
-        }
-        catch(e) {
-            trace('EMPTY FOLDER');
+        curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
+        if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
+
+        for (i in 0...charArray[curFolder].length) {
+            charArray[curFolder][i].targetY = i - curSelected[curFolder];
+            charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
+            iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
         }
 	}
 }
