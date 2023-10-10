@@ -11,8 +11,8 @@ class QuaFormat {
         map = CoolUtil.getFileContent(path).split('\n');
     }
     
-    public static function convertSong(path:String):SwagSong {
-        var quaMap:QuaFormat = new QuaFormat(path);
+    public static function convertSong(path:String, ?input:QuaFormat):SwagSong {
+        var quaMap:QuaFormat = input ?? new QuaFormat(path);
         var fnfMap:SwagSong = Song.getDefaultSong();
 
         // Check if map is above 4 keys
@@ -61,9 +61,10 @@ class QuaFormat {
                 var strumTime = Std.parseInt(map[l].split('- StartTime: ')[1].trim());
                 var noteData = Std.parseInt(map[l + 1].split('  Lane: ')[1].trim()) - 1;
                 if (noteData >= 0) {
-                    var susLength = 0;
+                    var susLength = 0.0;
                     if (map[l + 2].startsWith('  EndTime: ')) { // Get sus length if variable exists
                         susLength = Std.parseInt(map[l + 2].split('  EndTime: ')[1].trim()) - strumTime;
+                        susLength -= crochet / 4;
                     }
     
                     var noteSec = Std.int(strumTime/(crochet*4));

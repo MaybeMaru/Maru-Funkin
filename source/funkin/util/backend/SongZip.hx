@@ -1,5 +1,6 @@
 package funkin.util.backend;
 
+import funkin.util.song.formats.QuaFormat;
 import funkin.util.song.formats.OsuFormat;
 import funkin.states.editors.ModSetupState;
 
@@ -8,6 +9,14 @@ enum ZipFormat {
     QUAVER;
     STEPMANIA;
 }
+
+typedef UnZipType = {
+    var getMap: (chart:String) -> Dynamic;
+    var convert: (map:Dynamic) -> SwagSong;
+    var title: String;
+    var diff: String;
+    var audio: String;
+};
 
 class SongZip {
 
@@ -31,7 +40,7 @@ class SongZip {
         }
 
         for (a in zipArrays.keys()) {
-            var zipType = zipMap.get(a);
+            final zipType = zipMap.get(a);
             for (i in zipArrays.get(a)) {
                 final zipPath = Paths.getModPath('$i.$a');
                 final modPath = Paths.getModPath(i);
@@ -42,8 +51,8 @@ class SongZip {
                 removeQueue.push(zipPath);
                 
                 switch (zipType) {
-                    case OSU: unzipOsu(zipFiles, modPath);
-                    case QUAVER:
+                    case OSU: unzipFormat("osu", modPath, zipFiles);//unzipOsu(zipFiles, modPath);
+                    case QUAVER: unzipFormat("qua", modPath, zipFiles);//unzipQuaver(zipFiles, modPath);
                     case STEPMANIA:
                 }
             }
@@ -52,31 +61,47 @@ class SongZip {
         removeFilesFromQueue();
     }
 
-    static function unzipOsu(zipFiles:Array<String>, modPath:String) {
+    static var UNZIP_FORMAT:Map<String, UnZipType> = [
+        "osu" => {
+            getMap: function(chart) return cast new OsuFormat(chart),
+            convert: function(map) return OsuFormat.convertSong("", map),
+            title: "Title",
+            diff: "Version",
+            audio: "AudioFilename"
+        },
+        "qua" => {
+            getMap: function(chart) return cast new QuaFormat(chart),
+            convert: function(map) return QuaFormat.convertSong("", map),
+            title: "Title",
+            diff: "DifficultyName",
+            audio: "AudioFile"
+        }
+    ];
+
+    static function unzipFormat(format:String, modPath:String, zipFiles:Array<String>) {
         var _charts:Array<String> = [];
-        
         for (i in zipFiles) {
             switch (i.split(".")[1]) {
-                case "osu": _charts.push(i);
+                case "qua" | "osu": _charts.push(i);
                 default: removeQueue.push(i);
             }
         }
 
+        var formatUnzip = UNZIP_FORMAT.get(format);
         var _songDiffs:Map<String, Array<String>> = [];
-
         for (i in _charts) {
-            var osuMap = new OsuFormat(i);
-            final _title = osuMap.getVar('Title');
-            final osuTitle = Song.formatSongFolder(_title);
-
-            final osuDiff:String = osuMap.getVar("Version").toLowerCase();
-            final osuAudio:String = '$modPath/${osuMap.getVar("AudioFilename")}';
-
-            if (_songDiffs.exists(_title)) _songDiffs.get(_title).push(osuDiff);
-            else _songDiffs.set(_title, [osuDiff]);
+            var map = formatUnzip.getMap(i);
+            final title = map.getVar(formatUnzip.title);
+            final formatTitle = Song.formatSongFolder(title);
             
-            var osuChart = OsuFormat.convertSong("", osuMap);
-            createSongFolder('$modPath/songs/$osuTitle', osuTitle, osuChart, osuAudio, osuDiff);
+            final mapDiff = map.getVar(formatUnzip.diff);
+            final mapAudio = '$modPath/${map.getVar(formatUnzip.audio)}';
+
+            if (_songDiffs.exists(title)) _songDiffs.get(title).push(mapDiff);
+            else _songDiffs.set(title, [mapDiff]);
+
+            var chart = formatUnzip.convert(map);
+            createSongFolder('$modPath/songs/$formatTitle', formatTitle, chart, mapAudio, mapDiff);
             removeQueue.push(i);
         }
 
@@ -87,7 +112,7 @@ class SongZip {
             saveJson(weekJson, '$modPath/data/weeks/${Song.formatSongFolder(i)}.json');
         }
     }
-
+    
     static function saveJson(input:Dynamic, path:String) {
         final jsonString = FunkyJson.stringify(cast input, "\t");
         File.saveContent(path, jsonString);
