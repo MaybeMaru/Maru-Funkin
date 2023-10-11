@@ -62,7 +62,7 @@ class ChartingState extends MusicBeatState {
         Conductor.loadMusic(SONG.song);
         Conductor.mapBPMChanges(SONG);
 		Conductor.songOffset = SONG.offsets;
-        Conductor.setVolume();
+        Conductor.volume = 1;
         stop();
 
         mainGrid = new ChartGrid();
@@ -581,6 +581,15 @@ class ChartingState extends MusicBeatState {
                 metaEvents.push({});
             }
         }
+
+        if (metaEvents.length > 1) {
+			while (true) {
+				var lastSec = metaEvents[metaEvents.length-1];
+				if (lastSec == null) break;
+				if (Reflect.fields(lastSec).length <= 0) 	metaEvents.pop();
+				else 										break;
+			}
+		}
         
         var meta:SongMeta = {
             diffs: [PlayState.curDifficulty],

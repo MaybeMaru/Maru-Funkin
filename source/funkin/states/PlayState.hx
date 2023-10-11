@@ -66,9 +66,8 @@ class PlayState extends MusicBeatState {
 	public var startingSong:Bool = false;
 
 	public var gfSpeed:Int = 1;
-	public var health(default, set):Float = 1;
 	public var combo:Int = 0;
-
+	public var health(default, set):Float = 1;
 	function set_health(value:Float) {
 		value = FlxMath.bound(value, 0, 2);
 		if (value <= 0 && validScore) {
@@ -112,6 +111,7 @@ class PlayState extends MusicBeatState {
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
+	inline function formatDiff() return CoolUtil.formatStringUpper(curDifficulty); // For discord rpc
 
 	public var ghostTapEnabled:Bool = false;
 	public var inPractice:Bool = false;
@@ -154,7 +154,7 @@ class PlayState extends MusicBeatState {
 		if (Character.getCharData(SONG.players[1]) != null) {
 			iconRPC = Character.getCharData(SONG.players[1]).icon;
 		}
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
 
 		//FG & BG SPRITES
 		bgSpr = new FlxTypedGroup<Dynamic>();
@@ -470,11 +470,11 @@ class PlayState extends MusicBeatState {
 		}
 
 		Conductor.setPitch(Conductor.songPitch);
-		Conductor.setVolume(1);
+		Conductor.volume = 1;
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC, true, songLength);
+		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength);
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -511,7 +511,7 @@ class PlayState extends MusicBeatState {
 				Conductor.play();
 			}
 
-			var presenceDetails = '${SONG.song} ($curDifficulty)';
+			var presenceDetails = '${SONG.song} (${formatDiff()})';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
 		}
@@ -576,7 +576,7 @@ class PlayState extends MusicBeatState {
 		}
 		else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
-			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${curDifficulty})', iconRPC);
+			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -614,7 +614,7 @@ class PlayState extends MusicBeatState {
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 			
 		// Game Over doesn't get his own variable because it's only used here
-		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${CoolUtil.formatStringUpper(curDifficulty)})', iconRPC);
+		DiscordClient.changePresence('Game Over - $detailsText', '${SONG.song} (${formatDiff()})', iconRPC);
 	}
 
 	inline public function snapCamera() {
@@ -644,7 +644,7 @@ class PlayState extends MusicBeatState {
 	function endSong():Void {
 		canPause = false;
 		deathCounter = 0;
-		Conductor.setVolume(0);
+		Conductor.volume = 0;
 		ModdingUtil.addCall('endSong');
 		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
 		CustomTransition.skipTrans = isStoryMode;

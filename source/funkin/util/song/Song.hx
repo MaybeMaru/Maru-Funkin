@@ -98,6 +98,7 @@ class Song {
 		if (meta != null) { // Apply song metaData
 			song.offsets = meta.offsets.copy();
 			for (s in 0...meta.events.length) {
+				if (!Reflect.hasField(meta.events[s], "sectionEvents")) continue;
 				for (i in meta.events[s].sectionEvents.copy())
 					song.notes[s].sectionEvents.push(i);
 			}

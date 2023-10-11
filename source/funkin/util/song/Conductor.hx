@@ -125,27 +125,29 @@ class Conductor {
 		return lastChange;
 	}
 
-	public static function setVolume(volume:Float = 1.0) {
-		inst.volume = volume;
-		vocals.volume = volume;
+	public static var volume(default, set):Float = 1.0;
+	public static function set_volume(value:Float) {
+		inst.volume = value;
+		vocals.volume = value;
+		return volume = value;
 	}
 
-	public static function play():Void {
+	inline public static function play():Void {
 		inst.play();
 		vocals.play();
 	}
 
-	public static function pause():Void {
+	inline public static function pause():Void {
 		inst.pause();
 		vocals.pause();
 	}
 
-	public static function stop():Void {
+	inline public static function stop():Void {
 		inst.stop();
 		vocals.stop();
 	}
 
-	public static function sync():Void {
+	inline public static function sync():Void {
 		soundSync(inst, songOffset[0]);
 		if (hasVocals) soundSync(vocals, songOffset[1]);
 	}

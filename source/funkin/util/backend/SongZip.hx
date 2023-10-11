@@ -51,8 +51,8 @@ class SongZip {
                 removeQueue.push(zipPath);
                 
                 switch (zipType) {
-                    case OSU: unzipFormat("osu", modPath, zipFiles);//unzipOsu(zipFiles, modPath);
-                    case QUAVER: unzipFormat("qua", modPath, zipFiles);//unzipQuaver(zipFiles, modPath);
+                    case OSU: unzipFormat("osu", modPath, zipFiles);
+                    case QUAVER: unzipFormat("qua", modPath, zipFiles);
                     case STEPMANIA:
                 }
             }
@@ -112,7 +112,7 @@ class SongZip {
             saveJson(weekJson, '$modPath/data/weeks/${Song.formatSongFolder(i)}.json');
         }
     }
-    
+
     static function saveJson(input:Dynamic, path:String) {
         final jsonString = FunkyJson.stringify(cast input, "\t");
         File.saveContent(path, jsonString);
