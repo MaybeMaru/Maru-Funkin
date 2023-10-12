@@ -28,8 +28,8 @@ function create() {
 }
 
 function beatHit(curBeat) {
-    if (PlayState.curSong == 'Spookeez') return;
-    calcThunder();
+    if (PlayState.curSong != 'Spookeez')
+        calcThunder();
 }
 
 var lightningStrikeBeat:Int = 0;
@@ -69,4 +69,52 @@ function updatePost() {
         getSpr("thunderBg").alpha = 1;
         getSpr("thunderLight").alpha = 1;
     }
+}
+
+function openGameOverSubstate() {
+    if (PlayState.boyfriend.curCharacter == "tankman") {
+        openTankmanGameover();
+        return STOP_FUNCTION;
+    }
+}
+
+function openTankmanGameover() {
+    PlayState.persistentUpdate = false;
+    PlayState.persistentDraw = false;
+	Conductor.stop();
+
+    var spook = function () {
+        var sound = new FlxSound().loadEmbedded(Paths.soundRandom('thunder_', 1, 2));
+        sound.play();
+        PlayState.camGame.flash(FlxColor.WHITE, 2);
+        return sound;
+    }
+    var tankSub:MusicBeatSubstate = new MusicBeatSubstate();
+    CoolUtil.setGlobalManager(false);
+    CoolUtil.playMusic("scarySwings", 0.4);
+    
+    var bg = new FunkinSprite("tankman/spookyBg", [-150,-50], [0,0]);
+    bg.setScale(1.5);
+    tankSub.add(bg);
+
+    var tank = new FunkinSprite("tankman/spookyTankman", [435,360], [0,0]);
+    tank.setScale(1.5);
+    tank.addAnim("dance", "dance", 48, true);
+    tank.playAnim("dance");
+    tankSub.add(tank);
+
+    var didTrans:Bool = false;
+    tankSub._update = function() {
+        if (!didTrans && getKey('ACCEPT-P')) {
+            didTrans = true;
+            spook().fadeOut(1.5);
+            FlxG.sound.music.fadeOut();
+            PlayState.camGame.fade(FlxColor.BLACK, 2);
+            new FlxTimer().start(2.5, function (tmr:FlxTimer) {
+                CoolUtil.resetState();
+            });
+        }
+    }
+    PlayState.openSubState(tankSub);
+    spook();
 }

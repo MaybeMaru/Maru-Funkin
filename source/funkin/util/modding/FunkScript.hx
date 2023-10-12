@@ -59,6 +59,9 @@ class FunkScript extends Script {
 		set('GameVars', PlayState); // fuck
 		set('State', cast MusicBeatState.instance);
 
+		set('MusicBeatSubstate', MusicBeatSubstate);
+		set('MusicBeatState', MusicBeatState);
+
 		set('CoolUtil', CoolUtil);
 		set('Conductor', Conductor);
 		set('Paths', Paths);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="spookyTankman.png" width="972" height="271">
+  <SubTexture name="dance0006" x="4" y="4"  width="335" height="263" frameX="-101" frameY="-0" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0001" x="347" y="4"  width="334" height="263" frameX="-0" frameY="-0" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0004" x="689" y="4"  width="279" height="236" frameX="-73" frameY="-53" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0002" x="347" y="4"  width="334" height="263" frameX="-0" frameY="-0" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0003" x="347" y="4"  width="334" height="263" frameX="-0" frameY="-0" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0005" x="689" y="4"  width="279" height="236" frameX="-73" frameY="-53" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0009" x="689" y="4"  width="279" height="236" frameX="-73" frameY="-53" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0010" x="689" y="4"  width="279" height="236" frameX="-73" frameY="-53" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0007" x="4" y="4"  width="335" height="263" frameX="-101" frameY="-0" frameWidth="436" frameHeight="289"/>
+  <SubTexture name="dance0008" x="4" y="4"  width="335" height="263" frameX="-101" frameY="-0" frameWidth="436" frameHeight="289"/>
+</TextureAtlas>

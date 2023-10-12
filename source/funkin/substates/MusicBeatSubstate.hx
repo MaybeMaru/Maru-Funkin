@@ -3,10 +3,6 @@ package funkin.substates;
 import flixel.FlxSubState;
 
 class MusicBeatSubstate extends FlxSubState implements IMusicBeat {
-	public function new() {
-		super();
-	}
-
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
 	private var curSection:Int = 0;
@@ -15,9 +11,16 @@ class MusicBeatSubstate extends FlxSubState implements IMusicBeat {
 	private var curBeatDecimal:Float = 0;
 	private var curSectionDecimal:Float = 0;
 
-	override function update(elapsed:Float)
-	{
+	public function new() {
+		super();
+	}
+
+	public var _update:Dynamic = null;
+	override function update(elapsed:Float) {
+		if (MusicBeatState.instance != null) MusicBeatState.instance.scriptConsole.update(elapsed);
 		handleSteps();
+		ModdingUtil.addCall('subStateUpdate', [elapsed]);
+		if (_update != null) Reflect.callMethod(null, _update, [elapsed]);
 		super.update(elapsed);
 	}
 
