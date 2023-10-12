@@ -200,8 +200,8 @@ class ChartingState extends MusicBeatState {
         updateSectionTabUI();
     }
 
-    override function beatHit() {
-        super.beatHit();
+    override function beatHit(curBeat:Int) {
+        super.beatHit(curBeat);
         if (playing && tabs.check_metronome.checked) {
             CoolUtil.playSound('chart/metronome_tick', 1, 1);
 			var scaleMult:Float = (curBeat % Conductor.BEATS_PER_MEASURE == 0) ? 1.25 : 1.15;
@@ -508,8 +508,8 @@ class ChartingState extends MusicBeatState {
         mouse();
     }
 
-    override function stepHit() {
-        super.stepHit();
+    override function stepHit(curStep:Int) {
+        super.stepHit(curStep);
         if (playing) {
             Conductor.autoSync();
         }

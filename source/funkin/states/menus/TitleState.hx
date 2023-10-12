@@ -177,8 +177,8 @@ class TitleState extends MusicBeatState {
 		super.update(elapsed);
 	}
 
-	override function beatHit():Void {
-		super.beatHit();
+	override function beatHit(curBeat:Int):Void {
+		super.beatHit(curBeat);
 
 		if (initialized && gfDance.exists) {
 			logoBump.playAnim('idle', true);

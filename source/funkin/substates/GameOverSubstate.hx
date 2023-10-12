@@ -102,8 +102,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 		CustomTransition.skipTrans = false;
 	}
 
-	override function beatHit():Void {
-		super.beatHit();
+	override function beatHit(curBeat:Int):Void {
+		super.beatHit(curBeat);
 		ModdingUtil.addCall('beatHitGameOver', [curBeat]);
 
 		if (!isEnding) {

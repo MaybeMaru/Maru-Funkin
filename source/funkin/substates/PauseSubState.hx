@@ -25,7 +25,7 @@ class PauseSubState extends MusicBeatSubstate {
 	var maxTime:String = "";
 
 	public function new():Void {
-		super();
+		super(false);
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		FlxG.sound.list.add(pauseMusic);

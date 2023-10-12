@@ -1,48 +1,31 @@
 package funkin.states;
 
+import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
-interface IMusicBeat {
-	private var curStep:Int;
-	private var curBeat:Int;
-	private var curSection:Int;
-
-	private var curStepDecimal:Float;
-	private var curBeatDecimal:Float;
-	private var curSectionDecimal:Float;
-
-	private function handleSteps():Void;
-	private function updateStep():Void;
-	private function updateBeat():Void;
-	private function updateSection():Void;
-
-	public function stepHit():Void;
-	public function beatHit():Void;
-	public function sectionHit():Void;
+interface IMusicGetter {
+    public var musicBeat(default, null):MusicBeat;
+	public function stepHit(curStep:Int):Void;
+	public function beatHit(curBeat:Int):Void;
+	public function sectionHit(curSection:Int):Void;
 }
 
-class MusicBeatState extends FlxUIState implements IMusicBeat {
+class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public static var instance:MusicBeatState;
 	public static var curState:String;
 	public var scriptConsole:ScriptConsole;
-
-	private var curStep:Int = 0;
-	private var curBeat:Int = 0;
-	private var curSection:Int = 0;
-
-	private var curStepDecimal:Float = 0;
-	private var curBeatDecimal:Float = 0;
-	private var curSectionDecimal:Float = 0;
 
 	public var transition(get, default):CustomTransition = null;
 	function get_transition() {
 		return (transition != null ? transition : transition = new CustomTransition());
 	}
 
+	public var musicBeat(default, null):MusicBeat;
 	override function create():Void {
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);
 		super.create();
+		add(musicBeat = new MusicBeat(this));
 		scriptConsole = new ScriptConsole();
 		add(scriptConsole);
 		
@@ -59,68 +42,22 @@ class MusicBeatState extends FlxUIState implements IMusicBeat {
 	}
 
 	override function update(elapsed:Float):Void {
-		handleSteps();
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		if (FlxG.keys.justPressed.F1) scriptConsole.show = !scriptConsole.show;
 		super.update(elapsed);
 	}
 
-	private function handleSteps():Void {
-		var oldStep:Int = curStep;
-		updateStep();
-		updateBeat();
-		updateSection();
-		if (oldStep != curStep && curStep >= 0) {
-			stepHit();
-		}
-	}
-
-	private function updateSection():Void {
-		curSectionDecimal = curBeatDecimal / Conductor.BEATS_PER_MEASURE;
-		curSection = Math.floor(curSectionDecimal);
-	}
-
-	private function updateBeat():Void {
-		curBeatDecimal = curStepDecimal / Conductor.STEPS_PER_BEAT;
-		curBeat = Math.floor(curBeatDecimal);
-	}
-
-	private function updateStep():Void {
-		var lastChange:BPMChangeEvent = {
-			stepTime: 0,
-			songTime: 0,
-			bpm: 0
-		}
-		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime) {
-				lastChange = Conductor.bpmChangeMap[i];
-			}
-		}
-		curStepDecimal = lastChange.stepTime + (Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet;
-		curStep = Math.floor(curStepDecimal);
-	}
-
-	public function stepHit():Void {
+	public function stepHit(curStep:Int):Void {
 		ModdingUtil.addCall('stateStepHit', [curStep]);
-		if (curStep % Conductor.STEPS_PER_BEAT == 0) {
-			beatHit();
-		}
 	}
 
-	public function beatHit():Void {
+	public function beatHit(curBeat:Int):Void {
 		ModdingUtil.addCall('stateBeatHit', [curBeat]);
-		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
-			sectionHit();
-		}
 	}
 
-	public function sectionHit():Void {
+	public function sectionHit(curSection:Int):Void {
 		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
-
-	//Just a quicker way to get settings
-	public function getPref(pref:String):Dynamic		return Preferences.getPref(pref);
-	public function getKey(key:String):Dynamic			return Controls.getKey(key);
 
 	public function switchState(newState:FlxState) {
 		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
@@ -131,6 +68,18 @@ class MusicBeatState extends FlxUIState implements IMusicBeat {
 		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
 		transition.startTrans(null, function () FlxG.resetState());
 	}
+
+	// Some shortcuts
+	inline public function getPref(pref:String) return Preferences.getPref(pref);
+	inline public function getKey(key:String) 	return Controls.getKey(key);
+	
+	public var curStep(get, never):Int; 	inline function get_curStep() return musicBeat.curStep;
+	public var curBeat(get, never):Int; 	inline function get_curBeat() return musicBeat.curBeat;
+	public var curSection(get, never):Int; 	inline function get_curSection() return musicBeat.curSection;
+
+	public var curStepDecimal(get, never):Float; 	inline function get_curStepDecimal() return musicBeat.curStepDecimal;
+	public var curBeatDecimal(get, never):Float; 	inline function get_curBeatDecimal() return musicBeat.curBeatDecimal;
+	public var curSectionDecimal(get, never):Float; inline function get_curSectionDecimal() return musicBeat.curSectionDecimal;
 }
 
 class TransitionSubstate extends FlxSubState {

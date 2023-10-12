@@ -1,83 +1,45 @@
 package funkin.substates;
 
+import funkin.util.backend.MusicBeat;
 import flixel.FlxSubState;
 
-class MusicBeatSubstate extends FlxSubState implements IMusicBeat {
-	private var curStep:Int = 0;
-	private var curBeat:Int = 0;
-	private var curSection:Int = 0;
-
-	private var curStepDecimal:Float = 0;
-	private var curBeatDecimal:Float = 0;
-	private var curSectionDecimal:Float = 0;
-
-	public function new() {
+class MusicBeatSubstate extends FlxSubState implements IMusicGetter {
+	public var musicBeat(default, null):MusicBeat;
+	public function new(createMusic:Bool = true) {
 		super();
+		if (createMusic)
+			add(musicBeat = new MusicBeat(this));
 	}
 
 	public var _update:Dynamic = null;
 	override function update(elapsed:Float) {
 		if (MusicBeatState.instance != null) MusicBeatState.instance.scriptConsole.update(elapsed);
-		handleSteps();
 		ModdingUtil.addCall('subStateUpdate', [elapsed]);
 		if (_update != null) Reflect.callMethod(null, _update, [elapsed]);
 		super.update(elapsed);
 	}
 
-	private function handleSteps():Void {
-		var oldStep:Int = curStep;
-		updateStep();
-		updateBeat();
-		updateSection();
-		if (oldStep != curStep && curStep >= 0) {
-			stepHit();
-		}
-	}
-
-	private function updateSection():Void {
-		curSectionDecimal = curBeatDecimal / Conductor.BEATS_PER_MEASURE;
-		curSection = Math.floor(curSectionDecimal);
-	}
-
-	private function updateBeat():Void {
-		curBeatDecimal = curStepDecimal / Conductor.STEPS_PER_BEAT;
-		curBeat = Math.floor(curBeatDecimal);
-	}
-
-	private function updateStep():Void {
-		var lastChange:BPMChangeEvent = {
-			stepTime: 0,
-			songTime: 0,
-			bpm: 0
-		}
-		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime) {
-				lastChange = Conductor.bpmChangeMap[i];
-			}
-		}
-		curStepDecimal = lastChange.stepTime + (Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet;
-		curStep = Math.floor(curStepDecimal);
-	}
-
-	public function stepHit():Void {
+	public function stepHit(curStep:Int):Void {
 		ModdingUtil.addCall('subStateStepHit', [curStep]);
-		if (curStep % Conductor.STEPS_PER_BEAT == 0) {
-			beatHit();
-		}
 	}
 
-	public function beatHit():Void {
+	public function beatHit(curBeat:Int):Void {
 		ModdingUtil.addCall('subStateBeatHit', [curBeat]);
-		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
-			sectionHit();
-		}
 	}
 
-	public function sectionHit():Void {
+	public function sectionHit(curSection:Int):Void {
 		ModdingUtil.addCall('subStateSectionHit', [curSection]);
 	}
 
-	//Just a quicker way to get settings
-	inline function getPref(pref:String) return Preferences.getPref(pref);
-	inline function getKey(key:String) return Controls.getKey(key);
+	// Some shortcuts
+	inline public function getPref(pref:String) return Preferences.getPref(pref);
+	inline public function getKey(key:String) 	return Controls.getKey(key);
+	
+	public var curStep(get, never):Int; 	inline function get_curStep() return musicBeat.curStep;
+	public var curBeat(get, never):Int; 	inline function get_curBeat() return musicBeat.curBeat;
+	public var curSection(get, never):Int; 	inline function get_curSection() return musicBeat.curSection;
+
+	public var curStepDecimal(get, never):Float; 	inline function get_curStepDecimal() return musicBeat.curStepDecimal;
+	public var curBeatDecimal(get, never):Float; 	inline function get_curBeatDecimal() return musicBeat.curBeatDecimal;
+	public var curSectionDecimal(get, never):Float; inline function get_curSectionDecimal() return musicBeat.curSectionDecimal;
 }

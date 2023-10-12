@@ -77,15 +77,18 @@ class FreeplayState extends MusicBeatState {
 			add(icon);
 		}
 
-		scoreBG = new FlxSprite(FlxG.width * 0.69/*nice*/, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+		lerpPosition = FlxG.width * 0.69; // nice
+
+		scoreBG = new FlxSprite(lerpPosition, 0).makeGraphic(FlxG.width, 66, FlxColor.BLACK);
+		scoreBG.offset.x = 6;
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
-		scoreText = new FunkinText(scoreBG.x + 6, 5, "", 32);
+		scoreText = new FunkinText(lerpPosition, 5, "", 32);
 		scoreText.borderColor = FlxColor.TRANSPARENT;
 		add(scoreText);
 
-		diffText = new FunkinText(scoreText.x, scoreText.y + 36, "", 24);
+		diffText = new FunkinText(lerpPosition, scoreText.y + 36, "", 24);
 		diffText.borderColor = FlxColor.TRANSPARENT;
 		add(diffText);
 
@@ -121,6 +124,7 @@ class FreeplayState extends MusicBeatState {
 
 	var lerpColor:FlxColorFix;
 	var _lastMusic:String = "";
+	var lerpPosition:Float = 0.0;
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
@@ -132,20 +136,12 @@ class FreeplayState extends MusicBeatState {
 		lerpColor.lerp(getBgColor(), 0.045, true);
 		bg.color = lerpColor.get();
 
-		if (Math.abs(lerpScore - intendedScore) <= 10)
-			lerpScore = intendedScore;
+		if (Math.abs(lerpScore - intendedScore) <= 10) lerpScore = intendedScore;
+		scoreText.text = "PERSONAL BEST: " + lerpScore;
 
-		scoreText.text = 'PERSONAL BEST: $lerpScore';
-
-		var sexPos:Float =  FlxG.width * 0.69;
-		while (sexPos + scoreText.width > FlxG.width) {
-			sexPos -= 0.1;
+		for (i in [scoreText,diffText,scoreBG]) {
+			i.x = CoolUtil.coolLerp(i.x, lerpPosition, 0.2);
 		}
-
-		sexPos-=6;
-		scoreText.x = sexPos;
-		diffText.x = sexPos;
-		scoreBG.x = sexPos - 6;
 
 		if (getKey('UI_LEFT-P'))	changeDiff(-1);
 		if (getKey('UI_RIGHT-P'))	changeDiff(1);
@@ -217,7 +213,17 @@ class FreeplayState extends MusicBeatState {
 	function changeDiff(change:Int = 0):Void {
 		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		intendedScore = Highscore.getSongScore(songs[curSelected].songName, curWeekDiffs[curDifficulty]);
-		diffText.text = curWeekDiffs[curDifficulty].toUpperCase();
+		
+		var diffString:String = curWeekDiffs[curDifficulty].toUpperCase();
+		diffText.text = curWeekDiffs.length > 1 ? "< " + diffString + " >" : diffString;
+		updateLerpPosition();
+	}
+
+	function updateLerpPosition() {
+		final lastTxt = scoreText.text;
+		scoreText.text = "PERSONAL BEST: " + intendedScore;
+		lerpPosition = Math.min((FlxG.width * 0.69) - 6, FlxG.width - Math.max(scoreText.width, diffText.width) - 6);
+		scoreText.text = lastTxt;
 	}
 
 	function changeSelection(change:Int = 0):Void {

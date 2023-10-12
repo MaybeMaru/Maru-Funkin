@@ -93,22 +93,18 @@ class LatencyState extends MusicBeatState
 		return Math.floor(averageOff / lastOffsets.length * 0.1);
 	}
 
-	override public function beatHit()
-	{
-		super.beatHit();
+	override public function beatHit(curBeat:Int) {
+		super.beatHit(curBeat);
 		lastBeatTime = Conductor.songPosition;
 		nextBeatTime = Conductor.songPosition + Conductor.crochet;
 		hitSpr.playAnim('idle', true);
 	}
 
-	function resync()
+	inline function resync() {
 		Conductor.songPosition = getTime() - Conductor.settingOffset;
+	}
 
-	function getTime()
-	{
-		if (FlxG.sound.music != null)
-			return FlxG.sound.music.time;
-
-		return 0;
+	inline function getTime() {
+		return FlxG.sound.music != null ? FlxG.sound.music.time : 0;
 	}
 }

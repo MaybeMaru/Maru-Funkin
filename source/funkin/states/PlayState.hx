@@ -733,10 +733,10 @@ class PlayState extends MusicBeatState {
 		return noteRating;
 	}
 
-	override function stepHit():Void {
-		super.stepHit();
+	override function stepHit(curStep:Int):Void {
+		super.stepHit(curStep);
 		Conductor.autoSync();
-		ModdingUtil.addCall('stepHit', [curStep, curStepDecimal]);
+		ModdingUtil.addCall('stepHit', [curStep]);
 	}
 
 	inline function beatCharacters() {
@@ -745,8 +745,8 @@ class PlayState extends MusicBeatState {
 		if (curBeat % gfSpeed == 0) gf.danceInBeat();
 	}
 
-	override public function beatHit():Void {
-		super.beatHit();
+	override public function beatHit(curBeat:Int):Void {
+		super.beatHit(curBeat);
 		if (curSectionData != null) {
 			if (curSectionData.changeBPM) {
 				Conductor.bpm = curSectionData.bpm;
@@ -755,11 +755,11 @@ class PlayState extends MusicBeatState {
 		}
 
 		beatCharacters();
-		ModdingUtil.addCall('beatHit', [curBeat, curBeatDecimal]);
+		ModdingUtil.addCall('beatHit', [curBeat]);
 	}
 
-	override public function sectionHit():Void {
-		super.sectionHit();
+	override public function sectionHit(curSection:Int):Void {
+		super.sectionHit(curSection);
 		if (Conductor.songPosition <= 0) curSection = 0;
 		curSectionData = SONG.notes[curSection];
 		cameraMovement();
@@ -773,7 +773,7 @@ class PlayState extends MusicBeatState {
 			ghostTapEnabled = !curSectionData.mustHitSection;
 		}
 
-		ModdingUtil.addCall('sectionHit', [curSection, curSectionDecimal]);
+		ModdingUtil.addCall('sectionHit', [curSection]);
 	}
 
 	override function destroy():Void {
