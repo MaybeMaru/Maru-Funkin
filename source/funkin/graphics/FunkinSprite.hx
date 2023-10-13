@@ -7,21 +7,20 @@ class FunkinSprite extends FlxSpriteExt {
 
     public function new(path:String = "", ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
         super();
-        coords = (coords != null) ? coords : [0,0];
-        scrolls = (scrolls != null) ? scrolls : [1,1];
+        coords = coords ?? [0,0];
+        scrolls = scrolls ?? [1,1];
         setPosition(coords[0], coords[1]);
         scrollFactor.set(scrolls[0], scrolls[1]);
 
-        if (path.length <= 0) return;
-
-        loadImage(path);
-        animated = _packer != IMAGE;
-
-        var jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
-        if (useJson && Paths.exists(jsonPath, TEXT)) {
-            loadSpriteJson(jsonPath, '');
-        } else {
-            antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
+        if (path.length > 0) {
+            loadImage(path);
+            animated = _packer != IMAGE;
+    
+            var jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
+            if (useJson && Paths.exists(jsonPath, TEXT))
+                loadSpriteJson(jsonPath, '');
+            else
+                antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
         }
     }
     

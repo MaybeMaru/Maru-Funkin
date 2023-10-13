@@ -4,7 +4,7 @@ import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
 interface IMusicGetter {
-    public var musicBeat(default, null):MusicBeat;
+    /*@:optional*/ public var musicBeat(default, null):MusicBeat;
 	public function stepHit(curStep:Int):Void;
 	public function beatHit(curBeat:Int):Void;
 	public function sectionHit(curSection:Int):Void;
@@ -13,7 +13,7 @@ interface IMusicGetter {
 class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public static var instance:MusicBeatState;
 	public static var curState:String;
-	public var scriptConsole:ScriptConsole;
+	public var console:ScriptConsole;
 
 	public var transition(get, default):CustomTransition = null;
 	function get_transition() {
@@ -26,8 +26,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		curState = CoolUtil.formatClass(this, false);
 		super.create();
 		add(musicBeat = new MusicBeat(this));
-		scriptConsole = new ScriptConsole();
-		add(scriptConsole);
+		add(console = new ScriptConsole());
 		
 		add(transition);
 		transition.exitTrans();
@@ -43,21 +42,35 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	override function update(elapsed:Float):Void {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
-		if (FlxG.keys.justPressed.F1) scriptConsole.show = !scriptConsole.show;
 		super.update(elapsed);
 	}
 
 	public function stepHit(curStep:Int):Void {
+		//callOnObjects('stepHit', [curStep]);
 		ModdingUtil.addCall('stateStepHit', [curStep]);
 	}
 
 	public function beatHit(curBeat:Int):Void {
+		//callOnObjects('beatHit', [curBeat]);
 		ModdingUtil.addCall('stateBeatHit', [curBeat]);
 	}
 
 	public function sectionHit(curSection:Int):Void {
+		//callOnObjects('sectionHit', [curSection]);
 		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
+
+	/*function callOnObjects(func:String, ?args:Array<Dynamic>) {
+		var i:Int = 0;
+		var getter:Dynamic = null;
+		while (i < length) {
+			getter = cast members[i++];
+			if (getter != null && getter is IMusicGetter && getter != null && getter.exists && getter.active) {
+				var _func = cast Reflect.field(getter, func);
+				if (_func != null) Reflect.callMethod(getter, _func, args);
+			}
+		}
+	}*/
 
 	public function switchState(newState:FlxState) {
 		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());

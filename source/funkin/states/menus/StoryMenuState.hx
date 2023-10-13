@@ -27,14 +27,8 @@ class StoryMenuState extends MusicBeatState {
 	var rightArrow:FunkinSprite;
 
 	var storyWeeks:Array<WeekData> = [];
-
-	inline function getCurData() {
-		return storyWeeks[curWeek].data;
-	}
-
-	inline function getWeekChars() {
-		return getCurData().storyCharacters;
-	}
+	inline function getCurData() 	return storyWeeks[curWeek].data;
+	inline function getWeekChars() 	return getCurData().storyCharacters;
 
 	override function create():Void {
 		if (FlxG.sound.music == null) {

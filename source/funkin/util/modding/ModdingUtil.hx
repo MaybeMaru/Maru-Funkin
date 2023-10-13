@@ -100,7 +100,7 @@ class ModdingUtil {
     }
 
     inline public static function consoleTrace(text:String, ?color:Int):Void {
-        var console = MusicBeatState.instance.scriptConsole;
+        var console = MusicBeatState.instance.console;
         console.exists ? console.consoleTrace(text, color) : ScriptConsole.addToTraceList(text, color);
     }
 

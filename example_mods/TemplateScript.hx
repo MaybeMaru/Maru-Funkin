@@ -578,6 +578,12 @@ function sectionHit(curSection:Int)
     //  curSection --> The current section number
 }
 
+function openPauseSubState()
+{
+    // Called when the paused substate is about to be opened
+    // You can use ``return STOP_FUNCTION;`` to cancel the pause menu from opening
+}
+
 function openGameOverSubstate()
 {
     // Called when the game over substate is about to be opened

@@ -45,6 +45,8 @@ class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
+		if (FlxG.keys.justPressed.F1) show = !show;
+        
         targetX = show ? 0 : -width;
         x = CoolUtil.coolLerp(x, targetX, 0.25);
 

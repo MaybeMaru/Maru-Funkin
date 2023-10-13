@@ -479,6 +479,7 @@ class PlayState extends MusicBeatState {
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
 		if (!paused) {
+			if (ModdingUtil.addCall("openPauseSubState", [])) return;
 			paused = true;
 			persistentUpdate = false;
 			persistentDraw = true;
