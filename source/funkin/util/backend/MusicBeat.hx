@@ -9,7 +9,6 @@ interface IMusicBeat {
 	public var curBeatDecimal(default, null):Float;
 	public var curSectionDecimal(default, null):Float;
 
-	private function handleSteps():Void;
 	private function updateStep():Void;
 	private function updateBeat():Void;
 	private function updateSection():Void;
@@ -41,31 +40,27 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
     }
 
     override function update(elapsed:Float):Void {
-		handleSteps();
-		super.update(elapsed);
-	}
-
-    private function handleSteps():Void {
-		final oldStep:Int = curStep;
+        final oldStep:Int = curStep;
 		updateStep();
 		updateBeat();
 		updateSection();
 		if (oldStep != curStep && curStep >= 0) {
 			stepHit();
 		}
+        super.update(elapsed);
 	}
 
-	private function updateSection():Void {
+	private inline function updateSection():Void {
 		curSectionDecimal = curBeatDecimal / Conductor.BEATS_PER_MEASURE;
 		curSection = Math.floor(curSectionDecimal);
 	}
 
-	private function updateBeat():Void {
+	private inline function updateBeat():Void {
 		curBeatDecimal = curStepDecimal / Conductor.STEPS_PER_BEAT;
 		curBeat = Math.floor(curBeatDecimal);
 	}
 
-	private function updateStep():Void {
+	private inline function updateStep():Void {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
@@ -80,25 +75,25 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
 		curStep = Math.floor(curStepDecimal);
 	}
 
-	public function stepHit():Void {
+	public inline function stepHit():Void {
         event(STEP_EVENT);
         if (curStep % Conductor.STEPS_PER_BEAT == 0) {
 			beatHit();
 		}
 	}
 
-	public function beatHit():Void {
+	public inline function beatHit():Void {
         event(BEAT_EVENT);
 		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
 			sectionHit();
 		}
 	}
 
-	public function sectionHit():Void {
+	public inline function sectionHit():Void {
         event(SECTION_EVENT);
 	}
 
-    private function event(event:MusicBeatEvent) {
+    private inline function event(event:MusicBeatEvent) {
         switch (event) {
             case STEP_EVENT:    parent.stepHit(curStep);
             case BEAT_EVENT:    parent.beatHit(curBeat);

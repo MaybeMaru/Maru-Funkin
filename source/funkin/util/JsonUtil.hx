@@ -68,6 +68,7 @@ class JsonUtil {
 	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic {
 		if (!getJsonList(folder,true,true,true,false,false,library).contains(path))
 			return null;
+		//trace(Paths.file('$library/$folder/$path.json', TEXT));
 		var getJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
 		var returnJson:Dynamic = Json.parse(getJson);
 		return returnJson;

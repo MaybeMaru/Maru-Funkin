@@ -230,14 +230,14 @@ class TitleState extends MusicBeatState {
 						CoolUtil.debugMode = true;
 					case 'unlock':
 						WeekSetup.getWeekList();
-						for (week in WeekSetup.vanillaWeekNameList) {
-							Highscore.setWeekUnlock(week, true);
+						for (i in WeekSetup.vanillaWeekList) {
+							Highscore.setWeekUnlock(i.name, true);
 						}
 					case 'lock':
 						WeekSetup.getWeekList();
-						for (week in WeekSetup.vanillaWeekNameList) {
-							if (!WeekSetup.weekDataMap.get(week).startUnlocked) {
-								Highscore.setWeekUnlock(week, false);
+						for (i in WeekSetup.vanillaWeekList) {
+							if (!i.data.startUnlocked) {
+								Highscore.setWeekUnlock(i.name, false);
 							}
 						}
 					case 'keoiki':

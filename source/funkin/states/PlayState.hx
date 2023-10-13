@@ -673,8 +673,8 @@ class PlayState extends MusicBeatState {
 	public function endWeek() {
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
-			final weekData = WeekSetup.weekDataMap.get(storyWeek);
-			if (WeekSetup.weekDataMap.exists(weekData.unlockWeek))
+			final weekData = WeekSetup.weekMap.get(storyWeek)?.data ?? null;
+			if (weekData != null && WeekSetup.weekMap.exists(weekData.unlockWeek))
 				Highscore.setWeekUnlock(weekData.unlockWeek, true);
 		}
 

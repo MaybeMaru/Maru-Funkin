@@ -1,6 +1,5 @@
 package funkin.states.menus;
 
-import flixel.addons.transition.FlxTransitionableState;
 import funkin.states.menus.MenuCharacter;
 import funkin.states.menus.MenuItem;
 
@@ -19,7 +18,6 @@ class StoryMenuState extends MusicBeatState {
 
 	var grpWeekText:FlxTypedGroup<MenuItem>;
 	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
-	var weekCharacters:Array<Dynamic> = [];
 
 	var difficultySelectors:FlxGroup;
 	var storyBG:FlxSprite;
@@ -28,14 +26,17 @@ class StoryMenuState extends MusicBeatState {
 	var leftArrow:FunkinSprite;
 	var rightArrow:FunkinSprite;
 
-	var storyWeeks:Array<WeekJson> = [];
-	var storyWeeksNames:Array<String> = [];
+	var storyWeeks:Array<WeekData> = [];
+
+	inline function getCurData() {
+		return storyWeeks[curWeek].data;
+	}
+
+	inline function getWeekChars() {
+		return getCurData().storyCharacters;
+	}
 
 	override function create():Void {
-		for (week in WeekSetup.getWeekList()) {
-			weekCharacters.push(week.storyCharacters);
-		}
-
 		if (FlxG.sound.music == null) {
 			CoolUtil.playMusic('freakyMenu');
 		}
@@ -60,21 +61,19 @@ class StoryMenuState extends MusicBeatState {
 		#end
 
 		var weekID:Int = 0;
-		for (i in 0...WeekSetup.weekList.length) {
-			var weekData = WeekSetup.weekList[i];
-			var weekName = WeekSetup.weekNameList[i];
-			if (!weekData.hideStory) {
-				var weekThing:MenuItem = new MenuItem(weekID, weekData.weekImage);
-				weekThing.locked = !Highscore.getWeekUnlock(weekName);
+		for (i in WeekSetup.getWeekList()) {
+			if (!i.data.hideStory) {
+				var weekThing:MenuItem = new MenuItem(weekID, i.data.weekImage);
+				weekThing.locked = !Highscore.getWeekUnlock(i.name);
 				grpWeekText.add(weekThing);
 				weekID++;
-				storyWeeks.push(weekData);
-				storyWeeksNames.push(weekName);
+				storyWeeks.push(i);
 			}
 		}
 
+		MenuCharacter.cachedChars.clear();
 		for (i in 0...3) {
-			var weekChar:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + i) - 150, 70, weekCharacters[curWeek][i]);
+			var weekChar:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + i) - 150, 70, getWeekChars()[i]);
 			grpWeekCharacters.add(weekChar);
 		}
 		grpWeekCharacters.members[1].screenCenter(X);
@@ -112,7 +111,7 @@ class StoryMenuState extends MusicBeatState {
 		difficultySelectors.add(rightArrow);
 
 		storyBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFFFFFFF);//0xFFF9CF51
-		storyBG.color = CoolUtil.hexToColor(storyWeeks[0].weekColor);
+		storyBG.color = CoolUtil.hexToColor(storyWeeks[0].data.weekColor);
 		add(storyBG);
 		add(grpWeekCharacters);
 
@@ -131,14 +130,14 @@ class StoryMenuState extends MusicBeatState {
 	var lerpColor:FlxColorFix;
 
 	inline function getBgColor():FlxColor {
-		return FlxColor.fromString(storyWeeks[curWeek].weekColor);
+		return FlxColor.fromString(getCurData().weekColor);
 	}
 
 	override function update(elapsed:Float):Void {
 		lerpScore = Math.floor(CoolUtil.coolLerp(lerpScore, intendedScore, 0.5));
 		scoreText.text = 'WEEK SCORE:$lerpScore';
 
-		txtWeekTitle.text = storyWeeks[curWeek].weekName.toUpperCase();
+		txtWeekTitle.text = getCurData().weekName.toUpperCase();
 		txtWeekTitle.x = FlxG.width - (txtWeekTitle.width + 10);
 
 		if (!movedBack) {
@@ -158,7 +157,7 @@ class StoryMenuState extends MusicBeatState {
 			}
 		}
 
-		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeksNames[curWeek]);
+		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeks[curWeek].name);
 		leftArrow.visible = rightArrow.visible = curWeekDiffs.length > 1;
 
 		if ((getKey('BACK-P')) && !movedBack && !selectedWeek) {
@@ -183,9 +182,10 @@ class StoryMenuState extends MusicBeatState {
 	var stopCancelSpam:Bool = false;
 
 	function selectWeek():Void {
-		if (Highscore.getWeekUnlock(storyWeeksNames[curWeek])) {
-			PlayState.storyPlaylist = storyWeeks[curWeek].songList.songs;
-			WeekSetup.setupSong(storyWeeksNames[curWeek], PlayState.storyPlaylist[0], curWeekDiffs[curDifficulty]);
+		final _weekName = storyWeeks[curWeek].name;
+		if (Highscore.getWeekUnlock(_weekName)) {
+			PlayState.storyPlaylist = getCurData().songList.songs;
+			WeekSetup.setupSong(_weekName, PlayState.storyPlaylist[0], curWeekDiffs[curDifficulty]);
 
 			if (!selectedWeek) {
 				CoolUtil.playSound('confirmMenu');
@@ -214,7 +214,7 @@ class StoryMenuState extends MusicBeatState {
 	function changeDifficulty(change:Int = 0):Void {
 		var lastDiff:String = curWeekDiffs[curDifficulty];
 		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
-		intendedScore = Highscore.getWeekScore(storyWeeksNames[curWeek], curWeekDiffs[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(storyWeeks[curWeek].name, curWeekDiffs[curDifficulty]);
 
 		var _spr:FlxSprite;
 		var diffPath = 'storymenu/difficulties/${curWeekDiffs[curDifficulty]}';
@@ -246,10 +246,10 @@ class StoryMenuState extends MusicBeatState {
 	var intendedScore:Int = 0;
 
 	function changeWeek(change:Int = 0):Void {
-		var lastWeekDiffs = storyWeeks[curWeek].weekDiffs;
+		var lastWeekDiffs = getCurData().weekDiffs;
 		curWeek = FlxMath.wrap(curWeek += change, 0, storyWeeks.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu');
-		curWeekDiffs = storyWeeks[curWeek].weekDiffs;
+		curWeekDiffs = getCurData().weekDiffs;
 
 		if (lastWeekDiffs != curWeekDiffs) {	//	FIND MATCHES
 			if (curWeekDiffs.contains(lastWeekDiffs[curDifficulty])) {
@@ -267,11 +267,15 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function updateText():Void {
+		final lastMod = ModdingUtil.curModFolder; // Im lazy ok, deal with it
+		ModdingUtil.curModFolder = storyWeeks[curWeek].modFolder;
 		for (i in 0...grpWeekCharacters.members.length) {
-			grpWeekCharacters.members[i].setupChar(weekCharacters[curWeek][i]);
+			grpWeekCharacters.members[i].setupChar(getWeekChars()[i]);
 		}
+		ModdingUtil.curModFolder = lastMod;
+
 		txtTracklist.text = 'Tracks\n';
-		for (song in storyWeeks[curWeek].songList.songs) txtTracklist.text += '\n$song';
+		for (song in getCurData().songList.songs) txtTracklist.text += '\n$song';
 		txtTracklist.text = txtTracklist.text.toUpperCase();
 		txtTracklist.screenCenter(X);
 		txtTracklist.x -= FlxG.width * 0.35;

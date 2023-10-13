@@ -1,5 +1,7 @@
 package funkin.util.song;
 
+import flixel.util.FlxArrayUtil;
+
 /*
     Setup mod folders
     For weeks and song loading shit
@@ -26,12 +28,17 @@ typedef WeekJson = {
 	var hideFreeplay:Bool;
 }
 
+typedef WeekData = {
+    var data:WeekJson;
+    var modFolder:String;
+    var name:String;
+}
+
 class WeekSetup {
-    public static var modWeekMap:Map<String,String>;
-    public static var weekList:Array<WeekJson> = [];
-    public static var weekNameList:Array<String> = [];
-    public static var vanillaWeekNameList:Array<String> = [];
-    public static var weekDataMap:Map<String,WeekJson>;
+    public static var weekList:Array<WeekData> = [];
+    public static var vanillaWeekList:Array<WeekData> = [];
+    public static var weekMap:Map<String, WeekData> = [];
+
     public static var curWeekDiffs:Array<String> = ['easy','normal','hard'];
 
     public static var DEFAULT_WEEK(default, never):WeekJson = {
@@ -53,39 +60,51 @@ class WeekSetup {
         hideFreeplay: false,
 	}
 
-    public static function getWeekList():Array<WeekJson> {
-        //Load week Jsons
-        var weeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
+    public static function getWeekList() {//:Array<WeekJson> {
+        var weeks:Array<String> = [];
+
+        // Get week json lists
+        var vanillaWeeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
         var mod:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
-        vanillaWeekNameList = weeks.copy();
-
+        
         //Vanilla weeks go first >:)
-        weeks = weeks.concat(global);
+        weeks = weeks.concat(vanillaWeeks).concat(global);
         weeks = weeks.concat(mod.map(week -> Paths.getFileMod(week)[1]));
         weeks = CoolUtil.removeDuplicates(weeks);
 
-		modWeekMap = new Map<String,String>();
-		for (week in mod) {
-			var weekParts = Paths.getFileMod(week);
-			modWeekMap.set(weekParts[1], weekParts[0]);
+        FlxArrayUtil.clearArray(weekList);
+        FlxArrayUtil.clearArray(vanillaWeeks);
+        weekMap.clear();
+
+        var modMap:Map<String, String> = [];
+        for (i in mod) {
+			final pathParts = Paths.getFileMod(i);
+			modMap.set(pathParts[1], pathParts[0]);
 		}
 
-		//Parse jsons
-        weekList = [];
-        weekNameList = weeks;
-        weekDataMap = new Map<String,WeekJson>();
-		for (week in weeks) {
-			var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$week.json', TEXT, null, true));
+        for (i in weeks) {
+            var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$i.json', TEXT, null, true));
             var parsedJson:WeekJson = checkWeek(Json.parse(getJson));
-            weekList.push(parsedJson);
-            weekDataMap.set(week, parsedJson);
+
+            var _data:WeekData = {
+                data: parsedJson,
+                modFolder: modMap.get(i),
+                name: i
+            }
+
+            weekList.push(_data);
+            if (vanillaWeeks.contains(i)) {
+                vanillaWeekList.push(_data);
+            }
+            weekMap.set(i, _data);
 
             // Unlock the week
-            if (!Highscore.getWeekUnlock(week) && parsedJson.startUnlocked) {
-                Highscore.setWeekUnlock(week, true);
+            if (!Highscore.getWeekUnlock(i) && parsedJson.startUnlocked) {
+                Highscore.setWeekUnlock(i, true);
             }
-		}
+        }
+
         return weekList;
     }
 
@@ -116,15 +135,15 @@ class WeekSetup {
     }
 
     public static inline function getWeekDiffs(week:String) {
-		return getData(week)?.weekDiffs ?? CoolUtil.defaultDiffArray.copy();
+		return getData(week)?.data?.weekDiffs ?? CoolUtil.defaultDiffArray.copy();
 	}
 
-    public static inline function getData(week:String) {
-        return weekDataMap.get(week);
+    public static inline function getData(week:String):WeekData {
+        return weekMap.get(week);
     }
 
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
-        var modFolder:Null<String> = modWeekMap.get(weekName);
+        var modFolder:Null<String> = weekMap.get(weekName).modFolder;
         if (modFolder == null) ModdingUtil.curModFolder = "";   // In base game
         else if (ModdingUtil.modFolders.contains(modFolder)) {  // In a mod
             trace('SELECTED MOD FOLDER $modFolder');
