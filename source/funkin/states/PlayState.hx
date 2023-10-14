@@ -286,8 +286,7 @@ class PlayState extends MusicBeatState {
 		healthBarBG.screenCenter(X);
 		add(healthBarBG);
 
-		healthBar = new FlxBar(healthBarBG.x + 6, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 12),
-		Std.int(healthBarBG.height - 8), this, 'health', 0, 2);
+		healthBar = new FlxBar(healthBarBG.x + 6, healthBarBG.y + 4, RIGHT_TO_LEFT, cast healthBarBG.width - 12, cast healthBarBG.height - 8, this, 'health', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
@@ -296,14 +295,13 @@ class PlayState extends MusicBeatState {
 		add(iconGroup);
 
 		iconP1 = new HealthIcon(boyfriend.icon, true);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
-		iconP1.playIcon = true;
-		iconGroup.add(iconP1);
+		iconP2 = new HealthIcon(dad.icon);
 
-		iconP2 = new HealthIcon(dad.icon, false);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
-		iconP2.playIcon = true;
-		iconGroup.add(iconP2);
+		for (i in [iconP1,iconP2]) {
+			i.y = healthBar.y - (i.height*0.5);
+			i.playIcon = true;
+			iconGroup.add(i);
+		}
 
 		dad.iconSpr = iconP2;
 		boyfriend.iconSpr = iconP1;
@@ -533,13 +531,13 @@ class PlayState extends MusicBeatState {
 			songRating = Highscore.getAccuracyRating(songAccuracy).toUpperCase();
 		}
 
-		scoreTxt.text =
-		'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
-		scoreTxt.x = healthBarBG.x + healthBarBG.width/2 - scoreTxt.width/2;
-
 		if (getPref('vanilla-ui')) {
 			scoreTxt.text = 'Score:$songScore';
 			scoreTxt.setPosition(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30);
+		} else {
+			scoreTxt.text =
+			'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
+			scoreTxt.x = healthBarBG.x + healthBarBG.width/2 - scoreTxt.width/2;
 		}
 
 		ModdingUtil.addCall('updateScore', [songScore]);

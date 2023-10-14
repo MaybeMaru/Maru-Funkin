@@ -1,7 +1,7 @@
 package funkin.objects;
 
 class HealthIcon extends FlxSpriteExt {
-	public var sprTracker:FlxSprite;
+	public var sprTracker:FlxObject;
 	public var isPlayer:Bool = false;
 	public var playIcon:Bool = false;
 	public var isDying:Bool = false;
@@ -47,9 +47,8 @@ class HealthIcon extends FlxSpriteExt {
 	}
 
 	public function bumpIcon(bumpSize:Float = 1.3):Void {
-		centerOrigin();
-		scale.set(bumpSize, bumpSize);
-		updateHitbox();
+		setScale(bumpSize);
+		update(0);
 	}
 
 	public function animCheck():Void {
@@ -70,28 +69,29 @@ class HealthIcon extends FlxSpriteExt {
 	}
 
 	override function update(elapsed:Float):Void {
-		super.update(elapsed);
-
 		setSprTrackerPos();
-		if (!playIcon || PlayState.instance == null) return;
+		if (playIcon && PlayState.instance != null) {
+			final healthBar = PlayState.instance.healthBar;
+			var bumpLerp = 0.15;
+			var iconOffset = 23;
+			var moveOffset = width * 0.333;
+			if (Preferences.getPref('vanilla-ui')) {
+				bumpLerp = 0.75;
+				iconOffset = 26;
+				moveOffset = 0;
+			}
 
-		var vu:Bool = Preferences.getPref('vanilla-ui');
-		var inst = PlayState.instance;
-			
-		var bumpLerp:Float = vu ? 0.85 : 0.15;
-		var iconOffset:Float = vu ? 26 : 23;
-		var moveOffset:Float = vu ? 0 : width/3;
-			
-		var healthPercent:Float = FlxMath.remapToRange(inst.healthBar.percent, 0, 100, 100, 0);
-		var iconX:Float = inst.healthBar.x + inst.healthBar.width * healthPercent * 0.01;
-		var iconOffsetX:Float = isPlayer ? iconOffset : width - iconOffset;
-		x = iconX - iconOffsetX + moveOffset;
-			
-		isDying = isPlayer ? (inst.healthBar.percent < 20) : (inst.healthBar.percent > 80);
-		animCheck();
-			
-		var iconSize:Float = CoolUtil.coolLerp(scale.x, staticSize, bumpLerp);
-		scale.set(iconSize, iconSize);
-		updateHitbox();
+			final iconX = healthBar.x + healthBar.width * FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01;
+			var iconOffsetX = iconOffset;
+			isDying = healthBar.percent < 20;
+			if (!isPlayer) {
+				iconOffsetX = cast width - iconOffset;
+				isDying = healthBar.percent > 80;
+			}
+			x = iconX - iconOffsetX + moveOffset;
+			animCheck();
+			setScale(CoolUtil.coolLerp(scale.x, staticSize, bumpLerp));
+		}
+		super.update(elapsed);
 	}
 }

@@ -74,7 +74,7 @@ class WeekSetup {
         weeks = CoolUtil.removeDuplicates(weeks);
 
         FlxArrayUtil.clearArray(weekList);
-        FlxArrayUtil.clearArray(vanillaWeeks);
+        FlxArrayUtil.clearArray(vanillaWeekList);
         weekMap.clear();
 
         var modMap:Map<String, String> = [];

@@ -11,7 +11,6 @@ import openfl.utils.Assets as OpenFlAssets;
 import lime.utils.Assets as LimeAssets;
 import openfl.Assets as OflAssets;
 #if desktop
-import sys.io.File;
 import sys.FileSystem;
 #end
 

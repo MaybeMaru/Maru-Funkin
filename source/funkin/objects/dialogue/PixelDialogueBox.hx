@@ -155,7 +155,7 @@ class PixelPortrait extends FlxSprite {
 
 		if (path.endsWith('-pixel')) {
 			antialiasing = false;
-			setGraphicSize(Std.int(width * PixelDialogueBox.PIXEL_ZOOM * 0.9));
+			setGraphicSize(width * PixelDialogueBox.PIXEL_ZOOM * 0.9);
 			updateHitbox();
 		}
 		else {
