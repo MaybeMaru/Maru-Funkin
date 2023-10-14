@@ -75,7 +75,12 @@ class SettingItem extends FlxSpriteGroup {
             case 'bool':
                 checkboxSpr.playAnim(prefValue ? 'open' : 'close');
             case 'num':
-                numSetSpr.makeText('< $prefValue >');
+                var prefStr = Std.string(prefValue);
+                switch (itemPref) {
+                    case "const-speed": if (prefStr.length <= 1) prefStr += ".0";
+                }
+
+                numSetSpr.text = "< " + prefStr + " >";
                 settingTxt.x = 20 + numSetSpr.x + numSetSpr.width;
         }
     }

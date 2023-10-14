@@ -1,10 +1,10 @@
 package funkin.objects.alphabet;
 
 typedef LetterData = {
-    ?specialPrefix:Null<String>,
-    ?offsetUpperNormal:Array<Float>,
-    ?offsetLowerNormal:Array<Float>,
-    ?offsetBold:Array<Float>
+    ?prefix:Null<String>,
+    ?upper:Array<Float>,
+    ?lower:Array<Float>,
+    ?bold:Array<Float>
 }
 
 class AlphabetCharacter extends FlxSpriteExt {
@@ -16,28 +16,22 @@ class AlphabetCharacter extends FlxSpriteExt {
     public var offsetLetter:FlxPoint;
     public var letterSize:Float = 1;
     public var lineWidth:Int = 0;
-
-    /*
-        Might make it a JSON in the future, this sucks lmao
-        TODO Finish offsets and fix the shitty ones
-        {offsetBold:[0,0],offsetLowerNormal:[0,0],offsetUpperNormal:[0,0]}
-    */
     
-    public static var characters(default, never):Map<String, Null<LetterData>> =  [
+    public static var characters(default, never):Map<String, LetterData> =  [
         //  Alphabet
-        "a"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},  "b"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 0],offsetUpperNormal:[ 0, 0]},
-        "c"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,15],offsetUpperNormal:[ 0, 0]},  "d"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 0],offsetUpperNormal:[ 0, 0]},
-        "e"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,15],offsetUpperNormal:[ 0, 0]},  "f"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 0],offsetUpperNormal:[ 0, 0]},
-        "g"=>{offsetBold:[ 0, 3],offsetLowerNormal:[ 0,17],offsetUpperNormal:[ 0, 0]},  "h"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 5],offsetUpperNormal:[ 0, 0]},
-        "i"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},  "j"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 5],offsetUpperNormal:[ 0, 0]},
-        "k"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 5],offsetUpperNormal:[ 0, 0]},  "l"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 5],offsetUpperNormal:[ 0, 0]},
-        "m"=>{offsetBold:[ 0, 3],offsetLowerNormal:[ 0,25],offsetUpperNormal:[ 0, 0]},  "n"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,25],offsetUpperNormal:[ 0, 0]},
-        "o"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},  "p"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},
-        "q"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},  "r"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},
-        "s"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,15],offsetUpperNormal:[ 0, 0]},  "t"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0, 5],offsetUpperNormal:[ 0, 0]},
-        "u"=>{offsetBold:[ 0, 7],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},  "v"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,15],offsetUpperNormal:[ 0, 0]},
-        "w"=>{offsetBold:[ 0, 3],offsetLowerNormal:[ 0,20],offsetUpperNormal:[ 0, 0]},  "x"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},
-        "y"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},  "z"=>{offsetBold:[ 0, 0],offsetLowerNormal:[ 0,10],offsetUpperNormal:[ 0, 0]},
+        "a"=>{lower:[0,10],},               "b"=>null,
+        "c"=>{lower:[0,15],},               "d"=>null,
+        "e"=>{lower:[0,15],},               "f"=>null,
+        "g"=>{bold:[0,3], lower:[0,17],},   "h"=>{lower:[0,5],},
+        "i"=>{lower:[0,10],},               "j"=>{lower:[0,5],},
+        "k"=>{lower:[0,5],},                "l"=>{lower:[0,5],},
+        "m"=>{bold:[0,3], lower:[0,25],},   "n"=>{lower:[0,25],},
+        "o"=>{lower:[0,20],},               "p"=>{lower:[0,20],},
+        "q"=>{lower:[0,20],},               "r"=>{lower:[0,20],},
+        "s"=>{lower:[0,15],},               "t"=>{lower:[0,5],},
+        "u"=>{bold:[0,7], lower:[0,20],},   "v"=>{lower:[0,15],},
+        "w"=>{bold:[0,3], lower:[0,20],},   "x"=>{lower:[0,10],},
+        "y"=>{lower:[0,10],},               "z"=>{lower:[0,10],},
 
         //  Numbers
         "1"=>null,"2"=>null,"3"=>null,"4"=>null,"5"=>null,
@@ -47,17 +41,22 @@ class AlphabetCharacter extends FlxSpriteExt {
         "|"=> null, "~"=> null, "#"=> null,
         "$"=> null, "%"=> null, "("=> null,
         ")"=> null, "*"=> null, "+"=> null,
-        "-"=> {offsetBold: [0,25]}, ":"=> null, ";"=> null,
-        "<"=> null, "="=> null, ">"=> null,
-        "@"=> null, "["=> null, "]"=> null,
-        "^"=> null, "_"=> null, "."=> {specialPrefix: "period", offsetBold: [0, 50],offsetLowerNormal:[0, 40]},
-        ","=> {specialPrefix: "comma",offsetLowerNormal:[0, 40]}, "'"=> {specialPrefix: "apostrophe"},"!"=> {specialPrefix: "exclamation", offsetBold: [0, -10]},
-        "?"=> {specialPrefix: "question", offsetBold: [0,-5]},
+        "-"=> {bold: [0,25]}, ":"=> null,
+        ";"=> null, "<"=> null, "="=> null,
+        ">"=> null, "@"=> null, "["=> null,
+        "]"=> null, "^"=> null, "_"=> null,
+        
+        "." => {prefix: "period", bold: [0,50], lower:[0,40]},
+        "," => {prefix: "comma", lower:[0,40]},
+        "'" => {prefix: "apostrophe"},
+        "!" => {prefix: "exclamation", bold: [0,-10]},
+        "?" => {prefix: "question", bold: [0,-5]},
+
 
         //  Spanish and Portuguese Characters
-        "á"=>{offsetBold: [0, -33]},"é"=>{offsetBold: [0, -31]},
-        "í"=>{offsetBold: [0, -32]},"ó"=>{offsetBold: [0, -31]},
-        "ú"=>{offsetBold: [0, -27]},"ñ"=>{offsetBold: [0, -22]},
+        "á" => {bold:[0,-33]}, "é" => {bold:[0,-31]},
+        "í" => {bold:[0,-32]}, "ó" => {bold:[0,-31]},
+        "ú" => {bold:[0,-27]}, "ñ" => {bold:[0,-22]},
     ];
 
         
@@ -66,70 +65,58 @@ class AlphabetCharacter extends FlxSpriteExt {
         loadImage('alphabet');
 		antialiasing = Preferences.getPref('antialiasing');
         setupCharacter(x,y,letter,bold,letterSize);
+        offsetLetter = new FlxPoint();
     }
 
     private static var defData:LetterData = {
-        specialPrefix:          null,
-        offsetBold:             [0,0],
-        offsetLowerNormal:      [0,0],
-        offsetUpperNormal:      [0,0]
+        prefix: null,
+        bold: [0,0],
+        lower: [0,0],
+        upper: [0,0]
     }
+
+    static final alphabet:String = 'abcdefghijklmnopqrstuvwxyz';
+    static var mappedData:Map<String, LetterData> = [];
 
     public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         setPosition(x,y);
         this.letter = letter;
         this.letterSize = letterSize;
         lowerLetter = letter.toLowerCase();
-        offsetLetter = new FlxPoint(0,0);
-
-        var newData:Null<LetterData> =  characters[lowerLetter];
-        if (newData != null) {  //  Fix maybe NULL values
-            newData.offsetBold = (newData.offsetBold != null) ? newData.offsetBold : defData.offsetBold;
-            newData.offsetLowerNormal = (newData.offsetLowerNormal != null) ? newData.offsetLowerNormal : defData.offsetLowerNormal;
-            newData.offsetUpperNormal = (newData.offsetUpperNormal != null) ? newData.offsetUpperNormal : defData.offsetUpperNormal;
-            letterData = newData;
+        if (lowerLetter.length <= 0) return;
+        
+        if (!mappedData.exists(lowerLetter)) {
+            mappedData.set(lowerLetter, JsonUtil.checkJsonDefaults(defData, characters.get(lowerLetter)));
         }
-        else {
-            letterData = defData;
-        }
+        letterData = mappedData.get(lowerLetter);
 
         if (bold) {
-            offsetLetter.set(letterData.offsetBold[0], letterData.offsetBold[1]);
+            offsetLetter.set(letterData.bold[0], letterData.bold[1]);
             prefix = "bold";
         }
         else {
-            var alphabet:String = 'abcdefghijklmnopqrstuvwxyz';
             if (alphabet.contains(lowerLetter)) {
-                if (lowerLetter == letter) {
-                    offsetLetter.set(letterData.offsetLowerNormal[0], letterData.offsetLowerNormal[1]);
-                    prefix = "lowercase";
-                }
-                else {
-                    offsetLetter.set(letterData.offsetUpperNormal[0], letterData.offsetUpperNormal[1]);
-                    prefix = "uppercase";
-                }
+                final isLower = lowerLetter == letter;
+                prefix = isLower ? "lowercase" : "uppercase";
+
+                final arr = isLower ? letterData.lower : letterData.upper;
+                offsetLetter.set(arr[0],arr[1]);
             }
             else {
-                offsetLetter.set(letterData.offsetLowerNormal[0], letterData.offsetLowerNormal[1]);
+                offsetLetter.set(letterData.lower[0], letterData.lower[1]);
                 prefix = "normal";
             }
         }
 
-        if (characters.exists(lowerLetter)) {
-            makeCharacter();
-        }
+        if (characters.exists(lowerLetter)) makeChar();
     }
 
-    public function makeCharacter():Void {
-        animPrefix = lowerLetter;
-        if (letterData.specialPrefix != null) {
-            animPrefix = letterData.specialPrefix;
-        }
-        addAnim(letter, '$animPrefix $prefix', 24, true);
-        playAnim(letter);
-        x += offsetLetter.x*letterSize;
-        y += offsetLetter.y*letterSize;
-        scale.set(letterSize,letterSize);
-        updateHitbox();
+    public function makeChar():Void {
+        animPrefix = letterData.prefix ?? lowerLetter;
+        if (!animDatas.exists(letter)) addAnim(letter, '$animPrefix $prefix', 24, true);
+        playAnim(letter, true);
+        x += offsetLetter.x * letterSize;
+        y += offsetLetter.y * letterSize;
+        setScale(letterSize);
     }
 }

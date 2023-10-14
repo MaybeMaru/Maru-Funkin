@@ -1,9 +1,9 @@
 package funkin.objects.alphabet;
 
-enum AlphabetAlign {
-	LEFT;
-	CENTER;
-	RIGHT;
+enum abstract AlphabetAlign(String) {
+    var LEFT = 'left';
+    var CENTER = 'center';
+    var RIGHT = 'right';
 }
 
 class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
@@ -23,9 +23,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
 	}
 
     function set_text(value:String):String {
-        text = value;
-        makeText(value);
-        return value;
+        if (text != value) makeText(value);
+        return text = value;
     }
 
     private function setAlign():Void {

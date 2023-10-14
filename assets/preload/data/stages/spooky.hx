@@ -97,14 +97,14 @@ function openTankmanGameover() {
     bg.setScale(1.5);
     tankSub.add(bg);
 
-    var tank = new FunkinSprite("tankman/spookyTankman", [435,360], [0,0]);
-    tank.setScale(1.5);
+    var tank = new FunkinSprite("tankman/spookyTankman", [300,270], [0,0]);
     tank.addAnim("dance", "dance", 48, true);
     tank.playAnim("dance");
     tankSub.add(tank);
 
     var didTrans:Bool = false;
     tankSub._update = function() {
+        tank.setScale(1.75);
         if (!didTrans && getKey('ACCEPT-P')) {
             didTrans = true;
             spook().fadeOut(1.5);
