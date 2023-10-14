@@ -553,11 +553,12 @@ function popUpScore(daNote:Note)
     //  daNote --> Note to be judged
 }
 
-function cameraMovement(character:Int)
+function cameraMovement(character:Int, camPosition:FlxPoint)
 {
    //   Called when the camera moves to the player or opponent
    //   character --> Current pointed character
    //   0 = opponent, 1 = player
+   //   camPosition --> New position the camera with lock into
 }
 
 function stepHit(curStep:Int)

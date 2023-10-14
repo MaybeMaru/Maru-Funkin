@@ -312,8 +312,8 @@ class PlayState extends MusicBeatState {
 		add(scoreTxt);
 
 		if (getPref('vanilla-ui')) {
-			scoreTxt.borderColor = FlxColor.TRANSPARENT;
-			scoreTxt.setFormat(Paths.font('vcr'), 16, FlxColor.WHITE);
+			scoreTxt.setFormat(Paths.font("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			scoreTxt.borderSize = 1;
 		}
 
 		ratingGroup = new RatingGroup(boyfriend);
@@ -621,21 +621,27 @@ class PlayState extends MusicBeatState {
 	
 	public function cameraMovement():Void {
 		if (!notesGroup.generatedMusic || curSectionData == null) return;
-		final dadMidpoint = dad.getMidpoint();
-		final bfMidpoint = boyfriend.getMidpoint();
 		final mustHit:Bool = curSectionData.mustHitSection;
 
-		var intendedPos:Float = mustHit ? bfMidpoint.x - boyfriend.camOffsets.x - stageJsonData.bfCamOffsets[0] : dadMidpoint.x - dad.camOffsets.x - stageJsonData.dadCamOffsets[0];
-		var camOffsets:Array<Float> = mustHit ? stageJsonData.bfCamOffsets : stageJsonData.dadCamOffsets;
-		
+		var camOffsets:FlxPoint = null;
+		var midPoint:FlxPoint = null;
+		var stageCamOffsets:Array<Float> = null;
+		if (mustHit) {
+			camOffsets = boyfriend.camOffsets;
+			midPoint = boyfriend.getMidpoint();
+			stageCamOffsets = stageJsonData.bfCamOffsets;
+		} else {
+			camOffsets = dad.camOffsets;
+			midPoint = dad.getMidpoint();
+			stageCamOffsets = stageJsonData.dadCamOffsets;
+		}
+
+		final intendedPos = midPoint.x - camOffsets.x - stageCamOffsets[0];
 		if (camFollow.x != intendedPos) {
-			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0]);
-			camFollow.setPosition(mustHit ? bfMidpoint.x : dadMidpoint.x, mustHit ? bfMidpoint.y : dadMidpoint.y);
-			camFollow.x -= mustHit ? boyfriend.camOffsets.x : dad.camOffsets.x;
-			camFollow.y -= mustHit ? boyfriend.camOffsets.y : dad.camOffsets.y;
-	
-			camFollow.x -= camOffsets[0];
-			camFollow.y -= camOffsets[1];
+			final camX = midPoint.x - camOffsets.x - stageCamOffsets[0];
+			final camY = midPoint.y - camOffsets.y - stageCamOffsets[1];
+			camFollow.setPosition(camX, camY);
+			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0, camFollow.getPosition()]);
 		}
 	}
 

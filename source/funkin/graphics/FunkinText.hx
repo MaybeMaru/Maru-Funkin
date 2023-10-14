@@ -10,6 +10,7 @@ class FunkinText extends FlxText
         super(x,y,width,text,size);
         setFormat(Paths.font('vcr'), size, FlxColor.WHITE, alignment.toLowerCase().trim(), OUTLINE, FlxColor.BLACK);
         borderSize = 2;
+        antialiasing = false;
 		scrollFactor.set();
     }
 }

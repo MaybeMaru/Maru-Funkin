@@ -10,6 +10,11 @@ typedef CacheClearing =  {
 	?shaders:Bool
 }
 
+enum abstract SoundType(String) {
+	var SOUND = "sound";
+	var MUSIC = "music";
+}
+
 class CoolUtil {
 	public static var defaultDiffArray:Array<String> = 	['easy', 'normal', 'hard'];
 	public static var directionArray:Array<String> = 	['LEFT','DOWN','UP','RIGHT'];
@@ -70,8 +75,14 @@ class CoolUtil {
 		FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = active);
 	}
 
-	inline public static function getSound(key:String):FlxSound {
-		var newSound:FlxSound = new FlxSound().loadEmbedded(Paths.sound(key));
+	inline public static function getSound(key:String, lib:SoundType = SOUND):FlxSound {
+		var _sound = null;
+		switch(lib) {
+			case SOUND: _sound = Paths.sound(key);
+			case MUSIC: _sound = Paths.music(key);
+		}
+		
+		var newSound:FlxSound = new FlxSound().loadEmbedded(_sound);
 		FlxG.sound.list.add(newSound);
 		return newSound;
 	}

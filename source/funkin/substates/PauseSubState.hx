@@ -10,8 +10,6 @@ class PauseSubState extends MusicBeatSubstate {
 		'Exit to menu'
 	];
 	var grpMenuShit:FlxTypedGroup<MenuAlphabet>;
-	var pauseMusic:FlxSound;
-
 	var curSelected:Int = 0;
 
 	var bg:FlxSprite;
@@ -20,15 +18,18 @@ class PauseSubState extends MusicBeatSubstate {
 	var deathCounter:FunkinText;
 	var timeLeft:FunkinText;
 
+	var pauseMusic:FlxSound;
+	var pauseLength:Int = 0;
+
 	var _items:Array<FunkinText> = [];
 
 	var maxTime:String = "";
 
 	public function new():Void {
 		super(false);
-
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
-		FlxG.sound.list.add(pauseMusic);
+		pauseMusic = CoolUtil.getSound("breakfast", MUSIC);
+		pauseMusic.looped = true;
+		pauseLength = Std.int(pauseMusic.length * 0.5);
 
 		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.scrollFactor.set();
@@ -63,7 +64,8 @@ class PauseSubState extends MusicBeatSubstate {
 
 	public function init() {
 		pauseMusic.volume = 0;
-		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+		pauseMusic.play(true);
+		pauseMusic.time = FlxG.random.int(0, pauseLength);
 
 		for (i in _items) {
 			final _id = _items.indexOf(i);
@@ -92,8 +94,9 @@ class PauseSubState extends MusicBeatSubstate {
 	var coolDown:Float = 0.1; //Controllers have a lil lag
 
 	override function update(elapsed:Float):Void {
-		if (pauseMusic.volume < 0.5) {
+		if (pauseMusic.volume < 0.6) {
 			pauseMusic.volume += 0.01 * elapsed;
+			pauseMusic.volume = FlxMath.bound(pauseMusic.volume, 0, 0.6);
 		}
 
 		super.update(elapsed);
