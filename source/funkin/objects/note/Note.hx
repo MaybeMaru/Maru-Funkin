@@ -99,8 +99,8 @@ class Note extends FlxSpriteExt implements INoteData {
         super.update(elapsed);
         if (targetStrum == null) return; // Move to strum
         var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-        strumCenter = targetStrum.y + targetStrum.swagHeight / 2; // Center of the target strum
-        strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight / 2;
+        strumCenter = targetStrum.y + targetStrum.swagHeight * 0.5; // Center of the target strum
+        strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight * 0.5;
         y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
         x = targetStrum.x - (noteMove * -getSin(approachAngle));
 
@@ -127,13 +127,13 @@ class Note extends FlxSpriteExt implements INoteData {
         super.draw();
     }
 
-    public function hideNote() {
+    inline public function hideNote() {
         active = drawNote = false;
     }
 
-    public function initNote() {
+    inline public function initNote() {
         active = drawNote = true;
-        update(FlxG.elapsed);
+        update(0);
     }
 
     inline public function getInSustain(endExtra:Float = 0, startExtra:Float = 0):Bool {
@@ -195,7 +195,7 @@ class Note extends FlxSpriteExt implements INoteData {
         curKey = key;
         if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
             frames = Paths.getGraphic(key).imageFrame;
-            origin.set(width / 2, 0);
+            origin.set(width * 0.5, 0);
             return;
         } else {
             updateSprites();
@@ -213,7 +213,7 @@ class Note extends FlxSpriteExt implements INoteData {
             
             var gpuGraphic = Paths.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
             frames = gpuGraphic.imageFrame;
-            origin.set(width / 2, 0);
+            origin.set(width * 0.5, 0);
         }
     }
 
