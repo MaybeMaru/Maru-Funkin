@@ -27,7 +27,7 @@ class ChartWaveform extends FlxSprite {
             audioBuffer = sound._sound.__buffer;
             audioBytes = sound._sound.__buffer.data.toBytes();
         }
-        frames = Paths.addGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
+        frames = AssetManager.addGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
         antialiasing = false;
 
         color = _color;

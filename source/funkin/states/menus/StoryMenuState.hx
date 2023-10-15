@@ -123,12 +123,16 @@ class StoryMenuState extends MusicBeatState {
 		super.create();
 	}
 
+	var cachedChars:Array<String> = [];
+
 	function cacheChars() {
 		final startMod = ModdingUtil.curModFolder;
 		for (week in storyWeeks) {
 			if (WeekSetup.vanillaWeekList.contains(week)) continue;
 			ModdingUtil.curModFolder = week.modFolder;
 			for (i in week.data.storyCharacters) {
+				if (cachedChars.contains(i)) continue; // Avoid duplicates
+				cachedChars.push(i);
 				var char = new MenuCharacter(0,0,i);
 				char.destroy();
 			}
@@ -139,7 +143,7 @@ class StoryMenuState extends MusicBeatState {
 	var lerpColor:FlxColorFix;
 
 	inline function getBgColor():FlxColor {
-		return FlxColor.fromString(getCurData().weekColor);
+		return getPref("vanilla-ui") ? 0xfff9cf51 : FlxColor.fromString(getCurData().weekColor);
 	}
 
 	override function update(elapsed:Float):Void {

@@ -124,7 +124,7 @@ class Shader
 	inline public static function setSampler2D(shader:String, prop:String, path:String, ?bitmap:BitmapData)
 	{
 		if (existsShader(shader)) {
-			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : Paths.getBitmapData(Paths.image(path, null, true), true));
+			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : AssetManager.getBitmapData(Paths.image(path, null, true), true));
 		}
 	}
 

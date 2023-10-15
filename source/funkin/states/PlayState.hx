@@ -568,7 +568,6 @@ class PlayState extends MusicBeatState {
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else if (FlxG.keys.justPressed.EIGHT) {
-			SkinUtil.setCurSkin('default');
 			CustomTransition.skipTrans = false;
 			switchState(new AnimationDebug(SONG.players[1]));
 			DiscordClient.changePresence("Character Editor", null, null, true);
@@ -670,7 +669,6 @@ class PlayState extends MusicBeatState {
 		else {
 			trace('WENT BACK TO FREEPLAY??');
 			clearCache = true;
-			SkinUtil.setCurSkin('default');
 			switchState(new FreeplayState());
 		}
 	}
@@ -686,7 +684,6 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('endWeek');
 
 		clearCache = true;
-		SkinUtil.setCurSkin('default');
 		CustomTransition.skipTrans = false;
 		switchState(new StoryMenuState());
 	}
@@ -785,6 +782,7 @@ class PlayState extends MusicBeatState {
 		Conductor.setPitch(1, false);
 		Conductor.stop();
 		CoolUtil.destroyMusic();
+		SkinUtil.setCurSkin('default');
 		ModdingUtil.addCall('destroy');
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		super.destroy();

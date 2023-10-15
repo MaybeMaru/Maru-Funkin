@@ -1,5 +1,6 @@
 package funkin.states;
 
+import openfl.system.System;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
@@ -80,6 +81,11 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function resetState() {
 		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
 		transition.startTrans(null, function () FlxG.resetState());
+	}
+
+	override function destroy() {
+		super.destroy();
+		System.gc(); // Make sure shit gets cleared??
 	}
 
 	// Some shortcuts

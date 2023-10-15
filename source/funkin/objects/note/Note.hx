@@ -193,13 +193,13 @@ class Note extends FlxSpriteExt implements INoteData {
         var key:String = 'sus$noteData-$_height-$skin';
         if (curKey == key) return;
         curKey = key;
-        if (Paths.existsGraphic(key)) { // Save on drawing the graphic more than one time?
-            frames = Paths.getGraphic(key).imageFrame;
+        if (AssetManager.existsGraphic(key)) { // Save on drawing the graphic more than one time?
+            frames = AssetManager.getGraphic(key).imageFrame;
             origin.set(width * 0.5, 0);
             return;
         } else {
             updateSprites();
-            frames = Paths.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
+            frames = AssetManager.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
         
             // draw piece
             var loops = Math.floor(_height / susPiece.height) + 1;
@@ -211,7 +211,7 @@ class Note extends FlxSpriteExt implements INoteData {
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
             stampBitmap(susEnd, 0, endPos);
             
-            var gpuGraphic = Paths.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
+            var gpuGraphic = AssetManager.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
             frames = gpuGraphic.imageFrame;
             origin.set(width * 0.5, 0);
         }

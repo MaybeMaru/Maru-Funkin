@@ -15,3 +15,14 @@ function postCreateDialogue() {
         });
     }
 }
+
+function updatePost() {
+    for (i in PlayState.strumLineNotes) {
+        i.alpha = Math.round(i.alpha / 0.2) * 0.2;
+        i.y = Math.round(i.y / 0.6) * 0.6;
+    }
+}
+
+function startSong() {
+    closeScript();
+}

@@ -39,7 +39,7 @@ class Preloader extends flixel.FlxState {
             _texture.uploadFromBitmapData(bmp);
             cachedTextures.set(key, _texture);
         }
-        Paths.disposeBitmap(bmp);
+        AssetManager.disposeBitmap(bmp);
         var graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         graphic.persist = true;
         graphic.destroyOnNoUse = false;
@@ -56,7 +56,7 @@ class Preloader extends flixel.FlxState {
         if(!existsGraphic(key)) return;
         var graphic = getGraphic(key);
         cachedGraphics.remove(key);
-        Paths.destroyGraphic(graphic);
+        AssetManager.destroyGraphic(graphic);
         if (disposeTex) disposeTexture(key);
     }
 

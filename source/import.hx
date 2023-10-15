@@ -11,6 +11,7 @@ import funkin.util.song.WeekSetup;
 
 //Util
 import funkin.util.Paths;
+import funkin.util.backend.AssetManager;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
 import funkin.util.frontend.Shader;

@@ -8,6 +8,6 @@
     "weekImage": "week7",
     "weekName": "tankman",
     "weekColor": "0xFFF6B604",
-    "storyCharacters": ["tankman","bf","gf"],
+    "storyCharacters": ["tankman","bf","gf-tank"],
     "startUnlocked": false
 }

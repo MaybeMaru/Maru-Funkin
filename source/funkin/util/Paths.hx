@@ -2,14 +2,10 @@ package funkin.util;
 
 import textureAtlas.TextureAtlas;
 import flixel.system.FlxAssets;
-import flash.media.Sound;
 import flixel.system.FlxAssets.FlxSoundAsset;
-import openfl.display.BitmapData;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
-import lime.utils.Assets as LimeAssets;
-import openfl.Assets as OflAssets;
 #if desktop
 import sys.FileSystem;
 #end
@@ -22,52 +18,50 @@ class Paths
 	public static function set_currentLevel(value:String)
 		return currentLevel = value.toLowerCase();
 
-	public static function getPath(file:String, type:AssetType, library:Null<String>, allMods:Bool = false, mods:Bool = true, ?level:String):String {
+	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
 		if (mods) {
-			var modLib:String = '';
-			if (library != null)
-				modLib = '$library/';
-
-			var _folder = ModdingUtil.curModFolder.length <= 0 ? '' : '${ModdingUtil.curModFolder}/';
-			var modFolderPath = getModPath('$_folder$modLib$file');
+			final modLib:String = (library != null && library.length > 0) ? '$library/' : '';
+			final _folder = ModdingUtil.curModFolder.length <= 0 ? '' : '${ModdingUtil.curModFolder}/';
+			final modFolderPath = getModPath('$_folder$modLib$file');
 			if (FileSystem.exists(modFolderPath))
 				return modFolderPath;
 			
 			if (allMods) {
 				for (modFolder in ModdingUtil.modFolders) {
 					if (ModdingUtil.modFoldersMap.get(modFolder)) {
-						var modFolderPath = getModPath('$modFolder/$modLib$file');
-						if (FileSystem.exists(modFolderPath))
-							return modFolderPath;
+						final _modPath = getModPath('$modFolder/$modLib$file');
+						if (FileSystem.exists(_modPath))
+							return _modPath;
 					}
 				}
 			}
 			
-			var modPath = getModPath('$modLib$file');
+			final modPath = getModPath('$modLib$file');
 			if (FileSystem.exists(modPath))
 				return modPath;
 		}
 		#end
 
-		if (library != null && level != null) {
-			var levelPath = getLibraryPathForce(file, library, level);
-			if (OpenFlAssets.exists(levelPath, type))
-				return levelPath;
-		}
-		else if (library != null) {
-			var libraryPath = getLibraryPath(file, library);
-			if (OpenFlAssets.exists(libraryPath, type))
-				return libraryPath;
+		if (library != null) {
+			if (level != null) {
+				final levelPath = getLibraryPathForce(file, library, level);
+				if (OpenFlAssets.exists(levelPath, type))
+					return levelPath;
+			} else {
+				final libraryPath = getLibraryPath(file, library);
+				if (OpenFlAssets.exists(libraryPath, type))
+					return libraryPath;
+			}
 		}
 
 		if (currentLevel != null) {
-			var curLevelPath = getLibraryPathForce(file, 'weeks', currentLevel);
+			final curLevelPath = getLibraryPathForce(file, 'weeks', currentLevel);
 			if (OpenFlAssets.exists(curLevelPath, type))
 				return curLevelPath;
 		}
 
-		var sharedPath = getLibraryPathForce(file, "shared");
+		final sharedPath = getLibraryPathForce(file, "shared");
 		if (OpenFlAssets.exists(sharedPath, type))
 			return sharedPath;
 
@@ -127,7 +121,7 @@ class Paths
 	static public function sound(key:String, ?library:String, ?level:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library, false, true, level);
-		return forcePath ? soundPath : getSound(soundPath);
+		return forcePath ? soundPath : AssetManager.getSound(soundPath);
 	}
 
 	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String):FlxSoundAsset
@@ -138,20 +132,20 @@ class Paths
 	inline static public function music(key:String, ?library:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var musicPath:String = getPath('music/$key.$SOUND_EXT', MUSIC, library);
-		var soundFile:FlxSoundAsset = getSound(musicPath);
+		var soundFile:FlxSoundAsset = AssetManager.getSound(musicPath);
 		return forcePath ? musicPath : soundFile;
 	}
 
 	inline static public function voices(song:String, forcePath:Bool = false):FlxSoundAsset
 	{
 		var voicesPath:String = getPath('${Song.formatSongFolder(song)}/audio/Voices.$SOUND_EXT', MUSIC, 'songs');
-		return forcePath ? voicesPath : getSound(voicesPath);
+		return forcePath ? voicesPath : AssetManager.getSound(voicesPath);
 	}
 
 	inline static public function inst(song:String, forcePath:Bool = false, global:Bool = false):FlxSoundAsset
 	{
 		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs', global);
-		return forcePath ? instPath : getSound(instPath);
+		return forcePath ? instPath : AssetManager.getSound(instPath);
 	}
 
 	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
@@ -165,7 +159,7 @@ class Paths
 
 	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset {
 		var imagePath:String = getPath('images/$key.png', IMAGE, library, allMods);
-		return forcePath ? imagePath : getImage(imagePath, gpu);
+		return forcePath ? imagePath : AssetManager.getImage(imagePath, gpu);
 	}
 
 	inline static public function font(key:String, ?library:String):String {
@@ -258,140 +252,6 @@ class Paths
 		
 		return fileList;
 		#end
-	}
-
-	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		if (gpu) {
-			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
-			else if (exists(path, IMAGE)) {
-				var bitmap:BitmapData = getBitmapData(path);
-				return Preloader.addFromBitmap(bitmap, path);
-			}
-		} else return getGraphic(path, true);
-		return path;
-	}
-
-	/*
-		Used to get bitmaps without using gpu loading
-		Gpu loading is faster but breaks bitmap functions
-	*/
-	public static var cachedGraphics:Map<String, FlxGraphic> = [];
-	
-	inline public static function clearBitmapCache() {
-		for (key in cachedGraphics.keys()) {
-			removeGraphicByKey(key);
-		}
-		if (Preferences.getPref('clear-gpu')) {
-			for (key in Preloader.cachedTextures.keys()) {
-				if (key.startsWith('mods/'))
-					Preloader.removeByKey(key, true);
-			}
-		}
-		FlxG.bitmap.clearCache();
-	}
-
-	public static function removeGraphicByKey(key:String) {
-		if (!existsGraphic(key)) return;
-		var obj = cachedGraphics.get(key);
-		cachedGraphics.remove(key);
-		destroyGraphic(obj);
-	}
-
-	public static function destroyGraphic(?graphic:FlxGraphic) {
-		if (graphic == null) return;
-		graphic.persist = false;
-		graphic.destroyOnNoUse = true;
-		disposeBitmap(graphic.bitmap);
-		graphic.bitmap = null;
-		graphic.destroy();
-	}
-
-	inline public static function disposeBitmap(bitmap:BitmapData) {
-		bitmap.dispose();
-		bitmap.disposeImage();
-	}
-
-	inline static public function existsGraphic(key:String) {
-		return cachedGraphics.exists(key);
-	}
-
-	static public function addGraphic(width:Int, height:Int, color:FlxColor, ?key:String) {
-		if (existsGraphic(key)) return cachedGraphics.get(key);
-		var bitmap = new BitmapData(width, height, true, color);
-		var graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
-		graphic.destroyOnNoUse = false;
-		cachedGraphics.set(key, graphic);
-		return graphic;
-	}
-
-	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
-		var graphic = FlxGraphic.fromBitmapData(bitmap);
-		graphic.persist = cache;
-		if (cache) cachedGraphics.set(key, graphic);
-		return graphic;
-	}
-
-	static public function getRawBitmap(key:String) {
-		#if desktop	
-		var fixPath = removeAssetLib(key);
-		if (!fixPath.startsWith('assets'))
-			return BitmapData.fromFile(fixPath);
-		#end
-		return OpenFlAssets.getBitmapData(key, false);
-	}
-
-	static public function getGraphic(key:String, cache:Bool = false) {
-		if (existsGraphic(key)) return cachedGraphics.get(key);
-		return addGraphicFromBitmap(getRawBitmap(key), key, cache);
-	}
-
-	inline static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
-		return getGraphic(key, cache).bitmap;
-	}
-
-	static public function uploadGraphicGPU(key:String) {
-		if (!existsGraphic(key)) return null;
-		var graphic = getGraphic(key);
-		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
-		removeGraphicByKey(key);
-		cachedGraphics.set(key, gpuGraphic);
-		return gpuGraphic;
-	}
-
-	public static var cachedSounds:Map<String, Sound> = [];
-
-	public static function clearSoundCache(forced:Bool = false) {
-		for (key in cachedSounds.keys()) {
-			if (key.contains(Conductor._loadedSong) && !forced) continue;
-			else												Conductor._loadedSong = "";
-			removeSoundByKey(key);
-		}
-	}
-
-	static public inline function removeSoundByKey(key:String) {
-		if (!cachedSounds.exists(key)) return;
-		cachedSounds.get(key).close();
-		LimeAssets.cache.clear(key);
-		OflAssets.cache.removeSound(key);
-		cachedSounds.remove(key);
-	}
-
-	static public function getSound(key:String):FlxSoundAsset {
-		if (cachedSounds.exists(key)) return cachedSounds.get(key);
-		#if desktop
-		var fixPath = removeAssetLib(key);
-		if (!fixPath.startsWith('assets')) {
-			var sound = Sound.fromFile(fixPath);
-			cachedSounds.set(key, sound);
-			return sound;
-		}
-		#end
-		if (exists(key, MUSIC)) {
-			var sound = OpenFlAssets.getSound(key);
-			cachedSounds.set(key, sound);
-			return sound;
-		}
-		return key;
 	}
 
 	inline static public function getPackerType(key:String, ?library:String):PackerType {

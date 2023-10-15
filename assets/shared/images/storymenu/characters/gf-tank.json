@@ -1,0 +1,13 @@
+{
+    "antialiasing": true,
+    "scale": 0.5,
+    "imagePath": "gf-tank",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "GF Dancing at Gunpoint",
+            "loop": true,
+            "offsets": [100,125]
+        }
+    ]
+}

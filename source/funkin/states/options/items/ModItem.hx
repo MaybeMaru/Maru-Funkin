@@ -19,7 +19,7 @@ class ModItem extends FlxSpriteGroup {
 
         var icon = Paths.file('$modName/icon.png', IMAGE);
         var modIcon:FlxSpriteExt = new FlxSpriteExt();
-        modIcon.loadGraphic(Paths.exists(icon, IMAGE) ? Paths.getImage(icon) : Paths.image('options/blankMod'));
+        modIcon.loadGraphic(Paths.exists(icon, IMAGE) ? AssetManager.getImage(icon) : Paths.image('options/blankMod'));
         modIcon.antialiasing = aa;
         modIcon.setScale(0.6);
         modIcon.setPosition(15, modBox.height * 0.5 - modIcon.height * 0.5);

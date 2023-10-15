@@ -63,9 +63,9 @@ class CoolUtil {
 
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
 		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
-		if (cacheClear.bitmap) Paths.clearBitmapCache();
+		if (cacheClear.bitmap) AssetManager.clearBitmapCache();
 		if (cacheClear.sustains) NoteUtil.clearSustainCache();
-		if (cacheClear.sounds) Paths.clearSoundCache(!softClear);
+		if (cacheClear.sounds) AssetManager.clearSoundCache(!softClear);
 		if (cacheClear.shaders) Shader.clearShaders();
 		System.gc();
 	}

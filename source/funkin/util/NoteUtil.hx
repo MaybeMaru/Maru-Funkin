@@ -68,8 +68,8 @@ class NoteUtil {
 
     public static function clearSustainCache() {
         skinSpriteMap.clear();
-        for (key in Paths.cachedGraphics.keys()) {
-            if (key.startsWith('sus')) Paths.removeGraphicByKey(key);
+        for (key in AssetManager.cachedGraphics.keys()) {
+            if (key.startsWith('sus')) AssetManager.removeGraphicByKey(key);
         }
         for (key in Preloader.cachedTextures.keys()) {
             if (key.startsWith('sus'))
@@ -103,10 +103,10 @@ class NoteUtil {
         var susPieceMap:Map<String, BitmapData> = [];
         var susEndMap:Map<String, BitmapData> = [];
 
-        if (Paths.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
+        if (AssetManager.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
             for (i in CoolUtil.directionArray) {
-                susPieceMap.set(i, Paths.getGraphic('sus-bitmap-$skin-hold-$i').bitmap);
-                susEndMap.set(i,Paths.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap);
+                susPieceMap.set(i, AssetManager.getGraphic('sus-bitmap-$skin-hold-$i').bitmap);
+                susEndMap.set(i,AssetManager.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap);
             }
         }
         else {
@@ -118,12 +118,12 @@ class NoteUtil {
                 susPiece.updateHitbox();
                 susPiece.drawFrame();
                 //susPieceMap.set(i, createLoopBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
-                susPieceMap.set(i, Paths.addGraphicFromBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
+                susPieceMap.set(i, AssetManager.addGraphicFromBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
     
                 susEnd.animation.play('hold$i-end', true);
                 susEnd.updateHitbox();
                 susEnd.drawFrame();
-                susEndMap.set(i, Paths.addGraphicFromBitmap(susEnd.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
+                susEndMap.set(i, AssetManager.addGraphicFromBitmap(susEnd.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
             }
     
             // Wont need these anymore

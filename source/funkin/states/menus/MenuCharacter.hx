@@ -46,8 +46,12 @@ class MenuCharacter extends FlxSpriteExt {
 				lerpColor = charJson.lerpColor;
 				if (!lerpColor) color = FlxColor.WHITE;
 				
+				final lastFrame:Int = animation?.curAnim?.curFrame ?? 0;
 				loadJsonInput(JsonUtil.copyJson(charJson), charsFolder, true);
 				playAnim('idle');
+				if (animation.curAnim != null && lastFrame < animation.curAnim.frames.length) {
+					animation.curAnim.curFrame = lastFrame;
+				}
 			}
 		}
 	}

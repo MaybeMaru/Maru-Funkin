@@ -131,7 +131,7 @@ class TextureAtlas extends FlxAtlasFrames
 		if (Paths.exists('$Path/spritemap.json', TEXT))
 		{
 			var curJson:AnimateAtlas = haxe.Json.parse(StringTools.replace(CoolUtil.getFileContent('$Path/spritemap.json'), String.fromCharCode(0xFEFF), ""));
-			var curSpritemap = Paths.getRawBitmap('$Path/${curJson.meta.image}');
+			var curSpritemap = AssetManager.getRawBitmap('$Path/${curJson.meta.image}');
 			if (curSpritemap != null)
 			{
 				var graphic = FlxG.bitmap.add(curSpritemap);
@@ -154,7 +154,7 @@ class TextureAtlas extends FlxAtlasFrames
 		while (Paths.exists('$Path/spritemap$i.json', TEXT))
 		{
 			var curJson:AnimateAtlas = haxe.Json.parse(StringTools.replace(CoolUtil.getFileContent('$Path/spritemap$i.json'), String.fromCharCode(0xFEFF), ""));
-			var curSpritemap = Paths.getRawBitmap('$Path/${curJson.meta.image}');
+			var curSpritemap = AssetManager.getRawBitmap('$Path/${curJson.meta.image}');
 			if (curSpritemap != null)
 			{
 				var graphic = FlxG.bitmap.add(curSpritemap);
