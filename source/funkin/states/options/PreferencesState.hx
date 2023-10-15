@@ -53,7 +53,7 @@ class PreferencesState extends MusicBeatState {
             for (item in prefItems) {
                 if (item.ID == curSelected) {
                     switch (item.settingType) {
-                        case 'bool':
+                        case BOOL:
                             if (accepted) {
                                 switch(item.itemPref) {
                                     case 'naughty': if (!item.prefValue) CoolUtil.playSound('chart/naughty_on'); //  Tankman easteregg
@@ -62,7 +62,7 @@ class PreferencesState extends MusicBeatState {
                                 item.setValue(!item.prefValue);
                             }
                             
-                        case 'num':
+                        case NUMB:
                             var mult:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
                             switch(item.itemPref) {
                                 case 'const-speed': mult *= 0.1;
@@ -72,6 +72,8 @@ class PreferencesState extends MusicBeatState {
                                 if (leftP)  item.setValue(item.prefValue-mult);
                                 if (rightP) item.setValue(item.prefValue+mult);
                             }
+                            
+                        case ARRAY:
                     }
                     break;
                 }

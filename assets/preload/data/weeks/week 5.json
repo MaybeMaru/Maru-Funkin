@@ -8,7 +8,7 @@
     "weekImage": "week5",
     "weekName": "red snow",
     "weekColor": "0xFFA0D1FF",
-    "storyCharacters": ["parents","bf","gf"],
+    "storyCharacters": ["parents","bf-christmas","gf-christmas"],
     "startUnlocked": false,
     "unlockWeek": "week 6"
 }

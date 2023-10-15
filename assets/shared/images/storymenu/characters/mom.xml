@@ -1,19 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="menuMom.png">
-	<!-- Created with Adobe Animate version 22.0.5.191 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="momIdle0000" x="10" y="10" width="386" height="826" frameX="-4" frameY="-2" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0001" x="10" y="10" width="386" height="826" frameX="-4" frameY="-2" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0002" x="406" y="10" width="386" height="815" frameX="-4" frameY="-14" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0003" x="406" y="10" width="386" height="815" frameX="-4" frameY="-14" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0004" x="802" y="10" width="386" height="822" frameX="-1" frameY="-7" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0005" x="802" y="10" width="386" height="822" frameX="-1" frameY="-7" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0006" x="1198" y="10" width="386" height="824" frameX="0" frameY="-5" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0007" x="1198" y="10" width="386" height="824" frameX="0" frameY="-5" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0008" x="10" y="846" width="386" height="828" frameX="0" frameY="-1" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0009" x="10" y="846" width="386" height="828" frameX="0" frameY="-1" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0010" x="406" y="846" width="386" height="829" frameX="0" frameY="0" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0011" x="406" y="846" width="386" height="829" frameX="0" frameY="0" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0012" x="802" y="846" width="386" height="829" frameX="0" frameY="0" frameWidth="390" frameHeight="829"/>
-	<SubTexture name="momIdle0013" x="802" y="846" width="386" height="829" frameX="0" frameY="0" frameWidth="390" frameHeight="829"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="mom.png" width="2759" height="838">
+  <SubTexture name="Mom Idle0003" x="4" y="4"  width="386" height="815" frameX="-4" frameY="-15" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0005" x="398" y="4"  width="386" height="822" frameX="-1" frameY="-8" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0007" x="792" y="4"  width="386" height="825" frameX="-0" frameY="-5" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0001" x="1186" y="4"  width="387" height="827" frameX="-3" frameY="-3" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0009" x="1581" y="4"  width="386" height="829" frameX="-0" frameY="-1" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0011" x="1975" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0013" x="2369" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0002" x="1186" y="4"  width="387" height="827" frameX="-3" frameY="-3" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0004" x="4" y="4"  width="386" height="815" frameX="-4" frameY="-15" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0006" x="398" y="4"  width="386" height="822" frameX="-1" frameY="-8" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0008" x="792" y="4"  width="386" height="825" frameX="-0" frameY="-5" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0010" x="1581" y="4"  width="386" height="829" frameX="-0" frameY="-1" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0012" x="1975" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
+  <SubTexture name="Mom Idle0014" x="2369" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
 </TextureAtlas>

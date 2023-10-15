@@ -1,19 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="menuDad.png">
-	<!-- Created with Adobe Animate version 22.0.5.191 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="dadIdle0000" x="10" y="10" width="429" height="759" frameX="0" frameY="-8" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0001" x="10" y="10" width="429" height="759" frameX="0" frameY="-8" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0002" x="449" y="10" width="424" height="757" frameX="-2" frameY="-10" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0003" x="449" y="10" width="424" height="757" frameX="-2" frameY="-10" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0004" x="883" y="10" width="423" height="759" frameX="-3" frameY="-8" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0005" x="883" y="10" width="423" height="759" frameX="-3" frameY="-8" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0006" x="10" y="779" width="419" height="766" frameX="-5" frameY="-1" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0007" x="10" y="779" width="419" height="766" frameX="-5" frameY="-1" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0008" x="439" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0009" x="439" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0010" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0011" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0012" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
-	<SubTexture name="dadIdle0013" x="868" y="779" width="419" height="767" frameX="-6" frameY="0" frameWidth="429" frameHeight="767"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="dad.png" width="1296" height="1548">
+  <SubTexture name="Dad idle dance0001" x="4" y="4"  width="420" height="766" frameX="-5" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0009" x="4" y="778"  width="420" height="766" frameX="-4" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0003" x="432" y="4"  width="428" height="758" frameX="-0" frameY="-8" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0011" x="432" y="770"  width="420" height="766" frameX="-5" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0007" x="860" y="770"  width="424" height="758" frameX="-2" frameY="-8" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0005" x="868" y="4"  width="424" height="757" frameX="-1" frameY="-9" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0002" x="4" y="4"  width="420" height="766" frameX="-5" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0013" x="4" y="4"  width="420" height="766" frameX="-5" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0004" x="432" y="4"  width="428" height="758" frameX="-0" frameY="-8" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0006" x="868" y="4"  width="424" height="757" frameX="-1" frameY="-9" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0008" x="860" y="770"  width="424" height="758" frameX="-2" frameY="-8" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0010" x="4" y="778"  width="420" height="766" frameX="-4" frameY="-0" frameWidth="428" frameHeight="766"/>
+  <SubTexture name="Dad idle dance0012" x="432" y="770"  width="420" height="766" frameX="-5" frameY="-0" frameWidth="428" frameHeight="766"/>
 </TextureAtlas>

@@ -5,7 +5,7 @@
     "anims": [
         {
             "animName": "idle",
-            "animFile": "spookyIdle",
+            "animFile": "spooky dance idle",
             "loop": true,
             "offsets": [165,60]
         }

@@ -1,0 +1,18 @@
+{
+    "antialiasing": true,
+    "scale": 0.9,
+    "imagePath": "bf-christmas",
+    "anims": [
+        {
+            "animName": "idle",
+            "animFile": "BF idle dance",
+            "offsets": [25,15],
+            "loop": true
+        },
+        {
+            "animName": "confirm",
+            "animFile": "BF HEY!!",
+            "offsets": [25,20]
+        }
+    ]
+}

@@ -537,7 +537,7 @@ class PlayState extends MusicBeatState {
 		} else {
 			scoreTxt.text =
 			'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
-			scoreTxt.x = healthBarBG.x + healthBarBG.width/2 - scoreTxt.width/2;
+			scoreTxt.x = healthBarBG.x + healthBarBG.width * 0.5 - scoreTxt.width * 0.5;
 		}
 
 		ModdingUtil.addCall('updateScore', [songScore]);

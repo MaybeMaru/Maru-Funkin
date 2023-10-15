@@ -83,11 +83,11 @@ class TitleState extends MusicBeatState {
 	var logoBump:FunkinSprite;
 
 	function makeIntroShit(index:Int):Void {
-		var nuggets:IntroPart = introJson.beats[Std.int(Math.max(index, 0))];
+		var nuggets:IntroPart = introJson.beats[cast Math.max(index, 0)];
 		if (nuggets == null) return;
 		if (nuggets.sprite != null) {
-			var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height/2]);
-			introSpr.setGraphicSize(Std.int(introSpr.width*0.7));
+			var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height*0.5]);
+			introSpr.setGraphicSize(introSpr.width*0.7);
 			introSpr.screenCenter(X);
 			spriteGroup.add(introSpr);
 		}
@@ -146,7 +146,7 @@ class TitleState extends MusicBeatState {
 
 			var lerpValue = Math.sin(titleSine);
 			titleText.alpha = (lerpValue + 1) * 0.25 + 0.75;
-			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) / 2);
+			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) * 0.5);
 			checkCode();
 		}
 

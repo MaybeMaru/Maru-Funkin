@@ -1,11 +1,11 @@
 {
     "antialiasing": true,
-    "scale": 0.5,
+    "scale": 0.475,
     "imagePath": "mom",
     "anims": [
         {
             "animName": "idle",
-            "animFile": "momIdle",
+            "animFile": "Mom Idle",
             "loop": true,
             "offsets": [125,225]
         }

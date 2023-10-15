@@ -87,9 +87,10 @@ class ChartingState extends MusicBeatState {
         strumBar.setPosition(mainGrid.grid.x, mainGrid.grid.y);
         add(strumBar);
 
+        final instStr = FlxStringUtil.formatTime(Conductor.inst.length * 0.001, true);
         songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y + 25, "coolswag", 25);
         songTxt._dynamic.update = function (elapsed) {
-            var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(Conductor.inst.length / 1000, true) + "\n" +
+            var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +
                         "Beat: " + Math.max(0, curBeat) + "\n" +
                         "Section: " + Math.max(0, curSection) + "\n\n" +

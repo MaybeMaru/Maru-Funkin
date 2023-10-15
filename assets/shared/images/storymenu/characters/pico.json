@@ -1,13 +1,13 @@
 {
     "antialiasing": true,
-    "scale": 1.1,
+    "scale": 0.5,
     "imagePath": "pico",
     "anims": [
         {
             "animName": "idle",
-            "animFile": "picoIdle",
+            "animFile": "Pico Idle Dance",
             "loop": true,
-            "offsets": [50,-125]
+            "offsets": [140,0]
         }
     ]
 }

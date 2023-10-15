@@ -5,7 +5,7 @@
     "anims": [
         {
             "animName": "idle",
-            "animFile": "gfIdle",
+            "animFile": "GF Dancing Beat",
             "loop": true,
             "offsets": [100,125]
         }

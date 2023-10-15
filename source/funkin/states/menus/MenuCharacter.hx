@@ -29,9 +29,11 @@ class MenuCharacter extends FlxSpriteExt {
 	public static var cachedChars:Map<String, MenuCharJson> = [];
 
 	public function setupChar(char:String):Void {
-		visible = false;
+		alpha = 0; // doesnt use draw() i think?
+		active = false;
 		if (char.length > 0) {
-			visible = true;
+			alpha = 1;
+			active = true;
 			if (lastChar != char) {
 				lastChar = char;
 				var charJson:MenuCharJson = cachedChars.get(char);

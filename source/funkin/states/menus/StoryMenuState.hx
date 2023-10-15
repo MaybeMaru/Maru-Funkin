@@ -116,9 +116,24 @@ class StoryMenuState extends MusicBeatState {
 		add(scoreText);
 		add(txtWeekTitle);
 
+		cacheChars();
 		changeWeek();
+
 		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
 		super.create();
+	}
+
+	function cacheChars() {
+		final startMod = ModdingUtil.curModFolder;
+		for (week in storyWeeks) {
+			if (WeekSetup.vanillaWeekList.contains(week)) continue;
+			ModdingUtil.curModFolder = week.modFolder;
+			for (i in week.data.storyCharacters) {
+				var char = new MenuCharacter(0,0,i);
+				char.destroy();
+			}
+		}
+		ModdingUtil.curModFolder = startMod;
 	}
 
 	var lerpColor:FlxColorFix;
