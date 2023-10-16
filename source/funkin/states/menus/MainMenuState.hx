@@ -24,6 +24,7 @@ class MainMenuState extends MusicBeatState {
 			CoolUtil.playMusic('freakyMenu');
 		}
 		persistentUpdate = persistentDraw = true;
+		FlxG.mouse.visible = false;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);

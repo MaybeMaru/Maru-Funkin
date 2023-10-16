@@ -2,19 +2,19 @@
 <!--
 Created with Free texture packer v0.6.7 http://free-tex-packer.com
 -->
-<TextureAtlas imagePath="mom.png" width="2759" height="838">
-  <SubTexture name="Mom Idle0003" x="4" y="4"  width="386" height="815" frameX="-4" frameY="-15" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0005" x="398" y="4"  width="386" height="822" frameX="-1" frameY="-8" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0007" x="792" y="4"  width="386" height="825" frameX="-0" frameY="-5" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0001" x="1186" y="4"  width="387" height="827" frameX="-3" frameY="-3" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0009" x="1581" y="4"  width="386" height="829" frameX="-0" frameY="-1" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0011" x="1975" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0013" x="2369" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0002" x="1186" y="4"  width="387" height="827" frameX="-3" frameY="-3" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0004" x="4" y="4"  width="386" height="815" frameX="-4" frameY="-15" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0006" x="398" y="4"  width="386" height="822" frameX="-1" frameY="-8" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0008" x="792" y="4"  width="386" height="825" frameX="-0" frameY="-5" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0010" x="1581" y="4"  width="386" height="829" frameX="-0" frameY="-1" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0012" x="1975" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
-  <SubTexture name="Mom Idle0014" x="2369" y="4"  width="386" height="830" frameX="-0" frameY="-0" frameWidth="390" frameHeight="830"/>
+<TextureAtlas imagePath="mom.png" width="192" height="2800">
+  <SubTexture name="Mom Idle0009" x="4" y="4"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0011" x="4" y="406"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0013" x="4" y="808"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0001" x="4" y="1210"  width="184" height="393" frameX="-1" frameY="-1" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0007" x="4" y="1611"  width="184" height="392" frameX="-0" frameY="-2" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0005" x="4" y="2011"  width="184" height="390" frameX="-0" frameY="-4" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0003" x="4" y="2409"  width="183" height="387" frameX="-2" frameY="-7" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0002" x="4" y="1210"  width="184" height="393" frameX="-1" frameY="-1" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0004" x="4" y="2409"  width="183" height="387" frameX="-2" frameY="-7" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0006" x="4" y="2011"  width="184" height="390" frameX="-0" frameY="-4" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0008" x="4" y="1611"  width="184" height="392" frameX="-0" frameY="-2" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0010" x="4" y="4"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0012" x="4" y="406"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
+  <SubTexture name="Mom Idle0014" x="4" y="808"  width="184" height="394" frameX="-0" frameY="-0" frameWidth="185" frameHeight="394"/>
 </TextureAtlas>

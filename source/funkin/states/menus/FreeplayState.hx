@@ -1,5 +1,7 @@
 package funkin.states.menus;
 
+import flixel.addons.ui.FlxInputText;
+
 class FreeplayState extends MusicBeatState {
 	var bg:FunkinSprite;
 
@@ -23,10 +25,11 @@ class FreeplayState extends MusicBeatState {
 	var grpSongs:FlxTypedGroup<MenuAlphabet>;
 	var iconArray:Array<HealthIcon> = [];
 
+	//var inputText:SongSearch;
+
 	override function create():Void {
-		if (FlxG.sound.music == null) {
-			CoolUtil.playMusic('freakyMenu');
-		}
+		if (FlxG.sound.music == null) CoolUtil.playMusic('freakyMenu');
+		FlxG.mouse.visible = true;
 
 		#if cpp		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -96,6 +99,8 @@ class FreeplayState extends MusicBeatState {
 
 		changeSelection();
 		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
+		//inputText = new SongSearch();
+		//add(inputText);
 		
 		for (song in grpSongs)  song.setTargetPos();
 		for (icon in iconArray) icon.setSprTrackerPos();
@@ -251,6 +256,15 @@ class FreeplayState extends MusicBeatState {
 		iconArray[curSelected].alpha = 1;
 	}
 }
+/*
+class SongSearch extends FlxInputText {
+	public function new() {
+		var _width = Math.round(FlxG.width * 0.4);
+		var _size = 16;
+
+		super(FlxG.width - _width - 8, FlxG.height - _size - 16, _width, "", _size);
+	}
+}*/
 
 class SongMetadata {
 	public var songName:String = "";

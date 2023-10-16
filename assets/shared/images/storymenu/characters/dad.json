@@ -1,13 +1,13 @@
 {
     "antialiasing": true,
-    "scale": 0.475,
+    "scale": 1,
     "imagePath": "dad",
     "anims": [
         {
             "animName": "idle",
             "animFile": "Dad idle dance",
             "loop": true,
-            "offsets": [150,195]
+            "offsets": [25,0]
         }
     ]
 }
