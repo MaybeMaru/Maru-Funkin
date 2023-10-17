@@ -1,6 +1,5 @@
 package funkin.states;
 
-import openfl.system.System;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
@@ -85,7 +84,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	override function destroy() {
 		super.destroy();
-		System.gc(); // Make sure shit gets cleared??
+		CoolUtil.runGc(false); // Minor Gc Clear
 	}
 
 	// Some shortcuts

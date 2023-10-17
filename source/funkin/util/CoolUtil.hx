@@ -1,5 +1,6 @@
 package funkin.util;
 
+import cpp.vm.Gc;
 import funkin.util.backend.SongZip;
 import openfl.system.System;
 
@@ -67,7 +68,13 @@ class CoolUtil {
 		if (cacheClear.sustains) NoteUtil.clearSustainCache();
 		if (cacheClear.sounds) AssetManager.clearSoundCache(!softClear);
 		if (cacheClear.shaders) Shader.clearShaders();
+		runGc(true); // Major gc clear
+	}
+	
+	inline public static function runGc(major:Bool = true) {
 		System.gc();
+		Gc.run(major);
+		if (major) Gc.compact();
 	}
 
 	inline public static function setGlobalManager(active:Bool = true) {
