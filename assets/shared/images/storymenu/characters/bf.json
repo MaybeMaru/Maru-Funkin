@@ -1,18 +1,18 @@
 {
     "antialiasing": true,
-    "scale": 0.9,
+    "scale": 1,
     "imagePath": "bf",
     "anims": [
         {
             "animName": "idle",
-            "animFile": "idle",
-            "offsets": [25,15],
+            "animFile": "BF idle dance",
+            "offsets": [0,0],
             "loop": true
         },
         {
             "animName": "confirm",
-            "animFile": "pressed",
-            "offsets": [25,20]
+            "animFile": "BF HEY!!",
+            "offsets": [0,5]
         }
     ]
 }

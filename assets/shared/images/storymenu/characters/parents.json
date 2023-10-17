@@ -1,13 +1,13 @@
 {
     "antialiasing": true,
-    "scale": 1,
+    "scale": 0.9,
     "imagePath": "parents",
     "anims": [
         {
             "animName": "idle",
             "animFile": "Parent Christmas Idle",
             "loop": true,
-            "offsets": [380,190]
+            "offsets": [175,0]
         }
     ]
 }

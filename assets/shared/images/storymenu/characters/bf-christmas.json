@@ -6,13 +6,13 @@
         {
             "animName": "idle",
             "animFile": "BF idle dance",
-            "offsets": [25,15],
+            "offsets": [0,0],
             "loop": true
         },
         {
             "animName": "confirm",
             "animFile": "BF HEY!!",
-            "offsets": [25,20]
+            "offsets": [0,5]
         }
     ]
 }

@@ -33,17 +33,16 @@ function create():Void {
 	floor.scrollFactor.set(0, 0.3);
 	addSpr(floor);
 
-	var tree:FunkinSprite = new FunkinSprite('christmasTree', [370, -300], [0.4, 0.4]);
-	addSpr(tree);
+	addSpr(new FunkinSprite('christmasTree', [370, -300], [0.4, 0.4]));
 
-	bottomBoppers = new FunkinSprite('bottom bop', [-250,140], [0.9,0.9]);
+	bottomBoppers = new FunkinSprite('bottom bop', [-250,140], [0.8,0.9]);
 	bottomBoppers.addAnim('idle', 'Bottom Level Boppers');
 	bottomBoppers.setScale(0.95);
 	bottomBoppers.dance();
 	addSpr(bottomBoppers);
 
 	addSpr(new FunkinSprite('bgSnow', [-600,640]), 'bgSnow');
-	addSpr(new FunkinSprite('fgSnow', [-500,750]), 'fgSnow', true);
+	addSpr(new FunkinSprite('fgSnow', [-500,757.5]), 'fgSnow', true);
 
 	santa = new FunkinSprite('santa', [-750,175]);
 	santa.addAnim('idle', 'santa idle in fear');

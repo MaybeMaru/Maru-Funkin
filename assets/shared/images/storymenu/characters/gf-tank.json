@@ -7,7 +7,7 @@
             "animName": "idle",
             "animFile": "GF Dancing at Gunpoint",
             "loop": true,
-            "offsets": [100,125]
+            "offsets": [-20,-37.5]
         }
     ]
 }

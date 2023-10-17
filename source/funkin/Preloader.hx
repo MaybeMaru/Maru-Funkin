@@ -1,14 +1,9 @@
 package funkin;
 
-import openfl.Assets;
-import flixel.graphics.FlxGraphic;
 import openfl.display.BitmapData;
 import openfl.display3D.textures.Texture;
-import openfl.display3D.Context3DTextureFormat;
 import openfl.display3D.Context3D;
-
 import flixel.addons.util.FlxAsyncLoop;
-import flixel.ui.FlxBar;
 
 /*
 	Some stuff taken from the FNF FPS Plus preloader
@@ -20,7 +15,7 @@ class Preloader extends flixel.FlxState {
     public static var cachedTextures:Map<String,Texture> = [];
 
     inline public static function addBitmap(key:String) {
-        addFromBitmap(Assets.getBitmapData(key, false), key);
+        addFromBitmap(OpenFlAssets.getBitmapData(key, false), key);
     }
 
     inline public static function getGraphic(key:String):FlxGraphic {
