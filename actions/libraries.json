@@ -28,7 +28,7 @@
         {
             "name": "hxcpp",
             "type": "install",
-            "version": "4.2.1"
+            "version": null
         },
         {
             "name": "hxcpp-debug-server",
