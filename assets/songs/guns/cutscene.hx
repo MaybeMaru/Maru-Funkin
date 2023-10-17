@@ -8,7 +8,7 @@ function create() {
         cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [PlayState.dad.x, PlayState.dad.y + 150]);
         cutsceneTankman_Body.addAnim('tightBars', 'body/BODY_20');
 
-        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 60, PlayState.dad.y - 10]);
+        cutsceneTankman_Head = new FunkinSprite('tankmanCutscene_head', [PlayState.dad.x + 50, PlayState.dad.y]);
         cutsceneTankman_Head.addAnim('tightBars', 'HEAD_20');
 
         cutsceneTankman_Head.visible = cutsceneTankman_Body.visible = false;

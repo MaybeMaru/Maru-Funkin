@@ -1,20 +1,21 @@
+import flixel.addons.display.FlxBackdrop;
+
 var tankWatchtower:FunkinSprite;
 var tankGround:FunkinSprite;
 
 function create():Void {
 	PlayState.defaultCamZoom = 0.9;
+	PlayState.camGame.bgColor = 0xfff5ca51;
 
 	var sky:FunkinSprite = new FunkinSprite('tankSky', [-400, -400], [0, 0]);
 	addSpr(sky);
 	
-	var clouds:FunkinSprite = new FunkinSprite('tankClouds', [FlxG.random.int(-700, -100), FlxG.random.int(-20, 20)], [0.1, 0.1]);
+	var clouds:FlxBackdrop = new FlxBackdrop(Paths.image("tankClouds"), 0x01, 10);
+	clouds.scrollFactor.set(0.1,0.1);
+	clouds.setPosition(FlxG.random.int(-700, -100), -20);
 	clouds.velocity.x = FlxG.random.float(5, 15);
 	addSpr(clouds);
 
-	var extraClouds:FunkinSprite = new FunkinSprite('tankClouds', [clouds.x-clouds.width-50,clouds.y], [0.1,0.1]);
-	extraClouds.velocity.x = clouds.velocity.x;
-	addSpr(extraClouds);
-	
 	var mountains:FunkinSprite = new FunkinSprite('tankMountains', [-300, -20], [0.2, 0.2]);
 	mountains.setGraphicSize(Std.int(mountains.width * 1.2));
 	mountains.updateHitbox();

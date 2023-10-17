@@ -37,6 +37,7 @@ class Preferences {
         
         addPref('antialiasing',   'antialiasing',    true);
         addPref('clear-gpu',      'clear gpu cache', false);
+        addPref('preload',        'preload at start', true);
 
         SaveData.flushData();
         effectPrefs();
@@ -51,9 +52,11 @@ class Preferences {
     }
 
     inline public static function effectPrefs():Void {
-        var gameFramerate:Int = getPref('framerate');
+        final gameFramerate:Int = getPref('framerate');
         FlxG.drawFramerate = gameFramerate;
 		FlxG.updateFramerate = gameFramerate;
+        
+        FlxSprite.defaultAntialiasing = getPref('antialiasing');
 
         if(Main.fpsCounter != null) {
             Main.fpsCounter.visible = getPref('fps-counter');

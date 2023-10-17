@@ -79,28 +79,45 @@ class Preloader extends flixel.FlxState {
     var cachePart:FlxText;
 
 	override public function create():Void {
-        var loaderArt:FlxSpriteExt = new FlxSpriteExt();
-        loaderArt.loadGraphic(Paths.image('preloaderArt'));
-        loaderArt.setScale(0.4);
-        loaderArt.screenCenter();
-        add(loaderArt);
-
-        cacheProgress = new FlxSprite().makeGraphic(10,10,0xFFFFFFFF);
-        cacheProgress.screenCenter();
-        cacheProgress.y += loaderArt.height/2;
-        add(cacheProgress);
-
-        cachePart = new FlxText(0,0,0,'',16);
-        cachePart.alignment = CENTER;
-        cachePart.y = cacheProgress.y + cacheProgress.height*1.5;
-		add(cachePart);
-        
-        imageCache = fixFileList(Paths.getFileList(IMAGE, true, 'png'));
-        _length = imageCache.length;
-		cacheLoop = new FlxAsyncLoop(_length, loadBitmap);
-		add(cacheLoop);
-
 		super.create();
+
+        //Load Settings / Mods
+        SaveData.init();
+		Controls.setupBindings();
+		Preferences.setupPrefs();
+        Conductor.init();
+		CoolUtil.init();
+		Highscore.load();
+		#if cpp
+		DiscordClient.initialize();
+		lime.app.Application.current.onExit.add (function (exitCode)DiscordClient.shutdown());
+        #end
+
+        if (!Preferences.getPref('preload')) {
+            exit();
+            return;
+        } else {
+            var loaderArt:FlxSpriteExt = new FlxSpriteExt();
+            loaderArt.loadGraphic(Paths.image('preloaderArt'));
+            loaderArt.setScale(0.4);
+            loaderArt.screenCenter();
+            add(loaderArt);
+    
+            cacheProgress = new FlxSprite().makeGraphic(10,10,0xFFFFFFFF);
+            cacheProgress.screenCenter();
+            cacheProgress.y += loaderArt.height/2;
+            add(cacheProgress);
+    
+            cachePart = new FlxText(0,0,0,'',16);
+            cachePart.alignment = CENTER;
+            cachePart.y = cacheProgress.y + cacheProgress.height*1.5;
+            add(cachePart);
+            
+            imageCache = fixFileList(Paths.getFileList(IMAGE, true, 'png'));
+            _length = imageCache.length;
+            cacheLoop = new FlxAsyncLoop(_length, loadBitmap);
+            add(cacheLoop);
+        }
 	}
 
     var _index:Int = 0;
@@ -123,17 +140,20 @@ class Preloader extends flixel.FlxState {
         }
     }
 
+    function exit() {
+        CustomTransition.init();
+        FlxG.switchState(new SplashState());
+    }
+
 	override public function update(elapsed:Float):Void {
 		if (!cacheLoop.started) {
 			cacheLoop.start();
 		}
 		else {
 			if (cacheLoop.finished) {
-				cacheLoop.kill();
-				cacheLoop.destroy();
-
-                CustomTransition.init();
-                FlxG.switchState(new SplashState());
+                cacheLoop.kill();
+                cacheLoop.destroy();
+				exit();
 			}
 		}
 

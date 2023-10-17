@@ -1,23 +1,8 @@
 package;
 
-import lime.app.Application;
-
 class SplashState extends FlxState {
     override function create() {
         super.create();
-
-        //Load Settings / Mods
-        FlxSprite.defaultAntialiasing = true;
-        SaveData.init();
-		Controls.setupBindings();
-		Preferences.setupPrefs();
-        Conductor.init();
-		CoolUtil.init();
-		Highscore.load();
-		#if cpp
-		DiscordClient.initialize();
-		Application.current.onExit.add (function (exitCode)DiscordClient.shutdown());
-        #end
 
         var iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
         iconz.screenCenter();

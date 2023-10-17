@@ -58,6 +58,7 @@ function create() {
         initShader('demon_blur', 'demon_blur');
         setShaderFloat('demon_blur', 'u_size', 0);
         setShaderFloat('demon_blur', 'u_alpha', 0);
+        setCameraShader(PlayState.camGame, 'demon_blur');
 
         gfFaceplant = FlxG.random.bool(10);
         if (gfFaceplant) {
@@ -75,6 +76,8 @@ function create() {
     }
 }
 
+var _demonShader:Bool = false;
+
 function createPost() {
     if (gfFaceplant) {
         removeScript('_charScript_bf');
@@ -89,9 +92,9 @@ function startCutscene() {
     var stressCutscene:FlxSound = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
     FlxG.sound.list.add(stressCutscene);
 
-    demonBg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.BLACK);
+    demonBg = new FlxSprite(-FlxG.width*0.5, -FlxG.height*0.5).makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
     demonBg.scrollFactor.set();
-    demonBg.alpha = 0;
+    demonBg.alpha = 0.000001;
     addSpr(demonBg, 'demonBg');
 
     PlayState.camFollow.x = PlayState.dad.x + 400;
@@ -108,14 +111,15 @@ function startCutscene() {
 
     manager.pushEvent(15.2, function () { // Zoom to gf
         demonGf.playAnim('demonGf');
+        _demonShader = true;
         FlxTween.tween(PlayState.camFollow, {x: 700, y: 300}, 1, {ease: FlxEase.sineOut});
         FlxTween.tween(PlayState.camGame, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
         FlxTween.tween(demonBg, {alpha: 0.9}, 2.25, {ease: FlxEase.quadOut});
-        setCameraShader(PlayState.camGame, 'demon_blur');
     });
 
     manager.pushEvent(17.5, function () { // Pico appears
-        demonBg.alpha = 0;
+        demonBg.destroy();
+        demonBg = null;
         PlayState.camGame.setFilters([]);
         zoomBack();
     });
@@ -252,9 +256,9 @@ function updatePost() {
             steve.visible = !steve.animation.curAnim.finished;
         }
 
-        if (demonBg.alpha != 0) {
-            setShaderFloat('demon_blur', 'u_size', demonBg.alpha);
-            setShaderFloat('demon_blur', 'u_alpha', demonBg.alpha);
+        if (demonBg != null && _demonShader) {
+            setShaderFloat('demon_blur', 'u_size', demonBg.alpha*2);
+            setShaderFloat('demon_blur', 'u_alpha', demonBg.alpha*0.6);
         }
     }
 }
