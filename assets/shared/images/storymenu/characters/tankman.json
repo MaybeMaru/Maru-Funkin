@@ -5,7 +5,7 @@
     "anims": [
         {
             "animName": "idle",
-            "animFile": "tankmanIdle",
+            "animFile": "Tankman Idle Dance",
             "loop": true,
             "offsets": [60,-60]
         }

@@ -1,19 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="menuSenpai.png">
-	<!-- Created with Adobe Animate version 22.0.5.191 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="senpaiIdle0000" x="10" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0001" x="10" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0002" x="356" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0003" x="356" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0004" x="702" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0005" x="702" y="10" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0006" x="10" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0007" x="10" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0008" x="356" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0009" x="356" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0010" x="356" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0011" x="356" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0012" x="356" y="308" width="336" height="288"/>
-	<SubTexture name="senpaiIdle0013" x="356" y="308" width="336" height="288"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="senpai.png" width="1390" height="238">
+  <SubTexture name="senpaiIdle0001" x="4" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0003" x="282" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0005" x="560" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0007" x="838" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0009" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0002" x="4" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0004" x="282" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0006" x="560" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0008" x="838" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0010" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0011" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0012" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0013" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
+  <SubTexture name="senpaiIdle0014" x="1116" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
 </TextureAtlas>

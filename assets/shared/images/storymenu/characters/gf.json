@@ -7,7 +7,7 @@
             "animName": "idle",
             "animFile": "GF Dancing Beat",
             "loop": true,
-            "offsets": [-50,-25]
+            "offsets": [-75,-37.5]
         }
     ]
 }

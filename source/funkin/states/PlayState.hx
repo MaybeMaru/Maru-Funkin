@@ -40,26 +40,26 @@ class PlayState extends MusicBeatState {
 	private var ratingGroup:RatingGroup;
 
 	// For backwards compatibility and my own sanity, its ugly i know!!
-	public var notes(get,never):FlxTypedGroup<Note>; function get_notes()return notesGroup.notes;
-	public var unspawnNotes(get,never):Array<Note>; function get_unspawnNotes()return notesGroup.unspawnNotes;
-	public var holdingArray(get,never):Array<Bool>; function get_holdingArray()return notesGroup.holdingArray;
-	public var controlArray(get,never):Array<Bool>; function get_controlArray()return notesGroup.controlArray;
-	public var strumLineNotes(get,never):Array<NoteStrum>; function get_strumLineNotes()return notesGroup.strumLineNotes;
-	public var playerStrums(get,never):FlxTypedGroup<NoteStrum>; function get_playerStrums()return notesGroup.playerStrums;
-	public var opponentStrums(get,never):FlxTypedGroup<NoteStrum>; function get_opponentStrums()return notesGroup.opponentStrums;
-	public var strumLineInitPos(get,never):Array<FlxPoint>; function get_strumLineInitPos()return notesGroup.strumLineInitPos;
-	public var playerStrumsInitPos(get,never):Array<FlxPoint>; function get_playerStrumsInitPos()return notesGroup.playerStrumsInitPos;
-	public var songSpeed(get,never):Float; function get_songSpeed()return NotesGroup.songSpeed;
-	public var opponentStrumsInitPos(get,never):Array<FlxPoint>;	function get_opponentStrumsInitPos()return notesGroup.opponentStrumsInitPos;
-	public var grpNoteSplashes(get,never):FlxTypedGroup<NoteSplash>;	function get_grpNoteSplashes()return notesGroup.grpNoteSplashes;
-	public var curSong(get,never):String;	function get_curSong()return notesGroup.curSong;
-	public var generatedMusic(get,never):Bool;	function get_generatedMusic()return notesGroup.generatedMusic;
-	public var inst(get, never):FlxSound; function get_inst()return Conductor.inst;
-	public var vocals(get, never):FlxSound; function get_vocals()return Conductor.vocals;
-	public var skipStrumIntro(get,set):Bool; function get_skipStrumIntro()return notesGroup.skipStrumIntro;
-	function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;
-	public var inBotplay(get,set):Bool; function get_inBotplay()return notesGroup.inBotplay;
-	function set_inBotplay(value)return notesGroup.inBotplay = value;
+	public var notes(get,never):FlxTypedGroup<Note>; inline function get_notes()return notesGroup.notes;
+	public var unspawnNotes(get,never):Array<Note>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
+	public var holdingArray(get,never):Array<Bool>; inline function get_holdingArray()return notesGroup.holdingArray;
+	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
+	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;
+	public var playerStrums(get,never):FlxTypedGroup<NoteStrum>; inline function get_playerStrums()return notesGroup.playerStrums;
+	public var opponentStrums(get,never):FlxTypedGroup<NoteStrum>; inline function get_opponentStrums()return notesGroup.opponentStrums;
+	public var strumLineInitPos(get,never):Array<FlxPoint>; inline function get_strumLineInitPos()return notesGroup.strumLineInitPos;
+	public var playerStrumsInitPos(get,never):Array<FlxPoint>; inline function get_playerStrumsInitPos()return notesGroup.playerStrumsInitPos;
+	public var songSpeed(get,never):Float; inline function get_songSpeed()return NotesGroup.songSpeed;
+	public var opponentStrumsInitPos(get,never):Array<FlxPoint>;	inline function get_opponentStrumsInitPos()return notesGroup.opponentStrumsInitPos;
+	public var grpNoteSplashes(get,never):FlxTypedGroup<NoteSplash>;	inline function get_grpNoteSplashes()return notesGroup.grpNoteSplashes;
+	public var curSong(get,never):String;	inline function get_curSong()return notesGroup.curSong;
+	public var generatedMusic(get,never):Bool;	inline function get_generatedMusic()return notesGroup.generatedMusic;
+	public var inst(get, never):FlxSound; inline function get_inst()return Conductor.inst;
+	public var vocals(get, never):FlxSound; inline function get_vocals()return Conductor.vocals;
+	public var skipStrumIntro(get,set):Bool; inline function get_skipStrumIntro()return notesGroup.skipStrumIntro;
+	inline function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;
+	public var inBotplay(get,set):Bool; inline function get_inBotplay()return notesGroup.inBotplay;
+	inline function set_inBotplay(value)return notesGroup.inBotplay = value;
 
 	public var skipCountdown:Bool = false;
 	public var camZooming:Bool = false;

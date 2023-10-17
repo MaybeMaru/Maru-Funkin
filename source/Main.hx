@@ -1,5 +1,7 @@
 package;
 
+import lime.app.Application;
+import openfl.events.UncaughtErrorEvent;
 import flixel.FlxGame;
 import openfl.Lib;
 import openfl.display.Sprite;
@@ -28,6 +30,13 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtError);
+	}
+
+	static function uncaughtError(error:UncaughtErrorEvent) {
+		Application.current.window.alert(Std.string(error.error), "Uncaught Error");
+		DiscordClient.shutdown();
+		Sys.exit(1);
 	}
 
 	public function new()

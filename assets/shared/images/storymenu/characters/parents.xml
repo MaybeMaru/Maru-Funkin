@@ -1,19 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="menuParents.png">
-	<!-- Created with Adobe Animate version 22.0.5.191 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="parentsIdle0000" x="10" y="10" width="873" height="777" frameX="-6" frameY="-5" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0001" x="10" y="10" width="873" height="777" frameX="-6" frameY="-5" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0002" x="893" y="10" width="876" height="760" frameX="0" frameY="-22" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0003" x="893" y="10" width="876" height="760" frameX="0" frameY="-22" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0004" x="1779" y="10" width="877" height="766" frameX="-5" frameY="-16" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0005" x="1779" y="10" width="877" height="766" frameX="-5" frameY="-16" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0006" x="10" y="797" width="866" height="777" frameX="-18" frameY="-5" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0007" x="10" y="797" width="866" height="777" frameX="-18" frameY="-5" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0008" x="886" y="797" width="865" height="781" frameX="-19" frameY="-1" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0009" x="886" y="797" width="865" height="781" frameX="-19" frameY="-1" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0010" x="1761" y="797" width="865" height="782" frameX="-19" frameY="0" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0011" x="1761" y="797" width="865" height="782" frameX="-19" frameY="0" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0012" x="1761" y="797" width="865" height="782" frameX="-19" frameY="0" frameWidth="884" frameHeight="782"/>
-	<SubTexture name="parentsIdle0013" x="1761" y="797" width="865" height="782" frameX="-19" frameY="0" frameWidth="884" frameHeight="782"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="parents.png" width="3102" height="399">
+  <SubTexture name="Parent Christmas Idle0003" x="4" y="4"  width="438" height="380" frameX="-0" frameY="-11" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0005" x="450" y="4"  width="439" height="383" frameX="-2" frameY="-8" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0001" x="897" y="4"  width="437" height="389" frameX="-3" frameY="-2" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0007" x="1342" y="4"  width="433" height="389" frameX="-9" frameY="-2" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0009" x="1783" y="4"  width="433" height="390" frameX="-9" frameY="-1" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0011" x="2224" y="4"  width="433" height="391" frameX="-9" frameY="-0" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0013" x="2665" y="4"  width="433" height="391" frameX="-9" frameY="-0" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0002" x="897" y="4"  width="437" height="389" frameX="-3" frameY="-2" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0004" x="4" y="4"  width="438" height="380" frameX="-0" frameY="-11" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0006" x="450" y="4"  width="439" height="383" frameX="-2" frameY="-8" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0008" x="1342" y="4"  width="433" height="389" frameX="-9" frameY="-2" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0010" x="1783" y="4"  width="433" height="390" frameX="-9" frameY="-1" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0012" x="2224" y="4"  width="433" height="391" frameX="-9" frameY="-0" frameWidth="442" frameHeight="391"/>
+  <SubTexture name="Parent Christmas Idle0014" x="2665" y="4"  width="433" height="391" frameX="-9" frameY="-0" frameWidth="442" frameHeight="391"/>
 </TextureAtlas>
