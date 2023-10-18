@@ -21,6 +21,7 @@ import sys.io.File;
 class ModSetupTabs extends FlxUITabMenu {
     var tabGroup:FlxUI;
     
+    var modFolderInput:FlxUIInputText;
     var modNameInput:FlxUIInputText;
     var modDescInput:FlxUIInputText;
     var createButton:FlxUIButton;
@@ -45,39 +46,49 @@ class ModSetupTabs extends FlxUITabMenu {
 		tabGroup.name = "Setup Mod Folder";
         addGroup(tabGroup);
 
-        modNameInput = new FlxUIInputText(25, 25, 350, "Template Mod");
+        final _sep:Int = 35;
+
+        modFolderInput = new FlxUIInputText(25, 25, 350, "Template Mod");
+        addToGroup(modFolderInput, "Mod Folder:", true);
+
+        modNameInput = new FlxUIInputText(25, 25 + _sep, 350, "Template Mod");
         addToGroup(modNameInput, "Mod Name:", true);
 
-        modDescInput = new FlxUIInputText(25, 75, 350, "Get silly on a friday night yeah");
+        modDescInput = new FlxUIInputText(25, 25 + _sep * 2, 350, "Get silly on a friday night yeah");
         modDescInput.lines = 999;
         addToGroup(modDescInput, "Mod Description:", true);
 
         createButton = new FlxUIButton(310, 350, "Create Folder", function () {
-            var modName = modNameInput.text;
+            final modFolder = modFolderInput.text;
             
             var keys:Array<String> = [];
             for (i in ModSetupState.modFolderDirs.keys()) keys.push(i);
-            if (keys.contains(modName)) {
+            if (keys.contains(modFolder)) {
                 CoolUtil.playSound("rejectMenu");
                 return; // Invalid folder name
             }
             
             for (i in invalidFolderCharacters) {
-                if (modName.contains(i)) {
+                if (modFolder.contains(i)) {
                     CoolUtil.playSound("rejectMenu");
                     return; // Invalid folder character
                 }
             }
             
             var createFunc = function () {
-                ModSetupState.setupModFolder(modName);
-                File.saveContent('mods/$modName/info.txt', modDescInput.text);
+                ModSetupState.setupModFolder(modFolder);
+                var _jsonData = JsonUtil.copyJson(ModdingUtil.DEFAULT_MOD);
+                _jsonData.title = modNameInput.text;
+                _jsonData.description = modDescInput.text;
+            
+                var _jsonStr = FunkyJson.stringify(_jsonData, "\t");
+                File.saveContent('mods/$modFolder/mod.json', _jsonStr);
                 CoolUtil.playSound('confirmMenu');
             }
 
-            if (FileSystem.exists('mods/$modName')) {
+            if (FileSystem.exists('mods/$modFolder')) {
                 FlxG.state.openSubState(new PromptSubstate(
-                    'Mod folder\n$modName\nalready exists\n\nAre you sure you want to\noverwrite this folder?',
+                    'Mod folder\n$modFolder\nalready exists\n\nAre you sure you want to\noverwrite this folder?',
                     createFunc));
             }
             else {
