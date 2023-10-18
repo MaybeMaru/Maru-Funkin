@@ -706,7 +706,7 @@ class PlayState extends MusicBeatState {
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
-	static final ratingMap:Map<String, Dynamic> = [
+	static final ratingMap:Map<String, {var score:Int; var note:Float; var ghostLoss:Float;}> = [
 		"sick" => {score: 350, note: 1, ghostLoss: 0},
 		"good" => {score: 200, note: 0.8, ghostLoss: 0},
 		"bad" => {score: 100, note: 0.5, ghostLoss: 0.06},

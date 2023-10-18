@@ -22,19 +22,24 @@ class Paths
 		#if desktop
 		if (mods) {
 			final modLib:String = (library != null && library.length > 0) ? '$library/' : '';
+			
 			final _folder = ModdingUtil.curModFolder.length <= 0 ? '' : '${ModdingUtil.curModFolder}/';
 			final modFolderPath = getModPath('$_folder$modLib$file');
 			if (FileSystem.exists(modFolderPath))
 				return modFolderPath;
 			
 			if (allMods) {
-				for (modFolder in ModdingUtil.modFolders) {
-					if (ModdingUtil.modFoldersMap.get(modFolder)) {
-						final _modPath = getModPath('$modFolder/$modLib$file');
-						if (FileSystem.exists(_modPath))
-							return _modPath;
-					}
+				for (i in ModdingUtil.activeMods.keys()) {
+					final _modPath = getModPath(i + "/" + modLib + file);
+					if (ModdingUtil.activeMods.get(i) && FileSystem.exists(_modPath))
+						return _modPath;
 				}
+			}
+
+			for (i in ModdingUtil.globalMods) {
+				final _modPath = getModPath(i.folder + "/" + modLib + file);
+				if (FileSystem.exists(_modPath))
+					return _modPath;
 			}
 			
 			final modPath = getModPath('$modLib$file');
@@ -244,9 +249,9 @@ class Paths
 		if (global) pushFile(getModPath(folder));
 		if (curFolder) pushFile(getModPath('${ModdingUtil.curModFolder}/$folder'));
 		if (allFolders) {
-			for (modFolder in ModdingUtil.modFolders) {
-				if (ModdingUtil.modFoldersMap.get(modFolder))
-					pushFile(getModPath('$modFolder/$folder'));
+			for (i in ModdingUtil.activeMods.keys()) {
+				if (ModdingUtil.activeMods.get(i))
+					pushFile(getModPath('$i/$folder'));
 			}
 		}
 		

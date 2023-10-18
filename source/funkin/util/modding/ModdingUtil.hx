@@ -1,24 +1,42 @@
 package funkin.util.modding;
 
-typedef ModFolderJson = {
-    var description:String;
+import flixel.util.FlxArrayUtil;
+
+typedef ModFolder = {
     var title:String;
+    var description:String;
+    var icon:String;
+    var global:Bool;
+    var apiVersion:Int;
+    
+    @:optional var ?folder:String; // This is used internally, dont worry about it
 }
 
+/*
+ * API VERSIONS
+ * -1 => Beta 1
+ * 0 => Beta 2
+ */
+
 class ModdingUtil {
+    public static var folderExceptions(default, never):Array<String> = ['data', 'fonts', 'images', 'music', 'songs', 'videos', 'sounds'];
+    public static inline var API_VERSION:Int = 0;
+    public static var DEFAULT_MOD(default, never):ModFolder = {
+        title: "Empty Mod",
+        description: "This mod has no description.",
+        icon: "icon",
+        global: false,
+        apiVersion: API_VERSION
+    }
+    
     //Mod folders
+    public static var curMod:ModFolder = null;
     public static var curModFolder:String = "";
-    public static var modFolders:Array<String> = [];
-    public static var modFoldersMap:Map<String, Bool> = [];
-    private static var folderExceptions:Array<String> = [
-        'data',
-        'fonts',
-        'images',
-        'music',
-        'songs',
-        'videos',
-        'sounds'
-    ];
+    public static var modsList:Array<ModFolder> = [];
+    public static var modsMap:Map<String, ModFolder> = [];
+    
+    public static var activeMods:Map<String, Bool> = [];
+    public static var globalMods:Array<ModFolder> = [];
     
     //Scripts
     public static var scripts:Array<FunkScript> = [];
@@ -30,43 +48,65 @@ class ModdingUtil {
         scripts = [];
     }
 
-    inline public static function reloadModFolders():Void {
-        modFoldersMap = SaveData.getSave('activeMods');
-        modFolders = getModFolderList();
-        getDefModFolder();
+    public static function reloadMods():Void {
+        FlxArrayUtil.clearArray(modsList);
+        FlxArrayUtil.clearArray(globalMods);
+        modsMap.clear();
+        
+        activeMods = SaveData.getSave('activeMods');
+        modsList = getModsList();
+        for (i in modsList) {
+            modsMap.set(i.folder, i);
+            if (i.global && activeMods.get(i.folder)) globalMods.push(i);
+        }
+        getDefaultMod();
 
         SaveData.flushData();
     }
 
-    public static function getDefModFolder():Void {
-        if (modFolders.length > 0) {
-            for (mod in modFolders) {
-                if (modFoldersMap.get(mod)) {
-                    curModFolder = mod;
-                    trace(curModFolder);
-                    return;
-                }
-            }
-        }
-        curModFolder = "";
-    }
-
-    inline public static function getModFolderList():Array<String> {
-		var list:Array<String> = [];
+    static function getModsList():Array<ModFolder> {
+        var list:Array<ModFolder> = [];
 		#if desktop
 		if (FileSystem.exists('mods')) {
 			for (folder in FileSystem.readDirectory('mods')) {
                 if (!folderExceptions.contains(folder) && FileSystem.isDirectory('mods/$folder')) {
-                    if (!modFoldersMap.exists(folder)) {
-                        modFoldersMap.set(folder, true);
+                    var data:ModFolder = null;
+                    final _folder = "mods/" + folder + "/";
+                    final _jsonPath = _folder + "mod.json";
+
+                    if (Paths.exists(_jsonPath, TEXT)) {
+                        data = JsonUtil.checkJsonDefaults(DEFAULT_MOD, Json.parse(CoolUtil.getFileContent(_jsonPath)));
+                    } else {
+                        data = JsonUtil.copyJson(DEFAULT_MOD);
+                        data.title = folder;
+                        data.description = CoolUtil.getFileContent(_folder + "info.txt");
+                        data.apiVersion = -1; // PRE-BETA 2 MOD FOLDER
                     }
-                    list.push(folder);
+                    data.folder = folder;
+
+                    if (!activeMods.exists(data.folder)) activeMods.set(data.folder, true); // Set new mod active
+                    list.push(data);
                 }
 			}
 		}
 		#end
+        list.sort(function (a,b) return CoolUtil.sortAlphabetically(a.folder, b.folder));
 		return list;
-	}
+    }
+
+    static function getDefaultMod() {
+        curMod = null;
+        if (modsList.length > 0) {
+            for (i in modsList) {
+                if (activeMods.get(i.folder)) {
+                    curMod = i;
+                    curModFolder = i.folder;
+                    trace('Set default mod folder to ' + curModFolder);
+                    return;
+                }
+            }
+        }
+    }
 
     inline public static function addScript(path:String, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
@@ -86,8 +126,8 @@ class ModdingUtil {
         scripts.remove(script);
     }
 
-    inline public static function setModFolder(modName:String, activated:Bool):Void {
-        modFoldersMap.set(modName, activated);
+    inline public static function setModActive(modID:String, active:Bool):Void {
+        activeMods.set(modID, active);
         SaveData.flushData();
     }
 

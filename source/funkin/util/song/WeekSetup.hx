@@ -143,12 +143,15 @@ class WeekSetup {
     }
 
     public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
-        var modFolder:Null<String> = weekMap.get(weekName).modFolder;
-        if (modFolder == null) ModdingUtil.curModFolder = "";   // In base game
-        else if (ModdingUtil.modFolders.contains(modFolder)) {  // In a mod
-            trace('SELECTED MOD FOLDER $modFolder');
-			ModdingUtil.curModFolder = modFolder;
+        final _modFolder = weekMap.get(weekName)?.modFolder ?? null;
+        if (_modFolder == null) { // Base game
+            ModdingUtil.curModFolder = "";
         }
+        else if (ModdingUtil.modsMap.exists(_modFolder)) { // Mods
+            trace("Selected Mod folder " + _modFolder);
+            ModdingUtil.curModFolder = _modFolder;
+        }
+
         PlayState.storyWeek = weekName;
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);

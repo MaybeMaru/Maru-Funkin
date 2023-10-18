@@ -280,12 +280,12 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function updateText():Void {
-		final lastMod = ModdingUtil.curModFolder; // Im lazy ok, deal with it
-		ModdingUtil.curModFolder = storyWeeks[curWeek].modFolder;
+		final lastMod = ModdingUtil.curMod.folder; // Im lazy ok, deal with it
+		ModdingUtil.curMod.folder = storyWeeks[curWeek].modFolder;
 		for (i in 0...grpWeekCharacters.members.length) {
 			grpWeekCharacters.members[i].setupChar(getWeekChars()[i]);
 		}
-		ModdingUtil.curModFolder = lastMod;
+		ModdingUtil.curMod.folder = lastMod;
 
 		txtTracklist.text = 'Tracks\n';
 		for (song in getCurData().songList.songs) txtTracklist.text += '\n$song';

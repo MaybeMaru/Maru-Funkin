@@ -78,7 +78,7 @@ class FlxSpriteExt extends FlxSprite {
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
-		loadImage(specialImage != null ? specialImage : '$folder${spriteJson.imagePath}', global);
+		loadImage(specialImage ?? '$folder${spriteJson.imagePath}', global);
 
 		for (anim in spriteJson.anims) {
 			anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
@@ -153,8 +153,8 @@ class FlxSpriteExt extends FlxSprite {
 	}
 
 	public function addAnim(animName:String, animFile:String, animFramerate:Int = 24, animLoop:Bool = false, ?animIndices:Array<Int>, ?animOffsets:Array<Float>):Void {
-        animIndices = animIndices != null ? animIndices : [];
-        animOffsets = animOffsets != null ? animOffsets : [0,0];
+        animIndices = animIndices ?? [];
+        animOffsets = animOffsets ?? [0,0];
 		
 		setAnimData(animName, {
 			animName:animName,
@@ -185,6 +185,12 @@ class FlxSpriteExt extends FlxSprite {
 		final loop = newData.loop;
 
 		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
+	}
+
+	override function destroy() {
+		super.destroy();
+		animOffsets = null;
+		animDatas = null;
 	}
 
 	public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {

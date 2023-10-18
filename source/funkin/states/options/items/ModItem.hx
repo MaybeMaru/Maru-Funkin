@@ -1,59 +1,54 @@
 package funkin.states.options.items;
 
 class ModItem extends FlxSpriteGroup {
-    public var modName:String;
-    public var modEnabled:Bool = true;
+    public var mod:ModFolder = null;
+    public var enabled:Bool = true;
     
     public var enableButton:FlxSpriteExt;
     public var targetY:Float;
 
-    public function new(modName:String):Void {
+    public function new(mod:ModFolder):Void {
         super();
-        this.modName = modName;
+        this.mod = mod;
 
         var modBox:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.5), Std.int(FlxG.height / 4), FlxColor.BLACK);
         modBox.alpha = 0.6;
         add(modBox);
 
-        var aa = Preferences.getPref('antialiasing');
-
-        var icon = Paths.file('$modName/icon.png', IMAGE);
-        var modIcon:FlxSpriteExt = new FlxSpriteExt();
-        modIcon.loadGraphic(Paths.exists(icon, IMAGE) ? AssetManager.getImage(icon) : Paths.image('options/blankMod'));
-        modIcon.antialiasing = aa;
+        final _tryImage = 'mods/${mod.folder}/${mod.icon}.png';
+        final iconGraphic = Paths.exists(_tryImage, IMAGE) ? AssetManager.getImage(_tryImage) : Paths.image('options/blankMod');
+        final modIcon:FlxSpriteExt = new FlxSpriteExt();
+        modIcon.loadGraphic(iconGraphic);
         modIcon.setScale(0.6);
         modIcon.setPosition(15, modBox.height * 0.5 - modIcon.height * 0.5);
         add(modIcon);
 
-        var modTitle:Alphabet = new Alphabet(modIcon.x + modIcon.width + 10, 10, modName, true, Std.int(modBox.width/2), 0.666); // SATAN
+        final modTitle:Alphabet = new Alphabet(modIcon.x + modIcon.width + 10, 10, mod.title, true, Std.int(modBox.width * 0.5), 0.666);
         add(modTitle);
 
-        var infoText:String = CoolUtil.getFileContent(Paths.file('$modName/info.txt'));
-        var modInfo:FlxText = new FlxText(modTitle.x, modTitle.y + modTitle.height + 5, Std.int(modBox.width*0.6), infoText);
-        modInfo.setFormat(Paths.font('phantommuff_'), 20, FlxColor.BLACK, LEFT, OUTLINE, FlxColor.WHITE);
-        modInfo.borderSize = 1.333;
-        add(modInfo);
+        final modDesc:FlxText = new FlxText(modTitle.x, modTitle.y + modTitle.height + 5, Std.int(modBox.width*0.6), mod.description);
+        modDesc.setFormat(Paths.font('phantommuff_'), 20, FlxColor.BLACK, LEFT, OUTLINE, FlxColor.WHITE);
+        modDesc.borderSize = 1.333;
+        add(modDesc);
 
         enableButton = new FlxSpriteExt(modBox.width,modBox.height).loadImageAnimated('options/modButton', 60, 58);
-        enableButton.antialiasing = aa;
         enableButton.animation.add('on', [0]);
         enableButton.animation.add('off', [1]);
         enableButton.x -= enableButton.width + 5;
         enableButton.y -= enableButton.height + 5;
         add(enableButton);
 
-        modEnabled = ModdingUtil.modFoldersMap.get(modName);
+        enabled = ModdingUtil.activeMods.get(mod.folder);
         updateUI();
     }
 
     public function updateUI():Void {
         enableButton.scale.set(1.2,1.2);
-        enableButton.animation.play(modEnabled ? 'on' : 'off');
+        enableButton.animation.play(enabled ? 'on' : 'off');
     }
 
     public function clickEnable():Void {
-        modEnabled = !modEnabled;
-        ModdingUtil.setModFolder(modName, modEnabled);
+        ModdingUtil.setModActive(mod.folder, enabled = !enabled);
         updateUI();
     }
 

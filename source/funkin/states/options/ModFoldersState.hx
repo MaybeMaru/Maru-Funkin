@@ -4,7 +4,7 @@ import funkin.states.options.items.SpriteButton;
 
 class ModFoldersState extends MusicBeatState {
     var modFolderButtons:FlxTypedGroup<SpriteButton>;
-    var modFolderItems:FlxTypedGroup<ModItem>;
+    var modItemsGrp:FlxTypedGroup<ModItem>;
     var sliderPos:Float = 0;
 
     override function create():Void {
@@ -16,16 +16,14 @@ class ModFoldersState extends MusicBeatState {
 		bg.scrollFactor.set(0, 0);
 		add(bg);
 
-        modFolderItems = new FlxTypedGroup<ModItem>();
-        add(modFolderItems);
+        modItemsGrp = new FlxTypedGroup<ModItem>();
+        add(modItemsGrp);
 
-        for (i in 0...ModdingUtil.modFolders.length) {
-            var newMod:ModItem = new ModItem(ModdingUtil.modFolders[i]);
-            newMod.ID = i;
-            newMod.x = 25;
-            newMod.targetY = 0;
-            newMod.y = newMod.targetY;
-            modFolderItems.add(newMod);
+        for (i in 0...ModdingUtil.modsList.length) {
+            final modItem:ModItem = new ModItem(ModdingUtil.modsList[i]);
+            modItem.ID = i;
+            modItem.setPosition(25, 0);
+            modItemsGrp.add(modItem);
         }
 
         modFolderButtons = new FlxTypedGroup<SpriteButton>();
@@ -48,19 +46,19 @@ class ModFoldersState extends MusicBeatState {
         CoolUtil.resetState();
     }
 
-    function enableAll():Void {
+    inline function enableAll():Void {
         enableMods(true);
     }
 
-    function disableAll():Void {
+    inline function disableAll():Void {
         enableMods(false);
     }
 
     function enableMods(bool:Bool):Void {
-        for (folder in modFolderItems.members) {
-            folder.modEnabled = bool;
-            ModdingUtil.setModFolder(folder.modName, bool);
-            folder.updateUI();
+        for (i in modItemsGrp) {
+            i.enabled = bool;
+            ModdingUtil.setModActive(i.mod.folder, bool);
+            i.updateUI();
         }
     }
 
@@ -71,13 +69,13 @@ class ModFoldersState extends MusicBeatState {
             switchState(new OptionsState());
         }
 
-        if(FlxG.mouse.wheel != 0 && (modFolderItems.length > 3)) {
-            var limit:Int = Std.int(modFolderItems.length-3);
+        if(FlxG.mouse.wheel != 0 && (modItemsGrp.length > 3)) {
+            final limit:Int = Std.int(modItemsGrp.length-3);
             sliderPos = FlxMath.bound(sliderPos + FlxG.mouse.wheel, -limit, 0);
 		}
 
-        for (item in modFolderItems) {
-            item.targetY = 50 + (sliderPos-item.ID+modFolderItems.members.length-1)*200;
+        for (item in modItemsGrp) {
+            item.targetY = 50 + (sliderPos-item.ID+modItemsGrp.members.length-1)*200;
         }
     }
 }
