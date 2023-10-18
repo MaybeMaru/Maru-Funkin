@@ -18,8 +18,8 @@ function createPost():Void {
         speaker.x += 140;
     }
 
-    if (Paths.exists(Paths.chart(GameVars.SONG.song, 'picospeaker'), "TEXT")) {
-        picoNotes_ = Song.getSongNotes('picospeaker',  GameVars.SONG.song);
+    if (Paths.exists(Paths.chart(PlayState.SONG.song, 'picospeaker'), "TEXT")) {
+        picoNotes_ = Song.getSongNotes('picospeaker',  PlayState.SONG.song);
         initTankmenBG();
     }
 }

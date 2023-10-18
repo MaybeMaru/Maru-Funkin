@@ -51,7 +51,7 @@ function create():Void {
 
 function beatHit(curBeat):Void {
 	var genTrain:Bool = (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8 && !trainSound.playing);
-	var inBlammed:Bool = (PlayState.curSong == 'Blammed' && curBeat >= 100);
+	var inBlammed:Bool = (State.curSong == 'Blammed' && curBeat >= 100);
 
 	if (!trainMoving) {
         trainCooldown++;
@@ -77,7 +77,7 @@ function sectionHit(curSection):Void {
 	}
 	
 	var showLights:Bool = true;
-	switch(PlayState.curSong) {
+	switch(State.curSong) {
 		case 'Pico': showLights = (curSection > 1);	//	PICO CUTSCENE
 	}
 	phillyCityLights.visible = showLights;
@@ -112,7 +112,7 @@ function trainStart():Void {
 function updateTrainPos():Void {
 	if (trainSound.time >= 4700) {
 		startedMoving = true;
-		PlayState.gf.playAnim('hairBlow');
+		State.gf.playAnim('hairBlow');
 	}
 
 	if (startedMoving) {
@@ -132,7 +132,7 @@ function updateTrainPos():Void {
 }
 
 function trainReset():Void {
-	PlayState.gf.playAnim('hairFall');
+	State.gf.playAnim('hairFall');
 	phillyTrain.x = FlxG.width + 200;
 	trainMoving = false;
 	trainCars = 8;

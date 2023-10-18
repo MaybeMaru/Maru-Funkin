@@ -75,7 +75,7 @@ function create()
 				spr.offset.set(FlxG.random.float(-1.5,1.5), FlxG.random.float(-1.5,1.5));
 				
 				if (i == 'blammedTrain' && spr.visible) {
-					for (c in [PlayState.boyfriend, PlayState.dad]) {
+					for (c in [State.boyfriend, State.dad]) {
 						c.applyCurOffset(true);
 						c.offset.x += spr.offset.x;
 						c.offset.y += spr.offset.y;
@@ -114,20 +114,20 @@ function hideBlammed(value) {
 }
 	
 function addBlammedTransition() {
-	PlayState.camGame.flash(getSpr('phillyWindow').color, Conductor.crochet/250, null, true);
-	PlayState.switchChar('bf', 'bf-car');
-	PlayState.gfGroup.visible = false;
+	State.camGame.flash(getSpr('phillyWindow').color, Conductor.crochet/250, null, true);
+	State.switchChar('bf', 'bf-car');
+	State.gfGroup.visible = false;
 
-	PlayState.boyfriend.x += 75;
-	PlayState.dad.x -= 50;
+	State.boyfriend.x += 75;
+	State.dad.x -= 50;
 	
 	hidePhilly(false);
 	hideBlammed(true);
 	
-	PlayState.camZooming = getPref('camera-zoom');
-	PlayState.defaultCamZoom = 1;
-	PlayState.camGame.zoom = PlayState.defaultCamZoom;
-	PlayState.cameraMovement();
+	State.camZooming = getPref('camera-zoom');
+	State.defaultCamZoom = 1;
+	State.camGame.zoom = State.defaultCamZoom;
+	State.cameraMovement();
 }
 	
 function startBlammedTransition() {
@@ -148,9 +148,9 @@ function startBlammedTransition() {
 function exitTunnelTransition() {
 	for (i in ['blammedOverlay', 'tunnelBG', 'tunnelLights','tunnelLightsBlur']) getSpr(i).visible = false;
 	for (i in ['cityLoop0', 'cityLoop1'])  getSpr(i).visible = true;
-	PlayState.camGame.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,120), Conductor.crochetMills * 4, null, true);
-	PlayState.defaultCamZoom = 0.8;
-	PlayState.camGame.zoom = 0.8;
+	State.camGame.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,120), Conductor.crochetMills * 4, null, true);
+	State.defaultCamZoom = 0.8;
+	State.camGame.zoom = 0.8;
 	
 	for (i in ['phillyWindow', 'phillyWindowBlur', 'phillyCity']) getSpr(i).y += 2000;
 	var sky = getSpr('phillyBg');
@@ -163,10 +163,10 @@ function sectionHit(curSection)
 	switch (curSection)
 	{
 		case 28:
-			PlayState.camZooming = false;
-			FlxTween.tween(PlayState.camGame, {zoom: 1.5}, Conductor.sectionCrochetMills * 4);
+			State.camZooming = false;
+			FlxTween.tween(State.camGame, {zoom: 1.5}, Conductor.sectionCrochetMills * 4);
 		case 48: exitTunnelTransition();
-		case 72: PlayState.camHUD.fade(FlxColor.BLACK, Conductor.crochetMills * 2);
+		case 72: State.camHUD.fade(FlxColor.BLACK, Conductor.crochetMills * 2);
 	}
 }
 	
@@ -175,7 +175,7 @@ function stepHit(curStep) {
 	if (!getPref('flashing-light')) return;
 	if (curStep >= 1144 && curStep <= 1150 && curStep % 2 == 0) {
 		var alpha = curStep <= 1146 ? 120 : 160;
-		PlayState.camHUD.fade(FlxColor.fromRGB(0,0,0,Std.int(alpha)), Conductor.stepCrochetMills * 0.9);
+		State.camHUD.fade(FlxColor.fromRGB(0,0,0,Std.int(alpha)), Conductor.stepCrochetMills * 0.9);
 	}
 }*/
 	

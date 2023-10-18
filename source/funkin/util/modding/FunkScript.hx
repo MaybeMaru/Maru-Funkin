@@ -55,9 +55,8 @@ class FunkScript extends Script {
 
 		//Mau engin
 
-        set('PlayState', PlayState.instance);
-		set('GameVars', PlayState); // fuck
-		set('State', cast MusicBeatState.instance);
+        set('PlayState', PlayState);
+		set('State', cast FlxG.state);
 
 		set('MusicBeatSubstate', MusicBeatSubstate);
 		set('MusicBeatState', MusicBeatState);
@@ -230,10 +229,11 @@ class FunkScript extends Script {
 			}
 		});
 
-		set('makeGroup', function(key:String, ?order:Int):Void {
+		set('makeGroup', function(key:String, ?order:Int):FlxTypedGroup<Dynamic> {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
-			order != null ? PlayState.instance.insert(order, newGroup) : PlayState.instance.add(newGroup);
-			PlayState.instance.objMap.set('_group_$key', newGroup);
+			order != null ? FlxG.state.insert(order, newGroup) : FlxG.state.add(newGroup);
+			if (cast FlxG.state is PlayState) PlayState.instance.objMap.set('_group_$key', newGroup);
+			return newGroup;
 		});
 
 		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {

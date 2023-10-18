@@ -1,11 +1,11 @@
 function goodNoteHit(note) {
     if (note.noteType == 'default-hey') {
-        PlayState.boyfriend.hey();
+        State.boyfriend.hey();
     }
 }
 
 function opponentNoteHit(note) {
     if (note.noteType == 'default-hey') {
-        PlayState.dad.hey();
+        State.dad.hey();
     }
 }

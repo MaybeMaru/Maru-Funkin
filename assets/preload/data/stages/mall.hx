@@ -3,8 +3,6 @@ var upperBoppers:FunkinSprite;
 var santa:FunkinSprite;
 
 function create():Void {
-    PlayState.defaultCamZoom = 0.8;
-
 	var bg:FunkinSprite = new FunkinSprite('bgWalls', [-750, -450], [0.2, 0.2]);
 	bg.setScale(0.8);
 	addSpr(bg);

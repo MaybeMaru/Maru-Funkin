@@ -28,7 +28,7 @@ function create() {
 }
 
 function beatHit(curBeat) {
-    if (PlayState.curSong != 'Spookeez')
+    if (State.curSong != 'Spookeez')
         calcThunder();
 }
 
@@ -36,7 +36,7 @@ var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
 function calcThunder():Void {
-    if (FlxG.random.bool(10) && PlayState.curBeat > lightningStrikeBeat + lightningOffset) {
+    if (FlxG.random.bool(10) && State.curBeat > lightningStrikeBeat + lightningOffset) {
         thunder(true); 
     }
 }
@@ -44,22 +44,22 @@ function calcThunder():Void {
 var startThunder:Bool = false;
 
 function thunder(_sound:Bool) {
-    lightningStrikeBeat = PlayState.curBeat;
+    lightningStrikeBeat = State.curBeat;
 	lightningOffset = FlxG.random.int(8, 24);
     scaredAnim();
     if (_sound) FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
-    if (getPref('flashing-light')) PlayState.camGame.flash(FlxColor.fromRGB(255,255,255,125), Conductor.crochetMills * 2, null, true);
+    if (getPref('flashing-light')) State.camGame.flash(FlxColor.fromRGB(255,255,255,125), Conductor.crochetMills * 2, null, true);
 
     startThunder = true;
     getSpr('bg').playAnim("thunder", true);
 }
 
 function scaredAnim() {
-    PlayState.boyfriend.forceDance = false;     PlayState.boyfriend.playAnim('scared', true);
-    PlayState.gf.forceDance = false;	        PlayState.gf.playAnim('scared', true);
+    State.boyfriend.forceDance = false;     State.boyfriend.playAnim('scared', true);
+    State.gf.forceDance = false;	        State.gf.playAnim('scared', true);
     new FlxTimer().start(Conductor.crochetMills * 2, function(tmr:FlxTimer) {
-        PlayState.boyfriend.forceDance = true;
-        PlayState.gf.forceDance = true;
+        State.boyfriend.forceDance = true;
+        State.gf.forceDance = true;
     });
 }
 
@@ -72,21 +72,21 @@ function updatePost() {
 }
 
 function openGameOverSubstate() {
-    if (PlayState.boyfriend.curCharacter == "tankman") {
+    if (State.boyfriend.curCharacter == "tankman") {
         openTankmanGameover();
         return STOP_FUNCTION;
     }
 }
 
 function openTankmanGameover() {
-    PlayState.persistentUpdate = false;
-    PlayState.persistentDraw = false;
+    State.persistentUpdate = false;
+    State.persistentDraw = false;
 	Conductor.stop();
 
     var spook = function () {
         var sound = new FlxSound().loadEmbedded(Paths.soundRandom('thunder_', 1, 2));
         sound.play();
-        PlayState.camGame.flash(FlxColor.WHITE, 2);
+        State.camGame.flash(FlxColor.WHITE, 2);
         return sound;
     }
     var tankSub:MusicBeatSubstate = new MusicBeatSubstate();
@@ -109,12 +109,12 @@ function openTankmanGameover() {
             didTrans = true;
             spook().fadeOut(1.5);
             FlxG.sound.music.fadeOut();
-            PlayState.camGame.fade(FlxColor.BLACK, 2);
+            State.camGame.fade(FlxColor.BLACK, 2);
             new FlxTimer().start(2.5, function (tmr:FlxTimer) {
                 CoolUtil.resetState();
             });
         }
     }
-    PlayState.openSubState(tankSub);
+    State.openSubState(tankSub);
     spook();
 }

@@ -1,10 +1,10 @@
 function createPost()
 {
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-        PlayState.inCutscene = true;
+    if (PlayState.isStoryMode && !PlayState.seenCutscene)
+        State.inCutscene = true;
 }
 
 function startCutscene()
 {
-    PlayState.createDialogue();
+    State.createDialogue();
 }

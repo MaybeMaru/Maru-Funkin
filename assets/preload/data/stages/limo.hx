@@ -9,21 +9,20 @@ var vroomVroom:Array<FlxSound> = [];
 var goreSound:FlxSound;
 
 function create():Void {
-    PlayState.defaultCamZoom = 0.9;
-	PlayState.camGame.bgColor = 0xff516bdf;
+	State.camGame.bgColor = 0xff516bdf;
 	metalPos = new FlxSpriteExt(-400, 125);
 
 	var skyBG:FunkinSprite = new FunkinSprite('limo/limoSunset', [-120,-50],[0.1,0.1]);
-	PlayState.add(skyBG);
+	add(skyBG);
 
 	var metalPole:FunkinSprite = new FunkinSprite('limo/metalPole', [0,0], [0.4,0.4]);
 	metalPole._dynamic.update = function (elapsed) metalPole.setPosition(metalPos.x, metalPos.y);
-	PlayState.add(metalPole);
+	add(metalPole);
 
 	bgLimo = new FunkinSprite('limo/bgLimo',[-200, 480], [0.4, 0.4]);
 	bgLimo.addAnim('idle', 'background limo pink', 24, true);
 	bgLimo.playAnim('idle');
-	PlayState.add(bgLimo);
+	add(bgLimo);
 
 	grpLimoDancers = [];
 	for (i in 0...4) {
@@ -35,7 +34,7 @@ function create():Void {
 		dancer._dynamic.update = function (elapsed) {
 			dancer.visible = !dancer._dynamic.dead;
 		}
-		PlayState.add(dancer);
+		add(dancer);
 		grpLimoDancers.push(dancer);
 	}
 
@@ -44,7 +43,7 @@ function create():Void {
 	var highwayLight:FunkinSprite = new FunkinSprite('limo/highwayLight', [0,0], [0.4,0.4]);
 	highwayLight.offset.set(200, 30);
 	highwayLight._dynamic.update = function (elapsed) highwayLight.setPosition(metalPos.x, metalPos.y);
-	PlayState.add(highwayLight);
+	add(highwayLight);
 	
 	var limo:FunkinSprite = new FunkinSprite('limo/limoDrive', [-120, 570]);
 	limo.addAnim('idle', 'Limo stage', 24, true);
@@ -55,9 +54,9 @@ function create():Void {
 	resetFastCar();
 
 	//Layering
-	PlayState.add(PlayState.bgSpr);
-	PlayState.add(PlayState.gfGroup);
-	PlayState.add(limo);
+	add(State.bgSpr);
+	add(State.gfGroup);
+	add(limo);
 
 	var overlayShit:FunkinSprite = new FunkinSprite('limo/limoOverlay', [-500,-600]);
 	overlayShit.alpha = 0.15;
@@ -132,8 +131,8 @@ function updatePost() {
 				canKill = false;
 				dancerDeath(i);
 				if (killCount == 0) {
-					if (PlayState.gf._dynamic.dodge != null) {
-						PlayState.gf._dynamic.dodge();
+					if (State.gf._dynamic.dodge != null) {
+						State.gf._dynamic.dodge();
 					}
 				}
 				killCount++;

@@ -1,9 +1,9 @@
 function eventHit(event) {
     if (event.name == 'hey') {
         switch (event.values[0]) {
-            case 'boyfriend':   PlayState.boyfriend.hey();
-            case 'dad':         PlayState.dad.hey();
-            case 'girlfriend':  PlayState.gf.hey();
+            case 'boyfriend':   State.boyfriend.hey();
+            case 'dad':         State.dad.hey();
+            case 'girlfriend':  State.gf.hey();
         }
     }
 }

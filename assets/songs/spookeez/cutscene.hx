@@ -2,8 +2,8 @@
 var scriptedThunder:Array<Int> = [4,144,160,176,192,208,224];
 
 function createPost() {
-    PlayState.defaultCamZoom = 1.2;
-    PlayState.camGame.zoom = PlayState.defaultCamZoom;
+    State.defaultCamZoom = 1.2;
+    State.camGame.zoom = State.defaultCamZoom;
     var intro:FunkinSprite = new FunkinSprite('', [-200,-200], [1,1]).makeGraphic(FlxG.width*2, FlxG.height*2, 0xff150415);
     intro.blend = getBlendMode('multiply');
     intro.alpha = 0.6;
@@ -11,7 +11,7 @@ function createPost() {
 }
 
 function startCountdown() {
-    PlayState.showUI(false);
+    State.showUI(false);
 }
 
 function beatHit(curBeat) {
@@ -31,7 +31,7 @@ function beatHit(curBeat) {
 
     if (curBeat == 4) {
         getSpr('intro').visible = false;
-        PlayState.showUI(true);
-        PlayState.defaultCamZoom = 1.05;
+        State.showUI(true);
+        State.defaultCamZoom = 1.05;
     }
 }

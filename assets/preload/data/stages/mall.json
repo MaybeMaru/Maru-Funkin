@@ -1,5 +1,6 @@
 {
     "library": "week5",
+	"zoom": 0.8,
 	"gfOffsets": [-150,0],
 	"dadOffsets": [250,0],
 	"bfOffsets": [-300,0],

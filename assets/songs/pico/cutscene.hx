@@ -3,7 +3,7 @@ var picoText:FunkinText;
 
 function startCountdown() {
     blackOverlay = new FunkinSprite().makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
-    blackOverlay.cameras = [PlayState.camHUD];
+    blackOverlay.cameras = [State.camHUD];
     blackOverlay.visible = false;
     add(blackOverlay);
 
@@ -16,7 +16,7 @@ function startCountdown() {
     Thank you.';
 
     picoText = new FunkinText(0,0,picoString,40,0,'center');
-    picoText.cameras = [PlayState.camHUD];
+    picoText.cameras = [State.camHUD];
     picoText.visible = false;
     picoText.screenCenter();
     picoText.x -= FlxG.width/20;
@@ -25,11 +25,11 @@ function startCountdown() {
 
 function stepHit(curStep) {
     switch(curStep) {
-        case 4: PlayState.camZooming = false;
+        case 4: State.camZooming = false;
         case 20: blackOverlay.visible = picoText.visible = true;
         case 32:
             blackOverlay.visible = picoText.visible = false;
-            PlayState.camZooming = true;
+            State.camZooming = true;
             closeScript();
     }
 }

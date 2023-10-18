@@ -4,8 +4,7 @@ var tankWatchtower:FunkinSprite;
 var tankGround:FunkinSprite;
 
 function create():Void {
-	PlayState.defaultCamZoom = 0.9;
-	PlayState.camGame.bgColor = 0xfff5ca51;
+	State.camGame.bgColor = 0xfff5ca51;
 
 	var sky:FunkinSprite = new FunkinSprite('tankSky', [-400, -400], [0, 0]);
 	addSpr(sky);
@@ -56,7 +55,7 @@ function create():Void {
 	var ground:FunkinSprite = new FunkinSprite('tankGround', [-420, -150]);
 	ground.setGraphicSize(Std.int(ground.width * 1.15));
 	ground.updateHitbox();
-	PlayState.add(ground);
+	add(ground);
 }
 
 var tankDudes:Array<FunkinSprite> = [];
@@ -102,7 +101,7 @@ var tankSpeed:Float = FlxG.random.float(5, 7);
 var tankX:Float = 400;
 
 function moveTank():Void {
-	if (!PlayState.inCutscene) {
+	if (!State.inCutscene) {
 		tankGround.visible = true;
 		tankAngle += tankSpeed * FlxG.elapsed;
 		tankGround.angle = (tankAngle - 90 + 15);

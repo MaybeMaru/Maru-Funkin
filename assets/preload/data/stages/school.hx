@@ -29,7 +29,7 @@ function createPost():Void {
     setShaderFloat('senpaiTrees', 'uFrequency', 5);
 	setSpriteShader(fgTrees, 'senpaiTrees');
 
-	var isRoses = PlayState.curSong == 'Roses';
+	var isRoses = State.curSong == 'Roses';
 	var freaksSpr = isRoses ? 'school/bgGirlsDissuaded' : 'school/bgGirls';
 	var freaksAnim = isRoses ? 'BG Girls Dissuaded' : 'BG girl pair';
 	for (i in 0...4) {

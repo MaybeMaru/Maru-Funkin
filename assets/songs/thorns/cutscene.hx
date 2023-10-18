@@ -1,6 +1,6 @@
 function createPost() {
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-        PlayState.inCutscene = true;
+    if (PlayState.isStoryMode && !PlayState.seenCutscene)
+        State.inCutscene = true;
 }
 
 function startCutscene() {
@@ -17,7 +17,7 @@ function startCutscene() {
     senpaiEvil.alpha = 0;
     add(senpaiEvil);
 
-    PlayState.camHUD.visible = false;
+    State.camHUD.visible = false;
 
     var manager = makeCutsceneManager(); 
 
@@ -30,15 +30,15 @@ function startCutscene() {
         FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
             senpaiEvil.destroy();
             red.destroy();
-            PlayState.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
-                PlayState.camHUD.visible = true;
-                PlayState.createDialogue();
+            State.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
+                State.camHUD.visible = true;
+                State.createDialogue();
             }, true);
         });
     });
 
     manager.pushEvent(5.3, function () {
-        PlayState.camGame.fade(FlxColor.WHITE, 1.6, false);
+        State.camGame.fade(FlxColor.WHITE, 1.6, false);
     });
 
     manager.start();
@@ -57,7 +57,7 @@ function createDialogue() {
 
     face = new FunkinSprite('weeb/spiritFaceForward', [320, 170]);
     face.setScale(6, false);
-    face.cameras = [PlayState.camHUD];
+    face.cameras = [State.camHUD];
     add(face);
 
     initShader('thornsBg', 'faceShader');
@@ -66,7 +66,7 @@ function createDialogue() {
     setSpriteShader(face, 'faceShader');
 
     dialogueBox = new PixelDialogueBox('evil');
-    dialogueBox.cameras = [PlayState.camHUD];
+    dialogueBox.cameras = [State.camHUD];
 
     var handPos = dialogueBox.handSelect.getPosition();
     dialogueBox.handSelect = new FunkinSprite('skins/pixel/evil_hand', [handPos.x,handPos.y], [0,0]);
@@ -82,7 +82,7 @@ function createDialogue() {
     dialogueBox.swagDialogue.color = FlxColor.WHITE;
     dialogueBox.swagDialogue.borderColor = FlxColor.TRANSPARENT;
 
-    PlayState.dialogueBox = dialogueBox;
+    State.dialogueBox = dialogueBox;
     add(dialogueBox);
     inDialogue = true;
 }
@@ -99,7 +99,7 @@ function updatePost(elapsed) {
 }
 
 function startCountdown() {
-    if (GameVars.isStoryMode && inDialogue) {
+    if (PlayState.isStoryMode && inDialogue) {
         inDialogue = false;
         face.destroy();
         bgFade.destroy();

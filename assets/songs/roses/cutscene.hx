@@ -1,16 +1,16 @@
 function createPost() {
-    if (GameVars.isStoryMode && !GameVars.seenCutscene)
-        PlayState.inCutscene = true;
+    if (PlayState.isStoryMode && !PlayState.seenCutscene)
+        State.inCutscene = true;
 }
 
 function startCutscene() {
-    PlayState.createDialogue();
+    State.createDialogue();
 }
 
 function createDialogue() {
     playSound("ANGRY");
-    PlayState.dialogueBox = new PixelDialogueBox('mad');
-    PlayState.dialogueBox.portraitLeft.alpha = 0;
+    State.dialogueBox = new PixelDialogueBox('mad');
+    State.dialogueBox.portraitLeft.alpha = 0;
 }
 
 function startDialogue() {

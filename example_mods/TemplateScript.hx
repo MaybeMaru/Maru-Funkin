@@ -1,7 +1,7 @@
 /*
     Hello and welcome to the Mau Engin template script!
     Here you can find some info on the available callbacks and pre-added crap
-    Thank u for using this engine, but tbh use Psych or some other better engine smh...
+    Thank u for using this engine! But tbh just use Psych or some other better engines smh...
 */
 
 /*
@@ -9,9 +9,8 @@
 */
 
 // States
-PlayState // Current PlayState instance (you'll need this one most of the time)
-GameVars // PlayState class (for static variables)
-State // Current MusicBeatState
+PlayState // PlayState class (NOT the instance)
+State // Current MusicBeatState instance
 
 // Util
 CoolUtil
@@ -136,7 +135,7 @@ existsSpr(spriteTag:String)
 removeSpr(spriteTag:String)
 
 /*
-    Creates and adds a group to PlayState
+    Creates, adds and returns a group to the State
     @param groupTag    --> Sprite object to add
 */
 makeGroup(groupTag:String)
@@ -250,6 +249,12 @@ resumeSounds();
     @param stateName --> Name of the state in data/scripts/customStates to switch to
 */
 switchCustomState(stateName:String);
+
+/*
+    Closes the script from ussage and removes it from the scripts list
+    Useful for performance improvements for script without updates
+*/
+closeScript();
 
 /*
     Adds a new script
@@ -408,20 +413,20 @@ function destroy()
 
 function startCutscene(atEndSong:Bool)
 {
-   //   Called when a cutscene starts if PlayState.inCutscene is true
+   //   Called when a cutscene starts if State.inCutscene is true
    //   atEndSong --> if the function is being called at the end of a song
 }
 
 function createDialogue()
 {
     //  Called before dialogue boxes are created
-    //  You can add custom ones changing PlayState.dialogueBox when this callback is called
+    //  You can add custom ones changing State.dialogueBox when this callback is called
 }
 
 function postCreateDialogue()
 {
     //  Called after dialogue boxes are created
-    //  Useful for adding custom dialogue transitions changing PlayState.openDialogueFunc
+    //  Useful for adding custom dialogue transitions changing State.openDialogueFunc
 }
 
 function startDialogue()
@@ -543,7 +548,7 @@ function opponentSustainPress(note:Note)
 
 function updateScore(songScore:Int)
 {
-   //   Called every time PlayState.scoreTxt is updated
+   //   Called every time State.scoreTxt is updated
    //   songScore --> The current score in the game
 }
 
