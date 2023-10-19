@@ -30,7 +30,6 @@ class ModdingUtil {
     }
     
     //Mod folders
-    public static var curMod:ModFolder = null;
     public static var curModFolder:String = "";
     public static var modsList:Array<ModFolder> = [];
     public static var modsMap:Map<String, ModFolder> = [];
@@ -95,11 +94,10 @@ class ModdingUtil {
     }
 
     static function getDefaultMod() {
-        curMod = null;
+        curModFolder = "";
         if (modsList.length > 0) {
             for (i in modsList) {
                 if (activeMods.get(i.folder)) {
-                    curMod = i;
                     curModFolder = i.folder;
                     trace('Set default mod folder to ' + curModFolder);
                     return;

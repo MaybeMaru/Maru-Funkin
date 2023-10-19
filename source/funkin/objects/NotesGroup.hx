@@ -208,19 +208,18 @@ class NotesGroup extends FlxGroup
 	
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
-				var strumTime:Float = songNotes[0];
-				var sustainLength:Null<Float> = songNotes[2];
+				final strumTime:Float = songNotes[0];
+				final sustainLength:Null<Float> = songNotes[2];
 				if ((sustainLength != null ? strumTime + sustainLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
-				var noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
-				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
-				var mustPress:Bool = section.mustHitSection ? songNotes[1] < Conductor.NOTE_DATA_LENGTH : songNotes[1] >= Conductor.NOTE_DATA_LENGTH;
-				var targetStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
 				
-				var skin = NoteUtil.getTypeJson(noteType).skin;
-				skin = skin == null ? SkinUtil.curSkin : skin;
+				final noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
+				final noteType:String = NoteUtil.getTypeName(songNotes[3]);
+				final mustPress:Bool = section.mustHitSection ? songNotes[1] < Conductor.NOTE_DATA_LENGTH : songNotes[1] >= Conductor.NOTE_DATA_LENGTH;
+				final targetStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
+				final skin = NoteUtil.getTypeJson(noteType)?.skin ?? SkinUtil.curSkin;
 
 				// Add note
-				var newNote:Note = new Note(noteData, strumTime, 0, skin);
+				final newNote:Note = new Note(noteData, strumTime, 0, skin);
 				newNote.targetStrum = targetStrum;
 				newNote.mustPress = mustPress;
 				newNote.noteType = noteType;
@@ -229,7 +228,7 @@ class NotesGroup extends FlxGroup
 
 				// Add note sustain
 				if (sustainLength > 0) {
-					var newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
+					final newSustain:Note = new Note(noteData, strumTime, sustainLength, skin);
 					if (newSustain.alive) {
 						newSustain.targetStrum = targetStrum;
 						newSustain.mustPress = mustPress;
