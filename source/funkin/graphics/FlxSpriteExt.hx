@@ -1,12 +1,13 @@
 package funkin.graphics;
 
+import flixel.addons.effects.FlxSkewedSprite;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 
 /*
     Just FlxSprite but with helper functions
 */
-class FlxSpriteExt extends FlxSprite {
+class FlxSpriteExt extends FlxSkewedSprite {
 
 	public static var DEFAULT_SPRITE(default, never):SpriteJson = {
 		anims: [],
@@ -153,16 +154,13 @@ class FlxSpriteExt extends FlxSprite {
 	}
 
 	public function addAnim(animName:String, animFile:String, animFramerate:Int = 24, animLoop:Bool = false, ?animIndices:Array<Int>, ?animOffsets:Array<Float>):Void {
-        animIndices = animIndices ?? [];
-        animOffsets = animOffsets ?? [0,0];
-		
 		setAnimData(animName, {
 			animName:animName,
 			animFile:animFile,
 			framerate:animFramerate,
 			loop:animLoop,
-			indices:animIndices,
-			offsets:animOffsets
+			indices:animIndices ?? [],
+			offsets:animOffsets ?? [0,0]
 		});
 	}
 
@@ -171,7 +169,7 @@ class FlxSpriteExt extends FlxSprite {
 	}
 
 	inline public function getAnimData(anim:String):SpriteAnimation {
-		return animDatas.exists(anim) ? animDatas.get(anim) : Reflect.copy(DEFAULT_ANIM);
+		return animDatas.get(anim) ?? JsonUtil.copyJson(DEFAULT_ANIM);
 	}
 
 	public function setAnimData(anim:String, newData:SpriteAnimation):Void {
@@ -185,6 +183,10 @@ class FlxSpriteExt extends FlxSprite {
 		final loop = newData.loop;
 
 		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
+	}
+
+	inline public function setSkew(?skewX:Float, ?skewY:Float) {
+		skew.set(skewX ?? skew.x, skewY ?? skew.y);
 	}
 
 	override function destroy() {

@@ -26,7 +26,8 @@ class ModSetupTabs extends FlxUITabMenu {
     var modDescInput:FlxUIInputText;
     var createButton:FlxUIButton;
 
-    var templatesCheck:FlxUICheckBox;
+    var globalCheck:FlxUICheckBox;
+    //var templatesCheck:FlxUICheckBox;
 
     var focusList:Array<FlxUIInputText> = [];
 	public function getFocus():Bool {
@@ -80,6 +81,7 @@ class ModSetupTabs extends FlxUITabMenu {
                 var _jsonData = JsonUtil.copyJson(ModdingUtil.DEFAULT_MOD);
                 _jsonData.title = modNameInput.text;
                 _jsonData.description = modDescInput.text;
+                _jsonData.global = globalCheck.checked;
             
                 var _jsonStr = FunkyJson.stringify(_jsonData, "\t");
                 File.saveContent('mods/$modFolder/mod.json', _jsonStr);
@@ -97,10 +99,14 @@ class ModSetupTabs extends FlxUITabMenu {
         });
         tabGroup.add(createButton);
 
+        globalCheck = new FlxUICheckBox(25, 250, null, null, "Global Mod");
+        globalCheck.checked = false;
+        tabGroup.add(globalCheck);
+
         // If to include template character json, week json, songs, etc
-        templatesCheck = new FlxUICheckBox(25, 250, null, null, "Include template files");
+        /*templatesCheck = new FlxUICheckBox(25, 250, null, null, "Include template files");
         templatesCheck.checked = false;
-        tabGroup.add(templatesCheck);
+        tabGroup.add(templatesCheck);*/
     }
 
     function addToGroup(object:Dynamic, txt:String = "", focusPush:Bool = false) {

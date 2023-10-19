@@ -113,10 +113,28 @@ class ModdingUtil {
         if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
         consoleTrace('[ADD] $path', FlxColor.LIME);
         final scriptID = tag ?? path;
+        
+        if (path.startsWith("mods/")) {
+            final _mod = ModdingUtil.modsMap.get(Paths.getFileMod(path)[0]);
+            if (_mod != null && _mod.apiVersion != API_VERSION) {
+                deprecatedTrace('$scriptID / Uses API version ${_mod.apiVersion} (Cur $API_VERSION)');
+                scriptCode = updateScript(scriptCode, _mod.apiVersion);
+            }
+        }
+
         var script:FunkScript = new FunkScript(scriptCode, scriptID);
         scriptsMap.set(scriptID, script);
         scripts.push(script);
         return script;
+    }
+    
+    static function updateScript(code:String, version:Int) {
+        switch (version) {
+            case -1: // BETA 1
+                code = code.replace("PlayState.", "State.");
+                code = code.replace("GameVars.", "PlayState.");
+        }
+        return code;
     }
 
     inline public static function removeScript(tag:String) {
