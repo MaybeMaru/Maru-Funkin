@@ -1,5 +1,6 @@
 package funkin.util;
 
+import haxe.io.Path;
 import textureAtlas.TextureAtlas;
 import flixel.system.FlxAssets;
 import flixel.system.FlxAssets.FlxSoundAsset;
@@ -240,7 +241,7 @@ class Paths
 				dirRead.sort(CoolUtil.sortAlphabetically);
 				for (i in dirRead) {
 					if (i.endsWith(extension) || extension == null)
-						curFolderList.push(fullPath ? '$folderPath/$i' : i.split('.')[0]);
+						curFolderList.push(fullPath ? '$folderPath/$i' : Path.withoutExtension(i));
 				}
 
 				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));

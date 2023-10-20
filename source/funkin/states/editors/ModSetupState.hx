@@ -5,6 +5,7 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
+import haxe.io.Path;
 import flixel.addons.ui.FlxUICheckBox;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
@@ -169,7 +170,8 @@ class ModSetupState extends MusicBeatState {
         var dirs = path.split("/");
         var lastDir = prefix;
         for (i in dirs) {
-            if (i == null || i.contains(".")) continue;
+            final _ext = Path.extension(i);
+            if (i == null || (_ext.length != 0 && !_ext.contains(" "))) continue;
             lastDir += '$i/';
             if (!FileSystem.exists(lastDir)) {  // Create subdirectories
                 FileSystem.createDirectory(lastDir);

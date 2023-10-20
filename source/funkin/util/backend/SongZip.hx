@@ -1,5 +1,7 @@
 package funkin.util.backend;
 
+import haxe.io.Path;
+import flixel.util.FlxArrayUtil;
 import funkin.util.song.formats.QuaFormat;
 import funkin.util.song.formats.OsuFormat;
 import funkin.states.editors.ModSetupState;
@@ -30,7 +32,7 @@ class SongZip {
     static var removeQueue:Array<String> = []; // Files that will be deleted after zips are unzipped
 
     public static function init() {
-        removeQueue = [];
+        FlxArrayUtil.clearArray(removeQueue);
         var zipArrays:Map<String, Array<String>> = [];
 
         for (i in zipMap.keys()) {
@@ -47,6 +49,7 @@ class SongZip {
                 
                 var zipEntries = UnZipper.getZipEntries(zipPath);
                 var zipFiles = UnZipper.unzipFiles(zipEntries, modPath); // Unzip and get zip files
+                trace(i);
                 ModSetupState.setupModFolder(i); // Setup folders
                 removeQueue.push(zipPath);
                 
@@ -58,11 +61,10 @@ class SongZip {
             }
         }
 
-        if (removeQueue.length != 0) {
+        if (removeQueue.length > 0) {
             removeFilesFromQueue();
-            return true;
+			ModdingUtil.reloadMods();
         }
-        return false;
     }
 
     static var UNZIP_FORMAT:Map<String, UnZipType> = [
@@ -85,7 +87,8 @@ class SongZip {
     static function unzipFormat(format:String, modPath:String, zipFiles:Array<String>) {
         var _charts:Array<String> = [];
         for (i in zipFiles) {
-            switch (i.split(".")[1]) {
+            final _ext = Path.extension(i);
+            switch (_ext) {
                 case "qua" | "osu": _charts.push(i);
                 default: removeQueue.push(i);
             }
@@ -111,7 +114,7 @@ class SongZip {
 
         for (i in _songDiffs.keys()) {
             var weekJson:WeekJson = JsonUtil.copyJson(WeekSetup.DEFAULT_WEEK);
-            weekJson.weekDiffs = CoolUtil.customSort(_songDiffs.get(i), ['easy', 'normal', 'hard']);
+            weekJson.weekDiffs = CoolUtil.customSort(_songDiffs.get(i), ['easy', 'normal', 'hard', "Easy", "Normal", "Hard", "EASY", "NORMAL", "HARD"]);
             weekJson.songList.songs = [i];
             saveJson(weekJson, '$modPath/data/weeks/${Song.formatSongFolder(i)}.json');
         }

@@ -12,14 +12,14 @@ class HealthIcon extends FlxSpriteExt {
 	public function new(char:String = 'bf', isPlayer:Bool = false):Void {
 		super();
 		this.isPlayer = isPlayer;
-		makeIcon(char,false);
+		makeIcon(char);
 	}
 
 	public function makeIcon(char:String = 'bf', forced:Bool = false):Void {
 		if (iconName == char && !forced) return; // skip loading shit
 		antialiasing = Preferences.getPref('antialiasing');
 		iconName = char;
-		if (char == 'senpai' || char == 'spirit' || char.contains('-pixel')) antialiasing = false;
+		if (["senpai", "spirit"].contains(char) || char.contains('-pixel')) antialiasing = false;
 
 		var icon:FlxGraphicAsset = Paths.image('icons/face');
 		if (Paths.exists(Paths.image('icons/$char', null, true), IMAGE))
