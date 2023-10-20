@@ -49,7 +49,7 @@ class ModSetupTabs extends FlxUITabMenu {
 
         final _sep:Int = 35;
 
-        modFolderInput = new FlxUIInputText(25, 25, 350, "Template Mod");
+        modFolderInput = new FlxUIInputText(25, 25, 350, "template-mod");
         addToGroup(modFolderInput, "Mod Folder:", true);
 
         modNameInput = new FlxUIInputText(25, 25 + _sep, 350, "Template Mod");

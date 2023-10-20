@@ -1,13 +1,11 @@
 package funkin.util.modding;
 
-import hscript.Script;
-
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript extends Script {
+class FunkScript extends hscript.Script {
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
@@ -24,7 +22,7 @@ class FunkScript extends Script {
 			errorTrace(e);
 			return CONTINUE_FUNCTION;
 		}
-		return value == null ? CONTINUE_FUNCTION : value;
+		return value ?? CONTINUE_FUNCTION;
 	}
 
 	public function new(hscriptCode:String, scriptID:String):Void {

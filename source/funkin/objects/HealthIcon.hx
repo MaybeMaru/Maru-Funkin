@@ -12,7 +12,7 @@ class HealthIcon extends FlxSpriteExt {
 	public function new(char:String = 'bf', isPlayer:Bool = false):Void {
 		super();
 		this.isPlayer = isPlayer;
-		makeIcon(char);
+		makeIcon(char,false);
 	}
 
 	public function makeIcon(char:String = 'bf', forced:Bool = false):Void {
@@ -22,10 +22,10 @@ class HealthIcon extends FlxSpriteExt {
 		if (char == 'senpai' || char == 'spirit' || char.contains('-pixel')) antialiasing = false;
 
 		var icon:FlxGraphicAsset = Paths.image('icons/face');
-		if (Paths.exists(Paths.image('icons/$char', null, true, true), IMAGE))
-			icon = Paths.image('icons/$char', null, false, true);
+		if (Paths.exists(Paths.image('icons/$char', null, true), IMAGE))
+			icon = Paths.image('icons/$char', null, false);
 
-		loadImage('icons/$char', true);	//	Load it first to get the width and height
+		loadImage('icons/$char');	//	Load it first to get the width and height
 		if (_packer == IMAGE) {
 			singleAnim = !(width >= height * 1.25); // Id make it 2 but theres some weird ass resolutions out there
 			if (!singleAnim) {

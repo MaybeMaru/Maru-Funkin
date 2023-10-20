@@ -58,7 +58,11 @@ class SongZip {
             }
         }
 
-        removeFilesFromQueue();
+        if (removeQueue.length != 0) {
+            removeFilesFromQueue();
+            return true;
+        }
+        return false;
     }
 
     static var UNZIP_FORMAT:Map<String, UnZipType> = [

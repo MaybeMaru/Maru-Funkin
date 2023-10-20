@@ -447,7 +447,7 @@ class PlayState extends MusicBeatState {
 
 				countdownSpr.acceleration.y = SONG.bpm*60;
 				countdownSpr.velocity.y -= SONG.bpm*10;
-				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween){countdownSpr.destroy();}});
+				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) countdownSpr.destroy()});
 			}
 
 			CoolUtil.playSound(countdownSoundKeys[swagCounter],0.6);

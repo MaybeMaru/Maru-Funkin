@@ -129,8 +129,8 @@ class ModdingUtil {
     static function updateScript(code:String, version:Int) {
         switch (version) {
             case -1: // BETA 1
-                code = code.replace("PlayState.", "State.");
-                code = code.replace("GameVars.", "PlayState.");
+                code = code.replace("PlayState", "State");
+                code = code.replace("GameVars", "PlayState");
         }
         return code;
     }

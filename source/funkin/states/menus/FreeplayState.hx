@@ -1,11 +1,19 @@
 package funkin.states.menus;
 
-import flixel.addons.ui.FlxInputText;
+//import flixel.addons.ui.FlxInputText;
+
+typedef SongMetaData = {
+	var song:String;
+	var week:String;
+	var char:String;
+	var ID:Int;
+	var mod:String;
+}
 
 class FreeplayState extends MusicBeatState {
 	var bg:FunkinSprite;
 
-	var songs:Array<SongMetadata> = [];
+	var songs:Array<SongMetaData> = [];
 	var coolColors:Map<String, FlxColor>;
 	var curWeekDiffs:Array<String> = [
 		'easy',
@@ -46,7 +54,7 @@ class FreeplayState extends MusicBeatState {
 			final week = _data.data;
 			
 			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay) {
-				addWeek(week.songList.songs, week.songList.songIcons, weekName);
+				addWeek(week.songList.songs, week.songList.songIcons, weekName, _data.modFolder);
 
 				var songColors = week.songList.songColors;
 				for (i in 0...week.songList.songs.length) {
@@ -63,13 +71,17 @@ class FreeplayState extends MusicBeatState {
 		add(grpSongs);
 
 		for (i in 0...songs.length) {
-			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
+			final lastMod = ModdingUtil.curModFolder;
+			ModdingUtil.curModFolder = songs[i].mod;
+			var icon:HealthIcon = new HealthIcon(songs[i].char);
+			ModdingUtil.curModFolder = lastMod;
+			
 			var leScale:Float = 1;
-			while (icon.width*1.1+Alphabet.spaceWidth*songs[i].songName.length*leScale > FlxG.width) {
+			while (icon.width*1.1+Alphabet.spaceWidth*songs[i].song.length*leScale > FlxG.width) {
 				leScale-=0.01;
 			}
 
-			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, songs[i].songName, true, 0, leScale);
+			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, songs[i].song, true, 0, leScale);
 			songText.targetY = i;
 			songText.setTargetPos();
 			grpSongs.add(songText);
@@ -108,15 +120,21 @@ class FreeplayState extends MusicBeatState {
 		super.create();
 	}
 
-	public function addSong(songName:String, songCharacter:String, weekName:String, id:Int):Void {
-		songs.push(new SongMetadata(songName, songCharacter, weekName, id));
+	public function addSong(song:String, char:String, week:String, id:Int, mod:String = ""):Void {
+		songs.push({
+			song: song,
+			week: week,
+			char: char,
+			ID: id,
+			mod: mod
+		});
 	}
 
-	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String):Void {
+	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String, mod:String):Void {
 		songCharacters = songCharacters ?? ['bf'];
 		for (i in 0...songs.length) {
 			var songIcon:String = songCharacters[cast FlxMath.bound(i, 0, songCharacters.length-1)];
-			addSong(songs[i], songIcon, week, i);
+			addSong(songs[i], songIcon, week, i, mod);
 		}
 	}
 
@@ -126,7 +144,7 @@ class FreeplayState extends MusicBeatState {
 
 	function getBgColor():FlxColor {
 		var curSongMeta = songs[curSelected];
-		return coolColors.get(formatColor(curSongMeta.weekName, curSongMeta.ID));
+		return coolColors.get(formatColor(curSongMeta.week, curSongMeta.ID));
 	}
 
 	var lerpColor:FlxColorFix;
@@ -160,7 +178,7 @@ class FreeplayState extends MusicBeatState {
 
 		#if PRELOAD_ALL
 		if(FlxG.keys.justPressed.ONE) {
-			final targetMusic = songs[curSelected].songName;
+			final targetMusic = songs[curSelected].song;
 			if (targetMusic != _lastMusic) {
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
@@ -214,12 +232,12 @@ class FreeplayState extends MusicBeatState {
 
 	function setupSong():Void {
 		PlayState.isStoryMode = false;
-		WeekSetup.setupSong(songs[curSelected].weekName, songs[curSelected].songName, curWeekDiffs[curDifficulty]);
+		WeekSetup.setupSong(songs[curSelected].week, songs[curSelected].song, curWeekDiffs[curDifficulty]);
 	}
 
 	function changeDiff(change:Int = 0):Void {
 		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
-		intendedScore = Highscore.getSongScore(songs[curSelected].songName, curWeekDiffs[curDifficulty]);
+		intendedScore = Highscore.getSongScore(songs[curSelected].song, curWeekDiffs[curDifficulty]);
 		
 		var diffString:String = curWeekDiffs[curDifficulty].toUpperCase();
 		diffText.text = curWeekDiffs.length > 1 ? "< " + diffString + " >" : diffString;
@@ -234,11 +252,11 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	function changeSelection(change:Int = 0):Void {
-		var lastWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
+		var lastWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].week);
 		curSelected = FlxMath.wrap(curSelected += change, 0, songs.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-		curWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].weekName);
+		curWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].week);
 		if (lastWeekDiffs != curWeekDiffs) {	//	FIND MATCHES
 			if (curWeekDiffs.contains(lastWeekDiffs[curDifficulty])) {
 				curDifficulty = curWeekDiffs.indexOf(lastWeekDiffs[curDifficulty]);
@@ -265,17 +283,3 @@ class SongSearch extends FlxInputText {
 		super(FlxG.width - _width - 8, FlxG.height - _size - 16, _width, "", _size);
 	}
 }*/
-
-class SongMetadata {
-	public var songName:String = "";
-	public var weekName:String = "";
-	public var songCharacter:String = "";
-	public var ID:Int = 0;
-
-	public function new(song:String, songCharacter:String, weekName:String, ID:Int):Void {
-		this.songName = song;
-		this.songCharacter = songCharacter;
-		this.weekName = weekName;
-		this.ID = ID;
-	}
-}

@@ -26,8 +26,8 @@ class CoolUtil {
 	inline public static function init():Void {
 		#if desktop
 		FunkThread.runThread(function () {
-			SongZip.init();
-			ModdingUtil.reloadMods();
+			if (SongZip.init())
+				ModdingUtil.reloadMods();
 		}, 1);
 		ModdingUtil.reloadMods();
 		#end
