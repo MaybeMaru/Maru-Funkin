@@ -52,13 +52,10 @@ class Preferences {
     }
 
     inline public static function effectPrefs():Void {
-        final gameFramerate:Int = getPref('framerate');
-        FlxG.drawFramerate = gameFramerate;
-		FlxG.updateFramerate = gameFramerate;
-        
+        FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
 
-        if(Main.fpsCounter != null) {
+        if (Main.fpsCounter != null) {
             Main.fpsCounter.visible = getPref('fps-counter');
         }
     }

@@ -25,8 +25,8 @@ class FreeplayState extends MusicBeatState {
 	public static var curDifficulty:Int = 1;
 
 	var scoreBG:FlxSprite;
-	var scoreText:FunkinText;
-	var diffText:FunkinText;
+	var scoreText:FlxFunkText;
+	var diffText:FlxFunkText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
@@ -101,12 +101,18 @@ class FreeplayState extends MusicBeatState {
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
-		scoreText = new FunkinText(lerpPosition, 5, "", 32);
+		/*scoreText = new FunkinText(lerpPosition, 5, "", 32);
 		scoreText.borderColor = FlxColor.TRANSPARENT;
 		add(scoreText);
 
 		diffText = new FunkinText(lerpPosition, scoreText.y + 36, "", 24);
 		diffText.borderColor = FlxColor.TRANSPARENT;
+		add(diffText);*/
+
+		scoreText = new FlxFunkText(lerpPosition, 5, "", FlxPoint.get(FlxG.width, 32) , 32);
+		add(scoreText);
+
+		diffText = new FlxFunkText(lerpPosition, scoreText.y + 36, "", FlxPoint.get(FlxG.width, 24) , 24);
 		add(diffText);
 
 		changeSelection();
@@ -247,7 +253,7 @@ class FreeplayState extends MusicBeatState {
 	function updateLerpPosition() {
 		final lastTxt = scoreText.text;
 		scoreText.text = "PERSONAL BEST: " + intendedScore;
-		lerpPosition = Math.min((FlxG.width * 0.69) - 6, FlxG.width - Math.max(scoreText.width, diffText.width) - 6);
+		lerpPosition = Math.min((FlxG.width * 0.69) - 6, FlxG.width - Math.max(scoreText.textWidth, diffText.textWidth) - 6);
 		scoreText.text = lastTxt;
 	}
 

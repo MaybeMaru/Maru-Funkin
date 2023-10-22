@@ -4,9 +4,9 @@ import funkin.states.menus.MenuCharacter;
 import funkin.states.menus.MenuItem;
 
 class StoryMenuState extends MusicBeatState {
-	var scoreText:FlxText;
-	var txtWeekTitle:FlxText;
-	var txtTracklist:FunkinText;
+	var scoreText:FlxFunkText;
+	var txtWeekTitle:FlxFunkText;
+	var txtTracklist:FlxFunkText;
 
 	var curWeek:Int = 0;
 	var curDifficulty:Int = 1;
@@ -22,7 +22,7 @@ class StoryMenuState extends MusicBeatState {
 	var difficultySelectors:FlxGroup;
 	var storyBG:FlxSprite;
 	var sprDiff:FunkinSprite;
-	var diffText:FlxText;
+	var diffText:FlxFunkText;
 	var leftArrow:FunkinSprite;
 	var rightArrow:FunkinSprite;
 
@@ -31,16 +31,14 @@ class StoryMenuState extends MusicBeatState {
 	inline function getWeekChars() 	return getCurData().storyCharacters;
 
 	override function create():Void {
-		if (FlxG.sound.music == null) {
+		if (FlxG.sound.music == null)
 			CoolUtil.playMusic('freakyMenu');
-		}
 
-		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
-		scoreText.setFormat("VCR OSD Mono", 32);
-
-		txtWeekTitle = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
-		txtWeekTitle.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, RIGHT);
-		txtWeekTitle.alpha = 0.7;
+		scoreText = new FlxFunkText(10, 10, "SCORE: 49324858", FlxPoint.get(FlxG.width, 36), 36);
+		
+		txtWeekTitle = new FlxFunkText(0, 10, "Swag The Swagger", FlxPoint.get(FlxG.width, 36), 36);
+		txtWeekTitle.alignment = "right";
+		txtWeekTitle.color = 0xffB2B2B2;
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
 		add(grpWeekText);
@@ -80,9 +78,9 @@ class StoryMenuState extends MusicBeatState {
 		sprDiff.x += FlxG.width*0.335;
 		difficultySelectors.add(sprDiff);
 
-		diffText = new FlxText(0,sprDiff.y,0,"test").setFormat(Paths.font("phantommuff"), 80);
-		diffText.screenCenter(X);
-		diffText.x += FlxG.width*0.335;
+		diffText = new FlxFunkText(0,sprDiff.y,"homo",FlxPoint.get(FlxG.width, 80), 75);
+		diffText.font = "phantommuff";
+		diffText.alignment = "center";
 		diffText.visible = false;
 		difficultySelectors.add(diffText);
 
@@ -109,7 +107,9 @@ class StoryMenuState extends MusicBeatState {
 		add(storyBG);
 		add(grpWeekCharacters);
 
-		txtTracklist = new FunkinText(FlxG.width * 0.05, storyBG.x + storyBG.height + 100, 'Tracks', 32, 0, 'center');
+		txtTracklist = new FlxFunkText(FlxG.width * 0.05, storyBG.x + storyBG.height + 100, "Tracks", FlxPoint.get(FlxG.width, FlxG.height*0.5), 32);
+		txtTracklist.alignment = "center";
+		
 		txtTracklist.color = 0xFFe55777;
 		add(txtTracklist);
 
@@ -235,6 +235,8 @@ class StoryMenuState extends MusicBeatState {
 			sprDiff.loadImage(diffPath, true);
 			diffText.visible = false;
 			sprDiff.visible = true;
+			sprDiff.screenCenter(X);
+			sprDiff.x += FlxG.width*0.335;
 			_spr = sprDiff;
 		} else {
 			diffText.text = curWeekDiffs[curDifficulty];
@@ -242,11 +244,9 @@ class StoryMenuState extends MusicBeatState {
 			diffText.color = 0xc508ff;
 			sprDiff.visible = false;
 			diffText.offset.y = 10;
+			diffText.x = FlxG.width*0.335;
 			_spr = diffText;
 		}
-
-		_spr.screenCenter(X);
-		_spr.x += FlxG.width*0.335;
 		
 		if (curWeekDiffs[curDifficulty] != lastDiff) {
 			_spr.alpha = 0;

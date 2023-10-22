@@ -51,7 +51,7 @@ class FPS_Mem extends TextField
 
 		if (visible)
 			text = 
-			'FPS: $fps\n' +
+			'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
 			'RAM: $mem mb/$memPeak mb';
 	}
 }

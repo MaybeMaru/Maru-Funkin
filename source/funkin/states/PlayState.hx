@@ -93,7 +93,7 @@ class PlayState extends MusicBeatState {
 	public var songLength:Float = 0;
 	public var songScore:Int = 0;
 	public var songMisses:Int = 0;
-	var scoreTxt:FunkinText;
+	public var scoreTxt:FlxFunkText;
 	var watermark:FunkinSprite;
 
 	public static var campaignScore:Int = 0;
@@ -244,7 +244,7 @@ class PlayState extends MusicBeatState {
 		// Make Dad GF
 		if (SONG.players[1] == SONG.players[2] && dad.isGF) {
 			dad.setPosition(gf.x, gf.y);
-			gfGroup.visible = false;
+			gfGroup.alpha = 0;
 		}
 
 		//Sprites order
@@ -306,12 +306,16 @@ class PlayState extends MusicBeatState {
 		dad.iconSpr = iconP2;
 		boyfriend.iconSpr = iconP1;
 
-		scoreTxt = new FunkinText(healthBarBG.x, healthBarBG.y + 30);
+		scoreTxt = new FlxFunkText(0, healthBarBG.y + 30, "", FlxPoint.get(FlxG.width, 20));
 		add(scoreTxt);
 
 		if (getPref('vanilla-ui')) {
-			scoreTxt.setFormat(Paths.font("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			scoreTxt.borderSize = 1;
+			scoreTxt.setPosition(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30);
+			scoreTxt.style = TextStyle.OUTLINE(1, 6, FlxColor.BLACK);
+		} else {
+			scoreTxt.size = 20;
+			scoreTxt.style = TextStyle.OUTLINE(2, 6, FlxColor.BLACK);
+			scoreTxt.alignment = "center";
 		}
 
 		ratingGroup = new RatingGroup(boyfriend);
@@ -328,10 +332,6 @@ class PlayState extends MusicBeatState {
 
 		for (i in [notesGroup,  healthBar, healthBarBG, iconGroup, scoreTxt, watermark])
 			i.cameras = [camHUD];
-
-		//var test = new funkin.graphics.FlxFunkText(0,0,"THIS IS A COOL TEST");
-		//test.camera = camHUD;
-		//add(test);
 
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
@@ -537,11 +537,9 @@ class PlayState extends MusicBeatState {
 
 		if (getPref('vanilla-ui')) {
 			scoreTxt.text = 'Score:$songScore';
-			scoreTxt.setPosition(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30);
 		} else {
 			scoreTxt.text =
 			'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
-			scoreTxt.x = healthBarBG.x + healthBarBG.width * 0.5 - scoreTxt.width * 0.5;
 		}
 
 		ModdingUtil.addCall('updateScore', [songScore]);

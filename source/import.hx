@@ -61,6 +61,7 @@ import funkin.objects.alphabet.TypedAlphabet;
 import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinText;
+import funkin.graphics.FlxFunkText;
 
 //Main states
 import funkin.states.LoadingState;

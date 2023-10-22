@@ -31,7 +31,7 @@ class Shader
 
 		var txt = CoolUtil.getFileContent(frag);
 		txt = !txt.startsWith('//SHADERTOY PORT FIX') ? '$shaderToyFix\n$txt' : txt;
-		shaderMap.set(tag == null ? shader : tag, new FlxRuntimeShader(txt));
+		shaderMap.set(tag ?? shader, new FlxRuntimeShader(txt));
 		trace('created shader $shader from $frag');
 	}
 
@@ -76,13 +76,13 @@ class Shader
 		return 0;
 	}
 
-	inline public static function setVector (shader:String, prop:String, value:Array<Dynamic>):Void
+	inline public static function setVector(shader:String, prop:String, value:Array<Dynamic>):Void
 	{
 		if (existsShader(shader))
 			getShader(shader).setVector(prop, value);
 	}
 	
-	public static function getVector (shader:String, prop:String):Null<Array<Dynamic>>
+	public static function getVector(shader:String, prop:String):Null<Array<Dynamic>>
 	{
 		if (existsShader(shader))
 			return getShader(shader).getVector(prop);
