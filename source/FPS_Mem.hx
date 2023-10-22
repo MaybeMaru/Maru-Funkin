@@ -39,7 +39,6 @@ class FPS_Mem extends TextField
 
 	private function onEnter(_)
 	{	
-
 		var now = Timer.stamp();
 		times.push(now);
 

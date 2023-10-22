@@ -329,6 +329,10 @@ class PlayState extends MusicBeatState {
 		for (i in [notesGroup,  healthBar, healthBarBG, iconGroup, scoreTxt, watermark])
 			i.cameras = [camHUD];
 
+		//var test = new funkin.graphics.FlxFunkText(0,0,"THIS IS A COOL TEST");
+		//test.camera = camHUD;
+		//add(test);
+
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
 		inCutscene ? ModdingUtil.addCall('startCutscene', [false]) : startCountdown();
