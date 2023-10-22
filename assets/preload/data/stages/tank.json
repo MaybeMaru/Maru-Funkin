@@ -1,8 +1,8 @@
 {
-    "library": "week7",
+	"library": "week7",
 	"zoom": 0.9,
 	"gfOffsets": [30,50],
-	"bfOffsets": [-75,0],
 	"dadOffsets": [-75,20],
+	"bfOffsets": [-75,0],
 	"startCamOffsets": [-400,-580]
 }
