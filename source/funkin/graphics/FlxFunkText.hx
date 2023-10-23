@@ -9,8 +9,8 @@ import openfl.text.TextField;
 
 enum TextStyle {
     NONE;
-    OUTLINE(thickness:Float, quality:Int, color:FlxColor);
-    SHADOW(offset:FlxPoint, color:FlxColor);
+    OUTLINE(thickness:Float, ?quality:Int, ?color:FlxColor);
+    SHADOW(offset:FlxPoint, ?color:FlxColor);
 }
 
 class FlxFunkText extends FlxSprite {
@@ -116,7 +116,8 @@ class FlxFunkText extends FlxSprite {
                 final _color = color;
                 thicc *= sizeMult();
 
-                color = col;
+                color = col ?? FlxColor.BLACK;
+                quality = quality ?? 8;
                 for (i in 0...quality) {
                     final gay = (i / quality) * 2 * Math.PI;
                     offset.copyFrom(_offset);
@@ -131,7 +132,7 @@ class FlxFunkText extends FlxSprite {
                 final _offset = offset.clone();
                 final _color = color;
                 offset.add(off.x*sizeMult(),off.y*sizeMult());
-                color = col;
+                color = col ?? FlxColor.BLACK;
                 _draw();
                 offset.copyFrom(_offset);
                 color = _color;

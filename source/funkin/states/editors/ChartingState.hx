@@ -23,13 +23,19 @@ class ChartingState extends MusicBeatState {
     public var bg:FunkinSprite;
     public var noteTile:FlxSprite;
     public var strumBar:ChartStrumLine;
-    public var songTxt:FunkinText;
+    public var songTxt:FlxFunkText;
     public var tabs:ChartTabs;
 
     public var mainGrid:ChartGrid;
     public var eventsGrid:ChartEventsGrid;
 
     public var camTop:FlxCamera;
+    public var instStr:String = "";
+
+    public function loadMusic(value:String) {
+        Conductor.loadMusic(value);
+        instStr = FlxStringUtil.formatTime(Conductor.inst.length * 0.001, true);
+    }
     
     override function create() {
         instance = this;
@@ -59,7 +65,7 @@ class ChartingState extends MusicBeatState {
         SONG = Song.checkSong(PlayState.SONG);
         Conductor.bpm = SONG.bpm;
         Conductor.setTimeSignature(4,4);
-        Conductor.loadMusic(SONG.song);
+        loadMusic(SONG.song);
         Conductor.mapBPMChanges(SONG);
 		Conductor.songOffset = SONG.offsets;
         Conductor.volume = 1;
@@ -87,8 +93,9 @@ class ChartingState extends MusicBeatState {
         strumBar.setPosition(mainGrid.grid.x, mainGrid.grid.y);
         add(strumBar);
 
-        final instStr = FlxStringUtil.formatTime(Conductor.inst.length * 0.001, true);
-        songTxt = new FunkinText(mainGrid.grid.x + mainGrid.grid.width + 25, mainGrid.grid.y + 25, "coolswag", 25);
+        final _grid = mainGrid.grid;
+        songTxt = new FlxFunkText(_grid.x + _grid.width + 25, _grid.y + 25, "swag", FlxPoint.get(FlxG.width*0.5,FlxG.height*0.5), 25);
+        songTxt.style = OUTLINE(2, 8, FlxColor.BLACK);
         songTxt._dynamic.update = function (elapsed) {
             var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +
@@ -171,7 +178,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function changeSection(change:Int = 0) {
-        var newIndex = Std.int(Math.max(sectionIndex + change, 0));
+        final newIndex = Std.int(Math.max(sectionIndex + change, 0));
         setSection(newIndex);
     }
 

@@ -51,7 +51,7 @@ class ChartTabs extends FlxUITabMenu {
 	var p3Button:FlxUIButton;
 	var songTitleInput:FlxUIInputText;
 	function addSongUI():Void {
-		songTitleInput = new FlxUIInputText(10, 20, 150, ChartingState.SONG.song, 8);
+		songTitleInput = new FlxUIInputText(10, 20, 200, ChartingState.SONG.song, 8);
 		focusList.push(songTitleInput);
 		songTitleInput.callback = function(var1,var2) {
 			ChartingState.SONG.song = songTitleInput.text;
@@ -69,13 +69,19 @@ class ChartTabs extends FlxUITabMenu {
 			ChartingState.instance.loadJson(songTitleInput.text);
 		});
 
+		var reloadAudio:FlxUIButton = new FlxUIButton(reloadSongJson.x + 100, reloadSongJson.y, "Reload Audio", function() {
+			ChartingState.instance.stop();
+			ChartingState.instance.loadMusic(songTitleInput.text);
+			ChartingState.instance.changeSection();
+		});
+
 		var autoSaveFunc = function () {
 			ChartingState.instance.openSubState(new PromptSubstate('Are you sure you want to\nload the song autosave?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
 				ChartingState.instance.loadAutosave();
 			}));
 		}
 
-		var loadAutosaveBtn:FlxUIButton = new FlxUIButton(reloadSongJson.x + 100, reloadSongJson.y, 'Load Autosave', autoSaveFunc);
+		var loadAutosaveBtn:FlxUIButton = new FlxUIButton(reloadAudio.x + 100, reloadAudio.y, 'Load Autosave', autoSaveFunc);
 
 		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 85, 1, 1, 1, 339, 1);
 		stepperBPM.value = Conductor.bpm;
@@ -161,7 +167,7 @@ class ChartTabs extends FlxUITabMenu {
 		if (Conductor.hasVocals) tab_group_song.add(stepperOffsetVocals);
 
 		addGrpObj([
-			saveSongButton, saveMetaButton, reloadSongJson, loadAutosaveBtn, stepperBPM,stepperSpeed,
+			saveSongButton, saveMetaButton, reloadSongJson, reloadAudio, loadAutosaveBtn, stepperBPM,stepperSpeed,
 			p3Button, p1Button, p2Button,
 			difficultyDropDown, stageDropDown
 		], tab_group_song);
