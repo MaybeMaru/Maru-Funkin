@@ -41,11 +41,11 @@
             "version": null
         },
         {
-            "name": "hscript",
+            "name": "maru-hscript",
             "type": "git",
             "dir": null,
             "ref": "master",
-            "url": "https://github.com/MaybeMaru/hscript"
+            "url": "https://github.com/MaybeMaru/hscript-improved"
         },
         {
             "name": "discord_rpc",

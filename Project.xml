@@ -88,7 +88,7 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="discord_rpc" if="cpp"/>
 	<haxelib name="hxCodec" if="cpp"/>
-	<haxelib name="hscript" />
+	<haxelib name="maru-hscript" />
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->

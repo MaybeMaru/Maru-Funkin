@@ -93,7 +93,7 @@ class Song {
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
 		for (i in song.notes) {
 			i = checkSection(i);
-			if (i.sectionNotes.length > 100) return getDefaultSong(); // Fuck off
+			if (i.sectionNotes.length > 100 && !CoolUtil.debugMode) return getDefaultSong(); // Fuck off
 		}
 		if (meta != null) { // Apply song metaData
 			song.offsets = meta.offsets.copy();

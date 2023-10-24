@@ -83,7 +83,6 @@ class GhFormat {
                     if (note[2] > 0) {
                         note[2] *= tickToMills;
                         note[2] -= crochet * 0.25;
-                        trace(note[2]);
                     } else {
                         note[2] = 0;
                     }
