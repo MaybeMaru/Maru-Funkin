@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.system.FlxAssets;
 import flixel.math.FlxMatrix;
 import flixel.graphics.frames.FlxFrame;
 import openfl.text.TextFormat;
@@ -35,8 +36,9 @@ class FlxFunkText extends FlxSprite {
     public var font(default, set):String = "vcr";
     function set_font(value:String = "vcr") {
         if (font != value) {
-            font = value;
-            textFormat.font = OpenFlAssets.getFont(Paths.font(value)).fontName;
+            final _font = Paths.font(value);
+            textFormat.font = Paths.exists(_font, FONT) ? OpenFlAssets.getFont(_font).fontName : FlxAssets.FONT_DEFAULT;
+            font = textFormat.font;
             updateFormat();
         }
         return value;
@@ -60,7 +62,7 @@ class FlxFunkText extends FlxSprite {
         @:privateAccess
         textField.__textEngine.update();
         pixels.fillRect(_fillRect, FlxColor.TRANSPARENT);
-        pixels.draw(textField, _textMatrix, null, null, null, true);
+        pixels.draw(textField, _textMatrix, null, null, null, antialiasing);
     }
 
     public var alignment(default, set):String = "left";
@@ -110,6 +112,8 @@ class FlxFunkText extends FlxSprite {
     }
 
     override function draw() {
+        if (alpha == 0) return;
+        
         switch (style) {
             case OUTLINE(thicc, quality, col):
                 final _offset = offset.clone();

@@ -73,15 +73,14 @@ class FreeplayState extends MusicBeatState {
 		for (i in 0...songs.length) {
 			final lastMod = ModdingUtil.curModFolder;
 			ModdingUtil.curModFolder = songs[i].mod;
-			var icon:HealthIcon = new HealthIcon(songs[i].char);
+			final icon:HealthIcon = new HealthIcon(songs[i].char);
 			ModdingUtil.curModFolder = lastMod;
-			
-			var leScale:Float = 1;
-			while (icon.width*1.1+Alphabet.spaceWidth*songs[i].song.length*leScale > FlxG.width) {
-				leScale-=0.01;
-			}
 
-			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, songs[i].song, true, 0, leScale);
+			final _width = Alphabet.spaceWidth * songs[i].song.length;
+			final _icoWidth = icon.width * 1.1;		
+			final _scale:Float = _icoWidth + _width > FlxG.width ? (FlxG.width - _icoWidth) / _width : 1;
+
+			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, songs[i].song, true, 0, _scale);
 			songText.targetY = i;
 			songText.setTargetPos();
 			grpSongs.add(songText);
