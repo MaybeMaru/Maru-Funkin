@@ -84,19 +84,20 @@ class TitleState extends MusicBeatState {
 
 	function makeIntroShit(index:Int):Void {
 		var nuggets:IntroPart = introJson.beats[cast Math.max(index, 0)];
-		if (nuggets == null) return;
-		if (nuggets.sprite != null) {
-			var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height*0.5]);
-			introSpr.setGraphicSize(introSpr.width*0.7);
-			introSpr.screenCenter(X);
-			spriteGroup.add(introSpr);
+		if (nuggets != null) {
+			if (nuggets.sprite != null) {
+				var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height*0.5]);
+				introSpr.setGraphicSize(introSpr.width*0.7);
+				introSpr.screenCenter(X);
+				spriteGroup.add(introSpr);
+			}
+			if (nuggets.create != null)			makeText(nuggets.create);
+			if (nuggets.add != null)			addText(nuggets.add);
+			if (nuggets.makeRandom != null)		makeText([curWacky[nuggets.makeRandom]]);
+			if (nuggets.addRandom != null)		addText(curWacky[nuggets.addRandom]);
+			if (nuggets.clear)					clearText();
+			if (nuggets.skip)					skipIntro();
 		}
-		if (nuggets.create != null)			makeText(nuggets.create);
-		if (nuggets.add != null)			addText(nuggets.add);
-		if (nuggets.makeRandom != null)		makeText([curWacky[nuggets.makeRandom]]);
-		if (nuggets.addRandom != null)		addText(curWacky[nuggets.addRandom]);
-		if (nuggets.clear)					clearText();
-		if (nuggets.skip)					skipIntro();
 	}
 
 	function makeText(text:Array<String>):Void {
@@ -134,7 +135,7 @@ class TitleState extends MusicBeatState {
 
 	override function update(elapsed:Float):Void {
 		if (FlxG.sound.music != null) {
-			Conductor.songPosition = FlxG.sound.music.time;
+			this.musicBeat.targetSound = FlxG.sound.music;
 			if (FlxG.sound.music.volume < 0.6) FlxG.sound.music.volume += elapsed * 0.1;
 		}
 

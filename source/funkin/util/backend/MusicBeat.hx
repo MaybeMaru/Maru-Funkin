@@ -33,6 +33,7 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
 	public var curBeatDecimal(default, null):Float = 0;
 	public var curSectionDecimal(default, null):Float = 0;
 
+	public var targetSound:FlxSound = null;
     public var parent:IMusicGetter = null;
     public function new(?parent:IMusicGetter) {
         this.parent = parent;
@@ -40,7 +41,11 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
     }
 
     override function update(elapsed:Float):Void {
-        final oldStep:Int = curStep;
+        if (targetSound != null) {
+			Conductor.songPosition = targetSound.time - Conductor.settingOffset;
+		}
+		
+		final oldStep:Int = curStep;
 		updateStep();
 		updateBeat();
 		updateSection();

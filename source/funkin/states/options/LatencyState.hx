@@ -39,6 +39,7 @@ class LatencyState extends MusicBeatState
 		updateTxt();
 
 		super.create();
+		this.musicBeat.targetSound = FlxG.sound.music;
 	}
 
 	function updateTxt() {
@@ -56,9 +57,6 @@ class LatencyState extends MusicBeatState
 			exit();
 		}
 
-		if (FlxG.sound.music.playing)
-			resync();
-
 		if (FlxG.keys.justPressed.SPACE)
 			pushOffset();
 
@@ -75,7 +73,6 @@ class LatencyState extends MusicBeatState
 	var lastOffsets:Array<Float> = [];
 
 	function pushOffset() {
-		resync();
 		var off1_:Float = Math.abs(Conductor.songPosition - lastBeatTime);
         var off2_:Float = Math.abs(Conductor.songPosition - nextBeatTime);
 		var _off = (off1_ < off2_ ? Conductor.songPosition - lastBeatTime : Conductor.songPosition - nextBeatTime);
@@ -98,13 +95,5 @@ class LatencyState extends MusicBeatState
 		lastBeatTime = Conductor.songPosition;
 		nextBeatTime = Conductor.songPosition + Conductor.crochet;
 		hitSpr.playAnim('idle', true);
-	}
-
-	inline function resync() {
-		Conductor.songPosition = getTime() - Conductor.settingOffset;
-	}
-
-	inline function getTime() {
-		return FlxG.sound.music != null ? FlxG.sound.music.time : 0;
 	}
 }
