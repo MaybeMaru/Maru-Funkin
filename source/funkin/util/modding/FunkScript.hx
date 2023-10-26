@@ -19,7 +19,7 @@ class FunkScript extends hscript.Script {
 		try {
 			value = call(method, args);
 		} catch(e) {
-			errorTrace(e);
+			errorPrint(e);
 			return CONTINUE_FUNCTION;
 		}
 		return value ?? CONTINUE_FUNCTION;
@@ -33,16 +33,20 @@ class FunkScript extends hscript.Script {
 			executeString(hscriptCode);
 		}
 		catch(e) {
-			errorTrace(e);
+			errorPrint(e);
 		} 
 	}
 
-	inline public function errorTrace(error:Any) {
-		ModdingUtil.errorTrace('$scriptID / ${Std.string(error)}');
+	inline function getTraceID() {
+		return scriptID.replace("mods/","");
 	}
 
-	inline public function deprecatedTrace(text:String) {
-		ModdingUtil.deprecatedTrace('$scriptID / $text');
+	inline public function errorPrint(error:Any) {
+		ModdingUtil.errorPrint('${getTraceID()} / ${Std.string(error)}');
+	}
+
+	inline public function warningPrint(text:String) {
+		ModdingUtil.warningPrint('${getTraceID()} / $text');
 	}
 
 	public function implement():Void { //Preloaded Variables
@@ -114,11 +118,11 @@ class FunkScript extends hscript.Script {
 		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
 			if(packageStr != '') packageStr += '.';
 			if (customName != null && !exists(customName)) {
-				deprecatedTrace('importLib() is deprecated, use ``import as`` instead');
+				warningPrint('importLib() is deprecated, use ``import as`` instead');
 				set(customName, Type.resolveClass(packageStr + classStr));
 				return;
 			}
-			deprecatedTrace('importLib() is deprecated, use ``import`` instead!');
+			warningPrint('importLib() is deprecated, use ``import`` instead!');
 			set(classStr, Type.resolveClass(packageStr + classStr));
 		});
 
@@ -154,10 +158,11 @@ class FunkScript extends hscript.Script {
 		set('getKey', function(key:String):Bool {
 			return Controls.getKey(key);
 		});
-
-		set('trace', function(text:String, ?color:Int):Void {
-			ModdingUtil.consoleTrace(text, color);
-		});
+		
+		set("trace", Reflect.makeVarArgs(function(el) {
+			var v = el.shift();
+			ModdingUtil.print(Std.string(v), NONE);
+		}));
 
 		set('getSound', function (key:String):FlxSound {
 			return CoolUtil.getSound(key);
@@ -203,7 +208,7 @@ class FunkScript extends hscript.Script {
 				if (PlayState.instance.objMap.exists(sprKey))
 					return ScriptUtil.getGroup(i).members.indexOf(PlayState.instance.objMap.get(sprKey));
 			}
-			errorTrace('Sprite not found: $key');
+			errorPrint('Sprite not found: $key');
 			return 0;
 		});
 
@@ -238,7 +243,7 @@ class FunkScript extends hscript.Script {
 			if (PlayState.instance.objMap.exists('_group_$key'))
 				return PlayState.instance.objMap.get('_group_$key');
 			else {
-				errorTrace('Group not found: $key');
+				errorPrint('Group not found: $key');
 				return null;
 			}
 		});
@@ -265,8 +270,12 @@ class FunkScript extends hscript.Script {
 			return null;
 		});
 
+		set('callScriptsFunction', function(func:String, ?args:Array<Dynamic>) {
+			ModdingUtil.addCall(func, args);
+		});
+
 		set('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic {
-			return ModdingUtil.scriptsMap.get(script).callback(func, args);
+			return ModdingUtil.scriptsMap.get(script)?.callback(func, args) ?? null;
 		});
 
 		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
@@ -287,7 +296,7 @@ class FunkScript extends hscript.Script {
 		set('getGlobalVar', function (key:String) {
 			if (globalVariables.exists(key)) return globalVariables.get(key);
 			else {
-				errorTrace('Variable not found: $key');
+				errorPrint('Variable not found: $key');
 				return null;
 			}
 		});
@@ -383,7 +392,7 @@ class CustomState extends MusicBeatState {
 	}
 
     override public function create() {
-		ModdingUtil.consoleTrace('[ADD] $_scriptKey / Custom State', FlxColor.LIME);
+		ModdingUtil.addPrint(_scriptKey + " / Custom State");
 		if (superCallback('create')) super.create();
     }
     

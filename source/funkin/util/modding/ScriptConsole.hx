@@ -1,85 +1,130 @@
 package funkin.util.modding;
 
-class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
-    private var traceTextArray:Array<ConsoleTrace> = [];
-    public static var listToAdd:Array<Dynamic> = [];
-    public var show:Bool = false;
-    private var targetX:Float = 0;
-    var bgThing:FlxSprite;
+import flixel.system.FlxAssets;
+import flixel.util.FlxArrayUtil;
 
-    public function new():Void {
-        super();
-        bgThing = new FlxSprite().makeGraphic(Std.int(FlxG.width/2.25), FlxG.height, 0xff0d0d0d);
-        cameras = [CoolUtil.getTopCam()];
-        scrollFactor.set();
-        bgThing.alpha = 0.8;
-        add(bgThing);
-        x -= width;
-        traceTextArray = [];
-    }
+enum TraceType {
+    NONE;
+    ADD;
+    ERROR;
+    WARNING;
+}
 
-    public function consoleTrace(text:String, color:Int = 0xffffffff):Void {
-        for (member in traceTextArray) {
-            if (member.alive) {
-                member.y += member.height;
-                if (member.y >= FlxG.height/1.1)
-                    removeMember(member);
-            }
-        }
-        var newTrace:ConsoleTrace = recycle(ConsoleTrace);
-        newTrace.text = "";
-        newTrace.init(text,color);
-        traceTextArray.push(newTrace);
-        add(newTrace);
-    }
+class ConsolePrint extends FlxText {
+    final icon:FlxSprite;
 
-    function removeMember(member:ConsoleTrace):Void {
-        member.kill();
-        traceTextArray.remove(member);
-    }
-
-    public static function addToTraceList(text:String, color:Int = 0xffffffff):Void {
-        var shit:Array<Dynamic> = [text, color];
-        listToAdd.push(shit);
-    }
-
-    override public function update(elapsed:Float):Void {
-        super.update(elapsed);
-		if (FlxG.keys.justPressed.F1) show = !show;
+    public function new() {
+        icon = new FlxSprite().loadGraphic(Paths.image("options/console"), true, 16, 16);
+        icon.offset.x = 16;
+        icon.animation.add("ico", [0,1,2], 0);
+        icon.animation.play("ico");
+        icon.antialiasing = false;
         
-        targetX = show ? 0 : -width;
-        x = CoolUtil.coolLerp(x, targetX, 0.25);
+        super(26, 50, FlxG.width/2.25, "", 12);
+        offset.y = 1.5;
+        antialiasing = false;
+        font = FlxAssets.FONT_DEFAULT;
+        alpha = 0.001;
 
-        if (listToAdd[0] != null) {
-            while (listToAdd.length > 0) {
-                consoleTrace(listToAdd[0][0], listToAdd[0][1]);
-                listToAdd.remove(listToAdd[0]);
-            }
+        this.camera = icon.camera = CoolUtil.getTopCam();
+    }
+
+    static var typeMap:Map<TraceType, {frame:Int, color:FlxColor}> = [
+        ADD => {frame: 0, color: FlxColor.LIME},
+        ERROR => {frame: 1, color: FlxColor.RED},
+        WARNING => {frame: 2, color: FlxColor.YELLOW}
+    ];
+
+    public function init(txt:String, type:TraceType) {
+        setPosition(26,50);
+        time = 7;
+        alpha = 1;
+        text = txt;
+        color = FlxColor.WHITE;
+        
+        if (icon.visible = (type != NONE)) {
+            final _data = typeMap.get(type);
+            color = _data.color;
+            icon.alpha = 1;
+            icon.animation.curAnim.curFrame = _data.frame;
         }
+    }
 
-        if (show) {
-            for (member in traceTextArray) {
-                member.alphaTime -= elapsed*2;
-                member.alpha = member.alphaTime;
-                if (member.alpha <= 0)
-                    removeMember(member);
+    override function draw() {
+        super.draw();
+        if (icon.visible) icon.draw();
+    }
+
+    var time:Float = 0;
+    override function update(elapsed) {
+        icon.setPosition(x,y);
+        super.update(elapsed);
+        if (ScriptConsole?.instance?.show ?? false && time > 0) {
+            time -= elapsed;
+            this.alpha = icon.alpha = Math.max(time, 0.00001);
+            if (time <= 0) {
+                kill();
             }
         }
     }
 }
 
-class ConsoleTrace extends FlxText {
-    inline static var time:Float = 10;
-    public var alphaTime:Float = time;
-    public function new() {
-        super(20,50,Std.int(FlxG.width/2.25),"",10);
-        antialiasing = false;
+class ScriptConsole extends FlxTypedSpriteGroup<Dynamic> {
+    public var show:Bool = false;
+    var targetX:Float = 0;
+    final bg:FlxSprite;
+    public static var instance:ScriptConsole = null;
+    
+    public function new():Void {
+        super();
+        instance = this;
+        scrollFactor.set();
+        camera = CoolUtil.getTopCam();
+        
+        bg = new FlxSprite().makeGraphic(Std.int(FlxG.width/2.25), FlxG.height, FlxColor.BLACK);
+        bg.alpha = 0.8;
+        add(bg);
+
+        bg._dynamic.update = function () {
+            if (FlxG.keys.justPressed.F1) {
+                show = !show;
+                targetX = show ? 0 : -width;
+            }
+            if (x != targetX) {
+                x = CoolUtil.coolLerp(x, targetX, 0.25);
+                x = Math.abs(x - targetX) < 1 ? targetX : x;
+            }
+        }
+
+        x = targetX = -bg.width;
+        
+        printQueue();
     }
-    public function init(text:String, color:Int) {
-        setPosition(20,50);
-        this.text = text;
-        this.color = color;
-        alpha = 1;
-        alphaTime = time;
+
+    public function print(txt:String, type:TraceType) {
+        for (i in this) {
+            if (i is ConsolePrint) {
+                i.y += 16;
+                if (i.y >= 650) {
+                    i.kill();
+                }
+            }
+        }
+        
+        final _print:ConsolePrint = this.recycle(ConsolePrint);
+        _print.init(txt,type);
+        add(_print);
+    }
+
+    static var printQueueList:Array<{text:String,type:TraceType}> = [];
+    inline public static function addQueue(text:String, type:TraceType) {
+        printQueueList.push({text:text,type:type});
+    }
+
+    function printQueue() {
+        for (i in printQueueList) {
+            print(i.text,i.type);
+        }
+        FlxArrayUtil.clearArray(printQueueList);
     }
 }

@@ -119,7 +119,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         curLineWidth = 0;
     }
 
-    public function splitText(text:String):Array<String> {
+    inline public function splitText(text:String):Array<String> {
         return text.split("");
     }
 }

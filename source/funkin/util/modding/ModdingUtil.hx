@@ -109,13 +109,13 @@ class ModdingUtil {
     inline public static function addScript(path:String, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
         if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
-        consoleTrace('[ADD] $path', FlxColor.LIME);
+        addPrint(path);
         final scriptID = tag ?? path;
         
         if (path.startsWith("mods/")) {
             final _mod = ModdingUtil.modsMap.get(Paths.getFileMod(path)[0]);
             if (_mod != null && _mod.apiVersion != API_VERSION) {
-                deprecatedTrace('$scriptID / Uses API version ${_mod.apiVersion} (Cur $API_VERSION)');
+                warningPrint('${scriptID.replace("mods/","")} / Uses API version ${_mod.apiVersion} (Cur $API_VERSION)');
                 scriptCode = updateScript(scriptCode, _mod.apiVersion);
             }
         }
@@ -147,17 +147,13 @@ class ModdingUtil {
         SaveData.flushData();
     }
 
-    inline public static function errorTrace(text:String):Void {
-        consoleTrace('[ERROR] $text', FlxColor.RED);
-    }
+    inline public static function addPrint(txt:String)      print(txt, ADD);
+    inline public static function errorPrint(txt:String)    print(txt, ERROR);
+    inline public static function warningPrint(txt:String)  print(txt, WARNING);
 
-    inline public static function deprecatedTrace(text:String):Void {
-        consoleTrace('[DEPRECATED] $text', FlxColor.ORANGE);
-    }
-
-    inline public static function consoleTrace(text:String, ?color:Int):Void {
-        var console = MusicBeatState.instance.console;
-        console.exists ? console.consoleTrace(text, color) : ScriptConsole.addToTraceList(text, color);
+    inline public static function print(txt:String, type:TraceType):Void {
+        final console = MusicBeatState.instance.console;
+        console.exists ? console.print(txt, type) : ScriptConsole.addQueue(txt, type);
     }
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {

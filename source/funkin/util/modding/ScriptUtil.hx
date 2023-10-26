@@ -12,7 +12,7 @@ class ScriptUtil {
             if (PlayState.instance.objMap.exists(sprKey))
                 return PlayState.instance.objMap.get(sprKey);
         }
-        ModdingUtil.errorTrace('Sprite not found: $key');
+        ModdingUtil.errorPrint('Sprite not found: $key');
         return null;	
     }
 
@@ -31,7 +31,7 @@ class ScriptUtil {
     inline public static function switchCustomState(key:String) {
 		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
 		if (scriptCode.length <= 0) {
-			ModdingUtil.errorTrace('Custom state script not found: $key');
+			ModdingUtil.errorPrint('Custom state script not found: $key');
 			return;
 		}
 
