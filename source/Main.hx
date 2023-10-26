@@ -23,6 +23,7 @@ class Main extends Sprite
 	};
 
 	public static var fpsCounter:FPS_Mem; //The FPS display child
+	public static var scriptConsole:ScriptConsole;
 	public static var engineVersion(default, never):String = "1.0.0-b.1"; //The engine version, if its not the same as the github one itll open OutdatedSubState
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
@@ -68,6 +69,9 @@ class Main extends Sprite
 		}
 
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+
+		scriptConsole = new funkin.ScriptConsole();
+		addChild(scriptConsole);
 
 		#if !mobile
 		fpsCounter = new FPS_Mem(10,10,0xffffff);

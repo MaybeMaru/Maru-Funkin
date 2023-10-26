@@ -25,7 +25,7 @@ import sys.io.File;
 import sys.FileSystem;
 #end
 import funkin.util.modding.FunkScript;
-import funkin.util.modding.ScriptConsole;
+import funkin.ScriptConsole;
 import funkin.util.modding.ModdingUtil;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;

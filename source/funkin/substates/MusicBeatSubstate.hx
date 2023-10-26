@@ -13,10 +13,6 @@ class MusicBeatSubstate extends FlxSubState implements IMusicGetter {
 
 	public var _update:Dynamic = null;
 	override function update(elapsed:Float) {
-		if (MusicBeatState.instance != null) {
-			MusicBeatState.instance.console.update(elapsed);
-		}
-		
 		ModdingUtil.addCall('subStateUpdate', [elapsed]);
 		if (_update != null) Reflect.callMethod(null, _update, [elapsed]);
 		super.update(elapsed);

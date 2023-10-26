@@ -13,7 +13,6 @@ interface IMusicGetter {
 class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public static var instance:MusicBeatState;
 	public static var curState:String;
-	public var console:ScriptConsole;
 
 	public var transition(get, default):CustomTransition = null;
 	function get_transition() {
@@ -26,7 +25,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		curState = CoolUtil.formatClass(this, false);
 		super.create();
 		add(musicBeat = new MusicBeat(this));
-		add(console = new ScriptConsole());
 		
 		add(transition);
 		transition.exitTrans();

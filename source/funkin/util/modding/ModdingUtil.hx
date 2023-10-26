@@ -44,6 +44,7 @@ class ModdingUtil {
     inline public static function clearScripts():Void {
         scriptsMap.clear();
         FunkScript.globalVariables.clear();
+        Main.scriptConsole.clear();
         scripts = [];
     }
 
@@ -150,10 +151,8 @@ class ModdingUtil {
     inline public static function addPrint(txt:String)      print(txt, ADD);
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
-
-    inline public static function print(txt:String, type:TraceType):Void {
-        final console = MusicBeatState.instance.console;
-        console.exists ? console.print(txt, type) : ScriptConsole.addQueue(txt, type);
+    inline public static function print(text:String, type:PrintType):Void {
+        Main.scriptConsole.print(text, type);
     }
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
