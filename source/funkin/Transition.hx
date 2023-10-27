@@ -7,8 +7,8 @@ import openfl.display.Sprite;
 class Transition extends Sprite {
     public static var skipTrans:Bool = false;
     public static var times = {
-        open: 0.6,
-        close: 0.4
+        open: 0.4,
+        close: 0.3
     }
     var bitmap:Bitmap;
 
@@ -23,7 +23,7 @@ class Transition extends Sprite {
         //openfl.Lib.current.stage.quality = LOW;
     }
     
-    public function set(?color:FlxColor, openTime:Float = 0.6, closeTime:Float = 0.4, ?asset:FlxGraphicAsset) {
+    public function set(?color:FlxColor, openTime:Float = 0.4, closeTime:Float = 0.3, ?asset:FlxGraphicAsset) {
         times.open = openTime;
         times.close = closeTime;
         

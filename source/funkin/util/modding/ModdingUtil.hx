@@ -42,10 +42,10 @@ class ModdingUtil {
     public static var scriptsMap:Map<String, FunkScript> = [];
 
     inline public static function clearScripts():Void {
-        scriptsMap.clear();
         FunkScript.globalVariables.clear();
         Main.scriptConsole.clear();
-        scripts = [];
+        for (i in scripts) removeScript(i);
+        FlxArrayUtil.clearArray(scripts);
     }
 
     public static function reloadMods():Void {
@@ -136,11 +136,18 @@ class ModdingUtil {
         return code;
     }
 
-    inline public static function removeScript(tag:String) {
-        if (!scriptsMap.exists(tag)) return;
-        var script = scriptsMap.get(tag);
-        scriptsMap.remove(tag);
-        scripts.remove(script);
+    inline public static function removeScript(?script:FunkScript) {
+        if (script != null) {
+            if (scriptsMap.exists(script.scriptID)) {
+                scriptsMap.remove(script.scriptID);
+            }
+            script.destroy();
+            scripts.remove(script);
+        }
+    }
+
+    inline public static function removeScriptByTag(tag:String) {
+        removeScript(scriptsMap.get(tag));
     }
 
     inline public static function setModActive(modID:String, active:Bool):Void {

@@ -30,12 +30,13 @@ class Preloader extends flixel.FlxState {
         var _texture = null;
         if (cachedTextures.exists(key)) _texture = cachedTextures.get(key);
         else {
-            _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, COMPRESSED, true);
+            _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, BGR_PACKED, true);
             _texture.uploadFromBitmapData(bmp);
             cachedTextures.set(key, _texture);
         }
         AssetManager.disposeBitmap(bmp);
-        var graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
+        bmp = null;
+        final graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
         graphic.persist = true;
         graphic.destroyOnNoUse = false;
         return graphic;

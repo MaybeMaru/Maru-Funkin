@@ -29,6 +29,7 @@ class TitleState extends MusicBeatState {
 	var introJson:IntroJson = null;
 
 	override public function create():Void {
+		Transition.skipTrans = !initialized;
 		FlxG.mouse.visible = false;
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -154,6 +155,7 @@ class TitleState extends MusicBeatState {
 		if (getKey('ACCEPT-P')) {
 			if (!transitioning && (skippedIntro || openedGame) ) {
 			transitioning = true;
+			Transition.skipTrans = false;
 			titleText.playAnim('press');
 			titleText.color = FlxColor.WHITE;
 			titleText.alpha = 1;

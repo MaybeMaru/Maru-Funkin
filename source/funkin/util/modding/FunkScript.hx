@@ -1,11 +1,13 @@
 package funkin.util.modding;
 
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
+
 enum HscriptFunctionCallback {
 	STOP_FUNCTION;
 	CONTINUE_FUNCTION;
 }
 
-class FunkScript extends hscript.Script {
+class FunkScript extends hscript.Script implements IFlxDestroyable {
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
@@ -127,7 +129,7 @@ class FunkScript extends hscript.Script {
 		});
 
 		set('closeScript', function () {
-			ModdingUtil.removeScript(scriptID);
+			ModdingUtil.removeScript(this);
 		});
 
 		set('getBlendMode', function(blendType:String):openfl.display.BlendMode {
@@ -259,7 +261,7 @@ class FunkScript extends hscript.Script {
 		});
 
 		set('removeScript', function(tag:String):Void {
-			ModdingUtil.removeScript(tag);
+			ModdingUtil.removeScriptByTag(tag);
 		});
 
 		set('getScriptVar', function(script:String, key:String):Dynamic {
@@ -350,6 +352,10 @@ class FunkScript extends hscript.Script {
 		set('remove', function(object:Dynamic) {
 			FlxG.state.remove(object);
 		});
+	}
+
+	public function destroy() {
+		this.interp = null;
 	}
 }
 
