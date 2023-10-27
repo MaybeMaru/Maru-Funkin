@@ -565,12 +565,12 @@ class PlayState extends MusicBeatState {
 		}
 		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
-			CustomTransition.skipTrans = false;
+			Transition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else if (FlxG.keys.justPressed.EIGHT) {
-			CustomTransition.skipTrans = false;
+			Transition.skipTrans = false;
 			switchState(new AnimationDebug(SONG.players[1]));
 			DiscordClient.changePresence("Character Editor", null, null, true);
 		}
@@ -650,10 +650,10 @@ class PlayState extends MusicBeatState {
 		Conductor.volume = 0;
 		ModdingUtil.addCall('endSong');
 		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
-		CustomTransition.skipTrans = isStoryMode;
+		Transition.skipTrans = isStoryMode;
 
 		if (inChartEditor) {
-			CustomTransition.skipTrans = false;
+			Transition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
@@ -686,7 +686,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('endWeek');
 
 		clearCache = true;
-		CustomTransition.skipTrans = false;
+		Transition.skipTrans = false;
 		switchState(new StoryMenuState());
 	}
 

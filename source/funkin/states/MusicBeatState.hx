@@ -14,11 +14,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public static var instance:MusicBeatState;
 	public static var curState:String;
 
-	public var transition(get, default):CustomTransition = null;
-	function get_transition() {
-		return (transition != null ? transition : transition = new CustomTransition());
-	}
-
 	public var musicBeat(default, null):MusicBeat;
 	override function create():Void {
 		instance = this;
@@ -26,8 +21,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		super.create();
 		add(musicBeat = new MusicBeat(this));
 		
-		add(transition);
-		transition.exitTrans();
+		Main.transition.exitTrans();
 
 		//State Scripts
 		if (curState == "funkin.states.PlayState") return;
@@ -71,13 +65,13 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}*/
 
 	public function switchState(newState:FlxState) {
-		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
-		transition.startTrans(newState);
+		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
+		Main.transition.startTrans(newState);
 	}
 
 	public function resetState() {
-		if (!CustomTransition.skipTrans) openSubState(new TransitionSubstate());
-		transition.startTrans(null, function () FlxG.resetState());
+		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
+		Main.transition.startTrans(null, function () FlxG.resetState());
 	}
 
 	override function destroy() {
@@ -101,7 +95,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 class TransitionSubstate extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		MusicBeatState.instance == null ? return : MusicBeatState.instance.transition == null ? return :
-		MusicBeatState.instance.transition.update(elapsed);
+		//MusicBeatState.instance == null ? return : MusicBeatState.instance.transition == null ? return :
+		//MusicBeatState.instance.transition.update(elapsed);
 	}
 }

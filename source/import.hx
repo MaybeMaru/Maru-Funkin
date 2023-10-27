@@ -25,7 +25,6 @@ import sys.io.File;
 import sys.FileSystem;
 #end
 import funkin.util.modding.FunkScript;
-import funkin.ScriptConsole;
 import funkin.util.modding.ModdingUtil;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
@@ -33,8 +32,9 @@ import funkin.util.frontend.FlxColorFix;
 import funkin.util.JsonUtil;
 import funkin.util.Stage;
 import funkin.util.backend.SaveData;
-import funkin.objects.CustomTransition;
 import funkin.util.backend.FunkThread;
+import funkin.ScriptConsole;
+import funkin.Transition;
 
 //Note
 import funkin.objects.note.Note;

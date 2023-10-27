@@ -141,7 +141,6 @@ class Preloader extends flixel.FlxState {
     }
 
     function exit() {
-        CustomTransition.init();
         FlxG.switchState(new SplashState());
     }
 

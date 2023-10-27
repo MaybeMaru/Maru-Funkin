@@ -99,7 +99,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 	override function destroy() {
 		super.destroy();
-		CustomTransition.skipTrans = false;
+		Transition.skipTrans = false;
 	}
 
 	override function beatHit(curBeat:Int):Void {

@@ -314,7 +314,7 @@ class ChartingState extends MusicBeatState {
             autosaveSong();
             Conductor.stop();
             Conductor.setPitch(1, false);
-			FlxG.switchState(new PlayState());
+			switchState(new PlayState());
         }
     }
 

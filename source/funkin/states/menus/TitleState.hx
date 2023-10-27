@@ -242,7 +242,7 @@ class TitleState extends MusicBeatState {
 							}
 						}
 					case 'keoiki':
-						CustomTransition.set(null, 0.6, 0.4, Paths.image('keoiki'));
+						Main.transition.set(null, 0.6, 0.4, Paths.image('keoiki'));
 				}
 			}
 		} else if (FlxG.keys.justPressed.ANY) {
