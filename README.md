@@ -1,13 +1,21 @@
 # Maru-Funkin
 
-This engine is still in alpha state, this will eventually get updated when im not a lazy ass lol. Dont steal code n shit without permission!!
+Hi everyone! This is a silly little Funkin 0.2.7.1 fork that ive been working on for some time now.
+Theres no specific goal with it, just to add whatever comes to mind and have fun!
+At the moment all of base game is softcoded, as well as having mod folders support.
+Current version is beta 1.0, beta 2.0 coming out soon!
 
-# Credits
+## Credits
 * [LinkMain](https://www.youtube.com/@uppybuppy) - Music
 * [Rudyrue](https://www.youtube.com/@rudyrue3694) - Base game song offsets
 * [Mark-Zer0](https://twitter.com/MarkimusZer0) - Optimized GF export
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
+
+## How to make a mod
+
+Documentation on how to make mods is being done on the repo's github wiki! Ill add more stuff
+as time goes on and i add more features.
 
 ## Stuff you will need to compile
 
