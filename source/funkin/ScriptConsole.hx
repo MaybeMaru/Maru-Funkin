@@ -21,7 +21,7 @@ enum PrintType {
 class ConsolePrint extends Sprite {
 	private var icon:Bitmap;
     public var textField:TextField;
-    public var lastPrint:ConsolePrint = null;
+    public var nextPrint:ConsolePrint = null;
 
     static inline var frameSize:Int = 16;
     static var iconFrames:Array<BitmapData> = [];
@@ -128,31 +128,28 @@ class ScriptConsole extends Sprite {
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, update);
 	}
 
-    //var _lastPrint:ConsolePrint = null;
+    inline function forEachPrint(func:Dynamic, alive:Bool = false) {
+        for (i in prints.__children) {
+            if (i is ConsolePrint) {
+                final _p = cast (i, ConsolePrint);
+                if (alive == false || _p.alive == alive)
+                    if (func(_p)) break;
+            }
+        } 
+    }
+
+    var _lastPrint:ConsolePrint = null;
 
 	public function print(text:String, type:PrintType) {
-        for (i in prints.__children) {
-            if (i is ConsolePrint) {
-                final _p = cast (i, ConsolePrint);
-                //_p.y += _p.lastPrint?.textField?.textHeight ?? 14; TODO fix this shit
-                _p.y += 16;
-                if (_p.y >= 650) {
-                    _p.kill();
-                }
-            }
-        }
-
         var _print = null; // Get dead prints
-        for (i in prints.__children) {
-            if (i is ConsolePrint) {
-                final _p = cast (i, ConsolePrint);
-                if (!_p.alive) {
-                    _print = _p; // Reuse print
-                    _print.revive();
-                    break;
-                }
+        forEachPrint(function (p:ConsolePrint) {
+            if (!p.alive) {
+                _print = p; // Reuse print
+                _print.revive();
+                return true;
             }
-        }
+            return false;
+        });
         
         if (_print == null) {
             _print = new ConsolePrint();
@@ -160,7 +157,19 @@ class ScriptConsole extends Sprite {
         }
 
 		_print.init(text, type);
-        //_lastPrint = _print;
+        if (_lastPrint != null) {
+            _lastPrint.nextPrint = _print;
+        }
+        _lastPrint = _print;
+
+        forEachPrint(function (p:ConsolePrint) {
+            if (p != _print) {
+                p.y += p?.nextPrint?.textField.textHeight ?? 16;
+                if (p.y >= 650) {
+                    p.kill();
+                }
+            }
+        }, true);
 	}
 
     public function clear() {

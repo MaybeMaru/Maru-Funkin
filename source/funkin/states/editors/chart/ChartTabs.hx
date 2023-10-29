@@ -290,12 +290,64 @@ class ChartTabs extends FlxUITabMenu {
 		curEventValues = eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy();
 	}
 
+	var curEventIndex:Int = 0;
+	var curEvents:Array<String> = [
+		"test1",
+		"test2",
+		"test3",
+		"test4"
+	];
+
+	var eventListTxt:FlxText;
+	var eventLeft:FlxUIButton;
+	var eventAdd:FlxUIButton;
+	var eventRemove:FlxUIButton;
+	var eventRight:FlxUIButton;
+
+	function updateEventTxt() {
+		eventListTxt.text = "[ " + (curEventIndex + 1) + " / " + curEvents.length + " ] " + (curEvents[curEventIndex] ?? "NULL_EVENT");
+	}
+
 	function addEventUI():Void {
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';
 
+		eventListTxt = new FlxText(110, 10, 0, "", 12);
+		eventListTxt.antialiasing = false;
+		eventListTxt.alignment = RIGHT;
+
+		eventLeft = new FlxUIButton(10,10, "<", function () {
+			curEventIndex = FlxMath.wrap(curEventIndex - 1, 0, curEvents.length - 1);
+			updateEventTxt();
+		});
+
+		eventAdd = new FlxUIButton(eventLeft.x + 25,eventLeft.y, "+", function () {
+			if (curEvents.length < 16) {
+				curEvents.push("testNew");
+				curEventIndex = curEvents.length - 1;
+				updateEventTxt();
+			}
+		});
+		eventAdd.color = FlxColor.LIME;
+		eventAdd.label.color = FlxColor.WHITE;
+
+		eventRemove = new FlxUIButton(eventLeft.x + (25*2),eventLeft.y, "-", function () {
+			if (curEvents.length > 1) {
+				curEvents.remove(curEvents[curEventIndex]);
+				curEventIndex = curEvents.length - 1;
+				updateEventTxt();
+			}
+		});
+		eventRemove.color = FlxColor.RED;
+		eventRemove.label.color = FlxColor.WHITE;
+
+		eventRight = new FlxUIButton(eventLeft.x + (25*3),eventLeft.y, ">", function () {
+			curEventIndex = FlxMath.wrap(curEventIndex + 1, 0, curEvents.length - 1);
+			updateEventTxt();
+		});
+
 		var types:Array<String> = EventUtil.eventsArray.copy();
-		eventsDropDown = new FlxUIDropDownMenu(10, 25, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
+		eventsDropDown = new FlxUIDropDownMenu(10, 50, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
 			var newEvent = types[Std.parseInt(type)];
 			if (curEvent != newEvent) {
 				var eventData = EventUtil.getEventData(newEvent);
@@ -307,7 +359,14 @@ class ChartTabs extends FlxUITabMenu {
 			}
 		});
 
-		eventDescription = new FlxText(eventsDropDown.x,eventsDropDown.y+25,125,"ISNONEOINWPEOEGNPOEGPOMPEOWGPWG");
+		for (i in [eventLeft, eventAdd, eventRemove, eventRight]) {
+			tab_group_event.add(i);
+			i.resize(20,20);
+		}
+		tab_group_event.add(eventListTxt);
+		updateEventTxt();
+
+		eventDescription = new FlxText(eventsDropDown.x,eventsDropDown.y+25,125,"Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
 		tab_group_event.add(eventDescription);
 
 		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
@@ -321,7 +380,7 @@ class ChartTabs extends FlxUITabMenu {
 		}
 
 		postCreateFuncs.push(function () {
-			eventValueTab = new EventTab(150, 26, curEventValues);
+			eventValueTab = new EventTab(150, 50, curEventValues);
 			eventValueTab.updateFunc = function (id:Int, value:Dynamic)
 				ChartingState.instance.updateEvent(id, value);
 			tab_group_event.add(eventValueTab);
@@ -380,9 +439,8 @@ class ChartTabs extends FlxUITabMenu {
 
 		var formatButton = function (btn:FlxUIButton) {
 			btn.color = FlxColor.RED;
-			btn.scale.set(1.3,1.25);
+			btn.resize(100,25);
 			btn.label.color = FlxColor.WHITE;
-			btn.label.offset.y = -5;
 			btn.label.fieldWidth = 0;
 		}
 

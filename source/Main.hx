@@ -32,11 +32,14 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtError);
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, errorMsg);
+		#if cpp
+		untyped __global__.__hxcpp_set_critical_error_handler(errorMsg);
+		#end
 	}
 
-	static function uncaughtError(error:UncaughtErrorEvent) {
-		Application.current.window.alert(Std.string(error.error), "Uncaught Error");
+	static function errorMsg(error:Dynamic) {
+		Application.current.window.alert(Std.string(error is UncaughtErrorEvent ? error.error : error), "Uncaught Error");
 		DiscordClient.shutdown();
 		Sys.exit(1);
 	}

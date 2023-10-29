@@ -44,7 +44,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 	}
 
 	inline public function errorPrint(error:Any) {
-		ModdingUtil.errorPrint('${getTraceID()} / ${Std.string(error)}');
+		ModdingUtil.errorPrint('${getTraceID()} / ${Std.string(error).replace("hscript:", "")}');
 	}
 
 	inline public function warningPrint(text:String) {

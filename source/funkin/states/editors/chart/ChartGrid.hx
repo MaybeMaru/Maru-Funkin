@@ -196,7 +196,6 @@ class ChartNote extends Note {
         _skin = _skin == null ? SkinUtil.curSkin : _skin;
         txt = null;
 
-        alpha = isSustainNote ? 0.6 : 1;
         setPosition(_xPos, _yPos);
         if (skin != _skin || !startInit) {
             skin = _skin;
@@ -206,6 +205,7 @@ class ChartNote extends Note {
         updateHitbox();
 
         if (isSustainNote) {
+            alpha = 0.6;
             var _scale = _parent.scale.x;
             scale.set(_scale,_scale);
             updateHitbox();
@@ -217,6 +217,7 @@ class ChartNote extends Note {
             offset.x -= ChartGrid.GRID_SIZE / 2 - width / 2.125;
             offset.y -= ChartGrid.GRID_SIZE / 2;
         } else {
+            alpha = 1;
             setGraphicSize(ChartGrid.GRID_SIZE,ChartGrid.GRID_SIZE);
             updateHitbox();
         }

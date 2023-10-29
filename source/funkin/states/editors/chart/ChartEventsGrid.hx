@@ -105,6 +105,7 @@ class ChartEventsGrid extends FlxTypedGroup<Dynamic> {
 class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var data:Event;
     public var sprite:FlxSpriteExt;
+    //public var amount:FunkinText;
     public var text:FunkinText;
 
     var img:String = "blankEvent";
