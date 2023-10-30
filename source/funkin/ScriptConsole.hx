@@ -164,7 +164,8 @@ class ScriptConsole extends Sprite {
 
         forEachPrint(function (p:ConsolePrint) {
             if (p != _print) {
-                p.y += p?.nextPrint?.textField.textHeight ?? 16;
+                final movePrint:Float =  p?.nextPrint?.textField.textHeight ?? 16.0;
+                p.y += movePrint;
                 if (p.y >= 650) {
                     p.kill();
                 }
