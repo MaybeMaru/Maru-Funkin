@@ -7,12 +7,15 @@ import discord_rpc.DiscordRpc;
 
 class DiscordClient
 {
+	static final icon:String = "funkin";
+	static final largeText:String = "Friday Night Funkin'";
+
 	public function new()
 	{
 		#if cpp
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "814588678700924999",
+			clientID: "1168666530788163705", // 814588678700924999
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -43,8 +46,8 @@ class DiscordClient
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
-			largeImageKey: 'icon',
-			largeImageText: "Friday Night Funkin'"
+			largeImageKey: icon,
+			largeImageText: largeText
 		});
 		#end
 	}
@@ -83,8 +86,8 @@ class DiscordClient
 		DiscordRpc.presence({
 			details: details,
 			state: state,
-			largeImageKey: 'icon',
-			largeImageText: "Friday Night Funkin'",
+			largeImageKey: icon,
+			largeImageText: largeText,
 			smallImageKey : smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp : Std.int(startTimestamp / 1000),
