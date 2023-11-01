@@ -5,6 +5,7 @@ import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import haxe.io.Bytes;
 import lime.media.AudioBuffer;
+import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
 
 /*
     Inspired by the Kade Engine waveform class
@@ -27,7 +28,7 @@ class ChartWaveform extends FlxSprite {
             audioBuffer = sound._sound.__buffer;
             audioBytes = sound._sound.__buffer.data.toBytes();
         }
-        frames = AssetManager.addGraphic(ChartGrid.GRID_SIZE * Conductor.STRUMS_LENGTH, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
+        frames = AssetManager.addGraphic(GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
         antialiasing = false;
 
         color = _color;

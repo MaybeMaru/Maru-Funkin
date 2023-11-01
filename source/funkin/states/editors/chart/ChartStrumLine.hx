@@ -1,5 +1,7 @@
 package funkin.states.editors.chart;
 
+import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
+
 class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     
     var strums:Array<NoteStrum> = [];
@@ -11,15 +13,15 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     public function new() {
         super();
         for (i in 0...Conductor.STRUMS_LENGTH) {
-            var strum = new NoteStrum(i * ChartGrid.GRID_SIZE, 0, i % Conductor.NOTE_DATA_LENGTH);
+            var strum = new NoteStrum(i * GRID_SIZE, 0, i % Conductor.NOTE_DATA_LENGTH);
             strum.alpha = 0.8;
-            strum.setGraphicSize(ChartGrid.GRID_SIZE,ChartGrid.GRID_SIZE);
+            strum.setGraphicSize(GRID_SIZE, GRID_SIZE);
             strum.updateHitbox();
             strums.push(strum);
             add(strum);
         }
 
-        eventBar = new FlxSprite(-ChartGrid.GRID_SIZE * 1.5, 0).makeGraphic(ChartGrid.GRID_SIZE, 4);
+        eventBar = new FlxSprite(-GRID_SIZE * 1.5, 0).makeGraphic(GRID_SIZE, 4);
         add(eventBar);
 
         iconP1 = new HealthIcon("bf");
@@ -29,7 +31,7 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
         updateWithData();
     }
 
-    var midX = ChartGrid.GRID_SIZE * 2;
+    var midX = GRID_SIZE * 2;
 
     // Caching shit
     var charIcons:Map<String, String> = [];

@@ -1,7 +1,6 @@
 package funkin.states.editors;
 
 import flixel.util.FlxArrayUtil;
-import funkin.states.editors.chart.ChartEventsGrid;
 import funkin.states.editors.chart.ChartStrumLine;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
@@ -10,7 +9,13 @@ import flixel.addons.ui.FlxUICheckBox;
 import openfl.net.FileReference;
 import funkin.states.editors.chart.ChartTabs;
 import flixel.util.FlxStringUtil;
-import funkin.states.editors.chart.ChartGrid;
+
+import funkin.states.editors.chart.ChartGridBase;
+import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
+import funkin.states.editors.chart.ChartGridBase.getGridOverlap;
+import funkin.states.editors.chart.ChartGridBase.getGridCoords;
+import funkin.states.editors.chart.ChartGridBase.ChartNoteGrid;
+import funkin.states.editors.chart.ChartGridBase.ChartEventGrid;
 
 class ChartingState extends MusicBeatState {
     public static var SONG:SwagSong;
@@ -26,8 +31,8 @@ class ChartingState extends MusicBeatState {
     public var songTxt:FlxFunkText;
     public var tabs:ChartTabs;
 
-    public var mainGrid:ChartGrid;
-    public var eventsGrid:ChartEventsGrid;
+    public var mainGrid:ChartNoteGrid;
+    public var eventsGrid:ChartEventGrid;
 
     public var camTop:FlxCamera;
     public var instStr:String = "";
@@ -71,19 +76,19 @@ class ChartingState extends MusicBeatState {
         Conductor.volume = 1;
         stop();
 
-        mainGrid = new ChartGrid();
+        mainGrid = new ChartNoteGrid();
         add(mainGrid);
 
-        eventsGrid = new ChartEventsGrid();
+        eventsGrid = new ChartEventGrid();
         add(eventsGrid);
 
-        noteTile = new FlxSprite().makeGraphic(ChartGrid.GRID_SIZE, ChartGrid.GRID_SIZE, FlxColor.WHITE);//FlxColor.fromRGB(255,255,255,180));
+        noteTile = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE, FlxColor.WHITE);
         noteTile.alpha = 0.6;
         noteTile._dynamic.update = function (elapsed) {
-            var eventsOverlap = ChartGrid.getGridOverlap(FlxG.mouse, eventsGrid.grid);
-            if (ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid) || eventsOverlap) {
+            var eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
+            if (getGridOverlap(FlxG.mouse, mainGrid.grid) || eventsOverlap) {
                 noteTile.visible = true;
-                var tilePos = ChartGrid.getGridCoords(FlxG.mouse, eventsOverlap ? eventsGrid.grid : mainGrid.grid, !FlxG.keys.pressed.SHIFT);
+                var tilePos = getGridCoords(FlxG.mouse, eventsOverlap ? eventsGrid.grid : mainGrid.grid, !FlxG.keys.pressed.SHIFT);
                 noteTile.setPosition(tilePos.x, tilePos.y);
             } else noteTile.visible = false;
         }
@@ -120,7 +125,7 @@ class ChartingState extends MusicBeatState {
 
     function checkNoteSound() {
         var gray = FlxColor.fromRGB(180,150,180);
-        mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
+        mainGrid.group.forEachAlive(function (note:ChartNote) {
             if (note.strumTime + 0.1 <= Conductor.songPosition && note.strumTime + 0.1 >= sectionTime) {
                 if (note.color == FlxColor.WHITE) {
                     strumBar.pressStrum(note.gridNoteData);
@@ -144,7 +149,7 @@ class ChartingState extends MusicBeatState {
             }
         }
 
-        eventsGrid.eventsGroup.forEachAlive(function (event:ChartEvent) {
+        eventsGrid.group.forEachAlive(function (event:ChartEvent) {
             if (event.data.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
             else event.color = FlxColor.WHITE;
         });
@@ -319,19 +324,19 @@ class ChartingState extends MusicBeatState {
     }
 
     function mouse() {
-        var eventsOverlap = ChartGrid.getGridOverlap(FlxG.mouse, eventsGrid.grid);
-        if (!ChartGrid.getGridOverlap(FlxG.mouse, mainGrid.grid) && !eventsOverlap) return;
+        var eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
+        if (!getGridOverlap(FlxG.mouse, mainGrid.grid) && !eventsOverlap) return;
         if (FlxG.mouse.justPressed) {
             if (!eventsOverlap) {
-                if (FlxG.mouse.overlaps(mainGrid.notesGroup)) { // Remove notes
-                    mainGrid.notesGroup.forEachAlive(function (note:ChartNote) {
+                if (FlxG.mouse.overlaps(mainGrid.group)) { // Remove notes
+                    mainGrid.group.forEachAlive(function (note:ChartNote) {
                         if (note.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(note)) removeNote(note);
                     });
                 } else addNote(); // Add notes
             } else {
-                if (FlxG.mouse.overlaps(eventsGrid.eventsGroup)) { // Remove events
-                    eventsGrid.eventsGroup.forEachAlive(function (event:ChartEvent) {
+                if (FlxG.mouse.overlaps(eventsGrid.group)) { // Remove events
+                    eventsGrid.group.forEachAlive(function (event:ChartEvent) {
                         if (event.data.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(event)) removeEvent(event);
                     });
@@ -354,21 +359,21 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
-        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + sectionTime - Conductor.stepCrochet;
-        var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / ChartGrid.GRID_SIZE);
+        var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
+        var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / GRID_SIZE);
         var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         SONG.notes[sectionIndex].sectionNotes.push(note);
         selectedNote = note;
-        selectedNoteObject = mainGrid.drawNote(note);
+        selectedNoteObject = mainGrid.drawObject(note);
     }
 
     public function removeNote(note:ChartNote) {
-        var data = mainGrid.getNoteData(note);
+        var data = mainGrid.getObjectData(note);
         if (data == selectedNote || note == selectedNoteObject) {
             deselectNote();
         }
         SONG.notes[sectionIndex].sectionNotes.remove(data);
-        mainGrid.clearNote(note);
+        mainGrid.clearObject(note);
     }
 
     public var selectedEvent:Array<Dynamic> = null;
@@ -384,12 +389,12 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addEvent() {
-        var strumTime:Float = getYtime(noteTile.y+ChartGrid.GRID_SIZE) + sectionTime - Conductor.stepCrochet;
+        var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         tabs.setCurEvent(ChartTabs.curEvent); // Update values
         var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, convertEventValues(ChartTabs.curEventValues)];
         SONG.notes[sectionIndex].sectionEvents.push(event);
         selectedEvent = event;
-        selectedEventObject = eventsGrid.drawEvent(event);
+        selectedEventObject = eventsGrid.drawObject(event);
     }
 
     public function updateEvent(id:Int = 0, newValue:Dynamic) {
@@ -422,25 +427,25 @@ class ChartingState extends MusicBeatState {
     }
 
     public function removeEvent(event:ChartEvent) {
-        var data = eventsGrid.getEventData(event);
+        var data = eventsGrid.getObjectData(event);
         if (data == selectedEvent || event == selectedEventObject) {
             deselectEvent();
         }
         SONG.notes[sectionIndex].sectionEvents.remove(data);
-        eventsGrid.clearEvent(event);
+        eventsGrid.clearObject(event);
     }
 
     public function changeNoteSus(value:Float = 0) {
         if (selectedNote == null || selectedNoteObject == null) return;
         selectedNote[2] = (selectedNote[2] == null ? 0 : selectedNote[2]);
         selectedNote[2] = Math.max(selectedNote[2] + value, 0);
-        mainGrid.updateNote(selectedNoteObject, selectedNote);
+        mainGrid.updateObject(selectedNoteObject, selectedNote);
         updateNoteTabUI();
     }
 
     function updateSelectedNote() {
         if (selectedNote == null || selectedNoteObject == null) return;
-        mainGrid.updateNote(selectedNoteObject, selectedNote);
+        mainGrid.updateObject(selectedNoteObject, selectedNote);
     }
 
     public function clearSongEvents() {
@@ -504,7 +509,7 @@ class ChartingState extends MusicBeatState {
             var note:Array<Dynamic> = [i[0], i[1], i[2], i[3]]; // Make sure to not reuse it?? clone() don work :cries:
             note[0] += Conductor.stepCrochet * (Conductor.STEPS_PER_MEASURE * change);
             SONG.notes[sectionIndex].sectionNotes.push(note);
-            mainGrid.drawNote(note);
+            mainGrid.drawObject(note);
         } 
 	}
 
@@ -518,17 +523,15 @@ class ChartingState extends MusicBeatState {
 
     override function stepHit(curStep:Int) {
         super.stepHit(curStep);
-        if (playing) {
-            Conductor.autoSync();
-        }
+        if (playing) Conductor.autoSync();
     }
 
     public static inline function getTimeY(strumTime:Float):Float {
-		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE);
+		return FlxMath.remapToRange(strumTime, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE);
 	}
 
     public static inline function getYtime(y:Float):Float {
-        return FlxMath.remapToRange(y, 0, ChartGrid.GRID_SIZE * Conductor.STEPS_PER_MEASURE, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet);
+        return FlxMath.remapToRange(y, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE, 0, Conductor.STEPS_PER_MEASURE * Conductor.stepCrochet);
     }
 
     public static inline function getSecTime(index:Int = 0) {

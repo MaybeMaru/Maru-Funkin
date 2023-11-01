@@ -160,11 +160,12 @@ class Conductor {
 		if (playing) sound.play();
 	}
 
-	public static function autoSync(minOff:Int = 20):Void {
-		var syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > minOff * songPitch;
+	public static function autoSync(minOff:Int = 40):Void {
+		final pitchedMin:Float = minOff * songPitch;
+		final syncInst = Math.abs(songPosition - (inst.time + songOffset[0] + settingOffset)) > pitchedMin;
 		if (syncInst) soundSync(inst, songOffset[0]);
 		if (hasVocals) {
-			var syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > minOff * songPitch;
+			final syncVocals = Math.abs(songPosition - (vocals.time + songOffset[1] + settingOffset)) > pitchedMin;
 			if (syncVocals) soundSync(vocals, songOffset[1]);
 		}
 	}

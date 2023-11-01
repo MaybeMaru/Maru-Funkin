@@ -217,17 +217,17 @@ class ChartTabs extends FlxUITabMenu {
 
 		var swapSection:FlxUIButton = new FlxUIButton(10, 170, "Swap section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
-				var noteObject = ChartingState.instance.mainGrid.getNoteObject(note);
+				var noteObject = ChartingState.instance.mainGrid.getDataObject(note);
 				note[1] = (note[1] + Conductor.NOTE_DATA_LENGTH) % Conductor.STRUMS_LENGTH;
-				ChartingState.instance.mainGrid.updateNote(noteObject, note);
+				ChartingState.instance.mainGrid.updateObject(noteObject, note);
 			}
 		});
 
 		var setSectionNoteTypes:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 125, "Set types", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
-				var noteObject = ChartingState.instance.mainGrid.getNoteObject(note);
+				var noteObject = ChartingState.instance.mainGrid.getDataObject(note);
 				note[3] = sectionNoteTypesDropDown.selectedLabel;
-				ChartingState.instance.mainGrid.updateNote(noteObject, note);
+				ChartingState.instance.mainGrid.updateObject(noteObject, note);
 			}
 		});
 
@@ -267,7 +267,7 @@ class ChartTabs extends FlxUITabMenu {
 			curType = types[Std.parseInt(type)];
 			if (curNote == null || curNoteObject == null) return;
 			curNote[3] = curType;
-			ChartingState.instance.mainGrid.updateNote(curNoteObject, curNote);
+			ChartingState.instance.mainGrid.updateObject(curNoteObject, curNote);
 		});
 		curType = types[0];
 		noteTypesDropDown.selectedLabel = curType;
