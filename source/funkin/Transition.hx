@@ -4,7 +4,21 @@ import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 
-class Transition extends Sprite {
+class ResizableSprite extends Sprite {
+    public function new() {
+        super();
+        FlxG.signals.gameResized.add(function (width, height) {
+            resize(width, height);
+        });
+    }
+
+    public inline function resize(width:Int, height:Int) {
+        this.scaleX = width / FlxG.width;
+        this.scaleY = height / FlxG.height;
+    }
+}
+
+class Transition extends ResizableSprite {
     public static var skipTrans:Bool = false;
     public static var times = {
         open: 0.4,
@@ -20,7 +34,6 @@ class Transition extends Sprite {
         visible = false;
         
 		openfl.Lib.current.stage.addEventListener(openfl.events.Event.ENTER_FRAME, update);
-        //openfl.Lib.current.stage.quality = LOW;
     }
     
     public function set(?color:FlxColor, openTime:Float = 0.4, closeTime:Float = 0.3, ?asset:FlxGraphicAsset) {

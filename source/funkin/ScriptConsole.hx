@@ -104,7 +104,7 @@ class ConsolePrint extends Sprite {
     }
 }
 
-class ScriptConsole extends Sprite {
+class ScriptConsole extends ResizableSprite {
 	public static var show:Bool = false;
     private var targetX:Float = 0;
 	public var bg:Shape;

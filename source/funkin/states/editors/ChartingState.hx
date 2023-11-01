@@ -100,7 +100,7 @@ class ChartingState extends MusicBeatState {
 
         final _grid = mainGrid.grid;
         songTxt = new FlxFunkText(_grid.x + _grid.width + 25, _grid.y + 25, "swag", FlxPoint.get(FlxG.width*0.5,FlxG.height*0.5), 25);
-        songTxt.style = OUTLINE(2, 8, FlxColor.BLACK);
+        //songTxt.style = OUTLINE(2, 8, FlxColor.BLACK);
         songTxt._dynamic.update = function (elapsed) {
             var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +

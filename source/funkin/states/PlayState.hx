@@ -751,13 +751,6 @@ class PlayState extends MusicBeatState {
 
 	override public function beatHit(curBeat:Int):Void {
 		super.beatHit(curBeat);
-		if (curSectionData != null) {
-			if (curSectionData.changeBPM) {
-				Conductor.bpm = curSectionData.bpm;
-				FlxG.log.add('CHANGED BPM!');
-			}
-		}
-
 		beatCharacters();
 		ModdingUtil.addCall('beatHit', [curBeat]);
 	}
@@ -766,6 +759,9 @@ class PlayState extends MusicBeatState {
 		super.sectionHit(curSection);
 		if (Conductor.songPosition <= 0) curSection = 0;
 		curSectionData = SONG.notes[curSection];
+		if (curSectionData != null && curSectionData.changeBPM && curSectionData.bpm != Conductor.bpm) {
+			Conductor.bpm = curSectionData.bpm;
+		}
 		cameraMovement();
 
 		if (camZooming && getPref('camera-zoom')) {
