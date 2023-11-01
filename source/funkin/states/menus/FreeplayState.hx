@@ -15,11 +15,7 @@ class FreeplayState extends MusicBeatState {
 
 	var songs:Array<SongMetaData> = [];
 	var coolColors:Map<String, FlxColor>;
-	var curWeekDiffs:Array<String> = [
-		'easy',
-		'normal',
-		'hard'
-	];
+	var curWeekDiffs:Array<String> = ['easy', 'normal', 'hard'];
 
 	public static var curSelected:Int = 0;
 	public static var curDifficulty:Int = 1;
@@ -95,7 +91,7 @@ class FreeplayState extends MusicBeatState {
 
 		lerpPosition = FlxG.width * 0.69; // nice
 
-		scoreBG = new FlxSprite(lerpPosition, 0).makeGraphic(FlxG.width, 66, FlxColor.BLACK);
+		scoreBG = new FlxSprite(lerpPosition, 0).makeGraphic(FlxG.width, 70, FlxColor.BLACK);
 		scoreBG.offset.x = 6;
 		scoreBG.alpha = 0.6;
 		add(scoreBG);

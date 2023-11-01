@@ -150,7 +150,7 @@ class ChartingState extends MusicBeatState {
         }
 
         eventsGrid.group.forEachAlive(function (event:ChartEvent) {
-            if (event.data.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
+            if (event.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
             else event.color = FlxColor.WHITE;
         });
     }
@@ -337,7 +337,7 @@ class ChartingState extends MusicBeatState {
             } else {
                 if (FlxG.mouse.overlaps(eventsGrid.group)) { // Remove events
                     eventsGrid.group.forEachAlive(function (event:ChartEvent) {
-                        if (event.data.strumTime < sectionTime) return;
+                        if (event.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(event)) removeEvent(event);
                     });
                 } else addEvent(); // Add events
@@ -388,8 +388,11 @@ class ChartingState extends MusicBeatState {
         return selectedEventObject = value;
     }
 
+    public var eventID:Int = 0;
+
     public function addEvent() {
         var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
+        eventID = 0;
         tabs.setCurEvent(ChartTabs.curEvent); // Update values
         var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, convertEventValues(ChartTabs.curEventValues)];
         SONG.notes[sectionIndex].sectionEvents.push(event);
@@ -402,7 +405,7 @@ class ChartingState extends MusicBeatState {
         var values = selectedEvent[2].copy();
         values[id] = newValue;
         selectedEvent[2] = values;
-        selectedEventObject.data.values = selectedEvent[2].copy();
+        selectedEventObject.data[eventID].values = selectedEvent[2].copy();
         selectedEventObject.updateText();
     }
 
@@ -420,8 +423,8 @@ class ChartingState extends MusicBeatState {
         if (selectedEvent == null || selectedEventObject == null) return;
         selectedEvent[1] = name;
         selectedEvent[2] = convertEventValues(newData.copy());
-        selectedEventObject.data.values = selectedEvent[2].copy();
-        selectedEventObject.data.name = selectedEvent[1];
+        selectedEventObject.data[eventID].values = selectedEvent[2].copy();
+        selectedEventObject.data[eventID].name = selectedEvent[1];
         selectedEventObject.updateText();
         selectedEventObject.loadSettings();
     }
@@ -429,6 +432,8 @@ class ChartingState extends MusicBeatState {
     public function removeEvent(event:ChartEvent) {
         var data = eventsGrid.getObjectData(event);
         if (data == selectedEvent || event == selectedEventObject) {
+            eventID = 0;
+            tabs.updateEventTxt();
             deselectEvent();
         }
         SONG.notes[sectionIndex].sectionEvents.remove(data);
@@ -437,8 +442,7 @@ class ChartingState extends MusicBeatState {
 
     public function changeNoteSus(value:Float = 0) {
         if (selectedNote == null || selectedNoteObject == null) return;
-        selectedNote[2] = (selectedNote[2] == null ? 0 : selectedNote[2]);
-        selectedNote[2] = Math.max(selectedNote[2] + value, 0);
+        selectedNote[2] = Math.max((selectedNote[2] ?? 0) + value, 0);
         mainGrid.updateObject(selectedNoteObject, selectedNote);
         updateNoteTabUI();
     }
@@ -450,16 +454,16 @@ class ChartingState extends MusicBeatState {
 
     public function clearSongEvents() {
         stop();
-        openSubState(new PromptSubstate('Are you sure you want to\nclear this song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
-            for (i in SONG.notes) i.sectionEvents = [];
+        openSubState(new PromptSubstate('Are you sure you want to\nclear these song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+            for (i in SONG.notes) FlxArrayUtil.clearArray(i.sectionEvents);
             clearSectionData(false, true);
         }));
     }
 
     public function clearSongNotes() {
         stop();
-        openSubState(new PromptSubstate('Are you sure you want to\nclear this song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
-            for (i in SONG.notes) i.sectionNotes = [];
+        openSubState(new PromptSubstate('Are you sure you want to\nclear these song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+            for (i in SONG.notes) FlxArrayUtil.clearArray(i.sectionNotes);
             clearSectionData(true, false);
         }));
     }
@@ -468,8 +472,8 @@ class ChartingState extends MusicBeatState {
         stop();
         openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
             for (i in SONG.notes) {
-                i.sectionNotes = [];
-                i.sectionEvents = [];
+                FlxArrayUtil.clearArray(i.sectionNotes);
+                FlxArrayUtil.clearArray(i.sectionEvents);
                 i.mustHitSection = true;
                 i.changeBPM = false;
                 i.bpm = 0;

@@ -186,6 +186,7 @@ class ScriptConsole extends Sprite {
 			if (FlxG.keys.justPressed.F1) {
 				tmr = 0.1; // Fix spam issue
 				show = !show;
+                visible = true;
 				targetX = show ? 0 : -width;
 			}
 		} else {
@@ -204,6 +205,8 @@ class ScriptConsole extends Sprite {
 		if (x != targetX) {
 			x = CoolUtil.coolLerp(x, targetX, 0.25);
 			x = Math.abs(x - targetX) < 1 ? targetX : x;
-		}
+		} else {
+            visible = show;
+        }
 	}
 }

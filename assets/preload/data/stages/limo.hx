@@ -59,7 +59,7 @@ function create():Void {
 	add(limo);
 
 	var overlayShit:FunkinSprite = new FunkinSprite('limo/limoOverlay', [-500,-600]);
-	overlayShit.alpha = 0.15;
+	overlayShit.alpha = 0.1;
 	overlayShit.blend = getBlendMode('add');
 	addSpr(overlayShit, 'overlay', true);
 

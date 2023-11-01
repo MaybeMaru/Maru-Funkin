@@ -130,7 +130,7 @@ class AssetManager {
 		}
 		#end
 		if (Paths.exists(key, MUSIC)) {
-			var sound = OpenFlAssets.getSound(key);
+			final sound = OpenFlAssets.getSound(key);
 			cachedSounds.set(key, sound);
 			return sound;
 		}

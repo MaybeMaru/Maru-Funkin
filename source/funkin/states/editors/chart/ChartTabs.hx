@@ -205,7 +205,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		stepperCopy = new FlxUINumericStepper(copyButton.x + 100, copyButton.y, 1, 1, -999, 999, 0);
-		stepperCopy.y += copyButton.height/2 - stepperCopy.height/2;
+		stepperCopy.y += copyButton.height * .5 - stepperCopy.height * .5;
 		stepperCopy.name = 'stepper_copy';
 
 		lastSectionPreview = new ChartPreview(ChartingState.SONG);
@@ -256,7 +256,7 @@ class ChartTabs extends FlxUITabMenu {
 		var tab_group_note = new FlxUI(null, this);
 		tab_group_note.name = 'Note';
 
-		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE);
+		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrochet * .5, 0, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE);
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 
@@ -288,9 +288,9 @@ class ChartTabs extends FlxUITabMenu {
 	public function setCurEvent(event:String) {
 		curEvent = event;
 		curEventValues = eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy();
+		updateEventTxt();
 	}
 
-	var curEventIndex:Int = 0;
 	var curEvents:Array<String> = [
 		"test1",
 		"test2",
@@ -304,8 +304,12 @@ class ChartTabs extends FlxUITabMenu {
 	var eventRemove:FlxUIButton;
 	var eventRight:FlxUIButton;
 
-	function updateEventTxt() {
-		eventListTxt.text = "[ " + (curEventIndex + 1) + " / " + curEvents.length + " ] " + (curEvents[curEventIndex] ?? "NULL_EVENT");
+	inline function getEventID() {
+		return ChartingState.instance.eventID;
+	}
+
+	public function updateEventTxt() {
+		eventListTxt.text = "[ " + (getEventID() + 1) + " / " + curEvents.length + " ] " + (curEvents[getEventID()] ?? "NULL_EVENT");
 	}
 
 	function addEventUI():Void {
@@ -317,14 +321,14 @@ class ChartTabs extends FlxUITabMenu {
 		eventListTxt.alignment = RIGHT;
 
 		eventLeft = new FlxUIButton(10,10, "<", function () {
-			curEventIndex = FlxMath.wrap(curEventIndex - 1, 0, curEvents.length - 1);
+			ChartingState.instance.eventID = FlxMath.wrap(ChartingState.instance.eventID - 1, 0, curEvents.length - 1);
 			updateEventTxt();
 		});
 
 		eventAdd = new FlxUIButton(eventLeft.x + 25,eventLeft.y, "+", function () {
 			if (curEvents.length < 16) {
 				curEvents.push("testNew");
-				curEventIndex = curEvents.length - 1;
+				ChartingState.instance.eventID = curEvents.length - 1;
 				updateEventTxt();
 			}
 		});
@@ -333,8 +337,8 @@ class ChartTabs extends FlxUITabMenu {
 
 		eventRemove = new FlxUIButton(eventLeft.x + (25*2),eventLeft.y, "-", function () {
 			if (curEvents.length > 1) {
-				curEvents.remove(curEvents[curEventIndex]);
-				curEventIndex = curEvents.length - 1;
+				curEvents.remove(curEvents[getEventID()]);
+				ChartingState.instance.eventID = curEvents.length - 1;
 				updateEventTxt();
 			}
 		});
@@ -342,7 +346,7 @@ class ChartTabs extends FlxUITabMenu {
 		eventRemove.label.color = FlxColor.WHITE;
 
 		eventRight = new FlxUIButton(eventLeft.x + (25*3),eventLeft.y, ">", function () {
-			curEventIndex = FlxMath.wrap(curEventIndex + 1, 0, curEvents.length - 1);
+			ChartingState.instance.eventID = FlxMath.wrap(getEventID() + 1, 0, curEvents.length - 1);
 			updateEventTxt();
 		});
 
