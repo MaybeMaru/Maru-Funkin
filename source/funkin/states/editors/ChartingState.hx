@@ -506,15 +506,22 @@ class ChartingState extends MusicBeatState {
         selectedEventObject = null;
     }
 
+    public function copySection(?copyData:SwagSection, secTime:Float = 0.0) {
+        if (copyData != null) {
+            for (i in copyData.sectionNotes) {
+                final note:Array<Dynamic> = [i[0], i[1], i[2], i[3]];
+                note[0] -= secTime - sectionTime;
+                SONG.notes[sectionIndex].sectionNotes.push(note);
+                mainGrid.drawObject(note);
+            } 
+        }
+    }
+
     public function copyLastSection(change:Int = 1):Void {
-        var copyData = SONG.notes[sectionIndex - change];
-        if (copyData == null || change == 0) return;
-        for (i in copyData.sectionNotes) {
-            var note:Array<Dynamic> = [i[0], i[1], i[2], i[3]]; // Make sure to not reuse it?? clone() don work :cries:
-            note[0] += Conductor.stepCrochet * (Conductor.STEPS_PER_MEASURE * change);
-            SONG.notes[sectionIndex].sectionNotes.push(note);
-            mainGrid.drawObject(note);
-        } 
+        if (change != 0) {
+            final secIndex = sectionIndex - change;
+            copySection(SONG.notes[secIndex], getSecTime(secIndex));
+        }
 	}
 
     override function update(elapsed:Float) {
@@ -620,7 +627,7 @@ class ChartingState extends MusicBeatState {
 			var check:FlxUICheckBox = cast sender;
 			var label = check.getLabel().text;
 			switch (label) {
-				case 'Must hit section':
+				case 'Must Hit Section':
 					SONG.notes[sectionIndex].mustHitSection = check.checked;
 					updateIcons();
 

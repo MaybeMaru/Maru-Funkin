@@ -185,6 +185,11 @@ class ChartTabs extends FlxUITabMenu {
 	var lastSectionPreview:ChartPreview;
 	var sectionNoteTypesDropDown:FlxUIDropDownMenu;
 
+	var sectionClipboard:{section:SwagSection, time:Float} = {
+		section: null,
+		time: 0.0
+	};
+
 	public function updatePreview() {
 		var index = Std.int(ChartingState.instance.sectionIndex - stepperCopy.value);
 		var copyData = ChartingState.SONG.notes[index];
@@ -200,7 +205,7 @@ class ChartTabs extends FlxUITabMenu {
 		stepperSectionBPM.value = Conductor.bpm;
 		stepperSectionBPM.name = 'section_bpm';
 
-		var copyButton:FlxUIButton = new FlxUIButton(10, 130, "Copy last", function() {
+		var copyButton:FlxUIButton = new FlxUIButton(10, 130, "Copy Last", function() {
 			ChartingState.instance.copyLastSection(Std.int(stepperCopy.value));
 		});
 
@@ -213,9 +218,11 @@ class ChartTabs extends FlxUITabMenu {
 		lastSectionPreview.offset.x = -50;
 		updatePreview();
 
-		var clearSectionButton:FlxUIButton = new FlxUIButton(10, 150, "Clear", function() ChartingState.instance.clearSectionData(true, true, false));
+		var clearSectionButton:FlxUIButton = new FlxUIButton(10, 155, "Clear", function() {
+			ChartingState.instance.clearSectionData(true, true, false);
+		});
 
-		var swapSection:FlxUIButton = new FlxUIButton(10, 170, "Swap section", function() {
+		var swapSection:FlxUIButton = new FlxUIButton(10, 180, "Swap Section", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
 				var noteObject = ChartingState.instance.mainGrid.getDataObject(note);
 				note[1] = (note[1] + Conductor.NOTE_DATA_LENGTH) % Conductor.STRUMS_LENGTH;
@@ -223,18 +230,34 @@ class ChartTabs extends FlxUITabMenu {
 			}
 		});
 
-		var setSectionNoteTypes:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 125, "Set types", function() {
+		var copySection:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 50, "Copy Section", function () {
+			sectionClipboard.section = JsonUtil.copyJson(ChartingState.SONG.notes[ChartingState.instance.sectionIndex]);
+			sectionClipboard.time = ChartingState.instance.sectionTime;
+		});
+		
+		var pasteSection:FlxUIButton = new FlxUIButton(copySection.x, copySection.y + 25, "Paste Section", function () {
+			ChartingState.instance.copySection(sectionClipboard.section, sectionClipboard.time);
+		});
+
+		final setTypesLeft:FlxUICheckBox = new FlxUICheckBox(swapSection.x, swapSection.y + 150, null, null, "Left Side");
+		final setTypesRight:FlxUICheckBox = new FlxUICheckBox(setTypesLeft.x + 100, setTypesLeft.y, null, null, "Right Side");
+		setTypesLeft.checked = setTypesRight.checked = true;
+	
+		var setSectionNoteTypes:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 125, "Set Types", function() {
 			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
-				var noteObject = ChartingState.instance.mainGrid.getDataObject(note);
-				note[3] = sectionNoteTypesDropDown.selectedLabel;
-				ChartingState.instance.mainGrid.updateObject(noteObject, note);
+				final sideLength = Conductor.NOTE_DATA_LENGTH - 1;
+				if ((note[1] <= sideLength && setTypesLeft.checked) || (note[1] > sideLength && setTypesRight.checked)) {
+					final noteObject = ChartingState.instance.mainGrid.getDataObject(note);
+					note[3] = sectionNoteTypesDropDown.selectedLabel;
+					ChartingState.instance.mainGrid.updateObject(noteObject, note);
+				}
 			}
 		});
 
 		sectionNoteTypesDropDown = new FlxUIDropDownMenu(setSectionNoteTypes.x + 100, setSectionNoteTypes.y, FlxUIDropDownMenu.makeStrIdLabelArray(NoteUtil.noteTypesArray.copy(), true));
 		sectionNoteTypesDropDown.selectedLabel = 'default';
 
-		check_mustHitSection = new FlxUICheckBox(10, 30, null, null, "Must hit section", 100);
+		check_mustHitSection = new FlxUICheckBox(10, 30, null, null, "Must Hit Section", 100);
 		check_mustHitSection.name = 'check_mustHit';
 		check_mustHitSection.checked = true;
 
@@ -244,7 +267,8 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
 
 		addGrpObj([stepperSectionBPM,stepperCopy,lastSectionPreview,check_mustHitSection,check_changeBPM,
-			copyButton,clearSectionButton, swapSection,setSectionNoteTypes,sectionNoteTypesDropDown], tab_group_section);
+			copyButton,clearSectionButton, swapSection, copySection, pasteSection, setTypesLeft, setTypesRight,
+			setSectionNoteTypes,sectionNoteTypesDropDown], tab_group_section);
 	}
 
 	public var stepperSusLength:FlxUINumericStepper;

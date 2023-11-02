@@ -45,8 +45,10 @@ class PlayState extends MusicBeatState {
 	public var holdingArray(get,never):Array<Bool>; inline function get_holdingArray()return notesGroup.holdingArray;
 	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
 	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;
-	public var playerStrums(get,never):FlxTypedGroup<NoteStrum>; inline function get_playerStrums()return notesGroup.playerStrums;
-	public var opponentStrums(get,never):FlxTypedGroup<NoteStrum>; inline function get_opponentStrums()return notesGroup.opponentStrums;
+	public var playerStrums(get,never):StrumLineGroup; inline function get_playerStrums()return notesGroup.playerStrums;
+	public var opponentStrums(get,never):StrumLineGroup; inline function get_opponentStrums()return notesGroup.opponentStrums;
+	public var playerStrumNotes(get,never):Array<NoteStrum>; inline function get_playerStrumNotes()return notesGroup.playerStrums.members;
+	public var opponentStrumNotes(get,never):Array<NoteStrum>; inline function get_opponentStrumNotes()return notesGroup.opponentStrums.members;
 	public var strumLineInitPos(get,never):Array<FlxPoint>; inline function get_strumLineInitPos()return notesGroup.strumLineInitPos;
 	public var playerStrumsInitPos(get,never):Array<FlxPoint>; inline function get_playerStrumsInitPos()return notesGroup.playerStrumsInitPos;
 	public var songSpeed(get,never):Float; inline function get_songSpeed()return NotesGroup.songSpeed;
