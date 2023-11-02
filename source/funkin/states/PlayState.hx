@@ -330,8 +330,9 @@ class PlayState extends MusicBeatState {
 		watermark.alpha = validScore ? 0 : 0.8;
 		add(watermark);
 
+		// Set objects to HUD cam
 		for (i in [notesGroup,  healthBar, healthBarBG, iconGroup, scoreTxt, watermark])
-			i.cameras = [camHUD];
+			i.camera = camHUD;
 
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
@@ -392,7 +393,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		dialogueBox.closeCallback = startCountdown;
-		dialogueBox.cameras = [camHUD];
+		dialogueBox.camera = camHUD;
 		add(dialogueBox);
 	}
 
@@ -446,7 +447,7 @@ class PlayState extends MusicBeatState {
 				var countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
 				countdownSpr.setScale(SkinUtil.curSkinData.scale);
 				countdownSpr.screenCenter();
-				countdownSpr.cameras = [camHUD];
+				countdownSpr.camera = camHUD;
 				add(countdownSpr);
 
 				countdownSpr.acceleration.y = SONG.bpm*60;

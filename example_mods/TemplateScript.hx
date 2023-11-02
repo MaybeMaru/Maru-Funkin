@@ -99,7 +99,7 @@ setObjMap(object:Dynamic, objectTag:String);
     @param spriteTag    --> Tag of the sprite to add
     @param onTop        --> If to add it on the foreground or background of PlayState
 */
-addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool)
+addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool);
 
 /*
     Inserts a sprite of any kind in any order to the foreground or background of PlayState
@@ -108,49 +108,55 @@ addSpr(spriteVar:Dynamic, spriteTag:String, onTop:Bool)
     @param spriteTag    --> Tag of the sprite to add
     @param onTop        --> If to add it on the foreground or background of PlayState
 */
-insertSpr(spriteOrder:Int, spriteVar:Dynamic, spriteTag:String, onTop:Bool)
+insertSpr(spriteOrder:Int, spriteVar:Dynamic, spriteTag:String, onTop:Bool);
 
 /*
     Returns a sprite from the foreground or background of PlayState
     @param spriteTag    --> Tag of the sprite to get
 */
-getSpr(spriteTag:String)
+getSpr(spriteTag:String);
 
 /*
     Returns a sprite's order from the foreground or background of PlayState
     @param spriteTag    --> Tag of the sprite to get the order from
 */
-getSprOrder(spriteTag:String)
+getSprOrder(spriteTag:String);
 
 /*
     Returns if a sprite from the foreground or background of PlayState exists
     @param spriteTag    --> Tag of the sprite to get
 */
-existsSpr(spriteTag:String)
+existsSpr(spriteTag:String);
 
 /*
     Removes a sprite from the foreground or background of PlayState
     @param spriteTag    --> Tag of the sprite to remove
 */
-removeSpr(spriteTag:String)
+removeSpr(spriteTag:String);
 
 /*
     Creates, adds and returns a group to the State
     @param groupTag    --> Sprite object to add
 */
-makeGroup(groupTag:String)
+makeGroup(groupTag:String);
 
 /*
     Returns a group from PlayState
-    @param groupTag    --> Tag of the sprite to get
+    @param groupTag     --> Tag of the sprite to get
 */
-getGroup(groupTag:String)
+getGroup(groupTag:String);
 
 /*
     Returns if a group from PlayState exists
-    @param groupTag    --> Tag of the sprite to get
+    @param groupTag     --> Tag of the sprite to get
 */
-existsGroup(groupTag:String)
+existsGroup(groupTag:String);
+
+/*
+    Caches and returns a Character
+    @param charName     --> Name of the character to cache
+*/
+cacheCharacter(charName:String);
 
 /*
     Returns a BlendMode type
@@ -184,8 +190,11 @@ getPref(prefName:String);
     'vanilla-ui'        => Vanilla UI
     'flashing-light'    => Flashing Lights
     'camera-zoom'       => Camera Zooms
+
+    // Performance
     'antialiasing'      => Antialiasing
-    'auto-pause'        => Auto Pause
+    'clear-gpu'         => Clear Mod GPU Cache
+    'preload'           => Preload Assets At Start
 */
 
 /*
@@ -277,6 +286,13 @@ removeScript(scriptTag:String);
     @param scriptVar --> Name of the variable to get
 */
 getScriptVar(scriptTag:String, scriptVar:String);
+
+/*
+    Calls a function to all scripts
+    @param scriptFunction   --> Name of the function to call
+    @param functionArgs     --> Arguments to use in the function (OPTIONAL)
+*/
+callScriptFunction(scriptFunction:String, ?functionArgs:Array<Dynamic>);
 
 /*
     Calls a function from a script

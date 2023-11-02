@@ -81,13 +81,13 @@ class Transition extends ResizableSprite {
         }
         this.scaleY = -1;
         inExit = false;
-        setupTrans(0, FlxG.height*2, times.open, _func);
+        setupTrans(0, height, times.open, _func);
     }
 
     public function exitTrans(?completeCallback:Dynamic) {
         this.scaleY = 1;
         inExit = true;
-        setupTrans(-FlxG.height, FlxG.height, times.close, completeCallback);
+        setupTrans(-height * 0.5, height * 0.5, times.close, completeCallback);
     }
 
     function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic) {

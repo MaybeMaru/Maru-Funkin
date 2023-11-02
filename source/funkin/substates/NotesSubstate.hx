@@ -3,7 +3,6 @@ package funkin.substates;
 import funkin.objects.NotesGroup;
 
 class NotesSubstate extends MusicBeatSubstate {
-    
     public var SONG:SwagSong;
     public var notesGroup:NotesGroup;
     public var position:Float = 0;
@@ -12,7 +11,7 @@ class NotesSubstate extends MusicBeatSubstate {
         super();
         this.position = position;
 
-        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+        final bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		bg.scrollFactor.set();
 		add(bg);
@@ -24,14 +23,14 @@ class NotesSubstate extends MusicBeatSubstate {
         Conductor.sync();
         add(notesGroup);
 
-        var txt:FlxFunkText = new FlxFunkText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.1 : 0.8), "coolswag", FlxPoint.get(FlxG.width, FlxG.height * 0.3), 25);
+        final txt:FlxFunkText = new FlxFunkText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.1 : 0.8), "coolswag", FlxPoint.get(FlxG.width, FlxG.height * 0.3), 25);
         txt.alignment = "center";
         txt._dynamic.update = function (elapsed) {
             txt.text = 'Song Position: ${Math.floor(Conductor.songPosition)}\nCurrent Step: $curStep\nCurrent Beat: $curBeat\nCurrent Section: $curSection\n\nCurrent BPM: ${Conductor.bpm}';
         }
         add(txt);
 
-        cameras = [CoolUtil.getTopCam()];
+        camera = CoolUtil.getTopCam();
     }
 
     override function stepHit(curStep:Int) {

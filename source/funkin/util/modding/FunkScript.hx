@@ -254,6 +254,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			return PlayState.instance.objMap.exists('_group_$key');						
 		});
 
+		set('cacheCharacter', function(name:String):Character {
+			return new Character(0,0,name);
+		});
+
 		// Script functions
 
 		set('addScript', function(path:String, ?tag:String):Void {
@@ -337,9 +341,13 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			Shader.setVector(shader, prop, value);
 		});
 
+		// Custom state
+
 		set('switchCustomState', function (key:String) {
 			ScriptUtil.switchCustomState(key);
 		});
+
+		// Base state functions
 
 		set('add', function(object:Dynamic) {
 			FlxG.state.add(object);
