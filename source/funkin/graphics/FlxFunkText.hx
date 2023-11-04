@@ -33,11 +33,15 @@ class FlxFunkText extends FlxSprite {
         return value;
     }
 
+    static inline function getFont(value:String) {
+        final _font = (value.startsWith("assets/") || value.startsWith("mods/")) ? value : Paths.font(value);
+        return Paths.exists(_font, FONT) ? (_font.startsWith("assets/") ? OpenFlAssets.getFont(_font).fontName : _font) : FlxAssets.FONT_DEFAULT;
+    }
+
     public var font(default, set):String = "vcr";
     function set_font(value:String = "vcr") {
         if (font != value) {
-            final _font = Paths.font(value);
-            textFormat.font = Paths.exists(_font, FONT) ? OpenFlAssets.getFont(_font).fontName : FlxAssets.FONT_DEFAULT;
+            textFormat.font = getFont(value);
             font = textFormat.font;
             updateFormat();
         }
@@ -92,7 +96,7 @@ class FlxFunkText extends FlxSprite {
         textField = new TextField();
         textField.width = Std.int(canvasRes.x);
         textField.height = Std.int(canvasRes.y);
-        textFormat = new TextFormat(OpenFlAssets.getFont(Paths.font("vcr")).fontName, 16, 0xffffff);
+        textFormat = new TextFormat(getFont("vcr"), 16, 0xffffff);
         textField.defaultTextFormat = textFormat;
 
         _fillRect = new Rectangle(0,0,cast textField.width,cast textField.height);

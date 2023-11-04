@@ -69,7 +69,6 @@ class HealthIcon extends FlxSpriteExt {
 	}
 
 	override function update(elapsed:Float):Void {
-		setSprTrackerPos();
 		if (playIcon && PlayState.instance != null) {
 			final healthBar = PlayState.instance.healthBar;
 			var bumpLerp = 0.15;
@@ -93,5 +92,6 @@ class HealthIcon extends FlxSpriteExt {
 			setScale(CoolUtil.coolLerp(scale.x, staticSize, bumpLerp));
 		}
 		super.update(elapsed);
+		setSprTrackerPos();
 	}
 }

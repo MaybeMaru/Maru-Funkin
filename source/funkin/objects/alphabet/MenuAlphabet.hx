@@ -1,7 +1,7 @@
 package funkin.objects.alphabet;
 
 class MenuAlphabet extends Alphabet {
-        //  Some variables you may need for special menus
+    // Some variables useful for special menus
     public var strID:String = '';
     public var intID:Int = 0;
 
@@ -16,13 +16,18 @@ class MenuAlphabet extends Alphabet {
     }
 
     public function setTargetPos(snap:Bool = true):Void {
-		var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
-        x = (snap) ? (forceX ? (targetY * 20) + 90 : startX)  : (forceX ? CoolUtil.coolLerp(x, (targetY * 20) + 90, 0.16) : startX);
-        y = (snap) ? ((scaledY * 120) + (FlxG.height * 0.48)) : (CoolUtil.coolLerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16));
+		final scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+        if (snap) {
+            x = forceX ? (targetY * 20) + 90 : startX;
+            y = (scaledY * 120) + (FlxG.height * 0.48);
+        } else {
+            x = forceX ? CoolUtil.coolLerp(x, (targetY * 20) + 90, 0.16) : startX;
+            y = CoolUtil.coolLerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
+        }
     }
 
     override function update(elapsed:Float):Void {
-        super.update(elapsed);
         setTargetPos(false);
+        super.update(elapsed);
 	}
 }
