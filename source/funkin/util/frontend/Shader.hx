@@ -4,9 +4,42 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.display.BitmapData;
 import openfl.filters.ShaderFilter;
 
+class RuntimeShader extends FlxRuntimeShader {
+	/**
+	 * Modify a vector parameter of the shader.
+	 * @param name The name of the parameter to modify.
+	 * @param value The new value to use.
+	 */
+	public function setVector(name:String, value:Array<Dynamic>):Void
+	{
+		var prop:Dynamic = Reflect.field(this.data, name);
+		if (prop == null)
+		{
+			trace('[WARN] Shader vector[] property ${name} not found.');
+			return;
+		}
+		prop.value = value;
+	}
+
+	/**
+	 * Retrieve a Vector parameter of the shader.
+	 * @param name The name of the parameter to retrieve.
+	 */
+	public function getVector(name:String):Null<Array<Dynamic>>
+	{
+		var prop:Dynamic = Reflect.field(this.data, name);
+		if (prop == null)
+		{
+			trace('[WARN] Shader vector[] property ${name} not found.');
+			return null;
+		}
+		return prop.value;
+	}
+}
+
 class Shader
 {
-	public static var shaderMap:Map<String, FlxRuntimeShader> = [];
+	public static var shaderMap:Map<String, RuntimeShader> = [];
 	inline public static var shaderToyFix:String = '
 		//SHADERTOY PORT FIX
 		#pragma header
@@ -31,7 +64,7 @@ class Shader
 
 		var txt = CoolUtil.getFileContent(frag);
 		txt = !txt.startsWith('//SHADERTOY PORT FIX') ? '$shaderToyFix\n$txt' : txt;
-		shaderMap.set(tag ?? shader, new FlxRuntimeShader(txt));
+		shaderMap.set(tag ?? shader, new RuntimeShader(txt));
 		trace('created shader $shader from $frag');
 	}
 
@@ -39,7 +72,7 @@ class Shader
 		shaderMap.clear();
 	}
 
-	public static function getShader(shader:String):Null<FlxRuntimeShader>
+	public static function getShader(shader:String):Null<RuntimeShader>
 	{
 		initShader(shader);
 		return shaderMap.get(shader);

@@ -14,7 +14,7 @@ typedef ModFolder = {
 
 /*
  * API VERSIONS
- * -1 => Beta 1
+ * -1 => Beta 1 (And earlier versions)
  * 0 => Beta 2
  */
 
@@ -30,9 +30,15 @@ class ModdingUtil {
     }
     
     //Mod folders
-    public static var curModFolder:String = "";
+    public static var curModFolder(default, set):String = "";
+    public static var curModData:ModFolder = null;
     public static var modsList:Array<ModFolder> = [];
     public static var modsMap:Map<String, ModFolder> = [];
+
+    static function set_curModFolder(value:String) {
+        curModData = value.length > 0 ? modsMap.get(value) : null;
+        return curModFolder = value;
+    }
     
     public static var activeMods:Map<String, Bool> = [];
     public static var globalMods:Array<ModFolder> = [];
@@ -46,6 +52,11 @@ class ModdingUtil {
         Main.scriptConsole.clear();
         for (i in scripts) removeScript(i);
         FlxArrayUtil.clearArray(scripts);
+
+        // Warn if the mod folder is outdated
+        if (curModData != null && curModData.apiVersion != API_VERSION) {
+            warningPrint('$curModFolder / Uses API version ${curModData.apiVersion} (Cur $API_VERSION)');
+        }
     }
 
     public static function reloadMods():Void {
@@ -115,10 +126,8 @@ class ModdingUtil {
         
         if (path.startsWith("mods/")) {
             final _mod = ModdingUtil.modsMap.get(Paths.getFileMod(path)[0]);
-            if (_mod != null && _mod.apiVersion != API_VERSION) {
-                warningPrint('${scriptID.replace("mods/","")} / Uses API version ${_mod.apiVersion} (Cur $API_VERSION)');
+            if (_mod != null && _mod.apiVersion != API_VERSION)
                 scriptCode = updateScript(scriptCode, _mod.apiVersion);
-            }
         }
 
         var script:FunkScript = new FunkScript(scriptCode, scriptID);
