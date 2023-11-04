@@ -506,21 +506,31 @@ class ChartingState extends MusicBeatState {
         selectedEventObject = null;
     }
 
-    public function copySection(?copyData:SwagSection, secTime:Float = 0.0) {
+    public function copySection(?copyData:SwagSection, secTime:Float = 0.0, copyNotes:Bool = true, copyEvents:Bool = true) {
         if (copyData != null) {
-            for (i in copyData.sectionNotes) {
-                final note:Array<Dynamic> = [i[0], i[1], i[2], i[3]];
-                note[0] -= secTime - sectionTime;
-                SONG.notes[sectionIndex].sectionNotes.push(note);
-                mainGrid.drawObject(note);
-            } 
+            if (copyNotes) {
+                for (i in copyData.sectionNotes) {
+                    final note:Array<Dynamic> = [i[0], i[1], i[2], i[3]];
+                    note[0] -= secTime - sectionTime;
+                    SONG.notes[sectionIndex].sectionNotes.push(note);
+                    mainGrid.drawObject(note);
+                } 
+            }
+            if (copyEvents) {
+                for (i in copyData.sectionEvents) {
+                    final event:Array<Dynamic> = [i[0], i[1], cast(i[2], Array<Dynamic>).copy()];
+                    event[0] -= secTime - sectionTime;
+                    SONG.notes[sectionIndex].sectionEvents.push(event);
+                    eventsGrid.drawObject(event);
+                }
+            }
         }
     }
 
-    public function copyLastSection(change:Int = 1):Void {
+    public function copyLastSection(change:Int = 1, copyNotes:Bool = true, copyEvents:Bool = true):Void {
         if (change != 0) {
             final secIndex = sectionIndex - change;
-            copySection(SONG.notes[secIndex], getSecTime(secIndex));
+            copySection(SONG.notes[secIndex], getSecTime(secIndex), copyNotes, copyEvents);
         }
 	}
 

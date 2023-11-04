@@ -201,12 +201,19 @@ class ChartTabs extends FlxUITabMenu {
 		var tab_group_section = new FlxUI(null, this);
 		tab_group_section.name = 'Section';
 
-		stepperSectionBPM = new FlxUINumericStepper(10, 80, 1, Conductor.bpm, 0, 999, 0);
+		check_changeBPM = new FlxUICheckBox(10, 60, null, null, 'Change BPM', 100);
+		check_changeBPM.name = 'check_changeBPM';
+
+		stepperSectionBPM = new FlxUINumericStepper(check_changeBPM.x + 100, check_changeBPM.y, 1, Conductor.bpm, 0, 999, 0);
 		stepperSectionBPM.value = Conductor.bpm;
 		stepperSectionBPM.name = 'section_bpm';
 
+		final copyNotes:FlxUICheckBox = new FlxUICheckBox(check_changeBPM.x, check_changeBPM.y + 45, null, null, "Copy Notes");
+		final copyEvents:FlxUICheckBox = new FlxUICheckBox(copyNotes.x + 100, copyNotes.y, null, null, "Copy Events");
+		copyNotes.checked = copyEvents.checked = true;
+
 		var copyButton:FlxUIButton = new FlxUIButton(10, 130, "Copy Last", function() {
-			ChartingState.instance.copyLastSection(Std.int(stepperCopy.value));
+			ChartingState.instance.copyLastSection(Std.int(stepperCopy.value), copyNotes.checked, copyEvents.checked);
 		});
 
 		stepperCopy = new FlxUINumericStepper(copyButton.x + 100, copyButton.y, 1, 1, -999, 999, 0);
@@ -214,7 +221,7 @@ class ChartTabs extends FlxUITabMenu {
 		stepperCopy.name = 'stepper_copy';
 
 		lastSectionPreview = new ChartPreview(ChartingState.SONG);
-		lastSectionPreview.setPosition(stepperCopy.x + 80, stepperCopy.y);
+		lastSectionPreview.setPosition(stepperCopy.x + 100, stepperCopy.y);
 		lastSectionPreview.offset.x = -50;
 		updatePreview();
 
@@ -236,7 +243,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 		
 		var pasteSection:FlxUIButton = new FlxUIButton(copySection.x, copySection.y + 25, "Paste Section", function () {
-			ChartingState.instance.copySection(sectionClipboard.section, sectionClipboard.time);
+			ChartingState.instance.copySection(sectionClipboard.section, sectionClipboard.time, copyNotes.checked, copyEvents.checked);
 		});
 
 		final setTypesLeft:FlxUICheckBox = new FlxUICheckBox(swapSection.x, swapSection.y + 150, null, null, "Left Side");
@@ -261,12 +268,9 @@ class ChartTabs extends FlxUITabMenu {
 		check_mustHitSection.name = 'check_mustHit';
 		check_mustHitSection.checked = true;
 
-		check_changeBPM = new FlxUICheckBox(10, 60, null, null, 'Change BPM', 100);
-		check_changeBPM.name = 'check_changeBPM';
-
 		tab_group_section.add(new FlxText(lastSectionPreview.x, lastSectionPreview.y - 15, 0, 'Last Section Preview:'));
 
-		addGrpObj([stepperSectionBPM,stepperCopy,lastSectionPreview,check_mustHitSection,check_changeBPM,
+		addGrpObj([stepperSectionBPM,stepperCopy,copyNotes,copyEvents,lastSectionPreview,check_mustHitSection,check_changeBPM,
 			copyButton,clearSectionButton, swapSection, copySection, pasteSection, setTypesLeft, setTypesRight,
 			setSectionNoteTypes,sectionNoteTypesDropDown], tab_group_section);
 	}
