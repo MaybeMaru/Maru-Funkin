@@ -19,7 +19,7 @@ class FlxFunkText extends FlxSprite {
     function set_text(value:String) {
         if (value != text) {
             textField.text = value;
-            drawTextField();
+            _regen = true;
         }
         return text = value;
     }
@@ -51,7 +51,7 @@ class FlxFunkText extends FlxSprite {
     function updateFormat() {
         textField.defaultTextFormat = textFormat;
         textField.setTextFormat(textFormat);
-        drawTextField();
+        _regen = true;
     }
 
     public var textWidth(get, never):Float;
@@ -59,6 +59,7 @@ class FlxFunkText extends FlxSprite {
     function get_textWidth() @:privateAccess return textField.__textEngine.textWidth;
     function get_textHeight() @:privateAccess return textField.__textEngine.textHeight;
 
+    private var _regen:Bool = false;
     function drawTextField() {        
         _textMatrix.tx = textField.x;
         _textMatrix.ty = textField.y;
@@ -117,6 +118,10 @@ class FlxFunkText extends FlxSprite {
 
     override function draw() {
         if (alpha == 0) return;
+        if (_regen) {
+            drawTextField();
+            _regen = false;
+        }
         
         switch (style) {
             case OUTLINE(thicc, quality, col):

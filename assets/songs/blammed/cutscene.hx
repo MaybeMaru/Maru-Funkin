@@ -92,8 +92,8 @@ function beatHit(curBeat)
 {
 	switch (curBeat)
 	{
-		case 128: addBlammedTransition();
 		case 126: startBlammedTransition();
+		case 128: addBlammedTransition();
 	}
 
 	for (i in ['tunnelLights', 'tunnelLightsBlur'])
@@ -102,8 +102,8 @@ function beatHit(curBeat)
 	
 function hidePhilly(value) {
 	for (i in ['overlayTrain', 'overlayTrainBG', 'phillyStreet', 'phillyTrain', 'streetBehind']) {
-		if (existsSpr(i))
-			getSpr(i).visible = value;
+		if (existsSpr(i)) getSpr(i).destroy();
+			//getSpr(i).visible = value;
 	}
 }
 	
@@ -169,15 +169,6 @@ function sectionHit(curSection)
 		case 72: State.camHUD.fade(FlxColor.BLACK, Conductor.crochetMills * 2);
 	}
 }
-	
-/* WIP
-function stepHit(curStep) {
-	if (!getPref('flashing-light')) return;
-	if (curStep >= 1144 && curStep <= 1150 && curStep % 2 == 0) {
-		var alpha = curStep <= 1146 ? 120 : 160;
-		State.camHUD.fade(FlxColor.fromRGB(0,0,0,Std.int(alpha)), Conductor.stepCrochetMills * 0.9);
-	}
-}*/
 	
 function update(elapsed)
 {

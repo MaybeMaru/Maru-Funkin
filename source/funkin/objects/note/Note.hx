@@ -29,17 +29,14 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public function updateAnims() {
         if (isSustainNote) return;
-        var dir = CoolUtil.directionArray[noteData];
-        playAnim('scroll$dir');
+        playAnim('scroll' + CoolUtil.directionArray[noteData]);
     }
 
     public function createGraphic(init:Bool = true) {
-        var dir = CoolUtil.directionArray[noteData];
-
         if (isSustainNote) {
             if (init) { // Offset sustain
-                var _off = getPosMill(NoteUtil.swagHeight * 0.5);
-                initSusLength += _off / (NotesGroup.songSpeed * 2);
+                final _off = getPosMill(NoteUtil.swagHeight * 0.5, NotesGroup.songSpeed);
+                initSusLength += _off;
             }
         } else {
             loadFromSprite(refSprite);
@@ -50,7 +47,7 @@ class Note extends FlxSpriteExt implements INoteData {
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
 
         if (!isSustainNote) {
-            var _anim = 'scroll$dir';
+            final _anim = 'scroll' + CoolUtil.directionArray[noteData];
             if (animOffsets.exists(_anim)) {
                 var _off = animOffsets.get(_anim);
                 offset.add(_off.x, _off.y);
@@ -172,7 +169,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
-        var _height = newHeight != null ? newHeight : Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
+        var _height = newHeight ?? Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) {// New graphic
                 drawSustainCached(_height);
@@ -217,12 +214,12 @@ class Note extends FlxSpriteExt implements INoteData {
         }
     }
 
-    inline public function getPosMill(pos:Float):Float { // Converts a position on screen to song milliseconds
-        return pos / (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
+    inline public function getPosMill(pos:Float, ?_speed:Float):Float { // Converts a position on screen to song milliseconds
+        return pos / (0.45 * FlxMath.roundDecimal(_speed ?? noteSpeed, 2));
     }
 
-    inline public function getMillPos(mills:Float):Float { // Converts song milliseconds to a position on screen
-        return mills * (0.45 * FlxMath.roundDecimal(noteSpeed, 2));
+    inline public function getMillPos(mills:Float, ?_speed:Float):Float { // Converts song milliseconds to a position on screen
+        return mills * (0.45 * FlxMath.roundDecimal(_speed ?? noteSpeed, 2));
     }
 
     inline public function getSusLeft():Float {

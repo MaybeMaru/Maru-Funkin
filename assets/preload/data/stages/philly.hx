@@ -89,8 +89,8 @@ function sectionHit(curSection):Void {
 
 function update(elapsed):Void {
 	var alphaLight:Float = Conductor.crochetMills * elapsed;
-	phillyCityLights.alpha -= alphaLight * 2;
-	phillyCityLightsBlur.alpha -= alphaLight * 2.5;
+	phillyCityLights.alpha = Math.max(phillyCityLights.alpha - alphaLight * 2, 0.001);
+	phillyCityLightsBlur.alpha = Math.max(phillyCityLightsBlur.alpha - alphaLight * 2.5, 0.001);
 
     if (trainMoving) {
         trainFrameTiming += elapsed;
