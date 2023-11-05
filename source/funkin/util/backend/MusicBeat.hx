@@ -41,7 +41,7 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
     }
 
     override function update(elapsed:Float):Void {
-        if (targetSound != null) {
+        if (targetSound != null && targetSound.playing) {
 			Conductor.songPosition = targetSound.time - Conductor.settingOffset;
 		}
 		

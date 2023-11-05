@@ -20,6 +20,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	public function new(x:Float, y:Float):Void {
 		super();
 
+		PlayState.instance.camGame.bgColor = FlxColor.BLACK;
 		if (FlxG.sound.music != null) FlxG.sound.music.stop();
 		if (PlayState.instance.startTimer != null) {
 			PlayState.instance.startTimer.cancel();
@@ -75,15 +76,10 @@ class GameOverSubstate extends MusicBeatSubstate {
 		
 				if (char.animation.curAnim.finished) {
 					CoolUtil.playMusic('${skinFolder}gameOver');
+					musicBeat.targetSound = FlxG.sound.music;
 					gameOverDance();
 					ModdingUtil.addCall('musicGameOver');
 				}
-			}
-		}
-
-		if (FlxG.sound.music != null) {
-			if (FlxG.sound.music.playing) {
-				Conductor.songPosition = FlxG.sound.music.time;
 			}
 		}
 
