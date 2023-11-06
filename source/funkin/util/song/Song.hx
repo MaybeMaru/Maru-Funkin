@@ -72,7 +72,7 @@ class Song {
 				switch (format) {
 					case 'json':		return checkSong(parseJson(chartPath), meta);				// Funkin chart
 					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);	// Osu chart
-					case 'sm' | 'ssc': 	return checkSong(SmFormat.convertSong(chartPath), meta);	// Stepmania chart
+					case 'sm' | 'ssc': 	return checkSong(SmFormat.convertSong(chartPath, diff), meta);	// Stepmania chart
 					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);	// Quaver chart
 					case 'chart':		return checkSong(GhFormat.convertSong(chartPath), meta);	// Guitar hero chart
 				}
