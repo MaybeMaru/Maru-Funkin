@@ -225,7 +225,7 @@ class ChartNote extends Note {
         noteData = _data % Conductor.NOTE_DATA_LENGTH;
         gridNoteData = _data;
         isSustainNote = forceSus;
-        _skin = _skin == null ? SkinUtil.curSkin : _skin;
+        _skin = _skin ?? SkinUtil.curSkin;
         txt = null;
 
         setPosition(_xPos, _yPos);
@@ -260,13 +260,31 @@ class ChartEventGrid extends ChartGridBase {
     public var group:FlxTypedGroup<ChartEvent>;
 
     override function drawObject(event:Array<Dynamic>):Dynamic {
-        var strumTime:Float = event[0];
-        var eventName:String = event[1];
-        var eventValues:Array<Dynamic> = event[2];
+        final strumTime:Float = event[0];
+        final eventName:String = event[1];
+        final eventValues:Array<Dynamic> = event[2];
+        final gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
+
+        final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
+        _event.init(strumTime, [eventName], [eventValues], new FlxPoint(grid.x, gridY));
+
+        objectsGroup.add(_event);
+        return _event;
+    }
+
+    function drawPackedObject(strumTime:Float = 0, events:Array<Dynamic>) {
+        final eventNames:Array<String> = [];
+        final eventValues:Array<Array<Dynamic>> = [];
+
+        for (i in events) {
+            eventNames.push(i[1]);
+            eventValues.push(i[2]);
+        }
+        
         var gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
 
-        var _event:ChartEvent = objectsGroup.recycle(ChartEvent);
-        _event.init(strumTime, eventName, eventValues, new FlxPoint(grid.x, gridY));
+        final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
+        _event.init(strumTime, eventNames, eventValues, new FlxPoint(grid.x, gridY));
 
         objectsGroup.add(_event);
         return _event;
@@ -277,11 +295,10 @@ class ChartEventGrid extends ChartGridBase {
         this.group = cast this.objectsGroup;
     }
 
-    /*override function drawSectionData(?value:SwagSection, cutHalf:Bool = false, pushList:Bool = false) {
-        if (value == null) {
+    override function drawSectionData(?value:SwagSection, cutHalf:Bool = false, pushList:Bool = false) {
+        if (value == null)
             return;
-        }
-        
+
         var packedEvents:Bool = false;
         final eventsMap:Map<Int, Array<Array<Dynamic>>> = [];
         for (i in value.sectionEvents) {
@@ -298,21 +315,13 @@ class ChartEventGrid extends ChartGridBase {
         if (!packedEvents) {
             super.drawSectionData(value, cutHalf, pushList);
         }
-        // Draw w/ packed events
         else {
             for (time => events in eventsMap) {
-                drawPackedEvent(time, events);
+                final e = drawPackedObject(time, events);
+                if (pushList) curSecContent.push(e);
             }
         }
     }
-
-    function drawPackedEvent(time:Float, events:Array<Array<Dynamic>>) {
-        if (events.length == 1) {
-            drawObject(events[0]);
-        } else {
-            var packedEvent:PackedChartEvent = objectsGroup.recycle(PackedChartEvent);
-        }
-    }*/
 }
 
 class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
@@ -331,7 +340,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         add(sprite);
         
         text = new FunkinText(0,0,"",15);
-        text.offset.y = -GRID_SIZE * 0.5 + text.height * 0.5;
+        text.alignment = RIGHT;
         add(text);
 
         scrollFactor.set(1,1);
@@ -365,18 +374,18 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         var txt = "";
         for (i in data) txt += arrayString(i.values) + " - " + i.name + "\n";
         text.text = txt;
-        text.offset.x = text.width;
+        text.offset.set(text.width, -GRID_SIZE * 0.5 + text.height * 0.5);
     }
 
-    public function init(strumTime:Float, name:String, values:Array<Dynamic>, position:FlxPoint) {
+    public function init(strumTime:Float, names:Array<Dynamic>, values:Array<Array<Dynamic>>, position:FlxPoint) {
         setPosition(position.x,position.y);
         this.strumTime = strumTime;
-        data[0].strumTime = strumTime;
-        data[0].name = name;
-        data[0].values = values;
+        FlxArrayUtil.clearArray(data);
+        for (i in 0...names.length) {
+            if (data[i] == null)    data.push(new Event(strumTime, names[i], values[i]));
+            else                    data[i].set(strumTime, names[i], values[i]);
+        }
         updateText();
         loadSettings();
     }
-
-    //public function init(strumTime, )
 }

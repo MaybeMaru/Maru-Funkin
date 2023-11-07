@@ -47,6 +47,10 @@ class Event {
     public var values:Array<Dynamic> = [];
     
     public function new(strumTime:Float = 0, name:String = "", ?values:Array<Dynamic>) {
+        set(strumTime, name, values);
+    }
+
+    public inline function set(strumTime:Float = 0, name:String = "", ?values:Array<Dynamic>) {
         this.strumTime = strumTime;
         this.name = name;
         this.values = values ?? [];
