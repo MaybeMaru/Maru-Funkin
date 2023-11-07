@@ -120,8 +120,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public var drawNote:Bool = true;
     override function draw() { // This should help a bit on performance
-        if (!drawNote) return;
-        super.draw();
+        if (drawNote) super.draw();
     }
 
     inline public function hideNote() {
@@ -143,11 +142,11 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     inline public function getCos(?_angle) {
-        return Math.cos(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
+        return Math.cos(FlxAngle.asRadians(_angle ?? approachAngle));
     }
 
     inline public function getSin(?_angle) {
-        return Math.sin(FlxAngle.asRadians(_angle == null ? approachAngle : _angle));
+        return Math.sin(FlxAngle.asRadians(_angle ?? approachAngle));
     }
 
     function set_susLength(value:Float):Float {
@@ -165,15 +164,16 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public var percentCut:Float = 0;
     public var percentLeft:Float = 1;
-    public var susEndHeight:Int = 12; // 0
+    public var susEndHeight:Int = 20;
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
         var _height = newHeight ?? Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
         if (_height > (susEndHeight / scale.y)) {
-            if (forced || (_height > height)) {// New graphic
+            if (forced || (_height > height)) { // New graphic
                 drawSustainCached(_height);
-            } else {// Cut
+            }
+            else { // Cut
                 clipRect = new FlxRect(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
@@ -256,11 +256,10 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public var skin(default, set):String = '';
     public var skinJson:NoteSkinData;
-	public function set_skin(value:String = 'default'):String {
-		value = (value == null ? SkinUtil.curSkin : value);
-        skin = value;
+	public function set_skin(?value:String = 'default'):String {
+        skin = value ?? SkinUtil.curSkin;
         updateSprites();
-        return value;
+        return skin;
 	}
 
     public function updateSprites() {

@@ -20,7 +20,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	}
 
 	public function loadSkin(?skin:String):Void {
-		skin = skin == null ? SkinUtil.curSkin : skin;
+		skin = skin ?? SkinUtil.curSkin;
 		if (curSkin != skin) {
 			animOffsets = new Map<String, FlxPoint>();
 			curSkin = skin;
@@ -51,8 +51,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	}
 
 	public function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
-		data = (data == null) ? noteData : data;
-		playAnim('$anim${CoolUtil.directionArray[data]}', forced);
+		playAnim('$anim${CoolUtil.directionArray[data ?? noteData]}', forced);
 		applyOffsets();
 	}
 

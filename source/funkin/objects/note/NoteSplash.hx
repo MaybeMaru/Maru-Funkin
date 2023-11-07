@@ -13,7 +13,7 @@ class SplashGroup extends FlxTypedGroup<NoteSplash> {
 
 	public function spawnSplash(?note:Note) {
 		var splash:NoteSplash = recycle(NoteSplash);
-		if (note!=null) splash.setupNoteSplash(note.x, note.y, note.noteData, note);
+		if (note != null) splash.setupNoteSplash(note.x, note.y, note.noteData, note);
 		add(splash);
         return splash;
 	}
@@ -50,7 +50,7 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
 	}
 
     public function loadSkin(?skin:String):Void {
-		skin = skin == null ? SkinUtil.curSkin : skin;
+		skin = skin ?? SkinUtil.curSkin;
 		if (curSkin != skin) {
             var useSkin = Preferences.getPref('vanilla-ui') ? 'default' : skin;
             var skinData = SkinUtil.getSkinData(useSkin);

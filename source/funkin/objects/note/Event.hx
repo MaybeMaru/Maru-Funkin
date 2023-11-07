@@ -11,8 +11,8 @@ class EventUtil {
 	public static var eventsArray:Array<String> = [];
 
     static function getList() {
-        var eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
-        var eventList = JsonUtil.getSubFolderJsonList('events', [PlayState.SONG != null ? PlayState.SONG.song : ""]);
+        final eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
+        final eventList = JsonUtil.getSubFolderJsonList('events', [PlayState?.SONG?.song ?? ""]);
         return CoolUtil.customSort(eventList, eventSort);
     }
 
@@ -45,9 +45,10 @@ class Event {
     public var strumTime:Float = 0.0;
     public var name:String = "";
     public var values:Array<Dynamic> = [];
+    
     public function new(strumTime:Float = 0, name:String = "", ?values:Array<Dynamic>) {
         this.strumTime = strumTime;
         this.name = name;
-        this.values = (values != null ? values : []);
+        this.values = values ?? [];
     }
 }

@@ -86,6 +86,7 @@ function create()
 	}
 	
 	hideBlammed(false);
+	cacheCharacter("bf-car");
 }
 	
 function beatHit(curBeat)

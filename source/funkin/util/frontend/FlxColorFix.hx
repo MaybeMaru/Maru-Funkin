@@ -76,4 +76,24 @@ class FlxColorFix {
 	public static inline function toRGBAFloat (color:FlxColor) {
 		return [(color >> 16 & 0xFF) / 255, (color >> 8 & 0xFF) / 255, (color & 0xFF) / 255, ((color & 0xFF) << 24) / 255];
 	}
+
+	/*
+	public static function hexToInt(hex:String):Int {
+		if (hex.startsWith('0x')) {
+			hex = hex.substr(2);
+		}
+
+		var rgb = [];
+		while (hex.length > 0) {
+			rgb.push(Std.parseInt('0x${hex.substr(0, 2)}'));
+			hex = hex.substr(2);
+		}
+	
+		var red = rgb.length > 0 ? rgb[0] : 0;
+		var green = rgb.length > 1 ? rgb[1] : 0;
+		var blue = rgb.length > 2 ? rgb[2] : 0;
+	
+		return (red << 16) | (green << 8) | blue;
+	}
+	*/
 }

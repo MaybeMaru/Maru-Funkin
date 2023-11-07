@@ -510,11 +510,10 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
-	function forEachArray(array:Array<Dynamic>, func:Dynamic) {
+	inline function forEachArray(array:Array<Dynamic>, func:Dynamic) {
 		var i:Int = 0;
 		while (i < array.length) {
-			func(array[i]);
-			i++;
+			func(array[i++]);
 		}
 	}
 
