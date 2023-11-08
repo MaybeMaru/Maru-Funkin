@@ -36,7 +36,7 @@ class Note extends FlxSpriteExt implements INoteData {
         if (isSustainNote) {
             if (init) { // Offset sustain
                 final _off = getPosMill(NoteUtil.swagHeight * 0.5, NotesGroup.songSpeed);
-                initSusLength += _off - (NoteUtil.swagHeight * 0.5 / NotesGroup.songSpeed/*Math.pow(NotesGroup.songSpeed, 4)*/);
+                initSusLength += _off - (NoteUtil.swagHeight * 0.5 / NotesGroup.songSpeed);
             }
         } else {
             loadFromSprite(refSprite);
