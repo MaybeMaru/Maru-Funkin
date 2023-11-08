@@ -5,6 +5,11 @@ import haxe.zip.Uncompress;
 import haxe.zip.Reader;
 import sys.io.File;
 
+/*
+    Credits to part of this code to the Yoshi Crafter engine devs!!
+    I was way too dumb to figure out haxe zip by myself!!
+*/
+
 class UnZipper {
     public static function getZipEntries(path:String) {
         var zipData = openZip(path);

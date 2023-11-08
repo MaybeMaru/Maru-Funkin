@@ -346,7 +346,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
-		completeFunc = completeFunc == null ? startCountdown : completeFunc;
+		completeFunc = completeFunc ?? startCountdown;
 		#if cpp
 		var video:FlxVideo = new FlxVideo();
 		var vidFunc = function () {

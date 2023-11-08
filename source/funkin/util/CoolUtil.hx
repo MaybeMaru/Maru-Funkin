@@ -94,9 +94,9 @@ class CoolUtil {
 	}
 
 	inline public static function playSound(key:String, volume:Float = 1, ?pitch:Float) {
-		var sound = getSound(key);
+		final sound = getSound(key);
 		sound.volume = volume;
-		sound.pitch = (pitch == null ? FlxG.timeScale : pitch);
+		sound.pitch = pitch ?? FlxG.timeScale;
 		sound.play();
 		return sound;
 	}
@@ -141,12 +141,13 @@ class CoolUtil {
 		FlxG.sound.music = null;
 	}
 
+	static final baseLerp = 1 / 60;
 	inline public static function getLerp(ratio:Float):Float {
-		return 	FlxG.elapsed / (1 / 60) * ratio;
+		return FlxG.elapsed / baseLerp * ratio;
 	}
 
 	inline public static function coolLerp(a:Float, b:Float, ratio:Float):Float {
-		return FlxMath.lerp(a,b,getLerp(ratio));
+		return FlxMath.lerp(a, b, getLerp(ratio));
 	}
 
 	public static function sortByStrumTime(a:Dynamic, b:Dynamic) {
@@ -177,9 +178,8 @@ class CoolUtil {
 	public static function removeDuplicates(input:Array<String>):Array<String> {
         var result:Array<String> = [];
         for (i in input) {
-            if (!result.contains(i)) {
+            if (!result.contains(i))
                 result.push(i);
-            }
         }
         return result;
     }
@@ -214,6 +214,22 @@ class CoolUtil {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
 
+	inline public static function switchState(newState:FlxState) {
+		if (MusicBeatState.instance == null) {
+			FlxG.switchState(newState);
+			return;
+		}
+		MusicBeatState.instance.switchState(newState);
+	}
+
+	inline public static function resetState() {
+		if (MusicBeatState.instance == null) {
+			FlxG.resetState();
+			return;
+		}
+		MusicBeatState.instance.resetState();
+	}
+
 	/*
      *	RATING UTIL
     */
@@ -242,20 +258,4 @@ class CoolUtil {
     inline public static function getNoteDiff(daNote:Note):Float {
         return Math.abs(daNote.strumTime - Conductor.songPosition);
     }
-
-	inline public static function switchState(newState:FlxState) {
-		if (MusicBeatState.instance == null) {
-			FlxG.switchState(newState);
-			return;
-		}
-		MusicBeatState.instance.switchState(newState);
-	}
-
-	inline public static function resetState() {
-		if (MusicBeatState.instance == null) {
-			FlxG.resetState();
-			return;
-		}
-		MusicBeatState.instance.resetState();
-	}
 }
