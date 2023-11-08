@@ -36,7 +36,7 @@ class Note extends FlxSpriteExt implements INoteData {
         if (isSustainNote) {
             if (init) { // Offset sustain
                 final _off = getPosMill(NoteUtil.swagHeight * 0.5, NotesGroup.songSpeed);
-                initSusLength += _off;
+                initSusLength += _off - (NoteUtil.swagHeight * 0.5 / NotesGroup.songSpeed/*Math.pow(NotesGroup.songSpeed, 4)*/);
             }
         } else {
             loadFromSprite(refSprite);
@@ -90,14 +90,15 @@ class Note extends FlxSpriteExt implements INoteData {
     public var inSustain:Bool = false;
     public var approachAngle:Float = 0;
     public var spawnMult:Float = 1;
+    
     var strumCenter:Float = 0;
+    var noteMove:Float = 0;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
         if (targetStrum == null) return; // Move to strum
-        var noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-        strumCenter = targetStrum.y + targetStrum.swagHeight * 0.5; // Center of the target strum
-        strumCenter -= isSustainNote ? 0 : NoteUtil.swagHeight * 0.5;
+        noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
+        strumCenter = isSustainNote ? targetStrum.y + targetStrum.swagHeight * 0.5 : targetStrum.y; // Center of the target strum
         y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
         x = targetStrum.x - (noteMove * -getSin(approachAngle));
 
@@ -106,7 +107,10 @@ class Note extends FlxSpriteExt implements INoteData {
             flipX = (approachAngle % 360) >= 180;
                 
             inSustain = getInSustain(20); // lil extra time to be sure
+
             offset.y = 0;
+            if (noteSpeed < 1) // I have no idea, just dont ask
+                offset.y = (getMillPos(initSusLength) / scale.y - height) * scale.y * -getCos();
 
             if (Conductor.songPosition >= strumTime && pressed && !missedPress) { // Sustain is being pressed
                 setSusPressed();
@@ -168,7 +172,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
-        var _height = newHeight ?? Math.floor(Math.max((getMillPos(getSusLeft()) / scale.y), 0));
+        var _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
         if (_height > (susEndHeight / scale.y)) {
             if (forced || (_height > height)) { // New graphic
                 drawSustainCached(_height);

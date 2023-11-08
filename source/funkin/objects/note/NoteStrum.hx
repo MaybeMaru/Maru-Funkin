@@ -2,8 +2,8 @@ package funkin.objects.note;
 
 class NoteStrum extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
-	public var swagWidth:Float = 100;
-	public var swagHeight:Float = 100;
+	public var swagWidth:Float = NoteUtil.swagWidth;
+	public var swagHeight:Float = NoteUtil.swagHeight;
 	public var staticTime:Float = 0;
 	public var curSkin:String = '';
 
@@ -25,11 +25,21 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 			animOffsets = new Map<String, FlxPoint>();
 			curSkin = skin;
 			loadJsonInput(SkinUtil.getSkinData(skin).strumData, 'skins/$skin');
+			//_updateAnimation();
 			getWidth();
 		}
 	}
 
-	public function getWidth():Void	{	//For centered notes
+	/*inline function _updateAnimation() {
+		var lastAnim:Null<String> = animation.curAnim != null ? animation.curAnim.name.split(CoolUtil.directionArray[noteData])[0] : null;
+		updateHitbox();
+		playStrumAnim('static');
+		if (lastAnim != null) {
+			playStrumAnim(lastAnim);
+		}
+	}*/
+
+	inline function getWidth():Void	{	//For centered notes
 		var lastAnim:Null<String> = animation.curAnim != null ? animation.curAnim.name.split(CoolUtil.directionArray[noteData])[0] : null;
 		updateHitbox();
 		playStrumAnim('static');
@@ -44,10 +54,11 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 		if (animation.curAnim == null) return;
 		updateHitbox();
 		centerOffsets();
-		var getAnim = animOffsets.get(animation.curAnim.name);
-		if (getAnim == null) return;
-		var scaleOff = getScaleDiff();
-		offset.add(getAnim.x * scaleOff.x, getAnim.y * scaleOff.y);
+		final getAnim = animOffsets.get(animation.curAnim.name);
+		if (getAnim != null) {
+			final scaleOff = getScaleDiff();
+			offset.add(getAnim.x * scaleOff.x, getAnim.y * scaleOff.y);
+		}
 	}
 
 	public function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {

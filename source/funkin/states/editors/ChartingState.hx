@@ -419,6 +419,10 @@ class ChartingState extends MusicBeatState {
 		return values;
 	}
 
+   /* public function setEventDatas(newData:Array<{name:String, values:Array<Dynamic>}>) {
+        if (selectedEvent == null || selectedEventObject == null) return;
+    }*/
+
     public function setEventData(newData:Array<Dynamic>, name:String) {
         if (selectedEvent == null || selectedEventObject == null) return;
         selectedEvent[1] = name;
