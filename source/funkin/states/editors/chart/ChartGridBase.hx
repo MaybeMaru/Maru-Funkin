@@ -326,6 +326,8 @@ class ChartEventGrid extends ChartGridBase {
 
 class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var data:Array<Event> = [];
+    public var names:Array<String> = [];
+    
     public var sprite:FlxSpriteExt;
     public var text:FunkinText;
 
@@ -380,11 +382,19 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public function init(strumTime:Float, names:Array<Dynamic>, values:Array<Array<Dynamic>>, position:FlxPoint) {
         setPosition(position.x,position.y);
         this.strumTime = strumTime;
+        
         FlxArrayUtil.clearArray(data);
-        for (i in 0...names.length) {
-            if (data[i] == null)    data.push(new Event(strumTime, names[i], values[i]));
-            else                    data[i].set(strumTime, names[i], values[i]);
+        FlxArrayUtil.clearArray(this.names);
+        
+        for (i in 0...values.length) {
+            if (data[i] == null)    data.push(new Event(strumTime, names[i] ?? "NULL", values[i]));
+            else                    data[i].set(strumTime, names[i] ?? "NULL", values[i]);
         }
+
+        for (i in data) {
+            names.push(i.name);
+        }
+
         updateText();
         loadSettings();
     }

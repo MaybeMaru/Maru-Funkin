@@ -378,6 +378,8 @@ class ChartingState extends MusicBeatState {
 
     public var selectedEvent:Array<Dynamic> = null;
     public var selectedEventObject(default, set):ChartEvent = null;
+    public var eventID:Int = 0;
+
     function set_selectedEventObject(value) {
         if (value != null && selectedEventObject != null && value != selectedEventObject) {
             value.blend = ADD;
@@ -388,13 +390,11 @@ class ChartingState extends MusicBeatState {
         return selectedEventObject = value;
     }
 
-    public var eventID:Int = 0;
-
     public function addEvent() {
         var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         eventID = 0;
-        tabs.setCurEvent(ChartTabs.curEvent); // Update values
-        var event:Array<Dynamic> = [strumTime, ChartTabs.curEvent, convertEventValues(ChartTabs.curEventValues)];
+        tabs.setCurEvent(ChartTabs.curEventDatas[eventID].name); // Update values
+        var event:Array<Dynamic> = [strumTime, ChartTabs.curEventDatas[eventID].name, convertEventValues(ChartTabs.curEventDatas[eventID].values)];
         SONG.notes[sectionIndex].sectionEvents.push(event);
         selectedEvent = event;
         selectedEventObject = eventsGrid.drawObject(event);
@@ -402,7 +402,7 @@ class ChartingState extends MusicBeatState {
 
     public function updateEvent(id:Int = 0, newValue:Dynamic) {
         if (selectedEvent == null || selectedEventObject == null) return;
-        var values = selectedEvent[2].copy();
+        final values = selectedEvent[2].copy();
         values[id] = newValue;
         selectedEvent[2] = values;
         selectedEventObject.data[eventID].values = selectedEvent[2].copy();
