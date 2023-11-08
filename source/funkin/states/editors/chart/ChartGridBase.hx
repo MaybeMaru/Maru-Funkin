@@ -88,16 +88,6 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
         FlxArrayUtil.clearArray(curSecContent);
     }
 
-    public function getObjectData(obj:Dynamic):Array<Dynamic> {
-        for (i in (isNote ? sectionData.sectionNotes : sectionData.sectionEvents)) {
-            if (Math.floor(obj.strumTime) == Math.floor(i[0])) { // Same strum time
-                if (!isNote || i[1] == obj.gridNoteData) // Notedata check for notes
-                    return i;
-            }
-        }
-        return null;
-    }
-
     public function getDataObject(data:Array<Dynamic>):Dynamic {
         for (i in objectsGroup) {
             if (Math.floor(i.strumTime) == Math.floor(data[0])) { // Same strum time
@@ -109,7 +99,7 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
     }
     
     public function updateObject(obj:Dynamic, ?data:Array<Dynamic>) {
-        final _data = data ?? getObjectData(obj);
+        final _data = data ?? obj.chartData;
         clearObject(obj);
         drawObject(_data);
     }
@@ -152,6 +142,7 @@ class ChartNoteGrid extends ChartGridBase {
 
         final _note:ChartNote = objectsGroup.recycle(ChartNote);
         _note.init(strumTime, noteData, gridPos.x, gridPos.y, 0, typeData.skin);
+        _note.chartData = note;
 
         var susNote:ChartNote = null;
         if (susLength > 0) {
@@ -219,6 +210,7 @@ class ChartNote extends Note {
     public var gridNoteData:Int = 0;
     public var txt:FunkinText = null;
     public var startInit:Bool = false;
+    public var chartData:Array<Dynamic> = null;
 
     public function init(_time, _data, _xPos, _yPos, _sus, _skin, forceSus = false, ?_parent:Note) {
         strumTime = _time;
@@ -256,6 +248,8 @@ class ChartNote extends Note {
     }
 }
 
+typedef EventData = Array<Dynamic>;
+
 class ChartEventGrid extends ChartGridBase {
     public var group:FlxTypedGroup<ChartEvent>;
 
@@ -266,15 +260,15 @@ class ChartEventGrid extends ChartGridBase {
         final gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
 
         final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
-        _event.init(strumTime, [eventName], [eventValues], new FlxPoint(grid.x, gridY));
+        _event.init(strumTime, [eventName], [eventValues], new FlxPoint(grid.x, gridY), [event]);
 
         objectsGroup.add(_event);
         return _event;
     }
 
-    function drawPackedObject(strumTime:Float = 0, events:Array<Dynamic>) {
+    function drawPackedObject(strumTime:Float = 0, events:Array<EventData>) {
         final eventNames:Array<String> = [];
-        final eventValues:Array<Array<Dynamic>> = [];
+        final eventValues:Array<EventData> = [];
 
         for (i in events) {
             eventNames.push(i[1]);
@@ -284,7 +278,7 @@ class ChartEventGrid extends ChartGridBase {
         var gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
 
         final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
-        _event.init(strumTime, eventNames, eventValues, new FlxPoint(grid.x, gridY));
+        _event.init(strumTime, eventNames, eventValues, new FlxPoint(grid.x, gridY), events);
 
         objectsGroup.add(_event);
         return _event;
@@ -300,7 +294,7 @@ class ChartEventGrid extends ChartGridBase {
             return;
 
         var packedEvents:Bool = false;
-        final eventsMap:Map<Int, Array<Array<Dynamic>>> = [];
+        final eventsMap:Map<Int, Array<EventData>> = [];
         for (i in value.sectionEvents) {
             final time = Math.floor(i[0]);
             final arr = eventsMap.get(time) ?? [];
@@ -326,6 +320,7 @@ class ChartEventGrid extends ChartGridBase {
 
 class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var data:Array<Event> = [];
+    public var chartData:Array<EventData> = [];
     public var names:Array<String> = [];
     
     public var sprite:FlxSpriteExt;
@@ -363,7 +358,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         img = image;
     }
 
-    public function arrayString(array:Array<Dynamic>) {
+    public function arrayString(array:EventData) {
         var s:String = "[";
         for (i in 0...array.length) {
             s += Std.string(array[i]);
@@ -379,14 +374,16 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         text.offset.set(text.width, -GRID_SIZE * 0.5 + text.height * 0.5);
     }
 
-    public function init(strumTime:Float, names:Array<Dynamic>, values:Array<Array<Dynamic>>, position:FlxPoint) {
+    public function init(strumTime:Float, names:Array<String>, values:Array<Array<Dynamic>>, position:FlxPoint, events:Array<EventData>) {
         setPosition(position.x,position.y);
         this.strumTime = strumTime;
         
         FlxArrayUtil.clearArray(data);
         FlxArrayUtil.clearArray(this.names);
+        FlxArrayUtil.clearArray(this.chartData);
         
         for (i in 0...values.length) {
+            chartData.push(events[i]);
             if (data[i] == null)    data.push(new Event(strumTime, names[i] ?? "NULL", values[i]));
             else                    data[i].set(strumTime, names[i] ?? "NULL", values[i]);
         }

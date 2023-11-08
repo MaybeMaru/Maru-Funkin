@@ -368,12 +368,13 @@ class ChartingState extends MusicBeatState {
     }
 
     public function removeNote(note:ChartNote) {
-        var data = mainGrid.getObjectData(note);
-        if (data == selectedNote || note == selectedNoteObject) {
-            deselectNote();
+        if (note.chartData != null) {
+            if (note.chartData == selectedNote || note == selectedNoteObject) {
+                deselectNote();
+            }
+            SONG.notes[sectionIndex].sectionNotes.remove(note.chartData);
+            mainGrid.clearObject(note);
         }
-        SONG.notes[sectionIndex].sectionNotes.remove(data);
-        mainGrid.clearObject(note);
     }
 
     public var selectedEvent:Array<Dynamic> = null;
@@ -419,10 +420,6 @@ class ChartingState extends MusicBeatState {
 		return values;
 	}
 
-   /* public function setEventDatas(newData:Array<{name:String, values:Array<Dynamic>}>) {
-        if (selectedEvent == null || selectedEventObject == null) return;
-    }*/
-
     public function setEventData(newData:Array<Dynamic>, name:String) {
         if (selectedEvent == null || selectedEventObject == null) return;
         selectedEvent[1] = name;
@@ -434,13 +431,14 @@ class ChartingState extends MusicBeatState {
     }
 
     public function removeEvent(event:ChartEvent) {
-        var data = eventsGrid.getObjectData(event);
-        if (data == selectedEvent || event == selectedEventObject) {
-            eventID = 0;
-            tabs.updateEventTxt();
-            deselectEvent();
+        for (data in event.chartData) {
+            if (data == selectedEvent || event == selectedEventObject) {
+                eventID = 0;
+                tabs.updateEventTxt();
+                deselectEvent();
+            }
+            SONG.notes[sectionIndex].sectionEvents.remove(data);
         }
-        SONG.notes[sectionIndex].sectionEvents.remove(data);
         eventsGrid.clearObject(event);
     }
 
