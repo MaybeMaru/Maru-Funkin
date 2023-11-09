@@ -51,7 +51,7 @@ class HealthIcon extends FlxSpriteExt {
 		update(0);
 	}
 
-	public function animCheck():Void {
+	public dynamic function animCheck():Void {
 		if (!singleAnim) {
 			var lastAnim:String = (animation.curAnim != null) ? animation.curAnim.name : '';
 			var newAnim:String = isDying ? 'dying' : 'healthy';

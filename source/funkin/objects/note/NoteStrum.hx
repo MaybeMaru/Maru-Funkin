@@ -8,9 +8,8 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	public var curSkin:String = '';
 
 	public var controlFunction:Dynamic = null;
-	public function getControl(type:String = "") {
-		if (controlFunction == null) return false;
-		return controlFunction(type);
+	public inline function getControl(type:String = "") {
+		return controlFunction != null ? controlFunction(type) : false;
 	}
 
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
@@ -40,7 +39,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 		}
 	}
 
-	public function applyOffsets():Void {
+	public dynamic function applyOffsets():Void {
 		if (animation.curAnim == null) return;
 		updateHitbox();
 		centerOffsets();
