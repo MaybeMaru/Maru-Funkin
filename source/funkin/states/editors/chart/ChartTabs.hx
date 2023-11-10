@@ -1,5 +1,6 @@
 package funkin.states.editors.chart;
 
+import flixel.util.FlxArrayUtil;
 import flixel.addons.ui.FlxUIGroup;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUIButton;
@@ -341,6 +342,9 @@ class ChartTabs extends FlxUITabMenu {
 	}
 
 	function addEventUI():Void {
+		FlxArrayUtil.clearArray(curEventDatas);
+		FlxArrayUtil.clearArray(curEventNames);
+
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';
 
@@ -356,11 +360,15 @@ class ChartTabs extends FlxUITabMenu {
 		eventAdd = new FlxUIButton(eventLeft.x + 25,eventLeft.y, "+", function () {
 			if (curEventDatas.length < 16) {
 				final e:String = eventsDropDown.selectedLabel;
+				final d = eventValueTab == null ? EventUtil.getEventData(e).values.copy() : eventValueTab.getValues().copy();
+				
 				curEventNames.push(e);
 				curEventDatas.push({
 					name: e,
-					values: eventValueTab == null ? EventUtil.getEventData(e).values.copy() : eventValueTab.getValues().copy()
+					values: d
 				});
+
+				ChartingState.instance.pushEvent([0, e, d]);
 				ChartingState.instance.eventID = curEventDatas.length - 1;
 				updateEventTxt();
 			}
@@ -370,9 +378,11 @@ class ChartTabs extends FlxUITabMenu {
 
 		eventRemove = new FlxUIButton(eventLeft.x + (25*2),eventLeft.y, "-", function () {
 			if (curEventDatas.length > 1) {
-				curEventDatas.remove(curEventDatas[eventID()]);
-				curEventNames.remove(curEventNames[eventID()]);
+				final id = eventID();
+				curEventDatas.remove(curEventDatas[id]);
+				curEventNames.remove(curEventNames[id]);
 
+				ChartingState.instance.spliceEvent(id);
 				ChartingState.instance.eventID = curEventDatas.length - 1;
 				updateEventTxt();
 			}

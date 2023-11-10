@@ -335,12 +335,15 @@ class ChartingState extends MusicBeatState {
                     });
                 } else addNote(); // Add notes
             } else {
-                if (FlxG.mouse.overlaps(eventsGrid.group)) { // Remove events
-                    eventsGrid.group.forEachAlive(function (event:ChartEvent) {
-                        if (event.strumTime < sectionTime) return;
-                        if (FlxG.mouse.overlaps(event)) removeEvent(event);
-                    });
-                } else addEvent(); // Add events
+                var _overlap:Bool = false; // It is what it is
+                for (i in eventsGrid.group) {
+                    if (i.alive && i.strumTime >= sectionTime && FlxG.mouse.overlaps(i.sprite)) {
+                        _overlap = true;
+                        removeEvent(i); // Remove events
+                        break;
+                    }
+                }
+                if (!_overlap) addEvent(); // Add events
             }
 
         }
@@ -377,7 +380,7 @@ class ChartingState extends MusicBeatState {
         }
     }
 
-    public var selectedEvent:Array<Dynamic> = null;
+    public var selectedEvents:Array<EventData> = [];
     public var selectedEventObject(default, set):ChartEvent = null;
     public var eventID:Int = 0;
 
@@ -393,20 +396,44 @@ class ChartingState extends MusicBeatState {
 
     public function addEvent() {
         var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
-        eventID = 0;
         tabs.setCurEvent(ChartTabs.curEventDatas[eventID].name); // Update values
-        var event:Array<Dynamic> = [strumTime, ChartTabs.curEventDatas[eventID].name, convertEventValues(ChartTabs.curEventDatas[eventID].values)];
-        SONG.notes[sectionIndex].sectionEvents.push(event);
-        selectedEvent = event;
-        selectedEventObject = eventsGrid.drawObject(event);
+        deselectEvent();
+
+        for (i in ChartTabs.curEventDatas) {
+            final event:EventData = [strumTime, i.name, convertEventValues(i.values)];
+            SONG.notes[sectionIndex].sectionEvents.push(event);
+            selectedEvents.push(event);
+        }
+
+        selectedEventObject = eventsGrid.drawPackedObject(strumTime, selectedEvents);
+    }
+
+    public function pushEvent(data:EventData) {
+        if (selectedEvents.length == 0 || selectedEventObject == null) return;
+        data[0] = selectedEventObject.strumTime;
+
+        SONG.notes[sectionIndex].sectionEvents.push(data);
+        selectedEvents.push(data);
+        selectedEventObject.pushData(data);
+    }
+
+    public function spliceEvent(id:Int = 0) {
+        if (selectedEvents.length == 0 || selectedEventObject == null) return;
+        final data = selectedEventObject.chartData[id];
+
+        SONG.notes[sectionIndex].sectionEvents.remove(data);
+        selectedEvents.remove(data);
+        selectedEventObject.removeData(id);
     }
 
     public function updateEvent(id:Int = 0, newValue:Dynamic) {
-        if (selectedEvent == null || selectedEventObject == null) return;
-        final values = selectedEvent[2].copy();
+        if (selectedEvents.length == 0 || selectedEventObject == null) return;
+
+        final curEvent = selectedEvents[eventID];
+        final values = curEvent[2].copy();
         values[id] = newValue;
-        selectedEvent[2] = values;
-        selectedEventObject.data[eventID].values = selectedEvent[2].copy();
+        curEvent[2] = values;
+        selectedEventObject.data[eventID].values = curEvent[2].copy();
         selectedEventObject.updateText();
     }
 
@@ -421,19 +448,20 @@ class ChartingState extends MusicBeatState {
 	}
 
     public function setEventData(newData:Array<Dynamic>, name:String) {
-        if (selectedEvent == null || selectedEventObject == null) return;
-        selectedEvent[1] = name;
-        selectedEvent[2] = convertEventValues(newData.copy());
-        selectedEventObject.data[eventID].values = selectedEvent[2].copy();
-        selectedEventObject.data[eventID].name = selectedEvent[1];
+        if (selectedEvents.length == 0 || selectedEventObject == null) return;
+        
+        final curEvent = selectedEvents[eventID];
+        curEvent[1] = name;
+        curEvent[2] = convertEventValues(newData.copy());
+        selectedEventObject.data[eventID].values = curEvent[2].copy();
+        selectedEventObject.data[eventID].name = curEvent[1];
         selectedEventObject.updateText();
         selectedEventObject.loadSettings();
     }
 
     public function removeEvent(event:ChartEvent) {
         for (data in event.chartData) {
-            if (data == selectedEvent || event == selectedEventObject) {
-                eventID = 0;
+            if (selectedEvents.contains(data) || event == selectedEventObject) {
                 tabs.updateEventTxt();
                 deselectEvent();
             }
@@ -504,7 +532,8 @@ class ChartingState extends MusicBeatState {
     }
 
     function deselectEvent() {
-        selectedEvent = null;
+        eventID = 0;
+        FlxArrayUtil.clearArray(selectedEvents);
         selectedEventObject = null;
     }
 

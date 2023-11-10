@@ -255,31 +255,14 @@ class ChartEventGrid extends ChartGridBase {
     public var group:FlxTypedGroup<ChartEvent>;
 
     override function drawObject(event:Array<Dynamic>):Dynamic {
-        final strumTime:Float = event[0];
-        final eventName:String = event[1];
-        final eventValues:Array<Dynamic> = event[2];
+        return drawPackedObject(event[0], [event]);
+    }
+
+    public function drawPackedObject(strumTime:Float = 0, events:Array<EventData>) {
         final gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
 
         final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
-        _event.init(strumTime, [eventName], [eventValues], new FlxPoint(grid.x, gridY), [event]);
-
-        objectsGroup.add(_event);
-        return _event;
-    }
-
-    function drawPackedObject(strumTime:Float = 0, events:Array<EventData>) {
-        final eventNames:Array<String> = [];
-        final eventValues:Array<EventData> = [];
-
-        for (i in events) {
-            eventNames.push(i[1]);
-            eventValues.push(i[2]);
-        }
-        
-        var gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
-
-        final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
-        _event.init(strumTime, eventNames, eventValues, new FlxPoint(grid.x, gridY), events);
+        _event.init(strumTime, events, new FlxPoint(grid.x, gridY));
 
         objectsGroup.add(_event);
         return _event;
@@ -377,28 +360,34 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         for (i in data) txt += arrayString(i.values) + " - " + i.name + "\n";
         text.text = txt;
         text.offset.set(text.width, -GRID_SIZE * 0.5 + text.height * 0.5);
+        packSprite.visible = chartData.length > 1;
+    }
+    
+    public function pushData(eventData:EventData) {
+        chartData.push(eventData);
+        eventData[0] = strumTime;
+        if (data[chartData.length - 1] == null) data.push(new Event(strumTime, eventData[1] ?? "NULL", eventData[2]));
+        else                                    data[chartData.length - 1].set(strumTime, eventData[1] ?? "NULL", eventData[2]);
+        names.push(eventData[1]);
+        updateText();
     }
 
-    public function init(strumTime:Float, names:Array<String>, values:Array<Array<Dynamic>>, position:FlxPoint, events:Array<EventData>) {
+    public function removeData(id:Int) {
+        chartData.remove(chartData[id]);
+        data.remove(data[id]);
+        names.remove(names[id]);
+        updateText();
+    }
+
+    public function init(strumTime:Float, events:Array<EventData>, position:FlxPoint) {
         setPosition(position.x,position.y);
         this.strumTime = strumTime;
         
         FlxArrayUtil.clearArray(data);
         FlxArrayUtil.clearArray(this.names);
         FlxArrayUtil.clearArray(this.chartData);
-        packSprite.visible = events.length > 1;
-        
-        for (i in 0...values.length) {
-            chartData.push(events[i]);
-            if (data[i] == null)    data.push(new Event(strumTime, names[i] ?? "NULL", values[i]));
-            else                    data[i].set(strumTime, names[i] ?? "NULL", values[i]);
-        }
 
-        for (i in data) {
-            names.push(i.name);
-        }
-
-        updateText();
+        for (i in events) pushData(i);
         loadSettings();
     }
 }
