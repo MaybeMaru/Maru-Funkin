@@ -314,12 +314,18 @@ class ChartTabs extends FlxUITabMenu {
 	public static var curEventDatas:Array<{name:String, values:Array<Dynamic>}> = [];
 	public static var curEventNames:Array<String> = [];
 
+	function updateCurData(event:String) {
+		curEventDatas[eventID()] = {
+			curEventDatas[eventID()] = {
+				name: event,
+				values: eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy()
+			}
+		}
+	}
+
 	public function setCurEvent(event:String) {
 		curEventNames[eventID()] = event;
-		curEventDatas[eventID()] = {
-			name: event,
-			values: eventValueTab == null ? EventUtil.getEventData(event).values.copy() : eventValueTab.getValues().copy()
-		}
+		updateCurData(event);
 		updateEventTxt();
 	}
 
@@ -333,6 +339,35 @@ class ChartTabs extends FlxUITabMenu {
 	inline function eventObj() 	 	return ChartingState.instance.selectedEventObject;
 	
 	var initEvent:String = "NULL_EVENT";
+
+	function setEventTab(newEvent:String, ?values:Array<Dynamic>) {
+		final eventData = EventUtil.getEventData(newEvent);
+		final _defValues = eventData.values.copy();
+		eventDescription.text = eventData.description;
+		eventValueTab.createUI(_defValues);
+
+		if (values != null) {
+			eventsDropDown.selectedLabel = newEvent;
+			eventValueTab.setValues(values);
+		}
+		else {
+			setCurEvent(newEvent);
+			ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
+		}
+		
+		
+		/*if (values != null) {
+			eventDescription.text = eventData.description;
+			eventValueTab.setValues(values.copy());
+			//setCurEvent(newEvent);
+		} else {
+			final _defValues = eventData.values.copy();
+			eventDescription.text = eventData.description;
+			eventValueTab.setValues(_defValues);
+			setCurEvent(newEvent);
+			ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
+		}*/
+	}
 
 	public function updateEventTxt() {
 		eventListTxt.text = "[ " +
@@ -353,8 +388,23 @@ class ChartTabs extends FlxUITabMenu {
 		eventListTxt.alignment = RIGHT;
 
 		eventLeft = new FlxUIButton(10,10, "<", function () {
-			ChartingState.instance.eventID = FlxMath.wrap(ChartingState.instance.eventID - 1, 0, curEventDatas.length - 1);
-			updateEventTxt();
+			final id:Int = eventID();
+			updateCurData(curEventNames[id]);
+			ChartingState.instance.eventID = FlxMath.wrap(id - 1, 0, curEventDatas.length - 1);
+			if (eventID() != id) {
+				setEventTab(curEventNames[eventID()], curEventDatas[eventID()].values);
+				updateEventTxt();
+			}
+		});
+
+		eventRight = new FlxUIButton(eventLeft.x + (25*3),eventLeft.y, ">", function () {
+			final id:Int = eventID();
+			updateCurData(curEventNames[id]);
+			ChartingState.instance.eventID = FlxMath.wrap(id + 1, 0, curEventDatas.length - 1);
+			if (eventID() != id) {
+				setEventTab(curEventNames[eventID()], curEventDatas[eventID()].values);
+				updateEventTxt();
+			}
 		});
 
 		eventAdd = new FlxUIButton(eventLeft.x + 25,eventLeft.y, "+", function () {
@@ -390,21 +440,11 @@ class ChartTabs extends FlxUITabMenu {
 		eventRemove.color = FlxColor.RED;
 		eventRemove.label.color = FlxColor.WHITE;
 
-		eventRight = new FlxUIButton(eventLeft.x + (25*3),eventLeft.y, ">", function () {
-			ChartingState.instance.eventID = FlxMath.wrap(eventID() + 1, 0, curEventDatas.length - 1);
-			updateEventTxt();
-		});
-
 		var types:Array<String> = EventUtil.eventsArray.copy();
 		eventsDropDown = new FlxUIDropDownMenu(10, 50, FlxUIDropDownMenu.makeStrIdLabelArray(types, true), function(type:String) {
-			var newEvent = types[Std.parseInt(type)];
+			final newEvent = types[Std.parseInt(type)];
 			if (curEventDatas[eventID()].name != newEvent) {
-				var eventData = EventUtil.getEventData(newEvent);
-				var _defValues = eventData.values.copy();
-				eventDescription.text = eventData.description;
-				eventValueTab.setValues(_defValues);
-				setCurEvent(newEvent);
-				ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
+				setEventTab(newEvent);
 			}
 		});
 
