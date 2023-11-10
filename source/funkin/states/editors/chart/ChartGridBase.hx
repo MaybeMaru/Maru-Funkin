@@ -25,6 +25,8 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
         grid = new FlxBackdrop(_gridBitmap.pixels, Y);
         grid.screenCenter(X);
         add(grid);
+        
+        _gridBitmap.destroy();
 
         // Events grid offset
         if (!isNote) {
@@ -83,7 +85,7 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
     }
 
     public function clearSection(full:Bool = true) {
-        var objArray:Array<Dynamic> = full ? objectsGroup.members : curSecContent;
+        final objArray:Array<Dynamic> = full ? objectsGroup.members : curSecContent;
         for (i in objArray) clearObject(i);
         FlxArrayUtil.clearArray(curSecContent);
     }
@@ -152,9 +154,9 @@ class ChartNoteGrid extends ChartGridBase {
         }
 
         if (typeData.showText) {
-            var typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
+            final typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
             if (typeStr.length > 0) {
-                var typeText:FunkinText = textGroup.recycle(FunkinText);
+                final typeText:FunkinText = textGroup.recycle(FunkinText);
                 typeText.text = typeStr;
                 typeText.setPosition(_note.x - (typeText.width * .5 - _note.width * .5), _note.y - (typeText.height * .5 - _note.height * .5));
                 typeText.scrollFactor.set(1,1);
@@ -230,12 +232,11 @@ class ChartNote extends Note {
 
         if (isSustainNote) {
             alpha = 0.6;
-            var _scale = _parent.scale.x;
-            scale.set(_scale,_scale);
-            updateHitbox();
+            final _scale = _parent.scale.x;
+            setScale(_scale);
             
-            var _off = ChartingState.getYtime(GRID_SIZE * 0.5);
-            var _height = Math.floor(((FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE))) / _scale);
+            final _off = ChartingState.getYtime(GRID_SIZE * 0.5);
+            final _height = Math.floor(((FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE))) / _scale);
             drawSustainCached(_height);
             updateHitbox();
             offset.x -= GRID_SIZE * 0.5 - width / 2.125;
@@ -324,6 +325,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var names:Array<String> = [];
     
     public var sprite:FlxSpriteExt;
+    var packSprite:FlxSpriteExt;
     public var text:FunkinText;
 
     public var strumTime:Float = 0;
@@ -333,8 +335,12 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public function new() {
         super();
         sprite = new FlxSpriteExt();
-        loadImage(img);
+        loadEventImage(img);
         add(sprite);
+
+        packSprite = new FlxSpriteExt().loadImage("options/packedEvent");
+        packSprite.offset.set(-14,-20);
+        add(packSprite);
         
         text = new FunkinText(0,0,"",15);
         text.alignment = RIGHT;
@@ -346,12 +352,11 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
 
     public function loadSettings() {
         var eventData = EventUtil.getEventData(data[0].name);
-        if (img != eventData.image) {
-            loadImage(eventData.image);
-        }
+        if (img != eventData.image)
+            loadEventImage(eventData.image);
     }
 
-    public function loadImage(image:String) {
+    public function loadEventImage(image:String) {
         sprite.loadImage("events/" + image);
         sprite.setGraphicSize(GRID_SIZE, GRID_SIZE);
         sprite.updateHitbox();
@@ -381,6 +386,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         FlxArrayUtil.clearArray(data);
         FlxArrayUtil.clearArray(this.names);
         FlxArrayUtil.clearArray(this.chartData);
+        packSprite.visible = events.length > 1;
         
         for (i in 0...values.length) {
             chartData.push(events[i]);

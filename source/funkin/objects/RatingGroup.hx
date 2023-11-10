@@ -22,24 +22,25 @@ class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
     public function drawCombo(combo:Int):Void {
         if (combo < 10) return;
 
-        if (!Preferences.getPref('vanilla-ui')) {
-            var comboSpr:ComboRating = recycle(ComboRating);
+        final isVanilla = Preferences.getPref('vanilla-ui');
+        if (!isVanilla) {
+            final comboSpr:ComboRating = recycle(ComboRating);
             comboSpr.init();
             addTop(comboSpr);
         }
 
-        var numSplit:Array<String> = Std.string(combo).split('');
+        final numSplit:Array<String> = Std.string(combo).split('');
         numSplit.reverse();
 
         for (i in 0...numSplit.length) {
-            var num:NumRating = recycle(NumRating);
+            final num:NumRating = recycle(NumRating);
             num.init(numSplit[i], i);
             addTop(num);
         }
     }
 
     public function drawJudgement(judgement:String):Void {
-        var judgeSpr:JudgeRating = recycle(JudgeRating);
+        final judgeSpr:JudgeRating = recycle(JudgeRating);
         judgeSpr.init(judgement);
         addTop(judgeSpr);
     }
@@ -101,13 +102,16 @@ class ComboRating extends RemoveRating {
 }
 
 class NumRating extends RemoveRating {
+    public var initScale:Float = 1;
+    
     public function new() {
         super();
-        var imagePath = 'skins/${SkinUtil.curSkin}/ratings/nums';
+        final imagePath = 'skins/${SkinUtil.curSkin}/ratings/nums';
         loadImage(imagePath);
-        loadImageAnimated(imagePath, Std.int(width / 10), Std.int(height));
+        loadImageAnimated(imagePath, Std.int(width * 0.1), Std.int(height));
         for (i in 0...10) animation.add(Std.string(i), [i], 1);
-        setScale(scale.x * 1.2);
+        setScale(scale.x);
+        initScale = scale.x;
     }
 
     public function init(num:Dynamic, id:Int = 0) {
