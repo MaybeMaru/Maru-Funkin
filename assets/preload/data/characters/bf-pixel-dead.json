@@ -1,26 +1,10 @@
 {
 	"imagePath": "week6/deadBfPixel",
-	"isGF": false,
-	"camOffsets": [0,0],
 	"icon": "bf-pixel",
-	"scale": 6,
+	"camOffsets": [0,0],
+	"isGF": false,
+	"charOffsets": [-180,-190],
 	"anims": [
-		{
-			"offsets": [0,0],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "RETRY CONFIRM",
-			"animName": "deathConfirm"
-		},
-		{
-			"offsets": [0,0],
-			"indices": [18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Retry Loop",
-			"animName": "deathLoopRight"
-		},
 		{
 			"offsets": [24,6],
 			"indices": [],
@@ -31,6 +15,22 @@
 		},
 		{
 			"offsets": [0,0],
+			"indices": [18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Retry Loop",
+			"animName": "deathLoopRight"
+		},
+		{
+			"offsets": [0,0],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "RETRY CONFIRM",
+			"animName": "deathConfirm"
+		},
+		{
+			"offsets": [0,0],
 			"indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
 			"loop": false,
 			"framerate": 24,
@@ -38,10 +38,10 @@
 			"animName": "deathLoopLeft"
 		}
 	],
-	"charOffsets": [-180,-190],
-	"isPlayer": true,
+	"scale": 6,
 	"flipX": true,
-	"gameOverChar": "bf-dead",
+	"isPlayer": true,
 	"antialiasing": false,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

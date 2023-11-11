@@ -1,8 +1,10 @@
 {
 	"imagePath": "week6/gfPixel",
-	"isGF": false,
-	"icon": "gf",
 	"camOffsets": [0,0],
+	"icon": "gf",
+	"isGF": false,
+	"scale": 6,
+	"charOffsets": [-240,-60],
 	"anims": [
 		{
 			"offsets": [0,0],
@@ -21,11 +23,9 @@
 			"animName": "danceRight"
 		}
 	],
-	"charOffsets": [-240,-60],
-	"scale": 6,
-	"isPlayer": false,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": false,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

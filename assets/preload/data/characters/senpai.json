@@ -1,10 +1,8 @@
 {
 	"imagePath": "week6/senpai",
-	"isGF": false,
-	"camOffsets": [100,450],
 	"icon": "senpai",
-	"scale": 6,
-	"charOffsets": [-30,70],
+	"camOffsets": [100,450],
+	"isGF": false,
 	"anims": [
 		{
 			"offsets": [0,0],
@@ -16,11 +14,11 @@
 		},
 		{
 			"offsets": [0,0],
-			"indices": [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],
-			"loop": true,
+			"indices": [],
+			"loop": false,
 			"framerate": 24,
-			"animFile": "Senpai Idle",
-			"animName": "idle-loop"
+			"animFile": "SENPAI RIGHT NOTE",
+			"animName": "singRIGHT"
 		},
 		{
 			"offsets": [0,0],
@@ -32,19 +30,11 @@
 		},
 		{
 			"offsets": [0,0],
-			"indices": [],
-			"loop": false,
+			"indices": [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],
+			"loop": true,
 			"framerate": 24,
-			"animFile": "SENPAI RIGHT NOTE",
-			"animName": "singRIGHT"
-		},
-		{
-			"offsets": [0,36],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "SENPAI UP NOTE",
-			"animName": "singUP"
+			"animFile": "Senpai Idle",
+			"animName": "idle-loop"
 		},
 		{
 			"offsets": [24,0],
@@ -53,11 +43,21 @@
 			"framerate": 24,
 			"animFile": "SENPAI LEFT NOTE",
 			"animName": "singLEFT"
+		},
+		{
+			"offsets": [0,36],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "SENPAI UP NOTE",
+			"animName": "singUP"
 		}
 	],
-	"isPlayer": false,
+	"charOffsets": [-30,70],
+	"scale": 6,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": false,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

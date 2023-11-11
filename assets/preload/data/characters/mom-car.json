@@ -1,8 +1,10 @@
 {
 	"imagePath": "week4/momCar",
-	"isGF": false,
-	"icon": "mom",
 	"camOffsets": [-150,0],
+	"icon": "mom",
+	"isGF": false,
+	"scale": 1,
+	"charOffsets": [-40,400],
 	"anims": [
 		{
 			"offsets": [2,-182],
@@ -85,11 +87,9 @@
 			"animName": "singUP-loop"
 		}
 	],
-	"charOffsets": [-40,400],
-	"scale": 1,
-	"isPlayer": false,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }
