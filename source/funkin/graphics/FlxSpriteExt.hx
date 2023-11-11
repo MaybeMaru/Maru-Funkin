@@ -9,7 +9,7 @@ import openfl.display.BitmapData;
 */
 class FlxSpriteExt extends FlxSkewedSprite {
 
-	public static var DEFAULT_SPRITE(default, never):SpriteJson = {
+	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
 		scale: 1,
@@ -17,7 +17,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		flipX: false,
 	}
 
-	public static var DEFAULT_ANIM(default, never):SpriteAnimation = {
+	public static final DEFAULT_ANIM:SpriteAnimation = {
 		animName: 'idle',
 		animFile: 'idle',
 		offsets: [0,0],

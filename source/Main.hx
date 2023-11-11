@@ -2,7 +2,6 @@ package;
 
 import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
-import flixel.FlxGame;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -23,7 +22,7 @@ class Main extends Sprite
 	};
 
 	public static var fpsCounter:FPS_Mem; //The FPS display child
-	public static var scriptConsole:ScriptConsole;
+	public static var console:ScriptConsole;
 	public static var transition:Transition;
 	public static var engineVersion(default, never):String = "1.0.0-b.1"; //The engine version, if its not the same as the github one itll open OutdatedSubState
 
@@ -60,25 +59,19 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
+		final stageWidth:Int = Lib.current.stage.stageWidth;
+		final stageHeight:Int = Lib.current.stage.stageHeight;
 
 		if (game.zoom == -1.0)
 		{
-			var ratioX:Float = stageWidth / game.width;
-			var ratioY:Float = stageHeight / game.height;
+			final ratioX:Float = stageWidth / game.width;
+			final ratioY:Float = stageHeight / game.height;
 			game.zoom = Math.min(ratioX, ratioY);
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-
-		transition = new Transition();
-		addChild(transition);
-
-		scriptConsole = new ScriptConsole();
-		addChild(scriptConsole);
+		addChild(new FlxFunkGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		#if !mobile
 		fpsCounter = new FPS_Mem(10,10,0xffffff);

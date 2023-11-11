@@ -49,7 +49,7 @@ class ModdingUtil {
 
     inline public static function clearScripts():Void {
         FunkScript.globalVariables.clear();
-        Main.scriptConsole.clear();
+        Main.console.clear();
         for (i in scripts) removeScript(i);
         FlxArrayUtil.clearArray(scripts);
 
@@ -168,7 +168,7 @@ class ModdingUtil {
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
     inline public static function print(text:String, type:PrintType):Void {
-        Main.scriptConsole.print(text, type);
+        Main.console.print(text, type);
     }
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {

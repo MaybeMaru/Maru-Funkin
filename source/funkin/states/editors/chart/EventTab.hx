@@ -30,25 +30,25 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
 
         var i:Int = 1;
         for (v in values) {
-            var id:Int = i-1;
-            var _X = (i <= 12 ? 0 : 1)*125;
-            var _Y = (i <= 12 ? id : id-12)*30;
+            final id:Int = i-1;
+            final X = (i <= 12 ? 0 : 1) * 125;
+            final Y = (i <= 12 ? id : id-12) * 30;
             switch (Type.typeof(v)) {
                 case TInt | TFloat:
-                    final stepper = new QuickStepper(_X,_Y,v);
+                    final stepper = new QuickStepper(X, Y,v);
                     stepper.callback = function() if (updateFunc != null) updateFunc(id, stepper.value);
                     getValuesArray.push(function () return stepper.value);
                     addUI(stepper);
 
                 case TBool:
-                    final checkbox = new FlxUICheckBox(_X, _Y, null, null, " ");
+                    final checkbox = new FlxUICheckBox(X, Y, null, null, " ");
                     checkbox.checked = v;
                     checkbox.callback = function() if (updateFunc != null) updateFunc(id, checkbox.checked);
                     getValuesArray.push(function () return checkbox.checked);
                     addUI(checkbox);
 
                 case TClass(Array):
-                    final dropdown = new FlxUIDropDownMenu(_X,_Y,FlxUIDropDownMenu.makeStrIdLabelArray(v, true), function(_value:String) {
+                    final dropdown = new FlxUIDropDownMenu(X, Y, FlxUIDropDownMenu.makeStrIdLabelArray(v, true), function(_value:String) {
                         final value = v.copy()[Std.parseInt(_value)];
                         updateFunc(id, value);
                     });
@@ -57,7 +57,7 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
                     addUI(dropdown);
 
                 default: //TClass(String)
-                    final input = new FlxUIInputText(_X, _Y, 100, Std.string(v), 8);
+                    final input = new FlxUIInputText(X, Y, 100, Std.string(v), 8);
                     ChartingState.instance.tabs.focusList.push(input);
                     input.callback = function(var1, var2) if (updateFunc != null) updateFunc(id, input.text);
                     getValuesArray.push(function () return input.text);
@@ -86,7 +86,7 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
     }
 
     public function getValues():Array<Dynamic> {
-        var array:Array<Dynamic> = [];
+        final array:Array<Dynamic> = [];
         for (i in getValuesArray)
             array.push(i());
         return array;

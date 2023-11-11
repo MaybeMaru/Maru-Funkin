@@ -32,8 +32,6 @@ class Transition extends ResizableSprite {
         addChild(bitmap);
         set();
         visible = false;
-        
-		openfl.Lib.current.stage.addEventListener(openfl.events.Event.ENTER_FRAME, update);
     }
     
     public function set(?color:FlxColor, openTime:Float = 0.4, closeTime:Float = 0.3, ?asset:FlxGraphicAsset) {
@@ -109,12 +107,11 @@ class Transition extends ResizableSprite {
     var finishCallback:Dynamic = null;
     var transitioning:Bool = false;
 
-    function update(event) {
+    public function update(elapsed:Float) {
         if (!transitioning) return;
-        final elapsed = FlxG.elapsed;
 
         timeElapsed += elapsed;
-        var lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
+        final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
         y = FlxMath.lerp(startPosition, endPosition, lerpValue);
     
         if (Math.floor(y) == endPosition) {

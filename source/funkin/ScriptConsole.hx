@@ -125,7 +125,6 @@ class ScriptConsole extends ResizableSprite {
         targetX = x;
 		
         ConsolePrint.initFrames();
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, update);
 	}
 
     inline function forEachPrint(func:Dynamic, alive:Bool = false) {
@@ -181,7 +180,7 @@ class ScriptConsole extends ResizableSprite {
     }
 
 	var tmr:Float = 0;
-	function update(event) {
+	public function update(elapsed:Float) {
 		if (tmr <= 0) {
 			if (FlxG.keys.justPressed.F1) {
 				tmr = 0.1; // Fix spam issue
@@ -190,14 +189,14 @@ class ScriptConsole extends ResizableSprite {
 				targetX = show ? 0 : -width;
 			}
 		} else {
-			tmr -= FlxG.elapsed;
+			tmr -= elapsed;
 		}
 
         if (show) {
             for (i in prints.__children) {
                 if (i is ConsolePrint) {
                     final _p = cast (i, ConsolePrint);
-                    if (_p.alive) _p.update(FlxG.elapsed);
+                    if (_p.alive) _p.update(elapsed);
                 }
             }
         }

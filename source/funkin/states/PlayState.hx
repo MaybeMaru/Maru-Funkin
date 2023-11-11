@@ -747,8 +747,8 @@ class PlayState extends MusicBeatState {
 	}
 
 	inline function beatCharacters() {
-		for (i in [iconP1, iconP2]) i.bumpIcon();
-		for (i in [dad, boyfriend]) i.danceInBeat();
+		iconP1.bumpIcon(); 			iconP2.bumpIcon();
+		boyfriend.danceInBeat(); 	dad.danceInBeat();
 		if (curBeat % gfSpeed == 0) gf.danceInBeat();
 	}
 
@@ -790,18 +790,21 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function switchChar(type:String, newCharName:String) {
-		var targetChar:Character = boyfriend;
-		switch (type.toLowerCase().trim()) {
-			case 'dad': targetChar = dad;
-			case 'girlfriend' | 'gf': targetChar = gf;
+		type = type.toLowerCase().trim();
+		
+		final targetChar:Character = switch(type) {
+			case 'dad': dad;
+			case 'gf' | 'girlfriend': gf;
+			default: boyfriend;
 		}
 
 		targetChar.visible = false;
-		var newChar:Character = new Character(0,0,newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
+		final newChar:Character = new Character(0,0,newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
 		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		targetChar.group.add(newChar);
+		targetChar.destroy();
 
-		switch (type.toLowerCase().trim()) {
+		switch (type) {
 			case 'dad': dad = newChar;
 			case 'girlfriend' | 'gf': gf = newChar;
 			default: boyfriend = newChar;
