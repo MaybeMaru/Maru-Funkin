@@ -1,8 +1,10 @@
 {
 	"imagePath": "week1/DADDY_DEAREST",
-	"isGF": false,
-	"icon": "dad",
 	"camOffsets": [-150,100],
+	"icon": "dad",
+	"isGF": false,
+	"scale": 1,
+	"charOffsets": [0,350],
 	"anims": [
 		{
 			"offsets": [3,-30],
@@ -77,11 +79,9 @@
 			"animName": "singUP-loop"
 		}
 	],
-	"charOffsets": [0,350],
-	"scale": 1,
-	"isPlayer": false,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

@@ -1,8 +1,10 @@
 {
 	"imagePath": "week5/monsterChristmas",
-	"isGF": false,
-	"icon": "monster",
 	"camOffsets": [-300,100],
+	"icon": "monster",
+	"isGF": false,
+	"scale": 1,
+	"charOffsets": [90,290],
 	"anims": [
 		{
 			"offsets": [-60,-90],
@@ -85,11 +87,9 @@
 			"animName": "singUP-loop"
 		}
 	],
-	"charOffsets": [90,290],
-	"scale": 1,
-	"isPlayer": false,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

@@ -1,8 +1,10 @@
 {
 	"imagePath": "week6/senpaiMad",
-	"icon": "senpai",
-	"camOffsets": [100,450],
 	"isGF": false,
+	"camOffsets": [100,450],
+	"icon": "senpai",
+	"scale": 6,
+	"charOffsets": [-30,60],
 	"anims": [
 		{
 			"offsets": [0,0],
@@ -17,24 +19,16 @@
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "Angry Senpai RIGHT NOTE",
-			"animName": "singRIGHT"
+			"animFile": "Angry Senpai DOWN NOTE",
+			"animName": "singDOWN"
 		},
 		{
 			"offsets": [0,0],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "Angry Senpai DOWN NOTE",
-			"animName": "singDOWN"
-		},
-		{
-			"offsets": [24,0],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "Angry Senpai LEFT NOTE",
-			"animName": "singLEFT"
+			"animFile": "Angry Senpai RIGHT NOTE",
+			"animName": "singRIGHT"
 		},
 		{
 			"offsets": [0,36],
@@ -43,13 +37,19 @@
 			"framerate": 24,
 			"animFile": "Angry Senpai UP NOTE",
 			"animName": "singUP"
+		},
+		{
+			"offsets": [24,0],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "Angry Senpai LEFT NOTE",
+			"animName": "singLEFT"
 		}
 	],
-	"charOffsets": [-30,60],
-	"scale": 6,
-	"flipX": false,
 	"isPlayer": false,
-	"antialiasing": false,
+	"flipX": false,
 	"gameOverChar": "bf-dead",
+	"antialiasing": false,
 	"gameOverSuffix": ""
 }

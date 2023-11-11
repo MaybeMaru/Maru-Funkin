@@ -1,27 +1,9 @@
 {
 	"imagePath": "week1/BOYFRIEND-DEAD",
-	"isGF": false,
-	"camOffsets": [0,0],
 	"icon": "bf",
-	"scale": 1,
-	"charOffsets": [0,0],
+	"camOffsets": [0,0],
+	"isGF": false,
 	"anims": [
-		{
-			"offsets": [21,63],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF Dead confirm",
-			"animName": "deathConfirm"
-		},
-		{
-			"offsets": [21,-1],
-			"indices": [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF Dead Loop",
-			"animName": "deathLoopRight"
-		},
 		{
 			"offsets": [21,5],
 			"indices": [],
@@ -32,6 +14,22 @@
 		},
 		{
 			"offsets": [21,-1],
+			"indices": [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF Dead Loop",
+			"animName": "deathLoopRight"
+		},
+		{
+			"offsets": [21,63],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF Dead confirm",
+			"animName": "deathConfirm"
+		},
+		{
+			"offsets": [21,-1],
 			"indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
 			"loop": false,
 			"framerate": 24,
@@ -39,9 +37,11 @@
 			"animName": "deathLoopLeft"
 		}
 	],
-	"isPlayer": true,
+	"charOffsets": [0,0],
+	"scale": 1,
 	"flipX": true,
-	"gameOverChar": "bf-dead",
+	"isPlayer": true,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }

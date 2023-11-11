@@ -1,10 +1,8 @@
 {
 	"imagePath": "week2/Monster_Assets",
-	"camOffsets": [-300,100],
-	"icon": "monster",
 	"isGF": false,
-	"scale": 1,
-	"charOffsets": [90,260],
+	"icon": "monster",
+	"camOffsets": [-300,100],
 	"anims": [
 		{
 			"offsets": [-60,-90],
@@ -87,9 +85,11 @@
 			"animName": "singUP-loop"
 		}
 	],
-	"flipX": false,
+	"charOffsets": [90,260],
+	"scale": 1,
 	"isPlayer": false,
-	"antialiasing": true,
+	"flipX": false,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }
