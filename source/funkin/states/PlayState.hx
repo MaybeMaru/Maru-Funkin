@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.objects.ui.FunkBar;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 import flixel.ui.FlxBar;
@@ -72,6 +73,7 @@ class PlayState extends MusicBeatState {
 	public var health(default, set):Float = 1;
 	function set_health(value:Float) {
 		value = FlxMath.bound(value, 0, 2);
+		healthBar.updateBar(value);
 		if (value <= 0 && validScore) {
 			openGameOverSubstate();
 		}
@@ -81,12 +83,10 @@ class PlayState extends MusicBeatState {
 	public var noteCount:Int = 0;
 	public var noteTotal:Float = 0;
 
-	private var healthBarBG:FunkinSprite;
-	public var healthBar:FlxBar;
-
 	private var iconGroup:FlxSpriteGroup;
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
+	public var healthBar:FunkBar;
 
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
@@ -283,14 +283,8 @@ class PlayState extends MusicBeatState {
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FunkinSprite(SkinUtil.getAssetKey("healthBar"), [0,0], [0,0]);
-		healthBarBG.y = !getPref('downscroll') ? FlxG.height * 0.9 : FlxG.height * 0.1;
-		healthBarBG.screenCenter(X);
-		add(healthBarBG);
-
-		healthBar = new FlxBar(healthBarBG.x + 6, healthBarBG.y + 4, RIGHT_TO_LEFT, cast healthBarBG.width - 12, cast healthBarBG.height - 8, this, 'health', 0, 2);
-		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar = new FunkBar(0, !getPref('downscroll') ? FlxG.height * 0.9 : FlxG.height * 0.1, SkinUtil.getAssetKey("healthBar"));
+		healthBar.screenCenter(X);
 		add(healthBar);
 
 		iconGroup = new FlxSpriteGroup();
@@ -308,11 +302,11 @@ class PlayState extends MusicBeatState {
 		dad.iconSpr = iconP2;
 		boyfriend.iconSpr = iconP1;
 
-		scoreTxt = new FlxFunkText(0, healthBarBG.y + 30, "", FlxPoint.get(FlxG.width, 20));
+		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.get(FlxG.width, 20));
 		add(scoreTxt);
 
 		if (getPref('vanilla-ui')) {
-			scoreTxt.setPosition(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30);
+			scoreTxt.setPosition(healthBar.x + healthBar.width - 190, healthBar.y + 30);
 			scoreTxt.style = TextStyle.OUTLINE(1, 6, FlxColor.BLACK);
 		} else {
 			scoreTxt.size = 20;
@@ -333,7 +327,7 @@ class PlayState extends MusicBeatState {
 		add(watermark);
 
 		// Set objects to HUD cam
-		for (i in [notesGroup,  healthBar, healthBarBG, iconGroup, scoreTxt, watermark])
+		for (i in [notesGroup,  healthBar, iconGroup, scoreTxt, watermark])
 			i.camera = camHUD;
 
 		startingSong = true;
@@ -813,7 +807,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function showUI(bool:Bool):Void {
-		var displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, healthBarBG, notesGroup, watermark];
+		final displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
 		for (displayObject in displayObjects) displayObject.visible = bool;
 	}
 }

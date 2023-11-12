@@ -169,16 +169,17 @@ class Note extends FlxSpriteExt implements INoteData {
     public var percentCut:Float = 0;
     public var percentLeft:Float = 1;
     public var susEndHeight:Int = 15;
+    var susRect:FlxRect = null;
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
-        var _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
+        final _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
         if (_height > (susEndHeight * (noteSpeed * 0.5) / scale.y)) {
             if (forced || (_height > height)) { // New graphic
                 drawSustainCached(_height);
             }
             else { // Cut
-                clipRect = new FlxRect(0, height - _height, width, _height);
+                clipRect = (susRect ?? (susRect = new FlxRect())).set(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
                 percentLeft = _height / height;

@@ -103,7 +103,6 @@ class ChartingState extends MusicBeatState {
 
         final _grid = mainGrid.grid;
         songTxt = new FlxFunkText(_grid.x + _grid.width + 25, _grid.y + 25, "swag", FlxPoint.get(FlxG.width*0.5,FlxG.height*0.5), 25);
-        //songTxt.style = OUTLINE(2, 8, FlxColor.BLACK);
         songTxt._dynamic.update = function (elapsed) {
             var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
                         "Step: " + Math.max(0, curStep) + "\n" +
@@ -630,7 +629,7 @@ class ChartingState extends MusicBeatState {
 	}
 
     function saveJson(input:Any, fileName:String) {
-        var data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
+        final data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
         if (data.length > 0) {
 			var chartFile:FileReference = new FileReference();
 			chartFile.save(data.trim(), '$fileName.json');
@@ -656,7 +655,7 @@ class ChartingState extends MusicBeatState {
 
         if (metaEvents.length > 1) {
 			while (true) {
-				var lastSec = metaEvents[metaEvents.length-1];
+				final lastSec = metaEvents[metaEvents.length-1];
 				if (lastSec == null) break;
 				if (Reflect.fields(lastSec).length <= 0) 	metaEvents.pop();
 				else 										break;
@@ -674,8 +673,8 @@ class ChartingState extends MusicBeatState {
 
     override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
 		if (id == FlxUICheckBox.CLICK_EVENT) {
-			var check:FlxUICheckBox = cast sender;
-			var label = check.getLabel().text;
+			final check:FlxUICheckBox = cast sender;
+			final label = check.getLabel().text;
 			switch (label) {
 				case 'Must Hit Section':
 					SONG.notes[sectionIndex].mustHitSection = check.checked;
@@ -687,8 +686,8 @@ class ChartingState extends MusicBeatState {
 			}
 		}
 		else if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
-			var nums:FlxUINumericStepper = cast sender;
-			var wname = nums.name;
+			final nums:FlxUINumericStepper = cast sender;
+			final wname = nums.name;
 			switch (wname) {
 				case 'song_speed':
                     SONG.speed = nums.value;
@@ -699,13 +698,13 @@ class ChartingState extends MusicBeatState {
                     changeSection();
 
 				case 'song_inst_offset':
-					var tempOffset:Int = Std.int(nums.value);
+					final tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[0] = tempOffset;
 					SONG.offsets[0] = tempOffset;
                     mainGrid.updateWaveform();
 
 				case 'song_vocals_offset':
-					var tempOffset:Int = Std.int(nums.value);
+					final tempOffset:Int = Std.int(nums.value);
 					Conductor.songOffset[1] = tempOffset;
 					SONG.offsets[1] = tempOffset;
                     mainGrid.updateWaveform();
