@@ -25,6 +25,9 @@ class ChartingState extends MusicBeatState {
     public var sectionTime:Float = 0;
     public var nextSectionTime:Float = 0;
 
+    public static var lastSection:Int = 0;
+    public static var lastSong:String = "";
+
     public var bg:FunkinSprite;
     public var noteTile:FlxSprite;
     public var strumBar:ChartStrumLine;
@@ -119,7 +122,13 @@ class ChartingState extends MusicBeatState {
 
         for (i in [songTxt, tabs]) i.scrollFactor.set();
 
-        setSection(0, true);
+        
+        if (SONG.song != lastSong) {
+            lastSection = 0;
+            lastSong = SONG.song;
+        }
+        setSection(lastSection, true);
+
         super.create();
     }
 
@@ -719,7 +728,7 @@ class ChartingState extends MusicBeatState {
     override function destroy():Void {
         Conductor.songPitch = 1;
 		Conductor.setPitch(1, false);
-        //CoolUtil.clearCache({sounds: false, bitmap: false, sustains: false});
+        lastSection = sectionIndex;
 		super.destroy();
 	}
 }
