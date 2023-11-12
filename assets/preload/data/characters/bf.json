@@ -1,19 +1,9 @@
 {
 	"imagePath": "week1/BOYFRIEND",
-	"camOffsets": [100,100],
-	"icon": "bf",
 	"isGF": false,
-	"scale": 1,
-	"charOffsets": [0,0],
+	"icon": "bf",
+	"camOffsets": [100,100],
 	"anims": [
-		{
-			"offsets": [-2,1],
-			"indices": [],
-			"loop": true,
-			"framerate": 24,
-			"animFile": "BF idle shaking",
-			"animName": "scared"
-		},
 		{
 			"offsets": [301,270],
 			"indices": [],
@@ -23,12 +13,12 @@
 			"animName": "attack"
 		},
 		{
-			"offsets": [-20,-51],
+			"offsets": [-2,1],
 			"indices": [],
-			"loop": false,
+			"loop": true,
 			"framerate": 24,
-			"animFile": "BF NOTE DOWN0",
-			"animName": "singDOWN"
+			"animFile": "BF idle shaking",
+			"animName": "scared"
 		},
 		{
 			"offsets": [-42,20],
@@ -39,12 +29,12 @@
 			"animName": "singRIGHTmiss"
 		},
 		{
-			"offsets": [-37,28],
+			"offsets": [-20,-51],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE UP0",
-			"animName": "singUP"
+			"animFile": "BF NOTE DOWN0",
+			"animName": "singDOWN"
 		},
 		{
 			"offsets": [8,20],
@@ -55,12 +45,12 @@
 			"animName": "singLEFTmiss"
 		},
 		{
-			"offsets": [18,19],
+			"offsets": [-37,28],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF hit",
-			"animName": "hit"
+			"animFile": "BF NOTE UP0",
+			"animName": "singUP"
 		},
 		{
 			"offsets": [-27,-40],
@@ -71,12 +61,12 @@
 			"animName": "preattack"
 		},
 		{
-			"offsets": [0,0],
+			"offsets": [18,19],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF idle dance",
-			"animName": "idle"
+			"animFile": "BF hit",
+			"animName": "hit"
 		},
 		{
 			"offsets": [2,5],
@@ -87,12 +77,12 @@
 			"animName": "hey"
 		},
 		{
-			"offsets": [-44,-6],
+			"offsets": [0,0],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE RIGHT0",
-			"animName": "singRIGHT"
+			"animFile": "BF idle dance",
+			"animName": "idle"
 		},
 		{
 			"offsets": [-11,-19],
@@ -103,12 +93,12 @@
 			"animName": "singDOWNmiss"
 		},
 		{
-			"offsets": [-40,23],
+			"offsets": [-44,-6],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE UP MISS",
-			"animName": "singUPmiss"
+			"animFile": "BF NOTE RIGHT0",
+			"animName": "singRIGHT"
 		},
 		{
 			"offsets": [10,-7],
@@ -119,6 +109,14 @@
 			"animName": "singLEFT"
 		},
 		{
+			"offsets": [-40,23],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF NOTE UP MISS",
+			"animName": "singUPmiss"
+		},
+		{
 			"offsets": [6,-14],
 			"indices": [],
 			"loop": false,
@@ -127,9 +125,11 @@
 			"animName": "dodge"
 		}
 	],
-	"isPlayer": true,
+	"charOffsets": [0,0],
+	"scale": 1,
 	"flipX": true,
-	"antialiasing": true,
+	"isPlayer": true,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }

@@ -1,8 +1,10 @@
 {
 	"imagePath": "week4/bfCar",
-	"icon": "bf",
-	"camOffsets": [100,100],
 	"isGF": false,
+	"camOffsets": [100,100],
+	"icon": "bf",
+	"charOffsets": [20,0],
+	"scale": 1,
 	"anims": [
 		{
 			"offsets": [-10,-50],
@@ -13,14 +15,6 @@
 			"animName": "singDOWN-loop"
 		},
 		{
-			"offsets": [-10,-50],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF NOTE DOWN0",
-			"animName": "singDOWN"
-		},
-		{
 			"offsets": [-30,21],
 			"indices": [],
 			"loop": false,
@@ -29,12 +23,12 @@
 			"animName": "singRIGHTmiss"
 		},
 		{
-			"offsets": [-29,27],
+			"offsets": [-10,-50],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE UP0",
-			"animName": "singUP"
+			"animFile": "BF NOTE DOWN0",
+			"animName": "singDOWN"
 		},
 		{
 			"offsets": [12,24],
@@ -43,6 +37,14 @@
 			"framerate": 24,
 			"animFile": "BF NOTE LEFT MISS",
 			"animName": "singLEFTmiss"
+		},
+		{
+			"offsets": [-29,27],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF NOTE UP0",
+			"animName": "singUP"
 		},
 		{
 			"offsets": [12,-6],
@@ -69,12 +71,12 @@
 			"animName": "idle"
 		},
 		{
-			"offsets": [-38,-7],
+			"offsets": [-11,-19],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE RIGHT0",
-			"animName": "singRIGHT"
+			"animFile": "BF NOTE DOWN MISS",
+			"animName": "singDOWNmiss"
 		},
 		{
 			"offsets": [0,0],
@@ -85,20 +87,12 @@
 			"animName": "idle-loop"
 		},
 		{
-			"offsets": [-11,-19],
+			"offsets": [-38,-7],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "BF NOTE DOWN MISS",
-			"animName": "singDOWNmiss"
-		},
-		{
-			"offsets": [-29,27],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF NOTE UP MISS",
-			"animName": "singUPmiss"
+			"animFile": "BF NOTE RIGHT0",
+			"animName": "singRIGHT"
 		},
 		{
 			"offsets": [12,-6],
@@ -110,6 +104,14 @@
 		},
 		{
 			"offsets": [-29,27],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF NOTE UP MISS",
+			"animName": "singUPmiss"
+		},
+		{
+			"offsets": [-29,27],
 			"indices": [10,11,12,13],
 			"loop": true,
 			"framerate": 24,
@@ -117,11 +119,9 @@
 			"animName": "singUP-loop"
 		}
 	],
-	"scale": 1,
-	"charOffsets": [20,0],
-	"isPlayer": true,
 	"flipX": true,
-	"antialiasing": true,
+	"isPlayer": true,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }

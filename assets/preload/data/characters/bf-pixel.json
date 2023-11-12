@@ -1,18 +1,10 @@
 {
 	"imagePath": "week6/bfPixel",
-	"icon": "bf-pixel",
-	"camOffsets": [400,300],
 	"isGF": false,
-	"charOffsets": [-160,-170],
+	"camOffsets": [400,300],
+	"icon": "bf-pixel",
+	"scale": 6,
 	"anims": [
-		{
-			"offsets": [0,0],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF DOWN NOTE",
-			"animName": "singDOWN"
-		},
 		{
 			"offsets": [6,0],
 			"indices": [],
@@ -20,6 +12,14 @@
 			"framerate": 24,
 			"animFile": "BF RIGHT MISS",
 			"animName": "singRIGHTmiss"
+		},
+		{
+			"offsets": [0,0],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF DOWN NOTE",
+			"animName": "singDOWN"
 		},
 		{
 			"offsets": [-6,0],
@@ -70,26 +70,26 @@
 			"animName": "singRIGHT"
 		},
 		{
-			"offsets": [6,0],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "BF UP MISS",
-			"animName": "singUPmiss"
-		},
-		{
 			"offsets": [-6,0],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
 			"animFile": "BF LEFT NOTE",
 			"animName": "singLEFT"
+		},
+		{
+			"offsets": [6,0],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "BF UP MISS",
+			"animName": "singUPmiss"
 		}
 	],
-	"scale": 6,
-	"isPlayer": true,
+	"charOffsets": [-160,-170],
 	"flipX": true,
-	"gameOverChar": "bf-pixel-dead",
+	"isPlayer": true,
 	"antialiasing": false,
+	"gameOverChar": "bf-pixel-dead",
 	"gameOverSuffix": "pixel"
 }
