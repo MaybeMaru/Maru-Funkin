@@ -9,7 +9,7 @@ import haxe.ds.Vector;
 **/
 class FunkBar extends FlxSpriteExt {
     public var colors:Vector<Int>;
-    public var percent:Float = 0.5;
+    public var percent:Float = 50.0;
     var max:Float;
     
     public function new(X:Float, Y:Float, imagePath:String, max:Float = 2.0) {
@@ -64,16 +64,18 @@ class FunkBar extends FlxSpriteExt {
 			_matrix.ty = Math.floor(_matrix.ty);
 		}
 
-        color = colors[0];
-        _frame.frame.x = 0;
-        _frame.frame.width = width;
-        camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+        if (percent != 100) {
+            color = colors[0];
+            _frame.frame.x = 0;
+            _frame.frame.width = width;
+            camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+        }
 
         color = colors[1];
         final _pos = width * percent * 0.01;
         _frame.frame.x = width - _pos;
         _frame.frame.width = _pos;
         _matrix.translate(width - _pos, 0);
-		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+        camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
     }
 }
