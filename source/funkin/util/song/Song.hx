@@ -35,7 +35,7 @@ typedef SongMeta = {
 }
 
 class Song {
-	public static var DEFAULT_SONG:SwagSong = {
+	public static final DEFAULT_SONG:SwagSong = {
 		song: 'Test',
 		notes: [],
 		bpm: 150,
@@ -45,7 +45,7 @@ class Song {
 		speed: 1,
 	}
 
-	public static var DEFAULT_SECTION:SwagSection = {
+	public static final DEFAULT_SECTION:SwagSection = {
 		sectionNotes: [],
 		sectionEvents: [],
 		mustHitSection: true,
@@ -53,7 +53,7 @@ class Song {
 		changeBPM: false
 	}
 
-	private static var CHART_FORMATS = [
+	private static final CHART_FORMATS = [
 		'json', 					// Vanilla FNF
 		'osu', 						// Osu! Mania
 		'sm', 'ssc', 				// Stepmania
@@ -88,8 +88,8 @@ class Song {
 	}
 
 	//Check null values and remove unused format variables
-	public static function checkSong(?song:SwagSong, ?meta:SongMeta):SwagSong {
-		song = JsonUtil.checkJsonDefaults(getDefaultSong(), FunkinFormat.engineCheck(song));
+	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = true):SwagSong {
+		song = JsonUtil.checkJsonDefaults(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
 		for (i in song.notes) {
 			i = checkSection(i);
@@ -108,10 +108,10 @@ class Song {
 
 	public static function checkSection(?section:SwagSection):SwagSection {
 		section = JsonUtil.checkJsonDefaults(getDefaultSection(), section);
-		var foundNotes:Map<String, Bool> = [];
-		var uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
+		final foundNotes:Map<String, Bool> = [];
+		final uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
 		for (i in section.sectionNotes) {
-			var key = '${Math.floor(i[0])}-${i[1]}-${i[3]}';
+			final key = '${Math.floor(i[0])}-${i[1]}-${i[3]}';
 			if (!foundNotes.exists(key)) {
 				foundNotes.set(key, true);
 				uniqueNotes.push(i);
@@ -146,7 +146,8 @@ class Song {
 	}
 
 	inline public static function checkAddSections(song:SwagSong, index:Int) {
-		while(song.notes[index] == null) song.notes.push(getDefaultSection());
+		while (song.notes[index] == null)
+			song.notes.push(getDefaultSection());
 	}
 
 	public static function getTimeSection(song:SwagSong, time:Float):Int {
@@ -178,16 +179,15 @@ class Song {
 				}
 				sec.sectionNotes.sort(sortNotes);
 			}
-			if (sec.sectionEvents.length <= 0 || metaClear) {
+			if (sec.sectionEvents.length <= 0 || metaClear)
 				Reflect.deleteField(sec, 'sectionEvents');
-			}
-			if (sec.mustHitSection) {
+
+			if (sec.mustHitSection)
 				Reflect.deleteField(sec, 'mustHitSection');
-			}
 		}
 		if (song.notes.length > 1) {
 			while (true) {
-				var lastSec = song.notes[song.notes.length-1];
+				final lastSec = song.notes[song.notes.length-1];
 				if (lastSec == null) break;
 				if (Reflect.fields(lastSec).length <= 0) 	song.notes.pop();
 				else 										break;
@@ -215,12 +215,12 @@ class Song {
 		Used for pico in Stress, but you can use it on other cool stuff
 	*/
 	inline public static function getSongNotes(diff:String, song:String):Array<Dynamic> {
-		var sections:Array<SwagSection> = loadFromFile(diff, song).notes;
+		final sections:Array<SwagSection> = loadFromFile(diff, song).notes;
 		return sortSections(sections);
 	}
 
 	public static function sortSections(sections:Array<SwagSection>):Array<Array<Dynamic>> {
-		var returnNotes:Array<Array<Dynamic>> = [];
+		final returnNotes:Array<Array<Dynamic>> = [];
 		for (s in 0...sections.length) {
 			if (sections[s].sectionNotes != null) {
 				for (n in 0...sections[s].sectionNotes.length) {
@@ -238,7 +238,7 @@ class Song {
 
 	public static function formatSongFolder(songName:String):String {
 		var returnSong:String = "";
-		var songParts:Array<String> = songName.split("");
+		final songParts:Array<String> = songName.split("");
 		for (letter in songParts) {
 			var formatLetter:String = letter.toLowerCase();
 			switch (formatLetter) {

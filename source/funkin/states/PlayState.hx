@@ -148,7 +148,7 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		persistentUpdate = persistentDraw = true;
 
-		SONG = Song.checkSong(SONG);
+		SONG = Song.checkSong(SONG, null, false);
 
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';

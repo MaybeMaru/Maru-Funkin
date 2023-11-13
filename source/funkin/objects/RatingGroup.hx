@@ -2,7 +2,7 @@ package funkin.objects;
 
 class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
     public var targetSpr:FlxObject = null;
-    var _offset:FlxPoint;
+    public var _offset:FlxPoint;
 
     public function new(?targetSpr:FlxSprite):Void {
         super();

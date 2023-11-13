@@ -89,7 +89,7 @@ class NotesGroup extends FlxGroup
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
 		this.isPlayState = isPlayState;
-        SONG = Song.checkSong(_SONG); //Double check null values
+        SONG = Song.checkSong(_SONG, null, false); //Double check null values
         Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
