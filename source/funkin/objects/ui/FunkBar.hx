@@ -18,26 +18,24 @@ class FunkBar extends FlxSpriteExt {
         this.max = max;
         loadImage(imagePath);
         colors = new Vector(2);
-        colors[0] = 0xFFFF0000;
-        colors[1] = 0xFF66FF33;
-
+        createFilledBar(0xFFFF0000, 0xFF66FF33);
         updateBar(1.0);
     }
 
-    public function createColoredEmptyBar(color:Int) {
+    public inline function createColoredEmptyBar(color:Int) {
         colors[0] = color;
     }
 
-    public function createColoredFilledBar(color:Int) {
+    public inline function createColoredFilledBar(color:Int) {
         colors[1] = color;
     }
 
-    public function createFilledBar(color1:Int, color2:Int) {
+    public inline function createFilledBar(color1:Int, color2:Int) {
         createColoredEmptyBar(color1);
         createColoredFilledBar(color2);
     }
 
-    public function updateBar(value:Float) {
+    public inline function updateBar(value:Float) {
         percent = value / max * 100.0;
     }
 

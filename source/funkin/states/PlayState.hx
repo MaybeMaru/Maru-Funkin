@@ -3,7 +3,6 @@ package funkin.states;
 import funkin.objects.ui.FunkBar;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
-import flixel.ui.FlxBar;
 
 class PlayState extends MusicBeatState {
 	public static var instance:PlayState;

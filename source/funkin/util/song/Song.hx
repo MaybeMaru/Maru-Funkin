@@ -206,7 +206,7 @@ class Song {
 			rawJson = CoolUtil.getFileContent(chartPath).trim();
 			while (!rawJson.endsWith("}"))	rawJson = rawJson.substr(0, rawJson.length - 1);
 		}
-		var swagShit:SwagSong = Json.parse(rawJson).song;
+		final swagShit:SwagSong = Json.parse(rawJson).song;
 		return swagShit;
 	}
 

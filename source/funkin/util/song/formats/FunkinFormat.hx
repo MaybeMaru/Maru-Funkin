@@ -22,37 +22,59 @@ class FunkinFormat {
 		for (field in Reflect.fields(song)) {
 			switch (field) {
 				case 'gfVersion' | 'gf' | 'player3' | 'player2' | 'player1':
-					var playerIndex:Int = 0;
-					switch(field) {
-						case 'player1': playerIndex = 0;
-						case 'player2': playerIndex = 1;
-						default:		playerIndex = 2;
+					final playerIndex:Int = switch(field) {
+						case 'player1': 0;
+						case 'player2': 1;
+						default:		2;
 					}
-					var players:Array<String> = Reflect.field(song, 'players');
+					final players:Array<String> = Reflect.field(song, 'players');
 					players[playerIndex] = Reflect.field(song, field);
 					Reflect.setField(song, 'players', players);
 					Reflect.deleteField(song, field);
 				case 'events':
-					song = convertPsychChart(song);	
+					final isFps = Reflect.hasField(Reflect.field(song, "events"), "events");
+					song = isFps ? convertFpsChart(song) : convertPsychChart(song);
 					Reflect.deleteField(song, field);
 			}
 		}
 		return song;
 	}
+
+	// Converts FPS+ engine events
+	public static function convertFpsChart(song:SwagSong) {
+		final fpsEvents:Array<Dynamic> = Reflect.field(Reflect.field(song, "events"), "events");
+		if (fpsEvents == null || fpsEvents.length <= 0) return song;
+
+		final events:Map<Int, Array<Array<Dynamic>>> = [];
+		for (e in fpsEvents) {
+			if (!events.exists(e[0])) events.set(e[0], []);
+			events.get(e[0]).push([e[1], e[3], []]);
+		}
+
+		for (i in events.keys()) {
+			Song.checkAddSections(song, i);
+			song.notes[i] = Song.checkSection(song.notes[i]);
+			for (e in events.get(i))
+				song.notes[i].sectionEvents.push(e);
+		}
+
+		return song;
+	}
 	
+	// Converts psych and forever engine events
 	public static function convertPsychChart(song:SwagSong):SwagSong {
-		var psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
+		final psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
 		if (psychEvents == null || psychEvents.length <= 0) return song;
 
-		var events:Array<Array<Dynamic>> = [];
+		final events:Array<Array<Dynamic>> = [];
 		for (e in psychEvents) {
-			var eventTime = e[0];
-			var _events:Array<Array<Dynamic>> = e[1];
+			final eventTime = e[0];
+			final _events:Array<Array<Dynamic>> = e[1];
 			for (i in _events) events.push([eventTime, i[0], [i[1], i[2]]]);
 		}
 
 		for (i in events) {
-			var eventSec = Song.getTimeSection(song, i[0]);
+			final eventSec = Song.getTimeSection(song, i[0]);
 			Song.checkAddSections(song, eventSec);
 			song.notes[eventSec] = Song.checkSection(song.notes[eventSec]);
 			song.notes[eventSec].sectionEvents.push(i);
