@@ -179,13 +179,14 @@ class Note extends FlxSpriteExt implements INoteData {
                 drawSustainCached(_height);
             }
             else { // Cut
-                clipRect = (susRect ?? (susRect = new FlxRect())).set(0, height - _height, width, _height);
+                clipRect = (susRect ?? (susRect = FlxRect.get())).set(0, height - _height, width, _height);
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
                 percentLeft = _height / height;
             }
         } else {
             kill();
+            susRect = FlxDestroyUtil.put(susRect); // Pool rect for later
         }
     }
 
@@ -204,16 +205,16 @@ class Note extends FlxSpriteExt implements INoteData {
             frames = AssetManager.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
         
             // draw piece
-            var loops = Math.floor(_height / susPiece.height) + 1;
+            final loops = Math.floor(_height / susPiece.height) + 1;
             for (i in 0...loops)
                 stampBitmap(susPiece, 0, (_height - susEnd.height) - (i * susPiece.height));
             
             //draw end
-            var endPos = _height - susEnd.height;
+            final endPos = _height - susEnd.height;
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
             stampBitmap(susEnd, 0, endPos);
             
-            var gpuGraphic = AssetManager.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
+            final gpuGraphic = AssetManager.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
             frames = gpuGraphic.imageFrame;
             origin.set(width * 0.5, 0);
         }
@@ -268,7 +269,7 @@ class Note extends FlxSpriteExt implements INoteData {
 	}
 
     public function updateSprites() {
-        var mapData = NoteUtil.getSkinSprites(skin, noteData);
+        final mapData = NoteUtil.getSkinSprites(skin, noteData);
         refSprite = mapData.baseSprite;
         susPiece = mapData.susPiece;
         susEnd = mapData.susEnd;
@@ -283,7 +284,7 @@ class Note extends FlxSpriteExt implements INoteData {
     public var hitMult:Float = 1;
 
 	public function set_noteType(value:String = 'default'):String {
-		var noteJson:NoteTypeJson = NoteUtil.getTypeJson(value);
+		final noteJson:NoteTypeJson = NoteUtil.getTypeJson(value);
 		mustHit = noteJson.mustHit;
 		altAnim = noteJson.altAnim;
 		hitHealth = noteJson.hitHealth;

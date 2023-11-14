@@ -60,4 +60,9 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
 
         return strumNote;
     }
+
+    override function destroy() {
+        super.destroy();
+        FlxDestroyUtil.putArray(initPos);
+    }
 }

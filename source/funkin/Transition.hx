@@ -3,18 +3,21 @@ package funkin;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
+import openfl.events.Event as OpenFlEvent;
 
 class ResizableSprite extends Sprite {
     public function new() {
         super();
-        FlxG.signals.gameResized.add(function (width, height) {
-            resize(width, height);
-        });
+        addEventListener(OpenFlEvent.ADDED_TO_STAGE, create);
     }
 
-    public inline function resize(width:Int, height:Int) {
-        this.scaleX = width / FlxG.width;
-        this.scaleY = height / FlxG.height;
+    function create(_):Void {
+        stage.addEventListener(OpenFlEvent.RESIZE, onResize);
+    }
+    
+    function onResize(_):Void {
+        scaleX = FlxG.stage.stageWidth / FlxG.width;
+        scaleY = FlxG.stage.stageHeight / FlxG.height;
     }
 }
 
@@ -73,17 +76,17 @@ class Transition extends ResizableSprite {
     var inExit:Bool;
 
     public function startTrans(?nextState:FlxState, ?completeCallback:Dynamic) {
-        var _func = function (?tween:FlxTween) {
+        final _func = function (?tween:FlxTween) {
             if (completeCallback != null) completeCallback();
             if (nextState != null) FlxG.switchState(nextState);
         }
-        this.scaleY = -1;
+        scaleY = -Math.abs(scaleY);
         inExit = false;
         setupTrans(0, height, times.open, _func);
     }
 
     public function exitTrans(?completeCallback:Dynamic) {
-        this.scaleY = 1;
+        scaleY = Math.abs(scaleY);
         inExit = true;
         setupTrans(-height * 0.5, height * 0.5, times.close, completeCallback);
     }
@@ -114,7 +117,7 @@ class Transition extends ResizableSprite {
         final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
         y = FlxMath.lerp(startPosition, endPosition, lerpValue);
     
-        if (Math.floor(y) == endPosition) {
+        if (timeElapsed >= transDuration) {
             if (finishCallback != null) finishCallback();
             if (inExit) visible = false;
             transitioning = false;

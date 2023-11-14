@@ -41,7 +41,7 @@ class WeekSetup {
 
     public static var curWeekDiffs:Array<String> = ['easy','normal','hard'];
 
-    public static var DEFAULT_WEEK(default, never):WeekJson = {
+    public static final DEFAULT_WEEK:WeekJson = {
         songList: {
             songs:["Tutorial"],
             songIcons: ["gf"],
@@ -64,30 +64,30 @@ class WeekSetup {
         var weeks:Array<String> = [];
 
         // Get week json lists
-        var vanillaWeeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
-        var global:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
-        var mod:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
+        final vanillaWeeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
+        final globalWeeks:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
+        final modWeeks:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
         
         //Vanilla weeks go first >:)
-        weeks = weeks.concat(vanillaWeeks).concat(global);
-        weeks = weeks.concat(mod.map(week -> Paths.getFileMod(week)[1]));
+        weeks = weeks.concat(vanillaWeeks).concat(globalWeeks);
+        weeks = weeks.concat(modWeeks.map(week -> Paths.getFileMod(week)[1]));
         weeks = CoolUtil.removeDuplicates(weeks);
 
         FlxArrayUtil.clearArray(weekList);
         FlxArrayUtil.clearArray(vanillaWeekList);
         weekMap.clear();
 
-        var modMap:Map<String, String> = [];
-        for (i in mod) {
+        final modMap:Map<String, String> = [];
+        for (i in modWeeks) {
 			final pathParts = Paths.getFileMod(i);
 			modMap.set(pathParts[1], pathParts[0]);
 		}
 
         for (i in weeks) {
-            var getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$i.json', TEXT, null, true));
-            var parsedJson:WeekJson = checkWeek(Json.parse(getJson));
+            final getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$i.json', TEXT, null, true));
+            final parsedJson:WeekJson = checkWeek(Json.parse(getJson));
 
-            var _data:WeekData = {
+            final _data:WeekData = {
                 data: parsedJson,
                 modFolder: modMap.get(i),
                 name: i

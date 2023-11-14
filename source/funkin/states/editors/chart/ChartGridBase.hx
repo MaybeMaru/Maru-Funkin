@@ -107,7 +107,7 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
     }
 
     public function drawObject(data:Array<Dynamic>):Dynamic {
-        return null;
+        throw "Missing drawObject function";
     }
 
     // Dw about this
@@ -308,8 +308,8 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     public var names:Array<String> = [];
     
     public var sprite:FlxSpriteExt;
-    var packSprite:FlxSpriteExt;
     public var text:FunkinText;
+    var packSprite:FlxSpriteExt;
 
     public var strumTime:Float = 0;
 

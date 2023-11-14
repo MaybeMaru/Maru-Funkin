@@ -108,6 +108,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 import flixel.input.keyboard.FlxKey;
+import flixel.util.FlxDestroyUtil;
 
 import haxe.Json;
 import flixel.graphics.frames.FlxFramesCollection;

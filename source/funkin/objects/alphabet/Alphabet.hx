@@ -41,12 +41,18 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
 
     public function new(X:Float = 0, Y:Float = 0, text:String = "coolswag", bold:Bool = true, textWidth:Int = 0, textScale:Float = 1):Void {
         super(X,Y);
-        initPos = new FlxPoint();
-        curPos = new FlxPoint();
+        initPos = FlxPoint.get();
+        curPos = FlxPoint.get();
         this.bold = bold;
         this.textWidth = textWidth;
         this.textScale = textScale;
         this.text = text;
+    }
+
+    override function destroy() {
+        super.destroy();
+        initPos = FlxDestroyUtil.put(initPos);
+        curPos = FlxDestroyUtil.put(curPos);
     }
 
     public var cutText:Array<String> = [];

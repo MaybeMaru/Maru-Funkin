@@ -17,7 +17,7 @@ class AlphabetCharacter extends FlxSpriteExt {
     public var letterSize:Float = 1;
     public var lineWidth:Int = 0;
     
-    public static var characters(default, never):Map<String, LetterData> =  [
+    public static final characters:Map<String, LetterData> =  [
         //  Alphabet
         "a"=>{lower:[0,10],},               "b"=>null,
         "c"=>{lower:[0,15],},               "d"=>null,
@@ -65,7 +65,7 @@ class AlphabetCharacter extends FlxSpriteExt {
         loadImage('alphabet');
 		antialiasing = Preferences.getPref('antialiasing');
         setupCharacter(x,y,letter,bold,letterSize);
-        offsetLetter = new FlxPoint();
+        offsetLetter = FlxPoint.get();
     }
 
     private static var defData:LetterData = {
@@ -118,5 +118,10 @@ class AlphabetCharacter extends FlxSpriteExt {
         x += offsetLetter.x * letterSize;
         y += offsetLetter.y * letterSize;
         setScale(letterSize);
+    }
+
+    override function destroy() {
+        super.destroy();
+        offsetLetter = FlxDestroyUtil.put(offsetLetter);
     }
 }

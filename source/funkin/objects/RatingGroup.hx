@@ -7,9 +7,14 @@ class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
     public function new(?targetSpr:FlxSprite):Void {
         super();
         this.targetSpr = targetSpr;
-        _offset = new FlxPoint();
+        _offset = FlxPoint.get();
         if (targetSpr is FlxSprite)
             _offset.set(targetSpr.frameWidth * targetSpr.scale.x, targetSpr.frameHeight * targetSpr.scale.y);
+    }
+
+    override function destroy() {
+        super.destroy();
+        _offset = FlxDestroyUtil.put(_offset);
     }
 
     override public function update(elapsed:Float):Void {

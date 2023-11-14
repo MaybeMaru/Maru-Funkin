@@ -90,11 +90,13 @@ class Song {
 	//Check null values and remove unused format variables
 	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = true):SwagSong {
 		song = JsonUtil.checkJsonDefaults(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
+		
 		if (song.notes.length <= 0) song.notes.push(getDefaultSection());
 		for (i in song.notes) {
 			i = checkSection(i);
 			if (i.sectionNotes.length > 100 && !CoolUtil.debugMode) return getDefaultSong(); // Fuck off
 		}
+
 		if (meta != null) { // Apply song metaData
 			song.offsets = meta.offsets.copy();
 			for (s in 0...meta.events.length) {
@@ -103,6 +105,7 @@ class Song {
 					song.notes[s].sectionEvents.push(i);
 			}
 		}
+
 		return song;
 	}
 

@@ -30,7 +30,7 @@ class SkinUtil {
     }
 
     inline public static function getSkinJsonData(skin:String = 'default'):SkinJson {
-		var skinJson:SkinJson = JsonUtil.getJson(skin, 'skins');
+		final skinJson:SkinJson = JsonUtil.getJson(skin, 'skins');
 		return skinJson;
 	}
 
@@ -46,10 +46,10 @@ class SkinUtil {
 
     public static function getAssetKey(key:String, type:AssetType = IMAGE, ?skin:String) {
         skin = skin == null ? SkinUtil.curSkin : skin;
-        var skinKey = 'skins/$skin/$key';
-        var defaultSkinKey = 'skins/default/$key';
+        final skinKey = 'skins/$skin/$key';
+        final defaultSkinKey = 'skins/default/$key';
 
-        var skinPath = Paths.getAssetPath(skinKey, type);
+        final skinPath = Paths.getAssetPath(skinKey, type);
         return Paths.exists(skinPath, type) ? skinKey :  defaultSkinKey;
     }
 }

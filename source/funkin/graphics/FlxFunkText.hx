@@ -101,10 +101,11 @@ class FlxFunkText extends FlxSprite {
     public function new(X:Float=0, Y:Float=0, Text:String="", ?canvasRes:FlxPoint, ?size:Int) {
         super();
         canvasRes = canvasRes ?? FlxPoint.get(FlxG.width,FlxG.height);
-
         textField = new TextField();
         textField.width = Std.int(canvasRes.x);
         textField.height = Std.int(canvasRes.y);
+        canvasRes = FlxDestroyUtil.put(canvasRes);
+
         textFormat = new TextFormat(getFont("vcr"), 16, 0xffffff);
         textField.defaultTextFormat = textFormat;
 
@@ -114,8 +115,7 @@ class FlxFunkText extends FlxSprite {
         makeGraphic(cast textField.width,cast textField.height,FlxColor.TRANSPARENT,true);
         setPosition(X,Y);
         text = Text;
-        if (size != null)
-            this.size = size;
+        if (size != null) this.size = size;
     }
 
     public var style:TextStyle = NONE;
