@@ -90,6 +90,14 @@ class FlxFunkText extends FlxSprite {
     var _fillRect:Rectangle;
     var _textMatrix:FlxMatrix;
 
+    override function destroy() {
+        super.destroy();
+        textField = null;
+        textFormat = null;
+        _fillRect = null;
+        _textMatrix = null;
+    }
+
     public function new(X:Float=0, Y:Float=0, Text:String="", ?canvasRes:FlxPoint, ?size:Int) {
         super();
         canvasRes = canvasRes ?? FlxPoint.get(FlxG.width,FlxG.height);
@@ -106,9 +114,8 @@ class FlxFunkText extends FlxSprite {
         makeGraphic(cast textField.width,cast textField.height,FlxColor.TRANSPARENT,true);
         setPosition(X,Y);
         text = Text;
-        if (size != null) {
+        if (size != null)
             this.size = size;
-        }
     }
 
     public var style:TextStyle = NONE;

@@ -171,18 +171,6 @@ class ChartingState extends MusicBeatState {
         }
     }
 
-    public function checkSectionsInDistace(start:Int, end:Int) {
-        if (start == end || end < start) {
-            if (SONG.notes[start] == null) SONG.notes.push(Song.getDefaultSection());
-            return;
-        }
-        var i:Int = start;
-        while (i <= end) {
-            if (SONG.notes[i] == null) SONG.notes.push(Song.getDefaultSection()); // Make new sections
-            i++;
-        }
-    }
-
     function bpmPositionCheck(newPosition:Float = 0) {
         Conductor.songPosition = newPosition; // Bpm conductor crap
         Conductor.autoSync();
@@ -203,19 +191,21 @@ class ChartingState extends MusicBeatState {
 
         deselectNote();
         deselectEvent();
-        checkSectionsInDistace(sectionIndex, newIndex); // Check for null new sections
+        Song.checkAddSections(SONG, newIndex, sectionIndex);  // Check for null new sections
         sectionIndex = newIndex;
         sectionTime = getSecTime(sectionIndex);
         nextSectionTime = getSecTime(sectionIndex + 1);
 
-        if (sectionTime > Conductor.inst.length) {  // Set song bounds
+        if (sectionTime >= Conductor.inst.length) {  // Set song bounds
             setSection(Song.getTimeSection(SONG, Conductor.inst.length));
+            stop();
             return;
         }
         
         bpmPositionCheck(sectionTime);
 
-        mainGrid.setData(sectionIndex); // Change visual stuff
+        // Change visual stuff
+        mainGrid.setData(sectionIndex); 
         mainGrid.updateWaveform();
         eventsGrid.setData(sectionIndex);
         updateSectionTabUI();

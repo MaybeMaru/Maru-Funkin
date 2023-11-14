@@ -145,9 +145,14 @@ class Song {
         return time;
 	}
 
-	inline public static function checkAddSections(song:SwagSong, index:Int) {
-		while (song.notes[index] == null)
+	inline public static function checkAddSections(song:SwagSong, index:Int, i:Int = 0) {
+		while (song.notes.length < index + 1)
 			song.notes.push(getDefaultSection());
+
+		while (i < index) {
+			if (song.notes[i] == null) song.notes[i] = getDefaultSection();
+			i++;
+		}
 	}
 
 	public static function getTimeSection(song:SwagSong, time:Float):Int {

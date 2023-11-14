@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import flixel.util.FlxDestroyUtil;
+
 typedef CharacterJson = {
     var icon:String;
 	var camOffsets:Array<Int>;
@@ -96,9 +98,9 @@ class Character extends FlxSpriteExt {
 
 	public function new(?X:Float, ?Y:Float, character:String = "bf", isPlayer:Bool = false, debugMode:Bool = false, ?inputJson:CharacterJson):Void {
 		super(X,Y);
-		worldOffsets = new FlxPoint().set(0,0);
-		stageOffsets = new FlxPoint().set(0,0);
-		camOffsets = new FlxPoint().set(0,0);
+		worldOffsets = FlxPoint.get();
+		stageOffsets = FlxPoint.get();
+		camOffsets = FlxPoint.get();
 
 		this.debugMode = debugMode;
 		this.isPlayer = isPlayer;
@@ -303,5 +305,12 @@ class Character extends FlxSpriteExt {
 		else if (animOffsets.exists(_idle)) {
 			playAnim(_idle, !getAnimData(_idle).loop);
 		}
+	}
+
+	override function destroy() {
+		super.destroy();
+		worldOffsets = FlxDestroyUtil.put(worldOffsets);
+		stageOffsets = FlxDestroyUtil.put(stageOffsets);
+		camOffsets = FlxDestroyUtil.put(camOffsets);
 	}
 }

@@ -71,11 +71,9 @@ class PlayState extends MusicBeatState {
 	public var combo:Int = 0;
 	public var health(default, set):Float = 1;
 	function set_health(value:Float) {
-		value = FlxMath.bound(value, 0, 2);
-		healthBar.updateBar(value);
-		if (value <= 0 && validScore) {
+		healthBar.updateBar(value = FlxMath.bound(value, 0, 2));
+		if (value == 0 && validScore)
 			openGameOverSubstate();
-		}
 		return health = value;
 	}
 

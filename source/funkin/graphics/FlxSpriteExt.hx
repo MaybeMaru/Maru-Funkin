@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
@@ -134,7 +135,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	inline public function getScaleDiff() {
-		return new FlxPoint().set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
+		return FlxPoint.get(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
 	}
 
 	public function applyCurOffset(forced:Bool = false):Void {
@@ -150,7 +151,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	inline public function addOffset(name:String, x:Float = 0, y:Float = 0):Void {
-		animOffsets[name] = new FlxPoint(x, y);
+		animOffsets[name] = FlxPoint.get(x, y);
 	}
 
 	public function addAnim(animName:String, animFile:String, animFramerate:Int = 24, animLoop:Bool = false, ?animIndices:Array<Int>, ?animOffsets:Array<Float>):Void {
@@ -176,13 +177,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		animDatas[anim] = newData;
 		addOffset(anim, newData.offsets[0], newData.offsets[1]);
 
-		final name = newData.animName;
-		final file = newData.animFile;
-		final indices = newData.indices;
+		final n = newData.animName;
+		final f = newData.animFile;
+		final i = newData.indices;
 		final fps = newData.framerate;
-		final loop = newData.loop;
+		final l = newData.loop;
 
-		indices.length > 0 ? animation.addByIndices(name, file, indices, "", fps, loop) : animation.addByPrefix(name, file, fps, loop);
+		i.length > 0 ? animation.addByIndices(n, f, i, "", fps, l) : animation.addByPrefix(n, f, fps, l);
 	}
 
 	inline public function setSkew(?skewX:Float, ?skewY:Float) {

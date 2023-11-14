@@ -33,6 +33,13 @@ class FunkBar extends FlxSpriteExt {
         }
     }
 
+    override function destroy() {
+        super.destroy();
+        legacyMode.sprite.destroy();
+        colors = null;
+        legacyMode = null;
+    }
+
     public inline function createColoredEmptyBar(color:Int) {
         colors[0] = color;
     }
