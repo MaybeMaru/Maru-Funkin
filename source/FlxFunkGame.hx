@@ -1,9 +1,9 @@
 package;
 
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import flixel.system.ui.FlxSoundTray;
 import flixel.FlxGame;
-
-// TODO stylize this
 
 class FlxFunkGame extends FlxGame {
     public var transition:Transition;
@@ -30,6 +30,32 @@ class FlxFunkGame extends FlxGame {
 }
 
 class FlxFunkSoundTray extends FlxSoundTray {
+    var _bar:Bitmap;
+    
+    public function new() {
+        super();
+        removeChildren();
+        
+        final bg = new Bitmap(new BitmapData(80, 25, false, 0xff3f3f3f));
+        addChild(bg);
+
+        _bar = new Bitmap(new BitmapData(75, 25, false, 0xffffffff));
+        _bar.x = 2.5;
+        addChild(_bar);
+
+        final tmp:Bitmap = new Bitmap(openfl.Assets.getBitmapData("assets/images/options/soundtray.png"), null, true);
+        addChild(tmp);
+        screenCenter();
+        
+        tmp.scaleX = 0.5;
+        tmp.scaleY = 0.5;
+        tmp.x -= tmp.width * 0.2;
+        tmp.y -= 5;
+
+        y = -height;
+		visible = false;
+    }
+    
     override function update(elapsed:Float) {
         super.update(elapsed * 4);
     }
@@ -37,5 +63,6 @@ class FlxFunkSoundTray extends FlxSoundTray {
     override function show(up:Bool = false) {
         super.show(up);
         _timer *= 4;
+        _bar.scaleX = FlxG.sound.muted ? 0 : FlxG.sound.volume;
     }
 }
