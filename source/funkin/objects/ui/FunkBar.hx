@@ -35,6 +35,7 @@ class FunkBar extends FlxSpriteExt {
 
     override function destroy() {
         super.destroy();
+        barPoint.put();
         legacyMode.sprite.destroy();
         colors = null;
         legacyMode = null;
@@ -56,6 +57,8 @@ class FunkBar extends FlxSpriteExt {
     public inline function updateBar(value:Float) {
         percent = value / max * 100.0;
     }
+
+    public final barPoint:FlxPoint = FlxPoint.get();
 
     override function drawComplex(camera:FlxCamera) {
         _frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
@@ -103,19 +106,26 @@ class FunkBar extends FlxSpriteExt {
             }
         }
         else {
+            final _pos = width * percent * 0.01;
+            final _sub = width - _pos;
+
             if (percent != 100) {
                 color = colors[0];
                 _frame.frame.x = 0;
-                _frame.frame.width = width;
+                _frame.frame.width = _sub;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
     
             color = colors[1];
-            final _pos = width * percent * 0.01;
-            _frame.frame.x = width - _pos;
+            _frame.frame.x = _sub;
             _frame.frame.width = _pos;
-            _matrix.translate(width - _pos, 0);
-            camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+            _matrix.translate(_sub * _cosAngle, _sub * _sinAngle);
+            if (percent != 0) {
+                camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+            }
+
+            final _center = height * 0.5;
+            barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
         }
     }
 }

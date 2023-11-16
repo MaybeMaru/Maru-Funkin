@@ -1,5 +1,6 @@
 package;
 
+import flixel.system.FlxAssets;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import flixel.system.ui.FlxSoundTray;
@@ -61,8 +62,15 @@ class FlxFunkSoundTray extends FlxSoundTray {
     }
 
     override function show(up:Bool = false) {
-        super.show(up);
-        _timer *= 4;
+        if (!silent) {
+			final sound = FlxAssets.getSound("assets/sounds/volume");
+			if (sound != null)
+				FlxG.sound.load(sound).play();
+		}
+
+		_timer = 4;
+		y = 0;
+		visible = active = true;
         _bar.scaleX = FlxG.sound.muted ? 0 : FlxG.sound.volume;
     }
 }

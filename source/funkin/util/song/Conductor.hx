@@ -17,7 +17,7 @@ class Conductor {
 	public static function setTimeSignature(top:Int = 4, bottom:Int = 4, ?_bpm:Float) { // Is this how it works??
 		BEATS_PER_MEASURE = top;
 		STEPS_PER_BEAT = bottom;
-		set_bpm(_bpm != null ? _bpm : bpm); // Update values
+		set_bpm(_bpm ?? bpm); // Update values
 	}
 
 	public static var bpm(default, set):Float = 100;
@@ -45,9 +45,9 @@ class Conductor {
 	public static var songPitch:Float = 1;
 
 	public static var inst(get, default):FlxSound = null;
-	static function get_inst() return inst == null ? inst = new FlxSound() : inst;
+	static function get_inst() return inst ?? (inst = new FlxSound());
 	public static var vocals(get, default):FlxSound = null;
-	static function get_vocals() return vocals == null ? vocals = new FlxSound() : vocals;
+	static function get_vocals() return vocals ?? (vocals = new FlxSound());
 	public static var hasVocals:Bool = true;
 	
 	public static var _loadedSong:String = "";
@@ -55,6 +55,9 @@ class Conductor {
 	public static inline function loadMusic(song:String) {
 		song = Song.formatSongFolder(song);
 		if (_loadedSong != song) {
+			inst.destroy();
+			vocals.destroy();
+			
 			inst = new FlxSound().loadEmbedded(Paths.inst(song));
 			inst.persist = true;
 			FlxG.sound.list.add(inst);
@@ -87,7 +90,7 @@ class Conductor {
 		for (i in 0...song.notes.length) {
 			if(song.notes[i].changeBPM && song.notes[i].bpm != curBPM) {
 				curBPM = song.notes[i].bpm;
-				var event:BPMChangeEvent = {
+				final event:BPMChangeEvent = {
 					stepTime: totalSteps,
 					songTime: totalPos,
 					bpm: curBPM
@@ -95,7 +98,7 @@ class Conductor {
 				bpmChangeMap.push(event);
 			}
 
-			var deltaSteps:Int = STEPS_PER_MEASURE;
+			final deltaSteps:Int = STEPS_PER_MEASURE;
 			totalSteps += deltaSteps;
 			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
 		}
@@ -114,10 +117,10 @@ class Conductor {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
-			bpm: (autoBPM != null ? autoBPM : bpm)
+			bpm: autoBPM ?? bpm
 		}
 
-		time = (time != null ? time : songPosition);
+		time = (time ?? songPosition);
 		for (i in bpmChangeMap) {
 			if (time >= i.songTime) lastChange = i;
 		}
@@ -154,7 +157,7 @@ class Conductor {
 
 	public static function soundSync(?sound:FlxSound, offset:Float = 0) {
 		if (sound == null) return;
-		var playing:Bool = sound.playing;
+		final playing:Bool = sound.playing;
 		sound.pause();
 		sound.time = songPosition - offset - settingOffset;
 		if (playing) sound.play();

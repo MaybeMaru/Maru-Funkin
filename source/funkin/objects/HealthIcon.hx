@@ -9,6 +9,9 @@ class HealthIcon extends FlxSpriteExt {
 	public var staticSize:Float = 1;
 	public var iconName:String = '';
 
+	var _height:Float = 0;
+	var _width:Float = 0;
+
 	public function new(char:String = 'bf', isPlayer:Bool = false):Void {
 		super();
 		this.isPlayer = isPlayer;
@@ -44,18 +47,19 @@ class HealthIcon extends FlxSpriteExt {
 		animCheck();
 		flipX = isPlayer;
 		scrollFactor.set();
+		_height = height * 0.5;
+		_width = width;
 	}
 
-	public function bumpIcon(bumpSize:Float = 1.3):Void {
+	public function bumpIcon(bumpSize:Float = 1.2):Void {
 		setScale(bumpSize);
 		update(0);
 	}
 
 	public dynamic function animCheck():Void {
 		if (!singleAnim) {
-			var lastAnim:String = (animation.curAnim != null) ? animation.curAnim.name : '';
-			var newAnim:String = isDying ? 'dying' : 'healthy';
-			if (newAnim != lastAnim) {
+			final newAnim:String = isDying ? 'dying' : 'healthy';
+			if (newAnim != (animation?.curAnim?.name ?? "")) {
 				playAnim(newAnim);
 				updateHitbox();
 			}
@@ -64,7 +68,7 @@ class HealthIcon extends FlxSpriteExt {
 
 	public function setSprTrackerPos():Void {
 		if (sprTracker != null) {
-			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height/2 - sprTracker.height/2));
+			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height * 0.5 - sprTracker.height * 0.5));
 		}
 	}
 
@@ -72,26 +76,26 @@ class HealthIcon extends FlxSpriteExt {
 		if (playIcon && PlayState.instance != null) {
 			final healthBar = PlayState.instance.healthBar;
 			var bumpLerp = 0.15;
-			var iconOffset = 23;
-			var moveOffset = width * 0.333;
+			var coolOffset = 23 + width * 0.333;
 			if (Preferences.getPref('vanilla-ui')) {
 				bumpLerp = 0.75;
-				iconOffset = 26;
-				moveOffset = 0;
+				coolOffset = isPlayer ? 26 : _width - 26;
 			}
 
-			final iconX = healthBar.x + healthBar.width * FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01;
-			var iconOffsetX = iconOffset;
-			isDying = healthBar.percent < 20;
-			if (!isPlayer) {
-				iconOffsetX = cast width - iconOffset;
-				isDying = healthBar.percent > 80;
+			final yOff = _height + healthBar.height * 0.5;
+			if (isPlayer) {
+				isDying = healthBar.percent < 20;
+				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - yOff);
 			}
-			x = iconX - iconOffsetX + moveOffset;
+			else {
+				isDying = healthBar.percent > 80;
+				setPosition(healthBar.barPoint.x - width + _width - coolOffset, healthBar.barPoint.y - yOff);
+			}
+
 			animCheck();
 			setScale(CoolUtil.coolLerp(scale.x, staticSize, bumpLerp));
 		}
+		else setSprTrackerPos();
 		super.update(elapsed);
-		setSprTrackerPos();
 	}
 }

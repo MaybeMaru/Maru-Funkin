@@ -45,20 +45,18 @@ class ChartWaveform extends FlxSprite {
     }
 
     public function getIndexTime(time:Float) {
-        var index = time * audioBuffer.sampleRate / 1000;
-        index = Math.max(index, 0);
-        return index;
+        return Math.max(time * audioBuffer.sampleRate / 1000, 0);
     }
 
     public function drawWaveform(startTime:Float = 0, endTime:Float = 0) {
         if (!visible) return;
         clearPixels();
-        var startIndex:Int = Std.int(getIndexTime(startTime) * 4);
-        var endIndex:Int = Std.int(getIndexTime(endTime) * 4);
-        var indexLength:Int = endIndex - startIndex;
+        final startIndex:Int = Std.int(getIndexTime(startTime) * 4);
+        final endIndex:Int = Std.int(getIndexTime(endTime) * 4);
+        final indexLength:Int = endIndex - startIndex;
 
         var lastBytes:Array<Int> = [];
-        var useBytes:Array<Int> = [];
+        final useBytes:Array<Int> = [];
 
         /*
             TODO:
@@ -68,28 +66,28 @@ class ChartWaveform extends FlxSprite {
 
         var i:Int = 0; // Get a scaled down average
         while(i < indexLength) {
-            var byte:Int = audioBytes.getUInt16(i + startIndex);
+            final byte:Int = audioBytes.getUInt16(i + startIndex);
             lastBytes.push(byte);
             if (lastBytes.length == 128) {
                 var sum:Int = 0;
                 for (num in lastBytes) sum += num;
-                var average:Int = Std.int(sum / lastBytes.length);
+                final average:Int = Std.int(sum / lastBytes.length);
                 useBytes.push(average);
                 lastBytes = [];
             }
             i++;
         }
 
-        var mid = width * 0.5;
-        var points:Array<FlxPoint> = [new FlxPoint(mid,0)];
+        final mid = width * 0.5;
+        final points:Array<FlxPoint> = [new FlxPoint(mid,0)];
 
         i = 0;
-        var _length = useBytes.length;  // Get draw points
+        final _length = useBytes.length;  // Get draw points
         while(i < _length) {
-            var byte = useBytes[i];
-            var sample:Float = (byte / 65535);
-            var lineWidth =  sample * 100;
-            var lineY = FlxMath.remapToRange(i, 0, _length, 0, height);
+            final byte = useBytes[i];
+            final sample:Float = (byte / 65535);
+            final lineWidth =  sample * 100;
+            final lineY = FlxMath.remapToRange(i, 0, _length, 0, height);
             points.push(new FlxPoint(mid + lineWidth, lineY));
             points.push(new FlxPoint(mid - lineWidth, lineY));
             i++;
