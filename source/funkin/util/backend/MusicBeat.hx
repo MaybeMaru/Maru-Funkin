@@ -53,6 +53,12 @@ class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
 			stepHit();
 		}
         super.update(elapsed);
+
+		#if debug
+		FlxG.watch.addQuick("curSection", 	curSection);
+		FlxG.watch.addQuick("curBeat", 		curBeat);
+		FlxG.watch.addQuick("curStep", 		curStep);
+		#end
 	}
 
 	private inline function updateSection():Void {

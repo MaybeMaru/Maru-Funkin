@@ -5,16 +5,15 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var camFollow:FlxObject;
 
 	var skinFolder:String = 'default';
-	var charName:String = 'bf-dead';
 	var deathSound:FlxSound = null;
 	var lockedOn:Bool = false;
 
 	public static function cacheSounds() {
-		var skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
-		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
-		Paths.sound(skinFolder+"fnf_loss_sfx");
-		Paths.music(skinFolder+"gameOverEnd");
-		Paths.music(skinFolder+"gameOver");
+		var _skin = PlayState.instance.boyfriend.gameOverSuffix;
+		_skin = (_skin != "") ? 'skins/$_skin/' : 'skins/default/';
+		Paths.sound(_skin + "fnf_loss_sfx");
+		Paths.music(_skin + "gameOverEnd");
+		Paths.music(_skin + "gameOver");
 	}
 
 	public function new(x:Float, y:Float):Void {
@@ -26,7 +25,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			PlayState.instance.startTimer.cancel();
 		}
 
-		charName = PlayState.instance.boyfriend.gameOverChar;
+		final charName = PlayState?.instance?.boyfriend?.gameOverChar ?? "bf-dead";
 		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
 		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
 
@@ -126,7 +125,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			char.playAnim('deathConfirm', true);
 			if (FlxG.sound.music != null) FlxG.sound.music.stop();
 
-			var endSound = new FlxSound().loadEmbedded(Paths.music('${skinFolder}gameOverEnd'));
+			final endSound = new FlxSound().loadEmbedded(Paths.music('${skinFolder}gameOverEnd'));
 			endSound.play();
 			deathSound.stop();
 

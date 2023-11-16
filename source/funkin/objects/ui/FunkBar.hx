@@ -83,6 +83,7 @@ class FunkBar extends FlxSpriteExt {
          * This isn't pretty too look at but shhhhhh it works
         **/
 
+        // TODO add the angle fixes n barPoint shit to legacy mode
         if (legacyMode.active) {
             if (legacyMode.inFront) camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             
@@ -116,11 +117,12 @@ class FunkBar extends FlxSpriteExt {
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
     
-            color = colors[1];
-            _frame.frame.x = _sub;
-            _frame.frame.width = _pos;
             _matrix.translate(_sub * _cosAngle, _sub * _sinAngle);
+
             if (percent != 0) {
+                color = colors[1];
+                _frame.frame.x = _sub;
+                _frame.frame.width = _pos;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
 

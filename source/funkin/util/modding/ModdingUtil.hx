@@ -118,7 +118,13 @@ class ModdingUtil {
         }
     }
 
-    inline public static function addScript(path:String, ?tag:String):Null<FunkScript> {
+    inline public static function addScriptList(list:Array<String>, ?tags:Array<String>) {
+        tags = tags ?? [];
+        for (i in 0...list.length)
+            addScript(list[i], tags[i]);
+    }
+
+    public static function addScript(path:String, ?tag:String):Null<FunkScript> {
         var scriptCode:String = CoolUtil.getFileContent(path);
         if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
         addPrint(path);
@@ -130,7 +136,7 @@ class ModdingUtil {
                 scriptCode = updateScript(scriptCode, _mod.apiVersion);
         }
 
-        var script:FunkScript = new FunkScript(scriptCode, scriptID);
+        final script:FunkScript = new FunkScript(scriptCode, scriptID);
         scriptsMap.set(scriptID, script);
         scripts.push(script);
         return script;
@@ -190,7 +196,7 @@ class ModdingUtil {
     }
 
     public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
-        var scriptList:Array<String> = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
+        final scriptList:Array<String> = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
         return scriptList.concat(Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods));
     }
 }

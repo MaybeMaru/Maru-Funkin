@@ -163,9 +163,9 @@ class PlayState extends MusicBeatState {
 		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
 		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
-		var GF_POS:FlxPoint = new FlxPoint(400,360);
-		var DAD_POS:FlxPoint = new FlxPoint(100, 450);
-		var BOYFRIEND_POS:FlxPoint = new FlxPoint(770, 450);
+		final GF_POS:FlxPoint = FlxPoint.get(400,360);
+		final DAD_POS:FlxPoint = FlxPoint.get(100, 450);
+		final BOYFRIEND_POS:FlxPoint = FlxPoint.get(770, 450);
 
 		//MAKE CHARACTERS
 		gf = new Character(GF_POS.x, GF_POS.y, SONG.players[2]);
@@ -173,7 +173,7 @@ class PlayState extends MusicBeatState {
 		boyfriend = new Character(BOYFRIEND_POS.x, BOYFRIEND_POS.y, SONG.players[0], true);
 
 		//Cache Gameover Character
-		var deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
+		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
 		GameOverSubstate.cacheSounds();
 		//add(deadChar);
 
@@ -194,7 +194,7 @@ class PlayState extends MusicBeatState {
 		gf.setXY(GF_POS.x, GF_POS.y,);
 
 		//STAGE START CAM OFFSET
-		var camPos:FlxPoint = new FlxPoint().set(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
+		final camPos:FlxPoint = FlxPoint.get(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -203,11 +203,11 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.clearScripts(); //Clear any scripts left over
 
 		//Stage Script
-		var stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
+		final stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
 		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
 		//Character Scripts
-		var characterScripts = ModdingUtil.getScriptList('data/characters');
+		final characterScripts = ModdingUtil.getScriptList('data/characters');
 		for (char => _char in [boyfriend => 'bf', dad => 'dad', gf => 'gf']) {
    			for (script in characterScripts) {
         		final charName = script.split('/').pop().split('.')[0];
@@ -219,17 +219,15 @@ class PlayState extends MusicBeatState {
 		}
 
 		//Song Scripts
-		var songScripts:Array<String> = ModdingUtil.getScriptList('songs/${Song.formatSongFolder(SONG.song)}');
-		for (script in songScripts)
-			ModdingUtil.addScript(script);
+		final songScripts:Array<String> = ModdingUtil.getScriptList('songs/${Song.formatSongFolder(SONG.song)}');
+		ModdingUtil.addScriptList(songScripts);
 
 		//Skin Script
 		ModdingUtil.addScript(Paths.script('skins/${SkinUtil.curSkin}'));
 
 		//Global Scripts
-		var globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
-		for (script in globalScripts)
-			ModdingUtil.addScript(script);
+		final globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
+		ModdingUtil.addScriptList(globalScripts);
 
 		add(bgSpr);
 
@@ -359,7 +357,7 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('postCreateDialogue'); // Setup transitions
 
 		openDialogueFunc = openDialogueFunc ?? function () { // Default transition
-			var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			final black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 			black.scrollFactor.set();
 			add(black);
 
@@ -417,17 +415,17 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('startCountdown');
 
 		var swagCounter:Int = 0;
-		var countdownSoundKeys:Array<String> = []; // Cache countdown assets
-		var countdownSpriteKeys:Array<String> = [];
+		final countdownSoundKeys:Array<String> = []; // Cache countdown assets
+		final countdownSpriteKeys:Array<String> = [];
 
 		for (i in ['intro3','intro2','intro1','introGo']) {
-			var soundKey = SkinUtil.getAssetKey(i,SOUND);
+			final soundKey = SkinUtil.getAssetKey(i,SOUND);
 			Paths.sound(soundKey);
 			countdownSoundKeys.push(soundKey);
 		}
 
 		for (i in ['ready','set','go']) {
-			var spriteKey = SkinUtil.getAssetKey(i,IMAGE);
+			final spriteKey = SkinUtil.getAssetKey(i,IMAGE);
 			Paths.image(spriteKey);
 			countdownSpriteKeys.push(spriteKey);
 		}
@@ -565,12 +563,23 @@ class PlayState extends MusicBeatState {
 		}
 		else if (FlxG.keys.justPressed.EIGHT) {
 			Transition.skipTrans = false;
-			switchState(new AnimationDebug(SONG.players[1]));
 			DiscordClient.changePresence("Character Editor", null, null, true);
+
+			/* 	8 for opponent char
+			 *  SHIFT + 8 for player char
+			 *	CTRL + SHIFT + 8 for gf */
+			if (FlxG.keys.pressed.SHIFT) {
+				if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
+				else switchState(new AnimationDebug(SONG.players[0]));
+			}
+			else switchState(new AnimationDebug(SONG.players[1]));
 		}
 		else if (getKey('PAUSE-P') && startedCountdown && canPause) {
 			openPauseSubState(true);
 			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+		}
+		else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode) {
+			endSong();
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -582,15 +591,8 @@ class PlayState extends MusicBeatState {
 			camHUD.zoom = CoolUtil.coolLerp(camHUD.zoom, 1, 0.05);
 		}
 
-		FlxG.watch.addQuick("curSection", 	curSection);
-		FlxG.watch.addQuick("curBeat", 		curBeat);
-		FlxG.watch.addQuick("curStep", 		curStep);
-
 		// RESET -> Quick Game Over Screen
 		if (getKey('RESET-P') && !inCutscene) health = 0;
-
-		if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
-			endSong();
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
