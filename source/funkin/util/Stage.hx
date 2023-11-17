@@ -52,7 +52,7 @@ class Stage {
         return DEFAULT_STAGE;
     }
 
-    public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript) {
+    public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript, ?groups:Map<String, SpriteLayer>) {
         if (_layers == null) return;
         final layers = cast _layers;  
 
@@ -62,7 +62,8 @@ class Stage {
                 final object:StageObject = i;
                 final sprite = quickSprite(object);
                 if (script != null) script.set(object.tag, sprite);
-                ScriptUtil.addSprite(sprite, object.tag, layer == 'fg');
+                final group = groups?.get(layer) ?? layer;
+                ScriptUtil.addSprite(sprite, object.tag, group).tag = ScriptUtil.formatSpriteKey(object.tag, group);
             }
         }
     }

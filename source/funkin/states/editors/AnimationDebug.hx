@@ -64,7 +64,7 @@ class AnimationDebug extends MusicBeatState {
 		FlxG.cameras.add(camUI);
 		FlxG.cameras.setDefaultDrawTarget(camUI, true);
 
-		var gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
+		final gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
 		gridBG.cameras = [camChar];
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);

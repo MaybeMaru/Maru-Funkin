@@ -1,5 +1,10 @@
 package funkin.states.editors;
 
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.display.FlxBackdrop;
+
+typedef LayerGroup = FlxTypedGroup<Dynamic>;
+
 class StageDebug extends MusicBeatState {
     var stageData:StageJson;
     var camFollow:FlxObject;
@@ -14,7 +19,18 @@ class StageDebug extends MusicBeatState {
         camFollow = new FlxObject();
         FlxG.camera.follow(camFollow);
         FlxG.mouse.visible = true;
-        Stage.createStageObjects(stageData.layers, null);
+
+        final gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
+		gridBG.scrollFactor.set(0.5, 0.5);
+		add(gridBG);
+
+        final bgGroup = new LayerGroup(); bgGroup.ID = 0;
+        add(bgGroup);
+        final fgGroup = new LayerGroup(); fgGroup.ID = 1;
+        add(fgGroup);
+
+        // TODO add a better layer system you big goof
+        Stage.createStageObjects(stageData.layers, null, ["bg" => bgGroup, "fg" => fgGroup]);
     }
     
     final speed = 50;

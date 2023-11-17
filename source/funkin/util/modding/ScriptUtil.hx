@@ -1,20 +1,36 @@
 package funkin.util.modding;
 
+import flixel.util.typeLimit.OneOfThree;
+
+typedef SpriteLayer = OneOfThree<FlxTypedGroup<Dynamic>, String, Bool>;
+// TODO make layering less hardcoded, allow for multiple layers instead of only "bg" and "fg"
+
 class ScriptUtil {
     public static var objMap:Map<String, Dynamic> = [];
     
-    inline public static function addSprite(sprite:Dynamic, key:String, onTop:Bool = false) {
-        objMap.set(formatSpriteKey(key, onTop), sprite);
-        getLayer(onTop).add(sprite);
+    inline public static function addSprite(sprite:Dynamic, key:String, layer:SpriteLayer = "bg") {
+        objMap.set(formatSpriteKey(key, layer), sprite);
+        getLayer(layer).add(sprite);
+        return sprite;
     }
 
-    inline static function getLayer(onTop:Bool):FlxTypedGroup<Dynamic> {
-        return PlayState.instance != null ? (onTop ? PlayState.instance.fgSpr : PlayState.instance.bgSpr) : FlxG.state;
+    inline static function getLayerKey(layer:SpriteLayer):String {
+        if (layer is String) return layer;
+        else if (layer is Bool) return layer ? "fg" : "bg";
+        else return cast(layer, FlxTypedGroup<Dynamic>).ID == 1 ? "fg" : "bg";
+    }
+
+    inline static function getLayer(layer:SpriteLayer):FlxTypedGroup<Dynamic> {
+        if (layer is Bool || layer is String) {
+            final onTop = (layer is Bool ? layer : layer == "fg");
+            return PlayState.instance != null ? (onTop ? PlayState.instance.fgSpr : PlayState.instance.bgSpr) : FlxG.state;
+        }
+        else return cast(layer, FlxTypedGroup<Dynamic>);
     }
     
     public static function getSprite(key:String) {
         for (i in ['fg', 'bg']) {
-            var sprKey = '_${i}_sprite_$key';
+            final sprKey = '_${i}_sprite_$key';
             if (objMap.exists(sprKey))
                 return objMap.get(sprKey);
         }
@@ -22,8 +38,8 @@ class ScriptUtil {
         return null;	
     }
 
-    inline public static function formatSpriteKey(key:String, OnTop:Bool) {
-        return getSpriteKey(OnTop ? 'fg' : 'bg', key);
+    inline public static function formatSpriteKey(key:String, layer:SpriteLayer) {
+        return getSpriteKey(getLayerKey(layer), key);
     }
 
     inline public static function getSpriteKey(group:String, key:String) {

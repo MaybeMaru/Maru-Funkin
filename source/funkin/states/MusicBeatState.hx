@@ -16,10 +16,15 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public static var curState:String;
 
 	public var musicBeat(default, null):MusicBeat;
+
+	public function new() {
+		super();
+		ScriptUtil.objMap = new Map<String, Dynamic>();
+	}
+
 	override function create():Void {
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);
-		ScriptUtil.objMap = new Map<String, Dynamic>();
 		super.create();
 		add(musicBeat = new MusicBeat(this));
 		
