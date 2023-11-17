@@ -9,7 +9,7 @@ class MenuItem extends FlxSpriteGroup {
 
 	public function new(targetY:Int = 0, weekName:String = 'week1'):Void {
 		super();
-		var imagePath = Paths.image('storymenu/weeks/$weekName', null, true, true);
+		final imagePath = Paths.image('storymenu/weeks/$weekName', null, true, true);
 		weekSpr = (Paths.exists(imagePath, IMAGE) ? new FlxSpriteExt().loadImage('storymenu/weeks/$weekName', true) :
 													new FlxText(0,0,0,weekName).setFormat(Paths.font("phantommuff"), 80));
 		add(weekSpr);
@@ -20,7 +20,7 @@ class MenuItem extends FlxSpriteGroup {
 
 		lockSpr = new FunkinSprite('storymenu/weekLock');
 		lockSpr.x -= lockSpr.width + 10;
-		lockSpr.y = weekSpr.height/2 - lockSpr.height/2;
+		lockSpr.y = weekSpr.height * 0.5 - lockSpr.height * 0.5;
 		add(lockSpr);
 	}
 
@@ -55,16 +55,16 @@ class MenuItem extends FlxSpriteGroup {
 
 		if (isShaking || isFlashing) {
 			flashingInt++;
-			fakeFramerate = Std.int(Math.max(Math.round((1 / Math.max(elapsed, 0.001)) / 10), 1)); // prevent mod by 0 error???
+			fakeFramerate = Std.int(Math.max(Math.round((1 / Math.max(elapsed, 0.001)) * 0.1), 1)); // prevent mod by 0 error???
 
 			if (isShaking) {
-				weekSpr.color = (flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2)) ? FlxColor.RED : FlxColor.WHITE;
+				weekSpr.color = (flashingInt % fakeFramerate >= Math.floor(fakeFramerate * 0.5)) ? FlxColor.RED : FlxColor.WHITE;
 				weekSpr.offset.x = FlxG.random.int(-10,10);
 				weekSpr.alpha = (weekSpr.color == FlxColor.RED) ? 1 : 0.6;
 			}
 	
 			if (isFlashing) {
-				weekSpr.color = (flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2)) ? 0xFF33ffff : FlxColor.WHITE;
+				weekSpr.color = (flashingInt % fakeFramerate >= Math.floor(fakeFramerate * 0.5)) ? 0xFF33ffff : FlxColor.WHITE;
 			}
 		}
 	}

@@ -12,7 +12,7 @@ class SplashGroup extends FlxTypedGroup<NoteSplash> {
     }
 
 	public function spawnSplash(?note:Note) {
-		var splash:NoteSplash = recycle(NoteSplash);
+		final splash:NoteSplash = recycle(NoteSplash);
 		if (note != null) splash.setupNoteSplash(note.x, note.y, note.noteData, note);
 		add(splash);
         return splash;
@@ -37,8 +37,8 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
                 loadSkin(note.skin);
             }
             updateHitbox();
-            X = note.x + NoteUtil.swagWidth/2;
-            Y = note.y + NoteUtil.swagHeight/2;
+            X = note.x + NoteUtil.swagWidth * 0.5;
+            Y = note.y + NoteUtil.swagHeight * 0.5;
             noteData = note.noteData;
         }
         this.noteData = noteData;
@@ -52,13 +52,13 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
     public function loadSkin(?skin:String):Void {
 		skin = skin ?? SkinUtil.curSkin;
 		if (curSkin != skin) {
-            var useSkin = Preferences.getPref('vanilla-ui') ? 'default' : skin;
-            var skinData = SkinUtil.getSkinData(useSkin);
-            if (skinData.splashData == null) return; // Note skin doesnt have splash data
-
-            animOffsets = new Map<String, FlxPoint>();
-			curSkin = useSkin;
-			loadJsonInput(SkinUtil.getSkinData(curSkin).splashData, 'skins/$curSkin', false, Preferences.getPref('vanilla-ui') ? 'skins/$curSkin/splashAssets-vanilla' : null);
+            final useSkin = Preferences.getPref('vanilla-ui') ? 'default' : skin;
+            final skinData = SkinUtil.getSkinData(useSkin);
+            if (skinData.splashData == null) {
+                animOffsets = new Map<String, FlxPoint>();
+                curSkin = useSkin;
+                loadJsonInput(SkinUtil.getSkinData(curSkin).splashData, 'skins/$curSkin', false, Preferences.getPref('vanilla-ui') ? 'skins/$curSkin/splashAssets-vanilla' : null);
+            }
 		}
 	}
 

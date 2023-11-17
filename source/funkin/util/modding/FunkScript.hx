@@ -192,11 +192,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('setObjMap', function(object:Dynamic, key:String) {
-			PlayState.instance.objMap.set(key, object);
+			ScriptUtil.objMap.set(key, object);
 		});
 		
 		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
-			PlayState.instance.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
+			ScriptUtil.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
 			OnTop ? PlayState.instance.fgSpr.insert(order, spr) : PlayState.instance.bgSpr.insert(order, spr);
 		});
 
@@ -207,8 +207,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('getSprOrder', function(key:String):Int {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
-				if (PlayState.instance.objMap.exists(sprKey))
-					return ScriptUtil.getGroup(i).members.indexOf(PlayState.instance.objMap.get(sprKey));
+				if (ScriptUtil.objMap.exists(sprKey))
+					return ScriptUtil.getGroup(i).members.indexOf(ScriptUtil.objMap.get(sprKey));
 			}
 			errorPrint('Sprite not found: $key');
 			return 0;
@@ -216,7 +216,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		set('existsSpr', function(key:String):Null<Dynamic> {
 			for (i in ['fg', 'bg']) {
-				if (PlayState.instance.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
+				if (ScriptUtil.objMap.exists(ScriptUtil.getSpriteKey(i, key))) {
 					return true;
 				}
 			}
@@ -227,9 +227,9 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			for (i in ['fg', 'bg']) {
 				var sprKey = ScriptUtil.getSpriteKey(i, key);
 				var group = ScriptUtil.getGroup(i);
-				if (PlayState.instance.objMap.exists(sprKey)) {
+				if (ScriptUtil.objMap.exists(sprKey)) {
 					group.remove(ScriptUtil.getSprite(key));
-					PlayState.instance.objMap.remove(sprKey);
+					ScriptUtil.objMap.remove(sprKey);
 				}
 			}
 		});
@@ -237,13 +237,13 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('makeGroup', function(key:String, ?order:Int):FlxTypedGroup<Dynamic> {
 			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
 			order != null ? FlxG.state.insert(order, newGroup) : FlxG.state.add(newGroup);
-			if (cast FlxG.state is PlayState) PlayState.instance.objMap.set('_group_$key', newGroup);
+			if (cast FlxG.state is PlayState) ScriptUtil.objMap.set('_group_$key', newGroup);
 			return newGroup;
 		});
 
 		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
-			if (PlayState.instance.objMap.exists('_group_$key'))
-				return PlayState.instance.objMap.get('_group_$key');
+			if (ScriptUtil.objMap.exists('_group_$key'))
+				return ScriptUtil.objMap.get('_group_$key');
 			else {
 				errorPrint('Group not found: $key');
 				return null;
@@ -251,7 +251,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('existsGroup', function(key:String):Bool {
-			return PlayState.instance.objMap.exists('_group_$key');						
+			return ScriptUtil.objMap.exists('_group_$key');						
 		});
 
 		set('cacheCharacter', function(name:String):Character {

@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.util.modding.ScriptUtil;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
@@ -18,6 +19,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	override function create():Void {
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);
+		ScriptUtil.objMap = new Map<String, Dynamic>();
 		super.create();
 		add(musicBeat = new MusicBeat(this));
 		

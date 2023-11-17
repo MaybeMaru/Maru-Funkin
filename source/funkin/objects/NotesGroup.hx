@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import flixel.util.FlxArrayUtil;
 import funkin.objects.note.StrumLineGroup;
 
 class NotesGroup extends FlxGroup
@@ -141,11 +142,11 @@ class NotesGroup extends FlxGroup
 				game.combo = 0;
 				
 				Conductor.vocals.volume = 0;
-				var healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
+				final healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
 
 				var healthMult = 1.0;
 				if (note.isSustainNote) {
-					var notePercent = note.startedPress ? note.percentCut : 1;
+					final notePercent = note.startedPress ? note.percentCut : 1;
 					healthMult = notePercent * (note.initSusLength / Conductor.stepCrochet) * 4;
 				}
 
@@ -158,10 +159,10 @@ class NotesGroup extends FlxGroup
 				ModdingUtil.addCall('noteMiss', [note]);
 			}
 
-			var missChar = note == null ? game.boyfriend : note.mustPress ? game.boyfriend : game.dad;
+			final missChar = note == null ? game.boyfriend : note.mustPress ? game.boyfriend : game.dad;
 			missChar.stunned = true;
 			missChar.sing(direction, 'miss');
-			new FlxTimer().start(5 / 60, function(tmr:FlxTimer) {
+			new FlxTimer().start(0.083333333333333, function(tmr:FlxTimer) {
 				missChar.stunned = false;
 			});
 			
@@ -178,8 +179,10 @@ class NotesGroup extends FlxGroup
 
     public function init(startPos:Float = -5000) {
 		StrumLineGroup.strumLineY = Preferences.getPref('downscroll') ? FlxG.height - 150 : 50;
+		
 		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
 		add(opponentStrums);
+		
 		playerStrums = new StrumLineGroup(1, skipStrumIntro);
 		add(playerStrums);
 
@@ -192,7 +195,7 @@ class NotesGroup extends FlxGroup
     }
 
 	private function generateSong():Void {
-		var songData:SwagSong = SONG;
+		final songData:SwagSong = SONG;
 		ModdingUtil.addCall('generateSong', [songData]);
 
 		unspawnNotes = [];
@@ -200,7 +203,7 @@ class NotesGroup extends FlxGroup
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 	
-		var noteData:Array<SwagSection> = songData.notes;
+		final noteData:Array<SwagSection> = songData.notes;
 		curSong = songData.song;
 
         Conductor.loadMusic(curSong);
@@ -248,11 +251,11 @@ class NotesGroup extends FlxGroup
 			}
 
 			for (e in section.sectionEvents) {
-				var strumTime:Float = e[0];
-				var eventName:String = e[1];
-				var eventValues:Array<Dynamic> = e[2];
+				final strumTime:Float = e[0];
+				final eventName:String = e[1];
+				final eventValues:Array<Dynamic> = e[2];
 
-				var event:Event = new Event(strumTime, eventName, eventValues);
+				final event:Event = new Event(strumTime, eventName, eventValues);
 				events.push(event);
 
 				//	Add event for scripts
@@ -267,14 +270,14 @@ class NotesGroup extends FlxGroup
 		events.sort(CoolUtil.sortByStrumTime);
 		
 		if (isPlayState) {
-			var notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
+			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
 			for (script in notetypeScripts) { //Notetype Scripts
 				if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
 					ModdingUtil.addScript(script);
 				}
 			}
 			
-			var eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
+			final eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
 			for (script in eventScripts) { //Event Scripts
 				if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
 					ModdingUtil.addScript(script);
@@ -330,7 +333,7 @@ class NotesGroup extends FlxGroup
             return;
         }
 
-        var game = PlayState.instance;
+        final game = PlayState.instance;
         if ((game.startingSong || Conductor.inst.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
             Conductor.songPosition += FlxG.elapsed * 1000;
             if (game.startedCountdown && game.startingSong) {
@@ -343,7 +346,7 @@ class NotesGroup extends FlxGroup
 	function spawnNotes() { // Generate notes
         if (unspawnNotes[0] != null) {
 			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom * unspawnNotes[0].spawnMult) {
-				var dunceNote:Note = unspawnNotes[0];
+				final dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);
 				dunceNote.initNote();
@@ -435,9 +438,9 @@ class NotesGroup extends FlxGroup
 		pushControls(opponentStrums, dadBotplay);
 
 		if (generatedMusic) {
-			var possibleNotes:Array<Note> = [];
-			var ignoreList:Array<Int> = [];
-			var removeList:Array<Note> = [];
+			final possibleNotes:Array<Note> = [];
+			final ignoreList:Array<Int> = [];
+			final removeList:Array<Note> = [];
 
 			notes.forEachAlive(function(daNote:Note) {
 				if (isCpuNote(daNote)) return; // Skip Cpu notes
@@ -488,7 +491,7 @@ class NotesGroup extends FlxGroup
 
 			if (controlArray.contains(true)) {
 				forEachArray(removeList, function (badNote) removeNote(badNote));
-				var onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : getPref('ghost-tap');
+				final onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : getPref('ghost-tap');
 
 				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
@@ -518,9 +521,9 @@ class NotesGroup extends FlxGroup
 	}
 
 	function checkStrumAnims():Void {
-		var checkStrums:Array<NoteStrum> = (inBotplay ? [] : playerStrums.members).concat(dadBotplay ? [] : opponentStrums.members);
+		final checkStrums:Array<NoteStrum> = (inBotplay ? [] : playerStrums.members).concat(dadBotplay ? [] : opponentStrums.members);
 		for (strum in checkStrums) {
-			var strumAnim = strum.animation.curAnim;
+			final strumAnim = strum.animation.curAnim;
 			if (strumAnim == null) continue; // Lil null check
 			if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
 				strum.playStrumAnim('pressed');
@@ -534,7 +537,7 @@ class NotesGroup extends FlxGroup
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup) {
-		var overSinging:Bool = (char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
+		final overSinging:Bool = (char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
 		&& char.animation.curAnim.name.startsWith('sing')
 		&& !char.animation.curAnim.name.endsWith('miss'));
 
@@ -551,7 +554,7 @@ class NotesGroup extends FlxGroup
 	}
 
 	public function playStrumAnim(note:Note, anim:String = 'confirm', forced:Bool = true) {
-		var strum = note.targetStrum;
+		final strum = note.targetStrum;
 		if (strum == null) return;
 		strum.playStrumAnim(anim, forced);
 		strum.staticTime = Conductor.stepCrochetMills;

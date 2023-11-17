@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.states.editors.StageDebug;
 import funkin.objects.ui.FunkBar;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
@@ -21,7 +22,7 @@ class PlayState extends MusicBeatState {
 	private var stageJsonData:StageJson;
 	public var bgSpr:FlxTypedGroup<Dynamic>;
 	public var fgSpr:FlxTypedGroup<Dynamic>;
-	public var objMap:Map<String, Dynamic> = [];
+	//public var objMap:Map<String, Dynamic> = [];
 
 	public var dad:Character;
 	public var gf:Character;
@@ -554,6 +555,11 @@ class PlayState extends MusicBeatState {
 
 		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
 			changeOldIcon();
+		}
+		else if (FlxG.keys.justPressed.SIX) {
+			Transition.skipTrans = false;
+			DiscordClient.changePresence("Stage Editor", null, null, true);
+			switchState(new StageDebug(stageJsonData));
 		}
 		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};

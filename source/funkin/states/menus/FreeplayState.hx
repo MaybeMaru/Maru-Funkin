@@ -52,9 +52,9 @@ class FreeplayState extends MusicBeatState {
 			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay) {
 				addWeek(week.songList.songs, week.songList.songIcons, weekName, _data.modFolder);
 
-				var songColors = week.songList.songColors;
+				final songColors = week.songList.songColors;
 				for (i in 0...week.songList.songs.length) {
-					var songColor = FlxColor.fromString(songColors[cast FlxMath.bound(i, 0, songColors.length-1)]);
+					final songColor = FlxColorFix.fromString(songColors[cast FlxMath.bound(i, 0, songColors.length-1)]);
 					coolColors.set(formatColor(weekName, i), songColor);
 				}
 			}
@@ -135,12 +135,14 @@ class FreeplayState extends MusicBeatState {
 		return '${weekName}_songID_$id';
 	}
 
+	var lerpColor:FlxColorFix;
+	var targetColor:FlxColor;
+
 	function getBgColor():FlxColor {
-		var curSongMeta = songs[curSelected];
+		final curSongMeta = songs[curSelected];
 		return coolColors.get(formatColor(curSongMeta.week, curSongMeta.ID));
 	}
 
-	var lerpColor:FlxColorFix;
 	var _lastMusic:String = "";
 	var lerpPosition:Float = 0.0;
 
@@ -151,7 +153,7 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		lerpScore = Math.floor(CoolUtil.coolLerp(lerpScore, intendedScore, 0.4));
-		lerpColor.lerp(getBgColor(), 0.045, true);
+		lerpColor.lerp(targetColor ?? FlxColor.WHITE, 0.045, true);
 		bg.color = lerpColor.get();
 
 		if (Math.abs(lerpScore - intendedScore) <= 10) lerpScore = intendedScore;
@@ -265,6 +267,7 @@ class FreeplayState extends MusicBeatState {
 
 		for (i in iconArray) i.alpha = 0.6;
 		iconArray[curSelected].alpha = 1;
+		targetColor = getBgColor();
 	}
 }
 /*

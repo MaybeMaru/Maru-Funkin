@@ -1,16 +1,22 @@
 package funkin.util.modding;
 
 class ScriptUtil {
+    public static var objMap:Map<String, Dynamic> = [];
+    
     public static function addSprite(sprite:Dynamic, key:String, onTop:Bool = false) {
-        PlayState.instance.objMap.set(formatSpriteKey(key, onTop), sprite);
-        onTop ? PlayState.instance.fgSpr.add(sprite) : PlayState.instance.bgSpr.add(sprite);
+        objMap.set(formatSpriteKey(key, onTop), sprite);
+        getLayer(onTop).add(sprite);
+    }
+
+    static function getLayer(onTop:Bool):FlxTypedGroup<Dynamic> {
+        return PlayState.instance != null ? (onTop ? PlayState.instance.fgSpr : PlayState.instance.bgSpr) : FlxG.state;
     }
     
     public static function getSprite(key:String) {
         for (i in ['fg', 'bg']) {
             var sprKey = '_${i}_sprite_$key';
-            if (PlayState.instance.objMap.exists(sprKey))
-                return PlayState.instance.objMap.get(sprKey);
+            if (objMap.exists(sprKey))
+                return objMap.get(sprKey);
         }
         ModdingUtil.errorPrint('Sprite not found: $key');
         return null;	

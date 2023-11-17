@@ -88,7 +88,7 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function loadCharJson(inputJson:CharacterJson):Void {
-		var imagePath:String = (!inputJson.imagePath.startsWith('characters/')) ? 'characters/${inputJson.imagePath}' : inputJson.imagePath;
+		final imagePath:String = (!inputJson.imagePath.startsWith('characters/')) ? 'characters/${inputJson.imagePath}' : inputJson.imagePath;
 		loadImage(imagePath);
 		for (anim in inputJson.anims) {
 			anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);
@@ -106,7 +106,7 @@ class Character extends FlxSpriteExt {
 		this.isPlayer = isPlayer;
 		botMode = !isPlayer;
 
-		var charJson:CharacterJson = getCharData(curCharacter = character);
+		final charJson:CharacterJson = getCharData(curCharacter = character);
 		loadCharJson(charJson);
 		worldOffsets.set(charJson.charOffsets[0], charJson.charOffsets[1]);
 		camOffsets.set(charJson.camOffsets[0], charJson.camOffsets[1]);
@@ -125,10 +125,10 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function getAnimationPrefixes():Array<String> {
-		var prefixes:Array<String> = [];
+		final prefixes:Array<String> = [];
 		if (frames == null) return prefixes;
 		for (i in frames.frames) {
-			var anim = i.name.split('0')[0];
+			final anim = i.name.split('0')[0];
 			if (!prefixes.contains(anim)) prefixes.push(anim);
 		}
 		return prefixes;
@@ -259,7 +259,7 @@ class Character extends FlxSpriteExt {
 	public var curDanceBeat:Int = 0;
 
 	public function inIdle() {
-		var curAnim = animation.curAnim;
+		final curAnim = animation.curAnim;
 		if (curAnim == null) return false;
 		return curAnim.name.startsWith('dance') || curAnim.name.startsWith('idle');
 	}

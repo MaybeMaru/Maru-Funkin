@@ -24,10 +24,10 @@ class ChartPreview extends FlxSpriteExt {
     }
 
     public function drawChecks() { // Draw checkboard pattern
-        var CHECK_SIZE = NOTE_SIZE * Conductor.BEATS_PER_MEASURE;
+        final CHECK_SIZE = NOTE_SIZE * Conductor.BEATS_PER_MEASURE;
         for (Y in 0...Std.int(height / CHECK_SIZE)) {
             for (X in 0...Std.int(width / CHECK_SIZE))
-                drawRect(X*CHECK_SIZE, Y*CHECK_SIZE, CHECK_SIZE, CHECK_SIZE, [0xff7c7c7c, 0xff6e6e6e][(X+Y)%2]);
+                drawRect(X * CHECK_SIZE, Y * CHECK_SIZE, CHECK_SIZE, CHECK_SIZE, [0xff7c7c7c, 0xff6e6e6e][(X+Y)%2]);
         }
     }
 
@@ -50,12 +50,12 @@ class ChartPreview extends FlxSpriteExt {
 
     public function drawSection(notes:Array<Array<Dynamic>>, startTime:Float = 0, endTime:Float = 0) {
         for (n in notes) {
-            var note = n.copy();
-            var noteColor = getNoteColor(note);
+            final note = n.copy();
+            final noteColor = getNoteColor(note);
             note[0] -= startTime;
-            var noteY = FlxMath.remapToRange(note[0], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
+            final noteY = FlxMath.remapToRange(note[0], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
             if (note[2] > 0) { // Draw sustain
-                var susY = FlxMath.remapToRange(note[2], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
+                final susY = FlxMath.remapToRange(note[2], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
                 drawRect(note[1]*NOTE_SIZE, noteY, NOTE_SIZE, NOTE_SIZE + susY,
                 FlxColor.fromRGB(noteColor.red,noteColor.green,noteColor.blue,Std.int(noteColor.alpha*0.6)));
             }
@@ -70,11 +70,11 @@ class ChartPreview extends FlxSpriteExt {
     var colorMap:Map<String, FlxColor> = [];
 
     function getNoteColor(note:Array<Dynamic>):FlxColor {
-        var key = '${note[3]}-${note[1]%4}';
+        final key =  note[3] + "-" + note[1] % 4;
         if (colorMap.exists(key)) return colorMap.get(key);
-        var _skin = NoteUtil.getTypeJson(NoteUtil.getTypeName(note[3])).skin;
-        var _colors = SkinUtil.getSkinData(_skin).noteData.noteColorArray;
-        var color = FlxColor.fromString(_colors[Std.int(note[1]%4)]);
+        final _skin = NoteUtil.getTypeJson(NoteUtil.getTypeName(note[3])).skin;
+        final _colors = SkinUtil.getSkinData(_skin).noteData.noteColorArray;
+        final color = FlxColorFix.fromString(_colors[cast note[1]%4]);
         colorMap.set(key, color);
         return color;
     }

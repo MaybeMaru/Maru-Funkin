@@ -141,9 +141,10 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	var lerpColor:FlxColorFix;
+	var targetColor:FlxColor;
 
 	inline function getBgColor():FlxColor {
-		return getPref("vanilla-ui") ? 0xfff9cf51 : FlxColor.fromString(getCurData().weekColor);
+		return getPref("vanilla-ui") ? 0xfff9cf51 : FlxColorFix.fromString(getCurData().weekColor);
 	}
 
 	override function update(elapsed:Float):Void {
@@ -179,7 +180,7 @@ class StoryMenuState extends MusicBeatState {
 			switchState(new MainMenuState());
 		}
 
-		lerpColor.lerp(getBgColor(), 0.045, true);
+		lerpColor.lerp(targetColor ?? FlxColor.WHITE, 0.045, true);
 		storyBG.color = lerpColor.get();
 		
 		for (member in grpWeekCharacters) {
@@ -277,6 +278,7 @@ class StoryMenuState extends MusicBeatState {
 
 		changeDifficulty();
 		updateText();
+		targetColor = getBgColor();
 	}
 
 	function updateText():Void {

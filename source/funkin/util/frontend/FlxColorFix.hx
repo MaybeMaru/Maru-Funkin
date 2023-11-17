@@ -21,8 +21,15 @@ class FlxColorFix {
 	public static var MAGENTA:FlxColor = 0xFFFF00FF;
 	public static var CYAN:FlxColor = 0xFF00FFFF;
 
-    public static function fromString(str:String):FlxColor {
-		return FlxColor.fromString(str);
+	// Taken (stolen) from Psych :3
+	inline public static function fromString(color:String):FlxColor {
+		final hideChars = ~/[\t\n\r]/;
+		var color:String = hideChars.split(color).join('').trim();
+		if(color.startsWith('0x')) color = color.substring(color.length - 6);
+
+		var colorNum:Null<FlxColor> = FlxColor.fromString(color);
+		if (colorNum == null) colorNum = FlxColor.fromString('#$color');
+		return colorNum ?? FlxColor.WHITE;
 	}
 
     public static function fromRGB(red:Int, green:Int, blue:Int, alpha:Int = 255):FlxColor {
@@ -69,31 +76,11 @@ class FlxColorFix {
 		return get();
 	}
 
-	public static inline function toRGBA (color:FlxColor) {
+	public static inline function toRGBA(color:FlxColor) {
 		return [(color >> 16 & 0xFF), (color >> 8 & 0xFF), (color & 0xFF), (color & 0xFF) << 24, ((color & 0xFF) << 24)];
 	}
 	
-	public static inline function toRGBAFloat (color:FlxColor) {
+	public static inline function toRGBAFloat(color:FlxColor) {
 		return [(color >> 16 & 0xFF) / 255, (color >> 8 & 0xFF) / 255, (color & 0xFF) / 255, ((color & 0xFF) << 24) / 255];
 	}
-
-	/*
-	public static function hexToInt(hex:String):Int {
-		if (hex.startsWith('0x')) {
-			hex = hex.substr(2);
-		}
-
-		var rgb = [];
-		while (hex.length > 0) {
-			rgb.push(Std.parseInt('0x${hex.substr(0, 2)}'));
-			hex = hex.substr(2);
-		}
-	
-		var red = rgb.length > 0 ? rgb[0] : 0;
-		var green = rgb.length > 1 ? rgb[1] : 0;
-		var blue = rgb.length > 2 ? rgb[2] : 0;
-	
-		return (red << 16) | (green << 8) | blue;
-	}
-	*/
 }
