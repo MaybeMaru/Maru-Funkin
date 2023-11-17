@@ -3,12 +3,12 @@ package funkin.util.modding;
 class ScriptUtil {
     public static var objMap:Map<String, Dynamic> = [];
     
-    public static function addSprite(sprite:Dynamic, key:String, onTop:Bool = false) {
+    inline public static function addSprite(sprite:Dynamic, key:String, onTop:Bool = false) {
         objMap.set(formatSpriteKey(key, onTop), sprite);
         getLayer(onTop).add(sprite);
     }
 
-    static function getLayer(onTop:Bool):FlxTypedGroup<Dynamic> {
+    inline static function getLayer(onTop:Bool):FlxTypedGroup<Dynamic> {
         return PlayState.instance != null ? (onTop ? PlayState.instance.fgSpr : PlayState.instance.bgSpr) : FlxG.state;
     }
     
@@ -35,13 +35,13 @@ class ScriptUtil {
     }
     
     inline public static function switchCustomState(key:String) {
-		var scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
+		final scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
 		if (scriptCode.length <= 0) {
 			ModdingUtil.errorPrint('Custom state script not found: $key');
 			return;
 		}
 
-		var state = new CustomState().initScript(scriptCode, key);
+		final state = new CustomState().initScript(scriptCode, key);
 		CoolUtil.switchState(state);
 	}
 }

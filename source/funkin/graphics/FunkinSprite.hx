@@ -16,7 +16,7 @@ class FunkinSprite extends FlxSpriteExt {
             loadImage(path);
             animated = _packer != IMAGE;
     
-            var jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
+            final jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
             if (useJson && Paths.exists(jsonPath, TEXT))
                 loadSpriteJson(jsonPath, '');
             else

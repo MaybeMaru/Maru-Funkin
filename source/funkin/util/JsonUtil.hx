@@ -109,10 +109,10 @@ class JsonUtil {
 	}
 
 	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
-		var defaults = copyJson(defaultsInput);
+		final defaults = copyJson(defaultsInput);
 		if (input == null) return defaults;
 
-		var props = Reflect.fields(defaults);
+		final props = Reflect.fields(defaults);
 		for (prop in props) {
 			if (Reflect.hasField(input, prop)) {
 				var val = Reflect.field(input, prop);
@@ -126,8 +126,8 @@ class JsonUtil {
 	}
 
 	public static function removeUnusedVars(defaults:Dynamic, input:Dynamic):Dynamic {
-		var defProps = Reflect.fields(defaults);
-		var inputProps = Reflect.fields(input);
+		final defProps = Reflect.fields(defaults);
+		final inputProps = Reflect.fields(input);
 		for (prop in inputProps) {
 			if (!defProps.contains(prop))
 				Reflect.deleteField(input, prop);
@@ -135,8 +135,8 @@ class JsonUtil {
 		return input;
 	}
 
-	public static function copyJson<T>(c:T):T {
-		var serializedData = haxe.Serializer.run(c);
+	public static inline function copyJson<T>(c:T):T {
+		final serializedData = haxe.Serializer.run(c);
         return haxe.Unserializer.run(serializedData);
 	}
 }

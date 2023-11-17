@@ -785,6 +785,7 @@ class PlayState extends MusicBeatState {
 		SkinUtil.setCurSkin('default');
 		ModdingUtil.addCall('destroy');
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
+		instance = null;
 		super.destroy();
 	}
 

@@ -54,15 +54,15 @@ class Stage {
 
     public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript) {
         if (_layers == null) return;
-        var layers = cast _layers;  
+        final layers = cast _layers;  
 
         for (layer in Reflect.fields(layers)) {
-            var objects:Array<Dynamic> = cast Reflect.field(layers, layer);
-            for (object in objects) {
-                final objectTag = object.tag;
-                var sprite = quickSprite(object);
-                if (script != null) script.set(objectTag, sprite);
-                ScriptUtil.addSprite(sprite, objectTag, layer == 'fg');
+            final objects:Array<Dynamic> = cast Reflect.field(layers, layer);
+            for (i in objects) {
+                final object:StageObject = i;
+                final sprite = quickSprite(object);
+                if (script != null) script.set(object.tag, sprite);
+                ScriptUtil.addSprite(sprite, object.tag, layer == 'fg');
             }
         }
     }
@@ -81,8 +81,8 @@ class Stage {
 
     static function quickSprite(input:StageObject) {
         input = JsonUtil.checkJsonDefaults(DEFAULT_STAGE_OBJECT, input);
-        var sprite = new FunkinSprite("keoiki", input.position, input.scrolls);
-        sprite.loadJsonInput(input);
+        final sprite = new FunkinSprite("keoiki", input.position, input.scrolls);
+        sprite.loadJsonInput(JsonUtil.copyJson(input));
         sprite.flipX = input.flipX;
         sprite.flipY = input.flipY;
         return sprite;
