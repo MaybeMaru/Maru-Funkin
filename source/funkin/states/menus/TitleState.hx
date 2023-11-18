@@ -204,6 +204,7 @@ class TitleState extends MusicBeatState {
 
 	var codeIndex:Int = 0;
 	var curCode:String = 'konami';
+	static var keoiki:Bool = false;
 
 	var codes:Map<String, Array<FlxKey>> = [
 		'konami' => [ // debug code
@@ -244,7 +245,9 @@ class TitleState extends MusicBeatState {
 							}
 						}
 					case 'keoiki':
-						Main.transition.set(null, 0.6, 0.4, Paths.image('keoiki'));
+						keoiki = !keoiki;
+						Main.transition.set(null, 0.6, 0.4, keoiki ? Paths.image('keoiki') : null);
+						
 				}
 			}
 		} else if (FlxG.keys.justPressed.ANY) {

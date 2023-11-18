@@ -84,32 +84,45 @@ class FunkBar extends FlxSpriteExt {
         **/
 
         // TODO add the angle fixes n barPoint shit to legacy mode
+        final _pos = width * percent * 0.01;
+        final _sub = width - _pos;
+        
         if (legacyMode.active) {
+            final _mX = _matrix.tx;
+            final _mY = _matrix.ty;
             if (legacyMode.inFront) camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             
             final _spr = legacyMode.sprite;
+            final __frame = _spr.frame;
             final _out = legacyMode.outline * 2;
-            _spr.color = colors[0];
-            _matrix.translate(legacyMode.outline, legacyMode.outline);
-            _spr._frame.frame.width = width - _out;
-            _spr._frame.frame.height = height - _out;
-            camera.drawPixels(_spr._frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
 
-            _spr.color = colors[1];
-            final _pos = width * percent * 0.01;
-            _spr._frame.frame.width = _pos - _out;
-            _matrix.translate(width - _pos, 0);
-            camera.drawPixels(_spr._frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
+            _matrix.translate(legacyMode.outline * (_cosAngle - _sinAngle), legacyMode.outline * (_cosAngle + _sinAngle));
+            __frame.frame.height = height - _out;
+
+            if (percent != 100) {
+                _spr.color = colors[0];
+                __frame.frame.width = width - _out;
+                camera.drawPixels(__frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
+            }
+
+            _matrix.translate(_sub * _cosAngle, _sub * _sinAngle);
+
+            if (percent != 0) {
+                _spr.color = colors[1];
+                __frame.frame.width = _pos - _out;
+                camera.drawPixels(__frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
+            }
+
+            final _center = height * 0.5;
+            barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
 
             if (!legacyMode.inFront) {
-                _matrix.translate(-(width - _pos) - _out, -legacyMode.outline);
+                _matrix.tx = _mX;
+                _matrix.ty = _mY;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
         }
         else {
-            final _pos = width * percent * 0.01;
-            final _sub = width - _pos;
-
             if (percent != 100) {
                 color = colors[0];
                 _frame.frame.x = 0;

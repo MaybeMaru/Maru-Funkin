@@ -39,14 +39,12 @@ class ControlsState extends MusicBeatState {
 		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
 		camFollow = new FlxObject(FlxG.width/2, 0);
 		
-		var bg:FunkinSprite = new FunkinSprite('menuBGBlue', [0,0], [0,0]);
+		final bg:FunkinSprite = new FunkinSprite('menuBGBlue', [0,0], [0,0]);
 		bg.setScale(1.1, false);
         add(bg);
 
-		controlItems = new FlxTypedGroup<ControlItem>();
-		add(controlItems);
-		menuItems = new FlxTypedGroup<Alphabet>();
-		add(menuItems);
+		add(controlItems = new FlxTypedGroup<ControlItem>());
+		add(menuItems = new FlxTypedGroup<Alphabet>());
 
 		reloadValues();
 		menuCam.follow(camFollow, null, 0.08);
@@ -123,8 +121,8 @@ class ControlsState extends MusicBeatState {
 
 		if (getKey('ACCEPT-P')) {
 			openSubState(new PromptSubstate('Press any key to rebind\n\n\n\nEscape to cancel', function () {
-				var keyCode:Int = Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
-				var pressedKey:String = Controls.inGamepad() ? FlxGamepadInputID.toStringMap.get(keyCode) : FlxKey.toStringMap.get(keyCode);
+				final keyCode:Int = Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
+				final pressedKey:String = Controls.inGamepad() ? FlxGamepadInputID.toStringMap.get(keyCode) : FlxKey.toStringMap.get(keyCode);
 				if (pressedKey != 'ESCAPE') {
 					Controls.setBinding(controlList[curSelected], pressedKey, curBind);
 					CoolUtil.playSound('confirmMenu');

@@ -41,11 +41,11 @@ class Transition extends ResizableSprite {
         times.open = openTime;
         times.close = closeTime;
         
-        if (bitmap.bitmapData != null) {
+        /*if (bitmap.bitmapData != null) {
             bitmap.bitmapData.dispose();
             bitmap.bitmapData.disposeImage();
             bitmap.bitmapData = null;
-        }
+        }*/
         
         if (asset != null) {
             if (asset is String) bitmap.bitmapData = AssetManager.getRawBitmap(cast(asset, String));
@@ -56,10 +56,9 @@ class Transition extends ResizableSprite {
                 _graphic.destroyOnNoUse = false;
             } 
             else if (asset is BitmapData) bitmap.bitmapData = cast(asset, BitmapData);
-
-            bitmap.scaleX = FlxG.width / bitmap.bitmapData.width;
-            bitmap.scaleY = FlxG.height*2 / bitmap.bitmapData.height;
-        } else {
+            updateScale();
+        }
+        else {
             color = color ?? FlxColor.BLACK;
             final bmp = new BitmapData(FlxG.width, FlxG.height * 2, true, color);
             for (i in 0...FlxG.height) {
@@ -67,10 +66,16 @@ class Transition extends ResizableSprite {
                 bmp.fillRect(new Rectangle(0, i, FlxG.width, 1), FlxColor.fromRGB(color.red,color.green,color.blue,Std.int(lineAlpha)));
             }
             bitmap.bitmapData = bmp;
+            bitmap.scaleX = bitmap.scaleY = 1;
         }
 
         bitmap.smoothing = true;
         return bitmap.bitmapData;
+    }
+
+    inline function updateScale() {
+        bitmap.scaleX = FlxG.width / bitmap.bitmapData.width;
+        bitmap.scaleY = FlxG.height*2 / bitmap.bitmapData.height;
     }
 
     var inExit:Bool;
