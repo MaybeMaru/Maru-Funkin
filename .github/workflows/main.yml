@@ -63,5 +63,5 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: Maru-Funkin
-          path: export/release/windows/bin
+          path: export/release/linux/bin
           if-no-files-found: error
