@@ -35,6 +35,14 @@ class CoolUtil {
 		EventUtil.initEvents();
 	}
 
+	inline public static function openUrl(url:String) {
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [url, "&"]);
+		#else
+		FlxG.openURL(url);
+		#end
+	}
+
 	inline public static function coolTextFile(path:String):Array<String> {
 		return [for (i in getFileContent(path).trim().split('\n')) i.trim()];
 	}

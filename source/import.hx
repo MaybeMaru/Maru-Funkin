@@ -18,7 +18,7 @@ import funkin.util.frontend.Shader;
 #if desktop
 import funkin.util.backend.Discord;
 import funkin.util.backend.Discord.DiscordClient;
-#if cpp
+#if (cpp && !linux)
 import hxcodec.flixel.FlxVideo;
 #end
 import sys.io.File;

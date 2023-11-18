@@ -290,7 +290,6 @@ class PlayState extends MusicBeatState {
 		iconP2 = new HealthIcon(dad.icon);
 
 		for (i in [iconP1,iconP2]) {
-			i.y = healthBar.y - (i.height*0.5);
 			i.playIcon = true;
 			iconGroup.add(i);
 		}
@@ -337,9 +336,9 @@ class PlayState extends MusicBeatState {
 
 	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
 		completeFunc = completeFunc ?? startCountdown;
-		#if cpp
-		var video:FlxVideo = new FlxVideo();
-		var vidFunc = function () {
+		#if (cpp && !linux)
+		final video:FlxVideo = new FlxVideo();
+		final vidFunc = function () {
 			video.dispose();
 			completeFunc();
 		}
@@ -436,7 +435,7 @@ class PlayState extends MusicBeatState {
 			beatCharacters();
 
 			if (swagCounter > 0) {
-				var countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
+				final countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
 				countdownSpr.setScale(SkinUtil.curSkinData.scale);
 				countdownSpr.screenCenter();
 				countdownSpr.camera = camHUD;
