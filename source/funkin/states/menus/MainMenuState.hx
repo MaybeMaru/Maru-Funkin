@@ -121,7 +121,7 @@ class MainMenuState extends MusicBeatState {
 
 			if (getKey('ACCEPT-P')) {
 				if (optionShit[curSelected] == 'donate') {
-					FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
+					CoolUtil.openUrl("https://ninja-muffin24.itch.io/funkin");
 				}
 				else {
 					selectedSomethin = true;

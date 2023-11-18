@@ -79,7 +79,7 @@ class HealthIcon extends FlxSpriteExt {
 			var coolOffset = 23 + width * 0.333;
 			if (Preferences.getPref('vanilla-ui')) {
 				bumpLerp = 0.75;
-				coolOffset = isPlayer ? 26 : _width - 26;
+				coolOffset = isPlayer ? 26 : _width/* * 1.1*/ - 26 ;
 			}
 
 			final yOff = _height + healthBar.height * 0.5;
