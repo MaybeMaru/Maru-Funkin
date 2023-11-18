@@ -89,6 +89,7 @@
 	<haxelib name="discord_rpc" if="cpp"/>
 	<haxelib name="hxCodec" if="cpp"/>
 	<haxelib name="maru-hscript" />
+	<haxelib name="hxcpp-gh-release" />
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
