@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.objects.ui.FunkButton;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxBackdrop;
 
@@ -31,6 +32,8 @@ class StageDebug extends MusicBeatState {
 
         // TODO add a better layer system you big goof
         Stage.createStageObjects(stageData.layers, null, ["bg" => bgGroup, "fg" => fgGroup]);
+
+        //add(new FunkButton(50,50));
     }
     
     final speed = 50;

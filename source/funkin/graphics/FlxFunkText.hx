@@ -59,7 +59,7 @@ class FlxFunkText extends FlxSprite {
     function get_textWidth() @:privateAccess return textField.__textEngine.textWidth;
     function get_textHeight() @:privateAccess return textField.__textEngine.textHeight;
 
-    private var _regen:Bool = false;
+    private var _regen:Bool = false;    
     function drawTextField() {        
         _textMatrix.tx = textField.x;
         _textMatrix.ty = textField.y;
@@ -69,6 +69,11 @@ class FlxFunkText extends FlxSprite {
         pixels.fillRect(_fillRect, FlxColor.TRANSPARENT);
         pixels.draw(textField, _textMatrix, null, null, null, antialiasing);
     }
+
+    /*private var _canWrite:Bool = true;
+    function uploadGpu() { // TEXT WONT BE ABLE TO BE CHANGED AFTER THIS!!!
+
+    }*/
 
     public var alignment(default, set):String = "left";
     function set_alignment(value:String) {
@@ -99,7 +104,7 @@ class FlxFunkText extends FlxSprite {
     }
 
     public function new(X:Float=0, Y:Float=0, Text:String="", ?canvasRes:FlxPoint, ?size:Int) {
-        super();
+        super(X,Y);
         canvasRes = canvasRes ?? FlxPoint.get(FlxG.width,FlxG.height);
         textField = new TextField();
         textField.width = Std.int(canvasRes.x);
@@ -113,14 +118,13 @@ class FlxFunkText extends FlxSprite {
         _textMatrix = new FlxMatrix();
 
         makeGraphic(cast textField.width,cast textField.height,FlxColor.TRANSPARENT,true);
-        setPosition(X,Y);
         text = Text;
         if (size != null) this.size = size;
     }
 
     public var style:TextStyle = NONE;
     inline function sizeMult() {
-        return size / 16;
+        return size * 0.0625;
     }
 
     override function draw() {
@@ -151,7 +155,7 @@ class FlxFunkText extends FlxSprite {
             case SHADOW(off, col):
                 final _offset = offset.clone();
                 final _color = color;
-                offset.add(off.x*sizeMult(),off.y*sizeMult());
+                offset.add(off.x * sizeMult(), off.y * sizeMult());
                 color = col ?? FlxColor.BLACK;
                 _draw();
                 offset.copyFrom(_offset);

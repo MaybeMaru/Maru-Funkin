@@ -1,21 +1,29 @@
 package funkin.util.backend;
 
+import flixel.util.typeLimit.OneOfTwo;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.display.BitmapData;
 import flash.media.Sound;
 import lime.utils.Assets as LimeAssets;
 import openfl.Assets as OflAssets;
 
+typedef AssetGraphic = OneOfTwo<FlxGraphic, String>;
+
 // Just moving this from Paths for organization sake
 class AssetManager {
 	public static var cachedGraphics:Map<String, FlxGraphic> = [];
 	public static var cachedSounds:Map<String, Sound> = [];
+
+	private static inline function _toGraphic(_graphic:AssetGraphic) {
+		if (_graphic is FlxGraphic) return _graphic;
+		else						return (existsGraphic(_graphic) ? getGraphic(_graphic) : null);
+	}
     
 	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
 		if (gpu) {
 			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
 			else if (Paths.exists(path, IMAGE)) {
-				var bitmap:BitmapData = getBitmapData(path);
+				final bitmap:BitmapData = getBitmapData(path);
 				return Preloader.addFromBitmap(bitmap, path);
 			}
 		} else return getGraphic(path, true);
@@ -37,7 +45,7 @@ class AssetManager {
 
 	public static function removeGraphicByKey(key:String) {
 		if (!existsGraphic(key)) return;
-		var obj = cachedGraphics.get(key);
+		final obj = cachedGraphics.get(key);
 		cachedGraphics.remove(key);
 		destroyGraphic(obj);
 	}
@@ -62,15 +70,15 @@ class AssetManager {
 
 	static public function addGraphic(width:Int, height:Int, color:FlxColor, ?key:String) {
 		if (existsGraphic(key)) return cachedGraphics.get(key);
-		var bitmap = new BitmapData(width, height, true, color);
-		var graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
+		final bitmap = new BitmapData(width, height, true, color);
+		final graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
 		graphic.destroyOnNoUse = false;
 		cachedGraphics.set(key, graphic);
 		return graphic;
 	}
 
 	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
-		var graphic = FlxGraphic.fromBitmapData(bitmap);
+		final graphic = FlxGraphic.fromBitmapData(bitmap);
 		graphic.persist = cache;
 		if (cache) cachedGraphics.set(key, graphic);
 		return graphic;
@@ -96,8 +104,8 @@ class AssetManager {
 
 	static public function uploadGraphicGPU(key:String) {
 		if (!existsGraphic(key)) return null;
-		var graphic = getGraphic(key);
-		var gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
+		final graphic = getGraphic(key);
+		final gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
 		removeGraphicByKey(key);
 		cachedGraphics.set(key, gpuGraphic);
 		return gpuGraphic;
