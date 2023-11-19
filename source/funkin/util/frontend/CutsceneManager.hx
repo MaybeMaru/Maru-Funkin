@@ -17,6 +17,19 @@ class EventHandler extends flixel.FlxBasic {
         events.sort((a, b) -> Std.int(a.time - b.time));
     }
 
+    public function pushStep(step:Int = 0, event:Dynamic) {
+        pushEvent(step * Conductor.stepCrochetMills, event);
+    }
+
+    public function pushBeat(beat:Int = 0, event:Dynamic) {
+        pushEvent(beat * Conductor.crochetMills, event);
+    }
+
+    public function pushSection(section:Int = 0, event:Dynamic) {
+        pushEvent(section * Conductor.sectionCrochetMills, event);
+        //Song.getSectionTime(PlayState.SONG, section) TODO maybe??
+    }
+
     public function start() {
         FlxG.state.add(this);
         active = true;

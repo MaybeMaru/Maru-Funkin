@@ -4,24 +4,17 @@ function eventHit(event) {
     }
 }
 
-var cached = [];
-var already = false;
+var cachedChars = [];
 function createPost(){
-    for(char in State.SONG.players)
-        if(char != null) cached.push(char);
+    for (char in State.SONG.players)
+        if (char != null) cachedChars.push(char);
 
-    for(event in State.notesGroup.events){
-        if(event.name == 'changeChar'){
-            already = false;
-            for(cachedChar in cached){
-                if(cachedChar == event.values[1]){
-                    already = true;
-                    break; 
-                }
-            }
-            if(already) continue; // they already cached fuck off to the next one!!!!!
-            cached.push(event.values[1]);
-            cacheCharacter(event.values[1]);
+    for (event in State.notesGroup.events){
+        if (event.name == "changeChar"){
+            var char = event.values[1];
+            if (cachedChars.contains(char)) continue; // they already cached fuck off to the next one!!!!!
+            cachedChars.push(char);
+            cacheCharacter(char);
         }
     }
 }

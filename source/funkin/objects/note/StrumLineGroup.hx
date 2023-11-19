@@ -31,7 +31,7 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
     public function insertStrum(position:Int = 0, skipIntro:Bool = true) {
         if (members.length >= 9) return null; // STOP
         for (i in position...members.length) {
-            var strum = members[i];
+            final strum = members[i];
             if (strum == null) continue;
             strum.x += seperateWidth;
             strum.ID++;
@@ -41,8 +41,8 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
 
     public function addStrum(noteData:Int = 0, skipIntro:Bool = true) {
         if (members.length >= 9) return null; // STOP
-        var strumX:Float =  startX + seperateWidth * noteData;
-		var strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
+        final strumX:Float =  startX + seperateWidth * noteData;
+		final strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
 		strumNote.ID = noteData;
 		strumNote.updateHitbox();
 		strumNote.scrollFactor.set();
@@ -63,6 +63,6 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
 
     override function destroy() {
         super.destroy();
-        FlxDestroyUtil.putArray(initPos);
+        initPos = FlxDestroyUtil.putArray(initPos);
     }
 }

@@ -82,15 +82,15 @@
             },{
                 "animName": "confirmDOWN",
                 "animFile": "down confirm",
-                "offsets": [25,25]
+                "offsets": [26,27]
             },{
                 "animName": "confirmUP",
                 "animFile": "up confirm",
-                "offsets": [25,25]
+                "offsets": [26,25]
             },{
                 "animName": "confirmRIGHT",
                 "animFile": "right confirm",
-                "offsets": [25,25]
+                "offsets": [24,25]
             }
         ],
         "imagePath": "strumAssets",

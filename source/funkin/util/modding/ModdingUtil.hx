@@ -190,13 +190,31 @@ class ModdingUtil {
     public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
         subFolders = subFolders ?? [];
         var subFolderList:Array<String> = [];
-        for (i in subFolders)
-            subFolderList = subFolderList.concat(getScriptList(folder + "/" + i));
+        for (i in subFolders) subFolderList = subFolderList.concat(getScriptList(folder + "/" + i));
         return getScriptList(folder).concat(subFolderList);
     }
 
     public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
-        final scriptList:Array<String> = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
-        return scriptList.concat(Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods));
+        final assetScripts = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
+        final modScripts = Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods);
+        
+        final scripts = modScripts.concat(assetScripts); // mods go firts cuz reasons
+        return overrideScripts(scripts); 
+    }
+
+    static function overrideScripts(scripts:Array<String>) {
+        final _overrides:Array<String> = [];
+        final list:Array<String> = [];
+
+        for (i in scripts) {
+            final parts = i.split("/");
+            final base = parts[parts.length - 2] + "/" + parts[parts.length - 1];
+            if (_overrides.contains(base)) continue; // File has override already
+
+            _overrides.push(base);
+            list.push(i);
+        }
+
+        return list;
     }
 }

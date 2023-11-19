@@ -187,6 +187,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
 		});
 
+		// DONT USE THIS, ITS A WIP
+		set('makeModchartManager', function () {
+			return funkin.util.frontend.ModchartManager.makeManager();
+		});
+
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
 			ScriptUtil.addSprite(spr,key,onTop);
 		});
