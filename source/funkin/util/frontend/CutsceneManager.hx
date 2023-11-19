@@ -1,27 +1,14 @@
 package funkin.util.frontend;
 
-typedef CutsceneEvent = {
+typedef SimpleEvent = {
     var time:Float;
     var callback:Dynamic;
 }
 
-class CutsceneManager extends flixel.FlxBasic {
-    public var targetSound:FlxSound = null;
-    public var events:Array<CutsceneEvent> = [];
-    public var soundPosition:Float = 0;
-
-    public static function makeManager(?targetSound:FlxSound) {
-        var manager:CutsceneManager = new CutsceneManager(targetSound);
-        return manager;
-    }
-
-    public function start() {
-        FlxG.state.add(this);
-        if (targetSound != null) targetSound.play(true);
-        active = true;
-        _check();
-    }
-
+class EventHandler extends flixel.FlxBasic {
+    public var events:Array<SimpleEvent> = [];
+    public var position:Float = 0;
+    
     public function pushEvent(time:Float, callback:Dynamic) {
         events.push({
             time: time*1000,
@@ -30,11 +17,60 @@ class CutsceneManager extends flixel.FlxBasic {
         events.sort((a, b) -> Std.int(a.time - b.time));
     }
 
+    public function start() {
+        FlxG.state.add(this);
+        active = true;
+        _check();
+    }
+
+    inline public function pause() {
+        active = false;
+    }
+
+    inline public function resume() {
+        active = true;
+    }
+    
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        position += elapsed * 1000;
+        _check();
+    }
+
+    function _check() {
+        callEvents();
+    }
+
+    function callEvents() {
+        if (events[0] != null) {
+			while (events.length > 0 && events[0].time <= position) {
+                var event = events[0];
+                event.callback();
+                events.splice(events.indexOf(event), 1);
+			}
+		} else {
+            destroy();
+        }
+    }
+}
+
+class CutsceneManager extends EventHandler {
+    public var targetSound:FlxSound = null;
+
+    public static inline function makeManager(?targetSound:FlxSound) {
+        return new CutsceneManager(targetSound);
+    }
+
+    override public function start() {
+        if (targetSound != null) targetSound.play(true);
+        super.start();
+    }
+
     var startSoundOffset:Float = 0;
 
     public function setSound(sound:FlxSound) {
         targetSound = sound;
-        startSoundOffset = soundPosition;
+        startSoundOffset = position;
         targetSound.play(true);
     }
 
@@ -44,41 +80,23 @@ class CutsceneManager extends flixel.FlxBasic {
         if (targetSound != null) {
             targetSound.stop();
         }
-        soundPosition = 0;
+        position = 0;
         active = false;
     }
 
-    override function update(elapsed:Float) {
-        super.update(elapsed);
-        soundPosition += elapsed * 1000;
-        _check();
-    }
-
-    function _check() {
+    override function _check() {
         syncSound();
         callEvents();
     }
 
     function syncSound() {
         if (targetSound == null || targetSound.time <= 0) return;
-        final _time = soundPosition - startSoundOffset;
+        final _time = position - startSoundOffset;
         final _resync = Math.abs(_time - targetSound.time) > (40 * FlxG.timeScale);
         if (_resync) {
             targetSound.pause();
             targetSound.time = _time;
             targetSound.play();
-        }
-    }
-
-    function callEvents() {
-        if (events[0] != null) {
-			while (events.length > 0 && events[0].time <= soundPosition) {
-                var event = events[0];
-                event.callback();
-                events.splice(events.indexOf(event), 1);
-			}
-		} else {
-            destroy();
         }
     }
 }
