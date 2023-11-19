@@ -207,7 +207,7 @@ class CoolUtil {
 	}
 
 	public static function hexToColor(hex:String):FlxColor {
-		var rgb = [];
+		final rgb = [];
         if(hex.startsWith('0x')) {
             hex = hex.substr(2);
         }
@@ -223,19 +223,11 @@ class CoolUtil {
 	}
 
 	inline public static function switchState(newState:FlxState) {
-		if (MusicBeatState.instance == null) {
-			FlxG.switchState(newState);
-			return;
-		}
-		MusicBeatState.instance.switchState(newState);
+		MusicBeatState.instance != null ? MusicBeatState.instance.switchState(newState) : FlxG.switchState(newState);
 	}
 
 	inline public static function resetState() {
-		if (MusicBeatState.instance == null) {
-			FlxG.resetState();
-			return;
-		}
-		MusicBeatState.instance.resetState();
+		MusicBeatState.instance != null ? MusicBeatState.instance.resetState() : FlxG.resetState();
 	}
 
 	/*

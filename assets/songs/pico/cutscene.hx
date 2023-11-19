@@ -28,7 +28,8 @@ function stepHit(curStep) {
         case 4: State.camZooming = false;
         case 20: blackOverlay.visible = picoText.visible = true;
         case 32:
-            blackOverlay.visible = picoText.visible = false;
+            blackOverlay.destroy();
+            picoText.destroy();
             State.camZooming = true;
             closeScript();
     }

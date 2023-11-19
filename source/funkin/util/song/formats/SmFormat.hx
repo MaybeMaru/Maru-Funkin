@@ -43,7 +43,7 @@ class SmFormat {
         fnfMap.song = title;
         fnfMap.notes = sections;
         fnfMap.bpm = bpm;
-        trace(offset);
+        //trace(offset);
         fnfMap.offsets = [offset,0];
         return fnfMap;
     }

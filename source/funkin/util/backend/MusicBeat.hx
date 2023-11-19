@@ -1,30 +1,12 @@
 package funkin.util.backend;
 
-interface IMusicBeat {
-	public var curStep(default, null):Int;
-	public var curBeat(default, null):Int;
-	public var curSection(default, null):Int;
-
-	public var curStepDecimal(default, null):Float;
-	public var curBeatDecimal(default, null):Float;
-	public var curSectionDecimal(default, null):Float;
-
-	private function updateStep():Void;
-	private function updateBeat():Void;
-	private function updateSection():Void;
-
-	public function stepHit():Void;
-	public function beatHit():Void;
-	public function sectionHit():Void;
-}
-
 enum abstract MusicBeatEvent(Int) {
     var STEP_EVENT = 0;
     var BEAT_EVENT = 1;
     var SECTION_EVENT = 2;
 }
 
-class MusicBeat extends flixel.FlxBasic implements IMusicBeat {
+class MusicBeat extends flixel.FlxBasic {
     public var curStep(default, null):Int = 0;
 	public var curBeat(default, null):Int = 0;
 	public var curSection(default, null):Int = 0;

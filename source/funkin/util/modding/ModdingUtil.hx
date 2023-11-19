@@ -21,7 +21,7 @@ typedef ModFolder = {
 class ModdingUtil {
     public static var folderExceptions(default, never):Array<String> = ['data', 'fonts', 'images', 'music', 'songs', 'videos', 'sounds'];
     public static inline var API_VERSION:Int = 0;
-    public static var DEFAULT_MOD(default, never):ModFolder = {
+    public static final DEFAULT_MOD:ModFolder = {
         title: "Empty Mod",
         description: "This mod has no description.",
         icon: "icon",

@@ -9,6 +9,14 @@ interface IMusicGetter {
 	public function stepHit(curStep:Int):Void;
 	public function beatHit(curBeat:Int):Void;
 	public function sectionHit(curSection:Int):Void;
+
+	public var curStep(get, never):Int;
+	public var curBeat(get, never):Int;
+	public var curSection(get, never):Int;
+
+	public var curStepDecimal(get, never):Float;
+	public var curBeatDecimal(get, never):Float;
+	public var curSectionDecimal(get, never):Float;
 }
 
 class MusicBeatState extends FlxUIState implements IMusicGetter {
@@ -71,12 +79,12 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		}
 	}*/
 
-	public function switchState(newState:FlxState) {
+	public inline function switchState(newState:FlxState) {
 		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
 		Main.transition.startTrans(newState);
 	}
 
-	public function resetState() {
+	public inline function resetState() {
 		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
 		Main.transition.startTrans(null, function () FlxG.resetState());
 	}
