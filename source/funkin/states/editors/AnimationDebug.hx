@@ -40,6 +40,8 @@ class AnimationDebug extends MusicBeatState {
 	var camUI:FlxCamera;
 	var camChar:FlxCamera;
 	var camFollow:FlxObject;
+	var lastPos:FlxPoint;
+	var camSnapped:Bool = false;
 
 	var animsText:FlxTypedGroup<FunkinText>;
 	var curAnimText:FunkinText;
@@ -90,14 +92,15 @@ class AnimationDebug extends MusicBeatState {
 		add(camFollow);
 		camFollow.cameras = [camChar];
 		camChar.follow(camFollow);
+		lastPos = FlxPoint.get(camFollow.x,camFollow.y);
 
 		cam_offset = new FunkinSprite('options/cam_offset');
-		cam_offset.offset.set(cam_offset.width/2, cam_offset.height/2);
+		cam_offset.offset.set(cam_offset.width * 0.5, cam_offset.height * 0.5);
 		add(cam_offset);
 		cam_offset.cameras = [camChar];
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
-		UI_box.resize(350, 200);
+		UI_box.resize(355, 200);
 		UI_box.x = FlxG.width / 1.5;
 		UI_box.y = 20;
 		add(UI_box);
@@ -120,6 +123,7 @@ class AnimationDebug extends MusicBeatState {
 	var check_flipX:FlxUICheckBox;
 	var check_isPlayer:FlxUICheckBox;
 	var check_isPlayerGame:FlxUICheckBox;
+	var check_snapCam:FlxUICheckBox;
 
 	function addCharacterUI():Void {
 		var tab_group_char = new FlxUI(null, UI_box);
@@ -153,12 +157,20 @@ class AnimationDebug extends MusicBeatState {
 		stepper_camX = new FlxUINumericStepper(stepper_offsetY.x + stepper_offsetY.width + 20, stepper_scale.y, 10);
 		stepper_camY = new FlxUINumericStepper(stepper_camX.x + stepper_camX.width, stepper_scale.y, 10);
 
+		final updateSnapCam = function () {
+			if (camSnapped) {
+				final _cam = displayChar.prepareCamPoint(FlxPoint.weak());
+				camFollow.setPosition(_cam.x, _cam.y);
+			}
+		}
+
 		check_isPlayer = new FlxUICheckBox(stepper_scale.x, stepper_scale.y + 20, null, null, "Is Player (Game)", 100);
 		check_isPlayer.callback = function() {
 			character.isPlayer = check_isPlayer.checked;
 			displayChar.isPlayerJson = check_isPlayer.checked;
 			ghostChar.isPlayerJson = check_isPlayer.checked;
 			updateFlips();
+			updateSnapCam();
 		};
 
 		check_isPlayerGame = new FlxUICheckBox(check_isPlayer.x + check_isPlayer.width + 10, check_isPlayer.y, null, null, "Is Player (Editor)", 100);
@@ -168,7 +180,18 @@ class AnimationDebug extends MusicBeatState {
 			bf_offset.flipX = check_isPlayerGame.checked;
 			updateFlips();
 			updateWorldOffsets();
+			updateSnapCam();
 		};
+
+		check_snapCam = new FlxUICheckBox(check_isPlayerGame.x + check_isPlayerGame.width + 10, check_isPlayerGame.y, null, null, "Snap Camera (Editor)", 100);
+		check_snapCam.callback = function () {
+			camSnapped = check_snapCam.checked;
+			if (!camSnapped) camFollow.setPosition(lastPos.x, lastPos.y);
+			else {
+				lastPos = camFollow.getPosition();
+				updateSnapCam();
+			}
+		}
 
 		check_flipX = new FlxUICheckBox(check_isPlayer.x, check_isPlayer.y + 20, null, null, "Flip X", 100);
 		check_flipX.callback = function() {
@@ -200,7 +223,7 @@ class AnimationDebug extends MusicBeatState {
 		tab_group_char.add(reloadButton);	tab_group_char.add(input_imagePath);
 
 		tab_group_char.add(stepper_scale);	tab_group_char.add(stepper_offsetX);	tab_group_char.add(stepper_offsetY); tab_group_char.add(stepper_camX);	tab_group_char.add(stepper_camY);
-		tab_group_char.add(check_isPlayer);	tab_group_char.add(check_isPlayerGame);
+		tab_group_char.add(check_isPlayer);	tab_group_char.add(check_isPlayerGame); tab_group_char.add(check_snapCam);
 		tab_group_char.add(check_flipX);	tab_group_char.add(check_antialiasing);
 
 		tab_group_char.add(saveButton);
@@ -432,7 +455,7 @@ class AnimationDebug extends MusicBeatState {
 			var offsetText:String = '$anim: [${charOffsets.x}, ${charOffsets.y}]';
 			final isCurAnim = i == curAnimIndex;
 			if (create) {
-				var animText:FunkinText = animsText.recycle(FunkinText);
+				final animText:FunkinText = animsText.recycle(FunkinText);
 				animText.setPosition(10, curAnimText.y+40+(22*i));
 				animText.text = offsetText;
 				funcColor(animText, isCurAnim);
@@ -544,7 +567,7 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function updateWorldOffsets():Void {
-		var offsetValues:Array<Int> = [Std.int(stepper_offsetX.value),Std.int(stepper_offsetY.value)];
+		final offsetValues:Array<Int> = [Std.int(stepper_offsetX.value),Std.int(stepper_offsetY.value)];
 		character.charOffsets = offsetValues;
 		//offsetValues[0] *= (displayChar.flippedOffsets) ? -1 : 1;
 		displayChar.worldOffsets.set(offsetValues[0], offsetValues[1]);
@@ -580,7 +603,7 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function checkFocus():Bool {
-		var focusInputs = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
+		final focusInputs = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
 		for (input in focusInputs) {
 			if (input.hasFocus) return true;
 		}
@@ -612,10 +635,13 @@ class AnimationDebug extends MusicBeatState {
 			final pressJ = FlxG.keys.pressed.J;
 
 			// Move the camera
-			camFollow.velocity.y = (pressI || FlxG.keys.pressed.K) ? 90 * multiplier : 0;
-			camFollow.velocity.y *= pressI ? -1 : 1;
-			camFollow.velocity.x = (pressJ || FlxG.keys.pressed.L) ? 90 * multiplier : 0;
-			camFollow.velocity.x *= pressJ ? -1 : 1;
+			if (!camSnapped) {
+				camFollow.velocity.y = (pressI || FlxG.keys.pressed.K) ? 90 * multiplier : 0;
+				camFollow.velocity.y *= pressI ? -1 : 1;
+				camFollow.velocity.x = (pressJ || FlxG.keys.pressed.L) ? 90 * multiplier : 0;
+				camFollow.velocity.x *= pressJ ? -1 : 1;
+			}
+
 			if (FlxG.keys.pressed.E)	camChar.zoom += 0.01 * multiplier * camChar.zoom;
 			if (FlxG.keys.pressed.Q)	camChar.zoom -= 0.01 * multiplier * camChar.zoom;
 			camChar.zoom = FlxMath.bound(camChar.zoom, 0.25, 10);
@@ -653,7 +679,7 @@ class AnimationDebug extends MusicBeatState {
 	var _file:FileReference;
 	private function saveLevel():Void {
 		formatJsonChar();
-		var data:String = FunkyJson.stringify(character, "\t");
+		final data:String = FunkyJson.stringify(character, "\t");
 		if ((data != null) && (data.length > 0)) {
 			_file = new FileReference();
 			_file.save(data.trim(), '${displayChar.curCharacter}.json');

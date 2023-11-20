@@ -31,6 +31,7 @@ class Character extends FlxSpriteExt {
 	//	Offsets
 	public var worldOffsets:FlxPoint;
 	public var stageOffsets:FlxPoint;
+	public var stageCamOffsets:FlxPoint;
 	public var camOffsets:FlxPoint;
 	public var OG_X:Float = 0;
 	public var OG_Y:Float = 0;
@@ -100,6 +101,7 @@ class Character extends FlxSpriteExt {
 		super(X,Y);
 		worldOffsets = FlxPoint.get();
 		stageOffsets = FlxPoint.get();
+		stageCamOffsets = FlxPoint.get();
 		camOffsets = FlxPoint.get();
 
 		this.debugMode = debugMode;
@@ -187,7 +189,12 @@ class Character extends FlxSpriteExt {
 		super.update(elapsed);
 	}
 
-	public function copyStatusFrom(char:Character) {
+	public function prepareCamPoint(point:FlxPoint) {
+		final midPoint = this.getMidpoint();
+		return point.set(midPoint.x - camOffsets.x - stageCamOffsets.x, midPoint.y - camOffsets.y - stageCamOffsets.y);
+	}
+
+	public inline function copyStatusFrom(char:Character) {
 		return char.copyStatusTo(this);
 	}
 
@@ -198,6 +205,7 @@ class Character extends FlxSpriteExt {
 		char.specialAnim = specialAnim;
 		char.botMode = botMode;
 		char.stageOffsets.copyFrom(stageOffsets);
+		char.stageCamOffsets.copyFrom(stageCamOffsets);
 		char.setXY(OG_X,OG_Y);
 
 		final lastAnim = animation.curAnim;
@@ -311,6 +319,7 @@ class Character extends FlxSpriteExt {
 		super.destroy();
 		worldOffsets = FlxDestroyUtil.put(worldOffsets);
 		stageOffsets = FlxDestroyUtil.put(stageOffsets);
+		stageCamOffsets = FlxDestroyUtil.put(stageCamOffsets);
 		camOffsets = FlxDestroyUtil.put(camOffsets);
 	}
 }

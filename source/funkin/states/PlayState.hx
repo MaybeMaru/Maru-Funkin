@@ -22,7 +22,6 @@ class PlayState extends MusicBeatState {
 	private var stageJsonData:StageJson;
 	public var bgSpr:FlxTypedGroup<Dynamic>;
 	public var fgSpr:FlxTypedGroup<Dynamic>;
-	//public var objMap:Map<String, Dynamic> = [];
 
 	public var dad:Character;
 	public var gf:Character;
@@ -33,6 +32,7 @@ class PlayState extends MusicBeatState {
 	public var boyfriendGroup:FlxTypedSpriteGroup<Dynamic>;
 
 	private var camFollow:FlxObject;
+	private var targetCamPos:FlxPoint;
 	private static var prevCamFollow:FlxObject;
 
 	private var curSectionData:SwagSection = null;
@@ -174,9 +174,8 @@ class PlayState extends MusicBeatState {
 		boyfriend = new Character(BOYFRIEND_POS.x, BOYFRIEND_POS.y, SONG.players[0], true);
 
 		//Cache Gameover Character
-		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar);
+		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
 		GameOverSubstate.cacheSounds();
-		//add(deadChar);
 
 		// GET THE STAGE JSON SHIT
 		curStage = SONG.stage;
@@ -185,17 +184,18 @@ class PlayState extends MusicBeatState {
 		Paths.currentLevel = stageJsonData.library;
 		SkinUtil.setCurSkin(stageJsonData.skin);
 
-		boyfriend.stageOffsets.set(stageJsonData.bfOffsets[0], stageJsonData.bfOffsets[1]);
-		dad.stageOffsets.set(stageJsonData.dadOffsets[0], stageJsonData.dadOffsets[1]);
-		gf.stageOffsets.set(stageJsonData.gfOffsets[0], stageJsonData.gfOffsets[1]);
-
 		//ADD CHARACTER OFFSETS
+		Stage.applyData(stageJsonData, boyfriend, dad, gf);
 		boyfriend.setXY(BOYFRIEND_POS.x, BOYFRIEND_POS.y);
 		dad.setXY(DAD_POS.x, DAD_POS.y);
 		gf.setXY(GF_POS.x, GF_POS.y,);
 
+		BOYFRIEND_POS.put();
+		DAD_POS.put();
+		GF_POS.put();
+
 		//STAGE START CAM OFFSET
-		final camPos:FlxPoint = FlxPoint.get(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
+		final camPos:FlxPoint = FlxPoint.weak(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -271,6 +271,7 @@ class PlayState extends MusicBeatState {
 		}
 		add(camFollow);
 
+		targetCamPos = FlxPoint.get();
 		camFollowLerp = 0.04 * defaultCamSpeed;
 		camGame.follow(camFollow, LOCKON, camFollowLerp);
 		camGame.zoom = defaultCamZoom;
@@ -622,26 +623,11 @@ class PlayState extends MusicBeatState {
 	public function cameraMovement():Void {
 		if (!notesGroup.generatedMusic || curSectionData == null) return;
 		final mustHit:Bool = curSectionData.mustHitSection;
+		mustHit ? boyfriend.prepareCamPoint(targetCamPos) : dad.prepareCamPoint(targetCamPos);
 
-		var camOffsets:FlxPoint = null;
-		var midPoint:FlxPoint = null;
-		var stageCamOffsets:Array<Float> = null;
-		if (mustHit) {
-			camOffsets = boyfriend.camOffsets;
-			midPoint = boyfriend.getMidpoint();
-			stageCamOffsets = stageJsonData.bfCamOffsets;
-		} else {
-			camOffsets = dad.camOffsets;
-			midPoint = dad.getMidpoint();
-			stageCamOffsets = stageJsonData.dadCamOffsets;
-		}
-
-		final intendedPos = midPoint.x - camOffsets.x - stageCamOffsets[0];
-		if (camFollow.x != intendedPos) {
-			final camX = midPoint.x - camOffsets.x - stageCamOffsets[0];
-			final camY = midPoint.y - camOffsets.y - stageCamOffsets[1];
-			camFollow.setPosition(camX, camY);
-			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0, camFollow.getPosition()]);
+		if (camFollow.x != targetCamPos.x) {
+			camFollow.setPosition(targetCamPos.x, targetCamPos.y);
+			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0, targetCamPos]);
 		}
 	}
 
@@ -783,6 +769,8 @@ class PlayState extends MusicBeatState {
 		CoolUtil.destroyMusic();
 		SkinUtil.setCurSkin('default');
 		ModdingUtil.addCall('destroy');
+
+		targetCamPos = FlxDestroyUtil.put(targetCamPos);
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		instance = null;
 		super.destroy();

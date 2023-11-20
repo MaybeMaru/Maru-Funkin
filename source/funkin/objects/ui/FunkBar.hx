@@ -82,8 +82,7 @@ class FunkBar extends FlxSpriteExt {
         /*
          * This isn't pretty too look at but shhhhhh it works
         **/
-
-        // TODO add the angle fixes n barPoint shit to legacy mode
+        
         final _pos = width * percent * 0.01;
         final _sub = width - _pos;
         

@@ -52,6 +52,16 @@ class Stage {
         return DEFAULT_STAGE;
     }
 
+    public static inline function applyData(data:StageJson, bf:Character, dad:Character, gf:Character) {
+        bf.stageOffsets.set(data.bfOffsets[0], data.bfOffsets[1]);
+		dad.stageOffsets.set(data.dadOffsets[0], data.dadOffsets[1]);
+		gf.stageOffsets.set(data.gfOffsets[0], data.gfOffsets[1]);
+
+		bf.stageCamOffsets.set(data.bfCamOffsets[0], data.bfCamOffsets[1]);
+		dad.stageCamOffsets.set(data.dadCamOffsets[0], data.dadCamOffsets[1]);
+		gf.stageCamOffsets.set(data.gfCamOffsets[0], data.gfCamOffsets[1]);
+    }
+
     public static function createStageObjects(?_layers:Dynamic, ?script:FunkScript, ?groups:Map<String, SpriteLayer>) {
         if (_layers == null) return;
         final layers = cast _layers;  
