@@ -103,7 +103,7 @@ class StoryMenuState extends MusicBeatState {
 		difficultySelectors.add(rightArrow);
 
 		storyBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFFFFFFF);//0xFFF9CF51
-		storyBG.color = CoolUtil.hexToColor(storyWeeks[0].data.weekColor);
+		storyBG.color = FlxColorFix.fromString(storyWeeks[0].data.weekColor);
 		add(storyBG);
 		add(grpWeekCharacters);
 

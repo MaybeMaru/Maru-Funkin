@@ -206,18 +206,6 @@ class CoolUtil {
 		return result;
 	}
 
-	public static function hexToColor(hex:String):FlxColor {
-		final rgb = [];
-        if(hex.startsWith('0x')) {
-            hex = hex.substr(2);
-        }
-        while(hex.length > 0) {
-            rgb.push(Std.parseInt('0x${hex.substr(0,2)}'));
-            hex = hex.substr(2);
-        }
-        return FlxColor.fromRGB(rgb[1],rgb[2],rgb[3],rgb[0]);
-    }
-
 	inline public static function getTopCam():FlxCamera {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
@@ -237,6 +225,8 @@ class CoolUtil {
 	@:noCompletion
 	inline private static function __pauseState() {
 		FlxG.state.openSubState(new FlxSubState());
+		if (FlxG.state is PlayState)
+			Conductor.vocals.pause();
 	}
 
 	/*
