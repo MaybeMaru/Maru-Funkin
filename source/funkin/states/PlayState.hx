@@ -208,15 +208,12 @@ class PlayState extends MusicBeatState {
 		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
 		//Character Scripts
-		final characterScripts = ModdingUtil.getScriptList('data/characters');
 		for (char => _char in [boyfriend => 'bf', dad => 'dad', gf => 'gf']) {
-   			for (script in characterScripts) {
-        		final charName = script.split('/').pop().split('.')[0];
-        		if (char.curCharacter == charName) {
-            		ModdingUtil.addScript(script, '_charScript_$_char').set('ScriptChar', char);
-            		break;
-        		}
-    		}
+			final script = ModdingUtil.addScript(Paths.script('characters/' + char.curCharacter), '_charScript_$_char');
+			if (script != null) {
+				script.set('ScriptChar', char);
+				script.call('createChar', [char]);
+			}
 		}
 
 		//Song Scripts

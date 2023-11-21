@@ -125,6 +125,13 @@ class AnimationDebug extends MusicBeatState {
 	var check_isPlayerGame:FlxUICheckBox;
 	var check_snapCam:FlxUICheckBox;
 
+	function updateSnapCam() {
+		if (camSnapped) {
+			final _cam = displayChar.prepareCamPoint(FlxPoint.weak());
+			camFollow.setPosition(_cam.x, _cam.y);
+		}
+	}
+
 	function addCharacterUI():Void {
 		var tab_group_char = new FlxUI(null, UI_box);
 		tab_group_char.name = 'Character';
@@ -156,13 +163,6 @@ class AnimationDebug extends MusicBeatState {
 		stepper_offsetY = new FlxUINumericStepper(stepper_offsetX.x + stepper_offsetX.width, stepper_scale.y, 10);
 		stepper_camX = new FlxUINumericStepper(stepper_offsetY.x + stepper_offsetY.width + 20, stepper_scale.y, 10);
 		stepper_camY = new FlxUINumericStepper(stepper_camX.x + stepper_camX.width, stepper_scale.y, 10);
-
-		final updateSnapCam = function () {
-			if (camSnapped) {
-				final _cam = displayChar.prepareCamPoint(FlxPoint.weak());
-				camFollow.setPosition(_cam.x, _cam.y);
-			}
-		}
 
 		check_isPlayer = new FlxUICheckBox(stepper_scale.x, stepper_scale.y + 20, null, null, "Is Player (Game)", 100);
 		check_isPlayer.callback = function() {
@@ -558,12 +558,16 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function updateCamOffsets():Void {
-		var offsetValues:Array<Int> = [Std.int(stepper_camX.value),Std.int(stepper_camY.value)];
+		final offsetValues:Array<Int> = [Std.int(stepper_camX.value), Std.int(stepper_camY.value)];
+		offsetValues[0] *= displayChar.flippedOffsets ? -1 : 1;
 		character.camOffsets = offsetValues;
-		cam_offset.setPosition(displayChar.getMidpoint().x,displayChar.getMidpoint().y);
-		cam_offset.x -= displayChar.flippedOffsets ? -offsetValues[0] : offsetValues[0];
-		cam_offset.y -= offsetValues[1];
+		displayChar.camOffsets.set(offsetValues[0], offsetValues[1]);
+		
+		final prevCamPos = displayChar.prepareCamPoint(FlxPoint.weak());
+		cam_offset.setPosition(prevCamPos.x, prevCamPos.y);
 		cam_offset.flipX = (displayChar.flippedOffsets != check_isPlayer.checked);
+
+		updateSnapCam();
 	}
 
 	function updateWorldOffsets():Void {
