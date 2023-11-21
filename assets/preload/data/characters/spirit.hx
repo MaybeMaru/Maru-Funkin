@@ -1,4 +1,4 @@
-function createPost() {
+function createChar() {
     var evilTrail = new FlxTrail(ScriptChar, null, 4, 24, 0.3, 0.069);
     ScriptChar.group.insert(0, evilTrail);
 

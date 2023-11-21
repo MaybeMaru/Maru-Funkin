@@ -20,6 +20,7 @@ class FlxFunkGame extends FlxGame {
 
         addChild(Main.transition = transition = new Transition());
         addChild(Main.console = console = new ScriptConsole());
+        FlxG.mouse.useSystemCursor = true;
     }
 
     override function update() {

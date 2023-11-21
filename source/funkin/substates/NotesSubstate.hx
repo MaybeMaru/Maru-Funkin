@@ -14,6 +14,7 @@ class NotesSubstate extends MusicBeatSubstate {
         final bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		bg.scrollFactor.set();
+		bg.antialiasing = false;
 		add(bg);
 
         SONG = Song.checkSong(_SONG);

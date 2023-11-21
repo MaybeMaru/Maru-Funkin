@@ -1,7 +1,7 @@
 var speaker:FlxSpriteExt;
 var parts:Array<FlxSpriteExt> = [];
 
-function createPost():Void {
+function createChar():Void {
     ScriptChar.x += 120;
     speaker = new FlxSpriteExt(ScriptChar.x - 190, ScriptChar.y + 305.5);
     speaker.loadImage('characters/speakers');

@@ -33,6 +33,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.scrollFactor.set();
+		bg.antialiasing = false;
 		add(bg);
 
 		levelInfo = new FunkinText(20,15,PlayState.SONG.song,32);

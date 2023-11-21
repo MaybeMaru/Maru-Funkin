@@ -40,8 +40,13 @@ function createPost():Void {
 		bgGirls.push(freaks);
 	}
 
-	for (i in [bgSky, bgSchool, bgRoad, bgTrees,petals, bgTrunks, fgTrees].concat(bgGirls)) {
+	for (i in [bgSky, bgSchool, bgRoad, bgTrees,petals, bgTrunks, fgTrees].concat(bgGirls))
 		i.setScale(6);
+
+	if (isRoses) {
+		initShader('rosesBg', 'rosesBg');
+		for (i in [bgSky, bgSchool, petals])
+			setSpriteShader(i, 'rosesBg');
 	}
 
 	danceFreaks();

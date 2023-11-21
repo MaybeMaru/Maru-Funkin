@@ -190,10 +190,6 @@ class PlayState extends MusicBeatState {
 		dad.setXY(DAD_POS.x, DAD_POS.y);
 		gf.setXY(GF_POS.x, GF_POS.y,);
 
-		BOYFRIEND_POS.put();
-		DAD_POS.put();
-		GF_POS.put();
-
 		//STAGE START CAM OFFSET
 		final camPos:FlxPoint = FlxPoint.weak(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
 		
@@ -207,14 +203,20 @@ class PlayState extends MusicBeatState {
 		final stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
 		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
 
+		// Set up stuff for scripts
+		gf.group = gfGroup;
+		dad.group = dadGroup;
+		boyfriend.group = boyfriendGroup;
+
+		iconGroup = new FlxSpriteGroup();
+		iconP1 = new HealthIcon(boyfriend.icon, true, true);
+		iconP2 = new HealthIcon(dad.icon, false, true);
+		dad.iconSpr = iconP2;
+		boyfriend.iconSpr = iconP1;
+
 		//Character Scripts
-		for (char => _char in [boyfriend => 'bf', dad => 'dad', gf => 'gf']) {
-			final script = ModdingUtil.addScript(Paths.script('characters/' + char.curCharacter), '_charScript_$_char');
-			if (script != null) {
-				script.set('ScriptChar', char);
-				script.call('createChar', [char]);
-			}
-		}
+		boyfriend.type = "bf"; dad.type = "dad"; gf.type = "gf";
+		for (char in [boyfriend, dad, gf]) addCharScript(char);
 
 		//Song Scripts
 		final songScripts:Array<String> = ModdingUtil.getScriptList('songs/${Song.formatSongFolder(SONG.song)}');
@@ -238,23 +240,21 @@ class PlayState extends MusicBeatState {
 
 		// Make Dad GF
 		if (SONG.players[1] == SONG.players[2] && dad.isGF) {
-			dad.setPosition(gf.x, gf.y);
+			dadGroup.setPosition(GF_POS.x - DAD_POS.x, GF_POS.y - DAD_POS.y);
 			gfGroup.alpha = 0;
 		}
+		BOYFRIEND_POS.put(); DAD_POS.put(); GF_POS.put();
 
 		//Sprites order
 
 		add(gfGroup);
-		gf.group = gfGroup;
 		gfGroup.add(gf);
 		gfGroup.scrollFactor.set(0.95, 0.95);
 		
 		add(dadGroup);
-		dad.group = dadGroup;
 		dadGroup.add(dad);
 
 		add(boyfriendGroup);
-		boyfriend.group = boyfriendGroup;
 		boyfriendGroup.add(boyfriend);
 
 		add(fgSpr);
@@ -281,19 +281,8 @@ class PlayState extends MusicBeatState {
 		healthBar.screenCenter(X);
 		add(healthBar);
 
-		iconGroup = new FlxSpriteGroup();
 		add(iconGroup);
-
-		iconP1 = new HealthIcon(boyfriend.icon, true);
-		iconP2 = new HealthIcon(dad.icon);
-
-		for (i in [iconP1,iconP2]) {
-			i.playIcon = true;
-			iconGroup.add(i);
-		}
-
-		dad.iconSpr = iconP2;
-		boyfriend.iconSpr = iconP1;
+		for (i in [iconP1,iconP2]) iconGroup.add(i);
 
 		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.get(FlxG.width, 20));
 		add(scoreTxt);
@@ -364,7 +353,7 @@ class PlayState extends MusicBeatState {
 				onComplete: function(twn:FlxTween) {
 					quickDialogueBox();
 					remove(black);
-			}});
+				}});
 			} else {
 				quickDialogueBox();
 				remove(black);
@@ -735,19 +724,18 @@ class PlayState extends MusicBeatState {
 		super.sectionHit(curSection);
 		if (Conductor.songPosition <= 0) curSection = 0;
 		curSectionData = SONG.notes[curSection];
-		if (curSectionData != null && curSectionData.changeBPM && curSectionData.bpm != Conductor.bpm) {
-			Conductor.bpm = curSectionData.bpm;
-		}
 		cameraMovement();
+
+		if (curSectionData != null && curSectionData.changeBPM && curSectionData.bpm != Conductor.bpm)
+			Conductor.bpm = curSectionData.bpm;
 
 		if (camZooming && getPref('camera-zoom')) {
 			camGame.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
 
-		if (getPref('deghost-tap') && curSectionData != null){
+		if (getPref('deghost-tap') && curSectionData != null)
 			ghostTapEnabled = !curSectionData.mustHitSection;
-		}
 
 		ModdingUtil.addCall('sectionHit', [curSection]);
 	}
@@ -765,6 +753,15 @@ class PlayState extends MusicBeatState {
 		super.destroy();
 	}
 
+	inline function addCharScript(char:Character) {
+		final script = ModdingUtil.addScript(Paths.script('characters/' + char.curCharacter), '_charScript_' + char.type);
+		if (script != null) {
+			char.script = script;
+			script.set('ScriptChar', char);
+			script.call('createChar', [char]);
+		}
+	}
+
 	public function switchChar(type:String, newCharName:String) {
 		final targetChar:Character = switch(type = type.toLowerCase().trim()) {
 			case 'dad': dad;
@@ -774,8 +771,15 @@ class PlayState extends MusicBeatState {
 
 		final newChar:Character = new Character(0, 0, newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
 		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
-		targetChar.group.add(newChar);
-		targetChar.destroy();
+		
+		// Clear character group
+		final _grp = targetChar.group;
+		for (i in _grp) i.destroy();
+		_grp.clear();
+
+		// Character script
+		_grp.add(newChar);
+		addCharScript(newChar);
 
 		switch (type) {
 			case 'dad': dad = newChar;

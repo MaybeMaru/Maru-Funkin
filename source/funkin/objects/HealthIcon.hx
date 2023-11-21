@@ -12,9 +12,10 @@ class HealthIcon extends FlxSpriteExt {
 	var _height:Float = 0;
 	var _width:Float = 0;
 
-	public function new(char:String = 'bf', isPlayer:Bool = false):Void {
+	public function new(char:String = 'bf', isPlayer:Bool = false, playIcon:Bool = false):Void {
 		super();
 		this.isPlayer = isPlayer;
+		this.playIcon = playIcon;
 		makeIcon(char);
 	}
 

@@ -39,6 +39,8 @@ class Character extends FlxSpriteExt {
 	//Extra
 	public var debugMode:Bool = false;
 	public var botMode:Bool = false;
+	public var script:FunkScript = null;
+	public var type:String = "";
 
 	//	Display
 	public var icon:String = 'face';
@@ -206,6 +208,7 @@ class Character extends FlxSpriteExt {
 		char.botMode = botMode;
 		char.stageOffsets.copyFrom(stageOffsets);
 		char.stageCamOffsets.copyFrom(stageCamOffsets);
+		char.type = type;
 		char.setXY(OG_X,OG_Y);
 
 		final lastAnim = animation.curAnim;
@@ -321,5 +324,6 @@ class Character extends FlxSpriteExt {
 		stageOffsets = FlxDestroyUtil.put(stageOffsets);
 		stageCamOffsets = FlxDestroyUtil.put(stageCamOffsets);
 		camOffsets = FlxDestroyUtil.put(camOffsets);
+		ModdingUtil.removeScript(script);
 	}
 }

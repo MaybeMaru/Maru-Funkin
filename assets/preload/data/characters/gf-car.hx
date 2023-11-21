@@ -1,6 +1,6 @@
 var speaker:FlxSpriteExt;
 
-function createPost():Void {
+function createChar():Void {
     ScriptChar.x += 250;
     speaker = new FlxSpriteExt(ScriptChar.x - 210, ScriptChar.y + 300);
     speaker.loadImage('characters/speakers');
@@ -10,9 +10,8 @@ function createPost():Void {
 
     speaker.flippedOffsets =  ScriptChar.flippedOffsets;
     speaker.flipX = ScriptChar.flipX;
-    if (speaker.flippedOffsets) {
+    if (speaker.flippedOffsets)
         speaker.x += 140;
-    }
 
     ScriptChar._dynamic.dodge = function () {
         ScriptChar.playAnim('dodge', true);

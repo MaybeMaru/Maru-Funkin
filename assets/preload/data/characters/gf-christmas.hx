@@ -1,7 +1,7 @@
 var speaker:FlxSpriteExt;
 var lights:FlxSpriteExt;
 
-function createPost():Void {
+function createChar():Void {
     ScriptChar.x += 120;
     speaker = new FlxSpriteExt(ScriptChar.x - 190, ScriptChar.y + 300);
     speaker.loadImage('characters/speakers');
@@ -9,9 +9,8 @@ function createPost():Void {
 
     speaker.flippedOffsets =  ScriptChar.flippedOffsets;
     speaker.flipX = ScriptChar.flipX;
-    if (speaker.flippedOffsets) {
+    if (speaker.flippedOffsets)
         speaker.x += 140;
-    }
 
     lights = new FlxSpriteExt(speaker.x - 80, speaker.y - 40);
     lights.loadImage('characters/speakers/speakerLights');

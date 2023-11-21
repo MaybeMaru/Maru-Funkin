@@ -1,8 +1,10 @@
 {
 	"imagePath": "week7/picoSpeaker",
-	"icon": "pico",
-	"camOffsets": [0,0],
 	"isGF": false,
+	"camOffsets": [170,80],
+	"icon": "pico",
+	"scale": 1,
+	"charOffsets": [-50,230],
 	"anims": [
 		{
 			"offsets": [5,134],
@@ -77,11 +79,9 @@
 			"animName": "shoot1-loop"
 		}
 	],
-	"charOffsets": [-50,230],
-	"scale": 1,
-	"flipX": false,
 	"isPlayer": false,
-	"antialiasing": true,
+	"flipX": false,
 	"gameOverChar": "bf-dead",
+	"antialiasing": true,
 	"gameOverSuffix": ""
 }
