@@ -79,17 +79,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		}
 	}*/
 
-	public inline function switchState(newState:FlxState) {
-		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
-		Main.transition.startTrans(newState);
-	}
-
-	public inline function resetState() {
-		if (!Transition.skipTrans) openSubState(new TransitionSubstate());
-		Main.transition.startTrans(null, function () FlxG.resetState());
-	}
-
 	override function destroy() {
+		instance = null;
 		super.destroy();
 		CoolUtil.runGc(false); // Minor Gc Clear
 	}
@@ -97,6 +88,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	// Some shortcuts
 	inline public function getPref(pref:String) return Preferences.getPref(pref);
 	inline public function getKey(key:String) 	return Controls.getKey(key);
+	inline public function switchState(newState:FlxState, ?skip:Bool) CoolUtil.switchState(newState, skip);
+	inline public function resetState(?skip:Bool) CoolUtil.resetState(skip);
 	
 	public var curStep(get, never):Int; 	inline function get_curStep() return musicBeat.curStep;
 	public var curBeat(get, never):Int; 	inline function get_curBeat() return musicBeat.curBeat;
@@ -105,12 +98,4 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public var curStepDecimal(get, never):Float; 	inline function get_curStepDecimal() return musicBeat.curStepDecimal;
 	public var curBeatDecimal(get, never):Float; 	inline function get_curBeatDecimal() return musicBeat.curBeatDecimal;
 	public var curSectionDecimal(get, never):Float; inline function get_curSectionDecimal() return musicBeat.curSectionDecimal;
-}
-
-class TransitionSubstate extends FlxSubState {
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-		//MusicBeatState.instance == null ? return : MusicBeatState.instance.transition == null ? return :
-		//MusicBeatState.instance.transition.update(elapsed);
-	}
 }

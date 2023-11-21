@@ -35,7 +35,9 @@ class TitleState extends MusicBeatState {
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
 		Conductor.bpm = introJson.bpm;
-		persistentUpdate = true;
+		
+        persistentUpdate = true;
+		persistentDraw = true;
 
 		titleGroup = new FlxGroup();
 		add(titleGroup);
@@ -155,7 +157,6 @@ class TitleState extends MusicBeatState {
 		if (getKey('ACCEPT-P')) {
 			if (!transitioning && (skippedIntro || openedGame) ) {
 			transitioning = true;
-			Transition.skipTrans = false;
 			titleText.playAnim('press');
 			titleText.color = FlxColor.WHITE;
 			titleText.alpha = 1;

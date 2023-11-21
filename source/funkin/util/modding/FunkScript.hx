@@ -348,8 +348,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		// Custom state
 
-		set('switchCustomState', function (key:String) {
-			ScriptUtil.switchCustomState(key);
+		set('switchCustomState', function (key:String, skipTrans:Bool = false) {
+			ScriptUtil.switchCustomState(key, skipTrans);
 		});
 
 		// Base state functions
@@ -417,7 +417,7 @@ class CustomState extends MusicBeatState {
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
-		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey);
+		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey, Transition.skipTrans);
 		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
     }
 

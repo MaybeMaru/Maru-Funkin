@@ -92,11 +92,6 @@ class GameOverSubstate extends MusicBeatSubstate {
 		}
 	}
 
-	override function destroy() {
-		super.destroy();
-		Transition.skipTrans = false;
-	}
-
 	override function beatHit(curBeat:Int):Void {
 		super.beatHit(curBeat);
 		ModdingUtil.addCall('beatHitGameOver', [curBeat]);

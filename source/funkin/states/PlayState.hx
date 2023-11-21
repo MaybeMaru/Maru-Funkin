@@ -334,7 +334,7 @@ class PlayState extends MusicBeatState {
 
 	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
 		completeFunc = completeFunc ?? startCountdown;
-		#if (cpp && !linux)
+		#if VIDEOS_ALLOWED
 		final video:FlxVideo = new FlxVideo();
 		final vidFunc = function () {
 			video.dispose();
@@ -375,9 +375,9 @@ class PlayState extends MusicBeatState {
 
 	public function quickDialogueBox():Void {
 		if (dialogueBox == null) {
-			switch (SkinUtil.curSkin) {
-				case 'pixel':	dialogueBox = new PixelDialogueBox();
-				default:		dialogueBox = new NormalDialogueBox();
+			dialogueBox = switch (SkinUtil.curSkin) {
+				case 'pixel':	new PixelDialogueBox();
+				default:		new NormalDialogueBox();
 			}
 		}
 
@@ -554,18 +554,15 @@ class PlayState extends MusicBeatState {
 			changeOldIcon();
 		}
 		else if (FlxG.keys.justPressed.SIX) {
-			Transition.skipTrans = false;
 			DiscordClient.changePresence("Stage Editor", null, null, true);
 			switchState(new StageDebug(stageJsonData));
 		}
 		else if (FlxG.keys.justPressed.SEVEN) {
 			clearCacheData = {sounds: false};
-			Transition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
 		else if (FlxG.keys.justPressed.EIGHT) {
-			Transition.skipTrans = false;
 			DiscordClient.changePresence("Character Editor", null, null, true);
 
 			/* 	8 for opponent char
@@ -634,16 +631,12 @@ class PlayState extends MusicBeatState {
 		Conductor.volume = 0;
 		ModdingUtil.addCall('endSong');
 		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
-		Transition.skipTrans = isStoryMode;
 
 		if (inChartEditor) {
-			Transition.skipTrans = false;
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
-		else {
-			inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
-		}
+		else inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 	}
 
 	public function exitSong() {
@@ -670,7 +663,6 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('endWeek');
 
 		clearCache = true;
-		Transition.skipTrans = false;
 		switchState(new StoryMenuState());
 	}
 
@@ -689,7 +681,7 @@ class PlayState extends MusicBeatState {
 			bitmap: false
 		}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
-		LoadingState.loadAndSwitchState(new PlayState());
+		switchState(new PlayState(), true);
 	}
 
 	static final ratingMap:Map<String, {var score:Int; var note:Float; var ghostLoss:Float;}> = [
@@ -774,16 +766,13 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function switchChar(type:String, newCharName:String) {
-		type = type.toLowerCase().trim();
-		
-		final targetChar:Character = switch(type) {
+		final targetChar:Character = switch(type = type.toLowerCase().trim()) {
 			case 'dad': dad;
 			case 'gf' | 'girlfriend': gf;
 			default: boyfriend;
 		}
 
-		targetChar.visible = false;
-		final newChar:Character = new Character(0,0,newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
+		final newChar:Character = new Character(0, 0, newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
 		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		targetChar.group.add(newChar);
 		targetChar.destroy();

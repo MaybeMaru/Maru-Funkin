@@ -222,12 +222,21 @@ class CoolUtil {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
 
-	inline public static function switchState(newState:FlxState) {
-		MusicBeatState.instance != null ? MusicBeatState.instance.switchState(newState) : FlxG.switchState(newState);
+	inline public static function switchState(newState:FlxState, skipTrans:Bool = false) {
+		Transition.skipTrans = skipTrans;
+		Main.transition.startTrans(newState);
+		__pauseState();
 	}
 
-	inline public static function resetState() {
-		MusicBeatState.instance != null ? MusicBeatState.instance.resetState() : FlxG.resetState();
+	inline public static function resetState(skipTrans:Bool = false) {
+		Transition.skipTrans = skipTrans;
+		Main.transition.startTrans(null, function () FlxG.resetState());
+		__pauseState();
+	}
+
+	@:noCompletion
+	inline private static function __pauseState() {
+		FlxG.state.openSubState(new FlxSubState());
 	}
 
 	/*

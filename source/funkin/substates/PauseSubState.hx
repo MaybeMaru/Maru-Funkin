@@ -107,7 +107,6 @@ class PauseSubState extends MusicBeatSubstate {
 		if (coolDown > 0) coolDown-=elapsed;
 		else {
 			if (getKey('ACCEPT-P')) {
-				Transition.skipTrans = false;
 				switch (menuItems[curSelected]) {
 					case "Resume":	
 						CoolUtil.resumeSounds();

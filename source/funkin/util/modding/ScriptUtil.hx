@@ -50,7 +50,7 @@ class ScriptUtil {
         return key == 'fg' ? PlayState.instance.fgSpr : PlayState.instance.bgSpr;
     }
     
-    inline public static function switchCustomState(key:String) {
+    inline public static function switchCustomState(key:String, skipTrans:Bool) {
 		final scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
 		if (scriptCode.length <= 0) {
 			ModdingUtil.errorPrint('Custom state script not found: $key');
@@ -58,6 +58,6 @@ class ScriptUtil {
 		}
 
 		final state = new CustomState().initScript(scriptCode, key);
-		CoolUtil.switchState(state);
+		CoolUtil.switchState(state, skipTrans);
 	}
 }

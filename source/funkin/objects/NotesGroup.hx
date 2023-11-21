@@ -323,24 +323,24 @@ class NotesGroup extends FlxGroup
 				Conductor.vocals.volume = 0;
 			}
 		}
-		
-		if (!isPlayState) {
-            Conductor.songPosition += FlxG.elapsed * 1000;
+
+		if (isPlayState) {
+			final game = PlayState.instance;
+			if ((game.startingSong || Conductor.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
+				Conductor.songPosition += elapsed * 1000;
+				if (game.startedCountdown && game.startingSong) {
+					if (Conductor.songPosition >= 0) game.startSong();
+				}
+				else if (!game.paused && !Conductor.inst.playing) Conductor.play();
+			}
+		}
+		else {
+            Conductor.songPosition += elapsed * 1000;
 			if (!Conductor.inst.playing) Conductor.play();
 			if (Conductor.songPosition % Conductor.stepCrochet <= 5) {
 				Conductor.autoSync();
 			}
-            return;
-        }
-
-        final game = PlayState.instance;
-        if ((game.startingSong || Conductor.inst.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
-            Conductor.songPosition += FlxG.elapsed * 1000;
-            if (game.startedCountdown && game.startingSong) {
-                if (Conductor.songPosition >= 0) game.startSong();
-            }
-            else if (!game.paused && !Conductor.inst.playing) Conductor.play();
-        }
+		}
     }
 
 	function spawnNotes() { // Generate notes

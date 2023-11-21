@@ -43,7 +43,6 @@
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
 	
-	<!-- <define name="PRELOAD_ALL" /> -->
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
 	
@@ -65,21 +64,18 @@
 	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
 	<assets path="assets/weeks"    library="weeks"    exclude="*.ogg" if="web"/>
 	<assets path="assets/weeks"    library="weeks"    exclude="*.mp3" unless="web"/>
+
+	<assets path="assets/fonts"/>
+	<assets path="assets/videos"/>
 	
 	<assets path='example_mods' rename='mods' embed='false' unless="web"/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<assets path='art/preloaderArt.png' rename='assets/images/preloaderArt.png' unless="web"/>
-	<!-- <template path='mods' /> -->
-	
-	<!-- <assets path="CHANGELOG.md" rename='changelog.txt'/> -->
 
-	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
-		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
-		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
-		NOT USING A DIRECT THING TO THE ASSET!!!
-	-->
-	<assets path="assets/fonts"/>
-	<assets path="assets/videos"/>
+	<!-- ______________________________ Funkdefines _____________________________ -->
+
+	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
@@ -87,25 +83,18 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="discord_rpc" if="cpp"/>
-	<haxelib name="hxCodec" unless="linux" if="cpp"/>
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="maru-hscript" />
 	<haxelib name="hxcpp-gh-release" />
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
-	<!--Disable the Flixel core focus lost screen-->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
-
-	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
-
-	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
-	<!-- _________________________________ Custom _______________________________ -->
-
-	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+	<!-- _________________________________ Icons _______________________________ -->
 	
 	<icon path="art/icon16.png" size='16'/>
 	<icon path="art/icon32.png" size='32'/>

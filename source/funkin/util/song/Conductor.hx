@@ -129,23 +129,26 @@ class Conductor {
 	}
 
 	public static var volume(default, set):Float = 1.0;
-	public static function set_volume(value:Float) {
-		inst.volume = value;
-		vocals.volume = value;
-		return volume = value;
+	static inline function set_volume(value:Float) {
+		return volume = inst.volume = vocals.volume = value;
 	}
 
+	public static var playing(default, null):Bool = false;
+
 	inline public static function play():Void {
+		playing = true;
 		inst.play();
 		vocals.play();
 	}
 
 	inline public static function pause():Void {
+		playing = false;
 		inst.pause();
 		vocals.pause();
 	}
 
 	inline public static function stop():Void {
+		playing = false;
 		inst.stop();
 		vocals.stop();
 	}

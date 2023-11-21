@@ -9,7 +9,7 @@ class PreferencesState extends MusicBeatState {
         persistentUpdate = true;
 		persistentDraw = true;
 
-        var bg:FunkinSprite = new FunkinSprite('menuBGBlue');
+        final bg:FunkinSprite = new FunkinSprite('menuBGBlue');
         bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.screenCenter();
         add(bg);
@@ -17,11 +17,11 @@ class PreferencesState extends MusicBeatState {
         prefItems = new FlxTypedGroup<SettingItem>();
         add(prefItems);
 
-        var prefsArray:Array<String> = Preferences.prefsArray;
+        final prefsArray:Array<String> = Preferences.prefsArray;
         for (i in 0...prefsArray.length) {
-            var pref:String = prefsArray[i];
-            var prefLabel = Preferences.getLabel(pref);
-            var prefSetting:SettingItem = new SettingItem(pref, prefLabel);
+            final pref:String = prefsArray[i];
+            final prefLabel = Preferences.getLabel(pref);
+            final prefSetting:SettingItem = new SettingItem(pref, prefLabel);
             prefSetting.targetY = (i + (prefsArray.length/10))*125;
             prefSetting.y = prefSetting.targetY;
             prefSetting.ID = i;
@@ -45,9 +45,9 @@ class PreferencesState extends MusicBeatState {
     }
 
     function selectPref() {
-        var leftP = getKey('UI_LEFT-P');
-		var rightP = getKey('UI_RIGHT-P');
-		var accepted = getKey('ACCEPT-P');
+        final leftP = getKey('UI_LEFT-P');
+		final rightP = getKey('UI_RIGHT-P');
+		final accepted = getKey('ACCEPT-P');
 
         if (accepted || leftP || rightP) {
             for (item in prefItems) {
