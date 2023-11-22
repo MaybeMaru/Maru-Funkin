@@ -11,7 +11,7 @@ class Controls {
 
     // Returns if the controler is being used
 	inline public static function inGamepad():Bool {
-        return (gamepad == null) ? false : gamepad.connected;
+        return gamepad?.connected ?? false;
     }
 
     inline public static function addGamepad(newGamepad:FlxGamepad):Void {
@@ -25,9 +25,8 @@ class Controls {
     inline public static function initGamepads():Void {
         FlxG.gamepads.deviceConnected.add(addGamepad);
         FlxG.gamepads.deviceDisconnected.add(removeGamepad);
-        if (FlxG.gamepads.lastActive != null) {
+        if (FlxG.gamepads.lastActive != null)
             gamepad = FlxG.gamepads.lastActive;
-        }
     }
 
     inline public static function setupBindings():Void {
@@ -56,42 +55,39 @@ class Controls {
 
     inline public static function getKey(bind:String):Bool {
         bind = bind.toUpperCase().trim();
-		var bindParts:Array<String> = bind.split('-');
-		var bindName:String = bindParts[0];
-		var bindType:String = (bindParts[1] != null) ? bindParts[1] : '';
+		final bindParts:Array<String> = bind.split('-');
+		final bindName:String = bindParts[0];
+		final bindType:String = bindParts[1] ?? '';
 
-		var bindArray:Array<FlxKey> = [];
-		for (bind in controlBindings.get(bindName))
-			bindArray.push(FlxKey.fromString(bind));
-
-		var gamepadBindArray:Array<FlxGamepadInputID> = [];
-        for (bind in controlGamepadBindings.get(bindName))
-            gamepadBindArray.push(FlxGamepadInputID.fromString(bind));
-
-		return checkKey(bindType, bindArray, gamepadBindArray);
+        if (!inGamepad()) {
+            final bindArray:Array<FlxKey> = [];
+            for (bind in controlBindings.get(bindName)) bindArray.push(FlxKey.fromString(bind));
+            return checkKey(bindType, FlxG.keys, bindArray);
+        }
+        else {
+            final gamepadBindArray:Array<FlxGamepadInputID> = [];
+            for (bind in controlGamepadBindings.get(bindName)) gamepadBindArray.push(FlxGamepadInputID.fromString(bind));
+            return checkKey(bindType, gamepad, gamepadBindArray);
+        }
     }
 
-    inline private static function checkKey(bindType:String = '', bindArray:Array<FlxKey>, gamepadBindArray:Array<FlxGamepadInputID>):Bool {
-        var useGamepad = inGamepad();
-        var controller:Dynamic = useGamepad ? gamepad : FlxG.keys;
-        var binds:Array<Dynamic> = useGamepad ? gamepadBindArray : bindArray;
-        switch (bindType.toUpperCase().trim()) {
-            case 'R':   return controller.anyJustReleased(binds);    //  Release Key
-            case 'P':   return controller.anyJustPressed(binds);     //  Press Key
-            default:    return controller.anyPressed(binds);         //  Hold Key
+    inline private static function checkKey(bindType:String, controller:Dynamic, binds:Array<Dynamic>):Bool {
+        return switch (bindType.toUpperCase().trim()) {
+            case 'R':   controller.anyJustReleased(binds);    //  Release Key
+            case 'P':   controller.anyJustPressed(binds);     //  Press Key
+            default:    controller.anyPressed(binds);         //  Hold Key
         }
     }
 
     inline public static function getBinding(bind:String):Array<String> {
         bind = bind.toUpperCase().trim();
-        var bindingStuff:Array<String> = inGamepad() ? controlGamepadBindings.get(bind) : controlBindings.get(bind);
-        return bindingStuff;
+        return inGamepad() ? controlGamepadBindings.get(bind) : controlBindings.get(bind);
     }
 
     inline public static function setBinding(bind:String, key:String, index:Int):Void {
         bind = bind.toUpperCase().trim();
         key = key.toUpperCase().trim();
-        var lastSettings:Array<String> = (inGamepad() ? controlGamepadBindings : controlBindings).get(bind);
+        final lastSettings:Array<String> = (inGamepad() ? controlGamepadBindings : controlBindings).get(bind);
         lastSettings[index] = key;
         (inGamepad() ? controlGamepadBindings : controlBindings).set(bind, lastSettings);
         SaveData.flushData();
@@ -99,9 +95,7 @@ class Controls {
 
     inline public static function addBinding(bind:String, keys:Array<String>, gamepadKeys:Array<String>):Void {
         bind = bind.toUpperCase().trim();
-        for (i in 0...keys.length) {
-            keys[i] = keys[i].toUpperCase().trim();
-        }
+        for (i in 0...keys.length) keys[i] = keys[i].toUpperCase().trim();
         controlArray.push(bind);
         if (!controlBindings.exists(bind))          controlBindings.set(bind, keys);
         if (!controlGamepadBindings.exists(bind))   controlGamepadBindings.set(bind, gamepadKeys);

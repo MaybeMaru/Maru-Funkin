@@ -526,9 +526,8 @@ class PlayState extends MusicBeatState {
 
 	var oldIconID:Int = 0; // Old icon easter egg
 	public var allowIconEasterEgg:Bool = true;
-	function changeOldIcon() {
-		oldIconID = FlxMath.wrap(oldIconID + 1, 0, 2);
-		switch (oldIconID) {
+	inline function changeOldIcon() {
+		switch (oldIconID = FlxMath.wrap(oldIconID + 1, 0, 2)) {
 			default: 	iconP1.makeIcon(boyfriend.icon); 	iconP2.makeIcon(dad.icon);
 			case 1: 	iconP1.makeIcon('bf-old'); 			iconP2.makeIcon('dad');
 			case 2: 	iconP1.makeIcon('bf-older'); 		iconP2.makeIcon('dad-older');
@@ -567,9 +566,8 @@ class PlayState extends MusicBeatState {
 			openPauseSubState(true);
 			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
 		}
-		else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode) {
+		else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 			endSong();
-		}
 
 		//End the song if the conductor time is the same as the length
 		if (Conductor.songPosition >= songLength && canPause)
