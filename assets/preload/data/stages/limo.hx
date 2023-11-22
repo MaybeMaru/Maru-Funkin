@@ -1,3 +1,5 @@
+import funkin.util.song.WeekSetup;
+
 var grpLimoDancers:Array<FunkinSprite> = [];
 var fastCar:FlxSpriteExt;
 var metalPos:FlxSpriteExt;
@@ -116,10 +118,14 @@ var murdered:Bool = false;
 var calcMurder:Bool = false;
 
 function updatePost() {
-	if (!calcMurder) {
-		return;
-	}
+	if ( FlxG.mouse.overlaps(fastCar))
+		WeekSetup.loadSong("", "ridge", "normal");
+	
+	if (calcMurder)
+		murderCrap();
+}
 
+function murderCrap() {
 	var _pos = Math.min((Conductor.songPosition - _lastTime - 200) * 6, 2000);
 	killin = _pos < 2000;
 	metalPos.x = _pos;
@@ -131,9 +137,8 @@ function updatePost() {
 				canKill = false;
 				dancerDeath(i);
 				if (killCount == 0) {
-					if (State.gf._dynamic.dodge != null) {
+					if (State.gf._dynamic.dodge != null)
 						State.gf._dynamic.dodge();
-					}
 				}
 				killCount++;
 			}
@@ -178,7 +183,7 @@ function getRandom() {
 
 function dancerDeath(dancer):Void {
 	var mainSpr = getGroup('boogieDeathGrp').recycle(FunkinSprite).loadImage('limo/henchmenGore');
-	var midPos = [dancer.x + dancer.width / 3, dancer.y + dancer.height / 3];
+	var midPos = [dancer.x + dancer.width * 0.333, dancer.y + dancer.height * 0.333];
 	mainSpr.scrollFactor.set(0.4,0.4);
 	mainSpr.acceleration.set();
 	mainSpr.velocity.set();
