@@ -189,7 +189,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		// DONT USE THIS, ITS A WIP
 		set('makeModchartManager', function () {
-			return funkin.util.frontend.ModchartManager.makeManager();
+			final manager = funkin.util.frontend.ModchartManager.makeManager();
+			manager.setStrumLine(0, PlayState?.instance?.opponentStrums);
+			manager.setStrumLine(1, PlayState?.instance?.playerStrums);
+			return manager;
 		});
 
 		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
