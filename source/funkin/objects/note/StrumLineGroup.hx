@@ -1,6 +1,6 @@
 package funkin.objects.note;
 
-class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
+class StrumLineGroup extends FlxTypedSpriteGroup<NoteStrum> {
     public var initPos:Array<FlxPoint> = [];
     public static var strumLineY:Float = 50;
     
@@ -9,21 +9,21 @@ class StrumLineGroup extends FlxTypedGroup<NoteStrum> {
 
     public function new(p:Int = 0, skipIntro:Bool = false, lanes:Int = Conductor.NOTE_DATA_LENGTH) {
         super(9);
-        startX = NoteUtil.swagWidth * 0.666 + (FlxG.width / 2) * p;
+        startX = NoteUtil.swagWidth * 0.666 + (FlxG.width * 0.5) * p;
         offsetY = Preferences.getPref('downscroll') ? 10 : -10;
-        var isPlayer:Bool = p == 1;
-
+        
+        final isPlayer:Bool = p == 1;
         for (i in 0...lanes) {
-			var strumNote = addStrum(i, skipIntro);
+			final strumNote = addStrum(i, skipIntro);
 			ModdingUtil.addCall('generateStrum', [strumNote, isPlayer]);
 		}
     }
 
-    public static var DEFAULT_CONTROL_CHECKS(default, never):Array<Dynamic> = [
-        function (type) return Controls.getKey('NOTE_LEFT$type'),
-        function (type) return Controls.getKey('NOTE_DOWN$type'),
-        function (type) return Controls.getKey('NOTE_UP$type'),
-        function (type) return Controls.getKey('NOTE_RIGHT$type'),
+    public static final DEFAULT_CONTROL_CHECKS:Array<Dynamic> = [
+        function (t) return Controls.getKey('NOTE_LEFT' + t),
+        function (t) return Controls.getKey('NOTE_DOWN' + t),
+        function (t) return Controls.getKey('NOTE_UP' + t),
+        function (t) return Controls.getKey('NOTE_RIGHT' + t),
     ];
 
     static var seperateWidth(default, never) = NoteUtil.swagWidth + 5;

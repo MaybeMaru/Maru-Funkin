@@ -322,26 +322,31 @@ class ChartingState extends MusicBeatState {
     }
 
     function mouse() {
-        var eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
+        final eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
         if (!getGridOverlap(FlxG.mouse, mainGrid.grid) && !eventsOverlap) return;
-        if (FlxG.mouse.justPressed) {
+
+        final clickL = FlxG.mouse.justPressed;
+        final clickR = FlxG.mouse.justPressedRight;
+
+        if (clickL || clickR) {
             if (!eventsOverlap) {
                 if (FlxG.mouse.overlaps(mainGrid.group)) { // Remove notes
                     mainGrid.group.forEachAlive(function (note:ChartNote) {
                         if (note.strumTime < sectionTime) return;
-                        if (FlxG.mouse.overlaps(note)) removeNote(note);
+                        if (FlxG.mouse.overlaps(note)) clickL ? removeNote(note) : selectNote(note);
                     });
-                } else addNote(); // Add notes
-            } else {
+                } else if (clickL) addNote(); // Add notes
+            }
+            else {
                 var _overlap:Bool = false; // It is what it is
                 for (i in eventsGrid.group) {
                     if (i.alive && i.strumTime >= sectionTime && FlxG.mouse.overlaps(i.sprite)) {
                         _overlap = true;
-                        removeEvent(i); // Remove events
+                        clickL ? removeEvent(i) : selectEvent(i); // Remove events
                         break;
                     }
                 }
-                if (!_overlap) addEvent(); // Add events
+                if (!_overlap && clickL) addEvent(); // Add events
             }
 
         }
@@ -360,12 +365,23 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
-        var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
-        var noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / GRID_SIZE);
-        var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
+        final strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
+        final noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / GRID_SIZE);
+        final note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         SONG.notes[sectionIndex].sectionNotes.push(note);
         selectedNote = note;
         selectedNoteObject = mainGrid.drawObject(note);
+    }
+
+    public function selectNote(note:ChartNote) {
+        if (note.chartData != null) {
+            if (note == selectedNoteObject) deselectNote();
+            else {
+                selectedNote = note.chartData;
+                selectedNoteObject = note;
+                updateNoteTabUI();
+            }
+        }
     }
 
     public function removeNote(note:ChartNote) {
@@ -393,7 +409,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addEvent() {
-        var strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
+        final strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         tabs.setCurEvent(ChartTabs.curEventDatas[eventID].name); // Update values
         deselectEvent();
 
@@ -404,6 +420,12 @@ class ChartingState extends MusicBeatState {
         }
 
         selectedEventObject = eventsGrid.drawPackedObject(strumTime, selectedEvents);
+    }
+
+    public function selectEvent(event:ChartEvent) {
+        selectedEvents = event.chartData;
+        selectedEventObject = event;
+        tabs.updateEventTxt();
     }
 
     public function pushEvent(data:EventData) {

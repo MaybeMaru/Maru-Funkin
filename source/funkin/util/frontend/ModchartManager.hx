@@ -43,23 +43,35 @@ class ModchartManager extends EventHandler {
         return tweenStrum(l,s, {x: X, y:Y}, time, {ease: ease ?? FlxEase.linear});
     }
 
+    inline public function setStrumLineSine(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startY:Float) {
+        for (i in 0... getStrumLine(l).members.length)
+            setStrumSine(l, i, offPerNote * i, size, startY);
+    }
+
+    inline public function setStrumLineCosine(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startX:Float) {
+        for (i in 0... getStrumLine(l).members.length)
+            setStrumCosine(l, i, offPerNote * i, size, startX);
+    }
+
     // Requires the manager to be added to the state to work
 
-    inline public function setStrumSine(l:Int = 0, s:Int = 0, off:Float = 0.0, ?startY:Float) {
+    inline public function setStrumSine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
         final strum = getStrum(l, s);
         sineStrums.remove(strum);
 
         strum._dynamic.startY = startY ?? strum.y;
         strum._dynamic.sineOff = off;
+        strum._dynamic.sineSize = size;
         sineStrums.push(strum);
     }
 
-    inline public function setStrumCosine(l:Int = 0, s:Int = 0, off:Float = 0.0, ?startX:Float) {
+    inline public function setStrumCosine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startX:Float) {
         final strum = getStrum(l, s);
         cosineStrums.remove(strum);
 
         strum._dynamic.startX = startX ?? strum.x;
         strum._dynamic.cosineOff = off;
+        strum._dynamic.cosineSize = size;
         cosineStrums.push(strum);
     }
 
@@ -73,11 +85,13 @@ class ModchartManager extends EventHandler {
         timeElapsed += elapsed * speed;
         timeElapsed %= Math.PI * 2;
         super.update(elapsed);
-        
-        for (i in sineStrums)
-            i.y = i._dynamic?.startY ?? 0 + Math.sin(elapsed + i._dynamic?.sineOff ?? 0);
 
-        for (i in cosineStrums)
-            i.y = i._dynamic?.startX ?? 0 + Math.cos(elapsed + i._dynamic?.cosineOff ?? 0);
+        if (sineStrums.length > 0 || cosineStrums.length > 0) {
+            for (i in sineStrums)
+                i.y = (i._dynamic?.startY ?? 0) + (Math.sin(timeElapsed + (i._dynamic?.sineOff ?? 0)) * (i._dynamic?.sineSize ?? 50.0));
+
+            for (i in cosineStrums)
+                i.x = (i._dynamic?.startX ?? 0) + (Math.cos(timeElapsed + (i._dynamic?.cosineOff ?? 0)) * (i._dynamic?.cosineSize ?? 50.0));
+        }
     }
 }

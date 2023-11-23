@@ -61,9 +61,9 @@ class EventHandler extends flixel.FlxBasic {
                 event.callback();
                 events.splice(events.indexOf(event), 1);
 			}
-		} else {
+		}/* else {
             destroy();
-        }
+        }*/
     }
 }
 
