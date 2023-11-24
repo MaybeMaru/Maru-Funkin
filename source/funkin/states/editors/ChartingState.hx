@@ -270,13 +270,12 @@ class ChartingState extends MusicBeatState {
         updateBar();
     }
 
-    function updatePosition() {
-        if (!playing) return;
-        moveTime(FlxG.elapsed);
+    inline function updatePosition() {
+        if (playing) moveTime(FlxG.elapsed);
     }
 
-    function updateBar() {
-        var yPos = getTimeY(Conductor.songPosition - sectionTime);
+    inline function updateBar() {
+        final yPos = getTimeY(Conductor.songPosition - sectionTime);
         strumBar.y = yPos;
         FlxG.camera.scroll.y = yPos - FlxG.height * 0.333;
     }
@@ -413,6 +412,7 @@ class ChartingState extends MusicBeatState {
         tabs.setCurEvent(ChartTabs.curEventDatas[eventID].name); // Update values
         deselectEvent();
 
+        selectedEvents = [];
         for (i in ChartTabs.curEventDatas) {
             final event:EventData = [strumTime, i.name, convertEventValues(i.values)];
             SONG.notes[sectionIndex].sectionEvents.push(event);
@@ -643,7 +643,7 @@ class ChartingState extends MusicBeatState {
     function saveJson(input:Any, fileName:String) {
         final data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
         if (data.length > 0) {
-			var chartFile:FileReference = new FileReference();
+			final chartFile:FileReference = new FileReference();
 			chartFile.save(data.trim(), '$fileName.json');
 		}
     }
@@ -654,15 +654,14 @@ class ChartingState extends MusicBeatState {
     }
 
     public function saveMeta() {
-        var metaEvents:Array<SwagSection> = [];
+        final metaEvents:Array<SwagSection> = [];
         for (i in SONG.notes) {
             if (i.sectionEvents.length > 0) {
                 metaEvents.push({
                     sectionEvents: i.sectionEvents.copy()
                 });
-            } else {
-                metaEvents.push({});
             }
+            else metaEvents.push({});
         }
 
         if (metaEvents.length > 1) {
@@ -674,7 +673,7 @@ class ChartingState extends MusicBeatState {
 			}
 		}
         
-        var meta:SongMeta = {
+        final meta:SongMeta = {
             diffs: [PlayState.curDifficulty],
             offsets: SONG.offsets.copy(),
             events: metaEvents
