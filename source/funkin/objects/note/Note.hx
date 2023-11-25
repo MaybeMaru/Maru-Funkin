@@ -58,11 +58,13 @@ class Note extends FlxSpriteExt implements INoteData {
     public var susOffsetX:Float = 0;
 
     public function setupSustain() {
-        susRect = FlxRect.get();
-        drawSustain(true);
-        susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
-        offset.set(susOffsetX,0);
-        alpha = 0.6;
+        if (isSustainNote) {
+            if (susRect == null) susRect = FlxRect.get();
+            drawSustain(true);
+            susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
+            offset.set(susOffsetX,0);
+            alpha = 0.6;
+        }
     }
     
     public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
@@ -75,7 +77,7 @@ class Note extends FlxSpriteExt implements INoteData {
         approachAngle = Preferences.getPref('downscroll') ? 180 : 0;
 
         createGraphic();
-        if (isSustainNote) setupSustain();
+        setupSustain();
     }
 
     public var pressed:Bool = false;
