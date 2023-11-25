@@ -43,14 +43,14 @@ class Preloader extends flixel.FlxState {
     }
 
     public static function addFromBitmap(bmp:BitmapData, key:String) {        
-        var graphic:FlxGraphic = uploadTexture(bmp, key);
+        final graphic:FlxGraphic = uploadTexture(bmp, key);
         cachedGraphics.set(key, graphic);
         return graphic;
     }
 
     public static function removeByKey(key:String, disposeTex:Bool = false) {
         if(!existsGraphic(key)) return;
-        var graphic = getGraphic(key);
+        final graphic = getGraphic(key);
         cachedGraphics.remove(key);
         AssetManager.destroyGraphic(graphic);
         if (disposeTex) disposeTexture(key);
@@ -58,13 +58,13 @@ class Preloader extends flixel.FlxState {
 
     public static function disposeTexture(key:String) {
         if (!cachedTextures.exists(key)) return;
-        var texture = cachedTextures.get(key);
+        final texture = cachedTextures.get(key);
         cachedTextures.remove(key);
         texture.dispose();
     }
     
     function fixFileList(list:Array<String>, typeFolder:String = 'images/', noLibFolder:String = 'assets/weeks'):Array<String> {
-        var finalList:Array<String> = [];
+        final finalList:Array<String> = [];
         for (file in list) {
             if (!file.startsWith(noLibFolder) && !file.contains('unused/')) {
                 finalList.push(file.split(typeFolder)[1].split('.')[0]);
@@ -91,7 +91,7 @@ class Preloader extends flixel.FlxState {
 		Highscore.load();
 		#if cpp
 		DiscordClient.initialize();
-		lime.app.Application.current.onExit.add (function (exitCode)DiscordClient.shutdown());
+		lime.app.Application.current.onExit.add (function (exitCode) DiscordClient.shutdown());
         #end
 
         if (!Preferences.getPref('preload')) {
@@ -127,7 +127,7 @@ class Preloader extends flixel.FlxState {
     public function loadBitmap():Void {
         if (imageCache.length <= 0) return;
 
-        var cacheStr = imageCache[0];
+        final cacheStr = imageCache[0];
         if (cacheStr != null) {
             addBitmap(Paths.getPath('images/$cacheStr.png', IMAGE, null, false, false));
             imageCache.splice(imageCache.indexOf(cacheStr), 1);
@@ -143,6 +143,7 @@ class Preloader extends flixel.FlxState {
 
     function exit() {
         FlxG.switchState(new SplashState());
+        //FlxG.switchState(new funkin.states.TestState());
     }
 
 	override public function update(elapsed:Float):Void {

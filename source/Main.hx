@@ -14,7 +14,6 @@ class Main extends Sprite
 		initialState:					// The FlxState the game starts with.
 		#if PRELOAD_ALL	funkin.Preloader
 		#else			SplashState	#end,
-		//funkin.states.TestingState,
 		zoom: -1.0, 					// If -1, zoom is automatically calculated to fit the window dimensions.
 		framerate: 60, 					// How many frames per second the game should run at.
 		skipSplash: true, 				// Whether to skip the flixel splash screen that appears in release mode.
