@@ -58,12 +58,11 @@ class Note extends FlxSpriteExt implements INoteData {
     public var susOffsetX:Float = 0;
 
     public function setupSustain() {
-        if (isSustainNote) {
-            drawSustain(true);
-            susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
-            offset.set(susOffsetX,0);
-            alpha = 0.6;
-        }
+        susRect = FlxRect.get();
+        drawSustain(true);
+        susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
+        offset.set(susOffsetX,0);
+        alpha = 0.6;
     }
     
     public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
@@ -76,7 +75,7 @@ class Note extends FlxSpriteExt implements INoteData {
         approachAngle = Preferences.getPref('downscroll') ? 180 : 0;
 
         createGraphic();
-        setupSustain();
+        if (isSustainNote) setupSustain();
     }
 
     public var pressed:Bool = false;
@@ -179,15 +178,18 @@ class Note extends FlxSpriteExt implements INoteData {
                 drawSustainCached(_height);
             }
             else { // Cut
-                clipRect = (susRect ?? (susRect = FlxRect.get())).set(0, height - _height, width, _height);
+                _frame = frame.clipTo(susRect.set(0, height - _height, width, _height).round());       
                 offset.y = (_height - height) * scale.y * -getCos();
                 percentCut = (1 / height * _height);
                 percentLeft = _height / height;
             }
-        } else {
-            kill();
-            susRect = FlxDestroyUtil.put(susRect); // Pool rect for later
         }
+        else kill(); // youre USELESS >:(
+    }
+
+    override function destroy() {
+        super.destroy();
+        susRect = FlxDestroyUtil.put(susRect); // Pool rect for later
     }
 
     private var curKey:String = "";

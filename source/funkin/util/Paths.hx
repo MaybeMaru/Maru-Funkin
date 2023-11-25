@@ -22,29 +22,29 @@ class Paths
 	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
 		if (mods) {
-			final modLib:String = (library != null && library.length > 0) ? '$library/' : '';
+			final modLib:String = (library != null && library.length > 0) ? library + '/' : '';
 			
-			final _folder = ModdingUtil.curModFolder.length <= 0 ? '' : '${ModdingUtil.curModFolder}/';
+			final _folder = ModdingUtil.curModFolder.length <= 0 ? '' : ModdingUtil.curModFolder + '/';
 			final modFolderPath = getModPath('$_folder$modLib$file');
-			if (FileSystem.exists(modFolderPath))
+			if (exists(modFolderPath, type))
 				return modFolderPath;
 			
 			if (allMods) {
 				for (i in ModdingUtil.activeMods.keys()) {
 					final _modPath = getModPath(i + "/" + modLib + file);
-					if (ModdingUtil.activeMods.get(i) && FileSystem.exists(_modPath))
+					if (ModdingUtil.activeMods.get(i) && exists(_modPath, type))
 						return _modPath;
 				}
 			}
 
 			for (i in ModdingUtil.globalMods) {
 				final _modPath = getModPath(i.folder + "/" + modLib + file);
-				if (FileSystem.exists(_modPath))
+				if (exists(_modPath, type))
 					return _modPath;
 			}
 			
 			final modPath = getModPath('$modLib$file');
-			if (FileSystem.exists(modPath))
+			if (exists(modPath, type))
 				return modPath;
 		}
 		#end
@@ -52,23 +52,23 @@ class Paths
 		if (library != null) {
 			if (level != null) {
 				final levelPath = getLibraryPathForce(file, library, level);
-				if (OpenFlAssets.exists(levelPath, type))
+				if (exists(levelPath, type))
 					return levelPath;
 			} else {
 				final libraryPath = getLibraryPath(file, library);
-				if (OpenFlAssets.exists(libraryPath, type))
+				if (exists(libraryPath, type))
 					return libraryPath;
 			}
 		}
 
 		if (currentLevel != null) {
 			final curLevelPath = getLibraryPathForce(file, 'weeks', currentLevel);
-			if (OpenFlAssets.exists(curLevelPath, type))
+			if (exists(curLevelPath, type))
 				return curLevelPath;
 		}
 
 		final sharedPath = getLibraryPathForce(file, "shared");
-		if (OpenFlAssets.exists(sharedPath, type))
+		if (exists(sharedPath, type))
 			return sharedPath;
 
 		return getPreloadPath(file);

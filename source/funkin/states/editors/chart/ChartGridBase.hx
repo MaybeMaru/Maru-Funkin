@@ -334,7 +334,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
     }
 
     public function loadSettings() {
-        var eventData = EventUtil.getEventData(data[0].name);
+        final eventData = EventUtil.getEventData(data[0].name);
         if (img != eventData.image)
             loadEventImage(eventData.image);
     }
