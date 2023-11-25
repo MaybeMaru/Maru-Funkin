@@ -37,7 +37,7 @@ class Preferences {
         
         addPref('antialiasing',   'antialiasing',    true);
         addPref('clear-gpu',      'clear gpu cache', false);
-        addPref('preload',        'preload at start', true);
+        addPref('preload',        'preload at start', false);
 
         SaveData.flushData();
         effectPrefs();
