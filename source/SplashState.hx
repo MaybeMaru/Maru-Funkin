@@ -4,7 +4,7 @@ class SplashState extends FlxState {
     override function create() {
         super.create();
 
-        var iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
+        final iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
         iconz.screenCenter();
 
         new FlxTimer().start(0.5, function(tmr:FlxTimer) {

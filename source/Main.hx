@@ -6,14 +6,68 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
 
+class InitState extends FlxState {
+    override function create() {
+        super.create();
+
+		//Load Settings / Mods
+        SaveData.init();
+		Controls.setupBindings();
+		Preferences.setupPrefs();
+        Conductor.init();
+		CoolUtil.init();
+		Highscore.load();
+		#if cpp
+		DiscordClient.initialize();
+		lime.app.Application.current.onExit.add (function (exitCode) DiscordClient.shutdown());
+        #end
+
+        if (FlxG.save.data.askedPreload) {
+            FlxG.switchState(new funkin.Preloader());
+			return;
+        }
+
+		FlxG.save.data.askedPreload = true;
+		FlxG.save.flush();
+
+        final txt = new FlxFunkText();
+        txt.text =
+        "Hey there big boy, do you want to turn on preloading?" + "\n" +
+        "It is recommended on most PCs " + "\n" +
+		"and will make loading silky smooth."  + "\n" +
+        "Turn off if you have a toaster tho." + "\n\n" +
+        "Press ACCEPT to turn ON or BACK to turn OFF!!";
+        
+        txt.alignment = "center";
+		txt.size = 32;
+		txt.y = FlxG.height * 0.5 - 32 * 3;
+        add(txt);
+    }
+
+	var selected:Bool = false;
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		final accept = Controls.getKey('ACCEPT-P');
+		final back = Controls.getKey('BACK-P');
+
+		if (accept || back && !selected) {
+			selected = true;
+			CoolUtil.playSound("confirmMenu");
+			FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
+				Preferences.setPref("preload", accept);
+				FlxG.switchState(new funkin.Preloader());
+			});
+		}
+	}
+}
+
 class Main extends Sprite
 {
 	var game = {
 		width: 1280, 					// Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		height: 720, 					// Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-		initialState:					// The FlxState the game starts with.
-		#if PRELOAD_ALL	funkin.Preloader
-		#else			SplashState	#end,
+		initialState: InitState,		// The FlxState the game starts with.
 		zoom: -1.0, 					// If -1, zoom is automatically calculated to fit the window dimensions.
 		framerate: 60, 					// How many frames per second the game should run at.
 		skipSplash: true, 				// Whether to skip the flixel splash screen that appears in release mode.
