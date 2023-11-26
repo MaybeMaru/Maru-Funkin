@@ -131,7 +131,7 @@ class ChartingState extends MusicBeatState {
         super.create();
     }
 
-    function checkNoteSound() {
+    inline function checkNoteSound() {
         var gray = FlxColor.fromRGB(180,150,180);
         mainGrid.group.forEachAlive(function (note:ChartNote) {
             if (note.strumTime + 0.1 <= Conductor.songPosition && note.strumTime + 0.1 >= sectionTime) {
@@ -148,14 +148,12 @@ class ChartingState extends MusicBeatState {
             }
         });
 
-        if (SONG.notes[sectionIndex] == null) return;
-        for (note in SONG.notes[sectionIndex].sectionNotes) {
-            if (note[2] > 0) {
-                if (Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + note[2]) {
-                    strumBar.pressStrum(note[1]);
-                }
+        mainGrid.sustainsGroup.forEachAlive(function (sus:ChartNote) {
+            final note = sus?._parent?.chartData;
+            if (note != null && Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + note[2]) {
+                strumBar.pressStrum(note[1]);
             }
-        }
+        });
 
         eventsGrid.group.forEachAlive(function (event:ChartEvent) {
             if (event.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
@@ -287,7 +285,7 @@ class ChartingState extends MusicBeatState {
 		openSubState(new NotesSubstate(SONG, Conductor.songPosition));
     }
 
-    function keys() {
+    inline function keys() {
         if (FlxG.keys.justPressed.SPACE) {
             playing ? stop() : play();
         }
@@ -320,7 +318,7 @@ class ChartingState extends MusicBeatState {
         }
     }
 
-    function mouse() {
+    inline function mouse() {
         final eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
         if (!getGridOverlap(FlxG.mouse, mainGrid.grid) && !eventsOverlap) return;
 

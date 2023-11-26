@@ -17,7 +17,9 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
         this.isNote = isNote;
 
         // Draw grid bitmap
-        var _gridBitmap:FlxSprite = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * (isNote ? Conductor.STRUMS_LENGTH : 1), GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, 0xff7c7c7c, 0xff6e6e6e);
+        final color1 = isNote ? 0xff7c7c7c : 0xff6e6e6e;
+        final color2 = isNote ? 0xff6e6e6e : 0xff7c7c7c;
+        final _gridBitmap:FlxSprite = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE,  GRID_SIZE * (isNote ? Conductor.STRUMS_LENGTH : 1), GRID_SIZE * Conductor.STEPS_PER_MEASURE, true, color1, color2);
         for (i in 0...Conductor.BEATS_PER_MEASURE) _gridBitmap.pixels.fillRect(new Rectangle(0, ((_gridBitmap.height/Conductor.BEATS_PER_MEASURE) * i) - 1, _gridBitmap.width, 2), 0xff505050);
         if (isNote) _gridBitmap.pixels.fillRect(new Rectangle(_gridBitmap.width * .5 - 1, 0, 2, _gridBitmap.height), FlxColor.BLACK);
 
@@ -213,12 +215,14 @@ class ChartNote extends Note {
     public var txt:FunkinText = null;
     public var startInit:Bool = false;
     public var chartData:Array<Dynamic> = null;
+    public var _parent:ChartNote = null;
 
-    public function init(_time, _data, _xPos, _yPos, _sus, _skin, forceSus = false, ?_parent:Note) {
+    public function init(_time, _data, _xPos, _yPos, _sus, _skin, forceSus = false, ?_parent:ChartNote) {
         strumTime = _time;
         noteData = _data % Conductor.NOTE_DATA_LENGTH;
         gridNoteData = _data;
         isSustainNote = forceSus;
+        this._parent = _parent;
         _skin = _skin ?? SkinUtil.curSkin;
         txt = null;
 
@@ -327,6 +331,7 @@ class ChartEvent extends FlxTypedSpriteGroup<Dynamic> {
         
         text = new FunkinText(0,0,"",15);
         text.alignment = RIGHT;
+        text.borderStyle = NONE;
         add(text);
 
         scrollFactor.set(1,1);
