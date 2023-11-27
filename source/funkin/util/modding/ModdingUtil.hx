@@ -35,8 +35,8 @@ class ModdingUtil {
     public static var modsList:Array<ModFolder> = [];
     public static var modsMap:Map<String, ModFolder> = [];
 
-    static function set_curModFolder(value:String) {
-        curModData = value.length > 0 ? modsMap.get(value) : null;
+    static function set_curModFolder(?value:String) {
+        curModData = (value ?? "").length > 0 ? modsMap.get(value) : null;
         return curModFolder = value;
     }
     

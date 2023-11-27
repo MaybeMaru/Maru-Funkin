@@ -29,7 +29,7 @@ class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
 
         final isVanilla = Preferences.getPref('vanilla-ui');
         if (!isVanilla) {
-            final comboSpr:ComboRating = recycle(ComboRating);
+            final comboSpr:ComboRating = cast(recycle(ComboRating), ComboRating);
             comboSpr.init();
             addTop(comboSpr);
         }
@@ -38,14 +38,14 @@ class RatingGroup extends FlxTypedSpriteGroup<Dynamic> {
         numSplit.reverse();
 
         for (i in 0...numSplit.length) {
-            final num:NumRating = recycle(NumRating);
+            final num:NumRating = cast(recycle(NumRating), NumRating);
             num.init(numSplit[i], i);
             addTop(num);
         }
     }
 
     public function drawJudgement(judgement:String):Void {
-        final judgeSpr:JudgeRating = recycle(JudgeRating);
+        final judgeSpr:JudgeRating = cast(recycle(JudgeRating), JudgeRating);
         judgeSpr.init(judgement);
         addTop(judgeSpr);
     }

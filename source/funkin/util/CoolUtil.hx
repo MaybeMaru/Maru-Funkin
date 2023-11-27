@@ -1,6 +1,8 @@
 package funkin.util;
 
+#if cpp
 import cpp.vm.Gc;
+#end
 import funkin.util.backend.SongZip;
 import openfl.system.System;
 
@@ -80,8 +82,10 @@ class CoolUtil {
 	
 	inline public static function runGc(major:Bool = true) {
 		System.gc();
+		#if cpp
 		Gc.run(major);
 		if (major) Gc.compact();
+		#end
 	}
 
 	inline public static function setGlobalManager(active:Bool = true) {

@@ -16,18 +16,15 @@ function create():Void {
 	addSpr(clouds);
 
 	var mountains:FunkinSprite = new FunkinSprite('tankMountains', [-300, -20], [0.2, 0.2]);
-	mountains.setGraphicSize(Std.int(mountains.width * 1.2));
-	mountains.updateHitbox();
+	mountains.setScale(1.2);
 	addSpr(mountains);
 	
 	var buildings:FunkinSprite = new FunkinSprite('tankBuildings', [-200, 0], [0.3, 0.3]);
-	buildings.setGraphicSize(Std.int(buildings.width * 1.1));
-	buildings.updateHitbox();
+	buildings.setScale(1.1);
 	addSpr(buildings);
 	
 	var ruins:FunkinSprite = new FunkinSprite('tankRuins', [-200, 0], [0.35, 0.35]);
-	ruins.setGraphicSize(Std.int(ruins.width * 1.1));
-	ruins.updateHitbox();
+	ruins.setScale(1.1);
 	addSpr(ruins);
 
 	var smokeL:FunkinSprite = new FunkinSprite('smokeLeft', [-200, -100], [0.4, 0.4]);
@@ -53,8 +50,7 @@ function create():Void {
 	makeGroup('tankmanRun'); // Used later for pico
 						
 	var ground:FunkinSprite = new FunkinSprite('tankGround', [-420, -150]);
-	ground.setGraphicSize(Std.int(ground.width * 1.15));
-	ground.updateHitbox();
+	ground.setScale(1.15);
 	add(ground);
 }
 

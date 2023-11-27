@@ -123,7 +123,7 @@ class Transition extends ResizableSprite {
         y = FlxMath.lerp(startPosition, endPosition, lerpValue);
     
         if (timeElapsed >= transDuration) {
-            if (finishCallback != null) finishCallback();
+            if (finishCallback != null) Reflect.callMethod(null, finishCallback, []);
             if (inExit) visible = false;
             transitioning = false;
         }

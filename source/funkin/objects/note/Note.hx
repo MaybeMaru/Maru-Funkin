@@ -49,7 +49,7 @@ class Note extends FlxSpriteExt implements INoteData {
         if (!isSustainNote) {
             final _anim = 'scroll' + CoolUtil.directionArray[noteData];
             if (animOffsets.exists(_anim)) {
-                var _off = animOffsets.get(_anim);
+                final _off = animOffsets.get(_anim);
                 offset.add(_off.x, _off.y);
             }
         }
@@ -59,7 +59,6 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public function setupSustain() {
         if (isSustainNote) {
-            if (susRect == null) susRect = FlxRect.get();
             drawSustain(true);
             susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
             offset.set(susOffsetX,0);
@@ -170,7 +169,7 @@ class Note extends FlxSpriteExt implements INoteData {
     public var percentCut:Float = 0;
     public var percentLeft:Float = 1;
     public var susEndHeight:Int = 15;
-    var susRect:FlxRect = null;
+    static var susRect:FlxRect = FlxRect.get();
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
@@ -189,15 +188,10 @@ class Note extends FlxSpriteExt implements INoteData {
         else kill(); // youre USELESS >:(
     }
 
-    override function destroy() {
-        super.destroy();
-        susRect = FlxDestroyUtil.put(susRect); // Pool rect for later
-    }
-
     private var curKey:String = "";
 
     public function drawSustainCached(_height:Int) {
-        var key:String = 'sus$noteData-$_height-$skin';
+        final key:String = 'sus$noteData-$_height-$skin';
         if (curKey == key) return;
         curKey = key;
         if (AssetManager.existsGraphic(key)) { // Save on drawing the graphic more than one time?

@@ -34,29 +34,33 @@ class AssetManager {
 		for (key in cachedGraphics.keys()) {
 			removeGraphicByKey(key);
 		}
+		#if !hl
 		if (Preferences.getPref('clear-gpu')) {
 			for (key in Preloader.cachedTextures.keys()) {
 				if (key.startsWith('mods/'))
 					Preloader.removeByKey(key, true);
 			}
 		}
+		#end
 		FlxG.bitmap.clearCache();
 	}
 
-	public static function removeGraphicByKey(key:String) {
-		if (!existsGraphic(key)) return;
-		final obj = cachedGraphics.get(key);
-		cachedGraphics.remove(key);
-		destroyGraphic(obj);
+	public static inline function removeGraphicByKey(key:String) {
+		if (existsGraphic(key)) {
+			final obj = cachedGraphics.get(key);
+			cachedGraphics.remove(key);
+			destroyGraphic(obj);
+		}
 	}
 
-	public static function destroyGraphic(?graphic:FlxGraphic) {
-		if (graphic == null) return;
-		graphic.persist = false;
-		graphic.destroyOnNoUse = true;
-		disposeBitmap(graphic.bitmap);
-		graphic.bitmap = null;
-		graphic.destroy();
+	public static inline function destroyGraphic(?graphic:FlxGraphic) {
+		if (graphic != null) {
+			graphic.persist = false;
+			graphic.destroyOnNoUse = true;
+			disposeBitmap(graphic.bitmap);
+			graphic.bitmap = null;
+			graphic.destroy();
+		}
 	}
 
 	inline public static function disposeBitmap(bitmap:BitmapData) {

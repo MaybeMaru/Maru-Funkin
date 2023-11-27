@@ -144,7 +144,7 @@ class ChartNoteGrid extends ChartGridBase {
 
         final gridPos = new FlxPoint(grid.x + Math.floor(noteData * GRID_SIZE), grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime)));
 
-        final _note:ChartNote = objectsGroup.recycle(ChartNote);
+        final _note:ChartNote = cast(objectsGroup.recycle(ChartNote), ChartNote);
         _note.init(strumTime, noteData, gridPos.x, gridPos.y, 0, typeData.skin);
         _note.chartData = note;
 
@@ -265,7 +265,7 @@ class ChartEventGrid extends ChartGridBase {
     public function drawPackedObject(strumTime:Float = 0, events:Array<EventData>) {
         final gridY = grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime));
 
-        final _event:ChartEvent = objectsGroup.recycle(ChartEvent);
+        final _event:ChartEvent = cast(objectsGroup.recycle(ChartEvent), ChartEvent);
         _event.init(strumTime, events, new FlxPoint(grid.x, gridY));
 
         objectsGroup.add(_event);

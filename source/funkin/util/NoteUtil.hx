@@ -71,10 +71,12 @@ class NoteUtil {
         for (key in AssetManager.cachedGraphics.keys()) {
             if (key.startsWith('sus')) AssetManager.removeGraphicByKey(key);
         }
+        #if !hl
         for (key in Preloader.cachedTextures.keys()) {
             if (key.startsWith('sus'))
                 Preloader.disposeTexture(key);
         }
+        #end
     }
 
     /*

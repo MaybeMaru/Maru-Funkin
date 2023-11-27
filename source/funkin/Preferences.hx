@@ -36,8 +36,10 @@ class Preferences {
         addPref('camera-zoom',    'camera zooms',    true);
         
         addPref('antialiasing',   'antialiasing',    true);
+        #if !hl
         addPref('clear-gpu',      'clear gpu cache', false);
         addPref('preload',        'preload at start', true);
+        #end
 
         SaveData.flushData();
         effectPrefs();

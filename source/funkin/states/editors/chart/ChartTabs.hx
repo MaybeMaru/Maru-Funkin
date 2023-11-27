@@ -542,7 +542,7 @@ class ChartTabs extends FlxUITabMenu {
 		var button_clearSongFull:FlxUIButton = new FlxUIButton(button_clearSongEvents.x, button_clearSongEvents.y + 30, "Clear Song Full", ChartingState.instance.clearSongFull);
 		formatButton(button_clearSongFull);
 
-		slider_pitch = new FlxUISlider(this, 'songPitch', check_metronome.x, check_metronome.y + 30, 0.25, 2, 290, null, 5, FlxColor.WHITE, FlxColor.BLACK);
+		slider_pitch = new FlxUISlider(this, 'songPitch', check_metronome.x, check_metronome.y + 30, 0.25, 2, 290, 15, 5, FlxColor.WHITE, FlxColor.BLACK);
 		slider_pitch.nameLabel.text = 'Pitch/Speed';
 		slider_pitch.name = 'song_pitch';
 

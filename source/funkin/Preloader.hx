@@ -1,8 +1,10 @@
 package funkin;
 
 import openfl.display.BitmapData;
+#if !hl
 import openfl.display3D.textures.Texture;
 import openfl.display3D.Context3D;
+#end
 import flixel.addons.util.FlxAsyncLoop;
 
 /*
@@ -11,8 +13,10 @@ import flixel.addons.util.FlxAsyncLoop;
 */
 
 class Preloader extends flixel.FlxState {
-    public static var cachedGraphics:Map<String,FlxGraphic> = [];
-    public static var cachedTextures:Map<String,Texture> = [];
+    public static var cachedGraphics:Map<String, FlxGraphic> = [];
+    #if !hl
+    public static var cachedTextures:Map<String, Texture> = [];
+    #end
 
     inline public static function addBitmap(key:String) {
         addFromBitmap(OpenFlAssets.getBitmapData(key, false), key);
@@ -27,6 +31,7 @@ class Preloader extends flixel.FlxState {
     }
 
     public static function uploadTexture(bmp:BitmapData, key:String) {
+        #if !hl
         var _texture = null;
         if (cachedTextures.exists(key)) _texture = cachedTextures.get(key);
         else {
@@ -37,6 +42,9 @@ class Preloader extends flixel.FlxState {
         AssetManager.disposeBitmap(bmp);
         bmp = null;
         final graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
+        #else
+        final graphic = FlxGraphic.fromBitmapData(bmp);
+        #end
         graphic.persist = true;
         graphic.destroyOnNoUse = false;
         return graphic;
@@ -57,10 +65,12 @@ class Preloader extends flixel.FlxState {
     }
 
     public static function disposeTexture(key:String) {
+        #if !hl
         if (!cachedTextures.exists(key)) return;
         final texture = cachedTextures.get(key);
         cachedTextures.remove(key);
         texture.dispose();
+        #end
     }
     
     function fixFileList(list:Array<String>, typeFolder:String = 'images/', noLibFolder:String = 'assets/weeks'):Array<String> {
@@ -82,7 +92,7 @@ class Preloader extends flixel.FlxState {
 	override public function create():Void {
 		super.create();
 
-        if (!Preferences.getPref('preload')) {
+        if (#if hl true #else !Preferences.getPref('preload') #end) {
             skipPreload = true;
             return;
         }
@@ -133,6 +143,7 @@ class Preloader extends flixel.FlxState {
 
     inline function exit() {
         FlxG.switchState(new SplashState());
+        //FlxG.switchState(new funkin.states.TestState());
     }
 
 	override public function update(elapsed:Float):Void {

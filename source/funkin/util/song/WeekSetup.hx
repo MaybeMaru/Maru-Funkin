@@ -115,9 +115,12 @@ class WeekSetup {
         if (!Reflect.hasField(week, "storyCharacters"))
             week.storyCharacters = ["dad","bf","gf"];
         
-        for (field in Reflect.fields(cast week)) {
-            var fieldValue = Reflect.getProperty(week, field);
+        final fields = Reflect.fields(week);
+        for (i in 0...fields.length) {
+            final field:String = fields[i];
+            final fieldValue:Dynamic = Reflect.getProperty(week, field);
             if (fieldValue == null) continue;
+            
             switch (field) {
                 case "storyDad":   week.storyCharacters[0] = fieldValue;
                 case "storyBf":    week.storyCharacters[1] = fieldValue;

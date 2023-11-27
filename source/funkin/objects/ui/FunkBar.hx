@@ -35,7 +35,7 @@ class FunkBar extends FlxSpriteExt {
 
     override function destroy() {
         super.destroy();
-        barPoint.put();
+        barPoint = FlxDestroyUtil.put(barPoint);
         legacyMode.sprite.destroy();
         colors = null;
         legacyMode = null;
@@ -58,7 +58,7 @@ class FunkBar extends FlxSpriteExt {
         percent = value / max * 100.0;
     }
 
-    public final barPoint:FlxPoint = FlxPoint.get();
+    public var barPoint:FlxPoint = FlxPoint.get();
 
     override function drawComplex(camera:FlxCamera) {
         _frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
