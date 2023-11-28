@@ -118,7 +118,7 @@ var murdered:Bool = false;
 var calcMurder:Bool = false;
 
 function updatePost() {
-	if ( FlxG.mouse.overlaps(fastCar))
+	if ( FlxG.mouse.overlaps(fastCar) && FlxG.mouse.justPressed)
 		WeekSetup.loadSong("", "ridge", "normal");
 	
 	if (calcMurder)
