@@ -27,11 +27,6 @@ class Note extends FlxSpriteExt implements INoteData {
     var susEnd:BitmapData;
     var refSprite:FlxSpriteExt;
 
-    public function updateAnims() {
-        if (isSustainNote) return;
-        playAnim('scroll' + CoolUtil.directionArray[noteData]);
-    }
-
     public function createGraphic(init:Bool = true) {
         if (isSustainNote) {
             if (init) { // Offset sustain
@@ -55,13 +50,16 @@ class Note extends FlxSpriteExt implements INoteData {
         }
     }
 
-    public var susOffsetX:Float = 0;
+    public inline function updateAnims() {
+        if (!isSustainNote) playAnim('scroll' + CoolUtil.directionArray[noteData]);
+    }
 
-    public function setupSustain() {
+    public var susOffsetX:Float = 0;
+    inline public function setupSustain() {
         if (isSustainNote) {
             drawSustain(true);
-            susOffsetX = -(NoteUtil.swagWidth * 0.5 - width * 0.5);
-            offset.set(susOffsetX,0);
+            susOffsetX = NoteUtil.swagWidth * 0.5 - width * 0.5;
+            offset.set(-susOffsetX,0);
             alpha = 0.6;
         }
     }
@@ -82,7 +80,7 @@ class Note extends FlxSpriteExt implements INoteData {
     public var pressed:Bool = false;
     public var startedPress:Bool = false;
     public var missedPress(default, set):Bool = false;
-    public function set_missedPress(value:Bool) {
+    inline public function set_missedPress(value:Bool) {
         color = (value && mustHit) ? FlxColor.fromRGB(200,200,200) : FlxColor.WHITE;
         return missedPress = value;
     } 

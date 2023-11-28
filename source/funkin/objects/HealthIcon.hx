@@ -48,7 +48,7 @@ class HealthIcon extends FlxSpriteExt {
 		animCheck();
 		flipX = isPlayer;
 		scrollFactor.set();
-		_height = height * 0.5;
+		_height = height * 0.55;
 		_width = width;
 	}
 
@@ -80,17 +80,16 @@ class HealthIcon extends FlxSpriteExt {
 			var coolOffset = 23 + width * 0.333;
 			if (Preferences.getPref('vanilla-ui')) {
 				bumpLerp = 0.75;
-				coolOffset = isPlayer ? 26 : _width/* * 1.1*/ - 26 ;
+				coolOffset = isPlayer ? 26 : _width - 26 ;
 			}
 
-			final yOff = _height + healthBar.height * 0.5;
 			if (isPlayer) {
 				isDying = healthBar.percent < 20;
-				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - yOff);
+				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - _height);
 			}
 			else {
 				isDying = healthBar.percent > 80;
-				setPosition(healthBar.barPoint.x - width + _width - coolOffset, healthBar.barPoint.y - yOff);
+				setPosition(healthBar.barPoint.x - width + _width - coolOffset, healthBar.barPoint.y - _height);
 			}
 
 			animCheck();
