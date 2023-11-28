@@ -226,13 +226,15 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function changeDifficulty(change:Int = 0):Void {
-		var lastDiff:String = curWeekDiffs[curDifficulty];
+		final lastDiff:String = curWeekDiffs[curDifficulty];
 		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		intendedScore = Highscore.getWeekScore(storyWeeks[curWeek].name, curWeekDiffs[curDifficulty]);
 
 		var _spr:FlxSprite;
-		var diffPath = 'storymenu/difficulties/${curWeekDiffs[curDifficulty]}';
-		if (Paths.exists(Paths.image(diffPath, null, true, true), IMAGE)) {
+		final diffPath = 'storymenu/difficulties/' + curWeekDiffs[curDifficulty].toLowerCase();
+		final _tryPath = Paths.image(diffPath, null, true, true);
+		
+		if (Paths.exists(_tryPath, IMAGE)) {
 			sprDiff.loadImage(diffPath, true);
 			diffText.visible = false;
 			sprDiff.visible = true;
@@ -272,7 +274,7 @@ class StoryMenuState extends MusicBeatState {
 		}
 
 		for (i in 0...grpWeekText.members.length) {
-			var item = grpWeekText.members[i];
+			final item = grpWeekText.members[i];
 			item.targetY = i - curWeek;
 		}
 

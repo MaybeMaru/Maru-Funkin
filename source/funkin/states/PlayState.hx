@@ -503,6 +503,7 @@ class PlayState extends MusicBeatState {
 	public var paused:Bool = false;
 	public var startedCountdown:Bool = false;
 	var canPause:Bool = true;
+	var canDebug:Bool = true;
 
 	public function updateScore():Void {
 		var songAccuracy:Null<Float> = (noteCount > 0) ? 0 : null;
@@ -541,33 +542,35 @@ class PlayState extends MusicBeatState {
 		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
 			changeOldIcon();
 		}
-		else if (FlxG.keys.justPressed.SIX) {
-			DiscordClient.changePresence("Stage Editor", null, null, true);
-			switchState(new StageDebug(stageJsonData));
-		}
-		else if (FlxG.keys.justPressed.SEVEN) {
-			clearCacheData = {sounds: false};
-			switchState(new ChartingState());
-			DiscordClient.changePresence("Chart Editor", null, null, true);
-		}
-		else if (FlxG.keys.justPressed.EIGHT) {
-			DiscordClient.changePresence("Character Editor", null, null, true);
-
-			/* 	8 for opponent char
-			 *  SHIFT + 8 for player char
-			 *	CTRL + SHIFT + 8 for gf */
-			if (FlxG.keys.pressed.SHIFT) {
-				if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
-				else switchState(new AnimationDebug(SONG.players[0]));
+		else if (canDebug) {
+			if (FlxG.keys.justPressed.SIX) {
+				DiscordClient.changePresence("Stage Editor", null, null, true);
+				switchState(new StageDebug(stageJsonData));
 			}
-			else switchState(new AnimationDebug(SONG.players[1]));
+			else if (FlxG.keys.justPressed.SEVEN) {
+				clearCacheData = {sounds: false};
+				switchState(new ChartingState());
+				DiscordClient.changePresence("Chart Editor", null, null, true);
+			}
+			else if (FlxG.keys.justPressed.EIGHT) {
+				DiscordClient.changePresence("Character Editor", null, null, true);
+	
+				/* 	8 for opponent char
+				 *  SHIFT + 8 for player char
+				 *	CTRL + SHIFT + 8 for gf */
+				if (FlxG.keys.pressed.SHIFT) {
+					if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
+					else switchState(new AnimationDebug(SONG.players[0]));
+				}
+				else switchState(new AnimationDebug(SONG.players[1]));
+			}
+			else if (getKey('PAUSE-P') && startedCountdown && canPause) {
+				openPauseSubState(true);
+				DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+			}
+			else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
+				endSong();
 		}
-		else if (getKey('PAUSE-P') && startedCountdown && canPause) {
-			openPauseSubState(true);
-			DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
-		}
-		else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
-			endSong();
 
 		//End the song if the conductor time is the same as the length
 		if (Conductor.songPosition >= songLength && canPause)
@@ -579,7 +582,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		// RESET -> Quick Game Over Screen
-		if (getKey('RESET-P') && !inCutscene) health = 0;
+		if (getKey('RESET-P') && !inCutscene && canDebug) health = 0;
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
@@ -671,7 +674,12 @@ class PlayState extends MusicBeatState {
 		switchState(new PlayState(), true);
 	}
 
-	static final ratingMap:Map<String, {var score:Int; var note:Float; var ghostLoss:Float;}> = [
+	override function startTransition() {
+		canDebug = canPause = false;
+		super.startTransition();
+	}
+
+	static final ratingMap:Map<String, {final score:Int; final note:Float; final ghostLoss:Float;}> = [
 		"sick" => {score: 350, note: 1, ghostLoss: 0},
 		"good" => {score: 200, note: 0.8, ghostLoss: 0},
 		"bad" => {score: 100, note: 0.5, ghostLoss: 0.06},

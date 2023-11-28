@@ -13,9 +13,6 @@ class PauseSubState extends MusicBeatSubstate {
 	var curSelected:Int = 0;
 
 	var bg:FlxSprite;
-	var levelInfo:FunkinText;
-	var levelDifficulty:FunkinText;
-	var deathCounter:FunkinText;
 	var timeLeft:FunkinText;
 
 	var pauseMusic:FlxSound;
@@ -31,33 +28,30 @@ class PauseSubState extends MusicBeatSubstate {
 		pauseMusic.looped = true;
 		pauseLength = Std.int(pauseMusic.length * 0.5);
 
-		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg = new FlxSprite().makeGraphic(1,1, FlxColor.BLACK);
 		bg.scrollFactor.set();
 		bg.antialiasing = false;
+		bg.scale.set(1280,720);
+		bg.updateHitbox();
 		add(bg);
 
-		levelInfo = new FunkinText(20,15,PlayState.SONG.song,32);
-		add(levelInfo);
-
-		levelDifficulty = new FunkinText(20,15,(PlayState.curDifficulty.toUpperCase()),32);
-		add(levelDifficulty);
-
-		deathCounter = new FunkinText(20,15,"Blue balled: " + PlayState.deathCounter,32);
-		add(deathCounter);
+		final levelInfo:FunkinText = new FunkinText(20,15,PlayState.SONG.song,32);
+		final levelDifficulty:FunkinText = new FunkinText(20,15,(PlayState.curDifficulty.toUpperCase()),32);
+		final deathCounter:FunkinText = new FunkinText(20,15,"Blue balled: " + PlayState.deathCounter,32);
 
 		maxTime = FlxStringUtil.formatTime(Conductor.inst.length / 1000);
 		timeLeft = new FunkinText(20,15,"Time left: 0 / 0",32);
-		add(timeLeft);
 
-		_items = [levelInfo,levelDifficulty,deathCounter,timeLeft];
-		for (i in _items)
+		for (i in _items = [levelInfo,levelDifficulty,deathCounter,timeLeft]) {
 			i.x = FlxG.width - (i.width + 20);
+			add(i);
+		}
 
 		grpMenuShit = new FlxTypedGroup<MenuAlphabet>();
 		add(grpMenuShit);
 
 		for (i in 0...menuItems.length) {
-			var songText:MenuAlphabet = new MenuAlphabet(0, 0, menuItems[i], true);
+			final songText:MenuAlphabet = new MenuAlphabet(0, 0, menuItems[i], true);
 			songText.targetY = i;
 			grpMenuShit.add(songText);
 		}
@@ -70,7 +64,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 		for (i in _items) {
 			final _id = _items.indexOf(i);
-			i.alpha = 0;
+			i.alpha = 0.00001;
 			i.y = 15 + 32 * _id;
 			FlxTween.tween(i, {alpha: 1, y: i.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3 * (_id + 1)});
 		}
@@ -79,7 +73,7 @@ class PauseSubState extends MusicBeatSubstate {
 		timeLeft.text = "Time left: " + curTime + " / " + maxTime;
 		timeLeft.x = FlxG.width - (timeLeft.width + 20);
 
-		bg.alpha = 0;
+		bg.alpha = 0.00001;
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 
 		for (i in 0...grpMenuShit.members.length) {

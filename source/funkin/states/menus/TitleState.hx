@@ -23,7 +23,7 @@ class TitleState extends MusicBeatState {
 	var blackScreen:FlxSprite;
 	var titleGroup:FlxGroup;
 	var textSprite:Alphabet;
-	var spriteGroup:FlxGroup;
+	var spriteGroup:FlxTypedSpriteGroup<FunkinSprite>;
 
 	var curWacky:Array<String> = [];
 	var introJson:IntroJson = null;
@@ -70,10 +70,10 @@ class TitleState extends MusicBeatState {
 		add(blackScreen);
 		blackScreen.visible = !initialized;
 
-		textSprite = new Alphabet(FlxG.width/2,FlxG.height/4,'');
+		textSprite = new Alphabet(FlxG.width * 0.5, FlxG.height * 0.25,'');
 		textSprite.alignment = CENTER;
 		add(textSprite);
-		spriteGroup = new FlxGroup();
+		spriteGroup = new FlxTypedSpriteGroup<FunkinSprite>();
 		add(spriteGroup);
 
 		initialized = true;
@@ -86,11 +86,13 @@ class TitleState extends MusicBeatState {
 	var logoBump:FunkinSprite;
 
 	function makeIntroShit(index:Int):Void {
-		var nuggets:IntroPart = introJson.beats[cast Math.max(index, 0)];
+		final nuggets:IntroPart = introJson.beats[cast Math.max(index, 0)];
 		if (nuggets != null) {
 			if (nuggets.sprite != null) {
-				var introSpr:FunkinSprite = new FunkinSprite(nuggets.sprite, [0, textSprite.y + 20 + textSprite.height*0.5]);
-				introSpr.setGraphicSize(introSpr.width*0.7);
+				final introSpr:FunkinSprite = cast(spriteGroup.recycle(FunkinSprite), FunkinSprite);
+				introSpr.loadImage(nuggets.sprite);
+				introSpr.y = textSprite.y + textSprite.height * 0.5 + 50;
+				introSpr.setScale(0.7);
 				introSpr.screenCenter(X);
 				spriteGroup.add(introSpr);
 			}
@@ -124,8 +126,8 @@ class TitleState extends MusicBeatState {
 	}
 
 	function getIntroTextShit():Array<Array<String>> {
-		var convIntroLines:Array<Array<String>> = [];
-		var introLines:Array<String> = CoolUtil.coolTextFile(Paths.txt('introText'));
+		final convIntroLines:Array<Array<String>> = [];
+		final introLines:Array<String> = CoolUtil.coolTextFile(Paths.txt('introText'));
 		for (line in introLines) {
 			convIntroLines.push(line.trim().split('--'));
 		}
@@ -198,8 +200,8 @@ class TitleState extends MusicBeatState {
 		if (!skippedIntro && initialized) {
 			skippedIntro = true;
 			clearText();
-			blackScreen.visible = false;
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
+			spriteGroup.alpha = textSprite.alpha = blackScreen.alpha = 0;
 		}
 	}
 

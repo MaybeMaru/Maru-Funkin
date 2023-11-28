@@ -26,7 +26,7 @@ typedef DialogueJson = {
 class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 	public var skipIntro:Bool = false;
 	public var dialogueChars:Array<String> = ['senpai-pixel', 'bf-pixel', 'gf-pixel'];
-	public var jsonParsed:DialogueJson = null;
+	public var jsonParsed:DialogueJson;
 
 	public var targetDialogue:String = 'coolswag';
 	public var curCharData:Int = 0;
@@ -44,11 +44,10 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 	public function new():Void {
 		super();
 
-		var jsonThing:String = "";
-		jsonThing = CoolUtil.getFileContent(Paths.getPath('${Song.formatSongFolder(PlayState.SONG.song)}/dialogue.json', TEXT, 'songs'));
-		jsonParsed = Json.parse(jsonThing);
+		final jsonContent:String = CoolUtil.getFileContent(Paths.getPath(Song.formatSongFolder(PlayState.SONG.song) + '/dialogue.json', TEXT, 'songs'));
+		jsonParsed = Json.parse(jsonContent);
 
-		var defaultDialogue:DialogueJson = {
+		final defaultDialogue:DialogueJson = {
 			lines: [],
 			music: (SkinUtil.curSkin == 'pixel') ? 'skins/pixel/Lunchbox' : 'breakfast',
 			bf: 'bf-pixel',
@@ -112,7 +111,7 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 
 			new FlxTimer().start(1.2, function(tmr:FlxTimer) {
 				closeCallback();
-				kill();
+				destroy();
 			});
 		}
 	}
@@ -122,7 +121,7 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 		curCharData = jsonParsed.lines[0].char;
 		curCharName = dialogueChars[curCharData];
 
-		curTalkAnim = (jsonParsed.lines[0].anim != null) ? jsonParsed.lines[0].anim : "talk";
-		curBubbleType = (jsonParsed.lines[0].bubble != null) ? jsonParsed.lines[0].bubble : "normal";
+		curTalkAnim = jsonParsed.lines[0].anim ?? "talk";
+		curBubbleType = jsonParsed.lines[0].bubble ?? "normal";
 	}
 }

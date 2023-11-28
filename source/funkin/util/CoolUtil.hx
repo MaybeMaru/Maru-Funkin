@@ -229,8 +229,11 @@ class CoolUtil {
 	@:noCompletion
 	inline private static function __pauseState() {
 		FlxG.state.openSubState(new FlxSubState());
-		if (FlxG.state is PlayState)
-			Conductor.vocals.pause();
+		if (FlxG.state is MusicBeatState) {
+			cast(FlxG.state, MusicBeatState).startTransition();
+		}
+		//if (FlxG.state is PlayState)
+		//	Conductor.vocals.pause();
 	}
 
 	/*

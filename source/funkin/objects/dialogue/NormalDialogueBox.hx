@@ -12,8 +12,11 @@ class NormalDialogueBox extends DialogueBoxBase {
 
     public function new():Void {
         super();
-        blackBG = new FlxSprite(-100,-100).makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
-        blackBG.alpha = 0;
+        blackBG = new FlxSprite(-100,-100).makeGraphic(1,1, FlxColor.BLACK);
+        blackBG.scale.set(FlxG.width*2, FlxG.height*2);
+        blackBG.antialiasing = false;
+        blackBG.updateHitbox();
+        blackBG.alpha = 0.000001;
         add(blackBG);
 
         portraitGroup = new FlxSpriteGroup();
@@ -80,25 +83,19 @@ class NormalDialogueBox extends DialogueBoxBase {
         swagDialogue.resetText(targetDialogue);
 		swagDialogue.start(0.04);
 
-        portraitDad.talking = false;
-        portraitBf.talking = false;
-        portraitGf.talking = false;
+        portraitDad.talking = portraitBf.talking = portraitGf.talking = false;
 
         switch (curCharData) {
 			case 0:
                 portraitDad.talkAnim = curTalkAnim;
-                portraitDad.talking = true;
-                portraitDad.visible = true;
-                speechBubble.flipX = true;
+                portraitDad.talking = portraitDad.visible = speechBubble.flipX = true;
 			case 1:
                 portraitBf.talkAnim = curTalkAnim;
-                portraitBf.talking = true;
-                portraitBf.visible = true;
+                portraitBf.talking = portraitBf.visible = true;
                 speechBubble.flipX = false;
             case 2:
                 portraitGf.talkAnim = curTalkAnim;
-                portraitGf.talking = true;
-                portraitGf.visible = true;
+                portraitGf.talking = portraitGf.visible = true;
                 speechBubble.flipX = false;
 		}
     }

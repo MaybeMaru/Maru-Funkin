@@ -54,19 +54,6 @@ class GameOverSubstate extends MusicBeatSubstate {
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (getKey('ACCEPT-P')) {
-			endBullshit();
-			ModdingUtil.addCall('resetGameOver');
-		}
- 
-		if (getKey('BACK-P')) {
-			if (FlxG.sound.music != null) FlxG.sound.music.stop();
-			PlayState.deathCounter = 0;
-			PlayState.clearCache = true;
-			ModdingUtil.addCall('exitGameOver');
-			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
-		}
-
 		if (char.animation.curAnim != null) {
 			if (char.animation.curAnim.name == 'firstDeath') {
 				if (char.animation.curAnim.curFrame == 12) {
@@ -80,6 +67,19 @@ class GameOverSubstate extends MusicBeatSubstate {
 					ModdingUtil.addCall('musicGameOver');
 				}
 			}
+		}
+
+		if (getKey('ACCEPT-P')) {
+			endBullshit();
+			ModdingUtil.addCall('resetGameOver');
+		}
+ 
+		if (getKey('BACK-P')) {
+			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+			PlayState.deathCounter = 0;
+			PlayState.clearCache = true;
+			ModdingUtil.addCall('exitGameOver');
+			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
 		}
 
 		if (exitTimer > 0) {

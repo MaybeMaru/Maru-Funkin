@@ -16,6 +16,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
     public var bold:Bool = false;
     public var textWidth:Int = 500;
 
+    var baseSprite:FlxSpriteExt;
+
     function set_alignment(_alignment:AlphabetAlign):AlphabetAlign {
         alignment = _alignment;
         setAlign();
@@ -27,13 +29,12 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         return text = value;
     }
 
-    private function setAlign():Void {
+    private inline function setAlign():Void {
 		for (letter in letterArray) {
-            var alignOffset:Float = 0;
-            switch(alignment) {
-                default:        alignOffset = 0;
-                case CENTER:    alignOffset = letter.lineWidth/2;
-                case RIGHT:     alignOffset = letter.lineWidth;
+            final alignOffset:Float = switch(alignment) {
+                default:        0.0;
+                case CENTER:    letter.lineWidth * 0.5;
+                case RIGHT:     letter.lineWidth;
             }
             letter.offset.x = alignOffset;
 		}
@@ -43,6 +44,9 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         super(X,Y);
         initPos = FlxPoint.get();
         curPos = FlxPoint.get();
+        
+        baseSprite = new FlxSpriteExt().loadImage("alphabet");
+        
         this.bold = bold;
         this.textWidth = textWidth;
         this.textScale = textScale;
@@ -53,6 +57,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         super.destroy();
         initPos = FlxDestroyUtil.put(initPos);
         curPos = FlxDestroyUtil.put(curPos);
+        baseSprite = FlxDestroyUtil.destroy(baseSprite);
     }
 
     public var cutText:Array<String> = [];
@@ -99,7 +104,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
             default:
                 endWord = false;
                 var newLetter:AlphabetCharacter = recycle(AlphabetCharacter);
-                newLetter.setupCharacter(curPos.x, curPos.y, letter, bold, textScale);
+                newLetter.setupCharacter(curPos.x, curPos.y, letter, bold, textScale, baseSprite.frames);
                 var addWidth:Int = Std.int(newLetter.width*1.01);
                 curPos.x += addWidth;
                 curLineWidth += addWidth;

@@ -10,7 +10,7 @@ class MenuCharacter extends FlxSpriteExt {
 		setupChar(startChar);
 	}
 	
-	public static var DEFAULT_MENU_CHAR(default, never):MenuCharJson = {
+	public static final DEFAULT_MENU_CHAR:MenuCharJson = {
 		antialiasing: true,
 		scale: 0.9,
 		imagePath: "bf",

@@ -95,15 +95,15 @@ class NoteUtil {
         }
         skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
-        var refSprite:FlxSpriteExt = new FlxSpriteExt();
+        final refSprite:FlxSpriteExt = new FlxSpriteExt();
         refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
         refSprite.scale.set(skinJson.scale,skinJson.scale);
         refSprite.updateHitbox();
         for (anim in skinJson.anims)
             refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
-        var susPieceMap:Map<String, BitmapData> = [];
-        var susEndMap:Map<String, BitmapData> = [];
+        final susPieceMap:Map<String, BitmapData> = [];
+        final susEndMap:Map<String, BitmapData> = [];
 
         if (AssetManager.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
             for (i in CoolUtil.directionArray) {
@@ -112,28 +112,21 @@ class NoteUtil {
             }
         }
         else {
-            var susPiece = new FlxSprite().loadGraphicFromSprite(refSprite);
-            var susEnd = new FlxSprite().loadGraphicFromSprite(refSprite);
-
             for (i in CoolUtil.directionArray) {
-                susPiece.animation.play('hold$i', true);
-                susPiece.updateHitbox();
-                susPiece.drawFrame();
-                //susPieceMap.set(i, createLoopBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
-                susPieceMap.set(i, AssetManager.addGraphicFromBitmap(susPiece.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
+                refSprite.animation.play('hold' + i, true);
+                refSprite.updateHitbox();
+                refSprite.drawFrame();
+                //susPieceMap.set(i, createLoopBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
+                susPieceMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
     
-                susEnd.animation.play('hold$i-end', true);
-                susEnd.updateHitbox();
-                susEnd.drawFrame();
-                susEndMap.set(i, AssetManager.addGraphicFromBitmap(susEnd.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
+                refSprite.animation.play('hold$i-end', true);
+                refSprite.updateHitbox();
+                refSprite.drawFrame();
+                susEndMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
             }
-    
-            // Wont need these anymore
-            susPiece.destroy();
-            susEnd.destroy();
         }
 
-        var addMap:SkinSpriteData = {
+        final addMap:SkinSpriteData = {
             baseSprite: refSprite,
             susPieces: susPieceMap,
             susEnds: susEndMap,
@@ -172,10 +165,10 @@ class NoteUtil {
         }
     }
 
-    public static var DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
-    public static var DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
-    public static var DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
-    public static var DEFAULT_NOTE_ANGLES:Array<Float>= [0, -90, 90, 180];
+    public static final DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
+    public static final DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
+    public static final DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
+    public static final DEFAULT_NOTE_ANGLES:Array<Float>= [0, -90, 90, 180];
 
     public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>) {
         sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),

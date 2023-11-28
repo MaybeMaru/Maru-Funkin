@@ -13,9 +13,10 @@ class AlphabetCharacter extends FlxSpriteExt {
     public var prefix:String = "";
     public var animPrefix:String = "a";
     public var letterData:LetterData;
-    public var offsetLetter:FlxPoint;
     public var letterSize:Float = 1;
     public var lineWidth:Int = 0;
+
+    static final offsetLetter:FlxPoint = FlxPoint.get();
     
     public static final characters:Map<String, LetterData> =  [
         //  Alphabet
@@ -62,13 +63,10 @@ class AlphabetCharacter extends FlxSpriteExt {
         
     public function new (x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         super(x,y);
-        loadImage('alphabet');
-		antialiasing = Preferences.getPref('antialiasing');
-        setupCharacter(x,y,letter,bold,letterSize);
-        offsetLetter = FlxPoint.get();
+        antialiasing = Preferences.getPref('antialiasing');
     }
 
-    private static var defData:LetterData = {
+    private static final defData:LetterData = {
         prefix: null,
         bold: [0,0],
         lower: [0,0],
@@ -77,8 +75,14 @@ class AlphabetCharacter extends FlxSpriteExt {
 
     static final alphabet:String = 'abcdefghijklmnopqrstuvwxyz';
     static var mappedData:Map<String, LetterData> = [];
+    var loadedAtlas:Bool = false;
 
-    public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
+    public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1, ?baseFrames:FlxFramesCollection):Void {
+        if (!loadedAtlas) {
+            loadedAtlas = true;
+            frames = baseFrames;
+        }
+        
         setPosition(x,y);
         this.letter = letter;
         this.letterSize = letterSize;
@@ -118,10 +122,5 @@ class AlphabetCharacter extends FlxSpriteExt {
         x += offsetLetter.x * letterSize;
         y += offsetLetter.y * letterSize;
         setScale(letterSize);
-    }
-
-    override function destroy() {
-        super.destroy();
-        offsetLetter = FlxDestroyUtil.put(offsetLetter);
     }
 }

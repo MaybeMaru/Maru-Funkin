@@ -45,8 +45,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 			updateHitbox();
 	}
 
-	public function loadFromSprite(sprite:FlxSpriteExt) {
-		loadGraphicFromSprite(sprite);
+	public inline function loadFromSprite(sprite:FlxSpriteExt):FlxSpriteExt {
+		frames = sprite.frames;
+		animation.copyFrom(sprite.animation);
+		antialiasing = sprite.antialiasing;
+		
 		animOffsets = sprite.animOffsets.copy();
 		animDatas = sprite.animDatas.copy();
 		return this;

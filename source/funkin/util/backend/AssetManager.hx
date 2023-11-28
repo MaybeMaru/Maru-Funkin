@@ -87,8 +87,8 @@ class AssetManager {
 		if (cache) cachedGraphics.set(key, graphic);
 		return graphic;
 	}
-
-	static public function getRawBitmap(key:String) {
+	
+	static inline public function getRawBitmap(key:String) {
 		#if desktop	
 		final fixPath = Paths.removeAssetLib(key);
 		if (!fixPath.startsWith('assets'))

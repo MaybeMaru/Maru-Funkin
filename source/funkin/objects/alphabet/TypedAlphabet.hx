@@ -17,7 +17,7 @@ class TypedAlphabet extends Alphabet {
         resetText(text);
     }
 
-    public function resetText(newText:String):Void { //Changes the target text
+    public inline function resetText(newText:String):Void { //Changes the target text
         targetText = newText;
         splitWords = splitText(newText);
         cacheLetters();
@@ -25,9 +25,9 @@ class TypedAlphabet extends Alphabet {
         text = '';
     }
 
-    public function cacheLetters():Void {
+    public inline function cacheLetters():Void {
         while (splitWords.length > letterArray.length) {
-            var cacheChar:AlphabetCharacter = new AlphabetCharacter();
+            final cacheChar:AlphabetCharacter = this.recycle(AlphabetCharacter);
             letterArray.push(cacheChar);
             add(cacheChar);
             cacheChar.kill();
@@ -75,20 +75,19 @@ class TypedAlphabet extends Alphabet {
         });
     }
 
-    public function playRandomSound():Void { //Plays the sound from array
+    public inline function playRandomSound():Void { //Plays the sound from array
         if (sounds.length > 0) {
-            var randomSoundNum:Int = FlxG.random.int(0, sounds.length-1);
-            CoolUtil.playSound(sounds[randomSoundNum], volume);
+            CoolUtil.playSound(sounds[FlxG.random.int(0, sounds.length-1)], volume);
         }
     }
 
-    public function skip():Void { //Skips the start() or erase()
+    public inline function skip():Void { //Skips the start() or erase()
         text = (erasing ? "" : targetText);
         paused = true;
         curWordNum = (erasing ? 0 : letterArray.length-1);
     }
 
-    private function callCheck():Void {
+    private inline function callCheck():Void {
         if (finishCallback != null) {
             finishCallback();
         }
