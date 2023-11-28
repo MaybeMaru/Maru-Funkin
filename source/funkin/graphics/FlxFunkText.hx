@@ -48,7 +48,7 @@ class FlxFunkText extends FlxSprite {
         return value;
     }
 
-    function updateFormat() {
+    inline function updateFormat() {
         textField.defaultTextFormat = textFormat;
         textField.setTextFormat(textFormat);
         _regen = true;
@@ -127,26 +127,19 @@ class FlxFunkText extends FlxSprite {
         return size * 0.0625;
     }
 
-    override function draw() {
-        if (alpha == 0) return;
-        if (_regen) {
-            drawTextField();
-            _regen = false;
-        }
-        
+    override function drawComplex(camera:FlxCamera) {
         switch (style) {
-            case OUTLINE(thicc, quality, col):
+            case OUTLINE(thickness, quality, col):
                 final _offset = offset.clone();
                 final _color = color;
-                thicc *= sizeMult();
+                thickness *= sizeMult();
 
                 color = col ?? FlxColor.BLACK;
-                quality = quality ?? 8;
-                for (i in 0...quality) {
-                    final gay = (i / quality) * 2 * Math.PI;
+                for (i in 0...(quality = quality ?? 8)) {
+                    final _rad = (i / quality) * Math.PI * 2;
                     offset.copyFrom(_offset);
-                    offset.add(Math.cos(gay)*thicc, Math.sin(gay)*thicc);
-                    _draw();
+                    offset.add(Math.cos(_rad) * thickness, Math.sin(_rad) * thickness);
+                    super.drawComplex(camera);
                 }
                 
                 offset.copyFrom(_offset);
@@ -157,20 +150,22 @@ class FlxFunkText extends FlxSprite {
                 final _color = color;
                 offset.add(off.x * sizeMult(), off.y * sizeMult());
                 color = col ?? FlxColor.BLACK;
-                _draw();
+                super.drawComplex(camera);
                 offset.copyFrom(_offset);
                 color = _color;
 
             default:
         }
-        super.draw();
+        super.drawComplex(camera);
     }
 
-    public function _draw():Void {
-		if (alpha == 0 || _frame == null || _frame.type == FlxFrameType.EMPTY) return;
-		for (cam in cameras) {
-			if (!cam.visible || !cam.exists || !isOnScreen(cam)) continue;
-            isSimpleRender(cam) ? drawSimple(cam) : drawComplex(cam);
-		}
-	}
+    override function draw() {
+        if (alpha != 0) {
+            if (_regen) {
+                drawTextField();
+                _regen = false;
+            }
+            super.draw();
+        }
+    }
 }

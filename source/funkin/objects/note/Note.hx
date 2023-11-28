@@ -231,13 +231,11 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     public var canBeHit:Bool = false;
-	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var willMiss:Bool = false;
 
-	public function calcHit():Void {
+	inline public function calcHit():Void {
 		if (willMiss && !wasGoodHit) {
-			tooLate = true;
 			canBeHit = false;
 		}
 		else {
@@ -246,8 +244,7 @@ class Note extends FlxSpriteExt implements INoteData {
 					canBeHit = true;
 			}
 			else {
-				willMiss = true;
-				canBeHit = true;
+				willMiss = canBeHit = true;
 			}
 		}
 	}

@@ -468,7 +468,7 @@ class NotesGroup extends FlxGroup
 				}
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {
-						if (daNote.canBeHit && !daNote.tooLate && !daNote.wasGoodHit) {
+						if (daNote.canBeHit && !daNote.wasGoodHit) {
 							if (ignoreList.contains(daNote.noteData)) {
 								for (possibleNote in possibleNotes) {
 									if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10) {
