@@ -54,8 +54,9 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		if (ScriptUtil.stateQueue != null) {
 			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTrans);
 			ScriptUtil.stateQueue = null;
+			if (!Transition.skipTrans) super.draw();
 		}
-		super.draw();
+		else super.draw();
 	}
 
 	override function update(elapsed:Float):Void {
