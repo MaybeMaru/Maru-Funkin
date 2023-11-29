@@ -10,13 +10,13 @@ import openfl.Assets as OflAssets;
 typedef AssetGraphic = OneOfTwo<FlxGraphic, String>;
 
 // Just moving this from Paths for organization sake
-class AssetManager {
-	public static var cachedGraphics:Map<String, FlxGraphic> = [];
-	public static var cachedSounds:Map<String, Sound> = [];
+class AssetManager {	
+	public static final cachedGraphics:Map<String, FlxGraphic> = [];
+	public static final cachedSounds:Map<String, Sound> = [];
 
-	private static inline function _toGraphic(_graphic:AssetGraphic) {
-		if (_graphic is FlxGraphic) return _graphic;
-		else						return (existsGraphic(_graphic) ? getGraphic(_graphic) : null);
+	private static inline function __toGraphic(__graphic:AssetGraphic):Null<FlxGraphic> {
+		if (__graphic is FlxGraphic) return __graphic;
+		else						 return (existsGraphic(__graphic) ? getGraphic(__graphic) : null);
 	}
     
 	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {

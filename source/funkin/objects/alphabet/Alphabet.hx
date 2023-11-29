@@ -16,8 +16,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
     public var bold:Bool = false;
     public var textWidth:Int = 500;
 
-    var baseSprite:FlxSpriteExt;
-
     function set_alignment(_alignment:AlphabetAlign):AlphabetAlign {
         alignment = _alignment;
         setAlign();
@@ -45,8 +43,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         initPos = FlxPoint.get();
         curPos = FlxPoint.get();
         
-        baseSprite = new FlxSpriteExt().loadImage("alphabet");
-        
         this.bold = bold;
         this.textWidth = textWidth;
         this.textScale = textScale;
@@ -57,7 +53,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         super.destroy();
         initPos = FlxDestroyUtil.put(initPos);
         curPos = FlxDestroyUtil.put(curPos);
-        baseSprite = FlxDestroyUtil.destroy(baseSprite);
     }
 
     public var cutText:Array<String> = [];
@@ -104,7 +99,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
             default:
                 endWord = false;
                 var newLetter:AlphabetCharacter = recycle(AlphabetCharacter);
-                newLetter.setupCharacter(curPos.x, curPos.y, letter, bold, textScale, baseSprite.frames);
+                newLetter.setupCharacter(curPos.x, curPos.y, letter, bold, textScale);
                 var addWidth:Int = Std.int(newLetter.width*1.01);
                 curPos.x += addWidth;
                 curLineWidth += addWidth;

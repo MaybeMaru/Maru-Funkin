@@ -30,16 +30,16 @@ function create() {
         cutsceneTankman_Head.addOffset('godEffingDamnIt', 30, 25);
         cutsceneTankman_Head.addOffset('lookWhoItIs', 15, 15);
 
-        demonGf = new FunkinSprite('cutscenes/demon_gf' + censorStr, [State.gf.x - 920, State.gf.y - 454], [0.95, 0.95]);
+        demonGf = new FunkinSprite('cutscenes/demon_gf' + censorStr, [State.gf.x - 1040, State.gf.y - 454], [0.95, 0.95]);
         demonGf.addAnim('demonGf', 'DEMON_GF');
         demonGf.addAnim('dancing', 'GF Dancing at Gunpoint', 24, true);
         demonGf.addOffset('dancing', -738, -464);
         if (censored) {
             demonGf.addOffset('demonGf', -152, 0);
         }
-        john = new FunkinSprite('cutscenes/john' + censorStr, [State.gf.x + 398, State.gf.y - 45], [0.95, 0.95]);
+        john = new FunkinSprite('cutscenes/john' + censorStr, [State.gf.x + 278, State.gf.y - 45], [0.95, 0.95]);
         john.addAnim('john', 'JOHN');
-        steve = new FunkinSprite('cutscenes/steve' + censorStr, [State.gf.x - 887.5, State.gf.y - 345], [0.95, 0.95]);
+        steve = new FunkinSprite('cutscenes/steve' + censorStr, [State.gf.x - 1007.5, State.gf.y - 345], [0.95, 0.95]);
         steve.addAnim('steve', 'STEVE');
 
         State.dad.visible = State.gf.visible = false;

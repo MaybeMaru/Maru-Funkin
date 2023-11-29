@@ -62,7 +62,7 @@ class NotesGroup extends FlxGroup
 
 		if (!botplayCheck || prefBot) {
 			if (isPlayState) PlayState.instance.health += note.hitHealth[0];
-			var rating:String = isPlayState ? PlayState.instance.popUpScore(note.strumTime, note) :
+			final rating:String = isPlayState ? PlayState.instance.popUpScore(note.strumTime, note) :
 			CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
 			if (rating == "sick") spawnSplash(note); // Spawn splash
 		}
@@ -98,7 +98,7 @@ class NotesGroup extends FlxGroup
         inBotplay = getPref('botplay') && isPlayState;
 		
 		// Setup functions
-		var game:PlayState = isPlayState ? PlayState.instance : null;
+		final game:PlayState = isPlayState ? PlayState.instance : null;
 		
 		goodNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
@@ -365,7 +365,7 @@ class NotesGroup extends FlxGroup
 	function checkEvents() {
 		if (events[0] != null) {
 			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
-				var dunceEvent:Event = events[0];
+				final dunceEvent:Event = events[0];
 				ModdingUtil.addCall('eventHit', [dunceEvent]);
 				events.splice(events.indexOf(dunceEvent), 1);
 			}
@@ -424,14 +424,14 @@ class NotesGroup extends FlxGroup
     public var holdingArray:Array<Bool> = [];
 	public var controlArray:Array<Bool> = [];
 
-	function pushControls(strums:StrumLineGroup, value:Bool) {
+	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
 		for (i in strums) {
 			holdingArray.push(value ? false : i.getControl());
 			controlArray.push(value ? false : i.getControl("-P"));
 		}
 	}
 
-    private function controls():Void {
+    private inline function controls():Void {
 		holdingArray = [];
 		controlArray = [];
 		pushControls(playerStrums, inBotplay);
@@ -453,14 +453,13 @@ class NotesGroup extends FlxGroup
 							return;
 						}
 						if (daNote.startedPress) {
-							var holding = daNote.targetStrum.getControl();
-							var pressing = holding && daNote.inSustain;
+							final holding = daNote.targetStrum.getControl();
 							if (!holding) { // Sustain stopped being pressed
 								sustainMiss(daNote); 
 								return;
 							}
 							else {
-								daNote.pressed = pressing; // Pressed sustain
+								daNote.pressed = holding && daNote.inSustain; // Pressed sustain
 								if (daNote.pressed) checkCallback(daNote.mustPress ? goodSustainPress : opponentSustainPress, [daNote]);
 							}
 						}
@@ -470,7 +469,8 @@ class NotesGroup extends FlxGroup
 					if (controlArray.contains(true)) {
 						if (daNote.canBeHit && !daNote.wasGoodHit) {
 							if (ignoreList.contains(daNote.noteData)) {
-								for (possibleNote in possibleNotes) {
+								for (i in 0...possibleNotes.length) {
+									final possibleNote:Note = possibleNotes[i];
 									if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10) {
 										removeList.push(daNote);
 									}
@@ -515,9 +515,8 @@ class NotesGroup extends FlxGroup
 
 	inline function forEachArray(array:Array<Dynamic>, func:Dynamic) {
 		var i:Int = 0;
-		while (i < array.length) {
+		while (i < array.length)
 			func(array[i++]);
-		}
 	}
 
 	function checkStrumAnims():Void {

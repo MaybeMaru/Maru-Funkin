@@ -144,11 +144,11 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     inline public function getCos(?_angle) {
-        return Math.cos(FlxAngle.asRadians(_angle ?? approachAngle));
+        return FlxMath.fastCos(FlxAngle.asRadians(_angle ?? approachAngle));
     }
 
     inline public function getSin(?_angle) {
-        return Math.sin(FlxAngle.asRadians(_angle ?? approachAngle));
+        return FlxMath.fastSin(FlxAngle.asRadians(_angle ?? approachAngle));
     }
 
     function set_susLength(value:Float):Float {

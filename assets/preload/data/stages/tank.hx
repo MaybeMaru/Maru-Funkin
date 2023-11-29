@@ -92,6 +92,7 @@ function update():Void {
 	moveTank();
 }
 
+var pi:Float = 0.01745329251;
 var tankAngle:Float = FlxG.random.int(-90, 45);
 var tankSpeed:Float = FlxG.random.float(5, 7);
 var tankX:Float = 400;
@@ -101,8 +102,8 @@ function moveTank():Void {
 		tankGround.visible = true;
 		tankAngle += tankSpeed * FlxG.elapsed;
 		tankGround.angle = (tankAngle - 90 + 15);
-		tankGround.x = tankX + 1500 * Math.cos(Math.PI / 180 * (1 * tankAngle + 180));
-		tankGround.y = 1300 + 1100 * Math.sin(Math.PI / 180 * (1 * tankAngle + 180));
+		tankGround.x = tankX + 1500 * FlxMath.fastCos(pi * (tankAngle + 180));
+		tankGround.y = 1300 + 1100 * FlxMath.fastSin(pi * (tankAngle + 180));
 	} else {
 		tankGround.visible = false;
 	}

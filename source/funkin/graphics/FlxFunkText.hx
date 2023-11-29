@@ -138,7 +138,7 @@ class FlxFunkText extends FlxSprite {
                 for (i in 0...(quality = quality ?? 8)) {
                     final _rad = (i / quality) * Math.PI * 2;
                     offset.copyFrom(_offset);
-                    offset.add(Math.cos(_rad) * thickness, Math.sin(_rad) * thickness);
+                    offset.add(FlxMath.fastCos(_rad) * thickness, FlxMath.fastSin(_rad) * thickness);
                     super.drawComplex(camera);
                 }
                 

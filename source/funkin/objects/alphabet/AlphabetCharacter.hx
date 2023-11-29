@@ -63,6 +63,7 @@ class AlphabetCharacter extends FlxSpriteExt {
         
     public function new (x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         super(x,y);
+        loadImage("alphabet");
         antialiasing = Preferences.getPref('antialiasing');
     }
 
@@ -75,14 +76,8 @@ class AlphabetCharacter extends FlxSpriteExt {
 
     static final alphabet:String = 'abcdefghijklmnopqrstuvwxyz';
     static var mappedData:Map<String, LetterData> = [];
-    var loadedAtlas:Bool = false;
 
-    public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1, ?baseFrames:FlxFramesCollection):Void {
-        if (!loadedAtlas) {
-            loadedAtlas = true;
-            frames = baseFrames;
-        }
-        
+    public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         setPosition(x,y);
         this.letter = letter;
         this.letterSize = letterSize;

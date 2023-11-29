@@ -797,6 +797,6 @@ class PlayState extends MusicBeatState {
 
 	public function showUI(bool:Bool):Void {
 		final displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
-		for (displayObject in displayObjects) displayObject.visible = bool;
+		for (i in 0...displayObjects.length) displayObjects[i].visible = bool;
 	}
 }

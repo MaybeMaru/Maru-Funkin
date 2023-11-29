@@ -16,7 +16,9 @@ function createChar():Void {
     speaker.flipX = ScriptChar.flipX;
     if (speaker.flippedOffsets)
         speaker.x += 140;
+}
 
+function createPost() {
     if (Paths.exists(Paths.chart(PlayState.SONG.song, 'picospeaker'), "TEXT")) {
         picoNotes_ = Song.getSongNotes('picospeaker',  PlayState.SONG.song);
         initTankmenBG();
