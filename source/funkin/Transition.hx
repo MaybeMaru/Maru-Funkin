@@ -97,13 +97,17 @@ class Transition extends ResizableSprite {
     }
 
     function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic) {
-        y = startPosition = (skipTrans ? end : start);
+        y = startPosition = start;
         visible = !skipTrans;
         endPosition = end;
         transDuration = time;
         timeElapsed = 0;
         finishCallback = callback;
         transitioning = true;
+        
+        if (skipTrans) {
+            __finishTrans();
+        }
     }
 
     var timeElapsed:Float = 0;
@@ -123,10 +127,15 @@ class Transition extends ResizableSprite {
         y = FlxMath.lerp(startPosition, endPosition, lerpValue);
     
         if (timeElapsed >= transDuration) {
-            if (finishCallback != null) Reflect.callMethod(null, finishCallback, []);
-            if (inExit) visible = false;
-            transitioning = false;
+            __finishTrans();
         }
 
+    }
+
+    @:noCompletion
+    function __finishTrans() {
+        if (finishCallback != null) Reflect.callMethod(null, finishCallback, []);
+        if (inExit) visible = false;
+        transitioning = false;
     }
 }

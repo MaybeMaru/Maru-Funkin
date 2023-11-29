@@ -13,26 +13,13 @@ function update(elapsed) {
 }
 
 function stepHit(curStep) {
-    super_stepHit();
+    super_stepHit(curStep);
 }
 
 function beatHit(curBeat) {
-    super_beatHit();
+    super_beatHit(curBeat);
 }
 
 function sectionHit(curSection) {
-    super_sectionHit();
+    super_sectionHit(curSection);
 }
-
-function destroy() {
-    super_destroy();
-}
-
-/*
-    CUSTOM STATE VARIABLES
-*/
-
-Parent // FlxState instance
-add();
-insert();
-remove();

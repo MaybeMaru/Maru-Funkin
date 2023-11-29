@@ -37,16 +37,25 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		curState = CoolUtil.formatClass(this, false);
 		super.create();
 		add(musicBeat = new MusicBeat(this));
-		
-		Main.transition.exitTrans();
 
 		//State Scripts
-		if (curState == "funkin.states.PlayState") return;
-		ModdingUtil.clearScripts();
-		var globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
-		var curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
-		for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script);
-		ModdingUtil.addCall('stateCreate', []);
+		if (!curState.endsWith("PlayState")) {
+			ModdingUtil.clearScripts();
+			final globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
+			final curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
+			for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script);
+			ModdingUtil.addCall('stateCreate', []);
+		}
+
+		Main.transition.exitTrans();
+	}
+
+	override function draw() {
+		if (ScriptUtil.stateQueue != null) {
+			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTrans);
+			ScriptUtil.stateQueue = null;
+		}
+		super.draw();
 	}
 
 	override function update(elapsed:Float):Void {

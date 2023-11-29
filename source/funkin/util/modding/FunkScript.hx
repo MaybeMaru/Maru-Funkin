@@ -394,38 +394,54 @@ class CustomState extends MusicBeatState {
 
 		// This method sucks, but it works, sooooooo yeah... sorry
 		for (i in super_methods) {
-			script.set('super_' + i, function(?value:Dynamic) {
-				super_map.set(i, {
-					callback: CONTINUE_FUNCTION,
-					value: value,
-				});
+			script.set('super_' + i, function(?v:Dynamic) {
+				callDynamicSuper(i);
 			});
 		}
+
 		return this;
 	}
 
-	function superCallback(method:String, ?args:Dynamic) {
-		super_map.set(method, {
-			callback: STOP_FUNCTION,
-			value: null,
-		});
-		script.callback(method, args);
-		return super_map.get(method).callback == CONTINUE_FUNCTION;
+	final function super_create() super.create();
+	final function super_update(?e:Float) super.update(e ?? FlxG.elapsed);
+	final function super_stepHit(s:Int) super.stepHit(s);
+	final function super_beatHit(b:Int) super.beatHit(b);
+	final function super_sectionHit(s:Int) super.sectionHit(s);
+	
+	function callDynamicSuper(f:String, ?v:Dynamic) {
+		switch(f) {
+			case "create": super_create();
+			case "update": super_update(v);
+			case "stepHit": super_stepHit(v);
+			case "beatHit": super_beatHit(v);
+			case "sectionHit": super_sectionHit(v);
+		}
+	}
+
+	function checkSuper(f:String, ?v:Array<Dynamic>) {
+		if (script.exists(f)) {
+			script.callback(f, v);
+		} else {
+			callDynamicSuper(f, v[0]); // Gets called if function doesnt have an override
+		}
 	}
 
     override public function create() {
 		ModdingUtil.addPrint(_scriptKey + " / Custom State");
-		if (superCallback('create')) super.create();
+		checkSuper("create");
     }
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
 		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey, Transition.skipTrans);
-		if (superCallback('update', [elapsed])) super.update(super_map.get('update').value);
+		checkSuper("update", [elapsed]);
     }
 
-	override public function stepHit(curStep) 		if (superCallback('stepHit', [curStep])) 		super.stepHit(curStep);
-	override public function beatHit(curBeat) 		if (superCallback('beatHit', [curBeat])) 		super.beatHit(curBeat);
-	override public function sectionHit(curSection) if (superCallback('sectionHit', [curSection])) 	super.sectionHit(curSection);
-	override public function destroy() 				if (superCallback('destroy')) 					super.destroy();
+	override public function stepHit(curStep) 		checkSuper("stepHit", [curStep]);
+	override public function beatHit(curBeat) 		checkSuper("beatHit", [curBeat]);
+	override public function sectionHit(curSection) checkSuper("sectionHit", [curSection]);
+	override public function destroy() {
+		script.callback("destroy");
+		super.destroy();
+	}
 }

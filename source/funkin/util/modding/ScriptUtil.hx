@@ -49,6 +49,8 @@ class ScriptUtil {
     inline public static function getGroup(key:String) {
         return key == 'fg' ? PlayState.instance.fgSpr : PlayState.instance.bgSpr;
     }
+
+    public static var stateQueue:{state:MusicBeatState, skipTrans:Bool} = null;
     
     inline public static function switchCustomState(key:String, skipTrans:Bool) {
 		final scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
@@ -57,7 +59,9 @@ class ScriptUtil {
 			return;
 		}
 
-		final state = new CustomState().initScript(scriptCode, key);
-		CoolUtil.switchState(state, skipTrans);
+        stateQueue = {
+            state: new CustomState().initScript(scriptCode, key),
+            skipTrans: skipTrans
+        }
 	}
 }
