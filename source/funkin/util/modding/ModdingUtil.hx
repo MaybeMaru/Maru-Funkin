@@ -7,6 +7,7 @@ typedef ModFolder = {
     var description:String;
     var icon:String;
     var global:Bool;
+    var hideBaseGame:Bool;
     var apiVersion:Int;
     
     @:optional var ?folder:String; // This is used internally, dont worry about it
@@ -26,6 +27,7 @@ class ModdingUtil {
         description: "This mod has no description.",
         icon: "icon",
         global: false,
+        hideBaseGame: false,
         apiVersion: API_VERSION
     }
     

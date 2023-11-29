@@ -67,9 +67,18 @@ class WeekSetup {
         final vanillaWeeks:Array<String> = JsonUtil.getJsonList('weeks',true,false,false);
         final globalWeeks:Array<String> = JsonUtil.getJsonList('weeks',false,true,false);
         final modWeeks:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
+
+        var hideVanilla:Bool = false;
+        for (i in 0...ModdingUtil.modsList.length) {
+            if (ModdingUtil.modsList[i].hideBaseGame) {
+                hideVanilla = true;
+                break;
+            }
+        }
         
         //Vanilla weeks go first >:)
-        weeks = weeks.concat(vanillaWeeks).concat(globalWeeks);
+        if (!hideVanilla) weeks = weeks.concat(vanillaWeeks);
+        weeks = weeks.concat(globalWeeks);
         weeks = weeks.concat(modWeeks.map(week -> Paths.getFileMod(week)[1]));
         weeks = CoolUtil.removeDuplicates(weeks);
 

@@ -28,6 +28,7 @@ class ModSetupTabs extends FlxUITabMenu {
     var createButton:FlxUIButton;
 
     var globalCheck:FlxUICheckBox;
+    var hideCheck:FlxUICheckBox;
     //var templatesCheck:FlxUICheckBox;
 
     var focusList:Array<FlxUIInputText> = [];
@@ -83,6 +84,7 @@ class ModSetupTabs extends FlxUITabMenu {
                 _jsonData.title = modNameInput.text;
                 _jsonData.description = modDescInput.text;
                 _jsonData.global = globalCheck.checked;
+                _jsonData.hideBaseGame = hideCheck.checked;
             
                 var _jsonStr = FunkyJson.stringify(_jsonData, "\t");
                 File.saveContent('mods/$modFolder/mod.json', _jsonStr);
@@ -103,6 +105,10 @@ class ModSetupTabs extends FlxUITabMenu {
         globalCheck = new FlxUICheckBox(25, 250, null, null, "Global Mod");
         globalCheck.checked = false;
         tabGroup.add(globalCheck);
+
+        hideCheck = new FlxUICheckBox(25, 275, null, null, "Hide Base Game");
+        hideCheck.checked = false;
+        tabGroup.add(hideCheck);
 
         // If to include template character json, week json, songs, etc
         /*templatesCheck = new FlxUICheckBox(25, 250, null, null, "Include template files");
