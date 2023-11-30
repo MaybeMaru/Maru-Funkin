@@ -285,6 +285,11 @@ class ChartingState extends MusicBeatState {
 		openSubState(new NotesSubstate(SONG, Conductor.songPosition));
     }
 
+    override function closeSubState() {
+        super.closeSubState();
+        tabs.songPitch = tabs.slider_pitch.value;
+    }
+
     inline function keys() {
         if (FlxG.keys.justPressed.SPACE) {
             playing ? stop() : play();

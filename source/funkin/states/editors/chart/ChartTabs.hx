@@ -482,7 +482,7 @@ class ChartTabs extends FlxUITabMenu {
 	public var check_metronome:FlxUICheckBox;
 	public var slider_pitch:FlxUISlider;
 
-	var songPitch(default, set):Float = 1;
+	public var songPitch(default, set):Float = 1;
 	function set_songPitch(value:Float):Float {
 		value = FlxMath.roundDecimal(value,2);
 		songPitch = value;
