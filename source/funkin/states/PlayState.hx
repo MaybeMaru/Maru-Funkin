@@ -775,10 +775,13 @@ class PlayState extends MusicBeatState {
 			default: boyfriend;
 		}
 
+		if (targetChar.curCharacter == newCharName) return; // Is already that character
+
 		final newChar:Character = new Character(0, 0, newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
 		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		
 		// Clear character group
+		targetChar.callScript("destroyChar", [targetChar, newChar, newCharName]);
 		final _grp = targetChar.group;
 		for (i in _grp) i.destroy();
 		_grp.clear();

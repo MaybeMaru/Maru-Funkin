@@ -17,7 +17,7 @@ class StageDebug extends MusicBeatState {
     
     override function create() {
         super.create();
-        camFollow = new FlxObject();
+        camFollow = new FlxObject(FlxG.width*0.5, FlxG.height*0.5);
         FlxG.camera.follow(camFollow);
         FlxG.mouse.visible = true;
 
@@ -27,6 +27,20 @@ class StageDebug extends MusicBeatState {
 
         final bgGroup = new LayerGroup(); bgGroup.ID = 0;
         add(bgGroup);
+
+        /// Characters
+
+        final __dad = new FunkinSprite("options/bf_offset", [100, 450]);
+        __dad.alpha = 0.4;
+        add(__dad);
+
+        final __bf = new FunkinSprite("options/bf_offset", [770, 450]);
+        __bf.flipX = true;
+        __bf.alpha = 0.4;
+        add(__bf);
+
+        /// Characters
+
         final fgGroup = new LayerGroup(); fgGroup.ID = 1;
         add(fgGroup);
 
