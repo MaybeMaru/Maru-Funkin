@@ -26,9 +26,10 @@ class ModItem extends FlxSpriteGroup {
         final modTitle:Alphabet = new Alphabet(modIcon.x + modIcon.width + 10, 10, mod.title, true, Std.int(modBox.width * 0.5), 0.666);
         add(modTitle);
 
-        final modDesc:FlxText = new FlxText(modTitle.x, modTitle.y + modTitle.height + 5, Std.int(modBox.width*0.6), mod.description);
-        modDesc.setFormat(Paths.font('phantommuff_'), 20, FlxColor.BLACK, LEFT, OUTLINE, FlxColor.WHITE);
-        modDesc.borderSize = 1.333;
+        final modDesc:FlxFunkText = new FlxFunkText(modTitle.x, modTitle.y + modTitle.height + 5, mod.description, FlxPoint.get(modBox.width*0.6, modBox.height), 20);
+        modDesc.font = "phantommuff_";
+        modDesc.style = SHADOW(FlxPoint.weak(-2, -2), FlxColor.BLACK);
+        modDesc.wordWrap = true;
         add(modDesc);
 
         enableButton = new FlxSpriteExt(modBox.width,modBox.height).loadImageAnimated('options/modButton', 60, 58);
@@ -61,8 +62,7 @@ class ModItem extends FlxSpriteGroup {
         }
 
         if (enableButton.scale.x > 1) {
-            enableButton.scale.x = CoolUtil.coolLerp(enableButton.scale.x, 1, 0.2);
-            enableButton.scale.y = CoolUtil.coolLerp(enableButton.scale.y, 1, 0.2);
+            enableButton.scale.y = enableButton.scale.x = CoolUtil.coolLerp(enableButton.scale.x, 1, 0.2);
         }
     }
 }

@@ -59,6 +59,15 @@ class FlxFunkText extends FlxSprite {
     function get_textWidth() @:privateAccess return textField.__textEngine.textWidth;
     function get_textHeight() @:privateAccess return textField.__textEngine.textHeight;
 
+    public var wordWrap(default, set):Bool = false;
+    function set_wordWrap(value:Bool) {
+        if (wordWrap != value) {
+            textField.wordWrap = value;
+            updateFormat();
+        }
+        return value;
+    }
+
     private var _regen:Bool = false;    
     function drawTextField() {        
         _textMatrix.tx = textField.x;
@@ -69,11 +78,6 @@ class FlxFunkText extends FlxSprite {
         pixels.fillRect(_fillRect, FlxColor.TRANSPARENT);
         pixels.draw(textField, _textMatrix, null, null, null, antialiasing);
     }
-
-    /*private var _canWrite:Bool = true;
-    function uploadGpu() { // TEXT WONT BE ABLE TO BE CHANGED AFTER THIS!!!
-
-    }*/
 
     public var alignment(default, set):String = "left";
     function set_alignment(value:String) {
@@ -101,6 +105,12 @@ class FlxFunkText extends FlxSprite {
         textFormat = null;
         _fillRect = null;
         _textMatrix = null;
+
+        switch (style) {
+            case SHADOW(offset, color): offset.put();
+            default:
+        }
+        style = null;
     }
 
     public function new(X:Float=0, Y:Float=0, Text:String="", ?canvasRes:FlxPoint, ?size:Int) {

@@ -150,7 +150,7 @@ class TitleState extends MusicBeatState {
 			titleSine += elapsed * 3;
 			titleSine %= Math.PI * 2;
 
-			var lerpValue = Math.sin(titleSine);
+			final lerpValue:Float = FlxMath.fastSin(titleSine);
 			titleText.alpha = (lerpValue + 1) * 0.25 + 0.75;
 			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) * 0.5);
 			checkCode();

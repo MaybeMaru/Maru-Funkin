@@ -71,7 +71,7 @@ class WeekSetup {
         var hideVanilla:Bool = false;
         for (i in 0...ModdingUtil.modsList.length) {
             final mod = ModdingUtil.modsList[i];
-            if (mod.hideBaseGame && ModdingUtil.activeMods.get(mod.folder)) {
+            if (mod.hideBaseGame && ModdingUtil.getModActive(mod.folder)) {
                 hideVanilla = true;
                 break;
             }
