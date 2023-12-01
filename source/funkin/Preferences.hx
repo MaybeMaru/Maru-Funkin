@@ -72,8 +72,8 @@ class Preferences {
             }
             else setPref("ghost-tap-style", preferences.get("ghost-tap") ? "on" : "off");
             preferences.remove("ghost-tap");
+            SaveData.flushData();
         }
-        SaveData.flushData();
     }
 
     inline public static function getPref(pref:String):Dynamic {

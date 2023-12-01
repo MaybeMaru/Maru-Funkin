@@ -266,8 +266,13 @@ class NotesGroup extends FlxGroup
 		}
 
 		scrollSpeed = songSpeed;
+
 		unspawnNotes.sort(CoolUtil.sortByStrumTime);
 		events.sort(CoolUtil.sortByStrumTime);
+
+		var i:Int = 0;
+		while (i < unspawnNotes.length)
+			unspawnNotes[i++].__doDraw();
 		
 		if (isPlayState) {
 			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
@@ -292,10 +297,12 @@ class NotesGroup extends FlxGroup
 
 	public var scrollSpeed(default, set):Float = 1.0; // Shortcut to change all notes scroll speed
 	public function set_scrollSpeed(value:Float = 1.0) {
-		for (i in unspawnNotes.concat(notes.members)) {
-			i.noteSpeed = value;
+		if (value != scrollSpeed) {
+			for (i in unspawnNotes.concat(notes.members)) {
+				i.noteSpeed = value;
+			}
+			spawnNotes();
 		}
-		spawnNotes();
 		return scrollSpeed = value;
 	}
 
@@ -345,7 +352,7 @@ class NotesGroup extends FlxGroup
 
 	function spawnNotes() { // Generate notes
         if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / songSpeed / cameras[0].zoom * unspawnNotes[0].spawnMult) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / unspawnNotes[0].noteSpeed / cameras[0].zoom * unspawnNotes[0].spawnMult) {
 				final dunceNote:Note = unspawnNotes[0];
 				ModdingUtil.addCall('noteSpawn', [dunceNote]);
 				notes.add(dunceNote);

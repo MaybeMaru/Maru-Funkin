@@ -11,10 +11,9 @@ class SettingItem extends FlxSpriteGroup {
     private var settingTxt:Alphabet;
     public var settingType:SettingType = null;
 
-    private var checkboxSpr:FunkinSprite;       //Bool
-    public var  numSetSpr:Alphabet;             //Number
-    public var array:Array<String>;
-    //private var arraySetSpr:Alphabet;         //Array
+    private var checkboxSpr:FunkinSprite;   //Bool
+    public var  numSetSpr:Alphabet;         //Number
+    public var array:Array<String>;         //Array     
 
     public var stringID:String = '';
 
@@ -46,10 +45,10 @@ class SettingItem extends FlxSpriteGroup {
                 checkboxSpr = new FunkinSprite('options/optionCheckbox');
                 checkboxSpr.scale.set(0.8,0.8);
                 checkboxSpr.updateHitbox();
-                checkboxSpr.addAnim('open','open');
-                checkboxSpr.addAnim('close','close',24,false,null,[25,0]);
-                checkboxSpr.addAnim('staticOpen','staticOpen',24,false,null,[-17,-37]);
-                checkboxSpr.addAnim('staticClose','staticClose',24,false,null,[-22,-60]);
+                checkboxSpr.addAnim('open', 'open');
+                checkboxSpr.addAnim('close', 'close', 24, false, null, [25,0]);
+                checkboxSpr.addAnim('staticOpen', 'staticOpen', 24, false, null, [-17,-37]);
+                checkboxSpr.addAnim('staticClose', 'staticClose', 24, false, null, [-22,-60]);
                 add(checkboxSpr);
                 checkboxSpr.playAnim(prefValue ? 'staticOpen' : 'staticClose');
                 settingTxt.x += checkboxSpr.width * checkboxSpr.scale.x;
@@ -58,8 +57,6 @@ class SettingItem extends FlxSpriteGroup {
                 numSetSpr = new Alphabet(20, 100,'< $prefValue >');
                 add(numSetSpr);
                 settingTxt.x += numSetSpr.x + numSetSpr.width;
-
-            //case ARRAY:
         }
     }
 

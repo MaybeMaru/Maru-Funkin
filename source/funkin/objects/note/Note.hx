@@ -121,8 +121,21 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     public var drawNote:Bool = true;
+    var __queueDraw:Bool = false;
+
+    @:noCompletion
+    public inline function __doDraw() {
+        if (isSustainNote && __queueDraw) {
+            __queueDraw = false;
+            drawSustain();
+        }
+    }
+
     override function draw() { // This should help a bit on performance
-        if (drawNote) super.draw();
+        if (drawNote) {
+            __doDraw();
+            super.draw();
+        }
     }
 
     inline public function hideNote() {
@@ -140,7 +153,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     inline public function setSusPressed() {
         y = strumCenter;
-        drawSustain();
+        __queueDraw = true;
     }
 
     inline public function getCos(?_angle) {
@@ -153,14 +166,14 @@ class Note extends FlxSpriteExt implements INoteData {
 
     function set_susLength(value:Float):Float {
         susLength = Math.max(value, 0);
-        drawSustain();
+        __queueDraw = true;
         return value;
     }
 
     function set_noteSpeed(value:Float):Float {
         if (noteSpeed == value) return value;
         noteSpeed = value;
-        drawSustain();
+        __queueDraw = true;
         return value;
     }
 
@@ -173,6 +186,7 @@ class Note extends FlxSpriteExt implements INoteData {
         if (!isSustainNote) return;
         final _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
         if (_height > (susEndHeight * (noteSpeed * 0.5) / scale.y)) {
+            if (_height == height) return;
             if (forced || (_height > height)) { // New graphic
                 drawSustainCached(_height);
             }
