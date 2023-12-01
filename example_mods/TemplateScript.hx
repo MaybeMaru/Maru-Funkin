@@ -166,7 +166,7 @@ getBlendMode(blendModeName:String);
 
 /*
     Returns the preference variable
-    @param prefName --> Identifier name of the preference EX: 'ghost-tap'
+    @param prefName --> Identifier name of the preference EX: 'downscroll'
 */
 getPref(prefName:String);
 
@@ -180,9 +180,10 @@ getPref(prefName:String);
     'botplay'           => Botplay Mode
     'practice'          => Practice Mode
     'downscroll'        => Downscroll
-    'ghost-tap'         => Ghost Tapping
-    'deghost-tap'       => Deghostify
+    'ghost-tap-style'   => Ghost Tapping ("on", "off", "dad turn")
     'stack-rating'      => Stack Ratings
+    'use-const-speed'   => Use constant speed
+    'const-speed'       => Constant speed
 
     // UI
     'framerate'         => Framerate

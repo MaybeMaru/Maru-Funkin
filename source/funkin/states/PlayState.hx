@@ -128,7 +128,7 @@ class PlayState extends MusicBeatState {
 
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
-		ghostTapEnabled = getPref('ghost-tap');
+		ghostTapEnabled = getPref('ghost-tap-style') == "on";
 
 		SkinUtil.initSkinData();
 		NoteUtil.initTypes();
@@ -740,7 +740,7 @@ class PlayState extends MusicBeatState {
 			camHUD.zoom += 0.03;
 		}
 
-		if (getPref('deghost-tap') && curSectionData != null)
+		if (getPref('ghost-tap-style') == "dad turn" && curSectionData != null)
 			ghostTapEnabled = !curSectionData.mustHitSection;
 
 		ModdingUtil.addCall('sectionHit', [curSection]);

@@ -22,7 +22,7 @@ class PreferencesState extends MusicBeatState {
             final pref:String = prefsArray[i];
             final prefLabel = Preferences.getLabel(pref);
             final prefSetting:SettingItem = new SettingItem(pref, prefLabel);
-            prefSetting.targetY = (i + (prefsArray.length/10))*125;
+            prefSetting.targetY = (i + (prefsArray.length * 0.1))*125;
             prefSetting.y = prefSetting.targetY;
             prefSetting.ID = i;
             prefItems.add(prefSetting);
@@ -62,7 +62,7 @@ class PreferencesState extends MusicBeatState {
                                 item.setValue(!item.prefValue);
                             }
                             
-                        case NUMB:
+                        case NUMBER:
                             var mult:Float = (FlxG.keys.pressed.SHIFT) ? 5 : 1;
                             switch(item.itemPref) {
                                 case 'const-speed': mult *= 0.1;
@@ -74,6 +74,10 @@ class PreferencesState extends MusicBeatState {
                             }
                             
                         case ARRAY:
+                            if (leftP || rightP) {
+                                if (leftP)  item.setValue(item.array[FlxMath.wrap(item.getArrIndex()-1, 0, item.array.length - 1)]);
+                                if (rightP) item.setValue(item.array[FlxMath.wrap(item.getArrIndex()+1, 0, item.array.length - 1)]);
+                            }
                     }
                     break;
                 }

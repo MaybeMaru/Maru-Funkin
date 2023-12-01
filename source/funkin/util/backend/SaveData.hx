@@ -24,13 +24,13 @@ class SaveData
 		initSave = true;
 
 		// Setup save bases
-		var controlSave:Map<String, Map<String, Array<String>>> = new Map<String, Map<String, Array<String>>>();
+		final controlSave:Map<String, Map<String, Array<String>>> = new Map<String, Map<String, Array<String>>>();
 		controlSave['keyboardBinds'] = new Map<String, Array<String>>();
 		controlSave['gamepadBinds'] = new Map<String, Array<String>>();
-		var prefsSave:Map<String, Dynamic> = new Map<String, Dynamic>();
-		var scoresSave:Map<String, Int> = new Map<String, Int>();
-		var weekUnlockSave:Map<String, Bool> = new Map<String, Bool>();
-		var activeModsSave:Map<String, Bool> = new Map<String, Bool>();
+		final prefsSave:Map<String, Dynamic> = new Map<String, Dynamic>();
+		final scoresSave:Map<String, Int> = new Map<String, Int>();
+		final weekUnlockSave:Map<String, Bool> = new Map<String, Bool>();
+		final activeModsSave:Map<String, Bool> = new Map<String, Bool>();
 
 		// Add save bases
 		saves['controls'] = controlSave;

@@ -2,7 +2,7 @@ package funkin.states.options.items;
 
 enum SettingType {
     BOOL;
-    NUMB;
+    NUMBER;
     ARRAY;
 }
 
@@ -13,6 +13,7 @@ class SettingItem extends FlxSpriteGroup {
 
     private var checkboxSpr:FunkinSprite;       //Bool
     public var  numSetSpr:Alphabet;             //Number
+    public var array:Array<String>;
     //private var arraySetSpr:Alphabet;         //Array
 
     public var stringID:String = '';
@@ -29,11 +30,12 @@ class SettingItem extends FlxSpriteGroup {
         itemPref = prefName;
         prefValue = usePrefs ? Preferences.getPref(itemPref) : daValue;
 
-        var varType = Type.typeof(prefValue);
-        switch (varType) {
+        switch (Type.typeof(prefValue)) {
             default:            settingType = BOOL;
-            case TInt | TFloat: settingType = NUMB;
-            case TClass(Array): settingType = ARRAY;
+            case TInt | TFloat: settingType = NUMBER;
+            case TClass(String):
+                settingType = ARRAY;
+                array = Preferences.arrayPrefs.get(itemPref).array.copy();
         }
 
         settingTxt = new Alphabet(20, 100, description);
@@ -52,13 +54,17 @@ class SettingItem extends FlxSpriteGroup {
                 checkboxSpr.playAnim(prefValue ? 'staticOpen' : 'staticClose');
                 settingTxt.x += checkboxSpr.width * checkboxSpr.scale.x;
 
-            case NUMB:
+            case NUMBER | ARRAY:
                 numSetSpr = new Alphabet(20, 100,'< $prefValue >');
                 add(numSetSpr);
                 settingTxt.x += numSetSpr.x + numSetSpr.width;
 
-            case ARRAY:
+            //case ARRAY:
         }
+    }
+
+    inline public function getArrIndex() {
+        return array.indexOf(prefValue);
     }
 
     function applyAntiGroup(_members:Array<Dynamic>, anti:Bool = true) {
@@ -78,7 +84,7 @@ class SettingItem extends FlxSpriteGroup {
         prefValue = newValue;
 
         //hardcoded limits
-        if (settingType == NUMB) {
+        if (settingType == NUMBER) {
             switch (itemPref) {
                 case 'framerate':   prefValue = Std.int(FlxMath.bound(prefValue, 60, 240));
                 case 'const-speed': prefValue = FlxMath.roundDecimal(FlxMath.bound(prefValue, 0.1, 10.0), 1);
@@ -97,7 +103,7 @@ class SettingItem extends FlxSpriteGroup {
 
         switch (settingType) {
             case BOOL: checkboxSpr.playAnim(prefValue ? 'open' : 'close');
-            case NUMB:
+            case NUMBER | ARRAY:
                 var prefStr = Std.string(prefValue);
                 switch (itemPref) {
                     case "const-speed": if (prefStr.length <= 1) prefStr += ".0";
@@ -105,7 +111,6 @@ class SettingItem extends FlxSpriteGroup {
 
                 numSetSpr.text = "< " + prefStr + " >";
                 settingTxt.x = 20 + numSetSpr.x + numSetSpr.width;
-            case ARRAY:
         }
     }
 

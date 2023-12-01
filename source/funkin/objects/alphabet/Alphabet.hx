@@ -128,4 +128,44 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
     inline public function splitText(text:String):Array<String> {
         return text.split("");
     }
+
+    override function findMaxXHelper()
+	{
+		var value = Math.NEGATIVE_INFINITY;
+		for (member in _sprites)
+		{
+			if (member == null || !member.alive)
+				continue;
+			
+			var maxX:Float;
+			if (member.flixelType == SPRITEGROUP)
+				maxX = (cast member:FlxSpriteGroup).findMaxX();
+			else
+				maxX = member.x + member.width;
+			
+			if (maxX > value)
+				value = maxX;
+		}
+		return value;
+	}
+
+    override function findMinXHelper()
+	{
+		var value = Math.POSITIVE_INFINITY;
+		for (member in _sprites)
+		{
+			if (member == null || !member.alive)
+				continue;
+			
+			var minX:Float;
+			if (member.flixelType == SPRITEGROUP)
+				minX = (cast member:FlxSpriteGroup).findMinX();
+			else
+				minX = member.x;
+			
+			if (minX < value)
+				value = minX;
+		}
+		return value;
+	}
 }

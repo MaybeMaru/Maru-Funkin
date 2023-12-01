@@ -28,10 +28,10 @@ class PauseSubState extends MusicBeatSubstate {
 		pauseMusic.looped = true;
 		pauseLength = Std.int(pauseMusic.length * 0.5);
 
-		bg = new FlxSprite().makeGraphic(1,1, FlxColor.BLACK);
+		bg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		bg.scrollFactor.set();
 		bg.antialiasing = false;
-		bg.scale.set(1280,720);
+		bg.scale.set(FlxG.width, FlxG.height);
 		bg.updateHitbox();
 		add(bg);
 
@@ -132,10 +132,10 @@ class PauseSubState extends MusicBeatSubstate {
 		super.destroy();
 	}
 
-	function changeSelection(change:Int = 0):Void {
+	inline function changeSelection(change:Int = 0):Void {
 		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
 		for (i in 0...grpMenuShit.members.length) {
-			var item = grpMenuShit.members[i];
+			final item = grpMenuShit.members[i];
 			item.targetY = i - curSelected;
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;
 		}
