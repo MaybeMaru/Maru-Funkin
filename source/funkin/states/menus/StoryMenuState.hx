@@ -284,15 +284,13 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function updateText():Void {
-		final lastMod = ModdingUtil.curModFolder; // Im lazy ok, deal with it
-		ModdingUtil.curModFolder = storyWeeks[curWeek].modFolder;
-		for (i in 0...grpWeekCharacters.members.length) {
-			grpWeekCharacters.members[i].setupChar(getWeekChars()[i]);
-		}
-		ModdingUtil.curModFolder = lastMod;
+		ModdingUtil.runFunctionMod(storyWeeks[curWeek].modFolder, function () {
+			for (i in 0...grpWeekCharacters.members.length)
+				grpWeekCharacters.members[i].setupChar(getWeekChars()[i]);
+		});
 
 		txtTracklist.text = 'Tracks\n';
-		for (song in getCurData().songList.songs) txtTracklist.text += '\n$song';
+		for (song in getCurData().songList.songs) txtTracklist.text += '\n' + song;
 		txtTracklist.text = txtTracklist.text.toUpperCase();
 		txtTracklist.screenCenter(X);
 		txtTracklist.x -= FlxG.width * 0.35;

@@ -223,4 +223,17 @@ class ModdingUtil {
 
         return list;
     }
+
+    public static inline function runFunctionMod(mod:String, func:Dynamic) {
+        runFunctionMods([mod], func);
+    }
+
+    public static inline function runFunctionMods(mods:Array<String>, func:Dynamic) {
+        final lastMod = curModFolder;
+        for (i in 0...mods.length) {
+            curModFolder = mods[i];
+            func();
+        }
+        curModFolder = lastMod;
+    }
 }

@@ -1,7 +1,6 @@
 package funkin.util;
 
 import haxe.io.Path;
-import textureAtlas.TextureAtlas;
 import flixel.system.FlxAssets;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -205,7 +204,8 @@ class Paths
 	}
 
 	inline static public function getTextureAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return TextureAtlas.fromAtlas(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
+		return null;
+		//return TextureAtlas.fromAtlas(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
 	}
 
 	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {

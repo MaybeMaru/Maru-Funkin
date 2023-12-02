@@ -98,9 +98,8 @@ class Conductor {
 				bpmChangeMap.push(event);
 			}
 
-			final deltaSteps:Int = STEPS_PER_MEASURE;
-			totalSteps += deltaSteps;
-			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
+			totalSteps += STEPS_PER_MEASURE;
+			totalPos += ((60 / curBPM) * 250) * STEPS_PER_MEASURE;
 		}
 
 		if (bpmChangeMap.length > 0) {
