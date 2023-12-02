@@ -86,7 +86,7 @@ class FlxFunkText extends FlxSprite {
             alignment = value;
             switch (alignment) {
                 case "right": textFormat.align = RIGHT;
-                case "center": textFormat.align = CENTER;
+                case "center" | "middle": textFormat.align = CENTER;
                 default: textFormat.align = LEFT;
             }
             updateFormat();

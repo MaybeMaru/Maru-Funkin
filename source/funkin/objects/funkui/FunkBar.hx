@@ -1,4 +1,4 @@
-package funkin.objects.ui;
+package funkin.objects.funkui;
 
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;

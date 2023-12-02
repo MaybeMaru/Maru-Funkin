@@ -130,7 +130,7 @@ class Preloader extends flixel.FlxState {
             addBitmap(Paths.getPath('images/$cacheStr.png', IMAGE, null, false, false));
             imageCache.splice(imageCache.indexOf(cacheStr), 1);
 
-            cachePart.text = 'Preloading Sprites...\n$cacheStr';
+            cachePart.text = 'Preloading Sprites...\n' + cacheStr;
             cachePart.screenCenter(X);
 
             var listPercent:Float = (_index/(_length-1))*100;
@@ -144,6 +144,7 @@ class Preloader extends flixel.FlxState {
     inline function exit() {
         FlxG.switchState(new SplashState());
         //FlxG.switchState(new funkin.states.TestState());
+        //FlxG.switchState(new funkin.states.TestStateUI());
     }
 
 	override public function update(elapsed:Float):Void {

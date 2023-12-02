@@ -1,7 +1,7 @@
 package funkin.states;
 
 import funkin.states.editors.StageDebug;
-import funkin.objects.ui.FunkBar;
+import funkin.objects.funkui.FunkBar;
 import funkin.objects.note.StrumLineGroup;
 import funkin.objects.NotesGroup;
 
