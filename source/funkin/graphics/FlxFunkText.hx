@@ -65,7 +65,7 @@ class FlxFunkText extends FlxSprite {
             textField.wordWrap = value;
             updateFormat();
         }
-        return value;
+        return wordWrap = value;
     }
 
     private var _regen:Bool = false;    
