@@ -24,6 +24,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
             _addBar = false;
             _tmr = 0.0;
             __text.text = text;
+            __text.deselect();
         }
         targetColor = selected ? FlxColor.WHITE : HIGHLIGHT_COLOR;
         return selected = value;
@@ -122,8 +123,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     var shiftPress:Bool;
     var ctrlPress:Bool;
 
-    var clipBoard:String = "";
-    var didCut:Bool = false;
+    static var clipBoard:String = "";
 
     function ctrlKeys(key:FlxKey) {
         switch(key) {
@@ -131,18 +131,17 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 __text.setSelection(0, text.length);
             case C: // Copy
                 copySelection();
-                didCut = false;
             case V: // Paste
                 pasteSelection();
-                if (didCut) clipBoard = "";
-                didCut = false;
             case X: // Cut
                 copySelection();
                 removeSelection();
-                didCut = true;
             default:
                 return false;
         }
+
+        _addBar = true;
+        _tmr = 0.75;
         return true;
     }
 
@@ -179,6 +178,10 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         }
 
         switch (key) {
+            case ESCAPE:
+                selected = false;
+                return;
+            
             case SHIFT | CONTROL | TAB: // these aint do nothin
             case CAPSLOCK: capsLock = !capsLock;
             case BACKSPACE:
@@ -193,10 +196,10 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 updateCurLine();
 
             case LEFT | RIGHT:
+                __text.deselect();
                 if (!ctrlPress) { // Normal scrolling
                     wordPos += (key == LEFT ? -1 : 1);
                     wordPos = cast FlxMath.bound(wordPos, 0, text.length);
-                    __text.deselect();
                     updateCurLine();
                 }
                 else { // CONTROL jump scrolling

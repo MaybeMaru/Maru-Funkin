@@ -58,7 +58,7 @@ class FlxFunkText extends FlxSprite {
     public var endSelection:Null<Int> = null;
     public var selected(get, never):Bool;
     function get_selected() {
-        return startSelection != null && endSelection != null;
+        return !(startSelection == null || endSelection == null);
     }
 
     inline public function setSelection(start:Int, end:Int) {

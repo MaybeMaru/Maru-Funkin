@@ -29,18 +29,26 @@ class FunkButton extends FourSideSprite implements IFunkUIObject {
 		text.setPosition(X,Y);
 	}
 
+	static final HIGHLIGHT_COLOR:Int = 0xFFC8C7C7;
+	static final PRESS_COLOR:Int = 0xFF808080;
+
+	var targetColor:FlxColor = FlxColor.WHITE;
+
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 		
 		if (FlxG.mouse.overlaps(this)) {
+			targetColor = HIGHLIGHT_COLOR;
 			if (FlxG.mouse.justPressed) {
-				text.color = color = FlxColor.GRAY;
+				text.color = color = PRESS_COLOR;
 				onClick();
 			}
+		} else {
+			targetColor = FlxColor.WHITE;
 		}
 
-		if (color != FlxColor.WHITE) {
-			text.color = color = FlxColor.interpolate(color, FlxColor.WHITE, elapsed * 10);
+		if (color != targetColor) {
+			text.color = color = FlxColor.interpolate(color, targetColor, elapsed * 10);
 		}
 	}
 
