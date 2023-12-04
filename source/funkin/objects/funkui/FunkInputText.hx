@@ -36,6 +36,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     }
 
     static final HIGHLIGHT_COLOR = 0xFFD8D8D8;
+    static final DESELECT_COLOR = 0xFFA3A3A3;
     
     var _tmr:Float = 0;
     var _addBar(default,set):Bool = false;
@@ -63,8 +64,12 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         }
         if (FlxG.mouse.overlaps(this) || selected) {
             if (!selected) __text.color = color = HIGHLIGHT_COLOR;
-            if (FlxG.mouse.justPressed)
+            if (FlxG.mouse.justPressed) {
                 selected = !selected;
+                if (!selected) {
+                    __text.color = color = DESELECT_COLOR;
+                }
+            }
         }
 
         if (color != targetColor) {
@@ -108,43 +113,102 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     }
 
     var wordPos:Int = 0;
+    var curLine:Int = 0;
+
+    inline function updateCurLine() {
+        curLine = __text.getTextField().getLineIndexOfChar(wordPos);
+    }
+    
+    var shiftPress:Bool;
+    var ctrlPress:Bool;
 
     function runKey(key:FlxKey) {
+        shiftPress = FlxG.keys.pressed.SHIFT;
+        ctrlPress = FlxG.keys.pressed.CONTROL;
+        
+        set_text(text);
+        final txtf = __text.getTextField(); 
+        
         switch (key) {
-            case SHIFT | CONTROL: // these aint do nothin
+            case SHIFT | CONTROL | TAB: // these aint do nothin
             case CAPSLOCK: capsLock = !capsLock;
-            case BACKSPACE: text = text.substring(0, cast Math.max(text.length - 1, 0));
+            case BACKSPACE:
+                text = text.substring(0, wordPos - 1) + text.substring(wordPos);
+                wordPos--;
+                wordPos = cast Math.max(wordPos, 0);
+                updateCurLine();
 
             case LEFT | RIGHT:
-                wordPos += (key == LEFT ? -1 : 1);
-                wordPos = cast FlxMath.bound(wordPos, 0, text.length);
+                if (!ctrlPress) { // Normal scrolling
+                    wordPos += (key == LEFT ? -1 : 1);
+                    wordPos = cast FlxMath.bound(wordPos, 0, text.length);
+                    updateCurLine();
+                }
+                else { // CONTROL jump scrolling
+                    updateCurLine(); // Making sure we are at the correct line
+                    wordPos = txtf.getLineOffset(curLine);
+
+                    if (key == RIGHT) { // Go to the end of the line
+                        var lineLength:Int = txtf.getLineLength(curLine) - 1;
+                        if (curLine == (txtf.numLines - 1)) lineLength++;
+                        wordPos += lineLength;
+                    }
+                }
+
+            case UP | DOWN:
+                if (!__text.wordWrap) return; // Input text doesnt have multiple lines
+                
+                final charLineIndex:Int = wordPos - txtf.getLineOffset(curLine);
+                if (key == UP) {
+                    final prevLineIndex:Int = cast Math.max(curLine - 1, 0);
+                    final prevLineStartIndex:Int = txtf.getLineOffset(prevLineIndex);
+                    wordPos = cast prevLineStartIndex + Math.min(charLineIndex, txtf.getLineLength(prevLineIndex) - 1);
+                }
+                else {
+                    final nextLineIndex:Int = cast Math.min(curLine + 1, txtf.numLines - 1);
+                    final nextLineStartIndex:Int = txtf.getLineOffset(nextLineIndex);
+                    wordPos = cast nextLineStartIndex + Math.min(charLineIndex, txtf.getLineLength(nextLineIndex) - 1);
+                }
+                updateCurLine();
             
             default:
                 wordPos++;
                 switch (key) {
-                    case ENTER: addTxt("\n");
                     case SPACE: addTxt(" ");
+                    case ENTER: if (__text.wordWrap) addTxt("\n");
 
                     case PERIOD: addTxt(".");
                     case COMMA: addTxt(",");
+                    case MINUS | NUMPADMINUS: addTxt("-");
+                    case PLUS | NUMPADPLUS: addTxt("+");
+                    case QUOTE: addTxt("'", "?");
         
-                    case ZERO: addTxt("0");     case ONE: addTxt("1");      case TWO: addTxt("2");
-                    case THREE: addTxt("3");    case FOUR: addTxt("4");     case FIVE: addTxt("5");
-                    case SIX: addTxt("6");      case SEVEN: addTxt("7");    case EIGHT: addTxt("8");
-                    case NINE: addTxt("9");
+                    case ZERO | NUMPADZERO: addTxt("0", "=");
+                    case ONE | NUMPADONE: addTxt("1", "!", "|");
+                    case TWO | NUMPADTWO: addTxt("2", '"', "@");
+                    case THREE | NUMPADTHREE: addTxt("3", "·", "#");
+                    case FOUR | NUMPADFOUR: addTxt("4", "$");
+                    case FIVE | NUMPADFIVE: addTxt("5", "%");
+                    case SIX | NUMPADSIX: addTxt("6","&");
+                    case SEVEN | NUMPADSEVEN: addTxt("7", "/");
+                    case EIGHT | NUMPADEIGHT: addTxt("8", "(");
+                    case NINE | NUMPADNINE: addTxt("9", ")");
 
                     default:
                         final word = FlxKey.toStringMap.get(key);
                         final useCaps = capsLock != FlxG.keys.pressed.SHIFT;
                         addTxt(useCaps ? word : word.toLowerCase());
                 }
+                updateCurLine();
         }
 
         _addBar = true;
         _tmr = 0.75;
     }
     
-    inline function addTxt(str:String) {
+    inline function addTxt(str:String, ?shiftTxt:String, ?ctrlTxt:String) {
+        if (shiftTxt != null && shiftPress) str = shiftTxt;
+        else if (ctrlTxt != null && ctrlPress) str = ctrlTxt;
         text = text.substring(0, wordPos - 1) + str + text.substring(wordPos - 1);
     }
 

@@ -99,6 +99,11 @@ class FlxFunkText extends FlxSprite {
     var _fillRect:Rectangle;
     var _textMatrix:FlxMatrix;
 
+    @:noCompletion
+    inline public function getTextField():TextField {
+        return textField;
+    }
+
     override function destroy() {
         super.destroy();
         textField = null;

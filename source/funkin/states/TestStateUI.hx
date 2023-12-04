@@ -12,13 +12,9 @@ class TestStateUI extends MusicBeatState {
         super();
         
         container = new FunkUIContainer(100, 100, 800, 400);
-        add(container);
+        add(container);        
+        
         for (i in 0...8) {
-            container.add(new FunkInputText(10, 10  + 50 * i, "", null, 1));
-        }
-        
-        
-        /*for (i in 0...8) {
             container.add(new FunkButton(10, 10 + 50 * i, "abcabc", function () {
                 trace("clicked " + i);
             }));
@@ -28,6 +24,10 @@ class TestStateUI extends MusicBeatState {
             container.add(new FunkCheckBox(200, 10 + 50 * i, "abcabc", function (bool) {
                 trace("turned check " + i + " to " + bool);
             }));
-        }*/
+        }
+
+        for (i in 0...2) {
+            container.add(new FunkInputText(350, 10  + 100 * i, "", null, 4));
+        }
     }
 }
