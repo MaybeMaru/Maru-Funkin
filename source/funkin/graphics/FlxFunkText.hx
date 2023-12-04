@@ -16,7 +16,7 @@ enum TextStyle {
 
 class FlxFunkText extends FlxSprite {
     public var text(default, set):String = "";
-    function set_text(value:String) {
+    inline function set_text(value:String) {
         if (value != text) {
             textField.text = value;
             _regen = true;
@@ -24,8 +24,13 @@ class FlxFunkText extends FlxSprite {
         return text = value;
     }
 
+    public var length(get, never):Int;
+    inline function get_length() {
+        return text.length;
+    }
+
     public var size(default, set):Int = 16;
-    function set_size(value:Int) {
+    inline function set_size(value:Int) {
         if (value != textFormat.size) {
             textFormat.size = value;
             updateFormat();
@@ -39,13 +44,37 @@ class FlxFunkText extends FlxSprite {
     }
 
     public var font(default, set):String = "vcr";
-    function set_font(value:String = "vcr") {
+    inline function set_font(value:String = "vcr") {
         if (font != value) {
             textFormat.font = getFont(value);
             font = textFormat.font;
             updateFormat();
         }
         return value;
+    }
+
+    
+    public var startSelection:Null<Int> = null;    
+    public var endSelection:Null<Int> = null;
+    public var selected(get, never):Bool;
+    function get_selected() {
+        return startSelection != null && endSelection != null;
+    }
+
+    inline public function setSelection(start:Int, end:Int) {
+        if (start != startSelection && end != endSelection) {
+            startSelection = start;
+            endSelection = end;
+            _regen = true;
+        }
+    }
+
+    inline public function deselect() {
+        if (selected) {
+            startSelection = null;
+            endSelection = null;
+            _regen = true;
+        }
     }
 
     inline function updateFormat() {
@@ -63,7 +92,7 @@ class FlxFunkText extends FlxSprite {
     function set_wordWrap(value:Bool) {
         if (wordWrap != value) {
             textField.wordWrap = value;
-            updateFormat();
+            _regen = true;
         }
         return wordWrap = value;
     }
@@ -72,6 +101,8 @@ class FlxFunkText extends FlxSprite {
     function drawTextField() {        
         _textMatrix.tx = textField.x;
         _textMatrix.ty = textField.y;
+
+        textField.setSelection(startSelection ?? 0, endSelection ?? 0);
 
         @:privateAccess
         textField.__textEngine.update();

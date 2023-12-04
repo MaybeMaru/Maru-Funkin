@@ -122,35 +122,90 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     var shiftPress:Bool;
     var ctrlPress:Bool;
 
+    var clipBoard:String = "";
+    var didCut:Bool = false;
+
+    function ctrlKeys(key:FlxKey) {
+        switch(key) {
+            case A: // Get all
+                __text.setSelection(0, text.length);
+            case C: // Copy
+                copySelection();
+                didCut = false;
+            case V: // Paste
+                pasteSelection();
+                if (didCut) clipBoard = "";
+                didCut = false;
+            case X: // Cut
+                copySelection();
+                removeSelection();
+                didCut = true;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    inline function pasteSelection() {
+        final prefix = text.substring(0, wordPos);
+        final suffix = text.substring(wordPos);
+
+        text = prefix + clipBoard;
+        wordPos = text.length;
+        text += suffix;
+    }
+
+    inline function copySelection() {
+        if (__text.startSelection != null) {
+            clipBoard = text.substring(__text.startSelection, __text.endSelection);
+        }
+    }
+
+    inline function removeSelection() {
+        text = text.substring(0, __text.startSelection) + text.substring(__text.endSelection);
+        wordPos =  __text.startSelection;
+        __text.deselect();
+    }
+
     function runKey(key:FlxKey) {
         shiftPress = FlxG.keys.pressed.SHIFT;
         ctrlPress = FlxG.keys.pressed.CONTROL;
         
         set_text(text);
-        final txtf = __text.getTextField(); 
-        
+        final field = __text.getTextField(); 
+
+        if (ctrlPress) {
+            if (ctrlKeys(key)) return;
+        }
+
         switch (key) {
             case SHIFT | CONTROL | TAB: // these aint do nothin
             case CAPSLOCK: capsLock = !capsLock;
             case BACKSPACE:
-                text = text.substring(0, wordPos - 1) + text.substring(wordPos);
-                wordPos--;
-                wordPos = cast Math.max(wordPos, 0);
+                if (__text.startSelection != null) {
+                    removeSelection();
+                }
+                else {
+                    text = text.substring(0, wordPos - 1) + text.substring(wordPos);
+                    wordPos--;
+                    wordPos = cast Math.max(wordPos, 0);
+                }
                 updateCurLine();
 
             case LEFT | RIGHT:
                 if (!ctrlPress) { // Normal scrolling
                     wordPos += (key == LEFT ? -1 : 1);
                     wordPos = cast FlxMath.bound(wordPos, 0, text.length);
+                    __text.deselect();
                     updateCurLine();
                 }
                 else { // CONTROL jump scrolling
                     updateCurLine(); // Making sure we are at the correct line
-                    wordPos = txtf.getLineOffset(curLine);
+                    wordPos = field.getLineOffset(curLine);
 
                     if (key == RIGHT) { // Go to the end of the line
-                        var lineLength:Int = txtf.getLineLength(curLine) - 1;
-                        if (curLine == (txtf.numLines - 1)) lineLength++;
+                        var lineLength:Int = field.getLineLength(curLine) - 1;
+                        if (curLine == (field.numLines - 1)) lineLength++;
                         wordPos += lineLength;
                     }
                 }
@@ -158,16 +213,16 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
             case UP | DOWN:
                 if (!__text.wordWrap) return; // Input text doesnt have multiple lines
                 
-                final charLineIndex:Int = wordPos - txtf.getLineOffset(curLine);
+                final charLineIndex:Int = wordPos - field.getLineOffset(curLine);
                 if (key == UP) {
                     final prevLineIndex:Int = cast Math.max(curLine - 1, 0);
-                    final prevLineStartIndex:Int = txtf.getLineOffset(prevLineIndex);
-                    wordPos = cast prevLineStartIndex + Math.min(charLineIndex, txtf.getLineLength(prevLineIndex) - 1);
+                    final prevLineStartIndex:Int = field.getLineOffset(prevLineIndex);
+                    wordPos = cast prevLineStartIndex + Math.min(charLineIndex, field.getLineLength(prevLineIndex) - 1);
                 }
                 else {
-                    final nextLineIndex:Int = cast Math.min(curLine + 1, txtf.numLines - 1);
-                    final nextLineStartIndex:Int = txtf.getLineOffset(nextLineIndex);
-                    wordPos = cast nextLineStartIndex + Math.min(charLineIndex, txtf.getLineLength(nextLineIndex) - 1);
+                    final nextLineIndex:Int = cast Math.min(curLine + 1, field.numLines - 1);
+                    final nextLineStartIndex:Int = field.getLineOffset(nextLineIndex);
+                    wordPos = cast nextLineStartIndex + Math.min(charLineIndex, field.getLineLength(nextLineIndex) - 1);
                 }
                 updateCurLine();
             
