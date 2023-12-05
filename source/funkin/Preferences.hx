@@ -46,12 +46,12 @@ class Preferences {
         fixOldPrefs();
     }
 
-    inline public static function addPref(id:String, label:String, defaultValue:Dynamic):Void {
+    public static function addPref(id:String, label:String, defaultValue:Dynamic):Void {
         id = id.toLowerCase().trim();
         prefsArray.push(id);
 
         prefsLabels.set(id, label);
-        if (defaultValue.array != null) arrayPrefs.set(id, defaultValue);
+        if (Reflect.hasField(defaultValue, "array")) arrayPrefs.set(id, defaultValue);
         if (!preferences.exists(id)) preferences.set(id, defaultValue);
     }
 
@@ -77,8 +77,9 @@ class Preferences {
     }
 
     inline public static function getPref(pref:String):Dynamic {
-        final pref:Dynamic = cast preferences.get(pref.toLowerCase().trim());
-        return pref?.value ?? pref;
+        final pref:Dynamic = preferences.get(pref.toLowerCase().trim());
+        #if !hl return  pref?.value ?? pref;
+        #else   return Reflect.hasField(pref, "value") ? pref.value : pref; #end
     }
 
     inline public static function setPref(pref:String, value:Dynamic):Void {

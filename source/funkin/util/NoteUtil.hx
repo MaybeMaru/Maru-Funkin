@@ -119,7 +119,7 @@ class NoteUtil {
                 //susPieceMap.set(i, createLoopBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
                 susPieceMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
     
-                refSprite.animation.play('hold$i-end', true);
+                refSprite.animation.play('hold' + i + '-end', true);
                 refSprite.updateHitbox();
                 refSprite.drawFrame();
                 susEndMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);

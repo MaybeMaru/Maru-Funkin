@@ -199,9 +199,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		animDatas = null;
 	}
 
-	public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
+	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
 		final matrix:FlxMatrix = new FlxMatrix();
 		matrix.translate(X,Y);
 		graphic.bitmap.draw(Brush, matrix);
+	}
+
+	inline public function uploadGpu(key:String) {
+		return AssetManager.uploadSpriteGpu(this, key);
 	}
 }

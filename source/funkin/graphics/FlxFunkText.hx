@@ -55,15 +55,15 @@ class FlxFunkText extends FlxSprite {
     }
 
     
-    public var startSelection:Null<Int> = null;    
-    public var endSelection:Null<Int> = null;
+    public var startSelection:Int = -1;    
+    public var endSelection:Int = -1;
     public var selected(get, never):Bool;
     function get_selected() {
-        return !(startSelection == null || endSelection == null);
+        return startSelection != -1 && endSelection != -1 && !(startSelection == 0 && endSelection == 0);//(startSelection != -1) && (endSelection ?? -1) != -1) && (startSelection != 0 && endSelection != 0);
     }
 
     inline public function setSelection(start:Int, end:Int) {
-        if (start != startSelection && end != endSelection) {
+        if ((start != startSelection) || (end != endSelection)) {
             startSelection = start;
             endSelection = end;
             _regen = true;
@@ -72,8 +72,8 @@ class FlxFunkText extends FlxSprite {
 
     inline public function deselect() {
         if (selected) {
-            startSelection = null;
-            endSelection = null;
+            startSelection = -1;
+            endSelection = -1;
             _regen = true;
         }
     }
@@ -105,10 +105,10 @@ class FlxFunkText extends FlxSprite {
 
         if (selected) {
             textField.setSelection(startSelection, endSelection);
+            textField.__dirty = true;
+			textField.__setRenderDirty();
         }
 
-        @:privateAccess
-        textField.__textEngine.update();
         pixels.fillRect(_fillRect, FlxColor.TRANSPARENT);
         pixels.draw(textField, _textMatrix, null, null, null, antialiasing);
     }

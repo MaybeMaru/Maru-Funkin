@@ -30,28 +30,30 @@ class Preloader extends flixel.FlxState {
         return cachedGraphics.exists(key);
     }
 
-    public static function uploadTexture(bmp:BitmapData, key:String) {
-        #if !hl
-        var _texture = null;
-        if (cachedTextures.exists(key)) _texture = cachedTextures.get(key);
-        else {
-            _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, BGR_PACKED, true);
-            _texture.uploadFromBitmapData(bmp);
-            cachedTextures.set(key, _texture);
-        }
-        AssetManager.disposeBitmap(bmp);
-        bmp = null;
-        final graphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(_texture));
-        #else
-        final graphic = FlxGraphic.fromBitmapData(bmp);
-        #end
+    public static inline function makeGraphic(bpm:BitmapData, key:String):FlxGraphic {
+        final graphic = FlxGraphic.fromBitmapData(makeBitmap(bpm, key));
         graphic.persist = true;
         graphic.destroyOnNoUse = false;
         return graphic;
     }
 
+    public static inline function makeBitmap(bmp:BitmapData, key:String):BitmapData {
+        return #if hl bmp #else BitmapData.fromTexture(uploadTexture(bmp, key))#end ;
+    }
+
+    #if !hl
+    public static function uploadTexture(bmp:BitmapData, key:String) {
+        if (cachedTextures.exists(key))  return cachedTextures.get(key);
+        final _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, BGR_PACKED, true);
+        _texture.uploadFromBitmapData(bmp);
+        AssetManager.disposeBitmap(bmp);
+        cachedTextures.set(key, _texture);
+        return _texture;
+    }
+    #end
+
     public static function addFromBitmap(bmp:BitmapData, key:String) {        
-        final graphic:FlxGraphic = uploadTexture(bmp, key);
+        final graphic:FlxGraphic = makeGraphic(bmp, key);
         cachedGraphics.set(key, graphic);
         return graphic;
     }

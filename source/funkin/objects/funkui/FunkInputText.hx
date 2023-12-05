@@ -13,6 +13,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         __text = new FunkUIText(X, Y, text, width - 3, cast height - 2);
         __text.offset.set(-3,-2);
         __text.wordWrap = lines != 1;
+        __text.deselect();
 
         this.text = text;
         wordPos = text.length;
@@ -26,8 +27,8 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
             _tmr = 0.0;
             __text.text = text;
             __text.deselect();
+            if (overlap) setColor(FlxColor.WHITE);
         }
-        targetColor = selected ? FlxColor.WHITE : HIGHLIGHT_COLOR;
         return selected = value;
     }
 
@@ -38,7 +39,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     }
 
     static final HIGHLIGHT_COLOR = 0xFFD8D8D8;
-    static final DESELECT_COLOR = 0xFFA3A3A3;
+    static final CLICK_COLOR = 0xFFA3A3A3;
     
     var _tmr:Float = 0;
     var _addBar(default,set):Bool = false;
@@ -51,9 +52,19 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     }
 
     var targetColor = FlxColor.WHITE;
+    inline function setColor(c:FlxColor) {
+        __text.color = color = c;
+    }
+
+    var overlap:Bool = false;
+    var mouseClick:Bool = false;
+    var mousePress:Bool = false;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+        overlap = FlxG.mouse.overlaps(this);
+        mouseClick = FlxG.mouse.justPressed;
+        mousePress = FlxG.mouse.pressed;
 
         if (selected) {
             _tmr -= elapsed;
@@ -62,20 +73,30 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 _addBar = !_addBar;
             }
 
-            textInput();
+
+            if (mouseClick && !overlap) {  // DESELECT
+                selected = false;
+            }
+            else {
+                mouseInput();
+                textInput();
+            }   
         }
-        if (FlxG.mouse.overlaps(this) || selected) {
-            if (!selected) __text.color = color = HIGHLIGHT_COLOR;
-            if (FlxG.mouse.justPressed) {
-                selected = !selected;
-                if (!selected) {
-                    __text.color = color = DESELECT_COLOR;
+        else {
+            if (overlap) {
+                targetColor = HIGHLIGHT_COLOR;
+                if (mouseClick) {
+                    selected = true;
+                    setColor(CLICK_COLOR);
                 }
+            }
+            else {
+                targetColor = FlxColor.WHITE;
             }
         }
 
         if (color != targetColor) {
-			__text.color = color = FlxColor.interpolate(color, targetColor, elapsed * 10);
+			setColor(FlxColor.interpolate(color, targetColor, elapsed * 10));
 		}
     }
 
@@ -88,6 +109,21 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     inline function resetHold() {
         __pressTmr = 0.4;
         __pressAt = 0.0;
+    }
+
+    function mouseInput() {
+        if (mousePress) {
+            final mousePos = FlxG.mouse.getScreenPosition();
+            final fieldPos = __text.getScreenPosition();
+            var mouseIndex = __text.getTextField().getCharIndexAtPoint(mousePos.x - fieldPos.x, mousePos.y - fieldPos.y);
+
+            if (mouseClick)
+                __text.setSelection(mouseIndex, mouseIndex);
+            else {
+                if (mouseIndex > 0) mouseIndex++;
+                __text.setSelection(__text.startSelection, mouseIndex == -1 ? __text.startSelection : mouseIndex);
+            }
+        }
     }
 
     function textInput() {
@@ -156,9 +192,8 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     }
 
     inline function copySelection() {
-        if (__text.startSelection != null) {
+        if (__text.selected)
             clipBoard = text.substring(__text.startSelection, __text.endSelection);
-        }
     }
 
     inline function removeSelection() {
@@ -186,7 +221,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
             case SHIFT | CONTROL | TAB: // these aint do nothin
             case CAPSLOCK: capsLock = !capsLock;
             case BACKSPACE:
-                if (__text.startSelection != null) {
+                if (__text.selected) {
                     removeSelection();
                 }
                 else {
@@ -197,8 +232,12 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 updateCurLine();
 
             case LEFT | RIGHT:
-                __text.deselect();
-                if (!ctrlPress) { // Normal scrolling
+                if (__text.selected) { // SELECTED jump scrolling
+                    final start:Int = cast Math.min( __text.startSelection, __text.endSelection);
+                    final end:Int = cast Math.max( __text.startSelection, __text.endSelection);
+                    wordPos = (key == LEFT) ? start : end;
+                }
+                else if (!ctrlPress) { // Normal scrolling
                     wordPos += (key == LEFT ? -1 : 1);
                     wordPos = cast FlxMath.bound(wordPos, 0, text.length);
                     updateCurLine();
@@ -213,6 +252,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                         wordPos += lineLength;
                     }
                 }
+                __text.deselect();
 
             case UP | DOWN:
                 __text.deselect();

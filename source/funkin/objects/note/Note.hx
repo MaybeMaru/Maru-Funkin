@@ -226,8 +226,7 @@ class Note extends FlxSpriteExt implements INoteData {
             pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
             stampBitmap(susEnd, 0, endPos);
             
-            final gpuGraphic = AssetManager.uploadGraphicGPU(key); // After this the sustain bitmap data wont be readable, sorry
-            frames = gpuGraphic.imageFrame;
+            frames = AssetManager.uploadGpuFromKey(key).imageFrame; // After this the sustain bitmap data wont be readable, sorry
             origin.set(width * 0.5, 0);
         }
     }

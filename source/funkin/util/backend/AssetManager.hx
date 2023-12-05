@@ -106,13 +106,25 @@ class AssetManager {
 		return getGraphic(key, cache).bitmap;
 	}
 
-	static public function uploadGraphicGPU(key:String) {
+	static public function uploadGpuFromKey(key:String) {
 		if (!existsGraphic(key)) return null;
 		final graphic = getGraphic(key);
-		final gpuGraphic = Preloader.uploadTexture(graphic.bitmap, key);
+		final gpuGraphic = Preloader.makeGraphic(graphic.bitmap, key);
 		removeGraphicByKey(key);
 		cachedGraphics.set(key, gpuGraphic);
 		return gpuGraphic;
+	}
+
+	static public inline function uploadSpriteGpu(sprite:FlxSprite, key:String):FlxGraphic {
+		if (#if hl true #else sprite.frames.parent.bitmap.readable == false #end) return null; // Already uploaded bitmap
+
+		final gpuGraphic = Preloader.makeGraphic(sprite.frames.parent.bitmap, key);
+		for (i in 0...sprite.frames.frames.length) {
+			final frame = sprite.frames.frames[i];
+			frame.parent = gpuGraphic;
+		}
+
+		return sprite.frames.parent = gpuGraphic;
 	}
 
 	public static function clearSoundCache(forced:Bool = false) {
