@@ -3,7 +3,8 @@ import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 class InputFormatter {
-	public static function getKeyName(keyStr:String):String {
+	public static function getKeyName(?keyStr:String):String {
+		if (keyStr == null) return "";
 		if (Controls.gamepad != null) {
 			/*switch (FlxGamepadInputID.fromString(keyStr)) {
 				case FlxGamepadInputID.DPAD_UP: return 'DpUp';
@@ -13,26 +14,26 @@ class InputFormatter {
 			}*/
 		} else {
 			switch (FlxKey.fromString(keyStr)) {
-				case FlxKey.BACKSPACE:		return 'BckSpc'; case FlxKey.CONTROL: 		return 'Ctrl';
-				case FlxKey.ALT:			return 'Alt';    case FlxKey.CAPSLOCK: 		return 'Caps';
-				case FlxKey.PAGEUP:			return 'PgUp';   case FlxKey.PAGEDOWN: 		return 'PgDown';
-				case FlxKey.ZERO:			return '0';  	 case FlxKey.ONE: 			return '1';
-				case FlxKey.TWO:			return '2';  	 case FlxKey.THREE: 		return '3';
-				case FlxKey.FOUR:			return '4';  	 case FlxKey.FIVE: 			return '5';
-				case FlxKey.SIX:			return '6';  	 case FlxKey.SEVEN: 		return '7';
-				case FlxKey.EIGHT:			return '8';  	 case FlxKey.NINE: 			return '9';
-				case FlxKey.NUMPADZERO:		return '#0';  	 case FlxKey.NUMPADONE: 	return '#1';
-				case FlxKey.NUMPADTWO:		return '#2';  	 case FlxKey.NUMPADTHREE: 	return '#3';
-				case FlxKey.NUMPADFOUR:		return '#4';  	 case FlxKey.NUMPADFIVE: 	return '#5';
-				case FlxKey.NUMPADSIX:		return '#6';  	 case FlxKey.NUMPADSEVEN: 	return '#7';
-				case FlxKey.NUMPADEIGHT:	return '#8';  	 case FlxKey.NUMPADNINE: 	return '#9';
-				case FlxKey.NUMPADMULTIPLY:	return '#*';  	 case FlxKey.NUMPADPLUS: 	return '#+';
-				case FlxKey.NUMPADMINUS:	return '#-';  	 case FlxKey.NUMPADPERIOD:  return '#.';
-				case FlxKey.SEMICOLON:		return ';';  	 case FlxKey.COMMA: 		return ',';
-				case FlxKey.PERIOD:			return '.';  	 case FlxKey.SLASH: 		return '/';
-				case FlxKey.GRAVEACCENT:	return '`';  	 case FlxKey.LBRACKET: 		return '[';
-				case FlxKey.BACKSLASH:		return '\\';  	 case FlxKey.RBRACKET: 		return ']';
-				case FlxKey.QUOTE:			return '\'';  	 case FlxKey.PRINTSCREEN: 	return 'PrtScrn';
+				case BACKSPACE:		 return 'BckSpc'; case CONTROL: 		return 'Ctrl';
+				case ALT:			 return 'Alt';    case CAPSLOCK: 		return 'Caps';
+				case PAGEUP:		 return 'PgUp';   case PAGEDOWN: 		return 'PgDown';
+				case ZERO:			 return '0';  	  case ONE: 			return '1';
+				case TWO:			 return '2';  	  case THREE: 			return '3';
+				case FOUR:			 return '4';  	  case FIVE: 			return '5';
+				case SIX:			 return '6';  	  case SEVEN: 			return '7';
+				case EIGHT:			 return '8';  	  case NINE: 			return '9';
+				case NUMPADZERO:	 return '#0';  	  case NUMPADONE: 		return '#1';
+				case NUMPADTWO:		 return '#2';  	  case NUMPADTHREE: 	return '#3';
+				case NUMPADFOUR:	 return '#4';  	  case NUMPADFIVE: 		return '#5';
+				case NUMPADSIX:		 return '#6';  	  case NUMPADSEVEN: 	return '#7';
+				case NUMPADEIGHT:	 return '#8';  	  case NUMPADNINE: 		return '#9';
+				case NUMPADMULTIPLY: return '#*';  	  case NUMPADPLUS: 		return '#+';
+				case NUMPADMINUS:	 return '#-';  	  case NUMPADPERIOD:  	return '#.';
+				case SEMICOLON:		 return ';';  	  case COMMA: 			return ',';
+				case PERIOD:		 return '.';  	  case SLASH: 			return '/';
+				case GRAVEACCENT:	 return '`';  	  case LBRACKET: 		return '[';
+				case BACKSLASH:		 return '\\';  	  case RBRACKET: 		return ']';
+				case QUOTE:			 return '\'';  	  case PRINTSCREEN: 	return 'PrtScrn';
 				default:
 			}
 		}

@@ -17,7 +17,7 @@ class PromptSubstate extends MusicBeatSubstate {
         prompBox.screenCenter();
         add(prompBox);
 
-        var prompText:Alphabet = new Alphabet(FlxG.width/2,prompBox.y+75, text, true, 0, textScale);
+        var prompText:Alphabet = new Alphabet(FlxG.width * 0.5 ,prompBox.y + 75, text, true, 0, textScale);
         prompText.alignment = CENTER;
         add(prompText);
 
@@ -25,7 +25,7 @@ class PromptSubstate extends MusicBeatSubstate {
         for (i in [bg,prompBox,prompText]) i.scrollFactor.set();
     }
 
-    var startTimer:Float = 0.333;
+    var startTimer:Float = 0.15;
     var canClick:Bool = false;
 
     override function update(elapsed:Float) {

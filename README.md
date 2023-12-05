@@ -12,6 +12,11 @@ Current version is beta 1.0, beta 2.0 coming out soon!
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
 
+## NOTE
+
+At the moment HashLink support is extremely experimental. Dont expect it to be super stable or
+optimized just yet (it bad lol). Please just use Windows or Linux builds.
+
 ## How to make a mod
 
 Documentation on how to make mods is being done on the repo's github wiki! Ill add more stuff

@@ -20,7 +20,7 @@ class AssetManager {
 	}
     
 	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		if (gpu) {
+		if (#if !hl gpu #else false #end) {
 			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
 			else if (Paths.exists(path, IMAGE)) {
 				final bitmap:BitmapData = getBitmapData(path);
