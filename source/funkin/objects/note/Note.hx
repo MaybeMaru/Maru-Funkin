@@ -94,7 +94,11 @@ class Note extends FlxSpriteExt implements INoteData {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (targetStrum == null) return; // Move to strum
+        if (targetStrum == null) { // No strum to move towards
+            __doDraw();
+            return; 
+        }
+
         noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
         strumCenter = isSustainNote ? targetStrum.y + targetStrum.swagHeight * 0.5 : targetStrum.y; // Center of the target strum
         y = strumCenter - (noteMove * getCos(approachAngle)); // Set Position
@@ -117,6 +121,7 @@ class Note extends FlxSpriteExt implements INoteData {
             calcHit();
         }
 
+        __doDraw();
         active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
@@ -132,10 +137,7 @@ class Note extends FlxSpriteExt implements INoteData {
     }
 
     override function draw() { // This should help a bit on performance
-        if (drawNote) {
-            __doDraw();
-            super.draw();
-        }
+        if (drawNote) super.draw();
     }
 
     inline public function hideNote() {
