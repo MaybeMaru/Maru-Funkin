@@ -74,4 +74,9 @@ class FlxFunkSoundTray extends FlxSoundTray {
 		visible = active = true;
         _bar.scaleX = FlxG.sound.muted ? 0 : FlxG.sound.volume;
     }
+
+    override function screenCenter() {
+        _defaultScale = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height) * 2;
+        super.screenCenter();
+    }
 }

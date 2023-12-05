@@ -14,6 +14,7 @@ enum TextStyle {
     SHADOW(offset:FlxPoint, ?color:FlxColor);
 }
 
+@:access(openfl.text.TextField)
 class FlxFunkText extends FlxSprite {
     public var text(default, set):String = "";
     inline function set_text(value:String) {
@@ -85,11 +86,11 @@ class FlxFunkText extends FlxSprite {
 
     public var textWidth(get, never):Float;
     public var textHeight(get, never):Float;
-    function get_textWidth() @:privateAccess return textField.__textEngine.textWidth;
-    function get_textHeight() @:privateAccess return textField.__textEngine.textHeight;
+    function get_textWidth() return textField.__textEngine.textWidth;
+    function get_textHeight() return textField.__textEngine.textHeight;
 
     public var wordWrap(default, set):Bool = false;
-    function set_wordWrap(value:Bool) {
+    function set_wordWrap(value:Bool):Bool {
         if (wordWrap != value) {
             textField.wordWrap = value;
             _regen = true;
@@ -102,7 +103,9 @@ class FlxFunkText extends FlxSprite {
         _textMatrix.tx = textField.x;
         _textMatrix.ty = textField.y;
 
-        textField.setSelection(startSelection ?? 0, endSelection ?? 0);
+        if (selected) {
+            textField.setSelection(startSelection, endSelection);
+        }
 
         @:privateAccess
         textField.__textEngine.update();

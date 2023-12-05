@@ -16,8 +16,9 @@ class ResizableSprite extends Sprite {
     }
     
     function onResize(_):Void {
-        scaleX = FlxG.stage.stageWidth / FlxG.width;
-        scaleY = FlxG.stage.stageHeight / FlxG.height;
+        final _scale = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
+        scaleX = _scale;
+        scaleY = _scale;
     }
 }
 

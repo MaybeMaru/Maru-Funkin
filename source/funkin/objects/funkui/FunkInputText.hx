@@ -6,11 +6,12 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
 	public var ogY:Float;
     
     public function new(X:Float, Y:Float, text:String = "", ?Width:Int, lines:Int = 1) {
-        super(X, Y, Width ?? 375, lines = cast Math.max(lines, 1) * 20 + (5 / lines), 0xff343638);
+        super(X, Y, Width ?? 375, (lines = cast Math.max(lines, 1) * 20 + (5 / lines)) + 6, 0xff343638);
         ogX = X;
         ogY = Y;
 
-        __text = new FunkUIText(X, Y, text, width, cast height);
+        __text = new FunkUIText(X, Y, text, width - 3, cast height - 2);
+        __text.offset.set(-3,-2);
         __text.wordWrap = lines != 1;
 
         this.text = text;
@@ -43,8 +44,8 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
     var _addBar(default,set):Bool = false;
     function set__addBar(value:Bool):Bool {
         __text.text = text;
-        if (value) {
-           __text.text = __text.text.substring(0, wordPos) + "|" + __text.text.substring(wordPos);
+        if (value && !__text.selected) {
+           __text.text = text.substring(0, wordPos) + "|" + text.substring(wordPos);
         }
         return _addBar = value;
     }
@@ -214,6 +215,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 }
 
             case UP | DOWN:
+                __text.deselect();
                 if (!__text.wordWrap) return; // Input text doesnt have multiple lines
                 
                 final charLineIndex:Int = wordPos - field.getLineOffset(curLine);
@@ -235,10 +237,10 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                     case SPACE: addTxt(" ");
                     case ENTER: if (__text.wordWrap) addTxt("\n");
 
-                    case PERIOD: addTxt(".");
-                    case COMMA: addTxt(",");
-                    case MINUS | NUMPADMINUS: addTxt("-");
-                    case PLUS | NUMPADPLUS: addTxt("+");
+                    case PERIOD: addTxt(".", ":");
+                    case COMMA: addTxt(",", ";");
+                    case MINUS | NUMPADMINUS: addTxt("-", "_");
+                    case PLUS | NUMPADPLUS: addTxt("+", "*");
                     case QUOTE: addTxt("'", "?");
         
                     case ZERO | NUMPADZERO: addTxt("0", "=");
