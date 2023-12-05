@@ -603,9 +603,11 @@ class PlayState extends MusicBeatState {
 	inline public function snapCamera() {
 		camGame.focusOn(camFollow.getPosition());
 	}
+
+	public var camMove:Bool = true;
 	
 	public function cameraMovement():Void {
-		if (!notesGroup.generatedMusic || curSectionData == null) return;
+		if (!camMove || !notesGroup.generatedMusic || curSectionData == null) return;
 		final mustHit:Bool = curSectionData.mustHitSection;
 		mustHit ? boyfriend.prepareCamPoint(targetCamPos) : dad.prepareCamPoint(targetCamPos);
 
