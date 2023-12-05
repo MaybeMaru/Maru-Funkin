@@ -94,7 +94,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	override function destroy() {
 		instance = null;
 		super.destroy();
-		CoolUtil.runGc(false); // Minor Gc Clear
+		CoolUtil.gc(false);
 	}
 
 	// Some shortcuts

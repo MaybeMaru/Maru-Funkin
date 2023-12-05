@@ -643,8 +643,8 @@ class ChartingState extends MusicBeatState {
 		}, _);
 	}
 
-    function saveJson(input:Any, fileName:String) {
-        final data:String = cast input is String ? input : FunkyJson.stringify(input, "\t");
+    function saveJson(input:Dynamic, fileName:String) {
+        final data:String = input is String ? input : FunkyJson.stringify(input, "\t");
         if (data.length > 0) {
 			final chartFile:FileReference = new FileReference();
 			chartFile.save(data.trim(), '$fileName.json');

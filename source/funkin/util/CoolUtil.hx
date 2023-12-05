@@ -1,10 +1,14 @@
 package funkin.util;
 
+import funkin.util.backend.SongZip;
+//import openfl.system.System;
 #if cpp
 import cpp.vm.Gc;
+#elseif hl
+import hl.Gc;
+#elseif neko
+import neko.vm.Gc;
 #end
-import funkin.util.backend.SongZip;
-import openfl.system.System;
 
 typedef CacheClearing =  {
 	?bitmap:Bool,
@@ -77,14 +81,17 @@ class CoolUtil {
 		if (cacheClear.sustains) NoteUtil.clearSustainCache();
 		if (cacheClear.sounds) AssetManager.clearSoundCache(!softClear);
 		if (cacheClear.shaders) Shader.clearShaders();
-		runGc(true); // Major gc clear
+		gc(true);
 	}
 	
-	inline public static function runGc(major:Bool = true) {
-		System.gc();
-		#if cpp
-		Gc.run(major);
-		if (major) Gc.compact();
+	inline public static function gc(major:Bool = false) {
+		#if hl
+			Gc.blocking(true);
+			Gc.major();
+			Gc.blocking(false);
+		#else
+			Gc.run(major);
+			#if cpp if (major) Gc.compact(); #end
 		#end
 	}
 

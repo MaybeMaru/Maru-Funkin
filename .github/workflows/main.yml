@@ -65,3 +65,31 @@ jobs:
           name: Maru-Funkin-Linux
           path: export/release/linux/bin
           if-no-files-found: error
+  
+  hashlinkBuild:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@main
+        with:
+          submodules: true
+
+      - name: Install & Setup Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.3
+
+      - name: Install Libraries
+        run: |
+          haxe -cp ./actions -D analyzer-optimize -main Main --interp
+
+      - name: Build
+        run: haxelib run lime build hl
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Maru-Funkin-HashLink
+          path: export/release/hl/bin
+          if-no-files-found: error
