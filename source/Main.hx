@@ -125,11 +125,6 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		addChild(new FlxFunkGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-
-		#if !mobile
-		fpsCounter = new FPS_Mem(10,10,0xffffff);
-		addChild(fpsCounter);
-		#end
+		addChild(new FlxFunkGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 	}
 }

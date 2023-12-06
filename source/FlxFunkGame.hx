@@ -9,6 +9,7 @@ import flixel.FlxGame;
 class FlxFunkGame extends FlxGame {
     public var transition:Transition;
     public var console:ScriptConsole;
+    public var fpsCounter:FPS_Mem;
     
     public function new(gameWidth:Int = 0, gameHeight:Int = 0, ?initialState:Class<FlxState>, updateFramerate:Int = 60, drawFramerate:Int = 60, skipSplash:Bool = false, startFullscreen:Bool = false) {
         super(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen);
@@ -20,7 +21,13 @@ class FlxFunkGame extends FlxGame {
 
         addChild(Main.transition = transition = new Transition());
         addChild(Main.console = console = new ScriptConsole());
+
+        #if !mobile
+        addChild(Main.fpsCounter = fpsCounter = new FPS_Mem(10,10,0xffffff));
+        #end
+
         FlxG.mouse.useSystemCursor = true;
+        Preferences.effectPrefs();
     }
 
     override function update() {

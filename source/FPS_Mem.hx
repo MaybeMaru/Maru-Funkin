@@ -1,7 +1,7 @@
 package;
 
+import lime.text.UTF8String;
 import haxe.Timer;
-import openfl.display.FPS;
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;
@@ -37,21 +37,27 @@ class FPS_Mem extends TextField
 		height = 80;
 	}
 
+	static final memDiv:Float = 0.00009536743;
+
 	private function onEnter(_)
 	{	
-		var now = Timer.stamp();
+		if (!visible) return;
+
+		final now = Timer.stamp();
 		times.push(now);
 
 		while (times[0] < now - 1)
 			times.shift();
 
-		var fps:Int = times.length;
-		var mem:Float = Math.round(System.totalMemory / 1024 / 1024 * 100)/100;
+		final fps:Int = times.length;
+		final mem:Float = Math.round(System.totalMemory * memDiv) * 0.01;
 		if (mem > memPeak) memPeak = mem;
 
-		if (visible)
-			text = 
-			'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
-			'RAM: $mem mb/$memPeak mb';
+		final result:UTF8String =
+		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
+		'RAM: $mem mb/$memPeak mb';
+
+		if (text != result)
+			text = result;
 	}
 }

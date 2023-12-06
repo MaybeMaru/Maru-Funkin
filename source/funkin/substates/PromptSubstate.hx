@@ -21,7 +21,7 @@ class PromptSubstate extends MusicBeatSubstate {
         prompText.alignment = CENTER;
         add(prompText);
 
-        cameras = [CoolUtil.getTopCam()];
+        camera = CoolUtil.getTopCam();
         for (i in [bg,prompBox,prompText]) i.scrollFactor.set();
     }
 

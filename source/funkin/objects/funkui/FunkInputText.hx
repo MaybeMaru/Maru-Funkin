@@ -51,6 +51,11 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         return _addBar = value;
     }
 
+    inline function resetCaret() {
+        _addBar = true;
+        _tmr = 0.75;
+    }
+
     var targetColor = FlxColor.WHITE;
     inline function setColor(c:FlxColor) {
         __text.color = color = c;
@@ -111,17 +116,29 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         __pressAt = 0.0;
     }
 
+    var _lastSelect:Int = 0;
+
     function mouseInput() {
         if (mousePress) {
             final mousePos = FlxG.mouse.getScreenPosition();
             final fieldPos = __text.getScreenPosition();
             var mouseIndex = __text.getTextField().getCharIndexAtPoint(mousePos.x - fieldPos.x, mousePos.y - fieldPos.y);
 
-            if (mouseClick)
+            if (mouseClick) {
                 __text.setSelection(mouseIndex, mouseIndex);
+                _lastSelect = mouseIndex;
+                if (mouseIndex != -1) wordPos = mouseIndex;
+            }
             else {
+                if (mouseIndex == _lastSelect) {
+                    __text.deselect();
+                    resetCaret();
+                    return;
+                }
                 if (mouseIndex > 0) mouseIndex++;
-                __text.setSelection(__text.startSelection, mouseIndex == -1 ? __text.startSelection : mouseIndex);
+                __text.setSelection(_lastSelect, mouseIndex == -1 ? _lastSelect : mouseIndex);
+                _tmr = 0.0;
+                _addBar = false;
             }
         }
     }
@@ -177,8 +194,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 return false;
         }
 
-        _addBar = true;
-        _tmr = 0.75;
+        resetCaret();
         return true;
     }
 
@@ -302,8 +318,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
                 updateCurLine();
         }
 
-        _addBar = true;
-        _tmr = 0.75;
+        resetCaret();
     }
     
     inline function addTxt(str:String, ?shiftTxt:String, ?ctrlTxt:String) {

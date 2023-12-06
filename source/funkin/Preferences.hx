@@ -42,7 +42,6 @@ class Preferences {
         #end
 
         SaveData.flushData();
-        effectPrefs();
         fixOldPrefs();
     }
 
@@ -58,10 +57,7 @@ class Preferences {
     public static function effectPrefs():Void {
         FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
-
-        if (Main.fpsCounter != null) {
-            Main.fpsCounter.visible = getPref('fps-counter');
-        }
+        Main.fpsCounter.visible = getPref('fps-counter');
     }
 
     private static function fixOldPrefs() {
