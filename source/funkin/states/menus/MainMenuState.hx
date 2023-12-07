@@ -115,9 +115,11 @@ class MainMenuState extends MusicBeatState {
 				switchState(new TitleState());
 			}
 
+			#if desktop
 			if (FlxG.keys.justPressed.SEVEN) {
 				switchState(new funkin.states.editors.ModSetupState());
 			}
+			#end
 
 			if (getKey('ACCEPT-P')) {
 				if (optionShit[curSelected] == 'donate') {

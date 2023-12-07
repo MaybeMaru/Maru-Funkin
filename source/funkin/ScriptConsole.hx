@@ -1,5 +1,6 @@
 package funkin;
 
+import haxe.ds.Vector;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
 import flixel.system.FlxAssets;
@@ -18,10 +19,9 @@ enum PrintType {
     WARNING;
 }
 
-class ConsolePrint extends Sprite {
-	private var icon:Bitmap;
+class Print extends Sprite {
+	var icon:Bitmap;
     public var textField:TextField;
-    public var nextPrint:ConsolePrint = null;
 
     static inline var frameSize:Int = 16;
     static var iconFrames:Array<BitmapData> = [];
@@ -34,6 +34,12 @@ class ConsolePrint extends Sprite {
         }
     }
 
+    static var typeMap:Map<PrintType, {frame:Int, color:FlxColor}> = [
+        ADD => {frame: 0, color: FlxColor.LIME},
+        ERROR => {frame: 1, color: FlxColor.RED},
+        WARNING => {frame: 2, color: FlxColor.YELLOW}
+    ];
+
 	public function new() {
 		super();
 		icon = new Bitmap();
@@ -44,71 +50,67 @@ class ConsolePrint extends Sprite {
 		textField = new TextField();
         textField.multiline = true;
 		textField.wordWrap = true;
-        textField.width = Lib.current.stage.stageWidth / 2.3;
-		textField.defaultTextFormat = new TextFormat(FlxAssets.FONT_DEFAULT, 12, 0xFFFFFF);
+        textField.width = (Lib.current.stage.stageWidth / 2.3) - 50;
+		textField.defaultTextFormat = new TextFormat(Paths.font("roboto"), 14, 0xFFFFFF);
         addChild(textField);
-	}
 
-    static var typeMap:Map<PrintType, {frame:Int, color:FlxColor}> = [
-        ADD => {frame: 0, color: FlxColor.LIME},
-        ERROR => {frame: 1, color: FlxColor.RED},
-        WARNING => {frame: 2, color: FlxColor.YELLOW}
-    ];
-
-    var type = null;
-
-	public function init(text:String, type:PrintType) {
-		time = 7;
-        textField.alpha = icon.alpha = 1;
-        textField.text = text;
-		x = 26;
+        x = 26;
         y = 50;
-
-        if (this.type != type) {
-            this.type = type;
-            if (type == NONE) {
-                icon.visible = false;
-                setColor(FlxColor.WHITE);
-            } else {
-                final _data = typeMap.get(type);
-                icon.visible = true;
-                icon.bitmapData = iconFrames[_data.frame];
-                setColor(_data.color);
-            }
-        }
 	}
 
-    function setColor(color:Int) {
-        textField.textColor = color;
+    public var type(default, set):PrintType = NONE;
+    inline function set_type(value:PrintType):PrintType {
+        switch (value) {
+            case NONE:
+                icon.visible = false;
+                color = FlxColor.WHITE;
+            default:
+                icon.visible = true;
+                icon.bitmapData = iconFrames[typeMap[value].frame];
+                color = typeMap[value].color;
+        }
+        return type = value;
     }
 
-    public var alive:Bool = true;
-    public function kill() {
-        time = 0;
-        alive = visible = false;
+    public var text(default, set):String = "";
+    inline function set_text(value:String):String {
+        return text = textField.text = value;
     }
 
-    public function revive() {
-        alive = visible = true;
+    public var color(default, set):Int = FlxColor.WHITE;
+    inline function set_color(value:Int):Int {
+        return color = textField.textColor = value;
     }
 
-    var time:Float = 0;
-    public function update(elapsed:Float) {
-        if (time > 0) {
-            time -= elapsed;
-            textField.alpha = icon.alpha = time;
-            if (time <= 0) {
-                kill();
-            }
+    public var timer:Float = 7.0;
+    inline public function resetTimer() {
+        timer = 7.0;
+        alpha = 1;
+    }
+
+    inline public function hide() {
+        timer = 0.0;
+        alpha = 0;
+    }
+
+    public function update(e:Float) {
+        if (timer > 0) {
+            timer -= e;
+            alpha = timer;
         }
     }
 }
+
+typedef PrintData = {text:String, type:PrintType, lines:Int};
 
 class ScriptConsole extends ResizableSprite {
 	public static var show:Bool = false;
     private var targetX:Float = 0;
 	public var bg:Shape;
-	public var prints:Sprite;
+
+    var prints:Vector<Print>;
+    var printCache:Vector<PrintData>;
+    static final printsLength:Int = 38;
 	
 	public function new() {
 		super();
@@ -118,70 +120,59 @@ class ScriptConsole extends ResizableSprite {
         bg.graphics.endFill();
         addChild(bg);
 
-		prints = new Sprite();
-		addChild(prints);
-
 		x = -bg.width;
         targetX = x;
 		
-        ConsolePrint.initFrames();
+        Print.initFrames();
+        printCache = new Vector<PrintData>(printsLength, {text: "", type: NONE, lines: 1});
+        prints = new Vector<Print>(printsLength, null);
+        for (i in 0...printsLength) {
+            final print = new Print();
+            prints[i] = print;
+            addChild(print);
+        }
 	}
 
-    inline function forEachPrint(func:Dynamic, alive:Bool = false) {
-        for (i in prints.__children) {
-            if (i is ConsolePrint) {
-                final _p = cast (i, ConsolePrint);
-                if (alive == false || _p.alive == alive)
-                    if (func(_p)) break;
+    public function print(p:Dynamic, type:PrintType = NONE) {
+        // Move last prints down
+        for (i in 0...printsLength-1) {
+            final id:Int = printsLength-i-1;
+
+            final print = prints[id];
+            final lastPrint = prints[id-1];
+
+            print.text = lastPrint.text;
+            print.type = lastPrint.type;
+            print.alpha = lastPrint.alpha;
+            print.timer = lastPrint.timer;
+        }
+
+        // Display the new print
+        final text:String = Std.string(p);
+        prints[0].text = text;
+        prints[0].type = type;
+        prints[0].resetTimer();
+
+        // Move down all the prints
+        var Y = 50;
+        for (i in 0...printsLength) {
+            prints[i].y = Y;
+            if (Y > 620) {
+                prints[i].hide();
             }
-        } 
+            Y += prints[i].textField.numLines * 16;
+        }
     }
 
-    var _lastPrint:ConsolePrint = null;
-
-	public function print(text:String, type:PrintType) {
-        var _print = null; // Get dead prints
-        forEachPrint(function (p:ConsolePrint) {
-            if (!p.alive) {
-                _print = p; // Reuse print
-                _print.revive();
-                return true;
-            }
-            return false;
-        });
-        
-        if (_print == null) {
-            _print = new ConsolePrint();
-            prints.addChild(_print);
-        }
-
-		_print.init(text, type);
-        if (_lastPrint != null) {
-            _lastPrint.nextPrint = _print;
-        }
-        _lastPrint = _print;
-
-        forEachPrint(function (p:ConsolePrint) {
-            if (p != _print) {
-                final movePrint:Float =  p?.nextPrint?.textField.textHeight ?? 16.0;
-                p.y += movePrint;
-                if (p.y >= 650) {
-                    p.kill();
-                }
-            }
-        }, true);
-	}
-
     public function clear() {
-        for (i in prints.__children) {
-            if (i is ConsolePrint)
-                cast (i, ConsolePrint).kill();
+        for (i in 0...printsLength) {
+            prints[i].hide();
         }
     }
 
 	var tmr:Float = 0;
 	public function update(elapsed:Float) {
-		if (tmr <= 0) {
+        if (tmr <= 0) { // Show / hide console
 			if (FlxG.keys.justPressed.F1) {
 				tmr = 0.1; // Fix spam issue
 				show = !show;
@@ -193,15 +184,12 @@ class ScriptConsole extends ResizableSprite {
 		}
 
         if (show) {
-            for (i in prints.__children) {
-                if (i is ConsolePrint) {
-                    final _p = cast (i, ConsolePrint);
-                    if (_p.alive) _p.update(elapsed);
-                }
+            for (i in 0...printsLength) {
+                prints[i].update(elapsed);
             }
         }
 
-		if (x != targetX) {
+		if (x != targetX) { // Lerp console x
 			x = CoolUtil.coolLerp(x, targetX, 0.25);
 			x = Math.abs(x - targetX) < 1 ? targetX : x;
 		} else {

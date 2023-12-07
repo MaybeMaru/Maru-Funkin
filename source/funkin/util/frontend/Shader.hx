@@ -55,6 +55,7 @@ class Shader
 
 	public static function initShader(shader:String, ?tag:String, force:Bool = false):Void
 	{
+		#if web return; #end
 		if (shaderMap.exists(shader) && !force)
 			return;
 

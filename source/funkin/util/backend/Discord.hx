@@ -12,7 +12,7 @@ class DiscordClient
 
 	public function new()
 	{
-		#if cpp
+		#if DISCORD_ALLOWED
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "1168666530788163705", // 814588678700924999
@@ -35,14 +35,14 @@ class DiscordClient
 
 	public static function shutdown()
 	{
-		#if cpp
+		#if DISCORD_ALLOWED
 		DiscordRpc.shutdown();
 		#end
 	}
 	
 	static function onReady()
 	{
-		#if cpp
+		#if DISCORD_ALLOWED
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
@@ -64,7 +64,7 @@ class DiscordClient
 
 	public static function initialize()
 	{
-		#if cpp
+		#if DISCORD_ALLOWED
 		var DiscordDaemon = sys.thread.Thread.create(() ->
 		{
 			new DiscordClient();
@@ -75,7 +75,7 @@ class DiscordClient
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
 	{
-		#if cpp
+		#if DISCORD_ALLOWED
 		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
 
 		if (endTimestamp > 0)

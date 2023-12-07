@@ -75,6 +75,7 @@
 	<!-- ______________________________ Funkdefines _____________________________ -->
 
 	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>
+	<define name="DISCORD_ALLOWED" if="cpp"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

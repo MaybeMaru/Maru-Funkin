@@ -17,7 +17,7 @@ class InitState extends FlxState {
         Conductor.init();
 		CoolUtil.init();
 		Highscore.load();
-		#if cpp
+		#if DISCORD_ALLOWED
 		DiscordClient.initialize();
 		lime.app.Application.current.onExit.add (function (exitCode) DiscordClient.shutdown());
         #end
@@ -91,9 +91,11 @@ class Main extends Sprite
 	}
 
 	static function errorMsg(error:Dynamic) {
+		#if desktop
 		Application.current.window.alert(Std.string(error is UncaughtErrorEvent ? error.error : error), "Uncaught Error");
 		DiscordClient.shutdown();
 		Sys.exit(1);
+		#end
 	}
 
 	public function new()

@@ -5,13 +5,13 @@ package funkin.states.editors;
     just adding the essentials quickly with drag n drop and shit
 */
 
-import haxe.io.Path;
-import flixel.addons.ui.FlxUICheckBox;
-import funkin.substates.PromptSubstate;
-import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUI;
-import flixel.addons.ui.FlxUITabMenu;
+import flixel.addons.ui.FlxUIButton;
+import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIInputText;
+import flixel.addons.ui.FlxUITabMenu;
+import funkin.substates.PromptSubstate;
+import haxe.io.Path;
 import sys.io.File;
 
 /*
@@ -37,7 +37,7 @@ class ModSetupTabs extends FlxUITabMenu {
 		return false;
 	}
 
-    static var invalidFolderCharacters(default, never):Array<String> = ["/",":","*","?",'"',"<",">","|"];
+    static final invalidFolderCharacters:Array<String> = ["/",":","*","?",'"',"<",">","|","."];
     
     public function new() {
         super(null,[{name:"Setup Mod Folder", label: "Setup Mod Folder"}], true);
@@ -72,7 +72,7 @@ class ModSetupTabs extends FlxUITabMenu {
             }
             
             for (i in invalidFolderCharacters) {
-                if (modFolder.contains(i)) {
+                if (modFolder.contains(i) || modFolder.endsWith(".")) {
                     CoolUtil.playSound("rejectMenu");
                     return; // Invalid folder character
                 }

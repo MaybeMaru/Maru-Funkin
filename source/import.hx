@@ -15,14 +15,16 @@ import funkin.util.backend.AssetManager;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
 import funkin.util.frontend.Shader;
-#if desktop
 import funkin.util.backend.Discord;
 import funkin.util.backend.Discord.DiscordClient;
+#if desktop
 #if VIDEOS_ALLOWED
 import hxcodec.flixel.FlxVideo;
 #end
+#if sys
 import sys.io.File;
 import sys.FileSystem;
+#end
 #end
 import funkin.util.modding.FunkScript;
 import funkin.util.modding.ModdingUtil;

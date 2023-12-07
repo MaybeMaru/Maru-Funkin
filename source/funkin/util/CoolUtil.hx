@@ -1,7 +1,9 @@
 package funkin.util;
 
+#if desktop
 import funkin.util.backend.SongZip;
-//import openfl.system.System;
+#end
+
 #if cpp
 import cpp.vm.Gc;
 #elseif hl
@@ -85,6 +87,7 @@ class CoolUtil {
 	}
 	
 	inline public static function gc(major:Bool = false) {
+		#if desktop
 		#if hl
 			Gc.blocking(true);
 			Gc.major();
@@ -92,6 +95,7 @@ class CoolUtil {
 		#else
 			Gc.run(major);
 			#if cpp if (major) Gc.compact(); #end
+		#end
 		#end
 	}
 

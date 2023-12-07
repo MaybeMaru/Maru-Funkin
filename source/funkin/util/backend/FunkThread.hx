@@ -1,8 +1,7 @@
 package funkin.util.backend;
 
-//#if sys
+#if sys
 import sys.thread.Thread;
-//#end
 
 /*
     Still figuring this shit out lol
@@ -21,7 +20,6 @@ class FunkThread {
     }
     
     public static function runThread(func:Dynamic, id:Int = 0) {
-        //#if sys
         var thread:Null<Thread> = null;
         if (exists(id)) {
             thread = get(id);
@@ -37,9 +35,21 @@ class FunkThread {
             threadsMap.set(id, thread);
         }
         return thread;
-        /*#else
-        func();
-        return null;
-        #end*/
     }
 }
+#else
+class FunkThread {
+    public static inline function get(id:Int = 0) {
+        return null;
+    }
+
+    public static inline function exists(id:Int = 0):Bool {
+        return false;
+    }
+
+    public static function runThread(func:Dynamic, id:Int = 0) {
+        func();
+        return null;
+    }
+}
+#end
