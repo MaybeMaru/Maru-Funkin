@@ -33,10 +33,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	public var specialAnim:Bool = false;
 	public var _packer:PackerType = IMAGE;
 
-    public function new(?X:Float = 0, ?Y:Float = 0):Void {
+    public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset):Void {
         animOffsets = new Map<String, FlxPoint>();
 		animDatas = new Map<String, SpriteAnimation>();
-        super(X,Y);
+        super(X,Y,SimpleGraphic);
     }
 
 	inline public function setScale(_scale:Float = 1, updateBox:Bool = true) {

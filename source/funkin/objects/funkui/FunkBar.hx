@@ -1,6 +1,5 @@
 package funkin.objects.funkui;
 
-import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 import haxe.ds.Vector;
 
