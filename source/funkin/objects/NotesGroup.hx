@@ -269,10 +269,6 @@ class NotesGroup extends FlxGroup
 
 		unspawnNotes.sort(CoolUtil.sortByStrumTime);
 		events.sort(CoolUtil.sortByStrumTime);
-
-		var i:Int = 0;
-		while (i < unspawnNotes.length)
-			unspawnNotes[i++].__doDraw();
 		
 		if (isPlayState) {
 			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);

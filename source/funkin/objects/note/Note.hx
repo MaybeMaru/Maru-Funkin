@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import flixel.graphics.frames.FlxFrame;
+import funkin.graphics.SmartSprite;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 import funkin.objects.NotesGroup;
@@ -8,7 +10,7 @@ interface INoteData {
     public var noteData:Int;
 }
 
-class Note extends FlxSpriteExt implements INoteData {
+class Note extends SmartSprite implements INoteData {
     public var noteData:Int = 0;
     public var strumTime:Float = 0;
 
@@ -22,10 +24,8 @@ class Note extends FlxSpriteExt implements INoteData {
     public var parentNote:Note = null; // For sustain notes
     public var childNote:Note = null; // For normal notes
 
-    // Used for stampBitmap() !!!
-    var susPiece:BitmapData;
-    var susEnd:BitmapData;
     var refSprite:FlxSpriteExt;
+    var tail:FlxSprite; // Used for sustains !!!
 
     public function createGraphic(init:Bool = true) {
         if (isSustainNote) {
@@ -38,7 +38,7 @@ class Note extends FlxSpriteExt implements INoteData {
             updateAnims();
         }
 
-        setScale(skinJson.scale, true);
+        setScale(skinJson.scale);
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
 
         if (!isSustainNote) {
@@ -54,13 +54,15 @@ class Note extends FlxSpriteExt implements INoteData {
         if (!isSustainNote) playAnim('scroll' + CoolUtil.directionArray[noteData]);
     }
 
-    public var susOffsetX:Float = 0;
     inline public function setupSustain() {
         if (isSustainNote) {
-            drawSustain(true);
-            susOffsetX = NoteUtil.swagWidth * 0.5 - width * 0.5;
-            offset.set(-susOffsetX,0);
+            drawSustain();
+            updateHitbox();
+            offset.x -= (NoteUtil.swagWidth * 0.5) - (width * 0.5);
             alpha = 0.6;
+
+            renderMode = REPEAT;
+            drawStyle = BOTTOM_TOP;
         }
     }
     
@@ -94,10 +96,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (targetStrum == null) { // No strum to move towards
-            __doDraw();
-            return; 
-        }
+        if (targetStrum == null) return; 
 
         noteMove = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
         strumCenter = isSustainNote ? targetStrum.y + targetStrum.swagHeight * 0.5 : targetStrum.y; // Center of the target strum
@@ -110,10 +109,6 @@ class Note extends FlxSpriteExt implements INoteData {
                 
             inSustain = getInSustain(20); // lil extra time to be sure
 
-            offset.y = 0;
-            if (noteSpeed < 1) // I have no idea, just dont ask
-                offset.y = (getMillPos(initSusLength) / scale.y - height) * scale.y * -getCos();
-
             if (Conductor.songPosition >= strumTime && pressed && !missedPress) { // Sustain is being pressed
                 setSusPressed();
             }
@@ -121,24 +116,10 @@ class Note extends FlxSpriteExt implements INoteData {
             calcHit();
         }
 
-        __doDraw();
         active = Conductor.songPosition < (strumTime + initSusLength + getPosMill(NoteUtil.swagHeight * 2));
     }
 
     public var drawNote:Bool = true;
-    var __queueDraw:Bool = false;
-
-    @:noCompletion
-    public inline function __doDraw() {
-        if (isSustainNote && __queueDraw) {
-            __queueDraw = false;
-            drawSustain();
-        }
-    }
-
-    override function draw() { // This should help a bit on performance
-        if (drawNote) super.draw();
-    }
 
     inline public function hideNote() {
         active = drawNote = false;
@@ -155,7 +136,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     inline public function setSusPressed() {
         y = strumCenter;
-        __queueDraw = true;
+        drawSustain();
     }
 
     inline public function getCos(?_angle) {
@@ -168,70 +149,37 @@ class Note extends FlxSpriteExt implements INoteData {
 
     function set_susLength(value:Float):Float {
         susLength = Math.max(value, 0);
-        __queueDraw = true;
+        drawSustain();
         return value;
     }
 
     function set_noteSpeed(value:Float):Float {
         if (noteSpeed == value) return value;
         noteSpeed = value;
-        __queueDraw = true;
+        drawSustain();
         return value;
     }
 
     public var percentCut:Float = 0;
-    public var percentLeft:Float = 1;
     public var susEndHeight:Int = 15;
-    static var susRect:FlxRect = FlxRect.get();
-
-    public function drawSustain(forced:Bool = false, ?newHeight:Int) {
+    
+    public function drawSustain(?newHeight:Int) {
         if (!isSustainNote) return;
-        final _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
-        if (_height > (susEndHeight * (noteSpeed * 0.5) / scale.y)) {
-            if (_height == height) return;
-            if (forced || (_height > height)) { // New graphic
-                drawSustainCached(_height);
-            }
-            else { // Cut
-                _frame = frame.clipTo(susRect.set(0, height - _height, width, _height).round());       
-                offset.y = (_height - height) * scale.y * -getCos();
-                percentCut = (1 / height * _height);
-                percentLeft = _height / height;
-            }
+        final susHeight = newHeight ?? getMillPos(getSusLeft());
+        if (susHeight > susEndHeight * (noteSpeed * 0.5)) {
+            setRepeat(frameWidth * scale.x, susHeight);
+            percentCut = (1 / initSusLength * getSusLeft());
         }
         else kill(); // youre USELESS >:(
     }
 
-    private var curKey:String = "";
-
-    public function drawSustainCached(_height:Int) {
-        final key:String = 'sus$noteData-$_height-$skin';
-        if (curKey == key) return;
-        curKey = key;
-        if (AssetManager.existsGraphic(key)) { // Save on drawing the graphic more than one time?
-            frames = AssetManager.getGraphic(key).imageFrame;
-            origin.set(width * 0.5, 0);
-            return;
-        } else {
-            updateSprites();
-            frames = AssetManager.addGraphic(cast susPiece.width, _height, FlxColor.TRANSPARENT, key).imageFrame;
-        
-            // draw piece
-            final loops = Math.floor(_height / susPiece.height) + 1;
-            for (i in 0...loops)
-                stampBitmap(susPiece, 0, (_height - susEnd.height) - (i * susPiece.height));
-            
-            //draw end
-            final endPos = _height - susEnd.height;
-            pixels.fillRect(new Rectangle(0, endPos, width, susEnd.height), FlxColor.fromRGB(0,0,0,0));
-            stampBitmap(susEnd, 0, endPos);
-            
-            #if !hl
-            frames = AssetManager.uploadGpuFromKey(key).imageFrame; // After this the sustain bitmap data wont be readable, sorry
-            #end
-
-            origin.set(width * 0.5, 0);
+    override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData) {
+        if (tileY == 0) {
+            tail._frame.frame.height *= tileFrame.frame.height / baseFrame.frame.height;
+            tail._frame.frame.y =  tail.frame.frame.height - tail._frame.frame.height;
+            super.drawTile(tileX, tileY, tail._frame, tail.frame, tail.framePixels);
         }
+        else super.drawTile(tileX, tileY, tileFrame, baseFrame, bitmap);
     }
 
     inline public function getPosMill(pos:Float, ?_speed:Float):Float { // Converts a position on screen to song milliseconds
@@ -282,8 +230,11 @@ class Note extends FlxSpriteExt implements INoteData {
     public function updateSprites() {
         final mapData = NoteUtil.getSkinSprites(skin, noteData);
         refSprite = mapData.baseSprite;
-        susPiece = mapData.susPiece;
-        susEnd = mapData.susEnd;
+        if (isSustainNote) {
+            loadGraphic(mapData.susPiece);
+            tail = mapData.susEnd;
+            updateHitbox();
+        }
         skinJson = mapData.skinJson;
     }
 
