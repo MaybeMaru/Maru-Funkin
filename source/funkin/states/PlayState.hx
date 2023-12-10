@@ -129,6 +129,8 @@ class PlayState extends MusicBeatState {
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap-style') == "on";
+		if (getPref('ghost-tap-style') == "dad turn" && SONG.notes[0] != null)
+			ghostTapEnabled = !SONG.notes[0].mustHitSection;
 
 		SkinUtil.initSkinData();
 		NoteUtil.initTypes();

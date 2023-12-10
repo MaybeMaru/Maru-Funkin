@@ -57,13 +57,17 @@ class Note extends FlxSpriteExt implements INoteData {
     inline public function setupSustain() {
         if (isSustainNote) {
             drawSustain(true);
+            alpha = 0.6;
             offset.set(-0.5 * (Math.abs(scale.x) * frameWidth - frameWidth), 0);
             offset.x -= (NoteUtil.swagWidth * 0.5) - (Math.abs(scale.x) * frameWidth * 0.5);
-            alpha = 0.6;
+            
+            final _anim = 'hold' + CoolUtil.directionArray[noteData];
+            if (animOffsets.exists(_anim))
+                offset.x += animOffsets.get(_anim).x;
         }
     }
     
-    public function new (noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
+    public function new(noteData:Int = 0, strumTime:Float = 0, susLength:Float = 0, skin:String = 'default') {
         super();
         this.noteData = noteData;
         this.strumTime = strumTime;

@@ -6,7 +6,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
 	public var ogY:Float;
     
     public function new(X:Float, Y:Float, text:String = "", ?Width:Int, lines:Int = 1) {
-        super(X, Y, Width ?? 375, (lines = cast Math.max(lines, 1) * 20 + (5 / lines)) + 6, 0xff343638);
+        super(X, Y, Width ?? 375, (lines = cast Math.max(lines, 1) * 20 + (5 / lines)), 0xff343638);
         ogX = X;
         ogY = Y;
 

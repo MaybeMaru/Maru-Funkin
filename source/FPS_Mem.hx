@@ -32,10 +32,21 @@ class FPS_Mem extends TextField
 		times = [];
 
 		addEventListener(Event.ENTER_FRAME, onEnter);
+		addEventListener(Event.ADDED_TO_STAGE, create);
 
 		width = 200;
 		height = 80;
 	}
+
+	function create(_):Void {
+        stage.addEventListener(Event.RESIZE, onResize);
+    }
+
+	function onResize(_):Void {
+        final _scale = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
+        scaleX = _scale;
+        scaleY = _scale;
+    }
 
 	static final memDiv:Float = 0.00009536743;
 

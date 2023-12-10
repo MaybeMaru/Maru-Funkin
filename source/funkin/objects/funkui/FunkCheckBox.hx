@@ -33,7 +33,7 @@ class FunkCheckBox extends FlxSprite implements IFunkUIObject {
         }
     }
     
-    private var text:FlxFunkText;
+    private var text:FunkUIText;
     public var ogX:Float;
 	public var ogY:Float;
 	

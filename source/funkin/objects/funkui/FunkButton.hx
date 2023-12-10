@@ -26,7 +26,7 @@ class FunkButton extends FourSideSprite implements IFunkUIObject {
 
 	public function setUIPosition(X:Float, Y:Float) {
 		setPosition(X,Y);
-		text.setPosition(X,Y);
+		text.setPosition(X, Y + 1);
 	}
 
 	static final HIGHLIGHT_COLOR:Int = 0xFFC8C7C7;

@@ -3,6 +3,8 @@ package funkin.objects.funkui;
 class FunkUIContainer extends FourSideSprite{
     private var __group:FlxGroup;
     
+    public var displacement:FlxPoint = FlxPoint.get();
+    
     public function new(?X:Float, ?Y:Float, Width:Int = 500, Height:Int = 500) {
         __group = new FlxGroup();
         super(X, Y, Width,Height,0xff212325);
@@ -11,8 +13,13 @@ class FunkUIContainer extends FourSideSprite{
     function __updatePositions() {
         for (i in 0...__group.members.length) {
             final object:Dynamic = __group.members[i];
-            object.setUIPosition(object.ogX + x, object.ogY + y);
+            object.setUIPosition(displacement.x + object.ogX + x, displacement.y + object.ogY + y);
         }
+    }
+
+    public function setDisplacement(X:Float = 0, Y:Float = 0) {
+        displacement.set(X,Y);
+        __updatePositions();
     }
 
     override function set_x(value:Float):Float {
@@ -28,7 +35,7 @@ class FunkUIContainer extends FourSideSprite{
     }
 
     public function add(object:IFunkUIObject) {
-        object.setUIPosition(object.ogX + x, object.ogY + y);
+        object.setUIPosition(displacement.x + object.ogX + x, displacement.y + object.ogY + y);
         __group.add(cast object);
     }
 
@@ -44,6 +51,7 @@ class FunkUIContainer extends FourSideSprite{
 
     override function destroy() {
         super.destroy();
-        __group.destroy();
+        __group = FlxDestroyUtil.destroy(__group);
+        displacement = FlxDestroyUtil.put(displacement);
     }
 }
