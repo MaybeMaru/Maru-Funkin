@@ -235,28 +235,16 @@ class ChartNote extends Note {
         updateHitbox();
 
         if (isSustainNote) {
-            /*final _scale = _parent.scale.x;
-            setupSustain();
+            alpha = 0.6;
+            final _scale = _parent.scale.x;
             setScale(_scale);
             
             final _off = ChartingState.getYtime(GRID_SIZE * 0.5);
             final _height = Math.floor(((FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE))) / _scale);
-            setRepeat(frameWidth * scale.x, _height);
+            drawSustainCached(_height);
+            updateHitbox();
             offset.x -= GRID_SIZE * 0.5 - width / 2.125;
-            offset.y -= GRID_SIZE * 0.5;*/
-
-            if (tail == null) {
-                updateSprites();
-            }
-
-            setScale(_parent.scale.x);
-            renderMode = REPEAT;
-            drawStyle = BOTTOM_TOP;
-
-            final _off = ChartingState.getYtime(GRID_SIZE * 0.5);
-            final _height = FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE);
-            setRepeat(frameWidth * scale.x, _height);
-
+            offset.y -= GRID_SIZE * 0.5;
         } else {
             alpha = 1;
             setGraphicSize(GRID_SIZE, GRID_SIZE);

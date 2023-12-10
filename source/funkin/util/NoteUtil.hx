@@ -103,12 +103,12 @@ class NoteUtil {
             refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
         final susPieceMap:Map<String, BitmapData> = [];
-        final susEndMap:Map<String, FlxSprite> = [];
+        final susEndMap:Map<String, BitmapData> = [];
 
         if (AssetManager.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
             for (i in CoolUtil.directionArray) {
                 susPieceMap.set(i, AssetManager.getGraphic('sus-bitmap-$skin-hold-$i').bitmap);
-                susEndMap.set(i,new FlxSprite(AssetManager.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap));
+                susEndMap.set(i,AssetManager.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap);
             }
         }
         else {
@@ -116,12 +116,13 @@ class NoteUtil {
                 refSprite.animation.play('hold' + i, true);
                 refSprite.updateHitbox();
                 refSprite.drawFrame();
+                //susPieceMap.set(i, createLoopBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
                 susPieceMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
     
                 refSprite.animation.play('hold' + i + '-end', true);
                 refSprite.updateHitbox();
                 refSprite.drawFrame();
-                susEndMap.set(i, new FlxSprite(AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap));
+                susEndMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
             }
         }
 
@@ -134,6 +135,23 @@ class NoteUtil {
         skinSpriteMap.set(skin, addMap);
         return addMap;
     }
+
+    /*
+     *  Save on calculations????
+     */
+
+    /*static function createLoopBitmap(input:BitmapData, key:String):BitmapData { // Wont use until i fix clipping bitmaps
+        var loops:Int = Std.int(Math.max(input.height/12, 1));
+        var loopedBitmap:BitmapData = new BitmapData(input.width, input.height*loops, true, FlxColor.fromRGB(0,0,0,0));
+        for (i in 0...loops) {
+           var matrix:FlxMatrix = new FlxMatrix();
+           matrix.translate(0, i*input.height);
+           loopedBitmap.draw(input, matrix);
+        }
+        input.dispose();
+        input.disposeImage();
+        return Paths.addGraphicFromBitmap(loopedBitmap, key, true).bitmap;
+    }*/
     
     public static function getSkinSprites(skin:String, noteData:Int = 0):SkinMapData {
         if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
@@ -176,13 +194,13 @@ class NoteUtil {
 typedef SkinMapData = {
     baseSprite:FlxSpriteExt,
     susPiece:BitmapData,
-    susEnd:FlxSprite,
+    susEnd:BitmapData,
     skinJson:NoteSkinData
 }
 
 typedef SkinSpriteData = {
     baseSprite:FlxSpriteExt,
     susPieces:Map<String, BitmapData>,
-    susEnds:Map<String, FlxSprite>,
+    susEnds:Map<String, BitmapData>,
     skinJson:NoteSkinData
 }
