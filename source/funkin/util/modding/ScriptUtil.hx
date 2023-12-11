@@ -30,12 +30,20 @@ class ScriptUtil {
     
     public static function getSprite(key:String) {
         for (i in ['fg', 'bg']) {
-            final sprKey = '_${i}_sprite_$key';
+            final sprKey = getSpriteKey(i, key);
             if (objMap.exists(sprKey))
                 return objMap.get(sprKey);
         }
         ModdingUtil.errorPrint('Sprite not found: $key');
-        return null;	
+        return null;
+    }
+
+    public static function existsSprite(key:String) {
+        for (i in ['fg', 'bg']) {
+            if (objMap.exists(getSpriteKey(i, key)))
+                return true;
+        }
+        return false;	
     }
 
     inline public static function formatSpriteKey(key:String, layer:SpriteLayer) {
@@ -46,8 +54,26 @@ class ScriptUtil {
         return '_${group}_sprite_$key';
     }
 
+    inline public static function existsGroup(key:String) {
+        return objMap.exists(getGroupKey(key));
+    }
+
     inline public static function getGroup(key:String) {
-        return key == 'fg' ? PlayState.instance.fgSpr : PlayState.instance.bgSpr;
+        switch(key) {
+            case "bg": return PlayState.instance.bgSpr;
+            case "fg": return PlayState.instance.fgSpr;
+            default:
+            if (existsGroup(key))
+                return objMap.get(getGroupKey(key));
+            else {
+                ModdingUtil.errorPrint('Group not found: $key');
+                return null;	
+            }
+        }
+    }
+
+    inline public static function getGroupKey(key:String) {
+        return '_group_$key';
     }
 
     public static var stateQueue:{state:MusicBeatState, skipTrans:Bool} = null;

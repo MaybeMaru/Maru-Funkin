@@ -159,9 +159,10 @@ class FreeplayState extends MusicBeatState {
 		if (Math.abs(lerpScore - intendedScore) <= 10) lerpScore = intendedScore;
 		scoreText.text = "PERSONAL BEST: " + lerpScore;
 
-		for (i in [scoreText,diffText,scoreBG]) {
-			i.x = CoolUtil.coolLerp(i.x, lerpPosition, 0.2);
-		}
+		//for (i in [scoreText,diffText,scoreBG]) i.x = CoolUtil.coolLerp(i.x, lerpPosition, 0.2);
+		scoreBG.x = Math.max(CoolUtil.coolLerp(scoreBG.x, lerpPosition, 0.2), 0);
+		scoreText.x = Math.max(CoolUtil.coolLerp(scoreText.x, lerpPosition, 0.2), 0);
+		diffText.x = CoolUtil.coolLerp(diffText.x, lerpPosition, 0.2);
 
 		if (getKey('UI_LEFT-P'))	changeDiff(-1);
 		if (getKey('UI_RIGHT-P'))	changeDiff(1);

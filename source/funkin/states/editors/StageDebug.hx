@@ -45,6 +45,7 @@ class StageDebug extends MusicBeatState {
 
         // TODO add a better layer system you big goof
         Stage.createStageObjects(stageData.layers, null, ["bg" => bgGroup, "fg" => fgGroup]);
+        FlxG.camera.zoom = stageData.zoom;
     }
     
     final speed = 50;
