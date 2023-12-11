@@ -79,7 +79,8 @@ class Song {
 			}
 		}
 		trace('$folder-$diff CHART NOT FOUND');
-		return loadFromFile('hard','tutorial');
+		if (folder == "tutorial" && diff == "hard") throw 'Failed to load chart'; // Couldnt even find tutorial
+		else return loadFromFile('hard','tutorial');
 	}
 
 	inline public static function getSongMeta(song:String):Null<SongMeta> {

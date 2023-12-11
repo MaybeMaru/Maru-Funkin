@@ -177,8 +177,11 @@ class Paths
 	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
-		#if desktop return FileSystem.exists(removeAssetLib(file));
-		#else		return OpenFlAssets.exists(file, type);			#end
+		#if desktop
+		return FileSystem.exists(removeAssetLib(file));
+		#else
+		return OpenFlAssets.exists(file, type);
+		#end
 	}
 
 	inline static public function removeAssetLib(path:String):String {

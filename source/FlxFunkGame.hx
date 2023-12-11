@@ -71,9 +71,13 @@ class FlxFunkSoundTray extends FlxSoundTray {
 
     override function show(up:Bool = false) {
         if (!silent) {
-			final sound = FlxAssets.getSound("assets/sounds/volume");
+            #if desktop
+            final sound = FlxAssets.getSound("assets/sounds/volume");
 			if (sound != null)
 				FlxG.sound.load(sound).play();
+            #else
+            CoolUtil.playSound("volume");
+            #end
 		}
 
 		_timer = 4;
