@@ -243,16 +243,14 @@ class CoolUtil {
 		if (FlxG.state is MusicBeatState) {
 			cast(FlxG.state, MusicBeatState).startTransition();
 		}
-		//if (FlxG.state is PlayState)
-		//	Conductor.vocals.pause();
 	}
 
 	/*
      *	RATING UTIL
-    */
+     */
 
-    public static var judgeOffsets:Array<Int> =         [127, 106, 43];
-    public static var returnJudgements:Array<String> =  ['shit', 'bad', 'good'];
+    public static final judgeOffsets:Array<Int> =         [127, 106, 43];
+    public static final returnJudgements:Array<String> =  ['shit', 'bad', 'good'];
 
     public static function getNoteJudgement(noteDiff:Float):String {
         for (i in 0...judgeOffsets.length) {
