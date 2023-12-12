@@ -11,6 +11,10 @@ import sys.io.File;
 */
 
 class UnZipper {
+    public static function unzipInPath(zipPath:String, destPath:String) {
+        unzipFiles(getZipEntries(zipPath), destPath);
+    }
+    
     public static function getZipEntries(path:String) {
         var zipData = openZip(path);
 

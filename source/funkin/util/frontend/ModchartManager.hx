@@ -88,10 +88,10 @@ class ModchartManager extends EventHandler {
 
         if (sineStrums.length > 0 || cosineStrums.length > 0) {
             for (i in sineStrums)
-                i.y = (i._dynamic?.startY ?? 0) + (Math.sin(timeElapsed + (i._dynamic?.sineOff ?? 0)) * (i._dynamic?.sineSize ?? 50.0));
+                i.y = (i._dynamic?.startY ?? 0) + (FlxMath.fastSin(timeElapsed + (i._dynamic?.sineOff ?? 0)) * (i._dynamic?.sineSize ?? 50.0));
 
             for (i in cosineStrums)
-                i.x = (i._dynamic?.startX ?? 0) + (Math.cos(timeElapsed + (i._dynamic?.cosineOff ?? 0)) * (i._dynamic?.cosineSize ?? 50.0));
+                i.x = (i._dynamic?.startX ?? 0) + (FlxMath.fastCos(timeElapsed + (i._dynamic?.cosineOff ?? 0)) * (i._dynamic?.cosineSize ?? 50.0));
         }
     }
 }

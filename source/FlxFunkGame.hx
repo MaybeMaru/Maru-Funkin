@@ -20,6 +20,7 @@ class FlxFunkGame extends FlxGame {
         super.create(_);
 
         addChild(Main.transition = transition = new Transition());
+        removeChild(soundTray); addChild(soundTray); // Correct layering
         addChild(Main.console = console = new ScriptConsole());
 
         #if !mobile
@@ -66,7 +67,7 @@ class FlxFunkSoundTray extends FlxSoundTray {
     }
     
     override function update(elapsed:Float) {
-        super.update(elapsed * 4);
+        super.update(elapsed * 4); // hack, sound tray is slow as fuck
     }
 
     override function show(up:Bool = false) {

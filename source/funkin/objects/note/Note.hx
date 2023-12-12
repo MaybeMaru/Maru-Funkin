@@ -28,18 +28,16 @@ class Note extends FlxSpriteExt implements INoteData {
     var refSprite:FlxSpriteExt;
 
     public function createGraphic(init:Bool = true) {
-        if (isSustainNote) {
-            if (init) { // Offset sustain
-                final _off = getPosMill(NoteUtil.swagHeight * 0.5, NotesGroup.songSpeed);
-                initSusLength += _off - (NoteUtil.swagHeight * 0.5 / NotesGroup.songSpeed);
-            }
-        } else {
+        if (!isSustainNote) {
             loadFromSprite(refSprite);
             updateAnims();
         }
 
         setScale(skinJson.scale, true);
         antialiasing = skinJson.antialiasing ? Preferences.getPref('antialiasing') : false;
+
+        if (init && isSustainNote) // Offset sustain half a strum height
+            initSusLength += FlxMath.remapToRange(NoteUtil.swagHeight * 0.475, 0, getMillPos(1, NotesGroup.songSpeed) / scale.y, 0, 1);
 
         if (!isSustainNote) {
             final _anim = 'scroll' + CoolUtil.directionArray[noteData];

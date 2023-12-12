@@ -13,7 +13,7 @@ typedef CharacterJson = {
 } & SpriteJson;
 
 class Character extends FlxSpriteExt {
-	public static var DEFAULT_CHARACTER:CharacterJson = {
+	public static final DEFAULT_CHARACTER:CharacterJson = {
 		anims: [],
 		imagePath: "week1/BOYFRIEND",
 		icon: 'bf',
