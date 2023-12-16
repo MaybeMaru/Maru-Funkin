@@ -148,11 +148,8 @@ class TitleState extends MusicBeatState {
 
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
-			titleSine %= Math.PI * 2;
-
-			final lerpValue:Float = FlxMath.fastSin(titleSine);
-			titleText.alpha = (lerpValue + 1) * 0.25 + 0.75;
-			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, (lerpValue + 1) * 0.5);
+			final lerp = FlxMath.fastSin(titleSine %= (Math.PI * 2));
+			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, FlxMath.remapToRange(lerp, -1, 1, 0, 1));
 			checkCode();
 		}
 
@@ -161,11 +158,10 @@ class TitleState extends MusicBeatState {
 			transitioning = true;
 			titleText.playAnim('press');
 			titleText.color = FlxColor.WHITE;
-			titleText.alpha = 1;
 			openedGame = true;
 
 			CoolUtil.playSound('confirmMenu', 0.7);
-			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
+			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
 
 			new FlxTimer().start(2, function(tmr:FlxTimer) {
 				switchState(new MainMenuState());
@@ -200,7 +196,7 @@ class TitleState extends MusicBeatState {
 		if (!skippedIntro && initialized) {
 			skippedIntro = true;
 			clearText();
-			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : FlxColor.fromRGB(255,255,255,125), 3);
+			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
 			spriteGroup.alpha = textSprite.alpha = blackScreen.alpha = 0;
 		}
 	}

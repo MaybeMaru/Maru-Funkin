@@ -11,6 +11,7 @@ enum RepeatDrawStyle {
 
 /**
  * Like FlxTiledSprite but it use quads
+ * This class CANNOT be used unless it gets released on flixel addons or i give u permission to
  *
  * @author maybemaru
  */
