@@ -187,7 +187,7 @@ class Note extends FlxSpriteExt implements INoteData {
 
     public function drawSustain(forced:Bool = false, ?newHeight:Int) {
         if (!isSustainNote) return;
-        final _height = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
+        final _height:Int = newHeight ?? Math.floor(Math.max(getMillPos(getSusLeft()) / scale.y, 0));
         if (_height > (susEndHeight * (noteSpeed * 0.5) / scale.y)) {
             if (_height == height) return;
             if (forced || (_height > height)) { // New graphic

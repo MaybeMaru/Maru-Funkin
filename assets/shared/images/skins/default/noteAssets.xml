@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="noteAssets.png">
-	<SubTexture name="blue hold end0" x="321" y="68" width="51" height="64"/>
-	<SubTexture name="blue hold piece0" x="374" y="48" width="51" height="44"/>
-	<SubTexture name="blue0" x="2" y="2" width="158" height="154"/>
-	<SubTexture name="green hold end0" x="321" y="2" width="51" height="64"/>
-	<SubTexture name="green hold piece0" x="374" y="2" width="51" height="44"/>
-	<SubTexture name="green0" x="162" y="2" width="157" height="154"/>
-	<SubTexture name="purple hold end0" x="314" y="224" width="51" height="64"/>
-	<SubTexture name="purple hold piece0" x="367" y="180" width="51" height="44"/>
-	<SubTexture name="purple0" x="158" y="158" width="154" height="157"/>
-	<SubTexture name="red hold end0" x="314" y="158" width="51" height="64"/>
-	<SubTexture name="red hold piece0" x="367" y="134" width="51" height="44"/>
-	<SubTexture name="red0" x="2" y="158" width="154" height="157"/>
+	<SubTexture name="blue hold end0000" x="114" y="162" width="51" height="64"/>
+	<SubTexture name="blue hold piece0000" x="334" y="165" width="51" height="44"/>
+	<SubTexture name="blue0000" x="4" y="4" width="158" height="154"/>
+	<SubTexture name="green hold end0000" x="59" y="162" width="51" height="64"/>
+	<SubTexture name="green hold piece0000" x="279" y="165" width="51" height="44"/>
+	<SubTexture name="green0000" x="166" y="4" width="157" height="154"/>
+	<SubTexture name="purple hold end0000" x="169" y="162" width="51" height="64"/>
+	<SubTexture name="purple hold piece0000" x="389" y="165" width="51" height="44"/>
+	<SubTexture name="purple0000" x="485" y="4" width="154" height="157"/>
+	<SubTexture name="red hold end0000" x="4" y="162" width="51" height="64"/>
+	<SubTexture name="red hold piece0000" x="224" y="162" width="51" height="44"/>
+	<SubTexture name="red0000" x="327" y="4" width="154" height="157"/>
 </TextureAtlas>

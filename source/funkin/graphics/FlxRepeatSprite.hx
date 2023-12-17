@@ -111,10 +111,10 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
         __tilePoint.set(_matrix.tx, _matrix.ty);
         final fw:Float = frameWidth * scale.x;
-        final fh:Float = frameHeight * scale.y;
 
         _frame.frame.width = frameWidth;
         _frame.frame.height = frameHeight;
+        lastMatrix.set(-1,-1);
 
         switch (drawStyle) {
             // Draw from left top to right bottom style
@@ -130,12 +130,12 @@ class FlxRepeatSprite extends FlxSpriteExt {
                         
                         heightPos += __tempPoint.y;
                         if (heightPos > repeatHeight) // Cut frame height
-                            _frame.frame.height = (fh + (repeatHeight - heightPos)) / scale.y;
+                            _frame.frame.height = (__tempPoint.y + (repeatHeight - heightPos)) / scale.y;
         
                         // Position and draw
-                        final addX = addW - fw;
-                        final addY = heightPos - __tempPoint.y;
-        
+                        var addX = addW - fw;
+                        var addY = heightPos - __tempPoint.y;
+
                         _matrix.tx = __tilePoint.x + (addX * _cosAngle) + (addY * -_sinAngle);
                         _matrix.ty = __tilePoint.y + (addX * _sinAngle) + (addY * _cosAngle);
                         
@@ -162,7 +162,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
                         }
 
                         // Position and draw
-                        final addX = addW - fw;
+                        var addX = addW - fw;
                         _matrix.tx = __tilePoint.x + (addX * _cosAngle) + (heightPos * -_sinAngle);
                         _matrix.ty = __tilePoint.y + (addX * _sinAngle) + (heightPos * _cosAngle);
                         
@@ -185,16 +185,18 @@ class FlxRepeatSprite extends FlxSpriteExt {
         return __tempPoint;
     }
 
+    static var lastMatrix = FlxPoint.get(); // Nasty hack
+
     function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
         final __doDraw:Bool = clipRect != null ? handleClipRect(tileFrame, baseFrame, tilePos) : true;
         if (tileRect != null) tileFrame = tileFrame.clipTo(tileRect);
 
-        if (__doDraw) {
+        if (__doDraw && (lastMatrix.x != _matrix.tx || lastMatrix.y != _matrix.ty)) {
+            lastMatrix.set(_matrix.tx, _matrix.ty);
             camera.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
             #if FLX_DEBUG flixel.FlxBasic.visibleCount++; #end
         }
         tileFrame.frame.copyFrom(baseFrame.frame);
-        tileFrame.offset.copyFrom(baseFrame.offset);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {

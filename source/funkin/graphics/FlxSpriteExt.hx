@@ -49,6 +49,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		frames = sprite.frames;
 		animation.copyFrom(sprite.animation);
 		antialiasing = sprite.antialiasing;
+		scale.set(sprite.scale.x, sprite.scale.y);
+		updateHitbox();
 		
 		animOffsets = sprite.animOffsets.copy();
 		animDatas = sprite.animDatas.copy();

@@ -97,8 +97,8 @@ class NoteUtil {
 
         final refSprite:FlxSpriteExt = new FlxSpriteExt();
         refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
-        refSprite.scale.set(skinJson.scale,skinJson.scale);
-        refSprite.updateHitbox();
+        refSprite.setScale(skinJson.scale);
+        refSprite.antialiasing = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
         for (anim in skinJson.anims)
             refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
