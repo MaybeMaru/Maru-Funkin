@@ -102,11 +102,27 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (flippedOffsets) {
 			flipX = !flipX;
 			scale.x *= -1;
-			super.draw();
+			__superDraw();
 			flipX = !flipX;
 			scale.x *= -1;
 		}
-		else super.draw();
+		else __superDraw();
+	}
+
+	@:noCompletion
+	private inline function __superDraw() {
+		inline checkEmptyFrame();
+		if (alpha == 0 || _frame.type == EMPTY) return;
+		if (dirty) calcFrame(useFramePixels);  // rarely
+
+		for (i in 0...cameras.length) {
+			final camera = cameras[i];
+			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
+			drawComplex(camera);
+			#if FLX_DEBUG FlxBasic.visibleCount++; #end
+		}
+
+		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
 	}
 
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {

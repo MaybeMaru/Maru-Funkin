@@ -8,6 +8,16 @@ interface INoteData {
     public var noteData:Int;
 }
 
+interface INoteObject extends INoteData {
+    public var strumTime:Float;
+    public var noteSpeed:Float;
+    public var targetStrum:NoteStrum;
+    public var parentNote:Note;
+    public var childNote:Sustain;
+
+    public var isSustainNote:Bool;
+}
+
 class Note extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
     public var strumTime:Float = 0;

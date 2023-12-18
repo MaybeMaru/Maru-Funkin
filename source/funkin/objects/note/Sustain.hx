@@ -5,6 +5,7 @@ import funkin.graphics.FlxRepeatSprite;
 
 class Sustain extends FlxRepeatSprite implements INoteData {
     public var noteData:Int = 0;
+    public var noteSpeed:Float = 1.0;
     
     public function new(noteData:Int = 0) {
         super();
