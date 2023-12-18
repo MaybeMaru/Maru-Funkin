@@ -7,6 +7,13 @@ enum RenderMode {
 
 class SmartSprite extends FlxRepeatSprite {
     public var renderMode:RenderMode = QUAD;
+    public function setRenderMode(value:String) {
+        renderMode = switch (value.toLowerCase().trim()) {
+            case "quad" | "q" | "1": QUAD;
+            case "repeat" | "r" | "2": REPEAT;
+            default: QUAD; // Ill maybe add more render modes over time idk
+        }
+    }
 
     public function new(?X:Float, ?Y:Float, ?SimpleGraphic:FlxGraphicAsset) {
         super(X, Y, SimpleGraphic, 0, 0);
@@ -26,7 +33,7 @@ class SmartSprite extends FlxRepeatSprite {
                         updateTrig();
                         if (angle != 0) _matrix.rotateWithTrig(_cosAngle, _sinAngle);
                     }
-                    updateSkewMatrix();
+                    inline updateSkewMatrix();
                     _matrix.concat(_skewMatrix);
                 }
         

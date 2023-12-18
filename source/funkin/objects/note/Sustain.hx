@@ -1,26 +1,34 @@
 package funkin.objects.note;
 
 import flixel.graphics.frames.FlxFrame;
-import funkin.graphics.FlxRepeatSprite;
 
-class Sustain extends FlxRepeatSprite implements INoteData {
-    public var noteData:Int = 0;
-    public var noteSpeed:Float = 1.0;
+class Sustain extends BasicNote {
+    public var susLength:Float = 0.0;
     
-    public function new(noteData:Int = 0) {
-        super();
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:Note) {
+        super(noteData, strumTime, skin); // Load skin
+
+        this.parentNote = parentNote;
+        isSustainNote = true;
         drawStyle = BOTTOM_TOP;
         alpha = 0.6;
-        this.noteData = noteData % Conductor.NOTE_DATA_LENGTH;
         
-        changeSkin("default");
+        this.susLength = susLength;
+        setSusLength(susLength);
+
+        //clipRect = new FlxRect(0,0,0,0);
     }
 
-    var skinData:SkinMapData;
+    function updateSusLength() {
+        setSusLength(susLength);
+    }
 
-    public function changeSkin(value:String = "default") {
-        skinData = NoteUtil.getSkinSprites(value, noteData);
-        loadFromSprite(skinData.baseSprite);
+    function setSusLength(mills:Float = 0.0) {
+        repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+    }
+
+    override function updateSprites() {
+        super.updateSprites();
         updateHitbox();
 
         final holdFrame = animation.getByName("hold" + CoolUtil.directionArray[noteData]).frames[0];
@@ -34,8 +42,8 @@ class Sustain extends FlxRepeatSprite implements INoteData {
 
     override function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
         switch (tileY) {
-            case 0: playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
-            case 1: playAnim("hold" + CoolUtil.directionArray[noteData]);
+            case 0: playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");  // Tail
+            case 1: playAnim("hold" + CoolUtil.directionArray[noteData]);           // Piece
         }
         return super.setupTile(tileX, tileY, frame);
     }
