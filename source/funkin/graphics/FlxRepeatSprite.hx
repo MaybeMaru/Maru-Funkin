@@ -7,6 +7,7 @@ import flixel.graphics.frames.FlxFrame;
 enum RepeatDrawStyle {
     TOP_BOTTOM;
     BOTTOM_TOP;
+    //FAST_BOTTOM_TOP; maybe later
 }
 
 /**
@@ -133,8 +134,8 @@ class FlxRepeatSprite extends FlxSpriteExt {
                             _frame.frame.height = (__tempPoint.y + (repeatHeight - heightPos)) / scale.y;
         
                         // Position and draw
-                        var addX = addW - fw;
-                        var addY = heightPos - __tempPoint.y;
+                        final addX = addW - fw;
+                        final addY = heightPos - __tempPoint.y;
 
                         _matrix.tx = __tilePoint.x + (addX * _cosAngle) + (addY * -_sinAngle);
                         _matrix.ty = __tilePoint.y + (addX * _sinAngle) + (addY * _cosAngle);
@@ -162,7 +163,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
                         }
 
                         // Position and draw
-                        var addX = addW - fw;
+                        final addX = addW - fw;
                         _matrix.tx = __tilePoint.x + (addX * _cosAngle) + (heightPos * -_sinAngle);
                         _matrix.ty = __tilePoint.y + (addX * _sinAngle) + (heightPos * _cosAngle);
                         

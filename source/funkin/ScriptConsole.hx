@@ -32,6 +32,8 @@ class Print extends Sprite {
             frame.copyPixels(bmp, new Rectangle(i*frameSize,0,frameSize,frameSize), new Point(0,0));
             iconFrames.push(frame);
         }
+        bmp.dispose();
+        bmp.disposeImage();
     }
 
     static var typeMap:Map<PrintType, {frame:Int, color:FlxColor}> = [

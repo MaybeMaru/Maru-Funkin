@@ -2,10 +2,55 @@ package funkin.objects.note;
 
 import flixel.graphics.frames.FlxFrame;
 
+class TestNote extends BasicNote {
+    public function new(noteData:Int, strumTime:Float = 0.0, skin:String = "default", ?childNote:Sustain) {
+        super(noteData, strumTime, skin); // Load skin
+        this.childNote = childNote;
+        isSustainNote = false;
+    }
+
+    override function updateSprites() {
+        super.updateSprites();
+        playAnim('scroll' + CoolUtil.directionArray[noteData]);
+    }
+
+    override function applyCurOffset(forced:Bool = false) {
+        if (animation.curAnim != null) {
+			if(existsOffsets(animation.curAnim.name)) {
+				final animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
+				if (!animOffset.isZero() || forced) {
+					animOffset.x *= (flippedOffsets ? -1 : 1);
+                    updateHitbox();
+                    offset.add(animOffset.x, animOffset.y);
+				}
+			}
+		}
+    }
+
+    public var canBeHit:Bool = false;
+	public var wasGoodHit:Bool = false;
+	public var willMiss:Bool = false;
+
+	inline public function calcHit():Void {
+		if (willMiss && !wasGoodHit) {
+			canBeHit = false;
+		}
+		else {
+			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset * hitMult) {
+				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset * hitMult)
+					canBeHit = true;
+			}
+			else {
+				willMiss = canBeHit = true;
+			}
+		}
+	}
+}
+
 class Sustain extends BasicNote {
     public var susLength:Float = 0.0;
     
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:Note) {
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:TestNote) {
         super(noteData, strumTime, skin); // Load skin
 
         this.parentNote = parentNote;
@@ -19,24 +64,25 @@ class Sustain extends BasicNote {
         //clipRect = new FlxRect(0,0,0,0);
     }
 
-    function updateSusLength() {
+    public function updateSusLength() {
         setSusLength(susLength);
     }
 
-    function setSusLength(mills:Float = 0.0) {
+    public function setSusLength(mills:Float = 0.0) {
         repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
     }
 
     override function updateSprites() {
         super.updateSprites();
+        
+        playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
         updateHitbox();
-
-        final holdFrame = animation.getByName("hold" + CoolUtil.directionArray[noteData]).frames[0];
-        final holdWidth = frames.getByIndex(holdFrame).frame.width * scale.x;
-        offset.x -= (NoteUtil.swagWidth * 0.5) - (holdWidth * scale.x * 0.5);
+        offset.x -= NoteUtil.swagWidth * 0.5;
+        offset.x += width * 0.5;
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);
+        origin.set(width * 0.5 / scale.x, 0);
         repeatHeight = lastHeight;
     }
 
