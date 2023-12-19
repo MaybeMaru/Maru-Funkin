@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 import flixel.graphics.frames.FlxFrame;
 
@@ -91,8 +92,10 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
     static final __tilePoint:FlxPoint = FlxPoint.get();
     static final __tempPoint:FlxPoint = FlxPoint.get();
+    static var __drawCam:FlxCamera;
 
     override function drawComplex(camera:FlxCamera) {
+        __drawCam = camera;
         _frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
 		_matrix.translate(-origin.x, -origin.y);
 		_matrix.scale(scale.x, scale.y);
@@ -194,10 +197,17 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
         if (__doDraw && (lastMatrix.x != _matrix.tx || lastMatrix.y != _matrix.ty)) {
             lastMatrix.set(_matrix.tx, _matrix.ty);
-            camera.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
-            #if FLX_DEBUG flixel.FlxBasic.visibleCount++; #end
+            if (matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) return; // dont draw stuff out of bounds
+            __drawCam.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
         }
         tileFrame.frame.copyFrom(baseFrame.frame);
+    }
+
+    inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
+        return ((_matrix.tx + frame.width) < __drawCam.viewX) ||
+               (_matrix.tx > __drawCam.viewWidth) ||
+               ((_matrix.ty + frame.height) < __drawCam.viewY) ||
+               (_matrix.ty > __drawCam.viewHeight);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {
