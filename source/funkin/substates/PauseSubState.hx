@@ -33,6 +33,7 @@ class PauseSubState extends MusicBeatSubstate {
 		bg.antialiasing = false;
 		bg.scale.set(FlxG.width, FlxG.height);
 		bg.updateHitbox();
+		bg.active = false;
 		add(bg);
 
 		final levelInfo:FunkinText = new FunkinText(20,15,PlayState.SONG.song,32);

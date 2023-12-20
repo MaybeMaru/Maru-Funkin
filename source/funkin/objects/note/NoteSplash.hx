@@ -29,6 +29,7 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
         loadSkin();
         alpha = 0.6;
         setupNoteSplash(x,y,noteData);
+        moves = false;
 	}
 
 	public function setupNoteSplash(X:Float, Y:Float, noteData:Int = 0, ?note:Note):Void {

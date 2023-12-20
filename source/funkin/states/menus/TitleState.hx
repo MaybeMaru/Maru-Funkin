@@ -66,9 +66,13 @@ class TitleState extends MusicBeatState {
 		titleText.screenCenter(X);
 		titleGroup.add(titleText);
 
-		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		add(blackScreen);
+		blackScreen = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+		blackScreen.scale.set(FlxG.width,FlxG.height);
+		blackScreen.updateHitbox();
+		blackScreen.antialiasing = false;
+		blackScreen.active = false;
 		blackScreen.visible = !initialized;
+		add(blackScreen);
 
 		textSprite = new Alphabet(FlxG.width * 0.5, FlxG.height * 0.25,'');
 		textSprite.alignment = CENTER;

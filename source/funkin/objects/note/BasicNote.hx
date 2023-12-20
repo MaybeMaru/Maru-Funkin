@@ -46,6 +46,7 @@ class BasicNote extends SmartSprite implements INoteData {
         this.strumTime = strumTime;
         this.skin = skin;
         approachAngle = Preferences.getPref('downscroll') ? 180 : 0;
+        moves = false; // Save on velocity calculation
     }
 
     override function update(elapsed:Float) {

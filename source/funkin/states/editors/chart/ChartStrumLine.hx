@@ -31,7 +31,7 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
         updateWithData();
     }
 
-    var midX = GRID_SIZE * 2;
+    static final midX = GRID_SIZE * 2;
 
     // Caching shit
     var charIcons:Map<String, String> = [];
@@ -58,8 +58,8 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
             i.updateHitbox();
         }
 
-        iconP1.setPosition(x + (midX - (iconP1.width * 0.5)) + (mustHit ? 0 : midX * 2), y - 60);
-        iconP2.setPosition(x + (midX - (iconP2.width * 0.5)) + (mustHit ? midX * 2 : 0), y - 60);
+        iconP1.setPosition(x + (midX - (iconP1.width * 0.5)) + (mustHit ? 0 : midX * 2), y - iconP1.height);
+        iconP2.setPosition(x + (midX - (iconP2.width * 0.5)) + (mustHit ? midX * 2 : 0), y - iconP2.height);
     }
 
     public function pressStrum(data:Int = 0) {
