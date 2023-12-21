@@ -23,22 +23,13 @@ class FlxRepeatSprite extends FlxSpriteExt {
     public var drawStyle:RepeatDrawStyle = TOP_BOTTOM;
 
     public var tilesX(get, null):Int;
-    inline function get_tilesX() {
-        return Math.ceil(repeatWidth / (frameWidth * scale.x));
+    inline function get_tilesX():Int {
+        return Math.ceil(repeatWidth / (frameWidth * Math.abs(scale.x)));
     }
     
     public var tilesY(get, null):Int;
-    inline function get_tilesY() {
-        return Math.ceil(repeatHeight / (frameHeight * scale.y));
-    }
-
-    public function setRepeat(repeatWidth:Float, repeatHeight:Float) {
-        this.repeatWidth = repeatWidth;
-        this.repeatHeight = repeatHeight;
-    }
-
-    public function setTiles(tilesX:Float, tilesY:Float) {
-        setRepeat(tilesX * frameWidth * scale.x, tilesY * frameHeight * scale.y);
+    inline function get_tilesY():Int {
+        return Math.ceil(repeatHeight / (frameHeight * Math.abs(scale.y)));
     }
 
     /*
@@ -47,16 +38,30 @@ class FlxRepeatSprite extends FlxSpriteExt {
      */
     public var tileRect:FlxRect;
     
-    public function new(?X:Float, ?Y:Float, ?SimpleGraphic:FlxGraphicAsset, ?repeatWidth:Float, ?repeatHeight:Float) {
+    public function new(?X:Float, ?Y:Float, ?SimpleGraphic:FlxGraphicAsset, ?repeatWidth:Float, ?repeatHeight:Float):Void {
         super(X,Y,SimpleGraphic);
         checkEmptyFrame();
         setRepeat(repeatWidth ?? frameWidth, repeatHeight ?? frameHeight);
     }
 
-    override function destroy() {
-        super.destroy();
-        tileRect = FlxDestroyUtil.put(tileRect);
+    public function setRepeat(repeatWidth:Float, repeatHeight:Float):FlxRepeatSprite {
+        this.repeatWidth = repeatWidth;
+        this.repeatHeight = repeatHeight;
+
+	// useful for chaining stuff
+	// for example you can do new FlxRepeatSprite(...).setRepeat(...)
+	return this;
+    }
+
+    public function setTiles(tilesX:Float, tilesY:Float):FlxRepeatSprite {
+        setRepeat(tilesX * frameWidth * Math.abs(scale.x), tilesY * frameHeight * Math.abs(scale.y));
+	return this;
+    }
+
+    override function destroy():Void {
+	tileRect = FlxDestroyUtil.put(tileRect);
         clipRect = FlxDestroyUtil.put(clipRect);
+        super.destroy();
     }
 
     override function set_clipRect(rect:FlxRect):FlxRect {
@@ -64,19 +69,19 @@ class FlxRepeatSprite extends FlxSpriteExt {
     }
 
     override function draw() {
-        if (tilesX == 0 || tilesY == 0) {
+        if (tilesX == 0 || tilesY == 0)
             return;
-        }
         
         inline checkEmptyFrame();
-		if (alpha == 0 || !visible || (clipRect?.isEmpty)) return;
-		if (dirty) calcFrame(useFramePixels);
+	    
+	if (alpha == 0 || !visible || (clipRect?.isEmpty)) return;
+	if (dirty) calcFrame(useFramePixels);
 
-		for (i in 0...cameras.length) {
+	for (i in 0...cameras.length) {
             final camera = cameras[i];
-			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
-			drawComplex(camera);
-		}
+	    if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
+	    drawComplex(camera);
+	}
     }
 
     override function getScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
