@@ -185,6 +185,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
     // Prepare tile dimensions
     function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
         __tempPoint.set(baseFrame.frame.width * scale.y, baseFrame.frame.height * scale.y);
+        _frame.frame.copyFrom(baseFrame.frame);
         return __tempPoint;
     }
 
@@ -199,7 +200,6 @@ class FlxRepeatSprite extends FlxSpriteExt {
             if (!matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) // dont draw stuff out of bounds
                 __drawCam.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
         }
-        tileFrame.frame.copyFrom(baseFrame.frame);
     }
 
     inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {

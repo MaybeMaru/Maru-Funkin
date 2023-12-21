@@ -75,7 +75,7 @@ class Sustain extends BasicNote {
     override function updateSprites() {
         super.updateSprites();
         
-        playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
+        playAnim("hold" + CoolUtil.directionArray[noteData]);
         updateHitbox();
         offset.x -= NoteUtil.swagWidth * 0.5;
         offset.x += width * 0.5;
