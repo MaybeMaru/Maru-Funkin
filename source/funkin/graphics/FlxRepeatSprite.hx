@@ -8,7 +8,6 @@ import flixel.graphics.frames.FlxFrame;
 enum RepeatDrawStyle {
     TOP_BOTTOM;
     BOTTOM_TOP;
-    //FAST_BOTTOM_TOP; maybe later
 }
 
 /**
@@ -204,10 +203,10 @@ class FlxRepeatSprite extends FlxSpriteExt {
     }
 
     inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
-        return  ((_matrix.ty + frame.height) < cam.viewY) ||
-                ((_matrix.ty - frame.height) > cam.viewHeight) ||
-                ((_matrix.tx + frame.width) < cam.viewX) ||
-                ((_matrix.tx - frame.width) > cam.viewWidth);
+        return  ((_matrix.ty + (frame.height * scale.y)) < cam.viewY) ||
+                ((_matrix.ty - (frame.height * scale.y)) > cam.viewHeight) ||
+                ((_matrix.tx + (frame.width * scale.x)) < cam.viewX) ||
+                ((_matrix.tx - (frame.width * scale.x)) > cam.viewWidth);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {
