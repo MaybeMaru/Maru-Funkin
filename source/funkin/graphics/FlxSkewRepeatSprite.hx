@@ -16,7 +16,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     public var wigglePower:Float = 50.0;
 
-    var _:Float = 0.0;
+    /*var _:Float = 0.0;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
@@ -25,7 +25,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         wigglePower = FlxMath.fastSin(_) * 75;
 
         if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;
-    }
+    }*/
 
     public var calcHeight:Int = -1;
     public var smoothTiles:Int = 1;

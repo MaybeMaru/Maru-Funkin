@@ -50,7 +50,8 @@ class TestNote extends BasicNote {
 class Sustain extends BasicNote {
     public var susLength:Float = 0.0;
     
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:TestNote) {
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:TestNote):Void {
+        clipRect = FlxRect.get();
         super(noteData, strumTime, skin); // Load skin
 
         this.parentNote = parentNote;
@@ -58,25 +59,30 @@ class Sustain extends BasicNote {
         drawStyle = BOTTOM_TOP;
         alpha = 0.6;
         
+        yDisplace = NoteUtil.swagHeight * 0.5;
         this.susLength = susLength;
         setSusLength(susLength);
-
-        //clipRect = new FlxRect(0,0,0,0);
     }
 
-    public inline function updateSusLength() {
+    public inline function inSustain():Bool {
+        return Conductor.songPosition >= strumTime && Conductor.songPosition <= (susLength + Conductor.stepCrochet);
+    }
+
+    public inline function updateSusLength():Float {
         return setSusLength(susLength);
     }
 
-    public inline function setSusLength(mills:Float = 0.0) {
-        return repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+    public inline function setSusLength(mills:Float = 0.0):Float {
+        repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+        clipRect.height = repeatHeight;
+        return repeatHeight;
     }
 
-    public inline function setSusSecs(secs:Float = 0.0) {
+    public inline function setSusSecs(secs:Float = 0.0):Float {
         return setSusLength(secs * 1000);
     }
 
-    override function updateSprites() {
+    override function updateSprites():Void {
         super.updateSprites();
         
         playAnim("hold" + CoolUtil.directionArray[noteData]);
@@ -89,9 +95,10 @@ class Sustain extends BasicNote {
         origin.set(width * 0.5 / scale.x, 0);
         calcHeight = frameHeight;
         repeatHeight = lastHeight;
+        clipRect.width = repeatWidth;
     }
 
-    override function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
+    override function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame):FlxPoint {
         switch (tileY) {
             case 0: playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");  // Tail
             case 1: playAnim("hold" + CoolUtil.directionArray[noteData]);           // Piece
@@ -99,7 +106,12 @@ class Sustain extends BasicNote {
         return super.setupTile(tileX, tileY, frame);
     }
 
-    override function applyCurOffset(forced:Bool = false) {
+    override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {
+        clipRect.y = Math.min(clipRect.y, 0);
+        return super.handleClipRect(tileFrame, baseFrame, tilePos);
+    }
+
+    override function applyCurOffset(forced:Bool = false):Void {
         // we dont need offsets for these
     }
 }

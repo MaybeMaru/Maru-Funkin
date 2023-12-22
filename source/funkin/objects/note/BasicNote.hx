@@ -27,19 +27,19 @@ class BasicNote extends SmartSprite implements INoteData {
         return skin;
     }
 
-    public function changeSkin(?value:String) {
+    public function changeSkin(?value:String):Void {
         if (value != skin)
             skin = value;
     }
 
-    public function updateSprites() {
+    public function updateSprites():Void {
         loadFromSprite(curSkinData.baseSprite);
     }
 
     public var approachAngle:Float = 0;
     public var spawnMult:Float = 1.0;
 
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default") {
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default"):Void {
         super();
         initVariables();
         this.noteData = noteData;
@@ -49,24 +49,31 @@ class BasicNote extends SmartSprite implements INoteData {
         moves = false; // Save on velocity calculation
     }
 
-    override function update(elapsed:Float) {
+    override function update(elapsed:Float):Void {
         super.update(elapsed);
         if (targetStrum != null) {
             moveToStrum();
         }
     }
 
-    inline public function moveToStrum() {
-        final noteMove:Float = getMillPos(Conductor.songPosition - strumTime); // Position with strumtime
-        y = targetStrum.y - (noteMove * getCos()); // Set Position
-        x = targetStrum.x - (noteMove * -getSin());
+    public var xDisplace:Float = 0.0;
+    public var yDisplace:Float = 0.0;
+
+    inline public function moveToStrum():Void {
+        final noteMove:Float = distanceToStrum(); // Position with strumtime
+        y = targetStrum.y + xDisplace - (noteMove * getCos()); // Set Position
+        x = targetStrum.x + yDisplace - (noteMove * -getSin());
     }
 
-    inline public function getCos() {
+    inline public function distanceToStrum():Float {
+        return getMillPos(Conductor.songPosition - strumTime);
+    }
+
+    inline public function getCos():Float {
         return FlxMath.fastCos(FlxAngle.asRadians(approachAngle));
     }
 
-    inline public function getSin() {
+    inline public function getSin():Float {
         return FlxMath.fastSin(FlxAngle.asRadians(approachAngle));
     }
 
@@ -86,13 +93,13 @@ class BasicNote extends SmartSprite implements INoteData {
     public var missHealth:Vector<Float>;
     public var hitMult:Float = 1.0;
 
-    inline function initVariables() {
+    inline function initVariables():Void {
         hitHealth = new Vector<Float>(2, true, [0.025, 0.0125]);
         missHealth = new Vector<Float>(2, true, [0.0475, 0.02375]);
     }
 
     public var noteType(default, set):String = "default";
-    inline function set_noteType(value:String) {
+    inline function set_noteType(value:String):String {
         final typeJson:NoteTypeJson = NoteUtil.getTypeJson(value);
         mustHit = typeJson.mustHit;
         altAnim = typeJson.altAnim;
@@ -108,7 +115,7 @@ class BasicNote extends SmartSprite implements INoteData {
         return noteType = value;
     }
 
-    public function changeNoteType(value:String) {
+    public function changeNoteType(value:String):Void {
         if (noteType != value)
             noteType = value;
     }

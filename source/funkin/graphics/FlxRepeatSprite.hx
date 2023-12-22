@@ -200,10 +200,10 @@ class FlxRepeatSprite extends FlxSpriteExt {
     }
 
     inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
-        return  ((_matrix.ty + (frame.height * scale.y)) < cam.viewY) ||
-                ((_matrix.ty - (frame.height * scale.y)) > cam.viewHeight) ||
-                ((_matrix.tx + (frame.width * scale.x)) < cam.viewX) ||
-                ((_matrix.tx - (frame.width * scale.x)) > cam.viewWidth);
+        return ((_matrix.ty + (frame.height * scale.y)) < cam.viewY) ||
+               ((_matrix.ty - (frame.height * scale.y)) > cam.viewHeight) ||
+               ((_matrix.tx + (frame.width * scale.x)) < cam.viewX) ||
+               ((_matrix.tx - (frame.width * scale.x)) > cam.viewWidth);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {
