@@ -64,12 +64,16 @@ class Sustain extends BasicNote {
         //clipRect = new FlxRect(0,0,0,0);
     }
 
-    public function updateSusLength() {
-        setSusLength(susLength);
+    public inline function updateSusLength() {
+        return setSusLength(susLength);
     }
 
-    public function setSusLength(mills:Float = 0.0) {
-        repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+    public inline function setSusLength(mills:Float = 0.0) {
+        return repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+    }
+
+    public inline function setSusSecs(secs:Float = 0.0) {
+        return setSusLength(secs * 1000);
     }
 
     override function updateSprites() {
@@ -83,6 +87,7 @@ class Sustain extends BasicNote {
         final lastHeight = repeatHeight;
         setTiles(1, 1);
         origin.set(width * 0.5 / scale.x, 0);
+        calcHeight = frameHeight;
         repeatHeight = lastHeight;
     }
 

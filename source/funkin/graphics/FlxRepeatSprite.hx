@@ -23,12 +23,12 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
     public var tilesX(get, null):Int;
     inline function get_tilesX() {
-        return Math.ceil(repeatWidth / (frameWidth * scale.x));
+        return Math.ceil(repeatWidth / (frameWidth * Math.abs(scale.x)));
     }
     
     public var tilesY(get, null):Int;
     inline function get_tilesY() {
-        return Math.ceil(repeatHeight / (frameHeight * scale.y));
+        return Math.ceil(repeatHeight / (frameHeight * Math.abs(scale.y)));
     }
 
     public function setRepeat(repeatWidth:Float, repeatHeight:Float) {
@@ -91,6 +91,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
     static final __tilePoint:FlxPoint = FlxPoint.get();
     static final __tempPoint:FlxPoint = FlxPoint.get();
+    static final __lastMatrix = FlxPoint.get(); // Nasty hack
     static var __drawCam:FlxCamera;
 
     override function drawComplex(camera:FlxCamera) {
@@ -113,11 +114,9 @@ class FlxRepeatSprite extends FlxSpriteExt {
         **/
 
         __tilePoint.set(_matrix.tx, _matrix.ty);
-        final fw:Float = frameWidth * scale.x;
+        __lastMatrix.set(-1, -1);
 
-        _frame.frame.width = frameWidth;
-        _frame.frame.height = frameHeight;
-        lastMatrix.set(-1,-1);
+        final fw:Float = frameWidth * scale.x; // TODO: replace this shit same way as Height
 
         switch (drawStyle) {
             // Draw from left top to right bottom style
@@ -177,7 +176,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
     }
 
-    function translateWithTrig(tx:Float, ty:Float) {
+    private inline function translateWithTrig(tx:Float, ty:Float) {
         _matrix.tx += (tx * _cosAngle) + (ty * -_sinAngle);
         _matrix.ty += (tx * _sinAngle) + (ty * _cosAngle);
     }
@@ -189,14 +188,12 @@ class FlxRepeatSprite extends FlxSpriteExt {
         return __tempPoint;
     }
 
-    static var lastMatrix = FlxPoint.get(); // Nasty hack
-
     function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
         final __doDraw:Bool = clipRect != null ? handleClipRect(tileFrame, baseFrame, tilePos) : true;
         if (tileRect != null) tileFrame = tileFrame.clipTo(tileRect);
 
-        if (__doDraw && (lastMatrix.x != _matrix.tx || lastMatrix.y != _matrix.ty)) {
-            lastMatrix.set(_matrix.tx, _matrix.ty);
+        if (__doDraw && (__lastMatrix.x != _matrix.tx || __lastMatrix.y != _matrix.ty)) {
+            __lastMatrix.set(_matrix.tx, _matrix.ty);
             if (!matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) // dont draw stuff out of bounds
                 __drawCam.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
         }

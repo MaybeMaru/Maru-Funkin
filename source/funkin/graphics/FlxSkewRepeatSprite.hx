@@ -5,7 +5,9 @@ import flixel.graphics.frames.FlxFrame;
 import openfl.display.BitmapData;
 
 /*
-    TODO: add skew y support (_matrix.b) and fix problems with dynamically sized tiles
+    TODO:
+    add skew y support (_matrix.b) and fix problems with dynamically sized tiles
+    implement smoothTiles u dumb fuck
 */
 
 class FlxSkewRepeatSprite extends FlxRepeatSprite {
@@ -14,10 +16,19 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     public var wigglePower:Float = 50.0;
 
+    var _:Float = 0.0;
+
     override function update(elapsed:Float) {
         super.update(elapsed);
-        clipRect.y -= elapsed * 25;
+        clipRect.y -= elapsed * 50;
+        _ += elapsed * 10;
+        wigglePower = FlxMath.fastSin(_) * 75;
+
+        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;
     }
+
+    public var calcHeight:Int = -1;
+    public var smoothTiles:Int = 1;
 
     override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
         if (wigglePower == 0) {
@@ -29,7 +40,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         
         tempMatrix.copyFrom(_matrix);
 
-        final wiggleX = wigglePower * ((baseFrame.frame.height * scale.y) * 0.01); // Value outta my ass but trust me bro
+        final wiggleX = wigglePower * (calcHeight != -1 ? calcHeight : baseFrame.frame.height) * scale.y * 0.01; // Value outta my ass but trust me bro
         final skewX = wiggleX * (idY % 2 == 0 ? -1 : 1);
         _matrix.c = Math.tan(skewX * FlxAngle.TO_RAD);
 
