@@ -64,7 +64,7 @@ class InitState extends FlxState {
 
 class Main extends Sprite
 {
-	var game = {
+	var settings = {
 		width: 1280, 					// Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		height: 720, 					// Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		initialState: InitState,		// The FlxState the game starts with.
@@ -74,6 +74,7 @@ class Main extends Sprite
 		startFullscreen: false 			// Whether to start the game in fullscreen on desktop targets
 	};
 
+	public static var game:FlxFunkGame;
 	public static var fpsCounter:FPS_Mem; //The FPS display child
 	public static var console:ScriptConsole;
 	public static var transition:Transition;
@@ -113,20 +114,18 @@ class Main extends Sprite
 		setupGame();
 	}
 
-	private function setupGame():Void
-	{
+	private function setupGame():Void {
 		final stageWidth:Int = Lib.current.stage.stageWidth;
 		final stageHeight:Int = Lib.current.stage.stageHeight;
 
-		if (game.zoom == -1.0)
-		{
-			final ratioX:Float = stageWidth / game.width;
-			final ratioY:Float = stageHeight / game.height;
-			game.zoom = Math.min(ratioX, ratioY);
-			game.width = Math.ceil(stageWidth / game.zoom);
-			game.height = Math.ceil(stageHeight / game.zoom);
+		if (settings.zoom == -1.0) {
+			final ratioX:Float = stageWidth / settings.width;
+			final ratioY:Float = stageHeight / settings.height;
+			settings.zoom = Math.min(ratioX, ratioY);
+			settings.width = Math.ceil(stageWidth / settings.zoom);
+			settings.height = Math.ceil(stageHeight / settings.zoom);
 		}
 
-		addChild(new FlxFunkGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		addChild(game = new FlxFunkGame(settings.width, settings.height, settings.initialState, settings.framerate, settings.framerate, settings.skipSplash, settings.startFullscreen));
 	}
 }

@@ -17,10 +17,6 @@ function create() {
 
     setSpriteShader(bg, 'bgThorns');
     setSpriteShader(fg, 'fgThorns');
-}
-
-var timeElapsed:Float = 0;
-function update(elapsed) {
-    timeElapsed += elapsed;
-    for (i in ['bgThorns', 'fgThorns']) setShaderFloat(i, 'iTime', timeElapsed);
+    
+    closeScript();
 }

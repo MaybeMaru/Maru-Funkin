@@ -307,8 +307,12 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		// Runtime shader functions
 
-		set('initShader', function (shader:String, ?tag:String, forced:Bool = false):Void {
-			Shader.initShader(shader, tag, forced);
+		set('initShader', function (shader:String, ?tag:String, forced:Bool = false):Null<RuntimeShader> {
+			return Shader.initShader(shader, tag, forced);
+		});
+
+		set('getShader', function (shader:String):Null<RuntimeShader> {
+			return Shader.shaderMap.get(shader);
 		});
 
 		set('setSpriteShader', function (sprite:FlxSprite, shader:String) {
@@ -325,18 +329,22 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		set('setShaderFloat', function (shader:String, prop:String, value:Float) {
 			Shader.setFloat(shader, prop, value);
+			return value;
 		});
 
 		set('setShaderInt', function (shader:String, prop:String, value:Int) {
 			Shader.setInt(shader, prop, value);
+			return value;
 		});
 
 		set('setShaderBool', function (shader:String, prop:String, value:Bool) {
 			Shader.setBool(shader, prop, value);
+			return value;
 		});
 
 		set('setShaderVector', function (shader:String, prop:String, value:Array<Dynamic>) {
 			Shader.setVector(shader, prop, value);
+			return value;
 		});
 
 		// Custom state

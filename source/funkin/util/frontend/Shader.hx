@@ -1,10 +1,11 @@
 package funkin.util.frontend;
 
+import FlxFunkGame.IUpdateable;
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.display.BitmapData;
 import openfl.filters.ShaderFilter;
 
-class RuntimeShader extends FlxRuntimeShader {
+class RuntimeShader extends FlxRuntimeShader implements IUpdateable implements IFlxDestroyable {
 	/**
 	 * Modify a vector parameter of the shader.
 	 * @param name The name of the parameter to modify.
@@ -35,6 +36,31 @@ class RuntimeShader extends FlxRuntimeShader {
 		}
 		return prop.value;
 	}
+
+	public function new(code:String) {
+		super(code);
+		Main.game.updateObjects.push(this);
+	}
+	
+	public function destroy() {
+		iTime = 0.0;
+		Main.game.updateObjects.remove(this);
+	}
+	
+	public var updateTime:Bool = true;
+	public var iTime(default, set):Float = 0.0;
+	
+	inline function set_iTime(value:Float) {
+		try {
+			setFloat("iTime", value);
+		}
+		return iTime = value;
+	}
+
+	public function update(elapsed:Float) {
+		if (updateTime)
+			iTime += elapsed;
+	}
 }
 
 class Shader
@@ -53,24 +79,30 @@ class Shader
 		#define mainImage main
 		//SHADERTOY PORT FIX';
 
-	public static function initShader(shader:String, ?tag:String, force:Bool = false):Void
+	public static function initShader(shader:String, ?tag:String, force:Bool = false):Null<RuntimeShader>
 	{
-		#if web return; #end
+		#if web return null; #end
 		if (shaderMap.exists(shader) && !force)
-			return;
+			return shaderMap.get(shader);
 
 		var frag:String = Paths.shader(shader);
 		if (!Paths.exists(frag, TEXT))
-			return;
+			return null;
 
 		var txt = CoolUtil.getFileContent(frag);
 		txt = !txt.startsWith('//SHADERTOY PORT FIX') ? '$shaderToyFix\n$txt' : txt;
-		shaderMap.set(tag ?? shader, new RuntimeShader(txt));
 		trace('created shader $shader from $frag');
+		
+		final shaderObject = new RuntimeShader(txt);
+		shaderMap.set(tag ?? shader, shaderObject);
+		return shaderObject;
 	}
 
 	public static inline function clearShaders() {
-		shaderMap.clear();
+		for (i in shaderMap.keys()) {
+			shaderMap.get(i).destroy();
+			shaderMap.remove(i);
+		}
 	}
 
 	public static function getShader(shader:String):Null<RuntimeShader>

@@ -52,13 +52,6 @@ function createPost():Void {
 	danceFreaks();
 }
 
-
-var timeElapsed:Float = 0;
-function update(elapsed) {
-    timeElapsed += elapsed;
-    setShaderFloat('senpaiTrees', 'iTime', timeElapsed);
-}
-
 function danceFreaks(){
 	for (i in bgGirls) {
 		i.dance();

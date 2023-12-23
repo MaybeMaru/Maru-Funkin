@@ -6,6 +6,10 @@ import openfl.display.BitmapData;
 import flixel.system.ui.FlxSoundTray;
 import flixel.FlxGame;
 
+interface IUpdateable {
+	public function update(elapsed:Float):Void;
+}
+
 class FlxFunkGame extends FlxGame {
     public var transition:Transition;
     public var console:ScriptConsole;
@@ -31,11 +35,17 @@ class FlxFunkGame extends FlxGame {
         Preferences.effectPrefs();
     }
 
+    public var updateObjects:Array<IUpdateable> = [];
+
     override function update() {
         super.update();
 
         transition.update(FlxG.elapsed);
         console.update(FlxG.elapsed);
+
+        for (i in 0...updateObjects.length) {
+            updateObjects[i].update(FlxG.elapsed);
+        }
     }
 }
 

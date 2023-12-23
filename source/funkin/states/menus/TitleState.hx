@@ -54,7 +54,8 @@ class TitleState extends MusicBeatState {
 		gfDance.addAnim('danceRight', 'gfDance', 24, false, [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]);
 		titleGroup.add(gfDance);
 
-		Shader.initShader('colorSwap');
+		final colorSwap = Shader.initShader('colorSwap');
+		colorSwap.updateTime = false;
 		Shader.setSpriteShader(logoBump, 'colorSwap');
 		Shader.setSpriteShader(gfDance, 'colorSwap');
 

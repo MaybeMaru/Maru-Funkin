@@ -1,6 +1,10 @@
 function createPost() {
-    if (PlayState.isStoryMode && !PlayState.seenCutscene)
+    if (PlayState.isStoryMode && !PlayState.seenCutscene) {
         State.inCutscene = true;
+    } else {
+        closeScript();
+    }
+
 }
 
 function startCutscene() {
@@ -87,14 +91,12 @@ function createDialogue() {
     inDialogue = true;
 }
 
-var timeElapsed:Float = 0;
+var timeElapsed:Float = 0.0;
 function updatePost(elapsed) {
     if (dialogueBox != null && inDialogue) {
         face.alpha = dialogueBox.box.alpha;
-        timeElapsed += elapsed;
-        face.offset.y = FlxMath.roundDecimal(Math.sin(timeElapsed), 1) * 10;
-        setShaderFloat('faceShader', 'iTime', timeElapsed);
         bgFade.alpha = dialogueBox.bgFade.alpha;
+        face.offset.y = FlxMath.roundDecimal(FlxMath.fastSin(timeElapsed += elapsed), 1) * 10;
     }
 }
 
@@ -103,5 +105,6 @@ function startCountdown() {
         inDialogue = false;
         face.destroy();
         bgFade.destroy();
+        closeScript();
     }
 }
