@@ -7,7 +7,6 @@ import openfl.display.BitmapData;
 /*
     TODO:
     add skew y support (_matrix.b) and fix problems with dynamically sized tiles
-    implement smoothTiles u dumb fuck
 */
 
 class FlxSkewRepeatSprite extends FlxRepeatSprite {
@@ -15,20 +14,28 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
     static var idY:Int = -1;
 
     public var wigglePower:Float = 50.0;
+    public var smoothTiles:Float = 1;
+    public var calcHeight:Int = -1;
 
-    /*var _:Float = 0.0;
+    //var _:Float = 0.0;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        clipRect.y -= elapsed * 50;
+        /*clipRect.y -= elapsed * 50;
         _ += elapsed * 10;
         wigglePower = FlxMath.fastSin(_) * 75;
 
-        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;
-    }*/
+        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;*/
 
-    public var calcHeight:Int = -1;
-    public var smoothTiles:Int = 1;
+        if (FlxG.keys.justPressed.UP) smoothTiles++;
+        if (FlxG.keys.justPressed.DOWN) smoothTiles--;
+        smoothTiles = Math.max(smoothTiles, 1);
+
+        clipRect.y -= elapsed * 50;
+        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;
+    }
+
+    static var scaledWiggleX:Float = 1.0;
 
     override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
         if (wigglePower == 0) {
@@ -37,26 +44,43 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         }
 
         idY = tileY;
-        
         tempMatrix.copyFrom(_matrix);
+        
+        scaledWiggleX = wigglePower * (calcHeight != -1 ? calcHeight : baseFrame.frame.height) * scale.y * 0.01; // Value outta my ass but trust me bro
+        scaledWiggleX /= smoothTiles;
 
-        final wiggleX = wigglePower * (calcHeight != -1 ? calcHeight : baseFrame.frame.height) * scale.y * 0.01; // Value outta my ass but trust me bro
-        final skewX = wiggleX * (idY % 2 == 0 ? -1 : 1);
-        _matrix.c = Math.tan(skewX * FlxAngle.TO_RAD);
+        final lerpValue = ((idY % smoothTiles) + 1) / smoothTiles;
+        final lerpWiggle = FlxMath.lerp(0, scaledWiggleX, lerpValue);
+
+        final skewX = lerpWiggle * (isLeftSkew() ? -1 : 1);
+        _matrix.c = Math.tan(skewX * FlxAngle.TO_RAD); // Set skew X
 
         if (clipRect == null) offsetSkew(tileFrame, baseFrame);
-        
         super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos);
+
         _matrix.copyFrom(tempMatrix);
     }
 
+    inline function isLeftSkew():Bool {
+        return (idY % (smoothTiles * 2)) < smoothTiles;
+    }
+
+    static var xOff:Float = 0.0;
+
     inline function offsetSkew(tileFrame:FlxFrame, baseFrame:FlxFrame) {
-        final multX = tileFrame.frame.height / baseFrame.frame.height;
-        if (idY % 2 == 0) _matrix.translate(-_matrix.c * baseFrame.frame.width * multX, 0);
-        else if (multX != 1) {
-            _matrix.translate(-_matrix.c * baseFrame.frame.width * multX, 0);
-            _matrix.translate(baseFrame.frame.width * _matrix.c, 0);
+        final percId = idY % (smoothTiles * 2);
+
+        if (percId == 0)    xOff = 0;
+        else                xOff += _matrix.c * baseFrame.frame.width;
+
+        // TODO: This is more or less accurate but still isnt perfect, figure out better math you dumb cunt
+        var multX:Float = 1.0;
+        if (tileFrame.frame.height != baseFrame.frame.height) {
+            multX = tileFrame.frame.height / baseFrame.frame.height;
+            if (isLeftSkew()) _matrix.tx += _matrix.c * baseFrame.frame.width * (1-multX);
         }
+
+        _matrix.tx -= xOff * multX;
     }
 
     override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {
