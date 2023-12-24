@@ -5,7 +5,7 @@ enum RenderMode {
     REPEAT;
 }
 
-class SmartSprite extends FlxSkewRepeatSprite {
+class SmartSprite extends FlxRepeatSprite {
     public var renderMode:RenderMode = QUAD;
     public function setRenderMode(value:String) {
         renderMode = switch (value.toLowerCase().trim()) {

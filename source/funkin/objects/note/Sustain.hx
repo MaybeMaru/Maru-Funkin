@@ -25,6 +25,12 @@ class Sustain extends BasicNote {
         return value;
     }
 
+    public var autoFlip:Bool = true; // If to flip the sustain at a certain angle
+    override function set_approachAngle(value:Float):Float {
+        if (autoFlip) flipX = value % 360 >= 180;
+        return approachAngle = angle = value;
+    }
+
     inline public static var MISS_COLOR:Int = 0xffc8c8c8;
 
     public var pressed:Bool = false;
@@ -44,7 +50,7 @@ class Sustain extends BasicNote {
             final susY:Float = getMillPos(strumTime - Conductor.songPosition);
             percentLeft = repeatHeight / -susY;
             clipRect.y = susY;
-            offset.y = susY;
+            offset.y = susY * getCos();
             if (susY <= -repeatHeight) {
                 kill();
             }
@@ -60,7 +66,7 @@ class Sustain extends BasicNote {
     }
 
     public inline function setSusLength(mills:Float = 0.0):Float {
-        repeatHeight = getMillPos(mills) + NoteUtil.swagHeight * 0.5;
+        repeatHeight = getMillPos(mills) + (NoteUtil.swagHeight * 0.5);
         clipRect.height = repeatHeight;
         return repeatHeight;
     }
@@ -69,19 +75,26 @@ class Sustain extends BasicNote {
         return setSusLength(secs * 1000);
     }
 
+    override function set_targetStrum(value:NoteStrum):NoteStrum {
+        if (value != null) {
+            updateHitbox();
+            offset.y = 0;
+            offset.x -= value.width * 0.5 - width * 0.5;
+        }
+        return targetStrum = value;
+    }
+
     override function updateSprites():Void {
         super.updateSprites();
         
         playAnim("hold" + CoolUtil.directionArray[noteData]);
-        updateHitbox();
-        offset.x -= NoteUtil.swagWidth * 0.5;
-        offset.x += width * 0.5;
-        offset.y = 0;
+        playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
+        targetStrum = targetStrum;
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);
         origin.set(width * 0.5 / scale.x, 0);
-        calcHeight = frameHeight;
+        //calcHeight = frameHeight;
         repeatHeight = lastHeight;
         clipRect.width = repeatWidth;
     }
@@ -92,11 +105,6 @@ class Sustain extends BasicNote {
             case 1: playAnim("hold" + CoolUtil.directionArray[noteData]);           // Piece
         }
         return super.setupTile(tileX, tileY, frame);
-    }
-
-    override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {
-        clipRect.y = Math.min(clipRect.y, 0);
-        return super.handleClipRect(tileFrame, baseFrame, tilePos);
     }
 
     override function applyCurOffset(forced:Bool = false):Void {

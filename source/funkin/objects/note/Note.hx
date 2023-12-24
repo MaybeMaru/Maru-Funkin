@@ -25,6 +25,11 @@ class Note extends BasicNote {
 		}
     }
 
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		calcHit();
+	}
+
     public var canBeHit:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var willMiss:Bool = false;

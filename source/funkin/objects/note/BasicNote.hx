@@ -11,9 +11,13 @@ class BasicNote extends SmartSprite implements INoteData {
     public var strumTime:Float = 0.0;
     public var noteData:Int = 0;
     public var mustPress:Bool = false;
-    public var targetStrum:NoteStrum;
     public var parent:Note;
     public var child:Sustain;
+
+    public var targetStrum(default, set):NoteStrum;
+    function set_targetStrum(value:NoteStrum):NoteStrum {
+        return targetStrum = value;
+    }
 
     public var noteSpeed(default, set):Float = 1.0;
     function set_noteSpeed(value:Float):Float {
@@ -44,7 +48,11 @@ class BasicNote extends SmartSprite implements INoteData {
         loadFromSprite(curSkinData.baseSprite);
     }
 
-    public var approachAngle:Float = 0;
+    public var approachAngle(default, set):Float = 0;
+    function set_approachAngle(value:Float):Float {
+        return approachAngle = value;
+    }
+    
     public var spawnMult:Float = 1.0;
 
     public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default"):Void {
