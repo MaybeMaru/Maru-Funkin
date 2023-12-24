@@ -148,12 +148,12 @@ class ChartNoteGrid extends ChartGridBase {
         _note.init(strumTime, noteData, gridPos.x, gridPos.y, 0, typeData.skin);
         _note.chartData = note;
 
-        var susNote:ChartNote = null;
+        /*var susNote:ChartNote = null;
         if (susLength > 0) {
             susNote = sustainsGroup.recycle(ChartNote);
             susNote.init(strumTime, noteData, gridPos.x, gridPos.y, susLength, typeData.skin, true, _note);
             sustainsGroup.add(susNote);
-        }
+        }*/
 
         if (typeData.showText) {
             final typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
@@ -167,7 +167,7 @@ class ChartNoteGrid extends ChartGridBase {
             }
         }
 
-        _note.childNote = susNote;
+        //_note.child = susNote;
         objectsGroup.add(_note);
         return _note;
     }
@@ -207,7 +207,7 @@ class ChartNote extends Note {
     public function new() {
         super();
         scrollFactor.set(1,1);
-        susEndHeight = 0;
+        //susEndHeight = 0;
         active = false;
     }
 
@@ -226,7 +226,7 @@ class ChartNote extends Note {
         _skin = _skin ?? SkinUtil.curSkin;
         txt = null;
 
-        setPosition(_xPos, _yPos);
+        /*setPosition(_xPos, _yPos);
         if (skin != _skin || !startInit) {
             skin = _skin;
             createGraphic(false);
@@ -249,7 +249,7 @@ class ChartNote extends Note {
             alpha = 1;
             setGraphicSize(GRID_SIZE, GRID_SIZE);
             updateHitbox();
-        }
+        }*/
     }
 }
 

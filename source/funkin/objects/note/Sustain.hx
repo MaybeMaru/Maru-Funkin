@@ -2,59 +2,14 @@ package funkin.objects.note;
 
 import flixel.graphics.frames.FlxFrame;
 
-class TestNote extends BasicNote {
-    public function new(noteData:Int, strumTime:Float = 0.0, skin:String = "default", ?childNote:Sustain) {
-        super(noteData, strumTime, skin); // Load skin
-        this.childNote = childNote;
-        isSustainNote = false;
-    }
-
-    override function updateSprites() {
-        super.updateSprites();
-        playAnim('scroll' + CoolUtil.directionArray[noteData]);
-    }
-
-    override function applyCurOffset(forced:Bool = false) {
-        if (animation.curAnim != null) {
-			if(existsOffsets(animation.curAnim.name)) {
-				final animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
-				if (!animOffset.isZero() || forced) {
-					animOffset.x *= (flippedOffsets ? -1 : 1);
-                    updateHitbox();
-                    offset.add(animOffset.x, animOffset.y);
-				}
-			}
-		}
-    }
-
-    public var canBeHit:Bool = false;
-	public var wasGoodHit:Bool = false;
-	public var willMiss:Bool = false;
-
-	inline public function calcHit():Void {
-		if (willMiss && !wasGoodHit) {
-			canBeHit = false;
-		}
-		else {
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset * hitMult) {
-				if (strumTime < Conductor.songPosition + 0.5 * Conductor.safeZoneOffset * hitMult)
-					canBeHit = true;
-			}
-			else {
-				willMiss = canBeHit = true;
-			}
-		}
-	}
-}
-
 class Sustain extends BasicNote {
     public var susLength:Float = 0.0;
     
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parentNote:TestNote):Void {
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void {
         clipRect = FlxRect.get();
         super(noteData, strumTime, skin); // Load skin
 
-        this.parentNote = parentNote;
+        this.parent = parent;
         isSustainNote = true;
         drawStyle = BOTTOM_TOP;
         alpha = 0.6;
@@ -62,6 +17,38 @@ class Sustain extends BasicNote {
         yDisplace = NoteUtil.swagHeight * 0.5;
         this.susLength = susLength;
         setSusLength(susLength);
+    }
+
+    override function set_noteSpeed(value:Float):Float {
+        noteSpeed = value;
+        updateSusLength();
+        return value;
+    }
+
+    inline public static var MISS_COLOR:Int = 0xffc8c8c8;
+
+    public var pressed:Bool = false;
+    public var startedPress:Bool = false;
+    public var missedPress(default, set):Bool = false;
+    inline function set_missedPress(value:Bool) {
+        color = (value && mustHit) ? MISS_COLOR : FlxColor.WHITE;
+        return missedPress = value;
+    }
+
+    public var percentLeft(default, null):Float = 0.0;
+
+    public function pressSustain() {
+        pressed = false;
+        if (Conductor.songPosition >= strumTime) {
+            pressed = true;
+            final susY:Float = getMillPos(strumTime - Conductor.songPosition);
+            percentLeft = repeatHeight / -susY;
+            clipRect.y = susY;
+            offset.y = susY;
+            if (susY <= -repeatHeight) {
+                kill();
+            }
+        }
     }
 
     public inline function inSustain():Bool {
@@ -89,6 +76,7 @@ class Sustain extends BasicNote {
         updateHitbox();
         offset.x -= NoteUtil.swagWidth * 0.5;
         offset.x += width * 0.5;
+        offset.y = 0;
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);

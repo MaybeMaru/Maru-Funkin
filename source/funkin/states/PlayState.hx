@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.objects.note.BasicNote;
 import funkin.states.editors.StageDebug;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.note.StrumLineGroup;
@@ -41,8 +42,8 @@ class PlayState extends MusicBeatState {
 	private var ratingGroup:RatingGroup;
 
 	// For backwards compatibility and my own sanity, its ugly i know!!
-	public var notes(get,never):FlxTypedGroup<Note>; inline function get_notes()return notesGroup.notes;
-	public var unspawnNotes(get,never):Array<Note>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
+	public var notes(get,never):FlxTypedGroup<BasicNote>; inline function get_notes()return notesGroup.notes;
+	public var unspawnNotes(get,never):Array<BasicNote>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
 	public var holdingArray(get,never):Array<Bool>; inline function get_holdingArray()return notesGroup.holdingArray;
 	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
 	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;

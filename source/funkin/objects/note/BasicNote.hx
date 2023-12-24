@@ -1,19 +1,27 @@
 package funkin.objects.note;
 
 import openfl.Vector;
-import funkin.objects.note.Sustain.TestNote;
 import funkin.graphics.SmartSprite;
+
+interface INoteData {
+    public var noteData:Int;
+}
 
 class BasicNote extends SmartSprite implements INoteData {
     public var strumTime:Float = 0.0;
     public var noteData:Int = 0;
-    public var noteSpeed:Float = 1.0;
+    public var mustPress:Bool = false;
     public var targetStrum:NoteStrum;
-    public var parentNote:TestNote;
-    public var childNote:Sustain;
+    public var parent:Note;
+    public var child:Sustain;
+
+    public var noteSpeed(default, set):Float = 1.0;
+    function set_noteSpeed(value:Float):Float {
+        return noteSpeed = value;
+    }
     
     public var isSustainNote(default, set):Bool = false;
-    inline function set_isSustainNote(value:Bool) {
+    inline function set_isSustainNote(value:Bool):Bool {
         renderMode = value ? REPEAT : QUAD;
         return isSustainNote = value;
     }
@@ -49,9 +57,11 @@ class BasicNote extends SmartSprite implements INoteData {
         moves = false; // Save on velocity calculation
     }
 
+    public var moving:Bool = true;
+
     override function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (targetStrum != null) {
+        if (targetStrum != null && moving) {
             moveToStrum();
         }
     }
@@ -60,9 +70,15 @@ class BasicNote extends SmartSprite implements INoteData {
     public var yDisplace:Float = 0.0;
 
     inline public function moveToStrum():Void {
+        setPositionToStrum();
         final noteMove:Float = distanceToStrum(); // Position with strumtime
-        y = targetStrum.y + xDisplace - (noteMove * getCos()); // Set Position
-        x = targetStrum.x + yDisplace - (noteMove * -getSin());
+        y -= noteMove * getCos();
+        x -= noteMove * -getSin();
+    }
+
+    inline public function setPositionToStrum() {
+        y = targetStrum.y + yDisplace;
+        x = targetStrum.x + xDisplace;
     }
 
     inline public function distanceToStrum():Float {

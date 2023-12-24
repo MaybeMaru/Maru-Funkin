@@ -140,11 +140,11 @@ class ChartingState extends MusicBeatState {
                     if (playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
                 } 
                 note.color = gray;
-                if (note.childNote != null) note.childNote.color = gray;
+                if (note.child != null) note.child.color = gray;
             }
             else {
                 note.color = FlxColor.WHITE;
-                if (note.childNote != null) note.childNote.color = FlxColor.WHITE;
+                if (note.child != null) note.child.color = FlxColor.WHITE;
             }
         });
 

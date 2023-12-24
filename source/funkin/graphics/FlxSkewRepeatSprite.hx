@@ -13,27 +13,9 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
     static final tempMatrix:FlxMatrix = new FlxMatrix();
     static var idY:Int = -1;
 
-    public var wigglePower:Float = 50.0;
+    public var wigglePower:Float = 0.0;
     public var smoothTiles:Float = 1;
     public var calcHeight:Int = -1;
-
-    //var _:Float = 0.0;
-
-    override function update(elapsed:Float) {
-        super.update(elapsed);
-        /*clipRect.y -= elapsed * 50;
-        _ += elapsed * 10;
-        wigglePower = FlxMath.fastSin(_) * 75;
-
-        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;*/
-
-        if (FlxG.keys.justPressed.UP) smoothTiles++;
-        if (FlxG.keys.justPressed.DOWN) smoothTiles--;
-        smoothTiles = Math.max(smoothTiles, 1);
-
-        clipRect.y -= elapsed * 50;
-        if (FlxG.keys.justPressed.SPACE) clipRect.y = 0;
-    }
 
     static var scaledWiggleX:Float = 1.0;
 

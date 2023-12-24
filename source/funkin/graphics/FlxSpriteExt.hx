@@ -4,6 +4,7 @@ import flixel.util.FlxDestroyUtil;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
+import flixel.FlxBasic;
 
 /*
     Just FlxSprite but with helper functions

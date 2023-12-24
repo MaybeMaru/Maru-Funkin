@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import funkin.objects.note.BasicNote.INoteData;
+
 class SplashGroup extends FlxTypedGroup<NoteSplash> {
     public function new(startCache:Int = 4) {
         super();
