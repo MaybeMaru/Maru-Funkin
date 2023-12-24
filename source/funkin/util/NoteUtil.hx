@@ -15,7 +15,7 @@ typedef NoteTypeJson = {
 
 class NoteUtil {
 	public static var swagWidth:Float = 160 * 0.7;
-	public static var swagHeight:Float = 155 * 0.7;
+	public static var swagHeight:Float = 150 * 0.7;
 
     public static var DEFAULT_NOTE_TYPE(default, never):NoteTypeJson = {
 		mustHit: true,
