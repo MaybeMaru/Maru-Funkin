@@ -66,11 +66,13 @@ class BasicNote extends SmartSprite implements INoteData {
     }
 
     public var moving:Bool = true;
+    public var susLength:Float = 0.0;
 
     override function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (targetStrum != null && moving) {
-            moveToStrum();
+        if (targetStrum != null) {
+            if (moving) moveToStrum();
+            active = Conductor.songPosition < (strumTime + susLength + getPosMill(NoteUtil.swagHeight * 2));
         }
     }
 

@@ -7,6 +7,7 @@ import openfl.display.BitmapData;
 /*
     TODO:
     add skew y support (_matrix.b) and fix problems with dynamically sized tiles
+    fix skew on angles other than 0 and 180
 */
 
 class FlxSkewRepeatSprite extends FlxRepeatSprite {
@@ -66,7 +67,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {
         final _draw = super.handleClipRect(tileFrame, baseFrame, tilePos);
-        if (_draw) offsetSkew(tileFrame, baseFrame);
+        if (_draw && wigglePower != 0) offsetSkew(tileFrame, baseFrame);
         return _draw;
     }
 }

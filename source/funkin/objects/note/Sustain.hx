@@ -3,8 +3,6 @@ package funkin.objects.note;
 import flixel.graphics.frames.FlxFrame;
 
 class Sustain extends BasicNote {
-    public var susLength:Float = 0.0;
-    
     public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void {
         clipRect = FlxRect.get();
         super(noteData, strumTime, skin); // Load skin
@@ -96,9 +94,8 @@ class Sustain extends BasicNote {
         loadFromSprite(curSkinData.baseSprite);
         
         playAnim("hold" + CoolUtil.directionArray[noteData]);
-        
-        //playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
         targetStrum = targetStrum;
+        smoothTiles = Math.round(125 / height);
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);

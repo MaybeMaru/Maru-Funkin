@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.addons.effects.FlxSkewedSprite;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
@@ -8,7 +9,7 @@ import flixel.FlxBasic;
 /*
     Just FlxSprite but with helper functions
 */
-class FlxSpriteExt extends FlxSprite {
+class FlxSpriteExt extends FlxSkewedSprite {
 
 	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
@@ -34,8 +35,6 @@ class FlxSpriteExt extends FlxSprite {
 	
 	public var packer(default, null):PackerType = IMAGE;
 	public var imageKey(default, null):String = "::null::";
-
-	public var skew(default, null):FlxPoint = FlxPoint.get();
 
     public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset):Void {
         animOffsets = new Map<String, FlxPoint>();
@@ -178,8 +177,10 @@ class FlxSpriteExt extends FlxSprite {
 		}
 
 		if (skew.x != 0 || skew.y != 0) {
-			_matrix.c = Math.tan(skew.x * FlxAngle.TO_RAD);
-			_matrix.b = Math.tan(skew.y * FlxAngle.TO_RAD);
+			inline _skewMatrix.identity();
+			_skewMatrix.b = Math.tan(skew.y * FlxAngle.TO_RAD);
+			_skewMatrix.c = Math.tan(skew.x * FlxAngle.TO_RAD);
+			inline _matrix.concat(_skewMatrix);
 		}
 
 		getScreenPosition(_point, camera).subtractPoint(offset);
@@ -278,7 +279,6 @@ class FlxSpriteExt extends FlxSprite {
 	override function destroy() {
 		animOffsets = null;
 		animDatas = null;
-		skew = FlxDestroyUtil.put(skew);
 		super.destroy();
 	}
 
