@@ -15,13 +15,13 @@ class FunkinSprite extends FlxSpriteExt {
 
         if (path.length > 0) {
             loadImage(path);
-            animated = _packer != IMAGE;
+            animated = packer != IMAGE;
     
             final jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
-            if (useJson && Paths.exists(jsonPath, TEXT))
-                loadSpriteJson(jsonPath, '');
-            else
+            if (useJson && Paths.exists(jsonPath, TEXT)) loadSpriteJson(jsonPath, '');
+            else {
                 antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
+            }
         }
     }
     

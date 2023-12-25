@@ -365,9 +365,9 @@ class NotesGroup extends FlxGroup
 	function checkEvents() {
 		if (events[0] != null) {
 			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
-				final dunceEvent:Event = events[0];
-				ModdingUtil.addCall('eventHit', [dunceEvent]);
-				events.splice(events.indexOf(dunceEvent), 1);
+				final runEvent:Event = events[0];
+				ModdingUtil.addCall('eventHit', [runEvent]);
+				events.splice(events.indexOf(runEvent), 1);
 			}
 		}
 	}

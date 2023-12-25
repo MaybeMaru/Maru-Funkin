@@ -66,17 +66,16 @@ class NoteUtil {
 		return typeJson;
 	}
 
-    public static function clearSustainCache() {
-        skinSpriteMap.clear();
-        for (key in AssetManager.cachedGraphics.keys()) {
-            if (key.startsWith('sus')) AssetManager.removeGraphicByKey(key);
+    public static function clearSkinCache() {
+        for (skin => data in skinSpriteMap) {
+            AssetManager.removeGraphicByKey(data.baseSprite.imageKey);
+            #if !hl
+            Preloader.disposeTexture(data.baseSprite.imageKey);
+            #end
+            data.baseSprite = FlxDestroyUtil.destroy(data.baseSprite);
+            data.skinJson = null;
+            skinSpriteMap.remove(skin);
         }
-        #if !hl
-        for (key in Preloader.cachedTextures.keys()) {
-            if (key.startsWith('sus'))
-                Preloader.disposeTexture(key);
-        }
-        #end
     }
 
     /*
@@ -96,73 +95,23 @@ class NoteUtil {
         skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
         final refSprite:FlxSpriteExt = new FlxSpriteExt();
-        refSprite.loadImage('skins/$skin/${skinJson.imagePath}', false, false);
+        refSprite.loadImage('skins/$skin/${skinJson.imagePath}');
         refSprite.setScale(skinJson.scale);
         refSprite.antialiasing = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
         for (anim in skinJson.anims)
             refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
-        final susPieceMap:Map<String, BitmapData> = [];
-        final susEndMap:Map<String, BitmapData> = [];
-
-        if (AssetManager.existsGraphic('sus-bitmap-$skin-hold-LEFT')) { // Skip loading base sustain flxsprite
-            for (i in CoolUtil.directionArray) {
-                susPieceMap.set(i, AssetManager.getGraphic('sus-bitmap-$skin-hold-$i').bitmap);
-                susEndMap.set(i,AssetManager.getGraphic('sus-bitmap-$skin-holdend-$i').bitmap);
-            }
-        }
-        else {
-            for (i in CoolUtil.directionArray) {
-                refSprite.animation.play('hold' + i, true);
-                refSprite.updateHitbox();
-                refSprite.drawFrame();
-                //susPieceMap.set(i, createLoopBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i'));
-                susPieceMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-hold-$i', true).bitmap);
-    
-                refSprite.animation.play('hold' + i + '-end', true);
-                refSprite.updateHitbox();
-                refSprite.drawFrame();
-                susEndMap.set(i, AssetManager.addGraphicFromBitmap(refSprite.framePixels.clone(), 'sus-bitmap-$skin-holdend-$i', true).bitmap);
-            }
-        }
-
         final addMap:SkinSpriteData = {
             baseSprite: refSprite,
-            susPieces: susPieceMap,
-            susEnds: susEndMap,
             skinJson: skinJson
         }
         skinSpriteMap.set(skin, addMap);
         return addMap;
     }
-
-    /*
-     *  Save on calculations????
-     */
-
-    /*static function createLoopBitmap(input:BitmapData, key:String):BitmapData { // Wont use until i fix clipping bitmaps
-        var loops:Int = Std.int(Math.max(input.height/12, 1));
-        var loopedBitmap:BitmapData = new BitmapData(input.width, input.height*loops, true, FlxColor.fromRGB(0,0,0,0));
-        for (i in 0...loops) {
-           var matrix:FlxMatrix = new FlxMatrix();
-           matrix.translate(0, i*input.height);
-           loopedBitmap.draw(input, matrix);
-        }
-        input.dispose();
-        input.disposeImage();
-        return Paths.addGraphicFromBitmap(loopedBitmap, key, true).bitmap;
-    }*/
     
-    public static function getSkinSprites(skin:String, noteData:Int = 0):SkinMapData {
+    public static function getSkinSprites(skin:String):SkinSpriteData {
         if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
-        var dir = CoolUtil.directionArray[noteData];
-        var spriteData:SkinSpriteData = skinSpriteMap.get(skin);
-        return {
-            baseSprite: spriteData.baseSprite,
-            susPiece: spriteData.susPieces.get(dir),
-            susEnd: spriteData.susEnds.get(dir),
-            skinJson: spriteData.skinJson
-        }
+        return skinSpriteMap.get(skin);
     }
 
     public static final DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
@@ -191,16 +140,7 @@ class NoteUtil {
     }
 }
 
-typedef SkinMapData = {
-    baseSprite:FlxSpriteExt,
-    susPiece:BitmapData,
-    susEnd:BitmapData,
-    skinJson:NoteSkinData
-}
-
 typedef SkinSpriteData = {
     baseSprite:FlxSpriteExt,
-    susPieces:Map<String, BitmapData>,
-    susEnds:Map<String, BitmapData>,
     skinJson:NoteSkinData
 }

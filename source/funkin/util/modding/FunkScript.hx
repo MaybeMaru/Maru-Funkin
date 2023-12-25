@@ -51,6 +51,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		ModdingUtil.warningPrint('${getTraceID()} / $text');
 	}
 
+	static final tempEvent:Event = new Event(); // For runEvent()
+
 	public function implement():Void { //Preloaded Variables
 
 		// Wip
@@ -258,6 +260,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		set('cacheCharacter', function(name:String):Character {
 			return new Character(0,0,name);
+		});
+
+		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {
+			return ModdingUtil.addCall('eventHit', [tempEvent.set(-1, name, values)]);
 		});
 
 		// Script functions

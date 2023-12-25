@@ -30,11 +30,11 @@ class BasicNote extends SmartSprite implements INoteData {
         return isSustainNote = value;
     }
 
-    private var curSkinData:SkinMapData;
+    private var curSkinData:SkinSpriteData;
     public var skin(default, set):String = "default";
     inline function set_skin(?value:String) {
         skin = value ?? SkinUtil.curSkin;
-        curSkinData = NoteUtil.getSkinSprites(skin, noteData);
+        curSkinData = NoteUtil.getSkinSprites(skin);
         updateSprites();
         return skin;
     }

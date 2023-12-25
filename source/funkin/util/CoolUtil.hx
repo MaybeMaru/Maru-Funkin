@@ -14,7 +14,7 @@ import neko.vm.Gc;
 
 typedef CacheClearing =  {
 	?bitmap:Bool,
-	?sustains:Bool,
+	?skins:Bool,
 	?sounds:Bool,
 	?shaders:Bool
 }
@@ -70,9 +70,9 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	static var DEFAULT_CACHE_CLEARING:CacheClearing = {
+	static final DEFAULT_CACHE_CLEARING:CacheClearing = {
 		bitmap: true,
-		sustains: true,
+		skins: true,
 		sounds: true,
 		shaders: true
 	}
@@ -80,7 +80,7 @@ class CoolUtil {
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
 		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
 		if (cacheClear.bitmap) AssetManager.clearBitmapCache();
-		if (cacheClear.sustains) NoteUtil.clearSustainCache();
+		if (cacheClear.skins) NoteUtil.clearSkinCache();
 		if (cacheClear.sounds) AssetManager.clearSoundCache(!softClear);
 		if (cacheClear.shaders) Shader.clearShaders();
 		gc(true);

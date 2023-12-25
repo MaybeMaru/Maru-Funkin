@@ -19,18 +19,20 @@ class HealthIcon extends FlxSpriteExt {
 		makeIcon(char);
 	}
 
+	static final PIXEL_ICONS:Array<String> = ["senpai", "spirit"];
+
 	public function makeIcon(char:String = 'bf', forced:Bool = false):Void {
 		if (iconName == char && !forced) return; // skip loading shit
 		antialiasing = Preferences.getPref('antialiasing');
 		iconName = char;
-		if (["senpai", "spirit"].contains(char) || char.contains('-pixel')) antialiasing = false;
+		if (PIXEL_ICONS.contains(char) || char.contains('-pixel')) antialiasing = false;
 
 		var icon:FlxGraphicAsset = Paths.image('icons/face');
 		if (Paths.exists(Paths.image('icons/$char', null, true), IMAGE))
 			icon = Paths.image('icons/$char', null, false);
 
 		loadImage('icons/$char');	//	Load it first to get the width and height
-		if (_packer == IMAGE) {
+		if (packer == IMAGE) {
 			singleAnim = !(width >= height * 1.25); // Id make it 2 but theres some weird ass resolutions out there
 			if (!singleAnim) {
 				loadGraphic(icon, true, Math.floor(width * 0.5), cast height);

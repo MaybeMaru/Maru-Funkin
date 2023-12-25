@@ -32,7 +32,9 @@ class FlxSpriteExt extends FlxSkewedSprite {
     public var animOffsets:Map<String, FlxPoint>;
 	public var animDatas:Map<String, SpriteAnimation>;
 	public var specialAnim:Bool = false;
-	public var _packer:PackerType = IMAGE;
+	
+	public var packer(default, null):PackerType = IMAGE;
+	public var imageKey(default, null):String = "::null::";
 
     public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset):Void {
         animOffsets = new Map<String, FlxPoint>();
@@ -64,8 +66,9 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):FlxSpriteExt {
-		_packer = Paths.getPackerType(path);
-		switch (_packer) {
+		packer = Paths.getPackerType(path);
+		imageKey = path;
+		switch (packer) {
 			default:			loadGraphic(Paths.image(path, library, false, global, gpu));
 			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, gpu);
 			case SHEETPACKER: 	frames = Paths.getPackerAtlas(path, library, gpu);
@@ -124,6 +127,50 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		}
 
 		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
+	}
+
+	@:noCompletion
+	private inline function __updateTrig() {
+		if (_angleChanged) {
+			final rads:Float = angle * FlxAngle.TO_RAD;
+			#if FAST_MATH
+			_cosAngle = FlxMath.fastCos(rads);
+			_sinAngle = FlxMath.fastSin(rads);
+			#else
+			_cosAngle = Math.cos(rads);
+			_sinAngle = Math.sin(rads);
+			#end
+			_angleChanged = false;
+		}
+	}
+
+	override function set_angle(value:Float):Float {
+		if (angle != value) {
+			if (value == 0) {
+				_sinAngle = 0;
+				_cosAngle = 1;
+			}
+			else _angleChanged = true;
+			animation.update(0.0);
+		}
+		return angle = value;
+	}
+	
+	override function drawComplex(camera:FlxCamera) {
+		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
+		_matrix.translate(-origin.x, -origin.y);
+		_matrix.scale(scale.x, scale.y);
+
+		if (angle != 0) {
+			__updateTrig();
+			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
+		}
+
+		getScreenPosition(_point, camera).subtractPoint(offset);
+		_point.add(origin.x, origin.y);
+		_matrix.translate(_point.x, _point.y);
+
+		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
 	}
 
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {

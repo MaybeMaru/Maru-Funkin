@@ -50,9 +50,10 @@ class Event {
         set(strumTime, name, values);
     }
 
-    public inline function set(strumTime:Float = 0, name:String = "", ?values:Array<Dynamic>) {
+    public inline function set(strumTime:Float = 0, name:String = "", ?values:Array<Dynamic>):Event {
         this.strumTime = strumTime;
         this.name = name;
         this.values = values ?? [];
+        return this;
     }
 }

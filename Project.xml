@@ -76,6 +76,9 @@
 
 	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>
 	<define name="DISCORD_ALLOWED" if="cpp"/>
+	
+	<!--If you want more accurate sprite angles, at cost of performance-->
+	<define name="FAST_MATH"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

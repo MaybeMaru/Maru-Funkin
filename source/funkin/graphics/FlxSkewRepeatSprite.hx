@@ -10,7 +10,6 @@ import openfl.display.BitmapData;
 */
 
 class FlxSkewRepeatSprite extends FlxRepeatSprite {
-    static final tempMatrix:FlxMatrix = new FlxMatrix();
     static var idY:Int = -1;
 
     public var wigglePower:Float = 0.0;
@@ -26,7 +25,6 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         }
 
         idY = tileY;
-        tempMatrix.copyFrom(_matrix);
         
         scaledWiggleX = wigglePower * (calcHeight != -1 ? calcHeight : baseFrame.frame.height) * scale.y * 0.01; // Value outta my ass but trust me bro
         scaledWiggleX /= smoothTiles;
@@ -39,8 +37,6 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
         if (clipRect == null) offsetSkew(tileFrame, baseFrame);
         super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos);
-
-        _matrix.copyFrom(tempMatrix);
     }
 
     inline function isLeftSkew():Bool {
@@ -51,18 +47,21 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     inline function offsetSkew(tileFrame:FlxFrame, baseFrame:FlxFrame) {
         final percId = idY % (smoothTiles * 2);
+        tileOffset.set();
 
         if (percId == 0)    xOff = 0;
-        else                xOff += _matrix.c * baseFrame.frame.width;
+        else                xOff -= _matrix.c * baseFrame.frame.width;
 
         // TODO: This is more or less accurate but still isnt perfect, figure out better math you dumb cunt
         var multX:Float = 1.0;
         if (tileFrame.frame.height != baseFrame.frame.height) {
             multX = tileFrame.frame.height / baseFrame.frame.height;
-            if (isLeftSkew()) _matrix.tx += _matrix.c * baseFrame.frame.width * (1-multX);
+            if (isLeftSkew())
+                tileOffset.x -= _matrix.c * baseFrame.frame.width * (1 - multX);
         }
 
-        _matrix.tx -= xOff * multX;
+        tileOffset.x += xOff * multX;
+        tileOffset.x *= -_cosAngle;
     }
 
     override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {

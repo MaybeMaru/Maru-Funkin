@@ -672,8 +672,9 @@ class PlayState extends MusicBeatState {
 		Conductor.stop();
 
 		clearCache = true;
-		clearCacheData = { // Clear last song audio and note cache
-			bitmap: false
+		clearCacheData = { // Clear last song audio and shaders
+			bitmap: false,
+			skins: false
 		}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
 		switchState(new PlayState(), true);

@@ -56,6 +56,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
         super.destroy();
         tileRect = FlxDestroyUtil.put(tileRect);
         clipRect = FlxDestroyUtil.put(clipRect);
+        tileOffset = FlxDestroyUtil.put(tileOffset);
     }
 
     override function set_clipRect(rect:FlxRect):FlxRect {
@@ -188,14 +189,20 @@ class FlxRepeatSprite extends FlxSpriteExt {
         return __tempPoint;
     }
 
+    var tileOffset:FlxPoint = FlxPoint.get();
+
     function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
         final __doDraw:Bool = clipRect != null ? handleClipRect(tileFrame, baseFrame, tilePos) : true;
         if (tileRect != null) tileFrame = tileFrame.clipTo(tileRect);
 
         if (__doDraw && (__lastMatrix.x != _matrix.tx || __lastMatrix.y != _matrix.ty)) {
             __lastMatrix.set(_matrix.tx, _matrix.ty);
+            translateWithTrig(-tileOffset.x, -tileOffset.y);
             if (!matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) // dont draw stuff out of bounds
                 __drawCam.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
+            
+            translateWithTrig(tileOffset.x, tileOffset.y);
+            tileOffset.set();
         }
     }
 

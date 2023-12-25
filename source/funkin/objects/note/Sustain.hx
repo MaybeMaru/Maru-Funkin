@@ -80,6 +80,7 @@ class Sustain extends BasicNote {
             updateHitbox();
             offset.y = 0;
             offset.x -= value.width * 0.5 - width * 0.5;
+            origin.set(width * 0.5 / scale.x, 0);
         }
         return targetStrum = value;
     }
@@ -93,7 +94,6 @@ class Sustain extends BasicNote {
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);
-        origin.set(width * 0.5 / scale.x, 0);
         //calcHeight = frameHeight;
         repeatHeight = lastHeight;
         clipRect.width = repeatWidth;
