@@ -36,22 +36,29 @@ class Sustain extends BasicNote {
     public var pressed:Bool = false;
     public var startedPress:Bool = false;
     public var missedPress(default, set):Bool = false;
-    inline function set_missedPress(value:Bool) {
+    inline function set_missedPress(value:Bool):Bool {
         color = (value && mustHit) ? MISS_COLOR : FlxColor.WHITE;
+        pressed = false;
+        moving = true;
+        offset.y = cutHeight * getCos();
         return missedPress = value;
     }
 
     public var percentLeft(default, null):Float = 0.0;
+    public var cutHeight(default, null):Float = 0.0;
 
-    public function pressSustain() {
-        pressed = false;
+    public function pressSustain():Void {
         if (Conductor.songPosition >= strumTime) {
             pressed = true;
-            final susY:Float = getMillPos(strumTime - Conductor.songPosition);
-            percentLeft = repeatHeight / -susY;
-            clipRect.y = susY;
-            offset.y = susY * getCos();
-            if (susY <= -repeatHeight) {
+            moving = false;
+            setPositionToStrum();
+
+            // Update rect
+            cutHeight = getMillPos(strumTime - Conductor.songPosition);
+            clipRect.y = cutHeight;
+            
+            // Sustain is finished
+            if (cutHeight <= -repeatHeight) {
                 kill();
             }
         }
@@ -89,12 +96,13 @@ class Sustain extends BasicNote {
         loadFromSprite(curSkinData.baseSprite);
         
         playAnim("hold" + CoolUtil.directionArray[noteData]);
-        playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
+        
+        //playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
         targetStrum = targetStrum;
 
         final lastHeight = repeatHeight;
         setTiles(1, 1);
-        //calcHeight = frameHeight;
+        calcHeight = frameHeight;
         repeatHeight = lastHeight;
         clipRect.width = repeatWidth;
     }
