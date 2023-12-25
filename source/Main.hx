@@ -114,6 +114,8 @@ class Main extends Sprite
 		setupGame();
 	}
 
+	public static final DEFAULT_GRAPHIC:FlxGraphic = FlxGraphic.fromAssetKey("flixel/images/logo/default.png", true, "::default_graphic::", false);
+
 	private function setupGame():Void {
 		final stageWidth:Int = Lib.current.stage.stageWidth;
 		final stageHeight:Int = Lib.current.stage.stageHeight;

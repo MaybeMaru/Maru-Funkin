@@ -119,9 +119,10 @@ class NoteUtil {
     public static final DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
     public static final DEFAULT_NOTE_ANGLES:Array<Float>= [0, -90, 90, 180];
 
-    public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>) {
+    public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>):BitmapData {
         sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),
 		new openfl.filters.ColorMatrixFilter(getColorMatrix(red,green,blue)));
+        return sprite.pixels;
     }
 
     public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {

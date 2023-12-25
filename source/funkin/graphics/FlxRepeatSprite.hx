@@ -48,7 +48,6 @@ class FlxRepeatSprite extends FlxSpriteExt {
     
     public function new(?X:Float, ?Y:Float, ?SimpleGraphic:FlxGraphicAsset, ?repeatWidth:Float, ?repeatHeight:Float) {
         super(X,Y,SimpleGraphic);
-        checkEmptyFrame();
         setRepeat(repeatWidth ?? frameWidth, repeatHeight ?? frameHeight);
     }
 

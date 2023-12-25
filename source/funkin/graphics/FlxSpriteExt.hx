@@ -1,7 +1,6 @@
 package funkin.graphics;
 
 import flixel.util.FlxDestroyUtil;
-import flixel.addons.effects.FlxSkewedSprite;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 import flixel.FlxBasic;
@@ -9,7 +8,7 @@ import flixel.FlxBasic;
 /*
     Just FlxSprite but with helper functions
 */
-class FlxSpriteExt extends FlxSkewedSprite {
+class FlxSpriteExt extends FlxSprite {
 
 	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
@@ -35,6 +34,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	
 	public var packer(default, null):PackerType = IMAGE;
 	public var imageKey(default, null):String = "::null::";
+
+	public var skew(default, null):FlxPoint = FlxPoint.get();
 
     public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset):Void {
         animOffsets = new Map<String, FlxPoint>();
@@ -113,6 +114,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		else __superDraw();
 	}
 
+	override function checkEmptyFrame() {
+		if (_frame == null)
+			loadGraphic(Main.DEFAULT_GRAPHIC);
+	}
+
 	@:noCompletion
 	private inline function __superDraw() {
 		inline checkEmptyFrame();
@@ -157,6 +163,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 	
 	override function drawComplex(camera:FlxCamera) {
+		__superDrawComplex(camera);
+	}
+
+	@:noCompletion
+	private inline function __superDrawComplex(camera:FlxCamera) {
 		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
 		_matrix.translate(-origin.x, -origin.y);
 		_matrix.scale(scale.x, scale.y);
@@ -164,6 +175,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (angle != 0) {
 			__updateTrig();
 			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
+		}
+
+		if (skew.x != 0 || skew.y != 0) {
+			_matrix.c = Math.tan(skew.x * FlxAngle.TO_RAD);
+			_matrix.b = Math.tan(skew.y * FlxAngle.TO_RAD);
 		}
 
 		getScreenPosition(_point, camera).subtractPoint(offset);
@@ -255,14 +271,15 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		i.length > 0 ? animation.addByIndices(n, f, i, "", fps, l) : animation.addByPrefix(n, f, fps, l);
 	}
 
-	inline public function setSkew(?skewX:Float, ?skewY:Float) {
-		skew.set(skewX ?? skew.x, skewY ?? skew.y);
+	inline public function setSkew(skewX:Float = 0, skewY:Float = 0) {
+		skew.set(skewX, skewY);
 	}
 
 	override function destroy() {
-		super.destroy();
 		animOffsets = null;
 		animDatas = null;
+		skew = FlxDestroyUtil.put(skew);
+		super.destroy();
 	}
 
 	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
@@ -271,7 +288,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		graphic.bitmap.draw(Brush, matrix);
 	}
 
-	inline public function uploadGpu(key:String) {
-		return AssetManager.uploadSpriteGpu(this, key);
+	inline public function uploadGpu(?key:String) {
+		return AssetManager.uploadSpriteGpu(this, key ?? imageKey);
 	}
 }

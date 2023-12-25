@@ -86,7 +86,7 @@ class Sustain extends BasicNote {
     }
 
     override function updateSprites():Void {
-        super.updateSprites();
+        loadFromSprite(curSkinData.baseSprite);
         
         playAnim("hold" + CoolUtil.directionArray[noteData]);
         playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");
