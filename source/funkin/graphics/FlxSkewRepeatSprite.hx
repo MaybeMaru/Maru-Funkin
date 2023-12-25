@@ -7,7 +7,7 @@ import openfl.display.BitmapData;
 /*
     TODO:
     add skew y support (_matrix.b) and fix problems with dynamically sized tiles
-    fix skew on angles other than 0 and 180
+    fix skew on angles other than 0 and 180 (Fr this shit fucking sucks)
 */
 
 class FlxSkewRepeatSprite extends FlxRepeatSprite {

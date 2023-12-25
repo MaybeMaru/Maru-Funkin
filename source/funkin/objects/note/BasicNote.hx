@@ -76,12 +76,13 @@ class BasicNote extends SmartSprite implements INoteData {
         }
     }
 
+    public var noteMove(default, null):Float = 0.0; // Distance position value between the note and the strum
     public var xDisplace:Float = 0.0;
     public var yDisplace:Float = 0.0;
 
     inline public function moveToStrum():Void {
         setPositionToStrum();
-        final noteMove:Float = distanceToStrum(); // Position with strumtime
+        noteMove = distanceToStrum(); // Position with strumtime
         y -= noteMove * getCos();
         x -= noteMove * -getSin();
     }

@@ -198,11 +198,15 @@ class FlxRepeatSprite extends FlxSpriteExt {
             __lastMatrix.set(_matrix.tx, _matrix.ty);
             translateWithTrig(-tileOffset.x, -tileOffset.y);
             if (!matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) // dont draw stuff out of bounds
-                __drawCam.drawPixels(tileFrame, bitmap, _matrix, colorTransform, blend, antialiasing, shader);
+                drawTileToCamera(tileFrame, bitmap, _matrix, __drawCam);
             
             translateWithTrig(tileOffset.x, tileOffset.y);
             tileOffset.set();
         }
+    }
+
+    function drawTileToCamera(tileFrame:FlxFrame, bitmap:BitmapData, tileMatrix:FlxMatrix, camera:FlxCamera) {
+        camera.drawPixels(tileFrame, bitmap, tileMatrix, colorTransform, blend, antialiasing, shader);
     }
 
     inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
