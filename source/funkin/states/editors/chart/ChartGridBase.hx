@@ -81,8 +81,8 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
         obj.kill();
         if (cast obj is ChartNote) {
             obj.x = -999;
-            if (obj.childNote != null) obj.childNote.kill();
-            if (obj.txt != null) obj.txt.kill();
+            if (obj.child != null) obj.child.kill();
+            if (obj.typeText != null) obj.typeText.kill();
         }
     }
 
@@ -127,49 +127,57 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
     }
 }
 
+/*
+    TODO: make bitmaps sustain system for charting state
+*/
+
 class ChartNoteGrid extends ChartGridBase {
-    public var sustainsGroup:FlxTypedGroup<ChartNote>;
-    public var textGroup:FlxTypedGroup<FunkinText>;
     public var waveformVocals:ChartWaveform;
     public var waveformInst:ChartWaveform;
 
-    public var group:FlxTypedGroup<ChartNote>;
+    public var sustainsGroup:FlxTypedGroup<ChartSustain>;
+    public var textGroup:FlxTypedGroup<FunkinText>;
 
-    override function drawObject(note:Array<Dynamic>):Dynamic {
-        final strumTime:Float = note[0];
-        final noteData:Int = note[1];
-        final susLength:Float = note[2];
-        final noteType:String = NoteUtil.getTypeName(note[3]);
+    override function drawObject(data:Array<Dynamic>):Dynamic {
+        final strumTime:Float = data[0];
+        final noteData:Int = data[1];
+        final susLength:Float = data[2];
+        
+        final noteType:String = NoteUtil.getTypeName(data[3]);
         final typeData:NoteTypeJson = NoteUtil.getTypeJson(noteType);
+        final pos:FlxPoint = FlxPoint.get(grid.x + Math.floor(noteData * GRID_SIZE), grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime)));
 
-        final gridPos = new FlxPoint(grid.x + Math.floor(noteData * GRID_SIZE), grid.y + Math.floor(ChartingState.getTimeY(strumTime - sectionTime)));
+        // Create note
+        final note:ChartNote = cast(objectsGroup.recycle(ChartNote), ChartNote);
+        note.init(data, typeData.skin, pos);
 
-        final _note:ChartNote = cast(objectsGroup.recycle(ChartNote), ChartNote);
-        _note.init(strumTime, noteData, gridPos.x, gridPos.y, 0, typeData.skin);
-        _note.chartData = note;
-
-        /*var susNote:ChartNote = null;
+        // Create sustain
+        var sustain:ChartSustain = null;
         if (susLength > 0) {
-            susNote = sustainsGroup.recycle(ChartNote);
-            susNote.init(strumTime, noteData, gridPos.x, gridPos.y, susLength, typeData.skin, true, _note);
-            sustainsGroup.add(susNote);
-        }*/
+            sustain = sustainsGroup.recycle(ChartSustain);
+            sustain.init(data, typeData.skin, pos, note);
+            sustainsGroup.add(sustain);
+        }
+        note.child = sustain;
 
+        // Create type text
         if (typeData.showText) {
-            final typeStr:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
-            if (typeStr.length > 0) {
-                final typeText:FunkinText = textGroup.recycle(FunkinText);
-                typeText.text = typeStr;
-                typeText.setPosition(_note.x - (typeText.width * .5 - _note.width * .5), _note.y - (typeText.height * .5 - _note.height * .5));
-                typeText.scrollFactor.set(1,1);
-                textGroup.add(typeText);
-                _note.txt = typeText;
+            final type:String = (noteType.startsWith('default')) ? noteType.split('default')[1].replace('-','') : noteType;
+            if (type.length > 0) {
+                final text:FunkinText = textGroup.recycle(FunkinText);
+                text.text = type;
+
+                text.setPosition(pos.x - (text.width * .5 - note.width * .5), pos.y - (text.height * .5 - note.height * .5));
+                text.scrollFactor.set(1,1);
+
+                note.typeText = text;
+                textGroup.add(text);
             }
         }
 
-        //_note.child = susNote;
-        objectsGroup.add(_note);
-        return _note;
+        pos.put();
+        objectsGroup.add(note);
+        return note;
     }
     
     public function new() {        
@@ -182,15 +190,13 @@ class ChartNoteGrid extends ChartGridBase {
         insert(this.members.indexOf(objectsGroup), waveformVocals);
         waveformInst.visible = waveformVocals.visible = false;
 
-        sustainsGroup = new FlxTypedGroup<ChartNote>();
+        sustainsGroup = new FlxTypedGroup<ChartSustain>();
         insert(this.members.indexOf(objectsGroup), sustainsGroup);
         
         textGroup = new FlxTypedGroup<FunkinText>();
         add(textGroup);
 
         updateWaveform();
-
-        this.group = cast this.objectsGroup;
     }
 
     public function updateWaveform() {
@@ -207,49 +213,60 @@ class ChartNote extends Note {
     public function new() {
         super();
         scrollFactor.set(1,1);
-        //susEndHeight = 0;
         active = false;
     }
 
+    public var chartData:Null<Array<Dynamic>> = null;
+    public var typeText:Null<FunkinText> = null;
     public var gridNoteData:Int = 0;
-    public var txt:FunkinText = null;
-    public var startInit:Bool = false;
-    public var chartData:Array<Dynamic> = null;
-    public var _parent:ChartNote = null;
 
-    public function init(_time, _data, _xPos, _yPos, _sus, _skin, forceSus = false, ?_parent:ChartNote) {
-        strumTime = _time;
-        noteData = _data % Conductor.NOTE_DATA_LENGTH;
-        gridNoteData = _data;
-        isSustainNote = forceSus;
-        this._parent = _parent;
-        _skin = _skin ?? SkinUtil.curSkin;
-        txt = null;
+    public function init(?chartData:Array<Dynamic>, ?skin:String, position:FlxPoint) {
+        this.chartData = chartData;
 
-        /*setPosition(_xPos, _yPos);
-        if (skin != _skin || !startInit) {
-            skin = _skin;
-            createGraphic(false);
-            startInit = true;
-        } else updateAnims();
+        strumTime = chartData[0];
+        noteData = cast(chartData[1] % Conductor.NOTE_DATA_LENGTH, Int);
+        gridNoteData = chartData[1];
+
+        changeSkin(skin ?? SkinUtil.curSkin);
+        playAnim('scroll' + CoolUtil.directionArray[noteData]);
+        setGraphicSize(GRID_SIZE, GRID_SIZE);
         updateHitbox();
 
-        if (isSustainNote) {
-            alpha = 0.6;
-            final _scale = _parent.scale.x;
-            setScale(_scale);
-            
-            final _off = ChartingState.getYtime(GRID_SIZE * 0.5);
-            final _height = Math.floor(((FlxMath.remapToRange(_sus + _off, 0, Conductor.stepCrochet * Conductor.STEPS_PER_MEASURE, 0, GRID_SIZE * Conductor.STEPS_PER_MEASURE))) / _scale);
-            drawSustainCached(_height);
-            updateHitbox();
-            offset.x -= GRID_SIZE * 0.5 - width / 2.125;
-            offset.y -= GRID_SIZE * 0.5;
-        } else {
-            alpha = 1;
-            setGraphicSize(GRID_SIZE, GRID_SIZE);
-            updateHitbox();
-        }*/
+        setPosition(position.x, position.y);
+    }
+}
+
+class ChartSustain extends Sustain {
+    public function new() {
+        super();
+        scrollFactor.set(1,1);
+        active = false;
+        boundsOffsetY = -FlxG.height;
+    }
+
+    public var chartData:Null<Array<Dynamic>> = null;
+    public var chartParent:Null<ChartNote> = null;
+    public var gridNoteData:Int = 0;
+
+    public function init(?chartData:Array<Dynamic>, ?skin:String, position:FlxPoint, ?parent:ChartNote) {
+        this.chartData = chartData;
+        this.chartParent = parent;
+
+        strumTime = chartData[0];
+        noteData = cast(chartData[1] % Conductor.NOTE_DATA_LENGTH, Int);
+        gridNoteData = chartData[1];
+
+        changeSkin(skin ?? SkinUtil.curSkin);
+        setPosition(position.x, position.y);
+        if (parent != null) {
+            setScale(parent.scale.x);
+            setTiles(1,1);
+            offset.x -= GRID_SIZE * .5 - repeatWidth * .5;
+            offset.y -= GRID_SIZE * .5;
+        }
+
+        repeatHeight = FlxMath.remapToRange(chartData[2], 0, Conductor.stepCrochet, 0, GRID_SIZE) + GRID_SIZE * .5;
+        clipRect.height = repeatHeight;
     }
 }
 

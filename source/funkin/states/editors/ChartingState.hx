@@ -131,16 +131,17 @@ class ChartingState extends MusicBeatState {
         super.create();
     }
 
+    static final PRESSED_COLOR:Int = 0xffb496b4;
+
     inline function checkNoteSound() {
-        var gray = FlxColor.fromRGB(180,150,180);
-        mainGrid.group.forEachAlive(function (note:ChartNote) {
+        mainGrid.objectsGroup.forEachAlive(function (note:ChartNote) {
             if (note.strumTime + 0.1 <= Conductor.songPosition && note.strumTime + 0.1 >= sectionTime) {
                 if (note.color == FlxColor.WHITE) {
                     strumBar.pressStrum(note.gridNoteData);
                     if (playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
                 } 
-                note.color = gray;
-                if (note.child != null) note.child.color = gray;
+                note.color = PRESSED_COLOR;
+                if (note.child != null) note.child.color = PRESSED_COLOR;
             }
             else {
                 note.color = FlxColor.WHITE;
@@ -148,15 +149,15 @@ class ChartingState extends MusicBeatState {
             }
         });
 
-        mainGrid.sustainsGroup.forEachAlive(function (sus:ChartNote) {
-            final note = sus?._parent?.chartData;
-            if (note != null && Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + note[2]) {
+        mainGrid.sustainsGroup.forEachAlive(function (sustain:ChartSustain) {
+            final note = sustain?.chartParent?.chartData;
+            if (note != null && Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + (Conductor.stepCrochet * .5) + note[2]) {
                 strumBar.pressStrum(note[1]);
             }
         });
 
         eventsGrid.group.forEachAlive(function (event:ChartEvent) {
-            if (event.strumTime + 0.1 <= Conductor.songPosition) event.color = gray;
+            if (event.strumTime + 0.1 <= Conductor.songPosition) event.color = PRESSED_COLOR;
             else event.color = FlxColor.WHITE;
         });
     }
@@ -332,8 +333,8 @@ class ChartingState extends MusicBeatState {
 
         if (clickL || clickR) {
             if (!eventsOverlap) {
-                if (FlxG.mouse.overlaps(mainGrid.group)) { // Remove notes
-                    mainGrid.group.forEachAlive(function (note:ChartNote) {
+                if (FlxG.mouse.overlaps(mainGrid.objectsGroup)) { // Remove notes
+                    mainGrid.objectsGroup.forEachAlive(function (note:ChartNote) {
                         if (note.strumTime < sectionTime) return;
                         if (FlxG.mouse.overlaps(note)) clickL ? removeNote(note) : selectNote(note);
                     });

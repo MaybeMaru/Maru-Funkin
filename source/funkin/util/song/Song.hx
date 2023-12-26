@@ -184,7 +184,8 @@ class Song {
 			} else {
 				for (note in sec.sectionNotes) {
 					if (note[3] == null) continue;
-					if (note[3] == "default") note = note.pop(); 
+					final type:String = note[3]; // hl is gay
+					if (type == "default") note = note.pop(); 
 				}
 				sec.sectionNotes.sort(sortNotes);
 			}

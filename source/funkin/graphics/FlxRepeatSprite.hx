@@ -209,11 +209,14 @@ class FlxRepeatSprite extends FlxSpriteExt {
         camera.drawPixels(tileFrame, bitmap, tileMatrix, colorTransform, blend, antialiasing, shader);
     }
 
+    public var boundsOffsetX:Float = 0.0;
+    public var boundsOffsetY:Float = 0.0;
+
     inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
-        return ((_matrix.ty + (frame.height * scale.y)) < cam.viewY) ||
-               ((_matrix.ty - (frame.height * scale.y)) > cam.viewHeight) ||
-               ((_matrix.tx + (frame.width * scale.x)) < cam.viewX) ||
-               ((_matrix.tx - (frame.width * scale.x)) > cam.viewWidth);
+        return ((_matrix.ty + (frame.height * scale.y) - boundsOffsetY) < cam.viewY) ||
+               ((_matrix.ty - (frame.height * scale.y) + boundsOffsetY) > cam.viewHeight) ||
+               ((_matrix.tx + (frame.width * scale.x) - boundsOffsetX) < cam.viewX) ||
+               ((_matrix.tx - (frame.width * scale.x) + boundsOffsetX) > cam.viewWidth);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {

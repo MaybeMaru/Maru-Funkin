@@ -40,6 +40,7 @@ import funkin.Transition;
 
 //Note
 import funkin.objects.note.Note;
+import funkin.objects.note.Sustain;
 import funkin.util.NoteUtil;
 import funkin.objects.note.NoteSplash;
 import funkin.objects.note.NoteStrum;
