@@ -79,7 +79,9 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('FunkinSprite', FunkinSprite);
 		set('FunkinText', FunkinText);
 		set('Character', Character);
+		
 		set('Note', Note);
+		set('Sustain', Sustain);
 
 		set('Alphabet', Alphabet);
 		set('TypedAlphabet', TypedAlphabet);

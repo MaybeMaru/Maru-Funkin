@@ -74,20 +74,20 @@ class NotesGroup extends FlxGroup
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
-	function pressSustain(note:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	function pressSustain(sustain:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		if (isPlayState) {
-			character.sing(note.noteData, note.altAnim, false);
+			character.sing(sustain.noteData, sustain.altAnim, false);
 			Conductor.vocals.volume = 1;
 		}
 
 		if (!botplayCheck || prefBot) {
-			if (isPlayState) PlayState.instance.health += note.hitHealth[1] * (FlxG.elapsed * 5);
+			if (isPlayState) PlayState.instance.health += sustain.hitHealth[1] * (FlxG.elapsed * 5);
 		} else {
-			note.pressSustain();
+			sustain.pressSustain();
 		}
 
-		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
-		note.targetStrum.playStrumAnim('confirm', true);
+		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(sustain) :
+		sustain.targetStrum.playStrumAnim('confirm', true);
 	}
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {

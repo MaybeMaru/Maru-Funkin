@@ -26,10 +26,13 @@ PixelDialogueBox
 FunkinSprite
 FunkinText
 Character
-Note
 Alphabet
 TypedAlphabet
 MenuAlphabet
+
+// Gameplay objects
+Note
+Sustain
 
 // Haxe
 Std
@@ -159,6 +162,13 @@ existsGroup(groupTag:String);
 cacheCharacter(charName:String);
 
 /*
+    Runs a PlayState song event
+    @param eventName    --> Name of the event to call
+    @param eventValues  --> Values of the event to call (OPTIONAL)
+*/
+runEvent(eventName:String, ?eventValues:Array<Dynamic>);
+
+/*
     Returns a BlendMode type
     @param blendModeName --> Name of the blend mode EX: 'multiply'
 */
@@ -253,6 +263,16 @@ pauseSounds();
     Resumes all sounds created using getSound() or playSound()
 */
 resumeSounds();
+
+/*
+    Changes the current Discord client presence
+    @param details      --> Small text of the Discord presence
+    @param title        --> Big text of the Discord presence
+    @param smallImage   --> Small image key of the Discord presence (OPTIONAL)
+    @param hasTime      --> If to display the time on the presence (OPTIONAL)
+    @param endTime      --> Time length to display on the presence (OPTIONAL)
+*/
+changeDiscordPresence(details:String, title:String, ?smallImage:String, ?hasTime:Bool, ?endTime:Float);
 
 /*
     Switches the state to a custom state class
@@ -519,10 +539,10 @@ function noteHit(note:Note, isPlayer:Bool)
     //  isPlayer --> If the note is from the player lane
 }
 
-function sustainPress(note:Note, isPlayer:Bool)
+function sustainPress(sustain:Sustain, isPlayer:Bool)
 {
-    //  Called every frame a sustain note from any lane is beaing pressed
-    //  note --> Note pressed
+    //  Called every frame a sustain from any lane is beaing pressed
+    //  sustain --> Sustain pressed
     //  isPlayer --> If the note is from the player lane
 }
 
@@ -532,10 +552,10 @@ function goodNoteHit(note:Note)
     //  note --> Note hit by the player
 }
 
-function goodSustainPress(note:Note)
+function goodSustainPress(sustain:Sustain)
 {
-    // Called every frame a sustain note is being pressed by the player
-    // note --> Note pressed by the player
+    // Called every frame a sustain is being pressed by the player
+    // sustain --> Sustain pressed by the player
 }
 
 function badNoteHit(direction:Int)
@@ -557,10 +577,10 @@ function opponentNoteHit(note:Note)
     //  daNote --> Note hit by the opponent
 }
 
-function opponentSustainPress(note:Note)
+function opponentSustainPress(sustain:Sustain)
 {
-    // Called every frame a sustain note is being pressed by the opponent
-    // note --> Note pressed by the opponent
+    // Called every frame a sustain is being pressed by the opponent
+    // sustain --> Sustain pressed by the opponent
 }
 
 function updateScore(songScore:Int)
