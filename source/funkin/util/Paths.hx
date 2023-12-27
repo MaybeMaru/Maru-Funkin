@@ -21,26 +21,25 @@ class Paths
 	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		#if desktop
 		if (mods) {
-			final modFile:String = ((library != null && library.length > 0) ? library + '/' : '') + file;
+			final modFile:String = ((library?.length ?? 0) != 0 ? '$library/' : '') + file;
+			final modFolder:String = ModdingUtil.curModFolder != null ? ModdingUtil.curModFolder + "/" : "";
 			
-			final _checkFolder:String = ModdingUtil.curModFolder ?? "";
-			final modFolder = _checkFolder.length <= 0 ? '' : _checkFolder + '/';
 			final modFolderPath:String = getModPath(modFolder + modFile);
 			if (exists(modFolderPath, type))
 				return modFolderPath;
 			
 			if (allMods) {
 				for (i in ModdingUtil.activeMods.keys()) {
-					final _modPath = getModPath(i + "/" + modFile);
-					if (ModdingUtil.activeMods.get(i) && exists(_modPath, type))
-						return _modPath;
+					final modPath:String = getModPath(i + "/" + modFile);
+					if (ModdingUtil.activeMods.get(i) && exists(modPath, type))
+						return modPath;
 				}
 			}
 
 			for (i in ModdingUtil.globalMods) {
-				final _modPath = getModPath(i.folder + "/" + modFile);
-				if (exists(_modPath, type))
-					return _modPath;
+				final modPath:String = getModPath(i.folder + "/" + modFile);
+				if (exists(modPath, type))
+					return modPath;
 			}
 			
 			final modPath = getModPath(modFile);

@@ -44,6 +44,7 @@ class Sustain extends BasicNote {
 
     public var percentLeft(default, null):Float = 0.0;
     public var cutHeight(default, null):Float = 0.0;
+    public var susEndHeight:Int = 15;
 
     public function pressSustain():Void {
         if (Conductor.songPosition >= strumTime) {
@@ -56,7 +57,7 @@ class Sustain extends BasicNote {
             clipRect.y = cutHeight;
             
             // Sustain is finished
-            if (cutHeight <= -repeatHeight) {
+            if (cutHeight <= (-repeatHeight + (susEndHeight * noteSpeed * 0.45))) {
                 kill();
             }
         }
@@ -73,6 +74,11 @@ class Sustain extends BasicNote {
     public inline function setSusLength(mills:Float = 0.0):Float {
         repeatHeight = getMillPos(mills) + (NoteUtil.swagHeight * 0.5);
         clipRect.height = repeatHeight;
+
+        // Kill too short sustains
+        if (Std.int(repeatHeight) <= Std.int(NoteUtil.swagHeight * 0.51))
+            kill();
+        
         return repeatHeight;
     }
 
