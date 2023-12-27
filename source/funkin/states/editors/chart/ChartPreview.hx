@@ -23,11 +23,13 @@ class ChartPreview extends FlxSpriteExt {
         drawPreview(section);
     }
 
+    static final CHECKBOARD_COLORS:Array<Int> = [0xff7c7c7c, 0xff6e6e6e];
+
     public function drawChecks() { // Draw checkboard pattern
         final CHECK_SIZE = NOTE_SIZE * Conductor.BEATS_PER_MEASURE;
         for (Y in 0...Std.int(height / CHECK_SIZE)) {
             for (X in 0...Std.int(width / CHECK_SIZE))
-                drawRect(X * CHECK_SIZE, Y * CHECK_SIZE, CHECK_SIZE, CHECK_SIZE, [0xff7c7c7c, 0xff6e6e6e][(X+Y)%2]);
+                drawRect(X * CHECK_SIZE, Y * CHECK_SIZE, CHECK_SIZE, CHECK_SIZE, CHECKBOARD_COLORS[(X+Y)%2]);
         }
     }
 
@@ -49,22 +51,30 @@ class ChartPreview extends FlxSpriteExt {
     }
 
     public function drawSection(notes:Array<Array<Dynamic>>, startTime:Float = 0, endTime:Float = 0) {
-        for (n in notes) {
-            final note = n.copy();
+        return; // TODO: Fix this later, crash is coming from somewhere in the draw note rect code. Im just lazy
+        
+        for (i in 0...notes.length) {
+            final note = notes[i].copy();
             final noteColor = getNoteColor(note);
             note[0] -= startTime;
-            final noteY = FlxMath.remapToRange(note[0], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
+            
+            final noteX:Float = note[1]*NOTE_SIZE;
+            final noteY:Float = FlxMath.remapToRange(note[0], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
+            
             if (note[2] > 0) { // Draw sustain
                 final susY = FlxMath.remapToRange(note[2], 0, endTime - startTime, 0, NOTE_SIZE * Conductor.STEPS_PER_MEASURE);
-                drawRect(note[1]*NOTE_SIZE, noteY, NOTE_SIZE, NOTE_SIZE + susY,
+                drawRect(noteX, noteY, NOTE_SIZE, NOTE_SIZE + susY,
                 FlxColor.fromRGB(noteColor.red,noteColor.green,noteColor.blue,Std.int(noteColor.alpha*0.6)));
             }
-            drawRect(note[1]*NOTE_SIZE, noteY, NOTE_SIZE, NOTE_SIZE, noteColor);
+            drawRect(noteX, noteY, NOTE_SIZE, NOTE_SIZE, noteColor);
         }
     }
 
-    function drawRect(X:Float,Y:Float,W:Float,H:Float,C:Int) {
-        pixels.fillRect(new Rectangle(X, Y, W, H), C);
+    static final tempRect:Rectangle = new Rectangle();
+
+    function drawRect(X:Float = 0.0, Y:Float = 0.0, W:Float = 0.0, H:Float = 0.0, C:Int = FlxColor.WHITE) {
+        tempRect.setTo(X, Y, W, H);
+        pixels.fillRect(tempRect, C);
     }
 
     var colorMap:Map<String, FlxColor> = [];

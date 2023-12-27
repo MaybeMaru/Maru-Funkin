@@ -224,7 +224,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function updateSectionTabUI():Void {
-		var sec = SONG.notes[sectionIndex];
+        final sec = SONG.notes[sectionIndex];
         if (sec == null) return;
 		tabs.check_mustHitSection.checked = sec.mustHitSection;
 		tabs.check_changeBPM.checked = sec.changeBPM;

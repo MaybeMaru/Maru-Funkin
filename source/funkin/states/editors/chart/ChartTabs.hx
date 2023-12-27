@@ -194,7 +194,7 @@ class ChartTabs extends FlxUITabMenu {
 	public function updatePreview() {
 		var index = Std.int(ChartingState.instance.sectionIndex - stepperCopy.value);
 		var copyData = ChartingState.SONG.notes[index];
-       	if (copyData == null || stepperCopy.value == 0) return;
+		if (copyData == null || stepperCopy.value == 0) return;
 		lastSectionPreview.resetDraw(index);
 	}
 
