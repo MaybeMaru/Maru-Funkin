@@ -10,12 +10,12 @@ import openfl.text.TextField;
 
 enum TextStyle {
     NONE;
-    OUTLINE(thickness:Float, ?quality:Int, ?color:FlxColor);
+    OUTLINE(size:Float, ?quality:Int, ?color:FlxColor);
     SHADOW(offset:FlxPoint, ?color:FlxColor);
 }
 
 @:access(openfl.text.TextField)
-class FlxFunkText extends FlxSprite {
+class FlxFunkText extends FlxSpriteExt {
     public var text(default, set):String = "";
     inline function set_text(value:String) {
         if (value != text) {
@@ -178,17 +178,17 @@ class FlxFunkText extends FlxSprite {
 
     override function drawComplex(camera:FlxCamera) {
         switch (style) {
-            case OUTLINE(thickness, quality, col):
+            case OUTLINE(size, quality, col):
                 final _offset = offset.clone();
                 final _color = color;
-                thickness *= sizeMult();
+                size *= sizeMult();
 
                 color = col ?? FlxColor.BLACK;
                 for (i in 0...(quality = quality ?? 8)) {
                     final _rad = (i / quality) * Math.PI * 2;
                     offset.copyFrom(_offset);
-                    offset.add(FlxMath.fastCos(_rad) * thickness, FlxMath.fastSin(_rad) * thickness);
-                    super.drawComplex(camera);
+                    offset.add(FlxMath.fastCos(_rad) * size, FlxMath.fastSin(_rad) * size);
+                    __superDrawComplex(camera);
                 }
                 
                 offset.copyFrom(_offset);
@@ -199,13 +199,13 @@ class FlxFunkText extends FlxSprite {
                 final _color = color;
                 offset.add(off.x * sizeMult(), off.y * sizeMult());
                 color = col ?? FlxColor.BLACK;
-                super.drawComplex(camera);
+                __superDrawComplex(camera);
                 offset.copyFrom(_offset);
                 color = _color;
 
             default:
         }
-        super.drawComplex(camera);
+        __superDrawComplex(camera);
     }
 
     override function draw() {
@@ -214,7 +214,7 @@ class FlxFunkText extends FlxSprite {
                 drawTextField();
                 _regen = false;
             }
-            super.draw();
+            __superDraw();
         }
     }
 }
