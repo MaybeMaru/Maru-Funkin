@@ -76,9 +76,9 @@ class ScriptUtil {
         return '_group_$key';
     }
 
-    public static var stateQueue:{state:MusicBeatState, skipTrans:Bool} = null;
+    public static var stateQueue:{state:MusicBeatState, skipTransOpen:Bool, skipTransClose:Bool} = null;
     
-    inline public static function switchCustomState(key:String, skipTrans:Bool) {
+    inline public static function switchCustomState(key:String, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
 		final scriptCode = CoolUtil.getFileContent(Paths.script('scripts/customStates/$key'));
 		if (scriptCode.length <= 0) {
 			ModdingUtil.errorPrint('Custom state script not found: $key');
@@ -87,7 +87,8 @@ class ScriptUtil {
 
         stateQueue = {
             state: new CustomState().initScript(scriptCode, key),
-            skipTrans: skipTrans
+            skipTransOpen: skipTransOpen,
+            skipTransClose: skipTransClose ?? skipTransOpen
         }
 	}
 }

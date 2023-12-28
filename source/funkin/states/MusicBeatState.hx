@@ -52,9 +52,9 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	override function draw() {
 		if (ScriptUtil.stateQueue != null) {
-			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTrans);
+			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTransOpen, ScriptUtil.stateQueue.skipTransClose);
 			ScriptUtil.stateQueue = null;
-			if (!Transition.skipTrans) super.draw();
+			if (!Transition.skipTransOpen) super.draw();
 		}
 		else super.draw();
 	}
@@ -100,8 +100,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	// Some shortcuts
 	inline public function getPref(pref:String) return Preferences.getPref(pref);
 	inline public function getKey(key:String) 	return Controls.getKey(key);
-	inline public function switchState(newState:FlxState, ?skip:Bool) CoolUtil.switchState(newState, skip);
-	inline public function resetState(?skip:Bool) CoolUtil.resetState(skip);
+	inline public function switchState(newState:FlxState, ?skipStart:Bool, ?skipEnd:Bool) CoolUtil.switchState(newState, skipStart, skipEnd);
+	inline public function resetState(?skipStart:Bool, ?skipEnd:Bool) CoolUtil.resetState(skipStart, skipEnd);
 	
 	public var curStep(get, never):Int; 	inline function get_curStep() return musicBeat.curStep;
 	public var curBeat(get, never):Int; 	inline function get_curBeat() return musicBeat.curBeat;

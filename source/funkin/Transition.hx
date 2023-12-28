@@ -23,7 +23,14 @@ class ResizableSprite extends Sprite {
 }
 
 class Transition extends ResizableSprite {
-    public static var skipTrans:Bool = false;
+    public static var skipTransOpen:Bool = false;
+    public static var skipTransClose:Bool = false;
+
+    public inline static function setSkip(open:Bool = false, ?close:Bool) {
+        skipTransOpen = open;
+		skipTransClose = close ?? open;
+    }
+    
     public static var times = {
         open: 0.4,
         close: 0.3
@@ -88,25 +95,27 @@ class Transition extends ResizableSprite {
         }
         scaleY = -Math.abs(scaleY);
         inExit = false;
-        setupTrans(0, height, times.open, _func);
+        setupTrans(0, height, times.open, _func, true);
     }
 
     public function exitTrans(?completeCallback:Dynamic) {
         scaleY = Math.abs(scaleY);
         inExit = true;
-        setupTrans(-height * 0.5, height * 0.5, times.close, completeCallback);
+        setupTrans(-height * 0.5, height * 0.5, times.close, completeCallback, false);
     }
 
-    function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic) {
+    function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic, isOpen:Bool) {
+        final skipBool:Bool = (isOpen ? skipTransOpen : skipTransClose);
+        
         y = startPosition = start;
-        visible = !skipTrans;
+        visible = !skipBool;
         endPosition = end;
         transDuration = time;
         timeElapsed = 0;
         finishCallback = callback;
         transitioning = true;
         
-        if (skipTrans) {
+        if (skipBool) {
             __finishTrans();
         }
     }
@@ -130,7 +139,6 @@ class Transition extends ResizableSprite {
         if (timeElapsed >= transDuration) {
             __finishTrans();
         }
-
     }
 
     @:noCompletion

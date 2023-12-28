@@ -225,14 +225,14 @@ class CoolUtil {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
 
-	inline public static function switchState(newState:FlxState, skipTrans:Bool = false) {
-		Transition.skipTrans = skipTrans;
+	inline public static function switchState(newState:FlxState, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
+		Transition.setSkip(skipTransOpen, skipTransClose);
 		Main.transition.startTrans(newState);
 		__pauseState();
 	}
 
-	inline public static function resetState(skipTrans:Bool = false) {
-		Transition.skipTrans = skipTrans;
+	inline public static function resetState(skipTransOpen:Bool = false, ?skipTransClose:Bool) {
+		Transition.setSkip(skipTransOpen, skipTransClose);
 		Main.transition.startTrans(null, function () FlxG.resetState());
 		__pauseState();
 	}

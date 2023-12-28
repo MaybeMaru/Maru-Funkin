@@ -29,7 +29,8 @@ class TitleState extends MusicBeatState {
 	var introJson:IntroJson = null;
 
 	override public function create():Void {
-		Transition.skipTrans = !initialized;
+		Transition.setSkip(!initialized);
+		
 		FlxG.mouse.visible = false;
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
