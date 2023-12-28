@@ -376,7 +376,7 @@ class NotesGroup extends FlxGroup
 		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
 	}
 
-	public function checkCpuNote(note:BasicNote) {
+	public inline function checkCpuNote(note:BasicNote) {
 		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
@@ -390,7 +390,7 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
-	public function checkMissNote(note:BasicNote) {
+	public inline function checkMissNote(note:BasicNote) {
 		if (note.active || Conductor.songPosition < note.strumTime) return;
 		if (!isCpuNote(note) && !note.isSustainNote && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
@@ -410,9 +410,9 @@ class NotesGroup extends FlxGroup
 		if (!generatedMusic) return; // Stuff that needs notes / events
 		spawnNotes();
 		checkEvents();
-		notes.forEachAlive(function(daNote:BasicNote) {
-			checkCpuNote(daNote);
-			checkMissNote(daNote);
+		notes.forEachAlive(function(note:BasicNote) {
+			checkCpuNote(note);
+			checkMissNote(note);
 		});
 
         if (isPlayState) {

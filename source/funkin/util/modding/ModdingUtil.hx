@@ -186,9 +186,8 @@ class ModdingUtil {
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
         var calledStop:Bool = false;
         for (script in scripts) {
-            if (script.callback(name, args) == STOP_FUNCTION) {
+            if (script.callback(name, args) == STOP_FUNCTION)
                 calledStop = true;
-            }
         }
         return calledStop;
     }
