@@ -122,7 +122,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	@:noCompletion
 	private inline function __superDraw() {
 		inline checkEmptyFrame();
-		if (alpha == 0 || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
+		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
 		for (i in 0...cameras.length) {
@@ -221,17 +221,23 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		}
 	}
 
-	inline public function getScaleDiff() {
-		return FlxPoint.get(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
+	@:noCompletion
+	static final __scaleDiff:FlxPoint = FlxPoint.get();
+
+	inline public function getScaleDiff():FlxPoint {
+		return __scaleDiff.set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
 	}
+
+	@:noCompletion
+	static final __animOffset:FlxPoint = FlxPoint.get();
 
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
 			if(existsOffsets(animation.curAnim.name)) {
-				final animOffset:FlxPoint = new FlxPoint().copyFrom(animOffsets.get(animation.curAnim.name));
-				if (!animOffset.isZero() || forced) {
-					animOffset.x *= (flippedOffsets ? -1 : 1);
-					offset.set(animOffset.x, animOffset.y);
+				__animOffset.copyFrom(animOffsets.get(animation.curAnim.name));
+				if (!__animOffset.isZero() || forced) {
+					__animOffset.x *= (flippedOffsets ? -1 : 1);
+					offset.set(__animOffset.x, __animOffset.y);
 				}
 			}
 		}
@@ -283,10 +289,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		super.destroy();
 	}
 
+	static final __calcMatrix:FlxMatrix = new FlxMatrix();
+
 	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
-		final matrix:FlxMatrix = new FlxMatrix();
-		matrix.translate(X,Y);
-		graphic.bitmap.draw(Brush, matrix);
+		__calcMatrix.setTo(1, 0, 0, 1, X, Y);
+		graphic.bitmap.draw(Brush, __calcMatrix);
 	}
 
 	inline public function uploadGpu(?key:String) {
