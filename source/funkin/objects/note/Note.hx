@@ -27,7 +27,8 @@ class Note extends BasicNote {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		calcHit();
+		if (targetStrum != null)
+			calcHit();
 	}
 
     public var canBeHit:Bool = false;

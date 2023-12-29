@@ -110,7 +110,7 @@ class NotesGroup extends FlxGroup
 			hitNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
-			removeNote(note);
+			note.removeNote();
 		}
 
 		goodSustainPress = function (sustain:Sustain) {
@@ -124,7 +124,7 @@ class NotesGroup extends FlxGroup
 			hitNote(note, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
-			removeNote(note);
+			note.removeNote();
 		}
 
 		opponentSustainPress = function (sustain:Sustain) {
@@ -311,10 +311,6 @@ class NotesGroup extends FlxGroup
         if (callback != null) Reflect.callMethod(this, callback, args ?? []); // Prevent null
     }
 
-	public inline function removeNote(note:BasicNote) {
-		note.removeNote();
-	}
-
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
 		if (Conductor.inst.playing) {
@@ -394,7 +390,7 @@ class NotesGroup extends FlxGroup
 		if (note.activeNote || note.isSustainNote) return;
 		if (!isCpuNote(note) && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
-		removeNote(note);
+		note.removeNote();
 	}
 
 	public function sustainMiss(note:Sustain) {
@@ -422,18 +418,18 @@ class NotesGroup extends FlxGroup
 		inline checkStrumAnims();
     }
 
-    public var holdingArray:Array<Bool> = [];
+    //public var holdingArray:Array<Bool> = [];
 	public var controlArray:Array<Bool> = [];
 
 	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
 		for (i in strums) {
-			holdingArray.push(value ? false : i.getControl());
+			//holdingArray.push(value ? false : i.getControl());
 			controlArray.push(value ? false : i.getControl("-P"));
 		}
 	}
 
     private inline function controls():Void {
-		holdingArray = [];
+		//holdingArray = [];
 		controlArray = [];
 		pushControls(playerStrums, inBotplay);
 		pushControls(opponentStrums, dadBotplay);
@@ -493,7 +489,7 @@ class NotesGroup extends FlxGroup
 			});
 
 			if (controlArray.contains(true)) {
-				forEachArray(removeList, function (badNote) removeNote(badNote));
+				for (badNote in removeList) badNote.removeNote();
 				final onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : true;
 
 				possibleNotes.sort(CoolUtil.sortByStrumTime);
@@ -504,22 +500,16 @@ class NotesGroup extends FlxGroup
 						}
 					}
 
-					forEachArray(possibleNotes, function (possibleNote) {
+					for (possibleNote in possibleNotes) {
 						if (possibleNote.targetStrum.getControl("-P"))
 							checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
-					});
+					}
 				}
 				else if (!onGhost) {
                     checkCallback(badNoteHit);
 				}
 			}
 		}
-	}
-
-	inline function forEachArray(array:Array<Dynamic>, func:Dynamic) {
-		var i:Int = 0;
-		while (i < array.length)
-			func(array[i++]);
 	}
 
 	function checkStrumAnims():Void {

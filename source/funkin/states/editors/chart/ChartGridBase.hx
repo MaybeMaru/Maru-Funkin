@@ -120,10 +120,13 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
 		&& obj1.y > obj2.y && obj1.y < obj2.y + (GRID_SIZE * Conductor.STEPS_PER_MEASURE);
 	}
 
+    static final gridPos:FlxPoint = FlxPoint.get();
+
     public static inline function getGridCoords(obj1:Dynamic, obj2:Dynamic, snapY:Bool = true) {
         final tileX = obj2.x + Math.floor((obj1.x - obj2.x) / GRID_SIZE) * GRID_SIZE;
         final tileY = snapY ? obj2.y + (Math.floor((obj1.y - obj2.y) / GRID_SIZE) * GRID_SIZE) : obj1.y;
-        return new FlxPoint(tileX, tileY);
+        gridPos.set(tileX, tileY);
+        return gridPos;
     }
 }
 
@@ -220,6 +223,8 @@ class ChartNote extends Note {
     public var typeText:Null<FunkinText> = null;
     public var gridNoteData:Int = 0;
 
+    override function removeNote() {}
+
     public function init(?chartData:Array<Dynamic>, ?skin:String, position:FlxPoint) {
         this.chartData = chartData;
 
@@ -247,6 +252,8 @@ class ChartSustain extends Sustain {
     public var chartData:Null<Array<Dynamic>> = null;
     public var chartParent:Null<ChartNote> = null;
     public var gridNoteData:Int = 0;
+
+    override function removeNote() {}
 
     public function init(?chartData:Array<Dynamic>, ?skin:String, position:FlxPoint, ?parent:ChartNote) {
         this.chartData = chartData;

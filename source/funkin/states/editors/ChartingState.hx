@@ -87,14 +87,6 @@ class ChartingState extends MusicBeatState {
 
         noteTile = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE, FlxColor.WHITE);
         noteTile.alpha = 0.6;
-        noteTile._dynamic.update = function (elapsed) {
-            var eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
-            if (getGridOverlap(FlxG.mouse, mainGrid.grid) || eventsOverlap) {
-                noteTile.visible = true;
-                var tilePos = getGridCoords(FlxG.mouse, eventsOverlap ? eventsGrid.grid : mainGrid.grid, !FlxG.keys.pressed.SHIFT);
-                noteTile.setPosition(tilePos.x, tilePos.y);
-            } else noteTile.visible = false;
-        }
         add(noteTile);
 
         strumBar = new ChartStrumLine();
@@ -104,13 +96,12 @@ class ChartingState extends MusicBeatState {
         final _grid = mainGrid.grid;
         songTxt = new FlxFunkText(_grid.x + _grid.width + 25, _grid.y + 25, "swag", FlxPoint.get(FlxG.width*0.5,FlxG.height*0.5), 25);
         songTxt._dynamic.update = function (elapsed) {
-            var info =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
-                        "Step: " + Math.max(0, curStep) + "\n" +
-                        "Beat: " + Math.max(0, curBeat) + "\n" +
-                        "Section: " + Math.max(0, curSection) + "\n\n" +
-                        "Position: " + Math.floor(Conductor.songPosition) + "\n" +
-                        "BPM: " + Conductor.bpm;
-            songTxt.text = info;
+            songTxt.text =  "Time: " + FlxStringUtil.formatTime(Conductor.songPosition * 0.001, true) + " / " + instStr + "\n" +
+                            "Step: " + Math.max(0, curStep) + "\n" +
+                            "Beat: " + Math.max(0, curBeat) + "\n" +
+                            "Section: " + Math.max(0, curSection) + "\n\n" +
+                            "Position: " + Math.floor(Conductor.songPosition) + "\n" +
+                            "BPM: " + Conductor.bpm;
         }
         add(songTxt);
 
@@ -368,6 +359,7 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
+        trace(noteTile);
         final strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         final noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / GRID_SIZE);
         final note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
@@ -589,8 +581,18 @@ class ChartingState extends MusicBeatState {
         }
 	}
 
+    inline function updateNoteTile() {
+        var eventsOverlap = getGridOverlap(FlxG.mouse, eventsGrid.grid);
+        if (getGridOverlap(FlxG.mouse, mainGrid.grid) || eventsOverlap) {
+            noteTile.visible = true;
+            var tilePos = getGridCoords(FlxG.mouse, eventsOverlap ? eventsGrid.grid : mainGrid.grid, !FlxG.keys.pressed.SHIFT);
+            noteTile.setPosition(tilePos.x, tilePos.y);
+        } else noteTile.visible = false;
+    }
+
     override function update(elapsed:Float) {
         super.update(elapsed);
+        updateNoteTile();
         updatePosition();
         checkNoteSound();
         if (!tabs.getFocus()) keys();
