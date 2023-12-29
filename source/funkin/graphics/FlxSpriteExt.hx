@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.graphics.frames.FlxFrame;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxMatrix;
@@ -114,14 +115,18 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	override function checkEmptyFrame() {
-		if (_frame == null)
-			loadGraphic(Main.DEFAULT_GRAPHIC);
+		if (_frame == null) {
+			//trace(Main.DEFAULT_GRAPHIC);
+			frames = Main.DEFAULT_GRAPHIC.imageFrame;
+		}
+
+			//loadGraphic(Main.DEFAULT_GRAPHIC);
 	}
 
 	@:noCompletion
 	private inline function __superDraw() {
 		inline checkEmptyFrame();
-		if (alpha == 0 || _frame.type == EMPTY) return;
+		if (alpha == 0 || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
 		for (i in 0...cameras.length) {

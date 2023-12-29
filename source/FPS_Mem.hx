@@ -61,7 +61,12 @@ class FPS_Mem extends TextField
 			times.shift();
 
 		final fps:Int = times.length;
+		#if web
+		final mem:Float = FlxMath.roundDecimal(Math.round(System.totalMemory * memDiv) * 0.01, 2);
+		#else
 		final mem:Float = Math.round(System.totalMemory * memDiv) * 0.01;
+		#end
+		
 		if (mem > memPeak) memPeak = mem;
 
 		final result:UTF8String =

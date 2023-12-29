@@ -56,9 +56,11 @@ class TitleState extends MusicBeatState {
 		titleGroup.add(gfDance);
 
 		final colorSwap = Shader.initShader('colorSwap');
-		colorSwap.updateTime = false;
-		Shader.setSpriteShader(logoBump, 'colorSwap');
-		Shader.setSpriteShader(gfDance, 'colorSwap');
+		if (colorSwap != null) {
+			colorSwap.updateTime = false;
+			Shader.setSpriteShader(logoBump, 'colorSwap');
+			Shader.setSpriteShader(gfDance, 'colorSwap');
+		}
 
 		titleText = new FunkinSprite('title/titleEnter', [100,FlxG.height*0.8]);
 		titleText.addAnim('idle', 'Press Enter to Begin');

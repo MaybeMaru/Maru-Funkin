@@ -14,8 +14,13 @@ class OptionsState extends MusicBeatState {
 	var selectedSomethin:Bool = false;
 
 	override function create():Void {
+		#if web
+		if (fromPlayState && FlxG.sound.music == null)	FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		#else
 		if (!fromPlayState) 				optionItems.push('Mod Folders');
 		else if (FlxG.sound.music == null)	FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		#end
+
 		optionItems.push('Exit');
 
 		var bg:FunkinSprite = new FunkinSprite('menuBGMagenta');
@@ -104,7 +109,9 @@ class OptionsState extends MusicBeatState {
 			case 'Preferences':	switchState(new funkin.states.options.PreferencesState());
 			case 'Controls':	switchState(new funkin.states.options.ControlsState());
 			case 'Latency':		switchState(new funkin.states.options.LatencyState());
+			#if desktop
 			case 'Mod Folders':	switchState(new funkin.states.options.ModFoldersState());
+			#end
 			default:			exitOptions();
 		}
 	}

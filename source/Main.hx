@@ -1,5 +1,7 @@
 package;
 
+import openfl.display.BitmapData;
+import flixel.system.FlxAssets;
 import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
@@ -107,18 +109,21 @@ class Main extends Sprite
 
 	private function init(?E:Event):Void
 	{
-		#if mac throw("no."); #end
+		#if (mac || web) throw("no."); #end
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 
 		setupGame();
 	}
 
-	public static final DEFAULT_GRAPHIC:FlxGraphic = FlxGraphic.fromAssetKey("flixel/images/logo/default.png", true, "::default_graphic::", false);
+	public static var DEFAULT_GRAPHIC(default, null):GlobalGraphic = null;
 
 	private function setupGame():Void {
 		final stageWidth:Int = Lib.current.stage.stageWidth;
 		final stageHeight:Int = Lib.current.stage.stageHeight;
+		
+		@:privateAccess
+		DEFAULT_GRAPHIC = new GlobalGraphic(null, FlxAssets.getBitmapData("flixel/images/logo/default.png"));
 
 		if (settings.zoom == -1.0) {
 			final ratioX:Float = stageWidth / settings.width;
@@ -130,4 +135,8 @@ class Main extends Sprite
 
 		addChild(game = new FlxFunkGame(settings.width, settings.height, settings.initialState, settings.framerate, settings.framerate, settings.skipSplash, settings.startFullscreen));
 	}
+}
+
+class GlobalGraphic extends FlxGraphic {
+	override function destroy() {} // Lol
 }
