@@ -7,7 +7,8 @@ import flixel.util.FlxArrayUtil;
 import funkin.objects.note.StrumLineGroup;
 
 class NotesGroup extends FlxGroup
-{
+{	
+	public static var instance:NotesGroup = null;
     public var SONG:SwagSong;
 
     public static var songSpeed:Float = 1.0;
@@ -92,6 +93,7 @@ class NotesGroup extends FlxGroup
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
+		instance = this;
 		this.isPlayState = isPlayState;
         SONG = Song.checkSong(_SONG, null, false); //Double check null values
         Conductor.mapBPMChanges(SONG);
@@ -290,10 +292,9 @@ class NotesGroup extends FlxGroup
 	public var scrollSpeed(default, set):Float = 1.0; // Shortcut to change all notes scroll speed
 	public function set_scrollSpeed(value:Float = 1.0) {
 		if (value != scrollSpeed) {
-			for (i in unspawnNotes.concat(notes.members)) {
-				i.noteSpeed = value;
-			}
-			spawnNotes();
+			for (i in 0...unspawnNotes.length) unspawnNotes[i].noteSpeed = value;
+			for (i in 0...notes.members.length) notes.members[i].noteSpeed = value;
+			if (value < scrollSpeed) spawnNotes();
 		}
 		return scrollSpeed = value;
 	}
@@ -306,13 +307,12 @@ class NotesGroup extends FlxGroup
     public var opponentNoteHit:Dynamic = null;
     public var opponentSustainPress:Dynamic = null;
 
-    public function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
+    public inline function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
         if (callback != null) Reflect.callMethod(this, callback, args ?? []); // Prevent null
     }
 
 	public inline function removeNote(note:BasicNote) {
-		notes.remove(note, true);
-		note.destroy();
+		note.removeNote();
 	}
 
     //Makes the conductor song go vroom vroom
@@ -376,7 +376,7 @@ class NotesGroup extends FlxGroup
 		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
 	}
 
-	public inline function checkCpuNote(note:BasicNote) {
+	public function checkCpuNote(note:BasicNote) {
 		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
@@ -390,9 +390,9 @@ class NotesGroup extends FlxGroup
 		}
 	}
 
-	public inline function checkMissNote(note:BasicNote) {
-		if (note.active || Conductor.songPosition < note.strumTime) return;
-		if (!isCpuNote(note) && !note.isSustainNote && note.mustHit)
+	public function checkMissNote(note:BasicNote) {
+		if (note.activeNote || note.isSustainNote) return;
+		if (!isCpuNote(note) && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
 		removeNote(note);
 	}
@@ -405,21 +405,21 @@ class NotesGroup extends FlxGroup
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        updateConductor(elapsed);
+        inline updateConductor(elapsed);
 
 		if (!generatedMusic) return; // Stuff that needs notes / events
-		spawnNotes();
-		checkEvents();
+		inline spawnNotes();
+		inline checkEvents();
 		notes.forEachAlive(function(note:BasicNote) {
-			checkCpuNote(note);
-			checkMissNote(note);
+			inline checkCpuNote(note);
+			inline checkMissNote(note);
 		});
 
         if (isPlayState) {
             if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
-		checkStrumAnims();
+		inline checkStrumAnims();
     }
 
     public var holdingArray:Array<Bool> = [];

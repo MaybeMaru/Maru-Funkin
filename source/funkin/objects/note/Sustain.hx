@@ -35,11 +35,23 @@ class Sustain extends BasicNote {
     public var startedPress:Bool = false;
     public var missedPress(default, set):Bool = false;
     inline function set_missedPress(value:Bool):Bool {
-        color = (value && mustHit) ? MISS_COLOR : FlxColor.WHITE;
         pressed = false;
         moving = true;
-        offset.y = cutHeight * getCos();
+
+        FlxG.signals.preDraw.addOnce(function () {
+            color = (value && mustHit) ? MISS_COLOR : FlxColor.WHITE;
+            offset.y = cutHeight * getCos();
+        });
+        
         return missedPress = value;
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        if (missedPress && !activeNote) {
+            removeNote();
+        }
     }
 
     public var percentLeft(default, null):Float = 0.0;
@@ -57,9 +69,8 @@ class Sustain extends BasicNote {
             clipRect.y = cutHeight;
             
             // Sustain is finished
-            if (cutHeight <= (-repeatHeight + (susEndHeight * noteSpeed * 0.45))) {
-                kill();
-            }
+            if (cutHeight <= (-repeatHeight + (susEndHeight * noteSpeed * 0.45)))
+                removeNote();
         }
     }
 
@@ -77,7 +88,7 @@ class Sustain extends BasicNote {
 
         // Kill too short sustains
         if (Std.int(repeatHeight) <= Std.int(NoteUtil.swagHeight * 0.51))
-            kill();
+            removeNote();
         
         return repeatHeight;
     }
