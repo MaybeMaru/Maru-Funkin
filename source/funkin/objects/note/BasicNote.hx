@@ -1,6 +1,6 @@
 package funkin.objects.note;
 
-import openfl.Vector;
+import haxe.ds.Vector;
 import funkin.graphics.SmartSprite;
 
 interface INoteData {
@@ -131,8 +131,13 @@ class BasicNote extends SmartSprite implements INoteData {
     public var hitMult:Float = 1.0;
 
     inline function initVariables():Void {
-        hitHealth = new Vector<Float>(2, true, [0.025, 0.0125]);
-        missHealth = new Vector<Float>(2, true, [0.0475, 0.02375]);
+        hitHealth = new Vector<Float>(2);
+        hitHealth[0] = 0.025;
+        hitHealth[1] = 0.0125;
+        
+        missHealth = new Vector<Float>(2);
+        missHealth[0] = 0.0475;
+        missHealth[1] = 0.02375;
     }
 
     public var noteType(default, set):String = "default";

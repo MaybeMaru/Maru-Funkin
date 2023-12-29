@@ -75,7 +75,7 @@ class NotesGroup extends FlxGroup
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
-	function pressSustain(sustain:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	inline function pressSustain(sustain:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		if (isPlayState) {
 			character.sing(sustain.noteData, sustain.altAnim, false);
 			Conductor.vocals.volume = 1;
