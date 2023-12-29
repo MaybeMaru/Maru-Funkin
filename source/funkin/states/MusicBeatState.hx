@@ -54,14 +54,43 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		if (ScriptUtil.stateQueue != null) {
 			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTransOpen, ScriptUtil.stateQueue.skipTransClose);
 			ScriptUtil.stateQueue = null;
-			if (!Transition.skipTransOpen) super.draw();
+			if (!Transition.skipTransOpen) __superDraw();
 		}
-		else super.draw();
+		else __superDraw();
+	}
+
+	@:noCompletion
+	inline private function __superDraw():Void {
+		if (persistentDraw) {
+			@:privateAccess {
+				final oldDefaultCameras = FlxCamera._defaultCameras;
+				if (cameras != null)
+					FlxCamera._defaultCameras = cameras;
+		
+				for (basic in members) {
+					if (basic != null && basic.exists && basic.visible)
+						basic.draw();
+				}
+		
+				FlxCamera._defaultCameras = oldDefaultCameras;
+			}
+		}
+
+		if (subState != null)
+			subState.draw();
 	}
 
 	override function update(elapsed:Float):Void {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
-		super.update(elapsed);
+		__superUpdate(elapsed);
+	}
+
+	@:noCompletion
+	inline private function __superUpdate(elapsed:Float) {
+		for (basic in members) {
+			if (basic != null && basic.exists && basic.visible)
+				basic.update(elapsed);
+		}
 	}
 
 	public function stepHit(curStep:Int):Void {

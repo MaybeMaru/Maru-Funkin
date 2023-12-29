@@ -115,12 +115,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	override function checkEmptyFrame() {
-		if (_frame == null) {
-			//trace(Main.DEFAULT_GRAPHIC);
+		if (_frame == null)
 			frames = Main.DEFAULT_GRAPHIC.imageFrame;
-		}
-
-			//loadGraphic(Main.DEFAULT_GRAPHIC);
 	}
 
 	@:noCompletion

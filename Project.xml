@@ -86,7 +86,7 @@
 	<haxedev set='webgl' />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="discord_rpc" if="cpp"/>
+	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="maru-hscript" />
 	<haxelib name="hxcpp-gh-release" />
