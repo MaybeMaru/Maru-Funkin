@@ -261,14 +261,17 @@ class FlxSpriteExt extends FlxSkewedSprite {
 			if(existsOffsets(animation.curAnim.name)) {
 				__animOffset.copyFrom(animOffsets.get(animation.curAnim.name));
 				if (!__animOffset.isZero() || forced) {
-					__animOffset.x *= (flippedOffsets ? -1 : 1);
-					offset.set(
-						(__animOffset.x * _cosAngle) + (__animOffset.y * -_sinAngle),
-						(__animOffset.x * _sinAngle) + (__animOffset.y * _cosAngle)
-					);
-
-					if (scaleOffset)
-						offset.scalePoint(getScaleDiff());
+					
+					if (flippedOffsets) __animOffset.x *= -1; // Flip X
+					if (scaleOffset)	__animOffset.scalePoint(getScaleDiff()); // Scale offset
+					
+					if (angle != 0) { // Angled offset
+						offset.set(
+							(__animOffset.x * _cosAngle) + (__animOffset.y * -_sinAngle),
+							(__animOffset.x * _sinAngle) + (__animOffset.y * _cosAngle)
+						);
+					}
+					else offset.set(__animOffset.x, __animOffset.y); // Normal offset
 				}
 			}
 		}
