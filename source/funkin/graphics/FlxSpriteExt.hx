@@ -103,6 +103,24 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		antialiasing = antialiasing ? Preferences.getPref('antialiasing') : false;
 	}
 
+	public override function update(elapsed:Float) {
+		__superUpdate(elapsed);
+	}
+
+	@:noCompletion
+	private inline function __superUpdate(elapsed:Float) {
+		#if FLX_DEBUG FlxBasic.activeCount++; #end
+		
+		if (moves)
+			updateMotion(elapsed);
+		
+		if (packer != IMAGE)
+			updateAnimation(elapsed);
+
+		if (_dynamic.update != null)
+			Reflect.callMethod(null, _dynamic.update, [elapsed]);
+	}
+
     public override function draw():Void {
 		if (flippedOffsets) {
 			flipX = !flipX;
@@ -147,6 +165,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 			_sinAngle = Math.sin(rads);
 			#end
 			_angleChanged = false;
+
+			applyCurOffset(false); // Update display angle offset
 		}
 	}
 
@@ -237,7 +257,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 				__animOffset.copyFrom(animOffsets.get(animation.curAnim.name));
 				if (!__animOffset.isZero() || forced) {
 					__animOffset.x *= (flippedOffsets ? -1 : 1);
-					offset.set(__animOffset.x, __animOffset.y);
+					offset.set(
+						(__animOffset.x * _cosAngle) + (__animOffset.y * -_sinAngle),
+						(__animOffset.x * _sinAngle) + (__animOffset.y * _cosAngle)
+					);
 				}
 			}
 		}
