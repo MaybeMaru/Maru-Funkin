@@ -37,13 +37,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	public var packer(default, null):PackerType = IMAGE;
 	public var imageKey(default, null):String = "::null::";
 
-    public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset):Void {
-        animOffsets = new Map<String, FlxPoint>();
+	override function initVars():Void {
+		super.initVars();
+		animOffsets = new Map<String, FlxPoint>();
 		animDatas = new Map<String, SpriteAnimation>();
-        super(X,Y,SimpleGraphic);
-    }
+	}
 
-	inline public function setScale(_scale:Float = 1, updateBox:Bool = true) {
+	inline public function setScale(_scale:Float = 1, updateBox:Bool = true):Void {
 		scale.set(_scale,_scale);
 		if (updateBox)
 			updateHitbox();
@@ -81,12 +81,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	public var spriteJson:SpriteJson = null;
 
-	public function loadSpriteJson(path:String, folder:String = '', global:Bool = false) {
+	public function loadSpriteJson(path:String, folder:String = '', global:Bool = false):FlxSpriteExt {
 		spriteJson = JsonUtil.getJson(path, folder, 'images');
 		loadJsonInput(spriteJson, folder, global);
+		return this;
 	}
 
-	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String) {
+	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String):FlxSpriteExt {
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
@@ -101,14 +102,17 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 		antialiasing = spriteJson.antialiasing;
 		antialiasing = antialiasing ? Preferences.getPref('antialiasing') : false;
+		return this;
 	}
 
-	public override function update(elapsed:Float) {
+	public override function update(elapsed:Float):Void {
 		__superUpdate(elapsed);
 	}
 
+	// public var _dynamic:Dynamic = {}; // Gonna have to stop overriding flixel sometime soon
+
 	@:noCompletion
-	private inline function __superUpdate(elapsed:Float) {
+	private inline function __superUpdate(elapsed:Float):Void {
 		#if FLX_DEBUG FlxBasic.activeCount++; #end
 		
 		if (moves)
@@ -132,13 +136,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		else __superDraw();
 	}
 
-	override function checkEmptyFrame() {
+	override function checkEmptyFrame():Void {
 		if (_frame == null)
 			frames = Main.DEFAULT_GRAPHIC.imageFrame;
 	}
 
 	@:noCompletion
-	private inline function __superDraw() {
+	private inline function __superDraw():Void {
 		inline checkEmptyFrame();
 		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
@@ -154,7 +158,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	@:noCompletion
-	private inline function __updateTrig() {
+	private inline function __updateTrig():Void {
 		if (_angleChanged) {
 			final rads:Float = angle * FlxAngle.TO_RAD;
 			#if FAST_MATH
@@ -182,12 +186,12 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return angle = value;
 	}
 	
-	override function drawComplex(camera:FlxCamera) {
+	override function drawComplex(camera:FlxCamera):Void {
 		__superDrawComplex(camera);
 	}
 
 	@:noCompletion
-	private inline function __superDrawComplex(camera:FlxCamera) {
+	private inline function __superDrawComplex(camera:FlxCamera):Void {
 		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
 		_matrix.translate(-origin.x, -origin.y);
 		_matrix.scale(scale.x, scale.y);
@@ -250,6 +254,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	@:noCompletion
 	static final __animOffset:FlxPoint = FlxPoint.get();
+	public var scaleOffset:Bool = false;
 
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
@@ -261,6 +266,9 @@ class FlxSpriteExt extends FlxSkewedSprite {
 						(__animOffset.x * _cosAngle) + (__animOffset.y * -_sinAngle),
 						(__animOffset.x * _sinAngle) + (__animOffset.y * _cosAngle)
 					);
+
+					if (scaleOffset)
+						offset.scalePoint(getScaleDiff());
 				}
 			}
 		}
@@ -302,24 +310,24 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		i.length > 0 ? animation.addByIndices(n, f, i, "", fps, l) : animation.addByPrefix(n, f, fps, l);
 	}
 
-	inline public function setSkew(skewX:Float = 0, skewY:Float = 0) {
-		skew.set(skewX, skewY);
+	inline public function setSkew(skewX:Float = 0, skewY:Float = 0):FlxPoint {
+		return skew.set(skewX, skewY);
 	}
 
-	override function destroy() {
+	override function destroy():Void {
+		super.destroy();
 		animOffsets = null;
 		animDatas = null;
-		super.destroy();
 	}
 
 	static final __calcMatrix:FlxMatrix = new FlxMatrix();
 
-	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0) {
+	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0):Void {
 		__calcMatrix.setTo(1, 0, 0, 1, X, Y);
 		graphic.bitmap.draw(Brush, __calcMatrix);
 	}
 
-	inline public function uploadGpu(?key:String) {
+	inline public function uploadGpu(?key:String):FlxGraphic {
 		return AssetManager.uploadSpriteGpu(this, key ?? imageKey);
 	}
 }

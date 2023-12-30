@@ -130,6 +130,7 @@ class Character extends FlxSpriteExt {
 
 		curDanceBeat = danceBeat = isDoubleDancer() ? 0 : 1;
 		nullAnimCheck(); //	Find an anim to play to not have null curAnim
+		spriteJson = charJson;
 	}
 
 	public function getAnimationPrefixes():Array<String> {
