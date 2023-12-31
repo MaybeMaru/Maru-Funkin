@@ -1,5 +1,7 @@
 package funkin;
 
+import openfl.text.TextFieldType;
+import openfl.ui.Mouse;
 import haxe.ds.Vector;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
@@ -109,6 +111,7 @@ class ScriptConsole extends ResizableSprite {
 	public static var show:Bool = false;
     private var targetX:Float = 0;
 	public var bg:Shape;
+    public var input:TextField;
 
     var prints:Vector<Print>;
     var printCache:Vector<PrintData>;
@@ -133,7 +136,31 @@ class ScriptConsole extends ResizableSprite {
             prints[i] = print;
             addChild(print);
         }
+        
+        /*input = new TextField();
+        input.multiline = false;
+		input.wordWrap = false;
+        input.width = (Lib.current.stage.stageWidth / 2.3) - 50;
+		input.defaultTextFormat = new TextFormat(Paths.font("roboto"), 14, 0xFFFFFF);
+        input.text ="SEXO ANAL";
+
+        //input.selectable = true;
+        input.type = TextFieldType.INPUT;
+
+        input.x = 10;
+        input.y = 675;
+        
+        addChild(input);*/
+
+        script = new FunkScript("", "::global_script::");
 	}
+
+    public static var script(default, null):FunkScript;
+    
+    public static function runCode(code:String = "") {
+        code = code.trim();
+        script.__runCode(code.endsWith(";") ? code : code + ";");
+    }
 
     public function print(p:Dynamic, type:PrintType = NONE) {
         // Move last prints down
@@ -167,6 +194,7 @@ class ScriptConsole extends ResizableSprite {
     }
 
     public function clear() {
+        script.implementNonStatic();
         for (i in 0...printsLength) {
             prints[i].hide();
         }
@@ -189,6 +217,14 @@ class ScriptConsole extends ResizableSprite {
             for (i in 0...printsLength) {
                 prints[i].update(elapsed);
             }
+            
+            /*
+            if (bg.hitTestPoint(FlxG.mouse.screenX, FlxG.mouse.screenY)) {
+                //trace("BALLS");
+                Mouse.show();
+            } else {
+                //Mouse.hide();
+            }*/
         }
 
 		if (x != targetX) { // Lerp console x

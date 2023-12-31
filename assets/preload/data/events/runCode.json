@@ -1,0 +1,6 @@
+{
+    "description": "Runs a small piece of hscript code\n\nValue 1: Hscript code to run",
+    "values": [
+        ""
+    ]
+}

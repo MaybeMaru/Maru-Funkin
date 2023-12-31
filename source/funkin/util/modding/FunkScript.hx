@@ -31,12 +31,17 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		super();
 		this.scriptID = scriptID;
 		implement();
+		__runCode(hscriptCode);
+	}
+
+	@:noClosure
+	public inline function __runCode(hscriptCode:String = "") {
 		try {
 			executeString(hscriptCode);
 		}
 		catch(e) {
 			errorPrint(e);
-		} 
+		}
 	}
 
 	inline function getTraceID() {
@@ -52,8 +57,14 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 	}
 
 	static final tempEvent:Event = new Event(); // For runEvent()
+	
+	@:noCompletion
+	public function implementNonStatic():Void { // For the runCode event and script console
+		set('State', cast FlxG.state);
+	}
 
 	public function implement():Void { //Preloaded Variables
+		implementNonStatic();
 
 		// Wip
 
@@ -62,7 +73,6 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		//Mau engin
 
         set('PlayState', PlayState);
-		set('State', cast FlxG.state);
 
 		set('MusicBeatSubstate', MusicBeatSubstate);
 		set('MusicBeatState', MusicBeatState);
