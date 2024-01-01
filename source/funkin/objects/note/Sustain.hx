@@ -26,6 +26,7 @@ class Sustain extends BasicNote {
     public var autoFlip:Bool = true; // If to flip the sustain at a certain angle
     override function set_approachAngle(value:Float):Float {
         if (autoFlip) flipX = value % 360 >= 180;
+        if (approachAngle != value) calcApproachTrig(value);
         return approachAngle = angle = value;
     }
 
@@ -40,7 +41,7 @@ class Sustain extends BasicNote {
 
         FlxG.signals.preDraw.addOnce(function () {
             color = (value && mustHit) ? MISS_COLOR : FlxColor.WHITE;
-            offset.y = cutHeight * getCos();
+            offset.y = cutHeight * _approachCos;
         });
         
         return missedPress = value;

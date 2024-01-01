@@ -50,7 +50,21 @@ class BasicNote extends SmartSprite implements INoteData {
 
     public var approachAngle(default, set):Float = 0;
     function set_approachAngle(value:Float):Float {
+        if (approachAngle != value) calcApproachTrig(value);
         return approachAngle = value;
+    }
+
+    var _approachCos(default, null):Float = 1.0;
+    var _approachSin(default, null):Float = 0.0;
+
+    inline function calcApproachTrig(value:Float) {
+        #if FAST_MATH
+        _approachCos = FlxMath.fastCos(FlxAngle.asRadians(value));
+        _approachSin = FlxMath.fastSin(FlxAngle.asRadians(value));
+        #else
+        _approachCos = Math.cos(FlxAngle.asRadians(value));
+        _approachSin = Math.sin(FlxAngle.asRadians(value));
+        #end
     }
     
     public var spawnMult:Float = 1.0;
@@ -93,8 +107,8 @@ class BasicNote extends SmartSprite implements INoteData {
     inline public function moveToStrum():Void {
         setPositionToStrum();
         noteMove = distanceToStrum(); // Position with strumtime
-        y -= noteMove * getCos();
-        x -= noteMove * -getSin();
+        y -= noteMove * _approachCos;
+        x -= noteMove * -_approachSin;
     }
 
     inline public function setPositionToStrum() {
@@ -104,14 +118,6 @@ class BasicNote extends SmartSprite implements INoteData {
 
     inline public function distanceToStrum():Float {
         return getMillPos(Conductor.songPosition - strumTime);
-    }
-
-    inline public function getCos():Float {
-        return FlxMath.fastCos(FlxAngle.asRadians(approachAngle));
-    }
-
-    inline public function getSin():Float {
-        return FlxMath.fastSin(FlxAngle.asRadians(approachAngle));
     }
 
     // Converts song milliseconds to a position on screen
