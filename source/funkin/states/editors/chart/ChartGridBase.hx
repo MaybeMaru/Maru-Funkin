@@ -246,6 +246,7 @@ class ChartSustain extends Sustain {
         super();
         scrollFactor.set(1,1);
         angle = 0;
+        flipX = false;
         active = false;
         boundsOffsetY = -FlxG.height;
     }
