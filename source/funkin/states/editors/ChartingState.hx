@@ -359,7 +359,6 @@ class ChartingState extends MusicBeatState {
     }
 
     public function addNote() {
-        trace(noteTile);
         final strumTime:Float = getYtime(noteTile.y + GRID_SIZE) + sectionTime - Conductor.stepCrochet;
         final noteData:Int = Math.floor((noteTile.x - mainGrid.grid.x) / GRID_SIZE);
         final note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];

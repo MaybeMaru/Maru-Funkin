@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.objects.FunkCamera;
 import funkin.util.modding.ScriptUtil;
 import funkin.objects.note.BasicNote;
 import funkin.states.editors.StageDebug;
@@ -64,9 +65,9 @@ class PlayState extends MusicBeatState {
 	private var iconP2:HealthIcon;
 	public var healthBar:FunkBar;
 
-	public var camGame:FlxCamera;
-	public var camHUD:FlxCamera;
-	public var camOther:FlxCamera;
+	public var camGame:FunkCamera;
+	public var camHUD:FunkCamera;
+	public var camOther:FunkCamera;
 
 	public var songLength:Float = 0;
 	public var songScore:Int = 0;
@@ -115,9 +116,9 @@ class PlayState extends MusicBeatState {
 		EventUtil.initEvents();
 		CoolUtil.stopMusic();
 		
-		camGame = new FlxCamera();
-		camHUD = new FlxCamera();
-		camOther = new FlxCamera();
+		camGame = new FunkCamera();
+		camHUD = new FunkCamera();
+		camOther = new FunkCamera();
 		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
 		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
 
@@ -155,6 +156,7 @@ class PlayState extends MusicBeatState {
 
 		//Cache Gameover Character
 		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
+		if (deadChar.frame != null) camGame.startQuadBatch(deadChar.frame.parent, false, false, null, deadChar.antialiasing, null);
 		GameOverSubstate.cacheSounds();
 
 		// GET THE STAGE JSON SHIT
