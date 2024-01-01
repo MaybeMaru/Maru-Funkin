@@ -344,16 +344,11 @@ class NotesGroup extends FlxGroup
 				final spawnNote:BasicNote = unspawnNotes[0];
 				spawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [spawnNote]);
-				unspawnNotes.splice(unspawnNotes.indexOf(spawnNote), 1);
+				unspawnNotes.splice(0, 1);
 
-				notes.add(spawnNote);
-				notes.sort(function (order:Int, note1:BasicNote, note2:BasicNote):Int {
-					if (note1.strumTime == note2.strumTime) {
-						if (note1.isSustainNote && !note2.isSustainNote) return -1;
-						if (!note1.isSustainNote && note2.isSustainNote) return 1;
-					}
-					return CoolUtil.sortByStrumTime(note1, note2);
-				}, FlxSort.DESCENDING);
+				// Skip sorting
+				if (spawnNote.isSustainNote)	notes.insert(0, spawnNote);
+				else							notes.add(spawnNote);
 			}
 		}
 	}
@@ -363,7 +358,7 @@ class NotesGroup extends FlxGroup
 			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
 				final runEvent:Event = events[0];
 				ModdingUtil.addCall('eventHit', [runEvent]);
-				events.splice(events.indexOf(runEvent), 1);
+				events.splice(0, 1);
 			}
 		}
 	}
