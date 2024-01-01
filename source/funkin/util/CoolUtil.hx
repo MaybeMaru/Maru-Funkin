@@ -1,9 +1,5 @@
 package funkin.util;
 
-#if desktop
-import funkin.util.backend.SongZip;
-#end
-
 #if cpp
 import cpp.vm.Gc;
 #elseif hl
@@ -32,10 +28,12 @@ class CoolUtil {
 	public static var debugMode:Bool = false;
 
 	inline public static function init():Void {
-		#if desktop
+		#if ZIPS_ALLOWED
 		FunkThread.runThread(function () {
-			SongZip.init();
+			funkin.util.backend.SongZip.init();
 		}, 1);
+		#end
+		#if desktop
 		ModdingUtil.reloadMods();
 		#end
 		SkinUtil.setCurSkin();

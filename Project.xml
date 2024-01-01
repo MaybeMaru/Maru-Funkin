@@ -71,11 +71,18 @@
 	<assets path='example_mods' rename='mods' embed='false' unless="web"/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<assets path='art/preloaderArt.png' rename='assets/images/preloaderArt.png' unless="web"/>
+	<assets path='art/ffmpeg.exe' rename='assets/data/ffmpeg.exe' if="ZIPS_ALLOWED"/>
 
 	<!-- ______________________________ Funkdefines _____________________________ -->
 
+	<!--If you want hxcodec videos to be used-->
 	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>
+
+	<!--If you want the discord rcp to be used-->
 	<define name="DISCORD_ALLOWED" if="cpp"/>
+	
+	<!--If you want to have ffmpeg used for osu and quaver pack zip support-->
+	<define name="ZIPS_ALLOWED" if="desktop"/>
 	
 	<!--If you want more accurate sprite angles, at cost of performance-->
 	<define name="FAST_MATH"/>

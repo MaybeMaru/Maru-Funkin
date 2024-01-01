@@ -21,6 +21,7 @@ typedef UnZipType = {
 };
 
 class SongZip {
+    #if ZIPS_ALLOWED
 
     static var zipMap:Map<String, ZipFormat> = [
         "osz" => OSU,
@@ -151,4 +152,5 @@ class SongZip {
                 FileSystem.deleteFile(i);
         }
     }
+    #end
 }

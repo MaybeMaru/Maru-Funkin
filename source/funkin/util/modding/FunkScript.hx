@@ -29,6 +29,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 	public function new(hscriptCode:String, scriptID:String):Void {
 		super();
+		
+		// Make sure to DM me unsafe classes to add here
+		//interp.importBlocklist = [];
+		
 		this.scriptID = scriptID;
 		implement();
 		__runCode(hscriptCode);
@@ -277,6 +281,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {
+			if (name == "runCode") return false; // why would you-
+
 			return ModdingUtil.addCall('eventHit', [tempEvent.set(-1, name, values)]);
 		});
 
