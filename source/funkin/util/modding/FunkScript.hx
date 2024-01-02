@@ -280,6 +280,14 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			return new Character(0,0,name);
 		});
 
+		set('cacheImage', function(path:String, ?library:String, ?camera:FlxCamera):FlxGraphicAsset {
+			final image = Paths.image(path, library);
+			if ((camera != null) && (image is FlxGraphic)) {
+				camera.startQuadBatch(image, false, false, null, false, null);
+			}
+			return image;
+		});
+
 		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {
 			if (name == "runCode") return false; // why would you-
 

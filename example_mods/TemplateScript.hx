@@ -162,6 +162,14 @@ existsGroup(groupTag:String);
 cacheCharacter(charName:String);
 
 /*
+    Caches and returns an image, optionally can also precache the quad batch onto a camera
+    @param imagePath     --> Path of the image to cache
+    @param imageLibrary  --> Library of the image to cache (OPTIONAL)
+    @param quadCamera    --> Camera to start the quad batch to (OPTIONAL)
+*/
+cacheImage(imagePath:String, ?imageLibrary:String, ?quadCamera:FlxCamera);
+
+/*
     Runs a PlayState song event
     @param eventName    --> Name of the event to call
     @param eventValues  --> Values of the event to call (OPTIONAL)

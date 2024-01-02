@@ -9,9 +9,6 @@ class HealthIcon extends FlxSpriteExt {
 	public var staticSize:Float = 1;
 	public var iconName:String = '';
 
-	var _height:Float = 0;
-	var _width:Float = 0;
-
 	public function new(char:String = 'bf', isPlayer:Bool = false, playIcon:Bool = false):Void {
 		super();
 		this.isPlayer = isPlayer;
@@ -50,8 +47,28 @@ class HealthIcon extends FlxSpriteExt {
 		animCheck();
 		flipX = isPlayer;
 		scrollFactor.set();
+		
+
+		initBumpVars();
+	}
+
+	var _height:Float = 0;
+	var _width:Float = 0;
+	var bumpLerp:Float = 0.0;
+	var coolOffset:Float = 0.0;
+
+	function initBumpVars() {
 		_height = height * 0.55;
 		_width = width;
+
+		if (Preferences.getPref('vanilla-ui')) {
+			bumpLerp = 0.75;
+			coolOffset = isPlayer ? 26 : _width - 26 ;
+		}
+		else {
+			bumpLerp = 0.15;
+			coolOffset = 23 + width * 0.333;
+		}
 	}
 
 	public function bumpIcon(bumpSize:Float = 1.2):Void {
@@ -78,13 +95,6 @@ class HealthIcon extends FlxSpriteExt {
 	override function update(elapsed:Float):Void {
 		if (playIcon && PlayState.instance != null) {
 			final healthBar = PlayState.instance.healthBar;
-			var bumpLerp = 0.15;
-			var coolOffset = 23 + width * 0.333;
-			if (Preferences.getPref('vanilla-ui')) {
-				bumpLerp = 0.75;
-				coolOffset = isPlayer ? 26 : _width - 26 ;
-			}
-
 			if (isPlayer) {
 				isDying = healthBar.percent < 20;
 				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - _height);
