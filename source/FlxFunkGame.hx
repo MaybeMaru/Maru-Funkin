@@ -43,8 +43,10 @@ class FlxFunkGame extends FlxGame {
         transition.update(FlxG.elapsed);
         console.update(FlxG.elapsed);
 
-        for (i in 0...updateObjects.length) {
-            updateObjects[i].update(FlxG.elapsed);
+        if (updateObjects.length > 0) {
+            for (i in 0...updateObjects.length) {
+                updateObjects[i].update(FlxG.elapsed);
+            }
         }
     }
 }

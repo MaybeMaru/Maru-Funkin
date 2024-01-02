@@ -487,7 +487,6 @@ class NotesGroup extends FlxGroup
 				for (badNote in removeList) badNote.removeNote();
 				final onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : true;
 
-				possibleNotes.sort(CoolUtil.sortByStrumTime);
 				if (possibleNotes.length > 0) {
 					if (!onGhost) {
 						for (i in 0...controlArray.length) {

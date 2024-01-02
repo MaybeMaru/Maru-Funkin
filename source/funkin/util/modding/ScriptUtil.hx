@@ -91,4 +91,17 @@ class ScriptUtil {
             skipTransClose: skipTransClose ?? skipTransOpen
         }
 	}
+
+    public inline static function stringToBlend(value:String):openfl.display.BlendMode {
+        return switch(value.toLowerCase().trim()) {
+            case 'add':     ADD;        case 'alpha': 		ALPHA;
+            case 'darken':  DARKEN;     case 'difference': 	DIFFERENCE;
+            case 'erase':   ERASE;      case 'hardlight': 	HARDLIGHT;
+            case 'invert':  INVERT;     case 'layer': 		LAYER;
+            case 'lighten': LIGHTEN;    case 'multiply': 	MULTIPLY;
+            case 'overlay': OVERLAY;    case 'screen': 		SCREEN;
+            case 'shader':  SHADER; 	case 'subtract': 	SUBTRACT;
+            default:        NORMAL;
+        }
+    }
 }
