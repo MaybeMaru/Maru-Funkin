@@ -146,7 +146,6 @@ class Preloader extends flixel.FlxState {
     inline function exit() {
         FlxG.switchState(new SplashState());
         //FlxG.switchState(new funkin.states.TestState());
-        //FlxG.switchState(new funkin.states.TestStateUI());
     }
 
 	override public function update(elapsed:Float):Void {

@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 
@@ -113,16 +114,65 @@ class NoteUtil {
         if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
         return skinSpriteMap.get(skin);
     }
+}
+
+typedef SkinSpriteData = {
+    baseSprite:FlxSpriteExt,
+    skinJson:NoteSkinData
+}
+
+typedef NoteRGB = {
+    r:Array<Float>,
+    g:Array<Float>,
+    b:Array<Float>
+}
+
+class NoteAtlas {
+    public static function createAtlas(frames:FlxFramesCollection, colors:Array<NoteRGB>) {
+        // Color notes
+        var coloredGraphics:Array<FlxGraphic> = [];
+        for (rgb in colors) {
+            var newBitmap = frames.parent.bitmap.clone();
+            var graphic = FlxGraphic.fromBitmapData(applyColorFilter(newBitmap, rgb.r, rgb.g, rgb.b));
+            coloredGraphics.push(graphic);
+        }
+
+        // Create atlas
+        var atlasCollection:Array<FlxAtlasFrames> = [];
+        for (_ in 0...coloredGraphics.length) {
+            var newAtlas = new FlxAtlasFrames(coloredGraphics[_]);
+            newAtlas.frames = frames.frames;
+            
+            for (frame in newAtlas.frames) {
+                frame.parent = newAtlas.parent;
+                
+                var angle = cast(frame.angle, Int);
+                angle += DEFAULT_NOTE_ANGLES[_];
+                angle %= 360;
+            }
+
+            atlasCollection.push(newAtlas);
+        }
+
+        // Combine the atlas
+        final newCollection = new FlxAtlasFrames(coloredGraphics[0]);
+        for (atlas in atlasCollection) {
+            newCollection.addAtlas(atlas);
+        }
+
+        return newCollection;
+    }
 
     public static final DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
     public static final DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
     public static final DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
-    public static final DEFAULT_NOTE_ANGLES:Array<Float>= [0, -90, 90, 180];
+    public static final DEFAULT_NOTE_ANGLES:Array<Int>= [0, -90, 90, 180];
 
-    public static function applyColorFilter(sprite:FlxSprite, red:Array<Float>, green:Array<Float>, blue:Array<Float>):BitmapData {
-        sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new openfl.geom.Point(),
-		new openfl.filters.ColorMatrixFilter(getColorMatrix(red,green,blue)));
-        return sprite.pixels;
+    static final _point = new openfl.geom.Point();
+
+    public static function applyColorFilter(bitmap:BitmapData, red:Array<Float>, green:Array<Float>, blue:Array<Float>):BitmapData {
+        bitmap.applyFilter(bitmap, bitmap.rect, _point, new openfl.filters.ColorMatrixFilter(getColorMatrix(red,green,blue)));
+        return bitmap;
     }
 
     public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {
@@ -139,9 +189,4 @@ class NoteUtil {
 			0, 0, 0, 1, 0,
 		];
     }
-}
-
-typedef SkinSpriteData = {
-    baseSprite:FlxSpriteExt,
-    skinJson:NoteSkinData
 }
