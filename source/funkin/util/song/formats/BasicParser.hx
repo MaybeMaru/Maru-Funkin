@@ -1,7 +1,5 @@
 package funkin.util.song.formats;
 
-import haxe.ds.Vector;
-
 typedef BasicBpmChange = {
     time:Float,
     bpm:Float
@@ -34,9 +32,11 @@ class BasicParser {
         applyVars(variables, fnfMap);
         parseBpmChanges(map, bpmChanges);
 
+        final split = path.split("/");
+        fnfMap.song = split[split.length - 3];
         fnfMap.bpm = bpmChanges[0]?.bpm ?? 100.0;
         
-        final sections = parseNotes();
+        final sections = parseNotes(diff);
         if (sections != null) {
             for (section in sections) {
                 final newSec:SwagSection = Song.getDefaultSection();
@@ -55,7 +55,7 @@ class BasicParser {
 
     function applyVars(variables:Map<String, String>, fnfMap:SwagSong):Void {}
     
-    function parseNotes():Vector<BasicSection> {
+    function parseNotes(diff:String):Array<BasicSection> {
         return null;
     }
 

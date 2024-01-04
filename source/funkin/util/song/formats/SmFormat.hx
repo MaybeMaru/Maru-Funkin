@@ -3,7 +3,6 @@ package funkin.util.song.formats;
 import funkin.util.song.formats.BasicParser.ChartVar;
 import funkin.util.song.formats.BasicParser.BasicSection;
 import funkin.util.song.formats.BasicParser.BasicBpmChange;
-import haxe.ds.Vector;
 
 /*
     Custom made sm (stepmania) to fnf json format for mau engin
@@ -16,7 +15,6 @@ class SmFormat extends BasicParser {
     }
 
     override function applyVars(variables:Map<String, String>, fnfMap:SwagSong) {
-        fnfMap.song = variables.get("TITLE");
         fnfMap.offsets = [Std.int(Std.parseFloat(variables.get('OFFSET')) * -1000), 0];
     }
 
@@ -65,9 +63,7 @@ class SmFormat extends BasicParser {
         return null;
     }
 
-    var diffNotes:Map<String, Vector<BasicSection>> = [];
-
-    override function parseNotes():Vector<BasicSection> {
+    override function parseNotes(diff:String):Array<BasicSection> {
         var baseNotes:Array<String> = [];
         for (name => variable in variables) {
             if (name.startsWith("NOTES")) {
@@ -77,17 +73,18 @@ class SmFormat extends BasicParser {
 
         for (chart in baseNotes) {
             var parts = chart.split(":");
-
-            var diff:String = parts[2];
-            var sections:Vector<BasicSection> = parseSm(parts[5].substr(1, parts[5].length));
-
-            diffNotes.set(diff, sections);
+            var chartDiff:String = parts[2].toLowerCase();
+            
+            if (diff == chartDiff) {
+                return parseSm(parts[5].substr(0, parts[5].length - 1));
+            }
         }
         
+        throw("Couldn't find StepMania chart for difficulty " + diff);
         return null;
     }
 
-    function parseSm(notes:String):Vector<BasicSection> {
+    function parseSm(notes:String):Array<BasicSection> {
         // For ease of use, diving it
         var sections:Array<Array<String>> = [];
         for (sec in notes.split(",")) {
@@ -107,25 +104,24 @@ class SmFormat extends BasicParser {
 
         var position:Float = 0.0;
         var beatPosition:Float = 0.0;
+        
         var crochet:Float = 0.0;
-
+        
         var recalc = function (index:Int) {
-            crochet = (60 / curBpm) * (1 / sections[index].length) * 1000;
+            crochet = (60 / curBpm) * (4 / sections[index].length) * 1000;
         }
 
         for (i in 0...sections.length) {
             recalc(i);
 
-            for (line in sections[i]) {
-                var lineSplit = line.split("");
+            for (l in 0...sections[i].length) {
+                var lineSplit = sections[i][l].split("");
                 for (n in 0...lineSplit.length) {
                     switch (lineSplit[n]) {
                         case '1':// Normal note
                             sectionsVector[i].notes.push([position, n, 0.0]);
                         case '2':// Hold head
-                            //var susLengthInt = findSusLength(measureArray, [l,n]);
-                            //var susLength = stepCrochet * stepsPerLine * susLengthInt;
-                            //smSec.notes.push([strumTime,n,susLength]);
+                            sectionsVector[i].notes.push([position, n, resolveSustain(sections[i], l, n, crochet)]);
                         //case '4':// Roll head
                         //case '3': // Hold / Roll tail
                         //case 'M':// Mine
@@ -134,20 +130,30 @@ class SmFormat extends BasicParser {
                 }
                 
                 position += crochet;
-                beatPosition += 1 / sections[i].length;
+                beatPosition += 4 / sections[i].length;
 
                 if (bpmChanges[0] != null) {
                     while (bpmChanges[0].time <= beatPosition) {
                         curBpm = bpmChanges[0].bpm;
-                        bpmChanges.remove(bpmChanges[0]);
+                        sectionsVector[i].bpm = curBpm;
                         recalc(i);
 
-                        sectionsVector[i].bpm = curBpm;
+                        bpmChanges.remove(bpmChanges[0]);
+                        if (bpmChanges[0] == null) break;
                     }
                 }
             }
         }
 
-        return Vector.fromArrayCopy(sectionsVector);
+        return sectionsVector;
+    }
+
+    function resolveSustain(measure:Array<String>, line:Int, index:Int, crochet:Float):Float {
+        var length:Int = 1;
+        for (i in line...measure.length) {
+            if (measure[i].split("")[index] == "3") return length * crochet;
+            length++;
+        }
+        return 0.0;
     }
 }
