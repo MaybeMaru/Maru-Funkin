@@ -1,185 +1,153 @@
 package funkin.util.song.formats;
 
+import funkin.util.song.formats.BasicParser.ChartVar;
+import funkin.util.song.formats.BasicParser.BasicSection;
+import funkin.util.song.formats.BasicParser.BasicBpmChange;
+import haxe.ds.Vector;
+
 /*
     Custom made sm (stepmania) to fnf json format for mau engin
-    DOES NOT CONVERT ZIP PACK FILES YET, ONLY .SM CHART FILES!!!!!!
+    TODO: Rewrite this bitch!!! (and make a general format for other converters)
 */
 
-typedef BpmChanges = Array<{measure:Int, bpm:Float}>;
-typedef SmSection = {notes:Array<Array<Dynamic>>, changeBpm:Bool, bpm:Float};
-
-class SmFormat {
-    public static function convertSong(path:String, diff:String):SwagSong {
-        var smMap:Array<String> = CoolUtil.getFileContent(path).split('\n');
-        var fnfMap:SwagSong = Song.getDefaultSong();
-
-        var title = getMapVar(smMap, 'TITLE');
-        var offset = Std.int(Std.parseFloat(getMapVar(smMap, 'OFFSET'))*1000);
-        var bpm = 0.0;
-        
-        var bpmChanges:BpmChanges = [];
-        for (i in getMapVar(smMap, 'BPMS').split(",")) {
-            final data = i.split("=");
-            bpmChanges.push({
-                measure: Std.int(Std.parseFloat(data[0]) * 0.25),
-                bpm:  Std.parseFloat(data[1])
-            });
-        }
-        bpm = bpmChanges[0].bpm;
-        
-        var notes = getMapNotes(smMap, bpmChanges, diff);
-        var sections:Array<SwagSection> = [];
-        for (i in 0...Lambda.count(notes)) {
-            final newSec:SwagSection = Song.getDefaultSection();
-            final data = notes.get(i);
-            if (notes.get(i) != null) {
-                newSec.sectionNotes = data.notes;
-                newSec.changeBPM = data.changeBpm;
-                newSec.bpm = data.bpm;
-            }
-            sections.push(newSec);
-        }
-
-        fnfMap.song = title;
-        fnfMap.notes = sections;
-        fnfMap.bpm = bpm;
-        //trace(offset);
-        fnfMap.offsets = [offset,0];
-        return fnfMap;
+class SmFormat extends BasicParser {
+    public static function convert(path:String, diff:String):SwagSong {
+        return new SmFormat().convertSong(path, diff);
     }
 
-    private static function getMapVar(map:Array<String>, mapVar:String):String {
-        for (l in 0...map.length) {
-            final line = map[l];
-            if (line.startsWith('#$mapVar')) {
-                var retVar:String = line.split('#$mapVar:')[1].trim().replace('\r','').replace('\n','');
-                if (!retVar.endsWith(";")) {
-                    var i:Int = l + 1;
-                    while (!map[i].endsWith(";") && !map[i].startsWith(";")) {
-                        retVar += map[i].trim().replace('\r','').replace('\n','');
-                        i++;
+    override function applyVars(variables:Map<String, String>, fnfMap:SwagSong) {
+        fnfMap.song = variables.get("TITLE");
+        fnfMap.offsets = [Std.int(Std.parseFloat(variables.get('OFFSET')) * -1000), 0];
+    }
+
+    override function parseBpmChanges(map:Array<String>, bpmChanges:Array<BasicBpmChange>) {
+        for (i in variables.get("BPMS").split(",")) {
+            final data = i.split("=");
+            bpmChanges.push({
+                time: Std.parseFloat(data[0]), // Calculated in beats
+                bpm: Std.parseFloat(data[1])
+            });
+        }
+    }
+
+    override function __resolveVar(line:String, index:Int):ChartVar {
+        if (line.trim().startsWith("#")) {
+            var varName:String = line.split(":")[0];   
+            varName = varName.substring(1, varName.length); 
+
+            var retVar:String = line.split('$varName:')[1].trim().replace('\r','').replace('\n','');
+            if (!retVar.endsWith(";")) {
+                index++;
+                while (!map[index].endsWith(";") && !map[index].startsWith(";")) {
+                    var lineValue = map[index].trim().replace('\r','').replace('\n','');
+                    if (!lineValue.contains("// measure"))  retVar += lineValue; // I have no idea why this exists, only makes parsing harder
+                    else retVar += ",";
+
+                    if (lineValue.length == 4) {
+                        retVar += "-";
+                    }
+                    
+                    index++;
+
+                    if (index > map.length) {
+                        throw("Couldnt get variable for " + varName);
+                        break;
                     }
                 }
+            }
 
-                retVar = (retVar.endsWith(';')) ? retVar.substring(0, retVar.length - 1) : retVar;
-                return retVar;
+            return {
+                name: varName,
+                value: (retVar.endsWith(';')) ? retVar.substring(0, retVar.length - 1) : retVar
             }
         }
+
         return null;
     }
 
-    static inline function cleanStr(s:String):String
-        return Std.string(s).trim().replace('\r','').replace('\n','');
+    var diffNotes:Map<String, Vector<BasicSection>> = [];
 
-    private static function getMapNotes(map:Array<String>, bpmChanges:BpmChanges, diff:String):Map<Int, SmSection> {
-        var bpm = bpmChanges[0].bpm;
-        bpmChanges.remove(bpmChanges[0]);
-        
-        var crochet:Float = ((60 / bpm) * 1000); 	// beats in milliseconds
-        var stepCrochet:Float = crochet / 4; 		// steps in milliseconds
-        var sectionCrochet:Float = crochet * 4; 	// sections in milliseconds
-        
-        var returnMap:Map<Int, SmSection> = [];
-        var noteMeasures:Map<Int,Array<String>> = [];
-
-        // Get the line measures actually start
-        var notesLine:Int = 0;
-        var _diff:String = null;
-        for (l in 0...map.length) {
-            if (map[l].startsWith("#NOTES:")) {
-                for (i in l...map.length) {
-                    if (map[i].trim().toLowerCase().startsWith(diff)) // Find diff
-                        _diff = diff;
-
-                    if (cleanStr(map[i]).length == 4) {
-                        if (_diff == diff) { // STARTED NOTES, WOW!! (cries)
-                            notesLine = i;
-                            break;
-                        }
-                    }
-                }
-                break;
+    override function parseNotes():Vector<BasicSection> {
+        var baseNotes:Array<String> = [];
+        for (name => variable in variables) {
+            if (name.startsWith("NOTES")) {
+                baseNotes.push(variable);
             }
         }
 
-        var measure:Int = 0;
-        for (l in notesLine...map.length) {
-            var noteLine = map[l].trim();
-            if (noteLine.length <= 0) continue;
-            if (noteLine == ';') break;
-            if (noteLine.startsWith(",")) { // new measure
-                measure++;
-            } else { // Push notes to measure
-                var lastMeasureData:Array<String> = noteMeasures.get(measure) ?? [];
-                lastMeasureData.push(noteLine);
-                noteMeasures.set(measure, lastMeasureData);
-            }
+        for (chart in baseNotes) {
+            var parts = chart.split(":");
+
+            var diff:String = parts[2];
+            var sections:Vector<BasicSection> = parseSm(parts[5].substr(1, parts[5].length));
+
+            diffNotes.set(diff, sections);
+        }
+        
+        return null;
+    }
+
+    function parseSm(notes:String):Vector<BasicSection> {
+        // For ease of use, diving it
+        var sections:Array<Array<String>> = [];
+        for (sec in notes.split(",")) {
+            sections.push(sec.split("-"));
         }
 
-        var strumTime:Float = 0;
-        for (i in 0...Lambda.count(noteMeasures)) { // Measures            
-            if (noteMeasures.get(i) == null) continue;
-            final measureArray:Array<String> = noteMeasures.get(i);
-            final stepsPerLine = 16 / measureArray.length;
-
-            final smSec:SmSection = {
+        var sectionsVector:Array<BasicSection> = [];
+        for (i in 0...sections.length) {
+            sectionsVector.push({
                 notes: [],
-                changeBpm: false,
-                bpm: 0
-            }
+                bpm: -1
+            });
+        }
 
-            for (l in 0...measureArray.length) { // Lines
-                final measurePerc = i + (l + 1) / measureArray.length;
+        var curBpm:Float = bpmChanges[0].bpm;
+        bpmChanges.remove(bpmChanges[0]);
 
-                var lastChange = null;
-                for (change in bpmChanges) {
-                    if (change.measure <= measurePerc) {
-                        lastChange = change;
-                        bpmChanges.remove(change);
-                    }
-                }
+        var position:Float = 0.0;
+        var beatPosition:Float = 0.0;
+        var crochet:Float = 0.0;
 
-                if (lastChange != null) {
-                    crochet = ((60 / lastChange.bpm) * 1000);
-                    stepCrochet = crochet / 4;
-                    sectionCrochet = crochet * 4;
+        var recalc = function (index:Int) {
+            crochet = (60 / curBpm) * (1 / sections[index].length) * 1000;
+        }
 
-                    smSec.changeBpm = true;
-                    smSec.bpm = lastChange.bpm;
-                }
+        for (i in 0...sections.length) {
+            recalc(i);
 
-
-                strumTime += stepCrochet * stepsPerLine;
-                final line = measureArray[l].split('');
-                for (n in 0...line.length) {    // Notes
-                    switch (line[n]) {
+            for (line in sections[i]) {
+                var lineSplit = line.split("");
+                for (n in 0...lineSplit.length) {
+                    switch (lineSplit[n]) {
                         case '1':// Normal note
-                            smSec.notes.push([strumTime,n,0]);
+                            sectionsVector[i].notes.push([position, n, 0.0]);
                         case '2':// Hold head
-                            var susLengthInt = findSusLength(measureArray, [l,n]);
-                            var susLength = stepCrochet * stepsPerLine * susLengthInt;
-                            smSec.notes.push([strumTime,n,susLength]);
+                            //var susLengthInt = findSusLength(measureArray, [l,n]);
+                            //var susLength = stepCrochet * stepsPerLine * susLengthInt;
+                            //smSec.notes.push([strumTime,n,susLength]);
                         //case '4':// Roll head
+                        //case '3': // Hold / Roll tail
                         //case 'M':// Mine
                         default:
                     }
                 }
-            }
+                
+                position += crochet;
+                beatPosition += 1 / sections[i].length;
 
-            returnMap.set(i, smSec);
+                if (bpmChanges[0] != null) {
+                    while (bpmChanges[0].time <= beatPosition) {
+                        curBpm = bpmChanges[0].bpm;
+                        bpmChanges.remove(bpmChanges[0]);
+                        recalc(i);
+
+                        sectionsVector[i].bpm = curBpm;
+                    }
+                }
+            }
         }
 
-        return returnMap;
-    }
-
-    inline private static function findSusLength(measure:Array<String>, startSus:Array<Int>):Int {
-        var steps:Int = 0;
-        for (i in startSus[0]...measure.length) {
-            if (measure[i].split('')[startSus[1]] == '3') {
-                break;
-            }
-            steps++;
-        }
-        return steps;
+        return Vector.fromArrayCopy(sectionsVector);
     }
 }

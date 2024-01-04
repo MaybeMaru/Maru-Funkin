@@ -185,6 +185,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
     function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
         __tempPoint.set(baseFrame.frame.width * scale.y, baseFrame.frame.height * scale.y);
         _frame.frame.copyFrom(baseFrame.frame);
+        _frame.angle = baseFrame.angle;
         return __tempPoint;
     }
 
