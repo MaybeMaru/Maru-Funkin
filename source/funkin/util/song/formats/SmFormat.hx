@@ -16,13 +16,14 @@ class SmFormat extends BasicParser {
 
     override function applyVars(variables:Map<String, String>, fnfMap:SwagSong) {
         fnfMap.offsets = [Std.int(Std.parseFloat(variables.get('OFFSET')) * -1000), 0];
+        fnfMap.speed = 2.5;
     }
 
     override function parseBpmChanges(map:Array<String>, bpmChanges:Array<BasicBpmChange>) {
         for (i in variables.get("BPMS").split(",")) {
             final data = i.split("=");
             bpmChanges.push({
-                time: Std.parseFloat(data[0]), // Calculated in beats
+                time: Std.parseFloat(data[0]) * 0.25, // Calculated in measures
                 bpm: Std.parseFloat(data[1])
             });
         }
@@ -103,7 +104,7 @@ class SmFormat extends BasicParser {
         bpmChanges.remove(bpmChanges[0]);
 
         var position:Float = 0.0;
-        var beatPosition:Float = 0.0;
+        var measurePosition:Float = -1.0;
         
         var crochet:Float = 0.0;
         
@@ -115,25 +116,10 @@ class SmFormat extends BasicParser {
             recalc(i);
 
             for (l in 0...sections[i].length) {
-                var lineSplit = sections[i][l].split("");
-                for (n in 0...lineSplit.length) {
-                    switch (lineSplit[n]) {
-                        case '1':// Normal note
-                            sectionsVector[i].notes.push([position, n, 0.0]);
-                        case '2':// Hold head
-                            sectionsVector[i].notes.push([position, n, resolveSustain(sections[i], l, n, crochet)]);
-                        //case '4':// Roll head
-                        //case '3': // Hold / Roll tail
-                        //case 'M':// Mine
-                        default:
-                    }
-                }
-                
-                position += crochet;
-                beatPosition += 4 / sections[i].length;
-
+                //Check for bpm changes
+                measurePosition += 1 / sections[i].length;
                 if (bpmChanges[0] != null) {
-                    while (bpmChanges[0].time <= beatPosition) {
+                    while (bpmChanges[0].time <= measurePosition) {
                         curBpm = bpmChanges[0].bpm;
                         sectionsVector[i].bpm = curBpm;
                         recalc(i);
@@ -142,6 +128,25 @@ class SmFormat extends BasicParser {
                         if (bpmChanges[0] == null) break;
                     }
                 }
+                
+                // Add line notes
+                var lineSplit = sections[i][l].split("");
+                for (n in 0...lineSplit.length) {
+                    switch (lineSplit[n]) {
+                        case '1':// Normal note
+                            sectionsVector[i].notes.push([position, n, 0.0]);
+                        case '2':// Hold head
+                            sectionsVector[i].notes.push([position, n, resolveSustain(sections[i], l, n, crochet)]);
+                        case '4':// Roll head
+                            sectionsVector[i].notes.push([position, n, resolveSustain(sections[i], l, n, crochet), "roll"]);
+                        case 'M':// Mine
+                            sectionsVector[i].notes.push([position, n, 0.0, "mine"]);
+                        default:
+                    }
+                }
+                
+                // Move conductor
+                position += crochet;
             }
         }
 
