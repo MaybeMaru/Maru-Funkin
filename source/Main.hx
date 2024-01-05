@@ -151,8 +151,9 @@ class Main extends Sprite
 			case "640x360": resize(640, 360);
 			case "854x480": resize(854, 480);
 			case "960x540": resize(960, 540);
-        	case "1024x576": resize(1024, 576);
-        	case "1280x720": resize(1280, 720);
+			case "1024x576": resize(1024, 576);
+			case "1280x720": resize(1280, 720);
+			case "native": resize(FlxG.stage.fullScreenWidth, FlxG.stage.fullScreenHeight);
 			default: resize(FlxG.initialWidth, FlxG.initialHeight);
 		}
 		#end

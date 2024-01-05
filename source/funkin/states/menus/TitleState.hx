@@ -152,8 +152,6 @@ class TitleState extends MusicBeatState {
 			if (FlxG.sound.music.volume < 0.6) FlxG.sound.music.volume += elapsed * 0.1;
 		}
 
-		if (FlxG.keys.justPressed.F) FlxG.fullscreen = !FlxG.fullscreen;
-
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
 			final lerp = FlxMath.fastSin(titleSine %= (Math.PI * 2));
