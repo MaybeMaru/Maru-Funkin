@@ -4,10 +4,10 @@ import funkin.util.song.formats.BasicParser.ChartVar;
 import funkin.util.song.formats.BasicParser.BasicSection;
 import funkin.util.song.formats.BasicParser.BasicBpmChange;
 
-/*
-    Custom made sm (stepmania) to fnf json format for mau engin
-    TODO: Rewrite this bitch!!! (and make a general format for other converters)
-*/
+/**
+ * Custom made sm (stepmania) to fnf json format for mau engin
+ * @author maybemaru
+ */
 
 class SmFormat extends BasicParser {
     public static function convert(path:String, diff:String):SwagSong {
@@ -64,6 +64,8 @@ class SmFormat extends BasicParser {
         return null;
     }
 
+    var foundDiffs:Array<String> = [];
+
     override function parseNotes(diff:String):Array<BasicSection> {
         var baseNotes:Array<String> = [];
         for (name => variable in variables) {
@@ -75,13 +77,14 @@ class SmFormat extends BasicParser {
         for (chart in baseNotes) {
             var parts = chart.split(":");
             var chartDiff:String = parts[2].toLowerCase();
+            foundDiffs.push(chartDiff);
             
             if (diff == chartDiff) {
                 return parseSm(parts[5].substr(0, parts[5].length - 1));
             }
         }
         
-        throw("Couldn't find StepMania chart for difficulty " + diff);
+        throw("Couldn't find StepMania chart for difficulty " + diff + "\nFound difficulties " + foundDiffs.toString());
         return null;
     }
 
@@ -117,7 +120,6 @@ class SmFormat extends BasicParser {
 
             for (l in 0...sections[i].length) {
                 //Check for bpm changes
-                measurePosition += 1 / sections[i].length;
                 if (bpmChanges[0] != null) {
                     while (bpmChanges[0].time <= measurePosition) {
                         curBpm = bpmChanges[0].bpm;
@@ -147,6 +149,7 @@ class SmFormat extends BasicParser {
                 
                 // Move conductor
                 position += crochet;
+                measurePosition += 1 / sections[i].length;
             }
         }
 

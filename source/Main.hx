@@ -76,6 +76,7 @@ class Main extends Sprite
 		startFullscreen: false 			// Whether to start the game in fullscreen on desktop targets
 	};
 
+	public static var sprite:Main;
 	public static var game:FlxFunkGame;
 	public static var fpsCounter:FPS_Mem; //The FPS display child
 	public static var console:ScriptConsole;
@@ -86,7 +87,7 @@ class Main extends Sprite
 
 	public static function main():Void
 	{
-		Lib.current.addChild(new Main());
+		Lib.current.addChild(sprite = new Main());
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, errorMsg);
 		#if cpp
 		untyped __global__.__hxcpp_set_critical_error_handler(errorMsg);
@@ -135,6 +136,26 @@ class Main extends Sprite
 		}
 
 		addChild(game = new FlxFunkGame(settings.width, settings.height, settings.initialState, settings.framerate, settings.framerate, settings.skipSplash, settings.startFullscreen));
+	}
+
+	public static function resizeGame(resolution:String) {
+		#if desktop
+		var resize = function (w:Int, h:Int) {
+			FlxG.resizeWindow(w, h);
+			Lib.application.window.x = Std.int((FlxG.stage.fullScreenWidth - w) * 0.5);
+			Lib.application.window.y = Std.int((FlxG.stage.fullScreenHeight - h) * 0.5);
+		}
+		
+		switch (resolution) {
+			case "256x144": resize(256, 144);
+			case "640x360": resize(640, 360);
+			case "854x480": resize(854, 480);
+			case "960x540": resize(960, 540);
+        	case "1024x576": resize(1024, 576);
+        	case "1280x720": resize(1280, 720);
+			default: resize(FlxG.initialWidth, FlxG.initialHeight);
+		}
+		#end
 	}
 }
 

@@ -8,6 +8,17 @@ class Preferences {
     public static var prefsLabels:Map<String, String>;
     
     public static var arrayPrefs:Map<String, ArrayPref> = [];
+    
+    #if desktop
+    public static final resolutions:Array<String> = [
+        "256x144",
+        "640x360",
+        "854x480",
+        "960x540",
+        "1024x576",
+        "1280x720"
+    ];
+    #end
 
     public static function setupPrefs():Void {        
         prefsArray = [];
@@ -36,6 +47,9 @@ class Preferences {
         
         // Performance
         addPref('antialiasing',   'antialiasing',    true);
+        #if desktop
+        addPref('resolution',   'resolution',    {array:resolutions, value: "1280x720"});
+        #end
         #if !hl
         addPref('clear-gpu',      'clear gpu cache', false);
         addPref('preload',        'preload at start', true);
@@ -58,6 +72,9 @@ class Preferences {
         FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
         Main.fpsCounter.visible = getPref('fps-counter');
+        #if desktop
+        Main.resizeGame(getPref('resolution'));
+        #end
     }
 
     private static function fixOldPrefs() {

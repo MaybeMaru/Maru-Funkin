@@ -70,29 +70,7 @@ class MainMenuState extends MusicBeatState {
 		add(versionShit);
 
 		changeItem();
-
-		// IN TESTING!!
-		/*var noteBitmap = Paths.getRawBitmap(Paths.image("skins/pixel/coloredNoteAssets", null, true));
-		for (i in 0...4) {
-			var test = new FlxSprite(250 + 200 * i, 200, noteBitmap.clone());
-			test.scale.set(6,6);
-			test.updateHitbox();
-			test.antialiasing = false;
-			NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], NoteUtil.DEFAULT_COLORS_OUTER[i]);
-			add(test);
-		}
-		var noteBitmap = Paths.getRawBitmap(Paths.image("skins/default/coloredNoteAssets", null, true));
-		for (i in 0...4) {
-			var test = new FlxSprite(200  + 200 * i, 200, noteBitmap.clone());
-			//NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], [0,0,0]);//NoteUtil.DEFAULT_COLORS_OUTER[i]);
-			NoteUtil.applyColorFilter(test, NoteUtil.DEFAULT_COLORS_INNER[i], NoteUtil.DEFAULT_COLORS_RIM[i], NoteUtil.DEFAULT_COLORS_OUTER[i]);
-			test.origin.set(test.width/2,test.height/2);
-			test.angle = NoteUtil.DEFAULT_NOTE_ANGLES[i];
-			add(test);
-		}
-		noteBitmap.dispose();
-		noteBitmap.disposeImage();*/
-
+		
 		super.create();
 	}
 
@@ -141,20 +119,9 @@ class MainMenuState extends MusicBeatState {
 						}
 						else {
 							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker) {
-								var daChoice:String = optionShit[curSelected];
-								trace('${daChoice.toUpperCase()} Menu Selected');
-
-								switch (daChoice) {
-									case 'story mode':
-										switchState(new StoryMenuState());
-									case 'freeplay':
-										FreeplayState.curSelected = 0;
-										FreeplayState.curDifficulty = 1;
-										switchState(new FreeplayState());
-									case 'options':
-										OptionsState.fromPlayState = false;
-										switchState(new OptionsState());
-								}
+								var item:String = optionShit[curSelected];
+								trace('${item.toUpperCase()} Menu Selected');
+								selectItem(item);
 							});
 						}
 					});
@@ -165,7 +132,21 @@ class MainMenuState extends MusicBeatState {
 		super.update(elapsed);
 	}
 
-	function changeItem(add:Int = 0):Void {
+	dynamic function selectItem(item:String) {
+		switch (item) {
+			case 'story mode':
+				switchState(new StoryMenuState());
+			case 'freeplay':
+				FreeplayState.curSelected = 0;
+				FreeplayState.curDifficulty = 1;
+				switchState(new FreeplayState());
+			case 'options':
+				OptionsState.fromPlayState = false;
+				switchState(new OptionsState());
+		}
+	}
+
+	dynamic function changeItem(add:Int = 0):Void {
 		curSelected = FlxMath.wrap(curSelected + add, 0, menuItems.length - 1);
 		if (add != 0) CoolUtil.playSound('scrollMenu');
 

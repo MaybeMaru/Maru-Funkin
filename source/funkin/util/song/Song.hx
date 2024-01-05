@@ -242,14 +242,13 @@ class Song {
 		return returnNotes;
 	}
 
-	private static function sortNotes(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int {
-		return FlxSort.byValues(FlxSort.ASCENDING,  Obj1[0], Obj2[0]);
+	private static function sortNotes(note1:Array<Dynamic>, note2:Array<Dynamic>):Int {
+		return FlxSort.byValues(FlxSort.ASCENDING, note1[0], note2[0]);
 	}
 
 	public static function formatSongFolder(songName:String):String {
 		var returnSong:String = "";
-		final songParts:Array<String> = songName.split("");
-		for (letter in songParts) {
+		for (letter in songName.split("")) {
 			var formatLetter:String = letter.toLowerCase();
 			switch (formatLetter) {
 				case "." | "?": formatLetter = '';
