@@ -102,6 +102,10 @@ class NoteUtil {
         for (anim in skinJson.anims)
             refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 
+        if ((PlayState.instance != null) && (refSprite.frame != null)) {
+            CoolUtil.cacheImage(refSprite.frame.parent, null, PlayState.instance.camHUD);
+        }
+
         final addMap:SkinSpriteData = {
             baseSprite: refSprite,
             skinJson: skinJson

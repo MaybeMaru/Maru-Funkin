@@ -156,7 +156,7 @@ class PlayState extends MusicBeatState {
 
 		//Cache Gameover Character
 		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
-		if (deadChar.frame != null) camGame.startQuadBatch(deadChar.frame.parent, false, false, null, deadChar.antialiasing, null);
+		if (deadChar.frame != null) CoolUtil.cacheImage(deadChar.frame.parent, null, camGame);
 		GameOverSubstate.cacheSounds();
 
 		// GET THE STAGE JSON SHIT
@@ -361,10 +361,8 @@ class PlayState extends MusicBeatState {
 
 	function startCountdown():Void {
 		showUI(true);
-		inCutscene = false;
-		inDialogue = false;
-		startedCountdown = true;
-		seenCutscene = true;
+		inCutscene = inDialogue = false;
+		startedCountdown = seenCutscene = true;
 
 		if (!notesGroup.skipStrumIntro) {
 			for (strum in notesGroup.strumLineNotes)
@@ -394,8 +392,8 @@ class PlayState extends MusicBeatState {
 		}
 
 		for (i in ['ready','set','go']) {
-			final spriteKey = SkinUtil.getAssetKey(i,IMAGE);
-			Paths.image(spriteKey);
+			final spriteKey:String = SkinUtil.getAssetKey(i,IMAGE);
+			CoolUtil.cacheImage(spriteKey, null, camHUD);
 			countdownSpriteKeys.push(spriteKey);
 		}
 

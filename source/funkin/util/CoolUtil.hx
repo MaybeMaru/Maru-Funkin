@@ -235,6 +235,18 @@ class CoolUtil {
 		__pauseState();
 	}
 
+	inline public static function cacheImage(image:FlxGraphicAsset, ?library:String, ?camera:FlxCamera):FlxGraphicAsset {
+		if (image == null) return null;
+		
+		if (image is String)
+			image = Paths.image(image, library);
+
+		if ((camera != null) && (image is FlxGraphic))
+			camera.startQuadBatch(image, false, false, null, false, null);
+
+		return image;
+	}
+
 	@:noCompletion
 	inline private static function __pauseState() {
 		FlxG.state.openSubState(new FlxSubState());
