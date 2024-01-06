@@ -1,12 +1,14 @@
 package funkin.util.backend;
 
+import flixel.FlxBasic;
+
 enum abstract MusicBeatEvent(Int) {
     var STEP_EVENT = 0;
     var BEAT_EVENT = 1;
     var SECTION_EVENT = 2;
 }
 
-class MusicBeat extends flixel.FlxBasic {
+class MusicBeat extends FlxBasic {
     public var curStep(default, null):Int = 0;
 	public var curBeat(default, null):Int = 0;
 	public var curSection(default, null):Int = 0;
@@ -34,9 +36,9 @@ class MusicBeat extends flixel.FlxBasic {
 		if (oldStep != curStep && curStep >= 0) {
 			stepHit();
 		}
-        super.update(elapsed);
 
-		#if debug
+		#if FLX_DEBUG
+		FlxBasic.activeCount++;
 		FlxG.watch.addQuick("curSection", 	curSection);
 		FlxG.watch.addQuick("curBeat", 		curBeat);
 		FlxG.watch.addQuick("curStep", 		curStep);

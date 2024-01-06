@@ -117,31 +117,32 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			return;
 
 		var shader = shader != null ? shader : graphics.shader;
-		if (shader == null) {
-			trace('null null dum dum');
+		if (shader == null)
 			return;
-		}
 
 		shader.bitmap.input = graphics.bitmap;
 		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
 
-
-		if (colored || hasColorOffsets)
+		var hasColors = colored || hasColorOffsets;
+		if (hasColors)
 		{
 			shader.colorMultiplier.value = colorMultipliers;
 			shader.colorOffset.value = colorOffsets;
 		}
 
 		setParameterValue(shader.hasTransform, true);
-		setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
+		setParameterValue(shader.hasColorTransform, hasColors);
 
 		#if (openfl > "8.7.0")
 		camera.canvas.graphics.overrideBlendMode(blend);
 		#end
 		camera.canvas.graphics.beginShaderFill(shader);
 		camera.canvas.graphics.drawQuads(rects, null, transforms);
-		super.render(camera);
+		
+		#if FLX_DEBUG
+		FlxDrawBaseItem.drawCalls++;
+		#end
 	}
 
 	inline function setParameterValue(parameter:ShaderParameter<Bool>, value:Bool):Void

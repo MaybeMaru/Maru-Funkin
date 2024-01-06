@@ -23,7 +23,7 @@ typedef UnZipType = {
 class SongZip {
     #if ZIPS_ALLOWED
 
-    static var zipMap:Map<String, ZipFormat> = [
+    static final zipMap:Map<String, ZipFormat> = [
         "osz" => OSU,
         "qp" => QUAVER,
         "sm" => STEPMANIA,
@@ -68,7 +68,7 @@ class SongZip {
         }
     }
 
-    static var UNZIP_FORMAT:Map<String, UnZipType> = [
+    static final UNZIP_FORMAT:Map<String, UnZipType> = [
         "osu" => {
             getMap: function(chart) return cast new OsuFormat(chart),
             convert: function(map) return OsuFormat.convertSong("", map),

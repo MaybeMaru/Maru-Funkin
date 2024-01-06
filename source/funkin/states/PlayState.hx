@@ -523,7 +523,12 @@ class PlayState extends MusicBeatState {
 			changeOldIcon();
 		}
 		else if (canDebug) {
-			if (FlxG.keys.justPressed.SIX) {
+			if (getKey('PAUSE-P') && startedCountdown && canPause) {
+				openPauseSubState(true);
+				DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+			}
+			#if desktop
+			else if (FlxG.keys.justPressed.SIX) {
 				DiscordClient.changePresence("Stage Editor", null, null, true);
 				switchState(new StageDebug(stageJsonData));
 			}
@@ -544,10 +549,7 @@ class PlayState extends MusicBeatState {
 				}
 				else switchState(new AnimationDebug(SONG.players[1]));
 			}
-			else if (getKey('PAUSE-P') && startedCountdown && canPause) {
-				openPauseSubState(true);
-				DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
-			}
+			#end
 			else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
 				endSong();
 		}

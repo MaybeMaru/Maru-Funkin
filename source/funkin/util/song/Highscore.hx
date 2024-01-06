@@ -5,7 +5,7 @@ class Highscore {
 	public static var weekUnlocks:Map<String, Bool>;
 
 	public static function saveSongScore(song:String, diff:String, score:Int = 0):Void {
-		var daSong:String = formatSave('song-$song', diff);
+		var daSong:String = formatSave(formatSong(song), diff);
 		if (songScores.exists(daSong)) {
 			if (songScores.get(daSong) < score) {
 				setScore(daSong, score);
@@ -16,7 +16,7 @@ class Highscore {
 	}
 
 	public static function saveWeekScore(week:String, diff:String, score:Int = 0):Void {
-		var daWeek:String = formatSave('week-$week', diff);
+		var daWeek:String = formatSave(formatWeek(week), diff);
 		if (songScores.exists(daWeek)) {
 			if (songScores.get(daWeek) < score) {
 				setScore(daWeek, score);
@@ -27,14 +27,14 @@ class Highscore {
 	}
 
 	inline public static function getSongScore(song:String, diff:String):Int {
-		var daSong:String = formatSave('song-$song', diff);
+		var daSong:String = formatSave(formatSong(song), diff);
 		if (!songScores.exists(daSong))
 			setScore(daSong, 0);
 		return songScores.get(daSong);
 	}
 
 	inline public static function getWeekScore(week:String, diff:String):Int {
-		var daWeek:String = formatSave('week-$week', diff);
+		var daWeek:String = formatSave(formatWeek(week), diff);
 		if (!songScores.exists(daWeek))
 			setScore(daWeek, 0);
 		return songScores.get(daWeek);
@@ -53,9 +53,9 @@ class Highscore {
 		weekUnlocks = SaveData.getSave('weekUnlock');
 	}
 
-	inline public static function formatSave(input:String, diff:String) {
-		return '${Song.formatSongFolder(input)}-$diff';
-	}
+	inline static function formatSong(song:String):String return 'song-$song';
+	inline static function formatWeek(week:String):String return 'week-$week';
+	inline static function formatSave(input:String, diff:String):String return '${Song.formatSongFolder(input)}-$diff';
 
 	/**
 	 *	STORY MODE WEEK PROGRESSION
