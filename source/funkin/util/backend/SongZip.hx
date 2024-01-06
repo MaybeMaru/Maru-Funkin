@@ -50,7 +50,6 @@ class SongZip {
                 
                 var zipEntries = UnZipper.getZipEntries(zipPath);
                 var zipFiles = UnZipper.unzipFiles(zipEntries, modPath); // Unzip and get zip files
-                trace(i);
                 ModSetupState.setupModFolder(i); // Setup folders
                 removeQueue.push(zipPath);
                 
@@ -102,7 +101,7 @@ class SongZip {
             final title = map.getVar(formatUnzip.title);
             final formatTitle = Song.formatSongFolder(title);
             
-            final mapDiff = map.getVar(formatUnzip.diff);
+            final mapDiff = Song.formatSongFolder(map.getVar(formatUnzip.diff));
             final mapAudio = '$modPath/${map.getVar(formatUnzip.audio)}';
 
             if (_songDiffs.exists(title)) _songDiffs.get(title).push(mapDiff);

@@ -16,7 +16,8 @@ class OsuFormat {
         var fnfMap:SwagSong = Song.getDefaultSong();
 
         //  Check if its not an osu!mania map
-        if (osuMap.getVar('Mode') != 3)
+        final mode = Std.parseInt(osuMap.getVar('Mode'));
+        if (mode != 3)
             return fnfMap;
 
         var title = osuMap.getVar('Title');
@@ -24,7 +25,7 @@ class OsuFormat {
         var timingPoints = osuMap.getTimingPoints();
         var offset = timingPoints[0];
         var bpm = FlxMath.roundDecimal(60000 / timingPoints[1], 1);
-        var speed = osuMap.getVar('OverallDifficulty');
+        var speed = Std.parseFloat(osuMap.getVar('OverallDifficulty'));
         var hitObjects =  osuMap.getHitObjects();
 
         var sections:Array<SwagSection> = [];
@@ -43,11 +44,11 @@ class OsuFormat {
         return fnfMap;
     }
 
-    public function getVar(mapVar:String):Dynamic {
+    public function getVar(mapVar:String):Null<String> {
         for (line in map) {
             if (line.startsWith(mapVar)) {
                 var retVar:String = line.split('$mapVar:')[1].trim();
-                return Std.string(retVar.replace('\r','').replace('\n',''));
+                return retVar.replace('\r','').replace('\n','');
             }
         }
         return null;

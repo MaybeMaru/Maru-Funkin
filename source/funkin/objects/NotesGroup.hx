@@ -151,7 +151,7 @@ class NotesGroup extends FlxGroup
 
 				var healthMult = 1.0;
 				if (note.isSustainNote) {
-					final sus = cast(note, Sustain);
+					final sus:Sustain = note.toSustain();
 					healthMult = (sus.startedPress ? sus.percentLeft : 1) * (sus.susLength / Conductor.stepCrochet) * 4;
 				}
 
@@ -371,7 +371,7 @@ class NotesGroup extends FlxGroup
 		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
-				final sus = cast(note, Sustain);
+				final sus:Sustain = note.toSustain();
 				sus.pressSustain();
 				if (sus.pressed) checkCallback(note.mustPress ? goodSustainPress : opponentSustainPress, [note]);
 			} else {
@@ -438,29 +438,29 @@ class NotesGroup extends FlxGroup
 				if (isCpuNote(note)) return; // Skip Cpu notes
 
 				if (note.isSustainNote) { // Handle sustain notes
-					final sustain:Sustain = cast(note, Sustain);
-					sustain.pressed = false;
-					if (!sustain.missedPress) {
-						if ((Conductor.songPosition > sustain.strumTime + Conductor.safeZoneOffset * sustain.hitMult) && !sustain.startedPress) {
-							sustainMiss(sustain);
+					final sus:Sustain = note.toSustain();
+					sus.pressed = false;
+					if (!sus.missedPress) {
+						if ((Conductor.songPosition > sus.strumTime + Conductor.safeZoneOffset * sus.hitMult) && !sus.startedPress) {
+							sustainMiss(sus);
 							return;
 						}
-						if (sustain.startedPress) {
-							final holding = sustain.targetStrum.getControl();
+						if (sus.startedPress) {
+							final holding = sus.targetStrum.getControl();
 							if (!holding) { // Sustain stopped being pressed
-								sustainMiss(sustain); 
+								sustainMiss(sus); 
 								return;
 							}
 							else {
-								if (holding) sustain.pressSustain(); // Pressed sustain
-								if (sustain.pressed) checkCallback(sustain.mustPress ? goodSustainPress : opponentSustainPress, [sustain]);
+								if (holding) sus.pressSustain(); // Pressed sustain
+								if (sus.pressed) checkCallback(sus.mustPress ? goodSustainPress : opponentSustainPress, [sus]);
 							}
 						}
 					}
 				}
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {
-						final note:Note = cast(note, Note);
+						final note:Note = note.toNote();
 						if (note.canBeHit && !note.wasGoodHit) {
 							if (ignoreList.contains(note.noteData)) {
 								for (i in 0...possibleNotes.length) {

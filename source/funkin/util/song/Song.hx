@@ -251,7 +251,7 @@ class Song {
 		for (letter in songName.split("")) {
 			var formatLetter:String = letter.toLowerCase();
 			switch (formatLetter) {
-				case "." | "?": formatLetter = '';
+				case "." | "?" | "*": formatLetter = '';
 				case " " | ":":	formatLetter = '-';
 			}
 			returnSong += formatLetter;
