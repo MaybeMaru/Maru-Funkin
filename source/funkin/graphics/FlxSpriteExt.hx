@@ -190,9 +190,37 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		__superDrawComplex(camera);
 	}
 
+	private inline static function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
+		@:privateAccess {
+			mat.a = frame.tileMatrix[0];
+			mat.b = frame.tileMatrix[1];
+			mat.c = frame.tileMatrix[2];
+			mat.d = frame.tileMatrix[3];
+			mat.tx = frame.tileMatrix[4];
+			mat.ty = frame.tileMatrix[5];
+		}
+
+		if (frame.angle == 180) {
+			mat.rotateByPositive90();
+			mat.rotateByPositive90();
+			mat.translate(frame.sourceSize.y, frame.sourceSize.x);
+		}
+
+		if (flipX != frame.flipX) {
+			mat.scale(-1, 1);
+			mat.translate(frame.sourceSize.x, 0);
+		}
+
+		if (flipY != frame.flipY) {
+			mat.scale(1, -1);
+			mat.translate(0, frame.sourceSize.y);
+		}
+	}
+
 	@:noCompletion
 	private inline function __superDrawComplex(camera:FlxCamera):Void {
-		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
+		prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
+		
 		_matrix.translate(-origin.x, -origin.y);
 		_matrix.scale(scale.x, scale.y);
 

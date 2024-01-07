@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
@@ -131,46 +132,108 @@ typedef NoteRGB = {
     b:Array<Float>
 }
 
+enum NoteAtlasType {
+    NOTE;
+    STRUM;
+    SPLASH;
+}
+
 class NoteAtlas {
-    public static function createAtlas(frames:FlxFramesCollection, colors:Array<NoteRGB>) {
-        // Color notes
-        var coloredGraphics:Array<FlxGraphic> = [];
-        for (rgb in colors) {
-            var newBitmap = frames.parent.bitmap.clone();
-            var graphic = FlxGraphic.fromBitmapData(applyColorFilter(newBitmap, rgb.r, rgb.g, rgb.b));
-            coloredGraphics.push(graphic);
+
+    static final __calcMatrix:FlxMatrix = new FlxMatrix();
+
+    public static function createAtlas(frames:FlxFramesCollection, ?colors:Array<NoteRGB>, type:NoteAtlasType = NOTE) {
+        if (colors == null)
+            colors = DEFAULT_COLORS;
+        
+        final parent = frames.parent.bitmap;
+        final bitmap:BitmapData = new BitmapData(parent.width * colors.length, parent.height, true, FlxColor.TRANSPARENT);
+
+        // Create colored spritesheet
+        for (i in 0...colors.length) {
+            var rgb = colors[i];
+            var colorBitmap = applyColorFilter(parent.clone(), rgb.r, rgb.g, rgb.b);
+
+            __calcMatrix.setTo(1, 0, 0, 1, i * parent.width, 0);
+            bitmap.draw(colorBitmap, __calcMatrix);
+
+            AssetManager.disposeBitmap(colorBitmap);
+        }
+        
+        // Store base frames
+        var animationFrames:Map<String, Array<FlxFrame>> = switch (type) {
+            case NOTE: [
+                "note" => [],
+                "piece" => [],
+                "tail" => []
+            ];
+            case STRUM: [
+                "static" => [],
+                "press" => [],
+                "confirm" => []
+            ];
+            case SPLASH: [
+                "splash" => []
+            ];
         }
 
-        // Create atlas
-        var atlasCollection:Array<FlxAtlasFrames> = [];
-        for (_ in 0...coloredGraphics.length) {
-            var newAtlas = new FlxAtlasFrames(coloredGraphics[_]);
-            newAtlas.frames = frames.frames;
-            
-            for (frame in newAtlas.frames) {
-                frame.parent = newAtlas.parent;
-                
-                var angle = cast(frame.angle, Int);
-                angle += DEFAULT_NOTE_ANGLES[_];
-                angle %= 360;
+        for (frame in frames.frames) {
+            var frameName = frame.name.toLowerCase().trim();
+            switch (type) {
+                case NOTE:
+                    if (frameName.contains("end")) animationFrames.get("tail").push(frame);
+                    else if (frameName.contains("piece")) animationFrames.get("piece").push(frame);
+                    else animationFrames.get("note").push(frame);
+                case STRUM:
+                    if (frameName.contains("confirm")) animationFrames.get("confirm").push(frame);
+                    else if (frameName.contains("press")) animationFrames.get("press").push(frame);
+                    else animationFrames.get("static").push(frame);
+                case SPLASH:
+                    animationFrames.get("splash").push(frame);
             }
-
-            atlasCollection.push(newAtlas);
         }
 
-        // Combine the atlas
-        final newCollection = new FlxAtlasFrames(coloredGraphics[0]);
-        for (atlas in atlasCollection) {
-            newCollection.addAtlas(atlas);
-        }
+        final graphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap);
+        var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
-        return newCollection;
+        // Generate new frames
+        for (i in 0...CoolUtil.directionArray.length) {
+            var direction = CoolUtil.directionArray[i];
+
+            for (key => keyFrames in animationFrames) {
+                var frameIndex:Int = 0;
+                for (_ in keyFrames) {
+                    @:privateAccess
+                    var frame = new FlxFrame(graphic);
+                    _.copyTo(frame);
+
+                    frame.parent = graphic;
+                    frame.frame.x += parent.width * i;
+                    frame.name = key + direction + CoolUtil.formatInt(frameIndex, 5);
+                    frameIndex++;
+
+                    if (key == "note" || type == STRUM)
+                        frame.angle += DEFAULT_NOTE_ANGLES[i];
+
+                    frames.pushFrame(frame);
+                }
+            }
+        }
+        
+        return frames;
     }
 
     public static final DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
     public static final DEFAULT_COLORS_RIM:Array<Array<Float>> = [[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
     public static final DEFAULT_COLORS_OUTER:Array<Array<Float>> = [[60,31,86],[21,66,183],[10,68,71],[101,16,56]];
     public static final DEFAULT_NOTE_ANGLES:Array<Int>= [0, -90, 90, 180];
+
+    public static final DEFAULT_COLORS:Array<NoteRGB> = [
+        {r: DEFAULT_COLORS_INNER[0], g:DEFAULT_COLORS_RIM[0], b:DEFAULT_COLORS_OUTER[0]},
+        {r: DEFAULT_COLORS_INNER[1], g:DEFAULT_COLORS_RIM[1], b:DEFAULT_COLORS_OUTER[1]},
+        {r: DEFAULT_COLORS_INNER[2], g:DEFAULT_COLORS_RIM[2], b:DEFAULT_COLORS_OUTER[2]},
+        {r: DEFAULT_COLORS_INNER[3], g:DEFAULT_COLORS_RIM[3], b:DEFAULT_COLORS_OUTER[3]}
+    ];
 
     static final _point = new openfl.geom.Point();
 
@@ -179,11 +242,13 @@ class NoteAtlas {
         return bitmap;
     }
 
+    static inline var COLOR_DIV:Float = 1 / 255;
+
     public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {
         for (i in 0...3) {
-            r[i] /= 255;
-            g[i] /= 255;
-            b[i] /= 255;
+            r[i] *= COLOR_DIV;
+            g[i] *= COLOR_DIV;
+            b[i] *= COLOR_DIV;
         }
 
         return [

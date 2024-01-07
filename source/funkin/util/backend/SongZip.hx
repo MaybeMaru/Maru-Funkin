@@ -114,8 +114,9 @@ class SongZip {
 
         for (i in _songDiffs.keys()) {
             var weekJson:WeekJson = JsonUtil.copyJson(WeekSetup.DEFAULT_WEEK);
-            weekJson.weekDiffs = CoolUtil.customSort(_songDiffs.get(i), ['easy', 'normal', 'hard', "Easy", "Normal", "Hard", "EASY", "NORMAL", "HARD"]);
+            weekJson.weekDiffs = CoolUtil.customSort(_songDiffs.get(i), ['easy', 'Easy', 'EASY', 'normal', 'Normal', 'NORMAL', 'hard', 'Hard', 'HARD']);
             weekJson.songList.songs = [i];
+            weekJson.hideStory = true;
             saveJson(weekJson, '$modPath/data/weeks/${Song.formatSongFolder(i)}.json');
         }
     }
