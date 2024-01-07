@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.system.FlxAssets.FlxSoundAsset;
 import funkin.objects.FunkCamera;
 import funkin.util.modding.ScriptUtil;
 import funkin.objects.note.BasicNote;
@@ -382,19 +383,17 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('startCountdown');
 
 		var swagCounter:Int = 0;
-		final countdownSoundKeys:Array<String> = []; // Cache countdown assets
-		final countdownSpriteKeys:Array<String> = [];
+		final countdownSounds:Array<FlxSoundAsset> = []; // Cache countdown assets
+		final countdownImages:Array<FlxGraphicAsset> = [];
 
 		for (i in ['intro3','intro2','intro1','introGo']) {
 			final soundKey = SkinUtil.getAssetKey(i,SOUND);
-			Paths.sound(soundKey);
-			countdownSoundKeys.push(soundKey);
+			countdownSounds.push(Paths.sound(soundKey));
 		}
 
 		for (i in ['ready','set','go']) {
 			final spriteKey:String = SkinUtil.getAssetKey(i,IMAGE);
-			CoolUtil.cacheImage(spriteKey, null, camHUD);
-			countdownSpriteKeys.push(spriteKey);
+			countdownImages.push(CoolUtil.cacheImage(spriteKey, null, camHUD));
 		}
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
@@ -402,7 +401,7 @@ class PlayState extends MusicBeatState {
 			beatCharacters();
 
 			if (swagCounter > 0) {
-				final countdownSpr:FunkinSprite = new FunkinSprite(countdownSpriteKeys[swagCounter-1]);
+				final countdownSpr:FunkinSprite = new FunkinSprite(countdownImages[swagCounter-1]);
 				countdownSpr.setScale(SkinUtil.curSkinData.scale);
 				countdownSpr.screenCenter();
 				countdownSpr.camera = camHUD;
@@ -413,7 +412,7 @@ class PlayState extends MusicBeatState {
 				FlxTween.tween(countdownSpr, {alpha: 0}, Conductor.crochetMills, {ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) countdownSpr.destroy()});
 			}
 
-			CoolUtil.playSound(countdownSoundKeys[swagCounter],0.6);
+			CoolUtil.playSound(countdownSounds[swagCounter], 0.6);
 			swagCounter++;
 		}, 4);
 	}

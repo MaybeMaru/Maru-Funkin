@@ -6,20 +6,32 @@ class FunkinSprite extends FlxSpriteExt {
     public var animated:Bool = true;
     public var danced:Bool = false;
 
-    public function new(path:String = "", ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
+    public function new(?image:FlxGraphicAsset, ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
         super();
         coords = coords ?? [0,0];
         scrolls = scrolls ?? [1,1];
-        setPosition(coords[0], coords[1]);
+        x = coords[0]; y = coords[1];
         scrollFactor.set(scrolls[0], scrolls[1]);
 
-        if (path.length > 0) {
-            loadImage(path);
-            animated = packer != IMAGE;
-    
-            final jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
-            if (useJson && Paths.exists(jsonPath, TEXT)) loadSpriteJson(jsonPath, '');
+        coords = null;
+        scrolls = null;
+
+        if (image != null) {
+            if (image is String) {
+                final path:String = cast(image, String);
+                if (path.length > 0) {
+                    loadImage(path);
+                    animated = packer != IMAGE;
+            
+                    final jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
+                    if (useJson && Paths.exists(jsonPath, TEXT)) loadSpriteJson(jsonPath, '');
+                    else {
+                        antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
+                    }
+                }
+            }
             else {
+                loadGraphic(image);
                 antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
             }
         }

@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
 #elseif hl
@@ -102,23 +103,27 @@ class CoolUtil {
 		FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = active);
 	}
 
-	inline public static function getSound(key:String, lib:SoundType = SOUND):FlxSound {
-		var _sound = null;
-		switch(lib) {
-			case SOUND: _sound = Paths.sound(key);
-			case MUSIC: _sound = Paths.music(key);
+	inline static function soundFromAsset(asset:FlxSoundAsset, kill:Bool = false):FlxSound {
+		var sound:FlxSound = FlxG.sound.list.recycle(FlxSound).loadEmbedded(asset);
+		sound.onComplete = !kill ? null : function () {
+			sound.kill();
 		}
-		
-		var newSound:FlxSound = new FlxSound().loadEmbedded(_sound);
-		FlxG.sound.list.add(newSound);
-		return newSound;
+		return sound;
 	}
 
-	inline public static function playSound(key:String, volume:Float = 1, ?pitch:Float) {
-		final sound = getSound(key);
+	inline public static function getSound(key:String, lib:SoundType = SOUND, kill:Bool = false):FlxSound {
+		return soundFromAsset(switch(lib) {
+			case SOUND: Paths.sound(key);
+			case MUSIC: Paths.music(key);
+		}, kill);
+	}
+
+	inline public static function playSound(asset:FlxSoundAsset, volume:Float = 1, ?pitch:Float) {
+		final sound:FlxSound = ((asset is String) ? getSound(cast(asset, String), SOUND, true) : soundFromAsset(asset, true));
 		sound.volume = volume;
 		sound.pitch = pitch ?? FlxG.timeScale;
 		sound.play();
+
 		return sound;
 	}
 
