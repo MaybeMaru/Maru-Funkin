@@ -85,7 +85,7 @@ jobs:
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Build
-        run: haxelib run lime build hl -D analyzer-optimize
+        run: haxelib run lime build hl
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
