@@ -160,7 +160,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	@:noCompletion
 	private inline function __updateTrig():Void {
 		if (_angleChanged) {
-			final rads:Float = angle * FlxAngle.TO_RAD;
+			final rads:Float = angle * CoolUtil.TO_RADS;
 			#if FAST_MATH
 			_cosAngle = FlxMath.fastCos(rads);
 			_sinAngle = FlxMath.fastSin(rads);
@@ -201,19 +201,18 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		}
 
 		if (frame.angle == 180) {
-			mat.rotateByPositive90();
-			mat.rotateByPositive90();
-			mat.translate(frame.sourceSize.y, frame.sourceSize.x);
+			mat.rotateBy180();
+			inline mat.translate(frame.sourceSize.y, frame.sourceSize.x);
 		}
 
 		if (flipX != frame.flipX) {
-			mat.scale(-1, 1);
-			mat.translate(frame.sourceSize.x, 0);
+			inline mat.scale(-1, 1);
+			inline mat.translate(frame.sourceSize.x, 0);
 		}
 
 		if (flipY != frame.flipY) {
-			mat.scale(1, -1);
-			mat.translate(0, frame.sourceSize.y);
+			inline mat.scale(1, -1);
+			inline mat.translate(0, frame.sourceSize.y);
 		}
 	}
 
@@ -221,8 +220,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	private inline function __superDrawComplex(camera:FlxCamera):Void {
 		prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
 		
-		_matrix.translate(-origin.x, -origin.y);
-		_matrix.scale(scale.x, scale.y);
+		inline _matrix.translate(-origin.x, -origin.y);
+		inline _matrix.scale(scale.x, scale.y);
 
 		if (angle != 0) {
 			__updateTrig();
@@ -231,14 +230,14 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 		if (skew.x != 0 || skew.y != 0) {
 			inline _skewMatrix.identity();
-			_skewMatrix.b = Math.tan(skew.y * FlxAngle.TO_RAD);
-			_skewMatrix.c = Math.tan(skew.x * FlxAngle.TO_RAD);
+			_skewMatrix.b = Math.tan(skew.y * CoolUtil.TO_RADS);
+			_skewMatrix.c = Math.tan(skew.x * CoolUtil.TO_RADS);
 			inline _matrix.concat(_skewMatrix);
 		}
 
 		getScreenPosition(_point, camera).subtractPoint(offset);
 		_point.add(origin.x, origin.y);
-		_matrix.translate(_point.x, _point.y);
+		inline _matrix.translate(_point.x, _point.y);
 
 		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
 	}

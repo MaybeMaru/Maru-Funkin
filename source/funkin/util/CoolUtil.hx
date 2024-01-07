@@ -136,6 +136,8 @@ class CoolUtil {
 		resumeSoundsList = [];
 	}
 
+	public static inline var TO_RADS:Float = 3.14159265359 / 180;
+
 	/*
 		lil shortcut to play music
 		itll also change the conductor bpm to the music's data text file thing

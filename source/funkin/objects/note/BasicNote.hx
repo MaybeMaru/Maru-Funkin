@@ -59,11 +59,11 @@ class BasicNote extends SmartSprite implements INoteData {
 
     inline function calcApproachTrig(value:Float) {
         #if FAST_MATH
-        _approachCos = FlxMath.fastCos(FlxAngle.asRadians(value));
-        _approachSin = FlxMath.fastSin(FlxAngle.asRadians(value));
+        _approachCos = FlxMath.fastCos(value * CoolUtil.TO_RADS);
+        _approachSin = FlxMath.fastSin(value * CoolUtil.TO_RADS);
         #else
-        _approachCos = Math.cos(FlxAngle.asRadians(value));
-        _approachSin = Math.sin(FlxAngle.asRadians(value));
+        _approachCos = Math.cos(value * CoolUtil.TO_RADS);
+        _approachSin = Math.sin(value * CoolUtil.TO_RADS);
         #end
     }
     
