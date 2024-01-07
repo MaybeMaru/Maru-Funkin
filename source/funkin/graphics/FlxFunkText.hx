@@ -171,37 +171,49 @@ class FlxFunkText extends FlxSpriteExt {
         if (size != null) this.size = size;
     }
 
-    public var style:TextStyle = NONE;
+    public var style(default, set):TextStyle = NONE;
+    inline function set_style(?value:TextStyle):TextStyle {
+        return style = (value != null) ? switch (value) {
+            case OUTLINE(size, quality, color): OUTLINE(size ?? 16, quality ?? 8, color ?? FlxColor.BLACK);
+            case SHADOW(offset, color):         SHADOW(offset ?? FlxPoint.get(8, 8), color ?? FlxColor.BLACK);
+            default: value;
+        } : null;
+    }
+    
     inline function sizeMult() {
         return size * 0.0625;
     }
 
+    static var tempOffset:FlxPoint = FlxPoint.get();
+
     override function drawComplex(camera:FlxCamera) {
         switch (style) {
             case OUTLINE(size, quality, col):
-                final _offset = offset.clone();
-                final _color = color;
+                tempOffset.set(offset.x, tempOffset.y);
+                final initColor = color;
                 size *= sizeMult();
 
-                color = col ?? FlxColor.BLACK;
-                for (i in 0...(quality = quality ?? 8)) {
-                    final _rad = (i / quality) * Math.PI * 2;
-                    offset.copyFrom(_offset);
-                    offset.add(FlxMath.fastCos(_rad) * size, FlxMath.fastSin(_rad) * size);
+                color = col;
+                final qualityDiv = (1 / quality) * 6.28318530718;
+                for (i in 0...quality) {
+                    final rads = i * qualityDiv;
+                    offset.set(tempOffset.x, tempOffset.y);
+                    offset.add(FlxMath.fastCos(rads) * size, FlxMath.fastSin(rads) * size);
                     __superDrawComplex(camera);
                 }
                 
-                offset.copyFrom(_offset);
-                color = _color;
+                offset.set(tempOffset.x, tempOffset.y);
+                color = initColor;
 
             case SHADOW(off, col):
-                final _offset = offset.clone();
-                final _color = color;
+                tempOffset.set(offset.x, offset.y);
+                final initColor = color;
                 offset.add(off.x * sizeMult(), off.y * sizeMult());
-                color = col ?? FlxColor.BLACK;
+                color = col;
                 __superDrawComplex(camera);
-                offset.copyFrom(_offset);
-                color = _color;
+
+                offset.set(tempOffset.x, tempOffset.y);
+                color = initColor;
 
             default:
         }
@@ -209,7 +221,7 @@ class FlxFunkText extends FlxSpriteExt {
     }
 
     override function draw() {
-        if (alpha != 0) {
+        if (alpha != 0 && visible) {
             if (_regen) {
                 drawTextField();
                 _regen = false;

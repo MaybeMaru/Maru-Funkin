@@ -67,6 +67,7 @@ class Sustain extends BasicNote {
 
             // Update rect
             cutHeight = getMillPos(strumTime - Conductor.songPosition);
+            percentLeft = 1 + (cutHeight / repeatHeight);
             clipRect.y = cutHeight;
             
             // Sustain is finished

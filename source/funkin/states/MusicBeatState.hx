@@ -81,12 +81,12 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}
 
 	override function update(elapsed:Float):Void {
-		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		__superUpdate(elapsed);
 	}
 
 	@:noCompletion
 	inline private function __superUpdate(elapsed:Float) {
+		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		for (basic in members) {
 			if (basic != null && basic.exists && basic.active)
 				basic.update(elapsed);

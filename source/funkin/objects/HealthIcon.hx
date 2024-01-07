@@ -48,7 +48,6 @@ class HealthIcon extends FlxSpriteExt {
 		flipX = isPlayer;
 		scrollFactor.set();
 		
-
 		initBumpVars();
 	}
 

@@ -515,7 +515,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
+		__superUpdate(elapsed);
 		ModdingUtil.addCall('update', [elapsed]);
 
 		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
