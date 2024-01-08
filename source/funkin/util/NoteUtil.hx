@@ -134,15 +134,16 @@ typedef NoteRGB = {
 
 enum NoteAtlasType {
     NOTE;
-    STRUM;
     SPLASH;
+    STRUM;
 }
 
 class NoteAtlas {
 
     static final __calcMatrix:FlxMatrix = new FlxMatrix();
 
-    public static function createAtlas(frames:FlxFramesCollection, ?colors:Array<NoteRGB>, type:NoteAtlasType = NOTE) {
+    // Creates a colored spritesheet with the forced 4 note colors
+    public static function createBasicAtlas(frames:FlxFramesCollection, ?colors:Array<NoteRGB>, type:NoteAtlasType = NOTE) {
         if (colors == null)
             colors = DEFAULT_COLORS;
         
@@ -167,13 +168,12 @@ class NoteAtlas {
                 "piece" => [],
                 "tail" => []
             ];
-            case STRUM: [
-                "static" => [],
-                "press" => [],
-                "confirm" => []
-            ];
             case SPLASH: [
                 "splash" => []
+            ];
+            case STRUM: [
+                "press" => [],
+                "confirm" => []
             ];
         }
 
@@ -184,12 +184,11 @@ class NoteAtlas {
                     if (frameName.contains("end")) animationFrames.get("tail").push(frame);
                     else if (frameName.contains("piece")) animationFrames.get("piece").push(frame);
                     else animationFrames.get("note").push(frame);
+                case SPLASH:
+                    animationFrames.get("splash").push(frame);
                 case STRUM:
                     if (frameName.contains("confirm")) animationFrames.get("confirm").push(frame);
                     else if (frameName.contains("press")) animationFrames.get("press").push(frame);
-                    else animationFrames.get("static").push(frame);
-                case SPLASH:
-                    animationFrames.get("splash").push(frame);
             }
         }
 
@@ -221,6 +220,35 @@ class NoteAtlas {
         }
         
         return frames;
+    }
+
+    // Creates a colored spritesheet with the 4 note colors, strum static color and press color
+    public static function createStrumAtlas(frames:FlxFramesCollection, ?colors:Array<NoteRGB>) {
+        if (colors == null)
+            colors = DEFAULT_COLORS;
+
+        // Get bitmaps
+        var parent = frames.parent;
+        var coloredFrames = createBasicAtlas(frames, colors, STRUM);
+        var coloredParent = coloredFrames.parent;
+
+        // Draw uncolored bitmap
+        var strumBitmap = new BitmapData(coloredParent.width + parent.width, coloredParent.height, true, FlxColor.TRANSPARENT);
+        
+        __calcMatrix.setTo(1, 0, 0, 1, 0, 0);
+        strumBitmap.draw(coloredParent.bitmap, __calcMatrix);
+        
+        __calcMatrix.tx += coloredParent.width;
+        strumBitmap.draw(parent.bitmap, __calcMatrix);
+
+        // And replace old bitmap
+        coloredParent.bitmap.dispose();
+        coloredParent.bitmap.disposeImage();
+        coloredParent.bitmap = strumBitmap;
+
+        // TODO: add default frames and optimize the ammount of stuff needed to add on the bitmap
+
+        return strumBitmap;
     }
 
     public static final DEFAULT_COLORS_INNER:Array<Array<Float>> = [[194,75,153],[0,255,255],[18,250,5],[249,57,63]];
