@@ -1,6 +1,5 @@
 package funkin.util;
 
-import flixel.FlxBasic;
 import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
@@ -130,7 +129,7 @@ class CoolUtil {
 
 	public static var resumeSoundsList:Array<FlxSound> = [];
 	inline public static function pauseSounds() {
-		resumeSoundsList = [];
+		resumeSoundsList = FlxArrayUtil.clearArray(resumeSoundsList);
 		for (sound in FlxG.sound.list) {
 			if (sound.playing) resumeSoundsList.push(sound);
 			sound.pause();
@@ -139,10 +138,12 @@ class CoolUtil {
 
 	inline public static function resumeSounds() {
 		for (sound in resumeSoundsList) sound.play();
-		resumeSoundsList = [];
+		resumeSoundsList = FlxArrayUtil.clearArray(resumeSoundsList);
 	}
 
-	public static inline var TO_RADS:Float = 3.14159265359 / 180;
+	public static inline var PI:Float = 3.14159265358979323846;
+	public static inline var TO_RADS:Float = PI / 180;
+	public static inline var TO_DEGREES:Float = 180 / PI;
 
 	public static inline function sin(radians:Float) {
 		return #if FAST_MATH FlxMath.fastSin(radians); #else Math.sin(radians); #end
@@ -196,7 +197,7 @@ class CoolUtil {
 		FlxG.sound.music = null;
 	}
 
-	static final baseLerp = 1 / 60;
+	public static inline var baseLerp = 1 / 60;
 	inline public static function getLerp(ratio:Float):Float {
 		return FlxG.elapsed / baseLerp * ratio;
 	}
@@ -293,7 +294,7 @@ class CoolUtil {
      *	RATING UTIL
      */
 
-    public static final judgeOffsets:Array<Int> =         [127, 106, 43];
+    public static final judgeOffsets:Array<Int> = [127, 106, 43];
     public static final returnJudgements:Array<String> =  ['shit', 'bad', 'good'];
 
     public static function getNoteJudgement(noteDiff:Float):String {

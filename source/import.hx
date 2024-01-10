@@ -93,6 +93,7 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.util.FlxColor;
 import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxFramesCollection;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import openfl.geom.Rectangle;
@@ -112,9 +113,10 @@ import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxArrayUtil;
 
 import haxe.Json;
-import flixel.graphics.frames.FlxFramesCollection;
+import haxe.ds.Vector;
 
 using StringTools;
 #end

@@ -14,21 +14,23 @@ class Conductor {
 	public static var STEPS_PER_BEAT:Int = 4;
 	public static var STEPS_PER_MEASURE:Int = STEPS_PER_BEAT * BEATS_PER_MEASURE;
 
-	public static function setTimeSignature(top:Int = 4, bottom:Int = 4, ?_bpm:Float) { // Is this how it works??
+	public static inline function setTimeSignature(top:Int = 4, bottom:Int = 4, ?_bpm:Float) { // Is this how it works??
 		BEATS_PER_MEASURE = top;
 		STEPS_PER_BEAT = bottom;
 		set_bpm(_bpm ?? bpm); // Update values
 	}
 
-	public static var bpm(default, set):Float = 100;
-	public static var crochetMills:Float = 60 / bpm;
-	public static var stepCrochetMills:Float = crochetMills / STEPS_PER_BEAT;
-	public static var sectionCrochetMills:Float = crochetMills * BEATS_PER_MEASURE;
-	public static var crochet:Float = crochetMills * 1000; 					// beats in milliseconds
-	public static var stepCrochet:Float = stepCrochetMills * 1000;			// steps in milliseconds
-	public static var sectionCrochet:Float = sectionCrochetMills * 1000;	// sections in milliseconds
+	public static var crochetMills:Float;
+	public static var stepCrochetMills:Float;
+	public static var sectionCrochetMills:Float;
 
-	public static function set_bpm(value:Float):Float {
+	public static var crochet:Float;
+	public static var stepCrochet:Float;
+	public static var sectionCrochet:Float;
+
+	public static var bpm(default, set):Float;
+
+	public static inline function set_bpm(value:Float):Float {
 		crochetMills = 60 / value;
 		stepCrochetMills = crochetMills / STEPS_PER_BEAT;
 		sectionCrochetMills = crochetMills * BEATS_PER_MEASURE;
@@ -71,8 +73,8 @@ class Conductor {
 		vocals.onComplete = function () {}
 	}
 
-	public static var safeFrames:Int = 15;
-	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; //safeFrames in milliseconds
+	public static inline var safeFrames:Int = 15;
+	public static inline var safeZoneOffset:Float = (safeFrames / 60) * 1000;
 
 	public static function init():Void {
 		settingOffset = SaveData.getSave('offset');
