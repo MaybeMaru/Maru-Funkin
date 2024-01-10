@@ -34,7 +34,6 @@ class Preferences {
         addPref('practice',       'practice mode',   false);
         addPref('downscroll',     'downscroll',      false);
         addPref('ghost-tap-style', 'ghost tapping', {array:["dad turn", "off", "on"], value: "off"});
-        
         addPref('stack-rating',   'stack ratings',   false);
         addPref('use-const-speed', 'use constant speed', false);
         addPref('const-speed', 'constant speed', 1.0);
@@ -52,7 +51,7 @@ class Preferences {
         addPref('resolution',   'resolution',    {array:resolutions, value: "1280x720"});
         #end
         #if !hl
-        addPref('clear-gpu',      'clear gpu cache', false);
+        addPref('clear-gpu',      'clear gpu cache', true);
         addPref('preload',        'preload at start', true);
         #end
 

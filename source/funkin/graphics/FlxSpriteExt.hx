@@ -161,13 +161,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	private inline function __updateTrig():Void {
 		if (_angleChanged) {
 			final rads:Float = angle * CoolUtil.TO_RADS;
-			#if FAST_MATH
-			_cosAngle = FlxMath.fastCos(rads);
-			_sinAngle = FlxMath.fastSin(rads);
-			#else
-			_cosAngle = Math.cos(rads);
-			_sinAngle = Math.sin(rads);
-			#end
+			_cosAngle = CoolUtil.cos(rads);
+			_sinAngle = CoolUtil.sin(rads);
 			_angleChanged = false;
 
 			applyCurOffset(false); // Update display angle offset
@@ -190,7 +185,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		__superDrawComplex(camera);
 	}
 
-	private inline static function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
+	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
 		@:privateAccess {
 			mat.a = frame.tileMatrix[0];
 			mat.b = frame.tileMatrix[1];

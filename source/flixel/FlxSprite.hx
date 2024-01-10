@@ -890,7 +890,7 @@ class FlxSprite extends FlxObject
 			_matrix.scale(Brush.scale.x, Brush.scale.y);
 			if (Brush.angle != 0)
 			{
-				_matrix.rotate(Brush.angle * FlxAngle.TO_RAD);
+				_matrix.rotate(Brush.angle * CoolUtil.TO_RADS);
 			}
 			_matrix.translate(X + frame.frame.x + Brush.origin.x, Y + frame.frame.y + Brush.origin.y);
 			var brushBlend:BlendMode = Brush.blend;
@@ -1483,9 +1483,9 @@ class FlxSprite extends FlxObject
 	{
 		if (_angleChanged)
 		{
-			var radians:Float = angle * FlxAngle.TO_RAD;
-			_sinAngle = Math.sin(radians);
-			_cosAngle = Math.cos(radians);
+			final rads:Float = angle * CoolUtil.TO_RADS;
+			_cosAngle = CoolUtil.cos(rads);
+			_sinAngle = CoolUtil.sin(rads);
 			_angleChanged = false;
 		}
 	}

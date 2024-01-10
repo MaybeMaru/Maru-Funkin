@@ -212,6 +212,7 @@ getPref(prefName:String);
 
     // Performance
     'antialiasing'      => Antialiasing
+    'resolution'        => Game Resolution ("256x144", "640x360", "854x480", "960x540", "1024x576", "1280x720", "native")
     'clear-gpu'         => Clear Mod GPU Cache
     'preload'           => Preload Assets At Start
 */

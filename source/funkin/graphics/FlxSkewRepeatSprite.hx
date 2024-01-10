@@ -34,7 +34,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         final lerpWiggle = FlxMath.lerp(0, scaledWiggleX, lerpValue);
 
         final skewX = lerpWiggle * (isLeftSkew() ? -1 : 1);
-        _matrix.c = Math.tan(skewX * FlxAngle.TO_RAD); // Set skew X
+        _matrix.c = Math.tan(skewX * CoolUtil.TO_RADS); // Set skew X
 
         if (clipRect == null) offsetSkew(tileFrame, baseFrame);
         super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos);

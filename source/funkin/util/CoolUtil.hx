@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.FlxBasic;
 import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
@@ -143,6 +144,32 @@ class CoolUtil {
 
 	public static inline var TO_RADS:Float = 3.14159265359 / 180;
 
+	public static inline function sin(radians:Float) {
+		return #if FAST_MATH FlxMath.fastSin(radians); #else Math.sin(radians); #end
+	}
+
+	public static inline function cos(radians:Float) {
+		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
+	}
+
+	public static inline function translateWithTrig(object:FlxObject, x:Float = 0.0, y:Float = 0.0, cos:Float = 1.0, sin:Float = 0.0) {
+		object.x += (x * cos) + (y * -sin);
+        object.y += (x * sin) + (y * cos);
+	}
+
+	public static inline function offsetWithTrig(object:FlxObject, x:Float = 0.0, y:Float = 0.0, cos:Float = 1.0, sin:Float = 0.0) {
+		translateWithTrig(object, -x, -y, cos, sin);
+	}
+
+	public static inline function translateWithAngle(object:FlxObject, x:Float = 0.0, y:Float = 0.0, angle:Float = 0.0) {
+		final rads:Float = angle * TO_RADS;
+		translateWithTrig(object, x, y, sin(rads), cos(rads));
+	}
+
+	public static inline function offsetWithAngle(object:FlxObject, x:Float = 0.0, y:Float = 0.0, angle:Float = 0.0) {
+		translateWithAngle(object, -x, -y, angle);
+	}
+
 	/*
 		lil shortcut to play music
 		itll also change the conductor bpm to the music's data text file thing
@@ -178,7 +205,7 @@ class CoolUtil {
 		return FlxMath.lerp(a, b, getLerp(ratio));
 	}
 
-	public static function sortByStrumTime(a:Dynamic, b:Dynamic) {
+	public static inline function sortByStrumTime(a:Dynamic, b:Dynamic) {
 		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
 	}
 

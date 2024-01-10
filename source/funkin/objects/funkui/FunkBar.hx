@@ -59,20 +59,39 @@ class FunkBar extends FlxSpriteExt {
 
     public var barPoint:FlxPoint = FlxPoint.get();
 
-    override function drawComplex(camera:FlxCamera) {
-        _frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
-		_matrix.translate(-origin.x, -origin.y);
-		_matrix.scale(scale.x, scale.y);
+    override function draw() {
+        inline checkEmptyFrame();
+		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == EMPTY #end) return;
+		if (dirty) calcFrame(useFramePixels);  // rarely
 
-        if (angle != 0) {
+		for (i in 0...cameras.length) {
+			final camera = cameras[i];
+			if (!camera.visible || !camera.exists || !isOnScreen(camera)) {
+                barPoint.set(-9999,-9999);
+                continue;
+            }
+			drawComplex(camera);
+			#if FLX_DEBUG FlxBasic.visibleCount++; #end
+		}
+
+		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
+    }
+
+    override function drawComplex(camera:FlxCamera) {
+		prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
+		
+		inline _matrix.translate(-origin.x, -origin.y);
+		inline _matrix.scale(scale.x, scale.y);
+
+		if (angle != 0) {
 			__updateTrig();
 			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
 		}
 
 		if (skew.x != 0 || skew.y != 0) {
 			inline _skewMatrix.identity();
-			_skewMatrix.b = Math.tan(skew.y * FlxAngle.TO_RAD);
-			_skewMatrix.c = Math.tan(skew.x * FlxAngle.TO_RAD);
+			_skewMatrix.b = Math.tan(skew.y * CoolUtil.TO_RADS);
+			_skewMatrix.c = Math.tan(skew.x * CoolUtil.TO_RADS);
 			inline _matrix.concat(_skewMatrix);
 		}
 
@@ -86,6 +105,7 @@ class FunkBar extends FlxSpriteExt {
         
         final _pos = width * percent * 0.01;
         final _sub = width - _pos;
+        final _center = height * 0.5;
         
         if (legacyMode.active) {
             final _mX = _matrix.tx;
@@ -113,7 +133,6 @@ class FunkBar extends FlxSpriteExt {
                 camera.drawPixels(__frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
             }
 
-            final _center = height * 0.5;
             barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
 
             if (!legacyMode.inFront) {
@@ -139,7 +158,6 @@ class FunkBar extends FlxSpriteExt {
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
 
-            final _center = height * 0.5;
             barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
         }
     }
