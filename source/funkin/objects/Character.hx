@@ -54,7 +54,6 @@ class Character extends FlxSpriteExt {
 
 	//	Gameplay
 	public var holdTimer:Float = 0;
-	public var stunned:Bool = false;
 	public var forceDance:Bool = true;
 	public var group:FlxTypedSpriteGroup<Dynamic> = null;
 

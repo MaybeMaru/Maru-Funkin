@@ -165,11 +165,7 @@ class NotesGroup extends Group
 			}
 
 			final missChar = note == null ? game.boyfriend : note.mustPress ? game.boyfriend : game.dad;
-			missChar.stunned = true;
 			missChar.sing(direction, 'miss');
-			new FlxTimer().start(0.083333333333333, function(tmr:FlxTimer) {
-				missChar.stunned = false;
-			});
 			
 			game.updateScore();
 		}

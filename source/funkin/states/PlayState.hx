@@ -571,7 +571,7 @@ class PlayState extends MusicBeatState {
 	public function openGameOverSubstate() {
 		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
 		persistentUpdate = persistentDraw = false;
-		boyfriend.stunned = paused = true;
+		paused = true;
 
 		deathCounter++;
 		Conductor.stop();
