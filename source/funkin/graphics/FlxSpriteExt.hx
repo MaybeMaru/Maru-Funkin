@@ -148,7 +148,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
 		for (i in 0...cameras.length) {
-			final camera:FlxCamera = CoolUtil.unsafeGet(cameras, i);
+			final camera:FlxCamera = cameras[i];
 			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
 			drawComplex(camera);
 			#if FLX_DEBUG FlxBasic.visibleCount++; #end
@@ -354,29 +354,5 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	inline public function uploadGpu(?key:String):FlxGraphic {
 		return AssetManager.uploadSpriteGpu(this, key ?? imageKey);
-	}
-
-	@:noCompletion
-	override inline function get_camera():FlxCamera {
-        @:privateAccess
-		return (_cameras == null || _cameras.length == 0) ? CoolUtil.unsafeGet(FlxCamera._defaultCameras, 0) : CoolUtil.unsafeGet(_cameras, 0);
-	}
-
-	@:noCompletion
-    override inline function set_camera(Value:FlxCamera):FlxCamera {
-		if (_cameras == null) _cameras = [Value];
-		else CoolUtil.unsafeSet(_cameras, 0, Value);
-		return Value;
-	}
-
-    @:noCompletion
-	override inline function get_cameras():Array<FlxCamera> {
-        @:privateAccess
-		return (_cameras == null) ? FlxCamera._defaultCameras : _cameras;
-	}
-
-	@:noCompletion
-	override inline function set_cameras(Value:Array<FlxCamera>):Array<FlxCamera> {
-		return _cameras = Value;
 	}
 }

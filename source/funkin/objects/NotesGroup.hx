@@ -10,6 +10,7 @@ class NotesGroup extends Group
 {	
 	public static var instance:NotesGroup = null;
     public var SONG:SwagSong;
+	var game:PlayState = null;
 
     public static var songSpeed:Float = 1.0;
     public var curSong:String = 'test';
@@ -42,12 +43,12 @@ class NotesGroup extends Group
 	public var isPlayState:Bool = true;
 
 	public function set_inBotplay(value:Bool) {
-		if (isPlayState) PlayState.instance.boyfriend.botMode = value;
+		if (isPlayState) game.boyfriend.botMode = value;
 		return inBotplay = value;
 	}
 
 	public function set_dadBotplay(value:Bool) {
-		if (isPlayState) PlayState.instance.dad.botMode = value;
+		if (isPlayState) game.dad.botMode = value;
 		return dadBotplay = value;
 	}
 
@@ -65,8 +66,8 @@ class NotesGroup extends Group
 		}
 
 		if (!botplayCheck || prefBot) {
-			if (isPlayState) PlayState.instance.health += note.hitHealth[0];
-			final rating:String = isPlayState ? PlayState.instance.popUpScore(note.strumTime, note) :
+			if (isPlayState) game.health += note.hitHealth[0];
+			final rating:String = isPlayState ? game.popUpScore(note.strumTime, note) :
 			CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(note));
 			if (rating == "sick") spawnSplash(note); // Spawn splash
 		}
@@ -82,7 +83,7 @@ class NotesGroup extends Group
 		}
 
 		if (!botplayCheck || prefBot) {
-			if (isPlayState) PlayState.instance.health += sustain.hitHealth[1] * (FlxG.elapsed * 5);
+			if (isPlayState) game.health += sustain.hitHealth[1] * (FlxG.elapsed * 5) / songSpeed;
 		} else {
 			sustain.pressSustain();
 		}
@@ -94,6 +95,7 @@ class NotesGroup extends Group
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
 		instance = this;
+		game = isPlayState ? PlayState.instance : null;
 		this.isPlayState = isPlayState;
         SONG = Song.checkSong(_SONG, null, false); //Double check null values
         Conductor.mapBPMChanges(SONG);
@@ -103,8 +105,6 @@ class NotesGroup extends Group
         inBotplay = getPref('botplay') && isPlayState;
 		
 		// Setup functions
-		final game:PlayState = isPlayState ? PlayState.instance : null;
-		
 		goodNoteHit = function (note:Note) {
 			if (note.wasGoodHit) return;
 			hitNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
@@ -294,7 +294,7 @@ class NotesGroup extends Group
 		if (value != scrollSpeed) {
 			for (i in 0...unspawnNotes.length) unspawnNotes[i].noteSpeed = value;
 			for (i in 0...notes.members.length) notes.members[i].noteSpeed = value;
-			if (value < scrollSpeed) spawnNotes();
+			if (value < scrollSpeed) inline spawnNotes();
 		}
 		return scrollSpeed = value;
 	}
@@ -320,7 +320,6 @@ class NotesGroup extends Group
 		}
 
 		if (isPlayState) {
-			final game = PlayState.instance;
 			if ((game.startingSong || Conductor.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
 				Conductor.songPosition += elapsed * 1000;
 				if (game.startedCountdown && game.startingSong) {
@@ -339,9 +338,10 @@ class NotesGroup extends Group
     }
 
 	function spawnNotes() { // Generate notes
-        if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / unspawnNotes[0].noteSpeed / camera.zoom * unspawnNotes[0].spawnMult) {
-				final spawnNote:BasicNote = unspawnNotes[0];
+        var firstAvailable:BasicNote = unspawnNotes[0];//CoolUtil.unsafeGet(unspawnNotes, 0);
+		if (firstAvailable != null) {
+			while (unspawnNotes.length > 0 && firstAvailable.strumTime - Conductor.songPosition < 1500 / firstAvailable.noteSpeed / camera.zoom * firstAvailable.spawnMult) {
+				final spawnNote:BasicNote = firstAvailable;
 				spawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [spawnNote]);
 				unspawnNotes.splice(0, 1);
@@ -349,6 +349,8 @@ class NotesGroup extends Group
 				// Skip sorting
 				if (spawnNote.isSustainNote)	notes.insert(0, spawnNote);
 				else							notes.add(spawnNote);
+				//firstAvailable = CoolUtil.unsafeGet(unspawnNotes, 0);
+				firstAvailable = unspawnNotes[0];
 			}
 		}
 	}
@@ -407,7 +409,7 @@ class NotesGroup extends Group
 		});
 
         if (isPlayState) {
-            if (PlayState.instance.inCutscene) return; // No controls in cutscenes >:(
+            if (game.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
 		inline checkStrumAnims();
@@ -485,7 +487,7 @@ class NotesGroup extends Group
 
 			if (controlArray.contains(true)) {
 				for (badNote in removeList) badNote.removeNote();
-				final onGhost = isPlayState ? PlayState.instance.ghostTapEnabled : true;
+				final onGhost = isPlayState ? game.ghostTapEnabled : true;
 
 				if (possibleNotes.length > 0) {
 					if (!onGhost) {
@@ -518,8 +520,8 @@ class NotesGroup extends Group
 		}
 
         if (!isPlayState) return; // Botplay handles sing anims and strums, not necessary
-		if (!inBotplay) checkOverSinging(PlayState.instance.boyfriend, playerStrums);
-		if (!dadBotplay) checkOverSinging(PlayState.instance.dad, opponentStrums);
+		if (!inBotplay) checkOverSinging(game.boyfriend, playerStrums);
+		if (!dadBotplay) checkOverSinging(game.dad, opponentStrums);
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup) {

@@ -119,7 +119,6 @@ import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxArrayUtil;
 
 import haxe.Json;
-import haxe.ds.Vector;
 
 using StringTools;
 #end

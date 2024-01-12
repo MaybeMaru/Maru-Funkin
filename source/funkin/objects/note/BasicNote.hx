@@ -128,18 +128,13 @@ class BasicNote extends SmartSprite implements INoteData {
 
     public var mustHit:Bool = true;
     public var altAnim:String = "";
-    public var hitHealth:Vector<Float>;
-    public var missHealth:Vector<Float>;
+    public var hitHealth:Array<Float>;
+    public var missHealth:Array<Float>;
     public var hitMult:Float = 1.0;
 
     inline function initVariables():Void {
-        hitHealth = new Vector<Float>(2);
-        hitHealth[0] = 0.025;
-        hitHealth[1] = 0.0125;
-        
-        missHealth = new Vector<Float>(2);
-        missHealth[0] = 0.0475;
-        missHealth[1] = 0.02375;
+        hitHealth = [0.025, 0.0125];
+        missHealth = [0.0475, 0.02375];
     }
 
     public var noteType(default, set):String = "default";
