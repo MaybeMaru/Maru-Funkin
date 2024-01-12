@@ -71,7 +71,7 @@ class FunkBar extends FlxSpriteExt {
                 continue;
             }
 			drawComplex(camera);
-			#if FLX_DEBUG FlxBasic.visibleCount++; #end
+			#if FLX_DEBUG flixel.FlxBasic.visibleCount++; #end
 		}
 
 		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end

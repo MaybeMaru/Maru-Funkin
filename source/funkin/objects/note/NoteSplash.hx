@@ -2,7 +2,7 @@ package funkin.objects.note;
 
 import funkin.objects.note.BasicNote.INoteData;
 
-class SplashGroup extends FlxTypedGroup<NoteSplash> {
+class SplashGroup extends TypedGroup<NoteSplash> {
     public function new(startCache:Int = 4) {
         super();
         for (i in 0...startCache) spawnSplash();

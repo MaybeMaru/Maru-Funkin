@@ -3,6 +3,7 @@ package funkin.util;
 import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
+import cpp.NativeArray;
 #elseif hl
 import hl.Gc;
 #elseif neko
@@ -257,6 +258,23 @@ class CoolUtil {
 	inline public static function getTopCam():FlxCamera {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
+	
+	inline public static function unsafeGet(array:Array<Any>, index:Int) {
+		#if cpp
+		return NativeArray.unsafeGet(array, index);
+		#else
+		return array[index];
+		#end 
+	}
+
+	inline public static function unsafeSet(array:Array<Any>, index:Int, value:Any) {
+		#if cpp
+		NativeArray.unsafeSet(array, index, value);
+		#else
+		array[index] = value;
+		#end
+		return value;
+	}
 
 	inline public static function switchState(newState:FlxState, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
 		Transition.setSkip(skipTransOpen, skipTransClose);
@@ -294,8 +312,8 @@ class CoolUtil {
      *	RATING UTIL
      */
 
-    public static final judgeOffsets:Array<Int> = [127, 106, 43];
-    public static final returnJudgements:Array<String> =  ['shit', 'bad', 'good'];
+    public static final judgeOffsets:Vector<Int> = Vector.fromArrayCopy([127, 106, 43]);
+    public static final returnJudgements:Vector<String> =  Vector.fromArrayCopy(['shit', 'bad', 'good']);
 
     public static function getNoteJudgement(noteDiff:Float):String {
         for (i in 0...judgeOffsets.length) {
@@ -312,7 +330,7 @@ class CoolUtil {
     }
 
     inline public static function getMillisecondDiff(milliseconds:Int):Float {
-        return (milliseconds / Conductor.safeZoneOffset);
+        return (milliseconds * Conductor.safeZoneOffsetMult);
     }
 
     inline public static function getNoteDiff(daNote:Note):Float {

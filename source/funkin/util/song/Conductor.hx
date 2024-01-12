@@ -75,6 +75,7 @@ class Conductor {
 
 	public static inline var safeFrames:Int = 15;
 	public static inline var safeZoneOffset:Float = (safeFrames / 60) * 1000;
+	public static inline var safeZoneOffsetMult:Float = 1 / safeZoneOffset;
 
 	public static function init():Void {
 		settingOffset = SaveData.getSave('offset');

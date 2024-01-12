@@ -67,7 +67,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 				if (cameras != null)
 					FlxCamera._defaultCameras = cameras;
 		
-				for (basic in members) {
+				for (i in 0...members.length) {
+					final basic:FlxBasic = CoolUtil.unsafeGet(members, i);
 					if (basic != null && basic.exists && basic.visible)
 						basic.draw();
 				}
@@ -87,7 +88,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	@:noCompletion
 	inline private function __superUpdate(elapsed:Float) {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
-		for (basic in members) {
+		for (i in 0...members.length) {
+			final basic:FlxBasic = CoolUtil.unsafeGet(members, i);
 			if (basic != null && basic.exists && basic.active)
 				basic.update(elapsed);
 		}

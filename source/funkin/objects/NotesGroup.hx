@@ -6,7 +6,7 @@ import funkin.objects.note.BasicNote;
 import flixel.util.FlxArrayUtil;
 import funkin.objects.note.StrumLineGroup;
 
-class NotesGroup extends FlxGroup
+class NotesGroup extends Group
 {	
 	public static var instance:NotesGroup = null;
     public var SONG:SwagSong;
@@ -18,7 +18,7 @@ class NotesGroup extends FlxGroup
 
 	public var generatedMusic:Bool = false;
 
-    public var notes:FlxTypedGroup<BasicNote>;
+    public var notes:TypedGroup<BasicNote>;
 	public var unspawnNotes:Array<BasicNote> = [];
 	public var events:Array<Event> = [];
 
@@ -205,7 +205,7 @@ class NotesGroup extends FlxGroup
 
 		unspawnNotes = [];
 		events = [];
-		notes = new FlxTypedGroup<BasicNote>();
+		notes = new TypedGroup<BasicNote>();
 		add(notes);
 	
 		final noteData:Array<SwagSection> = songData.notes;
@@ -340,7 +340,7 @@ class NotesGroup extends FlxGroup
 
 	function spawnNotes() { // Generate notes
         if (unspawnNotes[0] != null) {
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / unspawnNotes[0].noteSpeed / cameras[0].zoom * unspawnNotes[0].spawnMult) {
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < 1500 / unspawnNotes[0].noteSpeed / camera.zoom * unspawnNotes[0].spawnMult) {
 				final spawnNote:BasicNote = unspawnNotes[0];
 				spawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [spawnNote]);

@@ -8,7 +8,7 @@ class OptionsState extends MusicBeatState {
 		'Controls',
 		'Latency'
 	];
-	var grpOptionsItems:FlxTypedGroup<Alphabet>;
+	var grpOptionsItems:TypedGroup<Alphabet>;
 	
 	var curSelected:Int = 0;
 	var selectedSomethin:Bool = false;
@@ -34,7 +34,7 @@ class OptionsState extends MusicBeatState {
 		optionsTitle.screenCenter(X);
 		add(optionsTitle);
 
-		grpOptionsItems = new FlxTypedGroup<Alphabet>();
+		grpOptionsItems = new TypedGroup<Alphabet>();
 		add(grpOptionsItems);
 
 		var leSpace:Float = FlxG.height/1.5;

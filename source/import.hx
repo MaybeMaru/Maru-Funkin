@@ -65,6 +65,8 @@ import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinText;
 import funkin.graphics.FlxFunkText;
+import funkin.graphics.TypedGroup.Group;
+import funkin.graphics.TypedGroup.TypedGroup;
 
 //Main states
 import funkin.states.LoadingState;
@@ -88,6 +90,7 @@ import funkin.states.editors.ChartingState;
 
 //Haxeflixel shit
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
