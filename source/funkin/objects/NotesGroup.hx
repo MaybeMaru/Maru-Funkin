@@ -226,14 +226,18 @@ class NotesGroup extends Group
 				note.targetStrum = targetStrum;
 				note.mustPress = mustPress;
 				note.noteType = noteType;
+				note.noteSpeed = songSpeed;
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
 					final sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
+					sustain.noteSpeed = songSpeed;
 					sustain.targetStrum = targetStrum;
 					sustain.mustPress = mustPress;
 					sustain.noteType = noteType;
-					unspawnNotes.push(sustain);
+					
+					if (sustain.alive) // Too short sustains shouldnt be added
+						unspawnNotes.push(sustain);
 
 					note.child = sustain;
 				}
@@ -265,6 +269,7 @@ class NotesGroup extends Group
 		events.sort(CoolUtil.sortByStrumTime);
 
 		curSpawnNote = unspawnNotes[0];
+		curCheckEvent = events[0];
 		
 		if (isPlayState) {
 			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
@@ -335,7 +340,8 @@ class NotesGroup extends Group
 		}
     }
 
-	var curSpawnNote:BasicNote = null;
+	public var curSpawnNote(default, null):BasicNote = null;
+
 	function spawnNotes() { // Generate notes
 		if (curSpawnNote != null) {
 			while (unspawnNotes.length > 0 && curSpawnNote.strumTime - Conductor.songPosition < 1500 / curSpawnNote.noteSpeed / camera.zoom * curSpawnNote.spawnMult) {
@@ -352,12 +358,15 @@ class NotesGroup extends Group
 		}
 	}
 
+	public var curCheckEvent(default, null):Event = null;
+
 	function checkEvents() {
-		if (events[0] != null) {
-			while (events.length > 0 && events[0].strumTime <= Conductor.songPosition) {
-				final runEvent:Event = events[0];
+		if (curCheckEvent != null) {
+			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
+				final runEvent:Event = curCheckEvent;
 				ModdingUtil.addCall('eventHit', [runEvent]);
 				events.splice(0, 1);
+				curCheckEvent = events[0];
 			}
 		}
 	}
@@ -400,10 +409,10 @@ class NotesGroup extends Group
 		if (!generatedMusic) return; // Stuff that needs notes / events
 		inline spawnNotes();
 		inline checkEvents();
-		notes.forEachAlive(function(note:BasicNote) {
+		for (note in notes) {
 			inline checkCpuNote(note);
 			inline checkMissNote(note);
-		});
+		}
 
         if (isPlayState) {
             if (game.inCutscene) return; // No controls in cutscenes >:(

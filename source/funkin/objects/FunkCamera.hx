@@ -43,7 +43,7 @@ class FunkCamera extends FlxCamera {
     }
 
     private static var __rect:Rectangle = new Rectangle(0,0,1,1);
-    private static var __baseBitmap:BitmapData = new BitmapData(1,1,false,0xFFFFFFFF);
+    private static var __baseBitmap:BitmapData = new BitmapData(1,1,true,0xFFFFFFFF);
 
     inline private function __setFadeColor(color:Int) {
         __fadeSprite.bitmapData.fillRect(__rect, color);
@@ -53,9 +53,37 @@ class FunkCamera extends FlxCamera {
         __flashSprite.bitmapData.fillRect(__rect, color);
     }
 
-    override function drawFX():Void {
-		if (_fxFlashAlpha > 0.0) __flashSprite.alpha = _fxFlashAlpha;
-		if (_fxFadeAlpha > 0.0) __fadeSprite.alpha = _fxFadeAlpha;
+    override function drawFX():Void {} // Wont be using this anymore
+
+    override function updateFlash(elapsed:Float):Void {
+        if (_fxFlashAlpha > 0.0) {
+			_fxFlashAlpha -= elapsed / _fxFlashDuration;
+            __flashSprite.alpha = _fxFlashAlpha;
+			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null)) {
+				_fxFlashComplete();
+			}
+		}
+    }
+
+    override function updateFade(elapsed:Float):Void {
+		if (_fxFadeDuration == 0.0) return;
+
+		if (_fxFadeIn) {
+			_fxFadeAlpha -= elapsed / _fxFadeDuration;
+            __fadeSprite.alpha = _fxFadeAlpha;
+			if (_fxFadeAlpha <= 0.0) {
+				_fxFadeAlpha = 0.0;
+				completeFade();
+			}
+		}
+		else {
+			_fxFadeAlpha += elapsed / _fxFadeDuration;
+            __fadeSprite.alpha = _fxFadeAlpha;
+			if (_fxFadeAlpha >= 1.0) {
+				_fxFadeAlpha = 1.0;
+				completeFade();
+			}
+		}
 	}
 
     override public function fade(Color:FlxColor = FlxColor.BLACK, Duration:Float = 1, FadeIn:Bool = false, ?OnComplete:Void->Void, Force:Bool = false):Void {
