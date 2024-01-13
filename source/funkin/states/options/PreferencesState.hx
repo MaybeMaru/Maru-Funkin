@@ -1,9 +1,9 @@
 package funkin.states.options;
-import funkin.states.options.items.SettingItem;
+import funkin.states.options.items.PrefItem;
 
 class PreferencesState extends MusicBeatState {
     var curSelected:Int = 0;
-    var prefItems:FlxTypedGroup<SettingItem>;
+    var prefItems:Array<PrefItem> = [];
 
     override function create():Void {
         persistentUpdate = true;
@@ -14,18 +14,17 @@ class PreferencesState extends MusicBeatState {
 		bg.screenCenter();
         add(bg);
 
-        prefItems = new FlxTypedGroup<SettingItem>();
-        add(prefItems);
-
         final prefsArray:Array<String> = Preferences.prefsArray;
         for (i in 0...prefsArray.length) {
             final pref:String = prefsArray[i];
             final prefLabel = Preferences.getLabel(pref);
-            final prefSetting:SettingItem = new SettingItem(pref, prefLabel);
-            prefSetting.targetY = (i + (prefsArray.length * 0.1))*125;
-            prefSetting.y = prefSetting.targetY;
-            prefSetting.ID = i;
-            prefItems.add(prefSetting);
+            final item:PrefItem = new PrefItem(pref, prefLabel);
+            item.targetY = (i + (prefsArray.length * 0.1))*125;
+            item.y = item.targetY;
+            item.ID = i;
+
+            add(item);
+            prefItems.push(item);
         }
         changeSelection();
         super.create();
@@ -35,8 +34,8 @@ class PreferencesState extends MusicBeatState {
         curSelected = FlxMath.wrap(curSelected + change, 0, prefItems.length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu');
 
-        for (item in prefItems.members) {
-            item.targetY = (item.ID - curSelected + (prefItems.length/10))*125;
+        for (item in prefItems) {
+            item.targetY = (item.ID - curSelected + (prefItems.length * 0.1)) * 125;
             item.selected = false;
             if (curSelected == item.ID) {
                 item.selected = true;
@@ -52,7 +51,7 @@ class PreferencesState extends MusicBeatState {
         if (accepted || leftP || rightP) {
             for (item in prefItems) {
                 if (item.ID == curSelected) {
-                    switch (item.settingType) {
+                    switch (item.type) {
                         case BOOL:
                             if (accepted) {
                                 switch(item.itemPref) {
@@ -69,8 +68,8 @@ class PreferencesState extends MusicBeatState {
                                 default:
                             }
                             if (leftP || rightP) {
-                                if (leftP)  item.setValue(item.prefValue-mult);
-                                if (rightP) item.setValue(item.prefValue+mult);
+                                if (leftP)  item.setValue(item.prefValue - mult);
+                                if (rightP) item.setValue(item.prefValue + mult);
                             }
                             
                         case ARRAY:

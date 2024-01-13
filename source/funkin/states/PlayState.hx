@@ -2,6 +2,7 @@ package funkin.states;
 
 import flixel.system.FlxAssets.FlxSoundAsset;
 import funkin.objects.FunkCamera;
+import funkin.objects.FunkCamera.AngledCamera;
 import funkin.util.modding.ScriptUtil;
 import funkin.objects.note.BasicNote;
 import funkin.states.editors.StageDebug;
@@ -66,7 +67,7 @@ class PlayState extends MusicBeatState {
 	private var iconP2:HealthIcon;
 	public var healthBar:FunkBar;
 
-	public var camGame:FunkCamera;
+	public var camGame:AngledCamera;
 	public var camHUD:FunkCamera;
 	public var camOther:FunkCamera;
 
@@ -117,7 +118,7 @@ class PlayState extends MusicBeatState {
 		EventUtil.initEvents();
 		CoolUtil.stopMusic();
 		
-		camGame = new FunkCamera();
+		camGame = new AngledCamera();
 		camHUD = new FunkCamera();
 		camOther = new FunkCamera();
 		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;

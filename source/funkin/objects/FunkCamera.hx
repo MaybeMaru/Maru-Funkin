@@ -18,16 +18,10 @@ class FunkCamera extends FlxCamera {
         super(X,Y,W,H,Z);
         
         __fadeSprite = new Bitmap(__baseBitmap.clone());
-        __fadeSprite.scaleX = FlxG.width;
-        __fadeSprite.scaleY = FlxG.height;
-        //__fadeSprite.visible = false;
         __fadeSprite.alpha = 0.0;
         _scrollRect.addChild(__fadeSprite);
 
         __flashSprite = new Bitmap(__baseBitmap.clone());
-        __flashSprite.scaleX = FlxG.width;
-        __flashSprite.scaleY = FlxG.height;
-        //__flashSprite.visible = false;
         __flashSprite.alpha = 0.0;
         _scrollRect.addChild(__flashSprite);
 
@@ -88,6 +82,31 @@ class FunkCamera extends FlxCamera {
 		_fxFlashComplete = OnComplete;
 		_fxFlashAlpha = 1.0;
 	}
+
+    override function updateInternalSpritePositions() {
+        if (canvas != null) {
+			canvas.x = -0.5 * width * (scaleX - initialZoom) * FlxG.scaleMode.scale.x;
+			canvas.y = -0.5 * height * (scaleY - initialZoom) * FlxG.scaleMode.scale.y;
+
+			canvas.scaleX = totalScaleX;
+			canvas.scaleY = totalScaleY;
+
+            if (__fadeSprite != null && __flashSprite != null) {
+                __fadeSprite.scaleX = __flashSprite.scaleX = totalScaleX * width * 1.25;
+                __fadeSprite.scaleY = __flashSprite.scaleY = totalScaleY * height * 1.25;
+            }
+
+			#if FLX_DEBUG
+			if (debugLayer != null) {
+				debugLayer.x = canvas.x;
+				debugLayer.y = canvas.y;
+
+				debugLayer.scaleX = totalScaleX;
+				debugLayer.scaleY = totalScaleY;
+			}
+			#end
+		}
+    }
     
     override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void {        
         if (transform != null) {
@@ -99,4 +118,38 @@ class FunkCamera extends FlxCamera {
             drawItem.addQuad(frame, matrix, transform);
         }
 	}
+}
+
+class AngledCamera extends FunkCamera {
+    @:noCompletion
+    private var _sin(default, null):Float = 0.0;
+
+    @:noCompletion
+    private var _cos(default, null):Float = 0.0;
+
+    override function set_angle(value:Float):Float {
+        if (value != angle) {
+            final rads:Float = value * CoolUtil.TO_RADS;
+            _sin = CoolUtil.sin(rads);
+            _cos = CoolUtil.cos(rads);
+        }
+        return angle = value;
+    }
+
+    override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader) {
+        if (angle != 0) {
+            matrix.translate(-width * .5, -height * .5);
+            matrix.rotateWithTrig(_cos, _sin);
+            matrix.translate(width * .5, height * .5);
+        }
+
+        if (transform != null) {
+            final drawItem = startQuadBatch(frame.parent, inline transform.hasRGBMultipliers(), inline transform.hasRGBAOffsets(), blend, smoothing, shader);
+            drawItem.addQuad(frame, matrix, transform);
+        }
+        else {
+            final drawItem = startQuadBatch(frame.parent, false, false, blend, smoothing, shader);
+            drawItem.addQuad(frame, matrix, transform);
+        }
+    }
 }

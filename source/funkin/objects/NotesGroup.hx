@@ -83,7 +83,7 @@ class NotesGroup extends Group
 		}
 
 		if (!botplayCheck || prefBot) {
-			if (isPlayState) game.health += sustain.hitHealth[1] * (FlxG.elapsed * 5) / songSpeed;
+			if (isPlayState) game.health += sustain.hitHealth[1] * (FlxG.elapsed * 5);
 		} else {
 			sustain.pressSustain();
 		}
@@ -263,6 +263,8 @@ class NotesGroup extends Group
 
 		unspawnNotes.sort(CoolUtil.sortByStrumTime);
 		events.sort(CoolUtil.sortByStrumTime);
+
+		curSpawnNote = unspawnNotes[0];
 		
 		if (isPlayState) {
 			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
@@ -333,11 +335,11 @@ class NotesGroup extends Group
 		}
     }
 
+	var curSpawnNote:BasicNote = null;
 	function spawnNotes() { // Generate notes
-        var firstAvailable:BasicNote = unspawnNotes[0];//CoolUtil.unsafeGet(unspawnNotes, 0);
-		if (firstAvailable != null) {
-			while (unspawnNotes.length > 0 && firstAvailable.strumTime - Conductor.songPosition < 1500 / firstAvailable.noteSpeed / camera.zoom * firstAvailable.spawnMult) {
-				final spawnNote:BasicNote = firstAvailable;
+		if (curSpawnNote != null) {
+			while (unspawnNotes.length > 0 && curSpawnNote.strumTime - Conductor.songPosition < 1500 / curSpawnNote.noteSpeed / camera.zoom * curSpawnNote.spawnMult) {
+				final spawnNote:BasicNote = curSpawnNote;
 				spawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [spawnNote]);
 				unspawnNotes.splice(0, 1);
@@ -345,8 +347,7 @@ class NotesGroup extends Group
 				// Skip sorting
 				if (spawnNote.isSustainNote)	notes.insert(0, spawnNote);
 				else							notes.add(spawnNote);
-				//firstAvailable = CoolUtil.unsafeGet(unspawnNotes, 0);
-				firstAvailable = unspawnNotes[0];
+				curSpawnNote = unspawnNotes[0];
 			}
 		}
 	}
@@ -542,6 +543,11 @@ class NotesGroup extends Group
 		if (strum == null) return;
 		strum.playStrumAnim(anim, forced);
 		strum.staticTime = Conductor.stepCrochetMills;
+	}
+
+	override function destroy() {
+		super.destroy();
+		curSpawnNote = null;
 	}
 
     inline function getPref(pref:String):Dynamic return Preferences.getPref(pref);
