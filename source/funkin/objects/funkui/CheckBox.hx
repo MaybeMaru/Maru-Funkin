@@ -1,6 +1,6 @@
 package funkin.objects.funkui;
 
-class FunkCheckBox extends FlxSprite implements IFunkUIObject {
+class CheckBox extends FlxSprite implements IUIObject {
     private static var __sprite:FlxSprite;
 
     static function getCheckSprite() {
@@ -33,7 +33,7 @@ class FunkCheckBox extends FlxSprite implements IFunkUIObject {
         }
     }
     
-    private var text:FunkUIText;
+    private var text:UIText;
     public var ogX:Float;
 	public var ogY:Float;
 	
@@ -57,7 +57,7 @@ class FunkCheckBox extends FlxSprite implements IFunkUIObject {
         ogX = X;
 		ogY = Y;
 
-        text = new FunkUIText(X + 30, Y, Label);
+        text = new UIText(X + 30, Y, Label);
         callback = Callback;
         checked = false;
     }

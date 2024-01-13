@@ -1,12 +1,12 @@
 package funkin.objects.funkui;
 
-class FunkUIContainer extends FourSideSprite{
-    private var __group:FlxGroup;
+class UIContainer extends FourSideSprite{
+    private var __group:Group;
     
     public var displacement:FlxPoint = FlxPoint.get();
     
     public function new(?X:Float, ?Y:Float, Width:Int = 500, Height:Int = 500) {
-        __group = new FlxGroup();
+        __group = new Group();
         super(X, Y, Width,Height,0xff212325);
     }
 
@@ -34,7 +34,7 @@ class FunkUIContainer extends FourSideSprite{
         return value;
     }
 
-    public function add(object:IFunkUIObject) {
+    public function add(object:IUIObject) {
         object.setUIPosition(displacement.x + object.ogX + x, displacement.y + object.ogY + y);
         __group.add(cast object);
     }

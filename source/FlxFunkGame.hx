@@ -52,6 +52,7 @@ class FlxFunkGame extends FlxGame {
     
     public var enabledSoundTray(default, set):Bool = true;
     inline function set_enabledSoundTray(value:Bool) {
+        #if FLX_KEYBOARD
         if (value != enabledSoundTray) {
             if (value) {
                 FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
@@ -64,6 +65,7 @@ class FlxFunkGame extends FlxGame {
                 FlxG.sound.muteKeys = [];
             }
         }
+        #end
         return enabledSoundTray = value;
     }
 }

@@ -1,6 +1,6 @@
 package funkin.objects.funkui;
 
-class FunkInputText extends FourSideSprite implements IFunkUIObject {
+class InputText extends FourSideSprite implements IUIObject {
     private var __text:FlxFunkText;
     public var ogX:Float;
 	public var ogY:Float;
@@ -10,7 +10,7 @@ class FunkInputText extends FourSideSprite implements IFunkUIObject {
         ogX = X;
         ogY = Y;
 
-        __text = new FunkUIText(X, Y, text, width - 3, cast height - 2);
+        __text = new UIText(X, Y, text, width - 3, cast height - 2);
         __text.offset.set(-3,-2);
         __text.wordWrap = lines != 1;
         __text.deselect();

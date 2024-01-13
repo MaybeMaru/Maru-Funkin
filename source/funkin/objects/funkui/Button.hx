@@ -1,6 +1,6 @@
 package funkin.objects.funkui;
 
-class FunkButton extends FourSideSprite implements IFunkUIObject {
+class Button extends FourSideSprite implements IUIObject {
 	private var text:FlxFunkText;
 	public var ogX:Float;
 	public var ogY:Float;
@@ -18,7 +18,7 @@ class FunkButton extends FourSideSprite implements IFunkUIObject {
 		ogX = X;
 		ogY = Y;
 
-		text = new FunkUIText(X,Y,Label,width);
+		text = new UIText(X,Y,Label,width);
 		text.alignment = "center";
 
 		callback = Callback;

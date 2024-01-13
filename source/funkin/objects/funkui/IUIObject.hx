@@ -1,6 +1,6 @@
 package funkin.objects.funkui;
 
-interface IFunkUIObject {
+interface IUIObject {
 	public var ogX:Float;
 	public var ogY:Float;
 	public function setUIPosition(X:Float, Y:Float):Void;
