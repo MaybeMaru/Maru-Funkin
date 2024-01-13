@@ -107,6 +107,7 @@ class CoolUtil {
 	inline static function soundFromAsset(asset:FlxSoundAsset, kill:Bool = false):FlxSound {
 		var sound:FlxSound = FlxG.sound.list.recycle(FlxSound).loadEmbedded(asset);
 		sound.onComplete = !kill ? null : function () {
+			sound.volume = 0;
 			sound.kill();
 		}
 		return sound;

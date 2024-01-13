@@ -138,9 +138,9 @@ class AngledCamera extends FunkCamera {
 
     override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader) {
         if (angle != 0) {
-            matrix.translate(-width * .5, -height * .5);
+            inline matrix.translate(-width * .5, -height * .5);
             matrix.rotateWithTrig(_cos, _sin);
-            matrix.translate(width * .5, height * .5);
+            inline matrix.translate(width * .5, height * .5);
         }
 
         if (transform != null) {

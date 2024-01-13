@@ -1,14 +1,11 @@
 package funkin.states;
 
-import flixel.system.FlxAssets.FlxSoundAsset;
-import funkin.objects.FunkCamera;
-import funkin.objects.FunkCamera.AngledCamera;
 import funkin.util.modding.ScriptUtil;
-import funkin.objects.note.BasicNote;
 import funkin.states.editors.StageDebug;
+import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
-import funkin.objects.note.StrumLineGroup;
-import funkin.objects.NotesGroup;
+import funkin.objects.FunkCamera.AngledCamera;
 
 class PlayState extends MusicBeatState {
 	public static var instance:PlayState;
@@ -122,7 +119,10 @@ class PlayState extends MusicBeatState {
 		camHUD = new FunkCamera();
 		camOther = new FunkCamera();
 		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
-		FlxG.camera.active = FlxG.camera.visible = FlxG.mouse.visible = false;
+		FlxG.mouse.visible = FlxG.camera.active = FlxG.camera.visible = false;
+		
+		FlxG.cameras.remove(FlxG.camera);
+		FlxG.camera = camGame;
 
 		FlxG.cameras.add(camGame);
 		FlxG.cameras.add(camHUD, false);

@@ -106,6 +106,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.FlxState;
 import flixel.math.FlxAngle;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;

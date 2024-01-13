@@ -548,6 +548,7 @@ class NotesGroup extends Group
 	override function destroy() {
 		super.destroy();
 		curSpawnNote = null;
+		unspawnNotes = FlxDestroyUtil.destroyArray(unspawnNotes);
 	}
 
     inline function getPref(pref:String):Dynamic return Preferences.getPref(pref);
