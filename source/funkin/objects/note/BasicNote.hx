@@ -159,6 +159,13 @@ class BasicNote extends SmartSprite implements INoteData {
             noteType = value;
     }
 
+    override function destroy() {
+        super.destroy();
+        curSkinData = null;
+        parent = null;
+        child = null;
+    }
+
     // Casts the basic note as a Note
     inline public function toNote():Note {
         return cast(this, Note);

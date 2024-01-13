@@ -606,10 +606,13 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function checkFocus():Bool {
-		final focusInputs = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
-		for (input in focusInputs) {
-			if (input.hasFocus) return true;
+		for (input in [input_icon, input_imagePath, input_animName, input_animFile, input_indices]) {
+			if (input.hasFocus) {
+				Main.game.enabledSoundTray = false;
+				return true;
+			}
 		}
+		Main.game.enabledSoundTray = true;
 		return false;
 	}
 
@@ -677,6 +680,11 @@ class AnimationDebug extends MusicBeatState {
 		final hasAnim = displayChar.animation.curAnim != null && animsList.length > 0;
 		curAnimText.text = hasAnim ? displayChar.animation.curAnim.name : 'NULL_ANIM';
 		curAnimText.color = hasAnim ? FlxColor.WHITE : FlxColor.RED;
+	}
+
+	override function destroy() {
+		super.destroy();
+		Main.game.enabledSoundTray = true;
 	}
 
 	var _file:FileReference;

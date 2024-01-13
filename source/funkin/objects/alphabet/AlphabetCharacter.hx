@@ -42,7 +42,7 @@ class AlphabetCharacter extends FlxSpriteExt {
         "|"=> null, "~"=> null, "#"=> null,
         "$"=> null, "%"=> null, "("=> null,
         ")"=> null, "*"=> null, "+"=> null,
-        "-"=> {bold: [0,25]}, ":"=> null,
+        "-"=> {bold: [0,25]}, ":"=> {bold: [0, 10]},
         ";"=> null, "<"=> null, "="=> null,
         ">"=> null, "@"=> null, "["=> null,
         "]"=> null, "^"=> null, "_"=> null,

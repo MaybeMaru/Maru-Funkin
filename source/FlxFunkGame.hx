@@ -49,6 +49,23 @@ class FlxFunkGame extends FlxGame {
             }
         }
     }
+    
+    public var enabledSoundTray(default, set):Bool = true;
+    inline function set_enabledSoundTray(value:Bool) {
+        if (value != enabledSoundTray) {
+            if (value) {
+                FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
+                FlxG.sound.volumeDownKeys = [MINUS, NUMPADMINUS];
+                FlxG.sound.muteKeys = [ZERO, NUMPADZERO];
+            }
+            else {
+                FlxG.sound.volumeUpKeys = [];
+                FlxG.sound.volumeDownKeys = [];
+                FlxG.sound.muteKeys = [];
+            }
+        }
+        return enabledSoundTray = value;
+    }
 }
 
 class FlxFunkSoundTray extends FlxSoundTray {
