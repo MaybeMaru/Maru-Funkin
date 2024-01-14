@@ -43,6 +43,8 @@ class CoolUtil {
 		EventUtil.initEvents();
 	}
 
+	public static var point:FlxPoint = FlxPoint.get(); // Global FlxPoint for quick calculations
+
 	inline public static function openUrl(url:String) {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url, "&"]);
@@ -153,6 +155,11 @@ class CoolUtil {
 
 	public static inline function cos(radians:Float) {
 		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
+	}
+
+	public static inline function positionWithTrig(object:FlxObject, x:Float = 0.0, y:Float = 0.0, cos:Float = 1.0, sin:Float = 0.0) {
+		object.x = (x * cos) + (y * -sin);
+        object.y = (x * sin) + (y * cos);
 	}
 
 	public static inline function translateWithTrig(object:FlxObject, x:Float = 0.0, y:Float = 0.0, cos:Float = 1.0, sin:Float = 0.0) {

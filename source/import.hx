@@ -66,7 +66,10 @@ import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinText;
 import funkin.graphics.FlxFunkText;
 import funkin.graphics.TypedGroup.Group;
+import funkin.graphics.TypedGroup.SpriteGroup;
+import funkin.graphics.TypedGroup.DynamicSpriteGroup;
 import funkin.graphics.TypedGroup.TypedGroup;
+import funkin.graphics.TypedGroup.TypedSpriteGroup;
 
 //Main states
 import funkin.states.LoadingState;

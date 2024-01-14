@@ -118,7 +118,7 @@ class PlayState extends MusicBeatState {
 		camGame = new AngledCamera();
 		camHUD = new FunkCamera();
 		camOther = new FunkCamera();
-		camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
+		camGame.bgColor = FlxColor.BLACK; camHUD.bgColor.alpha = camOther.bgColor.alpha = 0;
 		FlxG.mouse.visible = FlxG.camera.active = FlxG.camera.visible = false;
 		
 		FlxG.cameras.remove(FlxG.camera);

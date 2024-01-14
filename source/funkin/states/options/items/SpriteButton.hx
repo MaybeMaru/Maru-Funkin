@@ -17,8 +17,8 @@ class SpriteButton extends FlxSpriteGroup
         }
         btnSpr.setGraphicSize(Std.int(btnSpr.width*0.5));
         btnSpr.updateHitbox();
-        btnSpr.x -= btnSpr.width/40;
-        btnSpr.y -= btnSpr.height/4;
+        btnSpr.x -= btnSpr.width * 0.025;
+        btnSpr.y -= btnSpr.height * 0.25;
         btnSpr.scale.y *= 1.2;
         btnSpr.scale.x *= 1.2;
         add(btnSpr);
