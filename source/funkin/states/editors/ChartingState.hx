@@ -12,10 +12,10 @@ import flixel.util.FlxStringUtil;
 
 import funkin.states.editors.chart.ChartGridBase;
 import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
-import funkin.states.editors.chart.ChartGridBase.getGridOverlap;
-import funkin.states.editors.chart.ChartGridBase.getGridCoords;
 import funkin.states.editors.chart.ChartGridBase.ChartNoteGrid;
 import funkin.states.editors.chart.ChartGridBase.ChartEventGrid;
+import funkin.states.editors.chart.ChartGridBase.getGridOverlap;
+import funkin.states.editors.chart.ChartGridBase.getGridCoords;
 
 class ChartingState extends MusicBeatState {
     public static var SONG:SwagSong;

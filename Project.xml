@@ -42,6 +42,9 @@
 	
 	<!--If you want to have ffmpeg used for osu and quaver pack zip support-->
 	<define name="ZIPS_ALLOWED" if="desktop"/>
+
+	<!--If to check on startup for newer versions of the game-->
+	<define name="CHECK_UPDATES" if="desktop"/>
 	
 	<!--If you want more accurate sprite angles, at cost of performance-->
 	<define name="FAST_MATH"/>
