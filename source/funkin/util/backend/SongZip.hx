@@ -23,11 +23,11 @@ typedef UnZipType = {
 class SongZip {
     #if ZIPS_ALLOWED
 
-    static final zipMap:Map<String, ZipFormat> = [
+    public static final zipMap:Map<String, ZipFormat> = [
         "osz" => OSU,
         "qp" => QUAVER,
-        "sm" => STEPMANIA,
-        "ssc" => STEPMANIA
+        //"sm" => STEPMANIA,
+        //"ssc" => STEPMANIA
     ];
 
     static var removeQueue:Array<String> = []; // Files that will be deleted after zips are unzipped
@@ -46,11 +46,11 @@ class SongZip {
             final zipType = zipMap.get(a);
             for (i in zipArrays.get(a)) {
                 final zipPath = Paths.getModPath('$i.$a');
-                final modPath = Paths.getModPath(i);
+                final folderFormat = formatFolder(i, zipType);
+                final modPath = Paths.getModPath(folderFormat);
                 
-                var zipEntries = UnZipper.getZipEntries(zipPath);
-                var zipFiles = UnZipper.unzipFiles(zipEntries, modPath); // Unzip and get zip files
-                ModSetupState.setupModFolder(i); // Setup folders
+                var zipFiles = UnZipper.unzipInPath(zipPath, modPath);  // Unzip and get zip files
+                ModSetupState.setupModFolder(folderFormat); // Setup folders
                 removeQueue.push(zipPath);
                 
                 switch (zipType) {
@@ -65,6 +65,14 @@ class SongZip {
             removeFilesFromQueue();
 			ModdingUtil.reloadMods();
         }
+    }
+
+    static function formatFolder(folder:String, type:ZipFormat) {
+        switch (type) {
+            case OSU: folder = ~/(\d+ )/.replace(folder, '');
+            default:
+        }
+        return folder;
     }
 
     static final UNZIP_FORMAT:Map<String, UnZipType> = [

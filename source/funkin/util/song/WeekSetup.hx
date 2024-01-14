@@ -69,12 +69,18 @@ class WeekSetup {
         final modWeeks:Array<String> = JsonUtil.getJsonList('weeks',false,false,false,true,true);
 
         var hideVanilla:Bool = false;
-        for (i in 0...ModdingUtil.modsList.length) {
-            final mod = ModdingUtil.modsList[i];
+        for (mod in ModdingUtil.modsList) {
             if (mod.hideBaseGame && ModdingUtil.getModActive(mod.folder)) {
                 hideVanilla = true;
                 break;
             }
+        }
+
+        // Make sure theres no mods from innactive weeks
+        for (week in modWeeks) {
+            final mod = Paths.getFileMod(week)[0];
+            if (!ModdingUtil.existsModFolder(mod) || !ModdingUtil.getModActive(mod))
+                modWeeks.remove(week);
         }
         
         //Vanilla weeks go first >:)

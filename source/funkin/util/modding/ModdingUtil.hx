@@ -176,6 +176,14 @@ class ModdingUtil {
         return activeMods.get(modID) ?? false;
     }
 
+    public static function existsModFolder(folder:String):Bool {
+        for (mod in modsList) {
+            if (mod.folder == folder)
+                return true;
+        }
+        return false;
+    }
+
     inline public static function addPrint(txt:String)      print(txt, ADD);
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);

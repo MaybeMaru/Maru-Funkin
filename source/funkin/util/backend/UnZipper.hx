@@ -1,5 +1,6 @@
 package funkin.util.backend;
 
+import haxe.io.Path;
 import haxe.zip.Entry;
 import haxe.zip.Uncompress;
 import haxe.zip.Reader;
@@ -12,7 +13,7 @@ import sys.io.File;
 
 class UnZipper {
     public static function unzipInPath(zipPath:String, destPath:String) {
-        unzipFiles(getZipEntries(zipPath), destPath);
+        return unzipFiles(getZipEntries(zipPath), destPath);
     }
     
     public static function getZipEntries(path:String) {
@@ -30,6 +31,8 @@ class UnZipper {
 
     public static function unzipFiles(entries:List<Entry>, destPath:String) {
         var _files:Array<String> = [];
+        var tempIndex:Int = 0; // Used for invalid file names
+
         for(_ => field in entries) {
             final isFolder = field.fileName.endsWith("/") && field.fileSize == 0;
             if (isFolder) {
@@ -39,11 +42,20 @@ class UnZipper {
                 var split = [for(e in field.fileName.split("/")) e.trim()];
                 split.pop();
                 FileSystem.createDirectory('$destPath/${split.join("/")}');
-                
+
                 var data = unzip(field);
-                final filePath = '$destPath/${field.fileName}';
+                var filePath = '$destPath/${field.fileName}';
+
+                try {
+                    File.saveBytes(filePath, data);
+                }
+                catch (e) // Slap-on fix
+                {
+                    filePath = '$destPath/__tempFile${tempIndex++}.' + Path.extension(field.fileName);
+                    File.saveBytes(filePath, data);
+                }
+                
                 _files.push(filePath);
-                File.saveBytes(filePath, data);
             }
         }
         return _files;

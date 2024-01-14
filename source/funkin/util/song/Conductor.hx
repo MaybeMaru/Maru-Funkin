@@ -140,19 +140,19 @@ class Conductor {
 	inline public static function play():Void {
 		playing = true;
 		inst.play();
-		vocals.play();
+		if (hasVocals) vocals.play();
 	}
 
 	inline public static function pause():Void {
 		playing = false;
 		inst.pause();
-		vocals.pause();
+		if (hasVocals) vocals.pause();
 	}
 
 	inline public static function stop():Void {
 		playing = false;
 		inst.stop();
-		vocals.stop();
+		if (hasVocals) vocals.stop();
 	}
 
 	inline public static function sync():Void {
