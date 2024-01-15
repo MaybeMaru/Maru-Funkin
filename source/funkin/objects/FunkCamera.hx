@@ -135,6 +135,22 @@ class FunkCamera extends FlxCamera {
 			#end
 		}
     }
+
+    override public function setScale(X:Float, Y:Float):Void {
+		scaleX = X;
+		scaleY = Y;
+
+		totalScaleX = scaleX * FlxG.scaleMode.scale.x;
+		totalScaleY = scaleY * FlxG.scaleMode.scale.y;
+
+		calcMarginX();
+		calcMarginY();
+
+		updateScrollRect();
+		updateInternalSpritePositions();
+
+		FlxG.cameras.cameraResized.dispatch(this);
+	}
     
     override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void {        
         if (transform != null) {

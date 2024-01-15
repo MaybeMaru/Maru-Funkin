@@ -268,7 +268,7 @@ class PlayState extends MusicBeatState {
 		add(iconGroup);
 		for (i in [iconP1,iconP2]) iconGroup.add(i);
 
-		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.get(FlxG.width, 20));
+		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.weak(FlxG.width, 20));
 		add(scoreTxt);
 
 		if (getPref('vanilla-ui')) {

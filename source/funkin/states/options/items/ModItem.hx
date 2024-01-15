@@ -23,10 +23,10 @@ class ModItem extends FlxSpriteGroup {
         modIcon.setPosition(15, modBox.height * 0.5 - modIcon.height * 0.5);
         add(modIcon);
 
-        final modTitle:Alphabet = new Alphabet(modIcon.x + modIcon.width + 10, 10, mod.title, true, Std.int(modBox.width * 0.5), 0.666);
+        final modTitle:Alphabet = new Alphabet(modIcon.x + modIcon.width + 10, 10, mod.title, true, modBox.width * 0.5, 0.666);
         add(modTitle);
 
-        final modDesc:FlxFunkText = new FlxFunkText(modTitle.x, modTitle.y + modTitle.height + 5, mod.description, FlxPoint.get(modBox.width*0.6, modBox.height), 20);
+        final modDesc:FlxFunkText = new FlxFunkText(modTitle.x, modTitle.y + modTitle.height + 5, mod.description, FlxPoint.weak(modBox.width*0.6, modBox.height), 20);
         modDesc.font = "phantommuff_";
         modDesc.style = SHADOW(FlxPoint.weak(-2, -2), FlxColor.BLACK);
         modDesc.wordWrap = true;

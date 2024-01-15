@@ -152,13 +152,14 @@ class FlxFunkText extends FlxSpriteExt {
         style = null;
     }
 
-    public function new(X:Float=0, Y:Float=0, Text:String="", ?canvasRes:FlxPoint, ?size:Int) {
+    public function new(X:Float = 0, Y:Float = 0, Text:String = "", ?canvasRes:FlxPoint, ?size:Int) {
         super(X,Y);
-        canvasRes = canvasRes ?? FlxPoint.get(FlxG.width,FlxG.height);
+        canvasRes = canvasRes ?? FlxPoint.weak(FlxG.width,FlxG.height);
         textField = new TextField();
         textField.width = Std.int(canvasRes.x);
         textField.height = Std.int(canvasRes.y);
-        canvasRes = FlxDestroyUtil.put(canvasRes);
+        canvasRes.putWeak();
+        canvasRes = null;
 
         textFormat = new TextFormat(getFont("vcr"), 16, 0xffffff);
         textField.defaultTextFormat = textFormat;

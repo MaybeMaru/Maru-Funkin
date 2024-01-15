@@ -14,7 +14,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
     public var alignment(default, set):AlphabetAlign = LEFT;
     public var textScale:Float = 1;
     public var bold:Bool = false;
-    public var textWidth:Int = 500;
+    public var textWidth:Float = 500;
 
     function set_alignment(_alignment:AlphabetAlign):AlphabetAlign {
         alignment = _alignment;
@@ -38,7 +38,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
 		}
 	}
 
-    public function new(X:Float = 0, Y:Float = 0, text:String = "coolswag", bold:Bool = true, textWidth:Int = 0, textScale:Float = 1):Void {
+    public function new(X:Float = 0, Y:Float = 0, text:String = "coolswag", bold:Bool = true, textWidth:Float = 0, textScale:Float = 1):Void {
         super(X,Y);
         initPos = FlxPoint.get();
         curPos = FlxPoint.get();
@@ -67,7 +67,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         curLineWidth = 0;
         lastLineWidths = [];
         cutText = splitText(text);
-        maxWidth = (textWidth/25)*spaceWidth*textScale;
+        maxWidth = (textWidth * 0.04) * spaceWidth * textScale;
 
         for (letter in letterArray) {
             letter.kill();

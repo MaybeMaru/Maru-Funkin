@@ -62,6 +62,9 @@ class TitleState extends MusicBeatState {
 			Shader.setSpriteShader(gfDance, 'colorSwap');
 		}
 
+		updateColor(0.0);
+		updatePitch(0.0);
+
 		titleText = new FunkinSprite('title/titleEnter', [100,FlxG.height*0.8]);
 		titleText.addAnim('idle', 'Press Enter to Begin');
 		titleText.addAnim('press', 'ENTER PRESSED', 24, true);
@@ -144,7 +147,6 @@ class TitleState extends MusicBeatState {
 
 	var transitioning:Bool = false;
 	var titleSine:Float = 0;
-	var timeElp:Float = 0;
 
 	override function update(elapsed:Float):Void {
 		if (FlxG.sound.music != null) {
@@ -166,6 +168,9 @@ class TitleState extends MusicBeatState {
 			titleText.color = FlxColor.WHITE;
 			openedGame = true;
 
+			FlxG.sound.music.pitch = 1.0;
+			FlxG.timeScale = 1.0;
+
 			CoolUtil.playSound('confirmMenu', 0.7);
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
 
@@ -178,11 +183,35 @@ class TitleState extends MusicBeatState {
 			}
 		}
 
-		if (getKey('UI_LEFT')) timeElp -= elapsed;
-		if (getKey('UI_RIGHT'))timeElp += elapsed;
-		Shader.setFloat('colorSwap', 'iTime', timeElp);
+		// Color and pitch easter egg
+		if (!transitioning && (skippedIntro || openedGame)) {
+			if (getKey('UI_LEFT')) updateColor(-elapsed);
+			if (getKey('UI_RIGHT')) updateColor(elapsed);
+	
+			if (getKey('UI_UP')) updatePitch(-elapsed);
+			if (getKey('UI_DOWN')) updatePitch(elapsed);
+		}
 
 		super.update(elapsed);
+	}
+
+	var shaderColor:Float = 0;
+
+	function updateColor(elapsed:Float) {
+		shaderColor += elapsed / FlxG.timeScale;
+		Shader.setFloat('colorSwap', 'iTime', shaderColor);
+	}
+
+	var musicPitch:Float = CoolUtil.PI + 0.148; // Shhhh
+
+	function updatePitch(elapsed:Float) {
+		musicPitch += elapsed / FlxG.timeScale;
+		
+		if (FlxG.sound.music != null) {
+			var pitch = FlxMath.remapToRange(CoolUtil.sin(musicPitch), -1, 1, 0.25, 2);
+			FlxG.sound.music.pitch = pitch;
+			FlxG.timeScale = pitch;
+		}
 	}
 
 	override function beatHit(curBeat:Int):Void {
@@ -213,18 +242,16 @@ class TitleState extends MusicBeatState {
 
 	var codes:Map<String, Array<FlxKey>> = [
 		'konami' => [ // debug code
-			FlxKey.UP, FlxKey.UP, FlxKey.DOWN, FlxKey.DOWN,
-			FlxKey.LEFT, FlxKey.RIGHT, FlxKey.LEFT, FlxKey.RIGHT,
-			FlxKey.B, FlxKey.A
+			UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT, B, A
 		],
 		'unlock' => [ // unlock code
-			FlxKey.U,FlxKey.N,FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+			U, N, L, O, C, K, M, E,
 		],
 		'lock' => [ // lock code
-			FlxKey.L,FlxKey.O,FlxKey.C,FlxKey.K, FlxKey.M,FlxKey.E,
+			L, O, C, K, M, E,
 		],
 		'keoiki' => [ // keoiki code
-			FlxKey.K,FlxKey.E,FlxKey.O,FlxKey.I, FlxKey.K,FlxKey.I,
+			K, E, O, I, K, I,
 		]
 	];
 

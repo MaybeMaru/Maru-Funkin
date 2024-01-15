@@ -112,11 +112,11 @@ class PixelDialogueBox extends DialogueBoxBase {
         super.endDialogue();
         if (isEnding) {
             new FlxTimer().start(0.2, function(tmr:FlxTimer) {
-				box.alpha -= 1 / 5;
-				bgFade.alpha -= 1 / 5 * 0.7;
+				box.alpha -= 0.2;
+				bgFade.alpha -= 0.14;
 
-				portraitLeft.alpha -= 1 / 5;
-				portraitRight.alpha -= 1 / 5;
+				portraitLeft.alpha -= 0.2;
+				portraitRight.alpha -= 0.2;
 				portraitLeft.x -= 5;
 				portraitRight.x += 5;
 

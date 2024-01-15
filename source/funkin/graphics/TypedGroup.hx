@@ -1,6 +1,5 @@
 package funkin.graphics;
 
-import flixel.util.FlxAxes;
 import flixel.FlxBasic;
 
 // Just flixel groups with unsafe gets for performance
