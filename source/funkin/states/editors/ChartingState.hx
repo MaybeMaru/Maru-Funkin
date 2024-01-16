@@ -292,6 +292,11 @@ class ChartingState extends MusicBeatState {
 			return;
 		}
 
+        if (FlxG.keys.justPressed.R) {
+            stop();
+            setSection(FlxG.keys.pressed.SHIFT ? 0 : sectionIndex);
+        }
+
         if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.A || FlxG.keys.pressed.W || FlxG.keys.pressed.S) {
             stop();
             final mult = (FlxG.keys.pressed.SHIFT ? 4 : 1);

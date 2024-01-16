@@ -16,7 +16,11 @@ class ModItem extends FlxSpriteGroup {
         add(modBox);
 
         final _tryImage = 'mods/${mod.folder}/${mod.icon}.png';
-        final iconGraphic = Paths.exists(_tryImage, IMAGE) ? AssetManager.getImage(_tryImage) : Paths.image('options/blankMod');
+        final iconGraphic = Paths.exists(_tryImage, IMAGE) ? AssetManager.getImage(_tryImage) : Paths.image('options/' + switch(mod.folder.substring(0, 4)) {
+            case "osu-": "osuMod";
+            case "qua-": "quaverMod";
+            default: "blankMod";
+        });
         final modIcon:FlxSpriteExt = new FlxSpriteExt();
         modIcon.loadGraphic(iconGraphic);
         modIcon.setScale(0.6);
