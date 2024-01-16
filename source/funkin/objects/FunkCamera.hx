@@ -151,8 +151,20 @@ class FunkCamera extends FlxCamera {
 
 		FlxG.cameras.cameraResized.dispatch(this);
 	}
+
+    
+    public var pixelPerfect:Bool = false;
+    public var pixelMult(default, set):Int = 1;
+    inline function set_pixelMult(value:Int):Int {
+        return pixelMult = (value < 1 ? 1 : value);
+    }
     
     override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void {        
+        if (pixelPerfect) {
+            matrix.tx = Std.int(matrix.tx / pixelMult) * pixelMult;
+            matrix.ty = Std.int(matrix.ty / pixelMult) * pixelMult;
+        }
+        
         if (transform != null) {
             final drawItem = startQuadBatch(frame.parent, inline transform.hasRGBMultipliers(), inline transform.hasRGBAOffsets(), blend, smoothing, shader);
             drawItem.addQuad(frame, matrix, transform);
@@ -185,6 +197,11 @@ class AngledCamera extends FunkCamera {
             inline matrix.translate(-width * .5, -height * .5);
             matrix.rotateWithTrig(_cos, _sin);
             inline matrix.translate(width * .5, height * .5);
+        }
+
+        if (pixelPerfect) {
+            matrix.tx = Std.int(matrix.tx / pixelMult) * pixelMult;
+            matrix.ty = Std.int(matrix.ty / pixelMult) * pixelMult;
         }
 
         if (transform != null) {
