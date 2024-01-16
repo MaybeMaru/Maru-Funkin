@@ -69,7 +69,9 @@ class SongZip {
 
     static function formatFolder(folder:String, type:ZipFormat) {
         switch (type) {
-            case OSU: folder = ~/(\d+ )/.replace(folder, '');
+            case OSU:
+                folder = ~/(\d+ )/.replace(folder, '');
+                folder = "osu-" + folder;
             default:
         }
         return folder;
@@ -92,7 +94,7 @@ class SongZip {
         }
     ];
 
-    static function unzipFormat(format:String, modPath:String, zipFiles:Array<String>) {
+    static function unzipFormat(format:String, modPath:String, zipFiles:Array<String>) {        
         var _charts:Array<String> = [];
         for (i in zipFiles) {
             final _ext = Path.extension(i);
@@ -116,7 +118,7 @@ class SongZip {
             else _songDiffs.set(title, [mapDiff]);
 
             var chart = formatUnzip.convert(map);
-            createSongFolder('$modPath/songs/$formatTitle', formatTitle, chart, mapAudio, mapDiff);
+            createSongFolder('$modPath/songs/$formatTitle', chart, mapAudio, mapDiff);
             removeQueue.push(i);
         }
 
@@ -134,7 +136,7 @@ class SongZip {
         File.saveContent(path, jsonString);
     }
 
-    static function createSongFolder(prefix:String, song:String, chart:SwagSong, audio:String, diff:String = 'hard') {
+    static function createSongFolder(prefix:String, chart:SwagSong, audio:String, diff:String = 'hard') {
         for (i in ["charts", "audio"]) ModSetupState.createFolder('$prefix/$i', "");
         saveJson({song: Song.optimizeJson(chart)}, '$prefix/charts/$diff.json');
         final finalAudio = '$prefix/audio/Inst.ogg';
