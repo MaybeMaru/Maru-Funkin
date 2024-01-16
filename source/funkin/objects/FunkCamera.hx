@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import openfl.display.Shape;
 import openfl.display.Bitmap;
 import openfl.display.BlendMode;
 import flixel.system.FlxAssets.FlxShader;
@@ -11,19 +12,19 @@ import openfl.geom.ColorTransform;
 using flixel.util.FlxColorTransformUtil;
 
 class FunkCamera extends FlxCamera {    
-    var __fadeSprite:Bitmap;
-    var __flashSprite:Bitmap;
+    var __fadeShape:Shape;
+    var __flashShape:Shape;
     
     override public function new(?X,?Y,?W,?H,?Z) {
         super(X,Y,W,H,Z);
-        
-        __fadeSprite = new Bitmap(__baseBitmap.clone());
-        __fadeSprite.alpha = 0.0;
-        _scrollRect.addChild(__fadeSprite);
+       
+        __fadeShape = new Shape();
+        __fadeShape.alpha = 0.0;
+        _scrollRect.addChild(__fadeShape);
 
-        __flashSprite = new Bitmap(__baseBitmap.clone());
-        __flashSprite.alpha = 0.0;
-        _scrollRect.addChild(__flashSprite);
+        __flashShape = new Shape();
+        __flashShape.alpha = 0.0;
+        _scrollRect.addChild(__flashShape);
 
         #if FLX_DEBUG
         _scrollRect.removeChild(debugLayer);
@@ -32,25 +33,26 @@ class FunkCamera extends FlxCamera {
     }
 
     override function destroy() {
-        _scrollRect.removeChild(__fadeSprite);
-        _scrollRect.removeChild(__flashSprite);
-        AssetManager.disposeBitmap(__fadeSprite.bitmapData);
-        AssetManager.disposeBitmap(__flashSprite.bitmapData);
-        __fadeSprite = null;
-        __flashSprite = null;
+        _scrollRect.removeChild(__fadeShape);
+        _scrollRect.removeChild(__flashShape);
+        __fadeShape = null;
+        __flashShape = null;
         
         super.destroy();
     }
 
-    private static var __rect:Rectangle = new Rectangle(0,0,1,1);
-    private static var __baseBitmap:BitmapData = new BitmapData(1,1,true,0xFFFFFFFF);
-
     inline private function __setFadeColor(color:Int) {
-        __fadeSprite.bitmapData.fillRect(__rect, color);
+        __drawToShape(__fadeShape, color);
     }
 
     inline private function __setFlashColor(color:Int) {
-        __flashSprite.bitmapData.fillRect(__rect, color);
+        __drawToShape(__flashShape, color);
+    }
+
+    inline private static function __drawToShape(shape:Shape, color:Int) {
+        shape.graphics.beginFill(color);
+        shape.graphics.drawRect(0, 0, 1, 1);
+        shape.graphics.endFill();
     }
 
     override function drawFX():Void {} // Wont be using this anymore
@@ -58,7 +60,7 @@ class FunkCamera extends FlxCamera {
     override function updateFlash(elapsed:Float):Void {
         if (_fxFlashAlpha > 0.0) {
 			_fxFlashAlpha -= elapsed / _fxFlashDuration;
-            __flashSprite.alpha = _fxFlashAlpha;
+            __flashShape.alpha = _fxFlashAlpha;
 			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null)) {
 				_fxFlashComplete();
 			}
@@ -70,7 +72,7 @@ class FunkCamera extends FlxCamera {
 
 		if (_fxFadeIn) {
 			_fxFadeAlpha -= elapsed / _fxFadeDuration;
-            __fadeSprite.alpha = _fxFadeAlpha;
+            __fadeShape.alpha = _fxFadeAlpha;
 			if (_fxFadeAlpha <= 0.0) {
 				_fxFadeAlpha = 0.0;
 				completeFade();
@@ -78,7 +80,7 @@ class FunkCamera extends FlxCamera {
 		}
 		else {
 			_fxFadeAlpha += elapsed / _fxFadeDuration;
-            __fadeSprite.alpha = _fxFadeAlpha;
+            __fadeShape.alpha = _fxFadeAlpha;
 			if (_fxFadeAlpha >= 1.0) {
 				_fxFadeAlpha = 1.0;
 				completeFade();
@@ -119,9 +121,9 @@ class FunkCamera extends FlxCamera {
 			canvas.scaleX = totalScaleX;
 			canvas.scaleY = totalScaleY;
 
-            if (__fadeSprite != null && __flashSprite != null) {
-                __fadeSprite.scaleX = __flashSprite.scaleX = totalScaleX * width * 1.25;
-                __fadeSprite.scaleY = __flashSprite.scaleY = totalScaleY * height * 1.25;
+            if (__fadeShape != null && __flashShape != null) {
+                __fadeShape.scaleX = __flashShape.scaleX = totalScaleX * width * 1.25;
+                __fadeShape.scaleY = __flashShape.scaleY = totalScaleY * height * 1.25;
             }
 
 			#if FLX_DEBUG
