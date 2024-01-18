@@ -1,10 +1,10 @@
 package funkin.objects.alphabet;
 
 typedef LetterData = {
-    ?prefix:Null<String>,
-    ?upper:Array<Float>,
-    ?lower:Array<Float>,
-    ?bold:Array<Float>
+    ?p:Null<String>, // prefix
+    ?u:Float, // uppercase
+    ?l:Float, // lowercase
+    ?b:Float // bold
 }
 
 class AlphabetCharacter extends FlxSpriteExt {
@@ -14,68 +14,108 @@ class AlphabetCharacter extends FlxSpriteExt {
     public var animPrefix:String = "a";
     public var letterData:LetterData;
     public var letterSize:Float = 1;
-    public var lineWidth:Int = 0;
-
-    static final offsetLetter:FlxPoint = FlxPoint.get();
+    public var lineWidth:Float = 0;
     
     public static final characters:Map<String, LetterData> =  [
         //  Alphabet
-        "a"=>{lower:[0,10],},               "b"=>null,
-        "c"=>{lower:[0,15],},               "d"=>null,
-        "e"=>{lower:[0,15],},               "f"=>null,
-        "g"=>{bold:[0,3], lower:[0,17],},   "h"=>{lower:[0,5],},
-        "i"=>{lower:[0,10],},               "j"=>{lower:[0,5],},
-        "k"=>{lower:[0,5],},                "l"=>{lower:[0,5],},
-        "m"=>{bold:[0,3], lower:[0,25],},   "n"=>{lower:[0,25],},
-        "o"=>{lower:[0,20],},               "p"=>{lower:[0,20],},
-        "q"=>{lower:[0,20],},               "r"=>{lower:[0,20],},
-        "s"=>{lower:[0,15],},               "t"=>{lower:[0,5],},
-        "u"=>{bold:[0,7], lower:[0,20],},   "v"=>{lower:[0,15],},
-        "w"=>{bold:[0,3], lower:[0,20],},   "x"=>{lower:[0,10],},
-        "y"=>{lower:[0,10],},               "z"=>{lower:[0,10],},
+        "a"=>{l: 22},
+        "b"=>{b: -3, l: 8},
+        "c"=>{b: 1, l: 25, u: 1},
+        "d"=>{l: 5, u: 2},
+        "e"=>{b: 1, l: 21, u: 5},
+        "f"=>{l: 10, u: 6},
+        "g"=>{b: -3, l: 32, u: 2},
+        "h"=>{l: 12, u: 5},
+        "i"=>{b: 1, l: 15, u: 6},
+        "j"=>{b: -3, l: 15, u: 4},
+        "k"=>{b: -3, l: 10, u: 6},
+        "l"=>{l: 10, u: 5},
+        "m"=>{b: 3, l: 31, u: 8},
+        "n"=>{l: 31, u: 8},
+        "o"=>{b: -3, l: 27, u: 3},
+        "p"=>{b: -3, l: 30, u: 7},
+        "q"=>{l: 34, u: 6},
+        "r"=>{l: 29, u: 3},
+        "s"=>{l: 23, u: 3},
+        "t"=>{b: 1, l: 10, u: 7},
+        "u"=>{b: 7, l: 25, u: 8},
+        "v"=>{l: 26, u: 9},
+        "w"=>{b: 3, l: 27, u: 7},
+        "x"=>{l: 25, u: 5},
+        "y"=>{b: -3, l: 25, u: 5},
+        "z"=>{l: 27, u: 10},
 
         //  Numbers
-        "1"=>null,"2"=>null,"3"=>null,"4"=>null,"5"=>null,
-        "6"=>null,"7"=>null,"8"=>null,"9"=>null,"0"=>null,
+        "0"=>{l: 3},
+        "1"=>{l: 4},
+        "2"=>{b: 2, l: 5},
+        "3"=>{b: 1, l: 2},
+        "4"=>{b: 2, l: 3},
+        "5"=>{l: 4},
+        "6"=>{l: 4},
+        "7"=>{b: 3, l: 8},
+        "8"=>{l: 1},
+        "9"=>{l: 1},
 
         //  Symbols
-        "|"=> null, "~"=> null, "#"=> null,
-        "$"=> null, "%"=> null, "("=> null,
-        ")"=> null, "*"=> null, "+"=> null,
-        "-"=> {bold: [0,25]}, ":"=> {bold: [0, 10]},
-        ";"=> null, "<"=> null, "="=> null,
-        ">"=> null, "@"=> null, "["=> null,
-        "]"=> null, "^"=> null, "_"=> null,
+        "|"=> null,
+        "~"=> null,
+        "#"=> null,
+        "$"=> null,
+        "%"=> null,
+        "("=> null,
+        ")"=> null,
+        "*"=> null,
+        "+"=> null,
+        "-"=> {b: 25},
+        "_"=> null,
+        ":"=> {b:  10},
+        ";"=> null,
+        "<"=> null,
+        ">"=> null,
+        "="=> null,
+        "@"=> null,
+        "["=> null,
+        "]"=> null,
+        "^"=> null,
         
-        "." => {prefix: "period", bold: [0,50], lower:[0,40]},
-        "," => {prefix: "comma", lower:[0,40]},
-        "'" => {prefix: "apostrophe"},
-        "!" => {prefix: "exclamation", bold: [0,-10]},
-        "?" => {prefix: "question", bold: [0,-5]},
-
+        "." => {p: "period", b: 50, l:40},
+        "," => {p: "comma", l:40},
+        "'" => {p: "apostrophe"},
+        "!" => {p: "exclamation", b: -10},
+        "?" => {p: "question", b: -5},
 
         //  Spanish and Portuguese Characters
-        "á" => {bold:[0,-33]}, "é" => {bold:[0,-31]},
-        "í" => {bold:[0,-32]}, "ó" => {bold:[0,-31]},
-        "ú" => {bold:[0,-27]}, "ñ" => {bold:[0,-22]},
+        "á" => {b: -33, l: -5, u: -24},
+        "é" => {b: -31, l: -4, u: -20},
+        "í" => {b: -32, l: 5, u: -19},
+        "ó" => {b: -33, l: 2, u: -22},
+        "ú" => {b: -27, l: 1, u: -15},
+        
+        "â" => {b: -27, u: -20},
+        "ê" => {b: -30, u: -19},
+        "ô" => {b: -31, l: 5, u: -18},
+
+        "ã" => {b: -24, l: 5, u: -18},
+        "õ" => {b: -25, l: 9, u: -15},
+        "ï" => {b: -18, l: 17, u: -10},
+        "ü" => {b: -13, l: 11, u: -4},
+
+        "ñ" => {b: -22, l: 10, u: -10},
+        "ç" => {b: 2, l: 26, u: 2}
     ];
 
-        
     public function new (x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         super(x,y);
         loadImage("alphabet");
         antialiasing = Preferences.getPref('antialiasing');
     }
 
-    private static final defData:LetterData = {
-        prefix: null,
-        bold: [0,0],
-        lower: [0,0],
-        upper: [0,0]
-    }
+    private static final DEFAULT_LETTER:LetterData = {p: null, b: 0, l: 0, u: 0}
 
-    static final alphabet:String = 'abcdefghijklmnopqrstuvwxyz';
+    static final alphabet:String = 'abcdefghijklmnopqrstuvwxyz' + 'áéíóúâêôãõïü' + 'ñç';
     static var mappedData:Map<String, LetterData> = [];
+    static var offsetY:Float = 0.0;
 
     public function setupCharacter(x:Float = 0, y:Float = 0, letter:String = '', bold:Bool = true, letterSize:Float = 1):Void {
         setPosition(x,y);
@@ -85,24 +125,27 @@ class AlphabetCharacter extends FlxSpriteExt {
         if (lowerLetter.length <= 0) return;
         
         if (!mappedData.exists(lowerLetter)) {
-            mappedData.set(lowerLetter, JsonUtil.checkJsonDefaults(defData, characters.get(lowerLetter)));
+            mappedData.set(lowerLetter, JsonUtil.checkJsonDefaults(DEFAULT_LETTER, characters.get(lowerLetter)));
         }
         letterData = mappedData.get(lowerLetter);
 
         if (bold) {
-            offsetLetter.set(letterData.bold[0], letterData.bold[1]);
+            offsetY = letterData.b;
             prefix = "bold";
         }
         else {
             if (alphabet.contains(lowerLetter)) {
-                final isLower = lowerLetter == letter;
-                prefix = isLower ? "lowercase" : "uppercase";
-
-                final arr = isLower ? letterData.lower : letterData.upper;
-                offsetLetter.set(arr[0],arr[1]);
+                if (lowerLetter == letter) {
+                    prefix = "lowercase";
+                    offsetY = letterData.l;
+                }
+                else {
+                    prefix = "uppercase";
+                    offsetY = letterData.u;
+                }
             }
             else {
-                offsetLetter.set(letterData.lower[0], letterData.lower[1]);
+                offsetY = letterData.l;
                 prefix = "normal";
             }
         }
@@ -111,11 +154,10 @@ class AlphabetCharacter extends FlxSpriteExt {
     }
 
     public function makeChar():Void {
-        animPrefix = letterData.prefix ?? lowerLetter;
+        animPrefix = letterData.p ?? lowerLetter;
         if (!animDatas.exists(letter)) addAnim(letter, '$animPrefix $prefix', 24, true);
         playAnim(letter, true);
-        x += offsetLetter.x * letterSize;
-        y += offsetLetter.y * letterSize;
+        y += offsetY * letterSize;
         setScale(letterSize);
     }
 }

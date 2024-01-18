@@ -31,8 +31,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
 		for (letter in letterArray) {
             final alignOffset:Float = switch(alignment) {
                 default:        0.0;
-                case CENTER:    letter.lineWidth * 0.5;
-                case RIGHT:     letter.lineWidth;
+                case CENTER:    letter.lineWidth * .5;//(letter.lineWidth * .5) - (width * .5);
+                case RIGHT:     letter.lineWidth - width;
             }
             letter.offset.x = alignOffset;
 		}
@@ -80,10 +80,12 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         setAlign();
     }
 
-    private var curLineWidth:Int = 0;
-    private var lastLineWidths:Array<Int> = [];
+    private var curLineWidth:Float = 0;
+    private var lastLineWidths:Array<Float> = [];
     private var listToAddLine:Array<AlphabetCharacter> = [];
     private var endWord:Bool = false;
+
+    var spacing:Float = 2;
 
     public function makeLetter(letter:String):Void {
         switch (letter) {
@@ -100,9 +102,11 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
                 endWord = false;
                 var newLetter:AlphabetCharacter = recycle(AlphabetCharacter);
                 newLetter.setupCharacter(curPos.x, curPos.y, letter, bold, textScale);
-                var addWidth:Int = Std.int(newLetter.width*1.01);
+                
+                var addWidth:Float = newLetter.width + spacing;
                 curPos.x += addWidth;
                 curLineWidth += addWidth;
+
                 listToAddLine.push(newLetter);
                 letterArray.push(newLetter);
                 add(newLetter);
@@ -129,7 +133,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
         return text.split("");
     }
 
-    override function findMaxXHelper()
+        override function findMaxXHelper()
 	{
 		var value = Math.NEGATIVE_INFINITY;
 		for (member in _sprites)

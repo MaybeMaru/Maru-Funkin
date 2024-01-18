@@ -48,7 +48,9 @@ class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
 
 	public var members(get, never):Array<T>;
 	inline function get_members():Array<T> return group.members;
-	inline function add(basic:T):T return group.add(basic);
+	
+	inline public function add(basic:T):T return group.add(basic);
+	inline public function recycle(?basicClass:Class<T>):T return group.recycle(basicClass);
 
 	public var offset(default, null):FlxPoint;
 	public var origin(default, null):FlxPoint;
@@ -106,8 +108,13 @@ class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
 
 	override function destroy() {
 		super.destroy();
+		group = FlxDestroyUtil.destroy(group);
 		offset = FlxDestroyUtil.put(offset);
 		origin = FlxDestroyUtil.put(origin);
+	}
+
+	override function update(elapsed:Float) {
+		group.update(elapsed);
 	}
 
 	override function draw() {
@@ -123,8 +130,8 @@ class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
 				var basicX = basic.x; var basicY = basic.y; var basicAngle = basic.angle; var basicAlpha = basic.alpha;
 				CoolUtil.positionWithTrig(basic, basic.x - origin.x, basic.y - origin.y, _cos, _sin);
 				
-				basic.x += point.x;
-				basic.y += point.y;
+				basic.x += point.x + origin.x;
+				basic.y += point.y + origin.y;
 				basic.angle += angle;
 				basic.alpha *= alpha;
 
