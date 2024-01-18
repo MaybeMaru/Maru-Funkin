@@ -55,6 +55,21 @@ class FunkCamera extends FlxCamera {
         shape.graphics.endFill();
     }
 
+    override function update(elapsed:Float) {
+        if (target != null)
+            updateFollow();
+
+        updateScroll();
+        if (FlxG.state.persistentUpdate) {
+            updateFlash(elapsed);
+            updateFade(elapsed);
+            updateShake(elapsed);
+        }
+
+        flashSprite.filters = filtersEnabled ? filters : null;
+        updateFlashSpritePosition();
+    }
+
     override function drawFX():Void {} // Wont be using this anymore
 
     override function updateFlash(elapsed:Float):Void {
