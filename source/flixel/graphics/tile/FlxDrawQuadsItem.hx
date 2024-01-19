@@ -80,9 +80,9 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			if (colorOffsets == null)
 				colorOffsets = [];
 
-			for (i in 0...VERTICES_PER_QUAD)
+			if (transform != null)
 			{
-				if (transform != null)
+				for (i in 0...VERTICES_PER_QUAD)
 				{
 					colorMultipliers.push(transform.redMultiplier);
 					colorMultipliers.push(transform.greenMultiplier);
@@ -92,8 +92,13 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 					colorOffsets.push(transform.greenOffset);
 					colorOffsets.push(transform.blueOffset);
 					colorOffsets.push(transform.alphaOffset);
+
+					colorMultipliers.push(1);
 				}
-				else
+			}
+			else
+			{
+				for (i in 0...VERTICES_PER_QUAD)
 				{
 					colorMultipliers.push(1);
 					colorMultipliers.push(1);
@@ -103,9 +108,9 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 					colorOffsets.push(0);
 					colorOffsets.push(0);
 					colorOffsets.push(0);
-				}
 
-				colorMultipliers.push(1);
+					colorMultipliers.push(1);
+				}
 			}
 		}
 	}
@@ -135,10 +140,10 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		setParameterValue(shader.hasColorTransform, hasColors);
 
 		#if (openfl > "8.7.0")
-		camera.canvas.graphics.overrideBlendMode(blend);
+		inline camera.canvas.graphics.overrideBlendMode(blend);
 		#end
-		camera.canvas.graphics.beginShaderFill(shader);
-		camera.canvas.graphics.drawQuads(rects, null, transforms);
+		inline camera.canvas.graphics.beginShaderFill(shader);
+		inline camera.canvas.graphics.drawQuads(rects, null, transforms);
 		
 		#if FLX_DEBUG
 		FlxDrawBaseItem.drawCalls++;

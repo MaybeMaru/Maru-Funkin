@@ -137,8 +137,8 @@ class FunkCamera extends FlxCamera {
 			canvas.scaleY = totalScaleY;
 
             if (__fadeShape != null && __flashShape != null) {
-                __fadeShape.scaleX = __flashShape.scaleX = totalScaleX * width * 1.25;
-                __fadeShape.scaleY = __flashShape.scaleY = totalScaleY * height * 1.25;
+                __fadeShape.scaleX = __flashShape.scaleX = totalScaleX * width / zoom;
+                __fadeShape.scaleY = __flashShape.scaleY = totalScaleY * height / zoom;
             }
 
 			#if FLX_DEBUG
