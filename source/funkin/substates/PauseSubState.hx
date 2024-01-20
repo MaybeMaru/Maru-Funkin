@@ -126,11 +126,6 @@ class PauseSubState extends MusicBeatSubstate {
 		}
 	}
 
-	override function close() {
-		FlxG.state.persistentUpdate = true;
-		super.close();
-	}
-
 	override function destroy():Void {
 		pauseMusic.destroy();
 		super.destroy();

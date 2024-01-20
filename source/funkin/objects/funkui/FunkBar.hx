@@ -103,9 +103,9 @@ class FunkBar extends FlxSpriteExt {
          * This isn't pretty too look at but shhhhhh it works
         **/
         
-        final _pos = width * percent * 0.01;
-        final _sub = width - _pos;
-        final _center = height * 0.5;
+        var percentWidth = width * percent * 0.01;
+        var percentCut = width - percentWidth;
+        var barCenter = height * 0.5;
         
         if (legacyMode.active) {
             final _mX = _matrix.tx;
@@ -125,15 +125,15 @@ class FunkBar extends FlxSpriteExt {
                 camera.drawPixels(__frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
             }
 
-            _matrix.translate(_sub * _cosAngle, _sub * _sinAngle);
+            _matrix.translate(percentCut * _cosAngle, percentCut * _sinAngle);
 
             if (percent != 0) {
                 _spr.color = colors[1];
-                __frame.frame.width = _pos - _out;
+                __frame.frame.width = percentWidth - _out;
                 camera.drawPixels(__frame, _spr.framePixels, _matrix, _spr.colorTransform, blend, antialiasing, shader);
             }
 
-            barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
+            barPoint.set(_matrix.tx + (barCenter * -_sinAngle), _matrix.ty + (barCenter * _cosAngle));
 
             if (!legacyMode.inFront) {
                 _matrix.tx = _mX;
@@ -145,20 +145,20 @@ class FunkBar extends FlxSpriteExt {
             if (percent != 100) {
                 color = colors[0];
                 _frame.frame.x = 0;
-                _frame.frame.width = _sub;
+                _frame.frame.width = percentCut;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
     
-            _matrix.translate(_sub * _cosAngle, _sub * _sinAngle);
+            _matrix.translate(percentCut * _cosAngle, percentCut * _sinAngle);
 
             if (percent != 0) {
                 color = colors[1];
-                _frame.frame.x = _sub;
-                _frame.frame.width = _pos;
+                _frame.frame.x = percentCut;
+                _frame.frame.width = percentWidth;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
 
-            barPoint.set(_matrix.tx + (_center * -_sinAngle), _matrix.ty + (_center * _cosAngle));
+            barPoint.set(_matrix.tx + (barCenter * -_sinAngle), _matrix.ty + (barCenter * _cosAngle));
         }
     }
 }

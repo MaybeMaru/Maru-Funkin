@@ -156,7 +156,7 @@ class TitleState extends MusicBeatState {
 
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
-			final lerp = FlxMath.fastSin(titleSine %= (Math.PI * 2));
+			final lerp = FlxMath.fastSin(titleSine %= CoolUtil.DOUBLE_PI);
 			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, FlxMath.remapToRange(lerp, -1, 1, 0, 1));
 			checkCode();
 		}

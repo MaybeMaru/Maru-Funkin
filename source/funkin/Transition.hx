@@ -113,7 +113,7 @@ class Transition extends ResizableSprite {
         transDuration = time;
         timeElapsed = 0;
         finishCallback = callback;
-        transitioning = true;
+        inTransition = true;
         
         if (skipBool) {
             __finishTrans();
@@ -127,17 +127,17 @@ class Transition extends ResizableSprite {
     var endPosition:Float = 720;
 
     var finishCallback:Dynamic = null;
-    var transitioning:Bool = false;
+    public var inTransition(default, null):Bool = false;
 
     public function update(elapsed:Float) {
-        if (!transitioning) return;
-
-        timeElapsed += elapsed;
-        final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
-        y = FlxMath.lerp(startPosition, endPosition, lerpValue);
-    
-        if (timeElapsed >= transDuration) {
-            __finishTrans();
+        if (inTransition) {
+            timeElapsed += elapsed;
+            final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
+            y = FlxMath.lerp(startPosition, endPosition, lerpValue);
+        
+            if (timeElapsed >= transDuration) {
+                __finishTrans();
+            }
         }
     }
 
@@ -145,6 +145,6 @@ class Transition extends ResizableSprite {
     function __finishTrans() {
         if (finishCallback != null) Reflect.callMethod(null, finishCallback, []);
         if (inExit) visible = false;
-        transitioning = false;
+        inTransition = false;
     }
 }

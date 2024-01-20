@@ -450,6 +450,8 @@ class PlayState extends MusicBeatState {
 			
 			CoolUtil.setGlobalManager(false);
 			CoolUtil.pauseSounds();
+
+			camGame.updateFX = camHUD.updateFX = camOther.updateFX = false;
 	
 			pauseSubstate.init();
 			openSubState((easterEgg && FlxG.random.bool(0.1)) ? new funkin.substates.GitarooPauseSubState() : pauseSubstate);
@@ -465,6 +467,8 @@ class PlayState extends MusicBeatState {
 		if (paused) {
 			paused = false;
 			camGame.followLerp = camFollowLerp;
+			camGame.updateFX = camHUD.updateFX = camOther.updateFX = true;
+			persistentUpdate = true;
 			CoolUtil.setGlobalManager(true);
 
 			if (!startingSong) {
@@ -571,6 +575,7 @@ class PlayState extends MusicBeatState {
 
 	public function openGameOverSubstate() {
 		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
+		camGame.clearFX(); camHUD.clearFX(); camOther.clearFX();
 		persistentUpdate = persistentDraw = false;
 		paused = true;
 

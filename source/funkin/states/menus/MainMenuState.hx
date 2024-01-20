@@ -90,11 +90,13 @@ class MainMenuState extends MusicBeatState {
 			}
 
 			if (getKey('BACK-P')) {
+				selectedSomethin = true;
 				switchState(new TitleState());
 			}
 
 			#if desktop
 			if (FlxG.keys.justPressed.SEVEN) {
+				selectedSomethin = true;
 				switchState(new funkin.states.editors.ModSetupState());
 			}
 			#end

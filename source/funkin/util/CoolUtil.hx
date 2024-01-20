@@ -146,6 +146,7 @@ class CoolUtil {
 	}
 
 	public static inline var PI:Float = 3.14159265358979323846;
+	public static inline var DOUBLE_PI:Float = PI * 2;
 	public static inline var TO_RADS:Float = PI / 180;
 	public static inline var TO_DEGREES:Float = 180 / PI;
 
