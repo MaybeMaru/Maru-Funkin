@@ -72,7 +72,7 @@ class NotesGroup extends Group
 			if (rating == "sick") spawnSplash(note); // Spawn splash
 		}
 
-		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(note) :
+		botplayCheck ? if (!vanillaUI) playStrumAnim(note) :
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
@@ -88,9 +88,11 @@ class NotesGroup extends Group
 			sustain.pressSustain();
 		}
 
-		botplayCheck ? if (!getPref('vanilla-ui')) playStrumAnim(sustain) :
+		botplayCheck ? if (!vanillaUI) playStrumAnim(sustain) :
 		sustain.targetStrum.playStrumAnim('confirm', true);
 	}
+
+	public var vanillaUI:Bool = false;
     
     public function new(_SONG:SwagSong, isPlayState:Bool = true) {
         super();
@@ -103,6 +105,7 @@ class NotesGroup extends Group
 		Conductor.songOffset = SONG.offsets;
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
+		vanillaUI = getPref('vanilla-ui');
 		
 		// Setup functions
 		goodNoteHit = function (note:Note) {
@@ -179,7 +182,7 @@ class NotesGroup extends Group
     }
 
     public function init(startPos:Float = -5000) {
-		StrumLineGroup.strumLineY = Preferences.getPref('downscroll') ? FlxG.height - 150 : 50;
+		StrumLineGroup.strumLineY = getPref('downscroll') ? FlxG.height - 150 : 50;
 		
 		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
 		add(opponentStrums);
@@ -559,6 +562,4 @@ class NotesGroup extends Group
 		curSpawnNote = null;
 		unspawnNotes = FlxDestroyUtil.destroyArray(unspawnNotes);
 	}
-
-    inline function getPref(pref:String):Dynamic return Preferences.getPref(pref);
 }

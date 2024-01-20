@@ -111,7 +111,7 @@ class Main extends Sprite
 
 	private function init(?E:Event):Void
 	{
-		#if (mac || web) throw("no."); #end
+		#if (mac || hmtl5 || android) throw("no."); #end
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 

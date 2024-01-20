@@ -1,7 +1,9 @@
 #if !macro
 //Main shit
 import funkin.Controls;
+import funkin.Controls.getKey;
 import funkin.Preferences;
+import funkin.Preferences.getPref;
 
 //Song
 import funkin.util.song.Conductor;

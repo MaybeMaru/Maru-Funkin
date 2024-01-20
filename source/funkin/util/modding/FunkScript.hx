@@ -136,6 +136,17 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set("changeDiscordPresence", DiscordClient.changePresence);
 		#end
 
+		set("BUILD_TARGET",
+			#if windows "windows"
+			#elseif linux "linux"
+			#else null // Mac, mobile and html5 dont exist and will never do
+			#end
+		);
+
+		set("VIDEOS_ALLOWED", #if VIDEOS_ALLOWED true #else false #end);
+		set("DISCORD_ALLOWED", #if DISCORD_ALLOWED true #else false #end);
+		set("ZIPS_ALLOWED", #if ZIPS_ALLOWED true #else false #end);
+
 		//HScript Functions
 
 		// DEPRECATED

@@ -2,8 +2,20 @@ package funkin.objects.note;
 
 import funkin.objects.note.BasicNote.INoteData;
 
+typedef ModchartValues = {
+	var startX:Float;
+	var startY:Float;
+
+	var sinOff:Float;
+	var sinSize:Float;
+	var cosOff:Float;
+	var cosSize:Float;
+}
+
 class NoteStrum extends FlxSpriteExt implements INoteData {
     public var noteData:Int = 0;
+	public var modchart:ModchartValues;
+	
 	public var swagWidth:Float = 110;
 	public var swagHeight:Float = 110;
 	public var staticTime:Float = 0;
@@ -18,6 +30,21 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 		super(x,y);
 		this.noteData = noteData;
 		loadSkin();
+
+		modchart = {
+			startX: 0.0,
+			startY: 0.0,
+
+			sinOff: 0.0,
+			sinSize: 50.0,
+			cosOff: 0.0,
+			cosSize: 50.0
+		}
+	}
+
+	override function destroy() {
+		super.destroy();
+		modchart = null;
 	}
 
 	public function loadSkin(?skin:String):Void {

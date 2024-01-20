@@ -3,7 +3,7 @@ import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
 class ModchartManager extends EventHandler {
-    var strumLines:Map<Int, StrumLineGroup> = [];
+    private var strumLines:Map<Int, StrumLineGroup> = [];
     
     public function new():Void {
         super();
@@ -57,26 +57,26 @@ class ModchartManager extends EventHandler {
 
     inline public function setStrumSine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
         final strum = getStrum(l, s);
-        sineStrums.remove(strum);
+        sinStrums.remove(strum);
 
-        strum._dynamic.startY = startY ?? strum.y;
-        strum._dynamic.sineOff = off;
-        strum._dynamic.sineSize = size;
-        sineStrums.push(strum);
+        strum.modchart.startY = startY ?? strum.y;
+        strum.modchart.sinOff = off;
+        strum.modchart.sinSize = size;
+        sinStrums.push(strum);
     }
 
     inline public function setStrumCosine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startX:Float) {
         final strum = getStrum(l, s);
-        cosineStrums.remove(strum);
+        cosStrums.remove(strum);
 
-        strum._dynamic.startX = startX ?? strum.x;
-        strum._dynamic.cosineOff = off;
-        strum._dynamic.cosineSize = size;
-        cosineStrums.push(strum);
+        strum.modchart.startX = startX ?? strum.x;
+        strum.modchart.cosOff = off;
+        strum.modchart.cosSize = size;
+        cosStrums.push(strum);
     }
 
-    var sineStrums:Array<NoteStrum> = [];
-    var cosineStrums:Array<NoteStrum> = [];
+    var sinStrums:Array<NoteStrum> = [];
+    var cosStrums:Array<NoteStrum> = [];
     
     var timeElapsed:Float = 0.0;
     var speed:Float = 1.0;
@@ -86,12 +86,12 @@ class ModchartManager extends EventHandler {
         timeElapsed %= CoolUtil.DOUBLE_PI;
         super.update(elapsed);
 
-        if (sineStrums.length > 0 || cosineStrums.length > 0) {
-            for (i in sineStrums)
-                i.y = (i._dynamic?.startY ?? 0) + (CoolUtil.sin(timeElapsed + (i._dynamic?.sineOff ?? 0)) * (i._dynamic?.sineSize ?? 50.0));
+        if (sinStrums.length > 0 || cosStrums.length > 0) {
+            for (i in sinStrums)
+                i.y = (i.modchart.startY) + (CoolUtil.sin(timeElapsed + (i.modchart.sinOff)) * (i.modchart.sinSize));
 
-            for (i in cosineStrums)
-                i.x = (i._dynamic?.startX ?? 0) + (CoolUtil.cos(timeElapsed + (i._dynamic?.cosineOff ?? 0)) * (i._dynamic?.cosineSize ?? 50.0));
+            for (i in cosStrums)
+                i.x = (i.modchart.startX) + (CoolUtil.cos(timeElapsed + (i.modchart.cosOff)) * (i.modchart.cosSize));
         }
     }
 }

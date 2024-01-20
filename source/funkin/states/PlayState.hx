@@ -93,7 +93,7 @@ class PlayState extends MusicBeatState {
 
 	public var ghostTapEnabled:Bool = false;
 	public var inPractice:Bool = false;
-	private var validScore:Bool = true;
+	private var validScore(default, null):Bool = true;
 	
 	public var pauseSubstate:PauseSubState;
 
@@ -499,7 +499,7 @@ class PlayState extends MusicBeatState {
 			songRating = Highscore.getAccuracyRating(songAccuracy).toUpperCase();
 		}
 
-		if (getPref('vanilla-ui')) {
+		if (notesGroup.vanillaUI) {
 			scoreTxt.text = 'Score:$songScore';
 		} else {
 			scoreTxt.text =

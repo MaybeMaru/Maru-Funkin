@@ -126,9 +126,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		CoolUtil.gc(false);
 	}
 
-	// Some shortcuts
-	inline public function getPref(pref:String) return Preferences.getPref(pref);
-	inline public function getKey(key:String) 	return Controls.getKey(key);
 	inline public function switchState(newState:FlxState, ?skipStart:Bool, ?skipEnd:Bool) CoolUtil.switchState(newState, skipStart, skipEnd);
 	inline public function resetState(?skipStart:Bool, ?skipEnd:Bool) CoolUtil.resetState(skipStart, skipEnd);
 	

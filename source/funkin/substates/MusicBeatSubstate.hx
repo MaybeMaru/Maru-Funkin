@@ -29,10 +29,6 @@ class MusicBeatSubstate extends FlxSubState implements IMusicGetter {
 	public function sectionHit(curSection:Int):Void {
 		ModdingUtil.addCall('subStateSectionHit', [curSection]);
 	}
-
-	// Some shortcuts
-	inline public function getPref(pref:String) return Preferences.getPref(pref);
-	inline public function getKey(key:String) 	return Controls.getKey(key);
 	
 	public var curStep(get, never):Int; 	inline function get_curStep() return musicBeat.curStep;
 	public var curBeat(get, never):Int; 	inline function get_curBeat() return musicBeat.curBeat;
