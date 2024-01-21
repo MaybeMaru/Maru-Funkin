@@ -240,11 +240,25 @@ class FlxSpriteExt extends FlxSkewedSprite {
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {
 		if (flippedOffsets) {
 			scale.x = -scale.x;
-			final bounds = super.getScreenBounds(rect, cam);
+			var bounds = __superGetScreenBounds(rect, cam);
 			scale.x = -scale.x;
 			return bounds;
 		}
-		return super.getScreenBounds(rect, cam);
+		return __superGetScreenBounds(rect, cam);
+	}
+
+	@:noCompletion
+	private inline function __superGetScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
+		if (newRect == null) newRect = CoolUtil.rect;
+		if (camera == null) camera = FlxG.camera;
+		
+		newRect.setPosition(x, y);
+		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
+		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
+		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
+		newRect.setSize(frameWidth * Math.abs(scale.x), frameHeight * Math.abs(scale.y));
+		
+		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
 	}
 
     public function switchAnim(anim1:String, anim2:String):Void {

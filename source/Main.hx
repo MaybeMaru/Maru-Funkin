@@ -51,7 +51,6 @@ class InitState extends FlxState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 		var accept = Controls.getKey('ACCEPT-P');
-		var back = Controls.getKey('BACK-P');
 
 		if (accept || Controls.getKey('BACK-P') && !selected) {
 			selected = true;

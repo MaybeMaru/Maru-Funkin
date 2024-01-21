@@ -79,13 +79,15 @@ class FlxRepeatSprite extends FlxSpriteExt {
     }
 
     override function getScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
-		if (newRect == null) newRect = FlxRect.get();
+        if (newRect == null) newRect = CoolUtil.rect;
 		if (camera == null) camera = FlxG.camera;
+		
 		newRect.setPosition(x, y);
 		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
 		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
 		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
-        newRect.setSize(repeatWidth, repeatHeight);
+		newRect.setSize(repeatWidth, repeatHeight);
+		
 		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
     }
 
@@ -202,10 +204,15 @@ class FlxRepeatSprite extends FlxSpriteExt {
         if (tileRect != null) tileFrame = tileFrame.clipTo(tileRect);
 
         var lastMatrix = __lastMatrix;
-        if (doDraw && (lastMatrix.x != _matrix.tx || lastMatrix.y != _matrix.ty)) {
-            lastMatrix.set(_matrix.tx, _matrix.ty);
+        var mTx = _matrix.tx;
+        var mTy = _matrix.ty;
+        
+        if (doDraw && (lastMatrix.x != mTx || lastMatrix.y != mTy)) {
+            lastMatrix.set(mTx, mTy);
             translateWithTrig(-tileOffset.x, -tileOffset.y);
-            if (!matrixOutOfBounds(_matrix, tileFrame.frame, __drawCam)) // dont draw stuff out of bounds
+            
+            var frame = tileFrame.frame;
+            if (rectInBounds(mTx, mTy, frame.width, frame.height, __drawCam)) // dont draw stuff out of bounds
                 drawTileToCamera(tileFrame, bitmap, _matrix, __drawCam);
             
             translateWithTrig(tileOffset.x, tileOffset.y);
@@ -217,14 +224,8 @@ class FlxRepeatSprite extends FlxSpriteExt {
         camera.drawPixels(tileFrame, bitmap, tileMatrix, colorTransform, blend, antialiasing, shader);
     }
 
-    public var boundsOffsetX:Float = 0.0;
-    public var boundsOffsetY:Float = 0.0;
-
-    inline function matrixOutOfBounds(matrix:FlxMatrix, frame:FlxRect, cam:FlxCamera):Bool {
-        return ((_matrix.ty + (frame.height * scale.y) - boundsOffsetY) < cam.viewY) ||
-               ((_matrix.ty - (frame.height * scale.y) + boundsOffsetY) > cam.viewHeight) ||
-               ((_matrix.tx + (frame.width * scale.x) - boundsOffsetX) < cam.viewX) ||
-               ((_matrix.tx - (frame.width * scale.x) + boundsOffsetX) > cam.viewWidth);
+    inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool {
+        return cam.containsRect(CoolUtil.rect.set(x, y, w * Math.abs(scale.x), h * Math.abs(scale.y)));
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {

@@ -248,7 +248,6 @@ class ChartSustain extends Sustain {
         angle = 0;
         flipX = false;
         active = false;
-        boundsOffsetY = -FlxG.height;
     }
 
     public var chartData:Null<Array<Dynamic>> = null;

@@ -41,6 +41,7 @@ class CoolUtil {
 	}
 
 	public static var point:FlxPoint = FlxPoint.get(); // Global FlxPoint for quick calculations
+	public static var rect:FlxRect = FlxRect.get(); // Global FlxRect for quick calculations
 
 	inline public static function openUrl(url:String) {
 		#if linux
