@@ -185,35 +185,37 @@ class FlxFunkText extends FlxSpriteExt {
         return size * 0.0625;
     }
 
-    static var tempOffset:FlxPoint = FlxPoint.get();
-
     override function drawComplex(camera:FlxCamera) {
         switch (style) {
             case OUTLINE(size, quality, col):
-                tempOffset.set(offset.x, tempOffset.y);
+                var point = CoolUtil.point;
+
+                point.set(offset.x, offset.y);
                 final initColor = color;
                 size *= sizeMult();
 
                 color = col;
-                final qualityDiv = (1 / quality) * 6.28318530718;
+                final qualityDiv = (1 / quality) * CoolUtil.DOUBLE_PI;
                 for (i in 0...quality) {
                     final rads = i * qualityDiv;
-                    offset.set(tempOffset.x, tempOffset.y);
-                    offset.add(FlxMath.fastCos(rads) * size, FlxMath.fastSin(rads) * size);
+                    offset.set(point.x, point.y);
+                    offset.add(CoolUtil.cos(rads) * size, CoolUtil.sin(rads) * size);
                     __superDrawComplex(camera);
                 }
                 
-                offset.set(tempOffset.x, tempOffset.y);
+                offset.set(point.x, point.y);
                 color = initColor;
 
             case SHADOW(off, col):
-                tempOffset.set(offset.x, offset.y);
+                var point = CoolUtil.point;
+
+                point.set(offset.x, offset.y);
                 final initColor = color;
                 offset.add(off.x * sizeMult(), off.y * sizeMult());
                 color = col;
                 __superDrawComplex(camera);
 
-                offset.set(tempOffset.x, tempOffset.y);
+                offset.set(point.x, point.y);
                 color = initColor;
 
             default:

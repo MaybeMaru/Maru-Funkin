@@ -96,10 +96,10 @@ class FreeplayState extends MusicBeatState {
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
-		scoreText = new FlxFunkText(lerpPosition, 5, "", FlxPoint.get(FlxG.width, 32) , 32);
+		scoreText = new FlxFunkText(lerpPosition, 5, "", FlxPoint.weak(FlxG.width, 32) , 32);
 		add(scoreText);
 
-		diffText = new FlxFunkText(lerpPosition, scoreText.y + 36, "", FlxPoint.get(FlxG.width, 24) , 24);
+		diffText = new FlxFunkText(lerpPosition, scoreText.y + 36, "", FlxPoint.weak(FlxG.width, 24) , 24);
 		add(diffText);
 
 		changeSelection();

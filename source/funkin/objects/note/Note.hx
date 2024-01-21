@@ -12,17 +12,15 @@ class Note extends BasicNote {
         playAnim('scroll' + CoolUtil.directionArray[noteData]);
     }
 
-	@:noCompletion
-	static final __noteOffset:FlxPoint = FlxPoint.get();
-
     override function applyCurOffset(forced:Bool = false) {
         if (animation.curAnim != null) {
 			if(existsOffsets(animation.curAnim.name)) {
-				__noteOffset.copyFrom(animOffsets.get(animation.curAnim.name));
-				if (!__noteOffset.isZero() || forced) {
-					__noteOffset.x *= (flippedOffsets ? -1 : 1);
-                    updateHitbox();
-                    offset.add(__noteOffset.x, __noteOffset.y);
+				var point = CoolUtil.point;
+				point.copyFrom(animOffsets.get(animation.curAnim.name));
+				if (!point.isZero() || forced) {
+                    if (flippedOffsets) point.x = -point.x;
+					updateHitbox();
+                    offset.add(point.x, point.y);
 				}
 			}
 		}

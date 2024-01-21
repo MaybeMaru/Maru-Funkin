@@ -128,10 +128,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
     public override function draw():Void {
 		if (flippedOffsets) {
 			flipX = !flipX;
-			scale.x *= -1;
+			scale.x = -scale.x;
 			__superDraw();
 			flipX = !flipX;
-			scale.x *= -1;
+			scale.x = -scale.x;
 		}
 		else __superDraw();
 	}
@@ -239,9 +239,9 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {
 		if (flippedOffsets) {
-			scale.x *= -1;
+			scale.x = -scale.x;
 			final bounds = super.getScreenBounds(rect, cam);
-			scale.x *= -1;
+			scale.x = -scale.x;
 			return bounds;
 		}
 		return super.getScreenBounds(rect, cam);
@@ -274,26 +274,25 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return __scaleDiff.set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
 	}
 
-	@:noCompletion
-	static final __animOffset:FlxPoint = FlxPoint.get();
 	public var scaleOffset:Bool = false;
 
 	public function applyCurOffset(forced:Bool = false):Void {
 		if (animation.curAnim != null) {
 			if(existsOffsets(animation.curAnim.name)) {
-				__animOffset.copyFrom(animOffsets.get(animation.curAnim.name));
-				if (!__animOffset.isZero() || forced) {
+				var point = CoolUtil.point;
+				point.copyFrom(animOffsets.get(animation.curAnim.name));
+				if (!point.isZero() || forced) {
 					
-					if (flippedOffsets) __animOffset.x *= -1; // Flip X
-					if (scaleOffset)	__animOffset.scalePoint(getScaleDiff()); // Scale offset
+					if (flippedOffsets) point.x = -point.x; // Flip X
+					if (scaleOffset)	point.scalePoint(getScaleDiff()); // Scale offset
 					
 					if (angle != 0) { // Angled offset
 						offset.set(
-							(__animOffset.x * _cosAngle) + (__animOffset.y * -_sinAngle),
-							(__animOffset.x * _sinAngle) + (__animOffset.y * _cosAngle)
+							(point.x * _cosAngle) + (point.y * -_sinAngle),
+							(point.x * _sinAngle) + (point.y * _cosAngle)
 						);
 					}
-					else offset.set(__animOffset.x, __animOffset.y); // Normal offset
+					else offset.set(point.x, point.y); // Normal offset
 				}
 			}
 		}
