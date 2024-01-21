@@ -3,7 +3,6 @@ package funkin.util;
 import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
-import cpp.NativeArray;
 #elseif hl
 import hl.Gc;
 #elseif neko
@@ -154,6 +153,15 @@ class CoolUtil {
 
 	public static inline function cos(radians:Float) {
 		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
+	}
+
+	public static inline function positionInCenter(object:FlxObject, object2:FlxObject, setToPosition:Bool = false) {
+		object.x = (object2.width - object.width) * .5;
+		object.y = (object2.height - object.height) * .5;
+		if (setToPosition) {
+			object.x += object2.x;
+			object.y += object2.y;
+		}
 	}
 
 	public static inline function positionWithTrig(object:FlxObject, x:Float = 0.0, y:Float = 0.0, cos:Float = 1.0, sin:Float = 0.0) {

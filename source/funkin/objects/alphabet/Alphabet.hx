@@ -32,7 +32,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
             final alignOffset:Float = switch(alignment) {
                 default:        0.0;
                 case CENTER:    letter.lineWidth * .5;//(letter.lineWidth * .5) - (width * .5);
-                case RIGHT:     letter.lineWidth - width;
+                case RIGHT:     letter.lineWidth; //- width;
             }
             letter.offset.x = alignOffset;
 		}

@@ -133,10 +133,8 @@ class StoryMenuState extends MusicBeatState {
 			for (i in week.data.storyCharacters) {
 				if (cachedChars.contains(i)) continue; // Avoid duplicates
 				cachedChars.push(i);
-				FunkThread.run(function() {
-					var char = new MenuCharacter(0,0,i);
-					char = null;
-				});
+				var char = new MenuCharacter(0,0,i);
+				char = null;
 			}
 		}
 		ModdingUtil.curModFolder = startMod;

@@ -2,36 +2,32 @@ package funkin.states.options.items;
 
 class SpriteButton extends FlxSpriteGroup
 {
-    public var clickCallback:Void->Void = null;
-    private var btnText:Alphabet;
-    private var btnSpr:FunkinSprite;
+    public var clickCallback:()->Void;
+    public var text:Alphabet;
+    public var button:FunkinSprite;
 
-    public function new(X:Float, Y:Float, btnName:String = 'balls', ?clickCallback:Void->Void, baseSpr:String = 'buttonSprite'):Void {
-        super(X,Y);
-        if (clickCallback != null) this.clickCallback = clickCallback;
+    public function new(X:Float, Y:Float, buttonText:String = 'balls', ?clickCallback:()->Void, baseSpr:String = 'buttonSprite'):Void {
+        super(X, Y);
+        this.clickCallback = clickCallback;
 
-        btnSpr = new FunkinSprite('options/$baseSpr', [0,0], [0,0]);
-        if (btnSpr.animated) {
-            btnSpr.addAnim('loop','buttonSprite',24,true);
-            btnSpr.playAnim('loop');
+        button = new FunkinSprite('options/$baseSpr', [0,0], [0,0]);
+        if (button.animated) {
+            button.addAnim('loop', 'buttonSprite', 24, true);
+            button.playAnim('loop');
         }
-        btnSpr.setGraphicSize(Std.int(btnSpr.width*0.5));
-        btnSpr.updateHitbox();
-        btnSpr.x -= btnSpr.width * 0.025;
-        btnSpr.y -= btnSpr.height * 0.25;
-        btnSpr.scale.y *= 1.2;
-        btnSpr.scale.x *= 1.2;
-        add(btnSpr);
+        button.setScale(0.6);
+        add(button);
 
-        btnText = new Alphabet(0,0,btnName,false);
-        add(btnText);
+        text = new Alphabet(0, 0, buttonText, false);
+        CoolUtil.positionInCenter(text, button);
+        add(text);
     }
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
-        color = FlxColor.interpolate(color, FlxColor.WHITE, elapsed*8);
+        color = FlxColor.interpolate(color, FlxColor.WHITE, elapsed * 8);
 
-        if (FlxG.mouse.justPressed && FlxG.mouse.overlaps(btnSpr))
+        if (FlxG.mouse.justPressed && FlxG.mouse.overlaps(button))
             onButtonClick();
     }
 

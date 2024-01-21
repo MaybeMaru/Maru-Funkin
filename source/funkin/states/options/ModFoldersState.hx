@@ -36,7 +36,7 @@ class ModFoldersState extends MusicBeatState {
         var folderOptions:Array<String> = ['Reload', 'Enable', 'Disable'];
         var folderCallbacks:Array<Void->Void> = [reloadFolders, enableAll, disableAll];
         for (i in 0...folderOptions.length) {
-            var daButton:SpriteButton = new SpriteButton(1000, (150*i)+100, folderOptions[i], folderCallbacks[i]);
+            var daButton:SpriteButton = new SpriteButton(975, (150 * i) + 50, folderOptions[i], folderCallbacks[i]);
             modFolderButtons.add(daButton);
         }
 

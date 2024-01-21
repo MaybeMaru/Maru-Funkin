@@ -50,10 +50,10 @@ class InitState extends FlxState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		final accept = Controls.getKey('ACCEPT-P');
-		final back = Controls.getKey('BACK-P');
+		var accept = Controls.getKey('ACCEPT-P');
+		var back = Controls.getKey('BACK-P');
 
-		if (accept || back && !selected) {
+		if (accept || Controls.getKey('BACK-P') && !selected) {
 			selected = true;
 			CoolUtil.playSound("confirmMenu");
 			FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
@@ -88,20 +88,22 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(sprite = new Main());
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, errorMsg);
-		#if cpp
-		untyped __global__.__hxcpp_set_critical_error_handler(errorMsg);
+		#if desktop
+			Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, errorMsg);
+			#if cpp	
+				untyped __global__.__hxcpp_set_critical_error_handler(errorMsg);
+			#end
 		#end
 	}
 
+	#if desktop
 	static function errorMsg(error:Dynamic)
 	{
-		#if desktop
 		Application.current.window.alert(Std.string(error is UncaughtErrorEvent ? error.error : error), "Uncaught Error");
 		DiscordClient.shutdown();
 		Sys.exit(1);
-		#end
 	}
+	#end
 
 	public function new()
 	{
