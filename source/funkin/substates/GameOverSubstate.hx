@@ -19,7 +19,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	public function new(x:Float, y:Float):Void {
 		super();
 
-		PlayState.instance.camGame.bgColor = FlxColor.BLACK;
+		FlxG.camera.bgColor = FlxColor.BLACK;
 		if (FlxG.sound.music != null) FlxG.sound.music.stop();
 		if (PlayState.instance.startTimer != null) {
 			PlayState.instance.startTimer.cancel();

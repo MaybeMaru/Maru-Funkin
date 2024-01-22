@@ -743,6 +743,8 @@ class PlayState extends MusicBeatState {
 		SkinUtil.setCurSkin('default');
 		ModdingUtil.addCall('destroy');
 
+		FlxG.camera.bgColor = FlxColor.BLACK;
+		
 		targetCamPos = FlxDestroyUtil.put(targetCamPos);
 		if (clearCache) CoolUtil.clearCache(clearCacheData);
 		instance = null;
