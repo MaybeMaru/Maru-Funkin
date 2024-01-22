@@ -8,7 +8,7 @@ class GitarooPauseSubState extends MusicBeatSubstate {
 	public function new():Void {
 		super();
 
-		if (FlxG.sound.music != null){
+		if (FlxG.sound.music != null) {
 			FlxG.sound.music.stop();
 		}
 
@@ -33,8 +33,7 @@ class GitarooPauseSubState extends MusicBeatSubstate {
 		add(cancelButton);
 
 		changeThing();
-
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		camera = CoolUtil.getTopCam();
 	}
 
 	override function update(elapsed:Float):Void {

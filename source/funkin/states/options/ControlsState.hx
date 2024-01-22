@@ -5,6 +5,8 @@ import funkin.states.options.items.ControlItem;
 import flixel.input.gamepad.FlxGamepad;
 import funkin.substates.PromptSubstate;
 
+//	TODO: Clean this shit up!!!
+
 class ControlsState extends MusicBeatState {
 	var controlItems:FlxTypedGroup<ControlItem>;
 	var menuItems:FlxTypedGroup<Alphabet>;
@@ -36,7 +38,8 @@ class ControlsState extends MusicBeatState {
 		menuCam = new FlxCamera();
 		FlxG.cameras.add(menuCam);
 		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
-		camFollow = new FlxObject(FlxG.width/2, 0);
+		camFollow = new FlxObject(FlxG.width * .5, 0);
+		add(camFollow);
 		
 		final bg:FunkinSprite = new FunkinSprite('menuBGBlue', [0,0], [0,0]);
 		bg.setScale(1.1, false);

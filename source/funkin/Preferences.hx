@@ -26,10 +26,8 @@ class Preferences {
         preferences = SaveData.getSave('preferences');
         prefsLabels = new Map<String, String>();
 
-        // Miscellaneous
-        addPref('naughty',        'naughtyness',     true);
+        /****/addHeader("GAMEPLAY");/****/
 
-        // Gameplay
         addPref('botplay',        'botplay mode',    false);
         addPref('practice',       'practice mode',   false);
         addPref('downscroll',     'downscroll',      false);
@@ -38,14 +36,16 @@ class Preferences {
         addPref('use-const-speed', 'use constant speed', false);
         addPref('const-speed', 'constant speed', 1.0);
 
-        // UI
+        /****/addHeader("UI");/****/
+
         addPref('framerate',      'framerate',       60);
         addPref('fps-counter',    'fps counter',     true);
         addPref('vanilla-ui',     'vanilla ui',      false);
         addPref('flashing-light', 'flashing lights', true);
         addPref('camera-zoom',    'camera zooms',    true);
         
-        // Performance
+        /****/addHeader("PERFORMANCE");/****/
+
         addPref('antialiasing',   'antialiasing',    true);
         #if desktop
         addPref('resolution',   'resolution',    {array:resolutions, value: "1280x720"});
@@ -55,15 +55,33 @@ class Preferences {
         addPref('preload',        'preload at start', true);
         #end
 
+        /****/addHeader("MISCELLANEOUS");/****/
+
+        addPref('naughty',        'naughtyness',     true);
+
         SaveData.flushData();
         fixOldPrefs();
     }
 
+    private static var curHeader:String;
+    public static var headers:Array<String> = [];
+    public static var headerContents:Map<String, Array<String>> = [];
+
+    static function addHeader(name:String) {
+        if (name != curHeader) {
+            curHeader = name;
+            headerContents.set(name, []);
+            headers.push(name);
+        }
+    }
+
     public static function addPref(id:String, label:String, defaultValue:Dynamic):Void {
         id = id.toLowerCase().trim();
-        prefsArray.push(id);
 
+        prefsArray.push(id);
         prefsLabels.set(id, label);
+        headerContents.get(curHeader).push(id);
+        
         if (Reflect.hasField(defaultValue, "array")) arrayPrefs.set(id, defaultValue);
         if (!preferences.exists(id)) preferences.set(id, defaultValue);
     }

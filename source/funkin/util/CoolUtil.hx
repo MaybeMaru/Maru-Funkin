@@ -1,5 +1,7 @@
 package funkin.util;
 
+import openfl.geom.Matrix;
+import flixel.util.typeLimit.OneOfTwo;
 import flixel.system.FlxAssets.FlxSoundAsset;
 #if cpp
 import cpp.vm.Gc;
@@ -88,14 +90,17 @@ class CoolUtil {
 	
 	inline public static function gc(major:Bool = false) {
 		#if desktop
-		#if hl
-			Gc.blocking(true);
-			Gc.major();
-			Gc.blocking(false);
-		#else
-			Gc.run(major);
-			#if cpp if (major) Gc.compact(); #end
-		#end
+			#if hl
+				Gc.blocking(true);
+				Gc.major();
+				Gc.blocking(false);
+			#else
+				Gc.run(major);
+				#if cpp
+					if (major)
+						Gc.compact();
+				#end
+			#end
 		#end
 	}
 
@@ -156,6 +161,14 @@ class CoolUtil {
 		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
 	}
 
+	public static inline function sinAngle(angle:Float) {
+		return sin(angle * TO_RADS);
+	}
+
+	public static inline function cosAngle(angle:Float) {
+		return cos(angle * TO_RADS);
+	}
+
 	public static inline function positionInCenter(object:FlxObject, object2:FlxObject, setToPosition:Bool = false) {
 		object.x = (object2.width - object.width) * .5;
 		object.y = (object2.height - object.height) * .5;
@@ -180,7 +193,7 @@ class CoolUtil {
 	}
 
 	public static inline function translateWithAngle(object:FlxObject, x:Float = 0.0, y:Float = 0.0, angle:Float = 0.0) {
-		final rads:Float = angle * TO_RADS;
+		var rads:Float = angle * TO_RADS;
 		translateWithTrig(object, x, y, sin(rads), cos(rads));
 	}
 

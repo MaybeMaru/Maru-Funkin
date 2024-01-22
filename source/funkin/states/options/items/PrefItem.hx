@@ -18,7 +18,6 @@ class PrefItem extends FlxSpriteGroup {
     public var stringID:String = '';
 
     public var itemPref:String = 'lmao';
-    public var targetY:Float = 0;
     public var selected:Bool = false;
 
     public var prefValue:Dynamic;
@@ -119,7 +118,5 @@ class PrefItem extends FlxSpriteGroup {
             settingTxt.color = FlxColor.WHITE;
             settingTxt.alpha = 0.6;
         }
-
-        y = CoolUtil.coolLerp(y, targetY, 0.16);
     }
 }

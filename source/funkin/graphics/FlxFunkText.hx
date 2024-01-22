@@ -172,6 +172,16 @@ class FlxFunkText extends FlxSpriteExt {
         if (size != null) this.size = size;
     }
 
+    // Helper function from scripts
+    public function setStyle(type:String, ?values:Array<Dynamic>):TextStyle {
+        if (values == null) values = [];
+        return style = switch(type.toLowerCase().trim()) {
+            case "outline": OUTLINE(values[0], values[1], values[2]);
+            case "shadow": SHADOW(values[0], values[1]);
+            default: NONE;
+        }
+    }
+
     public var style(default, set):TextStyle = NONE;
     inline function set_style(?value:TextStyle):TextStyle {
         return style = (value != null) ? switch (value) {
@@ -195,7 +205,7 @@ class FlxFunkText extends FlxSpriteExt {
                 size *= sizeMult();
 
                 color = col;
-                final qualityDiv = (1 / quality) * CoolUtil.DOUBLE_PI;
+                final qualityDiv = CoolUtil.DOUBLE_PI / quality;
                 for (i in 0...quality) {
                     final rads = i * qualityDiv;
                     offset.set(point.x, point.y);
