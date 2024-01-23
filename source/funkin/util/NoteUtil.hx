@@ -270,13 +270,11 @@ class NoteAtlas {
         return bitmap;
     }
 
-    static inline var COLOR_DIV:Float = 1 / 255;
-
     public static function getColorMatrix(r:Array<Float>, g:Array<Float>, b:Array<Float>):Array<Float> {
         for (i in 0...3) {
-            r[i] *= COLOR_DIV;
-            g[i] *= COLOR_DIV;
-            b[i] *= COLOR_DIV;
+            r[i] *= FlxColorFix.COLOR_DIV;
+            g[i] *= FlxColorFix.COLOR_DIV;
+            b[i] *= FlxColorFix.COLOR_DIV;
         }
 
         return [

@@ -225,7 +225,13 @@ class FlxRepeatSprite extends FlxSpriteExt {
     }
 
     inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool {
-        return cam.containsRect(CoolUtil.rect.set(x, y, w * Math.abs(scale.x), h * Math.abs(scale.y)));
+        var rect = CoolUtil.rect.set(
+            x,
+            y,
+            w * Math.abs(scale.x),
+            h * Math.abs(scale.y)
+        );
+        return cam.containsRect(rect.getRotatedBounds(angle, null, rect));
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {

@@ -109,7 +109,7 @@ class Preferences {
 
     inline public static function getPref(pref:String):Dynamic {
         final pref:Dynamic = preferences.get(pref.toLowerCase().trim());
-        #if !hl return  pref?.value ?? pref;
+        #if !hl return pref?.value ?? pref;
         #else   return Reflect.hasField(pref, "value") ? pref.value : pref; #end
     }
 
