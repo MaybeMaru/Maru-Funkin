@@ -86,8 +86,8 @@ class FlxFunkText extends FlxSpriteExt {
 
     public var textWidth(get, never):Float;
     public var textHeight(get, never):Float;
-    function get_textWidth() return textField.__textEngine.textWidth;
-    function get_textHeight() return textField.__textEngine.textHeight;
+    inline function get_textWidth() return textField.__textEngine.textWidth;
+    inline function get_textHeight() return textField.__textEngine.textHeight;
 
     public var wordWrap(default, set):Bool = false;
     function set_wordWrap(value:Bool):Bool {
@@ -99,9 +99,9 @@ class FlxFunkText extends FlxSpriteExt {
     }
 
     private var _regen:Bool = false;    
-    function drawTextField() {        
-        _textMatrix.tx = textField.x;
-        _textMatrix.ty = textField.y;
+    function drawTextField() {
+        var matrix = CoolUtil.matrix;
+        inline matrix.setTo(1, 0, 0, 1, textField.x, textField.y);
 
         if (selected) {
             textField.setSelection(startSelection, endSelection);
@@ -109,8 +109,11 @@ class FlxFunkText extends FlxSpriteExt {
 			textField.__setRenderDirty();
         }
 
-        pixels.fillRect(_fillRect, FlxColor.TRANSPARENT);
-        pixels.draw(textField, _textMatrix, null, null, null, antialiasing);
+        var rect = CoolUtil.rectangle;
+        inline rect.setTo(0, 0, pixels.width, pixels.height);
+
+        pixels.fillRect(rect, FlxColor.TRANSPARENT);
+        pixels.draw(textField, matrix, null, null, null, antialiasing);
     }
 
     public var alignment(default, set):String = "left";
@@ -130,8 +133,6 @@ class FlxFunkText extends FlxSpriteExt {
     
     var textField:TextField;
     var textFormat:TextFormat;
-    var _fillRect:Rectangle;
-    var _textMatrix:FlxMatrix;
 
     @:noCompletion
     inline public function getTextField():TextField {
@@ -142,34 +143,42 @@ class FlxFunkText extends FlxSpriteExt {
         super.destroy();
         textField = null;
         textFormat = null;
-        _fillRect = null;
-        _textMatrix = null;
 
         switch (style) {
             case SHADOW(offset, color): offset.put();
             default:
         }
+
         style = null;
     }
 
     public function new(X:Float = 0, Y:Float = 0, Text:String = "", ?canvasRes:FlxPoint, ?size:Int) {
         super(X,Y);
-        canvasRes = canvasRes ?? FlxPoint.weak(FlxG.width,FlxG.height);
         textField = new TextField();
-        textField.width = Std.int(canvasRes.x);
-        textField.height = Std.int(canvasRes.y);
-        canvasRes.putWeak();
-        canvasRes = null;
+
+        if (canvasRes == null) {
+            setCanvasSize(FlxG.width, FlxG.height);
+        }
+        else {
+            setCanvasSize(Std.int(canvasRes.x), Std.int(canvasRes.y));
+            canvasRes.putWeak();
+            canvasRes = null;
+        }
 
         textFormat = new TextFormat(getFont("vcr"), 16, 0xffffff);
         textField.defaultTextFormat = textFormat;
 
-        _fillRect = new Rectangle(0,0,cast textField.width,cast textField.height);
-        _textMatrix = new FlxMatrix();
-
-        makeGraphic(cast textField.width,cast textField.height,FlxColor.TRANSPARENT,true);
         text = Text;
         if (size != null) this.size = size;
+    }
+
+    public inline function setCanvasSize(width:Int, height:Int) {
+        if (pixels == null || width != pixels.width || height != pixels.height) {
+            textField.width = width;
+            textField.height = height;
+            makeGraphic(width, height, FlxColor.TRANSPARENT, true);
+            _regen = true;
+        }
     }
 
     // Helper function from scripts

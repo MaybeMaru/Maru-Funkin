@@ -358,11 +358,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		animDatas = null;
 	}
 
-	static final __calcMatrix:FlxMatrix = new FlxMatrix();
-
 	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0):Void {
-		__calcMatrix.setTo(1, 0, 0, 1, X, Y);
-		graphic.bitmap.draw(Brush, __calcMatrix);
+		var matrix = CoolUtil.matrix;
+		inline matrix.setTo(1, 0, 0, 1, X, Y);
+		graphic.bitmap.draw(Brush, matrix);
 	}
 
 	inline public function uploadGpu(?key:String):FlxGraphic {

@@ -1,5 +1,6 @@
 package funkin.util;
 
+import flixel.math.FlxMatrix;
 import openfl.geom.Matrix;
 import flixel.util.typeLimit.OneOfTwo;
 import flixel.system.FlxAssets.FlxSoundAsset;
@@ -42,8 +43,11 @@ class CoolUtil {
 		EventUtil.initEvents();
 	}
 
-	public static var point:FlxPoint = FlxPoint.get(); // Global FlxPoint for quick calculations
-	public static var rect:FlxRect = FlxRect.get(); // Global FlxRect for quick calculations
+	// Static variables for quick calculations
+	public static var point:FlxPoint = FlxPoint.get();
+	public static var rect:FlxRect = FlxRect.get();
+	public static var matrix:FlxMatrix = new FlxMatrix();
+	public static var rectangle:Rectangle = new Rectangle();
 
 	inline public static function openUrl(url:String) {
 		#if linux

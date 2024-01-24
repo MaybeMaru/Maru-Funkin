@@ -58,7 +58,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
         tileOffset = FlxDestroyUtil.put(tileOffset);
     }
 
-    override function set_clipRect(rect:FlxRect):FlxRect {
+    override inline function set_clipRect(rect:FlxRect):FlxRect {
         return clipRect = rect;
     }
 
@@ -71,8 +71,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
 		if (alpha == 0 || !visible || (clipRect?.isEmpty)) return;
 		if (dirty) calcFrame(useFramePixels);
 
-		for (i in 0...cameras.length) {
-            final camera = cameras[i];
+		for (camera in cameras) {
 			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
 			drawComplex(camera);
 		}
@@ -190,8 +189,9 @@ class FlxRepeatSprite extends FlxSpriteExt {
 
     // Prepare tile dimensions
     function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
-        var point = __tempPoint.set(baseFrame.frame.width * scale.y, baseFrame.frame.height * scale.y);
-        _frame.frame.copyFrom(baseFrame.frame);
+        var frame = baseFrame.frame;
+        var point = __tempPoint.set(frame.width * scale.y, frame.height * scale.y);
+        _frame.frame.copyFrom(frame);
         _frame.angle = baseFrame.angle;
         return point;
     }
@@ -220,7 +220,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
         }
     }
 
-    function drawTileToCamera(tileFrame:FlxFrame, bitmap:BitmapData, tileMatrix:FlxMatrix, camera:FlxCamera) {
+    inline function drawTileToCamera(tileFrame:FlxFrame, bitmap:BitmapData, tileMatrix:FlxMatrix, camera:FlxCamera) {
         camera.drawPixels(tileFrame, bitmap, tileMatrix, colorTransform, blend, antialiasing, shader);
     }
 
@@ -238,39 +238,42 @@ class FlxRepeatSprite extends FlxSpriteExt {
         translateWithTrig(clipRect.x, clipRect.y);
         tilePos.add(clipRect.x, clipRect.y);
 
+        var frame = tileFrame.frame;
+        var baseFrame = baseFrame.frame;
+
         // Cut if clipping left
         if (tilePos.x < 0) {
-            final offX = tilePos.x / scale.x;
-            tileFrame.frame.width += offX;
-            tileFrame.frame.x -= offX;
+            var offX = tilePos.x / scale.x;
+            frame.width += offX;
+            frame.x -= offX;
             translateWithTrig(-offX * scale.x, 0);
-            if (tileFrame.frame.width <= 0) return false; // Dont draw it
+            if (frame.width <= 0) return false; // Dont draw it
         }
 
         // Cut if clipping right
         if ((clipRect.width - clipRect.x) < repeatWidth) {
-            final cutX = (tilePos.x + (baseFrame.frame.width * scale.x)) - clipRect.width;
+            var cutX = (tilePos.x + (baseFrame.width * scale.x)) - clipRect.width;
             if (cutX > 0) {
-                tileFrame.frame.width -= cutX / scale.x;
-                if (tileFrame.frame.width <= 0) return false; // Dont draw it
+                frame.width -= cutX / scale.x;
+                if (frame.width <= 0) return false; // Dont draw it
             }
         }
 
         // Cut if clipping top
         if (tilePos.y < 0) {
-            final offY = tilePos.y / scale.y;
-            tileFrame.frame.height += offY;
-            tileFrame.frame.y -= offY;
+            var offY = tilePos.y / scale.y;
+            frame.height += offY;
+            frame.y -= offY;
             translateWithTrig(0, -offY * scale.y);
-            if (tileFrame.frame.height <= 0) return false; // Dont draw it
+            if (frame.height <= 0) return false; // Dont draw it
         }
         
         // Cut if clipping bottom
         if ((clipRect.height - clipRect.y) < repeatHeight) {
-            final cutY = (tilePos.y + (baseFrame.frame.height * scale.y)) - clipRect.height;
+            var cutY = (tilePos.y + (baseFrame.height * scale.y)) - clipRect.height;
             if (cutY > 0) {
-                tileFrame.frame.height -= cutY / scale.y;
-                if (tileFrame.frame.height <= 0) return false; // Dont draw it
+                frame.height -= cutY / scale.y;
+                if (frame.height <= 0) return false; // Dont draw it
             }
         }
 

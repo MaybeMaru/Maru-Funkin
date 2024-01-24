@@ -27,8 +27,7 @@ class SmartSprite extends FlxSkewRepeatSprite {
                 if (alpha == 0 || _frame.type == EMPTY) return;
                 if (dirty)  calcFrame(useFramePixels); // rarely
          
-                for (i in 0...cameras.length) {
-                    final camera = cameras[i];
+                for (camera in cameras) {
                     if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
                     drawComplex(camera);
                 }
@@ -39,7 +38,7 @@ class SmartSprite extends FlxSkewRepeatSprite {
         switch (renderMode) {
             case REPEAT: return super.getScreenBounds(newRect, camera);
             case QUAD:
-                if (newRect == null) newRect = FlxRect.get();
+                if (newRect == null) newRect = CoolUtil.rect;
                 if (camera == null) camera = FlxG.camera;
                 newRect.setPosition(x, y);
                 _scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);

@@ -30,10 +30,10 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         scaledWiggleX = wigglePower * (calcHeight != -1 ? calcHeight : baseFrame.frame.height) * scale.y * 0.01; // Value outta my ass but trust me bro
         scaledWiggleX /= smoothTiles;
 
-        final lerpValue = ((idY % smoothTiles) + 1) / smoothTiles;
-        final lerpWiggle = FlxMath.lerp(0, scaledWiggleX, lerpValue);
+        var lerpValue = ((idY % smoothTiles) + 1) / smoothTiles;
+        var lerpWiggle = FlxMath.lerp(0, scaledWiggleX, lerpValue);
 
-        final skewX = lerpWiggle * (isLeftSkew() ? -1 : 1);
+        var skewX = isLeftSkew() ? -lerpWiggle : lerpWiggle;
         _matrix.c = Math.tan(skewX * CoolUtil.TO_RADS); // Set skew X
 
         if (clipRect == null) offsetSkew(tileFrame, baseFrame);

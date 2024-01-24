@@ -32,7 +32,6 @@ class Preferences {
         addPref('practice',       'practice mode',   false);
         addPref('downscroll',     'downscroll',      false);
         addPref('ghost-tap-style', 'ghost tapping', {array:["dad turn", "off", "on"], value: "off"});
-        addPref('stack-rating',   'stack ratings',   false);
         addPref('use-const-speed', 'use constant speed', false);
         addPref('const-speed', 'constant speed', 1.0);
 
@@ -41,6 +40,7 @@ class Preferences {
         addPref('framerate',      'framerate',       60);
         addPref('fps-counter',    'fps counter',     true);
         addPref('vanilla-ui',     'vanilla ui',      false);
+        addPref('stack-rating',   'stack ratings',   false);
         addPref('flashing-light', 'flashing lights', true);
         addPref('camera-zoom',    'camera zooms',    true);
         
