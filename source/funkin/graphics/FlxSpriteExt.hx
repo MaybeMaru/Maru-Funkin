@@ -148,7 +148,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
 		for (i in 0...cameras.length) {
-			final camera:FlxCamera = cameras[i];
+			var camera = cameras[i];
 			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
 			drawComplex(camera);
 			#if FLX_DEBUG FlxBasic.visibleCount++; #end
@@ -283,7 +283,6 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	@:noCompletion
 	static final __scaleDiff:FlxPoint = FlxPoint.get();
-
 	inline public function getScaleDiff():FlxPoint {
 		return __scaleDiff.set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
 	}

@@ -2,12 +2,6 @@ package funkin.util.backend;
 
 import flixel.FlxBasic;
 
-enum abstract MusicBeatEvent(Int) {
-    var STEP_EVENT = 0;
-    var BEAT_EVENT = 1;
-    var SECTION_EVENT = 2;
-}
-
 class MusicBeat extends FlxBasic {
     public var curStep(default, null):Int = 0;
 	public var curBeat(default, null):Int = 0;
@@ -18,27 +12,37 @@ class MusicBeat extends FlxBasic {
 	public var curSectionDecimal(default, null):Float = 0;
 
 	public var targetSound:FlxSound = null;
-    public var parent:IMusicGetter = null;
-    public function new(?parent:IMusicGetter) {
+    
+	public var hasParent(default, null):Bool = false;
+	public var parent(default, set):IMusicGetter = null;
+	inline function set_parent(value:IMusicGetter):IMusicGetter {
+		hasParent = value != null;
+		return parent = value;
+	}
+	
+	public function new(?parent:IMusicGetter) {
         this.parent = parent;
         super();
     }
+
+	var lastStep(default, null):Int = -1;
 
     override function update(elapsed:Float):Void {
         if (targetSound != null && targetSound.playing) {
 			Conductor.songPosition = targetSound.time - Conductor.settingOffset;
 		}
 		
-		final oldStep:Int = curStep;
+		lastStep = curStep;
+		
 		updateStep();
 		updateBeat();
 		updateSection();
-		if (oldStep != curStep && curStep >= 0) {
+
+		if (lastStep != curStep && curStep >= 0) {
 			stepHit();
 		}
 
 		#if FLX_DEBUG
-		FlxBasic.activeCount++;
 		FlxG.watch.addQuick("curSection", 	curSection);
 		FlxG.watch.addQuick("curBeat", 		curBeat);
 		FlxG.watch.addQuick("curStep", 		curStep);
@@ -61,38 +65,32 @@ class MusicBeat extends FlxBasic {
 			songTime: 0,
 			bpm: 0
 		}
+
 		for (i in 0...Conductor.bpmChangeMap.length) {
 			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime) {
 				lastChange = Conductor.bpmChangeMap[i];
 			}
 		}
+
 		curStepDecimal = lastChange.stepTime + (Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet;
 		curStep = Math.floor(curStepDecimal);
 	}
 
 	public inline function stepHit():Void {
-        event(STEP_EVENT);
+		if (hasParent) parent.stepHit(curStep);
         if (curStep % Conductor.STEPS_PER_BEAT == 0) {
 			beatHit();
 		}
 	}
 
 	public inline function beatHit():Void {
-        event(BEAT_EVENT);
+		if (hasParent) parent.beatHit(curBeat);
 		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
 			sectionHit();
 		}
 	}
 
 	public inline function sectionHit():Void {
-        event(SECTION_EVENT);
+		if (hasParent) parent.sectionHit(curSection);
 	}
-
-    private inline function event(event:MusicBeatEvent) {
-        switch (event) {
-            case STEP_EVENT:    parent.stepHit(curStep);
-            case BEAT_EVENT:    parent.beatHit(curBeat);
-            case SECTION_EVENT: parent.sectionHit(curSection);
-        }
-    }
 }

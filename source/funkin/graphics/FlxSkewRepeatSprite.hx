@@ -19,9 +19,9 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     static var scaledWiggleX:Float = 1.0;
 
-    override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint) {
+    override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint, camera:FlxCamera) {
         if (wigglePower == 0) {
-            super.drawTile(tileX, tileY, tileFrame, baseFrame, bitmap, tilePos);
+            super.drawTile(tileX, tileY, tileFrame, baseFrame, bitmap, tilePos, camera);
             return;
         }
 
@@ -37,7 +37,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         _matrix.c = Math.tan(skewX * CoolUtil.TO_RADS); // Set skew X
 
         if (clipRect == null) offsetSkew(tileFrame, baseFrame);
-        super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos);
+        super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos, camera);
     }
 
     inline function isLeftSkew():Bool {

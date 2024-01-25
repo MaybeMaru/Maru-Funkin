@@ -112,7 +112,7 @@ class FlxFunkText extends FlxSpriteExt {
         var rect = CoolUtil.rectangle;
         inline rect.setTo(0, 0, pixels.width, pixels.height);
 
-        pixels.fillRect(rect, FlxColor.TRANSPARENT);
+        pixels.fillRect(rect, 0x00000000);
         pixels.draw(textField, matrix, null, null, null, antialiasing);
     }
 
@@ -176,7 +176,7 @@ class FlxFunkText extends FlxSpriteExt {
         if (pixels == null || width != pixels.width || height != pixels.height) {
             textField.width = width;
             textField.height = height;
-            makeGraphic(width, height, FlxColor.TRANSPARENT, true);
+            makeGraphic(width, height, 0x00000000, true);
             _regen = true;
         }
     }

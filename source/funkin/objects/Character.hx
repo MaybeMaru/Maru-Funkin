@@ -171,19 +171,21 @@ class Character extends FlxSpriteExt {
 	}
 
 	override function update(elapsed:Float):Void {
-		if(animation.curAnim != null) {
-			final _curAnim = animation.curAnim;
-			if (_curAnim.finished) {
-				final loopAnim:String = '${_curAnim.name}-loop'; 
+		var curAnim = animation.curAnim;
+		if(curAnim != null) {
+			var curName = curAnim.name;
+			
+			if (curAnim.finished) {
+				var loopAnim:String = '${curName}-loop'; 
 				if (animOffsets.exists(loopAnim))
 					playAnim(loopAnim);
 			}
 
-			if (_curAnim.name.startsWith('sing') && !specialAnim && !debugMode) {
+			if (curName.startsWith('sing') && !specialAnim && !debugMode) {
 				holdTimer += elapsed;
 
-				final finishAnim:Bool = botMode ? (holdTimer >= Conductor.crochetMills) :
-				(_curAnim.name.endsWith('miss') && _curAnim.finished && !debugMode);
+				var finishAnim:Bool = botMode ? (holdTimer >= Conductor.crochetMills) :
+				(curName.endsWith('miss') && curAnim.finished && !debugMode);
 
 				if (finishAnim) {
 					restartDance();
@@ -192,7 +194,7 @@ class Character extends FlxSpriteExt {
 			}
 		}
 
-		super.update(elapsed);
+		__superUpdate(elapsed);
 	}
 
 	public function prepareCamPoint(point:FlxPoint) {

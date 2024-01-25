@@ -69,25 +69,28 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	}
 
 	public dynamic function applyOffsets():Void {
-		if (animation.curAnim == null) return;
-		updateHitbox();
-		centerOffsets();
-		final getAnim = animOffsets.get(animation.curAnim.name);
-		if (getAnim != null) {
-			final scaleOff = getScaleDiff();
-			offset.add(getAnim.x * scaleOff.x, getAnim.y * scaleOff.y);
+		var curAnim = animation.curAnim;
+		if (curAnim != null) {
+			updateHitbox();
+			centerOffsets();
+			var animOffset = animOffsets.get(curAnim.name);
+			if (animOffset != null) {
+				var scaleDiff = getScaleDiff();
+				offset.add(animOffset.x * scaleDiff.x, animOffset.y * scaleDiff.y);
+			}
 		}
 	}
 
-	public function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
+	public inline function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
 		playAnim('$anim${CoolUtil.directionArray[data ?? noteData]}', forced);
 		applyOffsets();
 	}
 
 	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
+		__superUpdate(elapsed);
+
 		if (staticTime > 0) {
-			staticTime-=elapsed;
+			staticTime -= elapsed;
 			if (staticTime <= 0) {
 				playStrumAnim('static');
 				staticTime = 0;
