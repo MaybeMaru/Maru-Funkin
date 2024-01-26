@@ -413,29 +413,29 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 	}
 }
 
-typedef SuperMethod = {
-	var callback:HscriptFunctionCallback;
-	var ?value:Dynamic;
+enum abstract SuperType(String) from String to String {
+	var CREATE = "create";
+	var UPDATE = "update";
+	var STEP = "stepHit";
+	var BEAT = "beatHit";
+	var SECTION = "sectionHit";
 }
 
 class CustomState extends MusicBeatState {
-	public var script:FunkScript;
-	private var _scriptKey:String;
-
-	var super_map:Map<String, SuperMethod> = [];
-	var super_methods:Array<String> = ['create', 'update', 'stepHit', 'beatHit', 'sectionHit', 'destroy'];
+	public var script(default, null):FunkScript;
+	public var key(default, null):String;
 
 	public function initScript(scriptCode:String, stateTag:String) {
-		_scriptKey = stateTag;
+		key = stateTag;
 		script = new FunkScript(scriptCode, '_custom_state_$stateTag');
 		script.set('Parent', cast this);
 
-		// This method sucks, but it works, sooooooo yeah... sorry
-		for (i in super_methods) {
-			script.set('super_' + i, function(?v:Dynamic) {
-				callDynamicSuper(i);
-			});
-		}
+		// Add the super arguments
+		script.set("super_" + CREATE, super_create);
+		script.set("super_" + UPDATE, super_update);
+		script.set("super_" + STEP, super_stepHit);
+		script.set("super_" + BEAT, super_beatHit);
+		script.set("super_" + SECTION, super_sectionHit);
 
 		return this;
 	}
@@ -446,13 +446,13 @@ class CustomState extends MusicBeatState {
 	final function super_beatHit(b:Int) super.beatHit(b);
 	final function super_sectionHit(s:Int) super.sectionHit(s);
 	
-	function callDynamicSuper(f:String, ?v:Dynamic) {
+	inline function callDynamicSuper(f:SuperType, ?v:Dynamic) {
 		switch(f) {
-			case "create": super_create();
-			case "update": super_update(v);
-			case "stepHit": super_stepHit(v);
-			case "beatHit": super_beatHit(v);
-			case "sectionHit": super_sectionHit(v);
+			case CREATE: super_create();
+			case UPDATE: super_update(v);
+			case STEP: super_stepHit(v);
+			case BEAT: super_beatHit(v);
+			case SECTION: super_sectionHit(v);
 		}
 	}
 
@@ -465,13 +465,13 @@ class CustomState extends MusicBeatState {
 	}
 
     override public function create() {
-		ModdingUtil.addPrint(_scriptKey + " / Custom State");
+		ModdingUtil.addPrint(key + " / Custom State");
 		checkSuper("create");
     }
     
     override public function update(elapsed:Float) {
-		if (FlxG.keys.justPressed.F4) switchState(new StoryMenuState()); // emergency exit
-		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(_scriptKey, false, false);
+		if (FlxG.keys.justPressed.F4) switchState(new MainMenuState()); // emergency exit
+		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(key, false, false);
 		checkSuper("update", [elapsed]);
     }
 
