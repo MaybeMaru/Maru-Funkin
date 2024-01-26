@@ -292,6 +292,17 @@ class CoolUtil {
 		return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 	}
 
+	inline public static function switchMusicState(newState:FlxState, stopMusic:Bool = true) {
+		Paths.currentLevel = PlayState.storyWeek;
+		if (stopMusic) {
+			Conductor.stop();
+			if (FlxG.sound.music != null) {
+				FlxG.sound.music.fadeOut(0.333);
+			}
+		}
+		switchState(newState);
+	}
+
 	inline public static function switchState(newState:FlxState, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
 		Transition.setSkip(skipTransOpen, skipTransClose);
 		Main.transition.startTrans(newState);

@@ -196,7 +196,7 @@ class FreeplayState extends MusicBeatState {
 
 		if (getKey('ACCEPT-P')) {
 			setupSong();
-			LoadingState.loadAndSwitchState(new PlayState());
+			CoolUtil.switchMusicState(new PlayState());
 		}
 	}
 

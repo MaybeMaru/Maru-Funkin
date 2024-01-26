@@ -74,7 +74,6 @@ import funkin.graphics.TypedGroup.TypedGroup;
 import funkin.graphics.TypedGroup.TypedSpriteGroup;
 
 //Main states
-import funkin.states.LoadingState;
 import funkin.states.MusicBeatState;
 import funkin.states.PlayState;
 
