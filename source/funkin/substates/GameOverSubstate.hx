@@ -1,6 +1,7 @@
 package funkin.substates;
 
 class GameOverSubstate extends MusicBeatSubstate {
+	static var instance:GameOverSubstate;
 	var char:Character;
 	var camFollow:FlxObject;
 
@@ -18,6 +19,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 	public function new(x:Float, y:Float):Void {
 		super();
+		instance = this;
 
 		FlxG.camera.bgColor = FlxColor.BLACK;
 		if (FlxG.sound.music != null) FlxG.sound.music.stop();
@@ -70,8 +72,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		}
 
 		if (getKey('ACCEPT-P')) {
-			endBullshit();
-			ModdingUtil.addCall('resetGameOver');
+			restartSong();
 		}
  
 		if (getKey('BACK-P')) {
@@ -114,7 +115,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var isEnding:Bool = false;
 	var exitTimer:Float = 0;
 
-	function endBullshit():Void {
+	function restartSong():Void {
 		if (!isEnding) {
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
@@ -130,6 +131,14 @@ class GameOverSubstate extends MusicBeatSubstate {
 				exitTimer = 2;
 				PlayState.instance.camGame.fade(FlxColor.BLACK, 2);
 			});
+
+			ModdingUtil.addCall('resetGameOver');
 		}
+	}
+
+	override function destroy() {
+		super.destroy();
+		if (instance == this)
+			instance = null;
 	}
 }

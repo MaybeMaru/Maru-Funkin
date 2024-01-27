@@ -93,7 +93,7 @@ class CoolUtil {
 	}
 	
 	inline public static function gc(major:Bool = false) {
-		#if desktop
+		#if (cpp || hl || neko)
 			#if hl
 				Gc.blocking(true);
 				Gc.major();
