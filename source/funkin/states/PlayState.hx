@@ -499,14 +499,11 @@ class PlayState extends MusicBeatState {
 			songRating = Highscore.getAccuracyRating(songAccuracy).toUpperCase();
 		}
 
-		if (notesGroup.vanillaUI) {
-			scoreTxt.text = 'Score:$songScore';
-		} else {
-			scoreTxt.text =
-			'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
-		}
+		scoreTxt.text = notesGroup.vanillaUI ?
+		'Score:$songScore' :
+		'Score: $songScore / Accuracy: ${(noteCount > 0) ? '$songAccuracy%' : ''} [$songRating] / Misses: $songMisses';
 
-		ModdingUtil.addCall('updateScore', [songScore]);
+		ModdingUtil.addCall('updateScore', [songScore, songMisses, songAccuracy, songRating]);
 	}
 
 	var oldIconID:Int = 0; // Old icon easter egg

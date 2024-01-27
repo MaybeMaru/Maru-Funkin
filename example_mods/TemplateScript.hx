@@ -12,6 +12,9 @@
 PlayState // PlayState class (NOT the instance)
 State // Current MusicBeatState instance
 
+MusicBeatState
+MusicBeatSubstate
+
 // Util
 CoolUtil
 Conductor
@@ -30,7 +33,7 @@ Alphabet
 TypedAlphabet
 MenuAlphabet
 
-// Gameplay objects
+// Gameplay Objects
 Note
 Sustain
 
@@ -39,9 +42,11 @@ Std
 Math
 Type
 Reflect
-StringTools // Scripts support StringTools now, u shouldnt need this much
 
-// Haxeflixel
+@:deprecated // Scripts support StringTools now, keeping this for backwards compatibility
+StringTools
+
+// HaxeFlixel
 FlxG
 FlxSpriteExt
 FlxSprite // Same as FlxSpriteExt, duplicate for backwards compatibility and shortcuts
@@ -57,6 +62,16 @@ FlxTween
 FlxEase
 FlxTrail
 
+// HxCodec
+FlxVideo
+FlxVideoSprite
+
+// Compilation Defines
+BUILD_TARGET // Target the build was compiled to (windows or linux)
+VIDEOS_ALLOWED // If hxcodec is enabled
+DISCORD_ALLOWED // If discord presence is enabled
+ZIPS_ALLOWED // If osu and quaver zips are enabled
+
 /*
     HSCRIPT FUNCTIONS
 */
@@ -67,7 +82,7 @@ FlxTrail
     @param classPackage     --> Package of the class        EX: 'flixel'
     @param customClassName  --> Custom tag for the class    (OPTIONAL) 
 */
-@:deprecated //importLib() is deprecated, use import instead
+@:deprecated // importLib() is deprecated, use import instead
 importLib(className:String, classPackage:String, ?customClassName:String);
 
 /*
@@ -191,9 +206,6 @@ getPref(prefName:String);
 /*
     PREFERENCES TAGS:
 
-    // Miscellaneous
-    'naughty'           => Naughtyness
-
     // Gameplay
     'botplay'           => Botplay Mode
     'practice'          => Practice Mode
@@ -215,6 +227,9 @@ getPref(prefName:String);
     'resolution'        => Game Resolution ("256x144", "640x360", "854x480", "960x540", "1024x576", "1280x720", "native")
     'clear-gpu'         => Clear Mod GPU Cache
     'preload'           => Preload Assets At Start
+
+    // Miscellaneous
+    'naughty'           => Naughtyness
 */
 
 /*
@@ -427,8 +442,8 @@ setShaderBool(shaderTag:String, variableName:String, boolValue:Bool);
 setShaderVector(shaderTag:String, variableName:String, vectorValue:Array<Int, Float, Bool>);
 
 /*
-    HSCRIPT PLAYSTATE CALLBACKS
-*/
+ * HSCRIPT PLAYSTATE CALLBACKS
+ */
 
 function create()
 {
@@ -583,7 +598,7 @@ function noteMiss(noteMissed:Note)
 function opponentNoteHit(note:Note)
 {
     //  Called every time a note is hit by the opponent
-    //  daNote --> Note hit by the opponent
+    //  note --> Note hit by the opponent
 }
 
 function opponentSustainPress(sustain:Sustain)
@@ -592,16 +607,19 @@ function opponentSustainPress(sustain:Sustain)
     // sustain --> Sustain pressed by the opponent
 }
 
-function updateScore(songScore:Int)
+function updateScore(songScore:Int, songMisses:Int, songAccuracy:Float, songRating:String)
 {
-   //   Called every time State.scoreTxt is updated
-   //   songScore --> The current score in the game
+    //   Called every time State.scoreTxt is updated
+    //   songScore --> The current score in the game
+    //   songMisses --> The current number of misses in the game
+    //   songAccuracy --> The current accuracy from 0% to 100% in the game
+    //   songRating --> The current rating name in the game
 }
 
-function popUpScore(daNote:Note)
+function popUpScore(note:Note)
 {
     //  Called when a note hit is judged, before splashes and ratings are created
-    //  daNote --> Note to be judged
+    //  note --> Note to be judged
 }
 
 function cameraMovement(character:Int, camPosition:FlxPoint)
@@ -642,6 +660,10 @@ function openGameOverSubstate()
     // You can use ``return STOP_FUNCTION;`` to cancel the game over
 }
 
+/*
+ * GameOverSubstate callbacks
+ */
+
 function startGameOver()
 {
     // Called when the game over substate is created
@@ -667,6 +689,10 @@ function beatHitGameOver(curBeat:Int)
     //  Called every time there is a beat hit in the game over music
     //  curBeat --> The current beat number
 }
+
+/*
+ * MusicBeatState callbacks
+ */
 
 function stateCreate()
 {
