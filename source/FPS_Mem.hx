@@ -1,11 +1,15 @@
 package;
 
-import lime.text.UTF8String;
+import openfl.system.System;
 import haxe.Timer;
 import openfl.events.Event;
-import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import flixel.FlxG;
+
+#if cpp
+import memory.Memory;
+#end
 
 /**
  * FPS class extension to display memory usage.
@@ -14,9 +18,7 @@ import openfl.text.TextFormat;
 
 class FPS_Mem extends TextField
 {
-
 	private var times:Array<Float>;
-	private var memPeak:Float = 0;
 
 	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000) 
 	{
@@ -48,10 +50,16 @@ class FPS_Mem extends TextField
         scaleY = _scale;
     }
 
-	static final memDiv:Float = 0.00009536743;
+	static inline var memDiv:Float = 1 / 1024 / 1024 * 100;
+	static inline function formatBytes(bytes:Float):Float {
+		return Math.round(bytes * memDiv) * 0.01;
+	}
 
-	private function onEnter(_)
-	{	
+	#if desktop
+	var memPeak:Float = 0;
+	#end
+
+	private function onEnter(_) {
 		if (!visible) return;
 
 		final now = Timer.stamp();
@@ -61,19 +69,21 @@ class FPS_Mem extends TextField
 			times.shift();
 
 		final fps:Int = times.length;
-		#if web
-		final mem:Float = FlxMath.roundDecimal(Math.round(System.totalMemory * memDiv) * 0.01, 2);
-		#else
-		final mem:Float = Math.round(System.totalMemory * memDiv) * 0.01;
+
+		#if desktop
+			/*final memCur = formatBytes( // Will add this when i know who to credit lmfao
+				#if cpp Memory.getCurrentUsage()
+				#else System.totalMemory #end
+			);*/
+			final memCur = formatBytes(System.totalMemory);
+
+			if (memCur > memPeak)
+				memPeak = memCur;
 		#end
-		
-		if (mem > memPeak) memPeak = mem;
 
-		final result:UTF8String =
-		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
-		'RAM: $mem mb/$memPeak mb';
-
-		if (text != result)
-			text = result;
+		text =
+		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' #if desktop +=
+		'RAM: $memCur mb/$memPeak mb';
+		#end
 	}
 }

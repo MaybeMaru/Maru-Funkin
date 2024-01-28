@@ -244,11 +244,14 @@ class PlayState extends MusicBeatState {
 		add(fgSpr);
 
 		//Cam Follow
-		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.setPosition(camPos.x, camPos.y);
 		if (prevCamFollow != null) {
 			camFollow = prevCamFollow;
 			prevCamFollow = null;
+		}
+		else {
+			camFollow = new FlxObject(0, 0, 1, 1);
+			camFollow.setPosition(camPos.x, camPos.y);
+			camFollow.active = false;
 		}
 		add(camFollow);
 
@@ -303,6 +306,7 @@ class PlayState extends MusicBeatState {
 		super.create();
 		destroySubStates = false;
 		pauseSubstate = new PauseSubState();
+		CoolUtil.gc(false);
 	}
 
 	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
@@ -398,8 +402,8 @@ class PlayState extends MusicBeatState {
 		}
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
-			ModdingUtil.addCall('startTimer', [swagCounter]);
 			beatCharacters();
+			ModdingUtil.addCall('startTimer', [swagCounter]);
 
 			if (swagCounter > 0) {
 				final countdownSpr:FunkinSprite = new FunkinSprite(countdownImages[swagCounter-1]);
@@ -579,7 +583,7 @@ class PlayState extends MusicBeatState {
 		deathCounter++;
 		Conductor.stop();
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
-			
+
 		// Game Over doesn't get his own variable because it's only used here
 		DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC);
 	}
@@ -595,7 +599,7 @@ class PlayState extends MusicBeatState {
 		final mustHit:Bool = curSectionData.mustHitSection;
 		mustHit ? boyfriend.prepareCamPoint(targetCamPos) : dad.prepareCamPoint(targetCamPos);
 
-		if (camFollow.x != targetCamPos.x) {
+		if (camFollow.x != targetCamPos.x || camFollow.y != targetCamPos.y) {
 			camFollow.setPosition(targetCamPos.x, targetCamPos.y);
 			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0, targetCamPos]);
 		}

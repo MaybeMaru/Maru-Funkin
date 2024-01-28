@@ -123,7 +123,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	override function destroy() {
 		instance = null;
 		super.destroy();
-		CoolUtil.gc(false);
+		CoolUtil.gc(true);
 	}
 
 	inline public function switchState(newState:FlxState, ?skipStart:Bool, ?skipEnd:Bool) CoolUtil.switchState(newState, skipStart, skipEnd);
