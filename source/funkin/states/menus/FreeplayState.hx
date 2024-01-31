@@ -179,7 +179,7 @@ class FreeplayState extends MusicBeatState {
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
 				FunkThread.run(function () { // Make a new thread to load the music
-					FlxG.sound.playMusic(Paths.inst(targetMusic, false, true), 0);
+					FlxG.sound.playMusic(Paths.inst(targetMusic, true), 0);
 				});
 				_lastMusic = targetMusic;
 

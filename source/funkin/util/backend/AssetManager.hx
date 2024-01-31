@@ -1,163 +1,337 @@
 package funkin.util.backend;
 
+import openfl.media.Sound;
+import openfl.display3D.textures.TextureBase;
 import flixel.util.typeLimit.OneOfTwo;
-import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.display.BitmapData;
-import flash.media.Sound;
 import lime.utils.Assets as LimeAssets;
-import openfl.Assets as OflAssets;
 
-typedef AssetGraphic = OneOfTwo<FlxGraphic, String>;
+typedef AssetClass = OneOfTwo<LodGraphic, Sound>;
 
-// Just moving this from Paths for organization sake
-class AssetManager {	
-	public static final cachedGraphics:Map<String, FlxGraphic> = [];
-	public static final cachedSounds:Map<String, Sound> = [];
+class Asset
+{
+	public var asset(default, null):AssetClass;
+	public var isSoundAsset(default, null):Bool;
+	public var isGraphicAsset(default, null):Bool;
+	public var onDispose:()->Void;
 
-	private static inline function __toGraphic(__graphic:AssetGraphic):Null<FlxGraphic> {
-		if (__graphic is FlxGraphic) return __graphic;
-		else						 return (existsGraphic(__graphic) ? getGraphic(__graphic) : null);
+	public function new() {}
+
+	public static inline function fromAsset(asset:AssetClass):Asset {
+		return new Asset().setAsset(asset);
 	}
-    
-	static public function getImage(path:String, gpu:Bool = true):FlxGraphicAsset {
-		if (#if !hl gpu #else false #end) {
-			if (Preloader.existsGraphic(path)) return Preloader.getGraphic(path);
-			else if (Paths.exists(path, IMAGE)) {
-				final bitmap:BitmapData = getBitmapData(path);
-				return Preloader.addFromBitmap(bitmap, path);
+
+	public inline function setAsset(asset:AssetClass):Asset {
+		isGraphicAsset = asset is LodGraphic;
+		isSoundAsset = !isGraphicAsset;
+		this.asset = asset;
+		return this;
+	}
+
+	public inline function dispose():Void {
+		if (asset != null) {
+			if (isGraphicAsset) {
+				asset = __disposeGraphic(asset);
 			}
-		} else return getGraphic(path, true);
-		return path;
-	}
-
-	inline public static function clearBitmapCache() {
-		for (key in cachedGraphics.keys()) {
-			removeGraphicByKey(key);
-		}
-		#if !hl
-		if (Preferences.getPref('clear-gpu')) {
-			for (key in Preloader.cachedTextures.keys()) {
-				if (key.startsWith('mods/'))
-					Preloader.removeByKey(key, true);
+			else {
+				asset = __disposeSound(asset);
 			}
-		}
-		#end
-		FlxG.bitmap.clearCache();
-	}
 
-	public static inline function removeGraphicByKey(key:String) {
-		if (existsGraphic(key)) {
-			final obj = cachedGraphics.get(key);
-			cachedGraphics.remove(key);
-			destroyGraphic(obj);
+			if (onDispose != null)
+				onDispose();
 		}
 	}
 
-	public static inline function destroyGraphic(?graphic:FlxGraphic) {
-		if (graphic != null) {
-			graphic.persist = false;
-			graphic.destroyOnNoUse = true;
-			disposeBitmap(graphic.bitmap);
-			graphic.bitmap = null;
-			graphic.destroy();
-		}
-	}
-
-	inline public static function disposeBitmap(bitmap:BitmapData) {
+	inline function __disposeBitmap(bitmap:BitmapData, disposeTexture:Bool = true):BitmapData {
+		@:privateAccess
+		if (disposeTexture)
+			__disposeTexture(bitmap.__texture);
+		
 		bitmap.dispose();
-		bitmap.disposeImage();
+
+		return null;
 	}
 
-	inline static public function existsGraphic(key:String) {
-		return cachedGraphics.exists(key);
+	inline function __disposeTexture(texture:TextureBase) {
+		if (texture != null) {
+			texture.dispose();
+
+			@:privateAccess {
+				texture.__textureContext = null;
+				texture.__context = null;
+			}
+
+		}
 	}
 
-	static public function addGraphic(width:Int, height:Int, color:FlxColor, ?key:String) {
-		if (existsGraphic(key)) return cachedGraphics.get(key);
-		final bitmap = new BitmapData(width, height, true, color);
-		final graphic = @:privateAccess {new FlxGraphic(key, bitmap, true); }
-		graphic.destroyOnNoUse = false;
-		cachedGraphics.set(key, graphic);
+	inline function __disposeGraphic(graphic:LodGraphic):LodGraphic {
+		__disposeBitmap(graphic.bitmap);
+		graphic.destroy();
+		return null;
+	}
+
+	function __disposeSound(sound:Sound):Sound @:privateAccess {
+		var buffer = sound.__buffer;
+
+		if (buffer != null) {
+			buffer.data.buffer = null;
+			buffer.data = null;
+		}
+
+		sound.close();
+
+		return null;
+	}
+}
+
+class LodGraphic extends FlxGraphic
+{
+	private var _lodGenerated:Bool = false;
+	public var parsedChildren:Bool = false;
+	
+	public var lodScale(default, null):Float = 1.0;
+	public var lodLevel(default, null):Int = 0;
+	
+	public function generateLod(level:Int = 0)
+	{
+		lodLevel = level;
+		if (_lodGenerated || level <= 0 || !bitmap.readable)
+			return;
+		
+		lodScale = 1 << level;
+		var scale = 1 / lodScale;
+
+        var matrix = CoolUtil.resetMatrix();
+		matrix.scale(scale, scale);
+
+		var newWidth:Int = bitmap.width >> level;
+		var newHeight:Int = bitmap.height >> level;
+
+        var lodBitmap = new BitmapData(newWidth, newHeight, true, 0x00000000);
+		lodBitmap.draw(bitmap, matrix, null, null, null, true);
+
+		bitmap.dispose();
+		bitmap = lodBitmap;
+
+		imageFrame.frame.sourceSize *= lodScale;
+
+		//width = bitmap.width << level;
+		//height = bitmap.height << level;
+	}
+}
+
+enum abstract LodLevel(Int) from Int to Int {
+	var HIGH = 0;
+	var MEDIUM = 1;
+	var LOW = 2;
+	var RUDY = 3;
+}
+
+class AssetManager
+{
+	public static var assetsMap:Map<String, Asset> = [];
+	public static var staticAssets:Array<String> = [];
+	public static var tempAssets:Array<String> = [];
+
+	public static inline function clearAllCache(?clearGraphics:Bool, ?clearSounds:Bool):Void {
+		clearStaticCache(false, clearGraphics, clearSounds);
+		clearTempCache(false, clearGraphics, clearSounds);
+		CoolUtil.gc(true);
+	}
+
+	public static inline function clearStaticCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
+		staticAssets = __clearCacheFromKeys(staticAssets, clearGraphics, clearSounds);
+		if (runGc) CoolUtil.gc(true);
+	}
+
+	public static inline function clearTempCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
+		tempAssets = __clearCacheFromKeys(tempAssets, clearGraphics, clearSounds);
+		if (runGc) CoolUtil.gc(true);
+	}
+
+	/*
+	 * GRAPHIC CACHE
+	 */
+
+	public static var lodQuality:LodLevel = HIGH;
+	public static function setLodQuality(level:String):LodLevel {
+		return lodQuality = switch (level) {
+			case "high": HIGH;
+			case "medium": MEDIUM;
+			case "low": LOW;
+			case "rudy": RUDY;
+			default: HIGH;
+		}
+	}
+
+	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, useTexture:Bool = true, ?lodLevel:LodLevel, ?key:String):LodGraphic
+	{
+		if (key == null)
+			key = path;
+		
+		var asset = getAsset(key); // Check if asset is already cached
+		if (asset != null)
+			return asset.asset;
+
+		var bitmap = __getFileBitmap(path);
+		
+		@:privateAccess
+		var graphic = new LodGraphic(null, bitmap);
+
+		if (lodLevel == null)
+			lodLevel = lodQuality;
+		
+		if (cast(lodLevel, Int) > 0)
+			graphic.generateLod(lodLevel);
+
+		if (useTexture)
+			graphic = cast uploadGraphicTexture(graphic);
+		
+		var asset = Asset.fromAsset(graphic);
+		setAsset(key, asset, staticAsset);
+
 		return graphic;
 	}
 
-	static public function addGraphicFromBitmap(bitmap:BitmapData, key:String, cache:Bool = false) {
-		final graphic = FlxGraphic.fromBitmapData(bitmap);
-		graphic.persist = cache;
-		if (cache) cachedGraphics.set(key, graphic);
+	public static function uploadGraphicTexture(graphic:FlxGraphic):FlxGraphic
+	{
+		var bitmap = graphic.bitmap;
+
+		if (bitmap.readable) {
+			var texture = FlxG.stage.context3D.createTexture(bitmap.width, bitmap.height, BGR_PACKED, true);
+			texture.uploadFromBitmapData(bitmap);
+
+			bitmap.dispose();
+
+			graphic.bitmap = BitmapData.fromTexture(texture);
+		}
+
 		return graphic;
+	}
+
+	public static function getAssetGraphic(key:String):LodGraphic
+	{
+		return __nullAssetGet(key);
+	}
+
+	public static function getFileBitmap(path:String, ?staticAsset:Bool):BitmapData 
+	{
+		return cacheGraphicPath(path, staticAsset, false).bitmap;
+	}
+
+	@:noCompletion
+	static inline function __getFileBitmap(path:String):BitmapData {
+		#if desktop
+		var desktopPath = Paths.removeAssetLib(path);
+		if (!desktopPath.startsWith('assets'))
+			return BitmapData.fromFile(desktopPath);
+		#end
+
+		return OpenFlAssets.getBitmapData(path, false);
 	}
 	
-	static inline public function getRawBitmap(key:String) {
-		#if desktop	
-		final fixPath = Paths.removeAssetLib(key);
-		if (!fixPath.startsWith('assets'))
-			return BitmapData.fromFile(fixPath);
-		#end
-		return OpenFlAssets.getBitmapData(key, false);
+	/*
+	 * SOUND CACHE
+	 */
+
+	public static function cacheSoundPath(path:String, staticAsset:Bool = false, ?key:String):Sound
+	{
+		if (key == null)
+			key = path;
+		
+		var asset = getAsset(key); // Check if asset is already cached
+		if (asset != null)
+			return asset.asset;
+
+		var sound = __getFileSound(path);
+		//sound.stop();
+
+		var asset = Asset.fromAsset(sound);
+		setAsset(key, asset, staticAsset);
+
+		return sound;
 	}
 
-	static public function getGraphic(key:String, cache:Bool = false) {
-		if (existsGraphic(key)) return cachedGraphics.get(key);
-		return addGraphicFromBitmap(getRawBitmap(key), key, cache);
+	public static function getAssetSound(key:String):Sound
+	{
+		return __nullAssetGet(key);
 	}
 
-	inline static public function getBitmapData(key:String, cache:Bool = false):BitmapData {
-		return getGraphic(key, cache).bitmap;
+	public static function getFileSound(path:String, ?staticAsset:Bool):Sound 
+	{
+		return cacheSoundPath(path, staticAsset);
 	}
 
-	static public function uploadGpuFromKey(key:String) {
-		if (!existsGraphic(key)) return null;
-		final graphic = getGraphic(key);
-		final gpuGraphic = Preloader.makeGraphic(graphic.bitmap, key);
-		removeGraphicByKey(key);
-		cachedGraphics.set(key, gpuGraphic);
-		return gpuGraphic;
-	}
-
-	static public inline function uploadSpriteGpu(sprite:FlxSprite, key:String):FlxGraphic {
-		if (#if hl true #else sprite.frames.parent.bitmap.readable == false #end) return null; // Already uploaded bitmap
-
-		final gpuGraphic = Preloader.makeGraphic(sprite.frames.parent.bitmap, key);
-		for (i in 0...sprite.frames.frames.length) {
-			final frame = sprite.frames.frames[i];
-			frame.parent = gpuGraphic;
-		}
-
-		return sprite.frames.parent = gpuGraphic;
-	}
-
-	public static function clearSoundCache(forced:Bool = false) {
-		for (key in cachedSounds.keys()) {
-			if (key.contains(Conductor._loadedSong) && !forced) continue;
-			else												Conductor._loadedSong = "";
-			removeSoundByKey(key);
-		}
-	}
-
-	static public inline function removeSoundByKey(key:String) {
-		if (!cachedSounds.exists(key)) return;
-		cachedSounds.get(key).close();
-		LimeAssets.cache.clear(key);
-		OflAssets.cache.removeSound(key);
-		cachedSounds.remove(key);
-	}
-
-	static public function getSound(key:String):FlxSoundAsset {
-		if (cachedSounds.exists(key)) return cachedSounds.get(key);
+	@:noCompletion
+	static inline function __getFileSound(path:String):Sound {
 		#if desktop
-		final fixPath = Paths.removeAssetLib(key);
-		if (!fixPath.startsWith('assets')) {
-			final sound = Sound.fromFile(fixPath);
-			cachedSounds.set(key, sound);
-			return sound;
-		}
+		var desktopPath = Paths.removeAssetLib(path);
+		if (!desktopPath.startsWith('assets'))
+			return Sound.fromFile(desktopPath);
 		#end
-		if (Paths.exists(key, MUSIC)) {
-			final sound = OpenFlAssets.getSound(key);
-			cachedSounds.set(key, sound);
-			return sound;
+
+		return getLimeAssetsSound(path);
+	}
+
+	public static inline function getLimeAssetsSound(id:String):Sound {
+		var buffer = LimeAssets.getAudioBuffer(id, false);
+		if (buffer != null)
+			return Sound.fromAudioBuffer(buffer);
+
+        return null;
+    }
+	
+	
+	// Anal Sex
+
+	public static inline function setAsset(key:String, asset:Asset, staticAsset:Bool):Void {
+		assetsMap.set(key, asset);
+		staticAsset ? staticAssets.push(key) : tempAssets.push(key);
+	}
+
+	public static inline function getAsset(key:String):Asset {
+		return assetsMap.get(key);
+	}
+
+	public static inline function existsAsset(key:String):Bool {
+		return getAsset(key) != null;
+	}
+
+	public static inline function disposeAsset(key:String):Bool {
+		var asset = getAsset(key);
+		if (asset == null)
+			return false;
+
+		asset.dispose();
+		assetsMap.remove(key);
+
+		if (tempAssets.contains(key)) tempAssets.remove(key);
+		else if (staticAssets.contains(key)) staticAssets.remove(key);
+
+		return true;
+	}
+
+	@:noCompletion
+	inline static function __nullAssetGet(key:String):AssetClass {
+		var asset = getAsset(key);
+		return asset != null ? asset.asset : null;
+	}
+
+	@:noCompletion
+	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool) {
+		for (i in 0...keys.length) {
+			var key = keys[i];
+			var asset = assetsMap.get(key);
+
+			if (asset != null) {
+				var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
+				if (dispose) {
+					asset.dispose();
+					assetsMap.remove(key);
+				}
+			}
 		}
-		return key;
+
+		return FlxArrayUtil.clearArray(keys);
 	}
 }

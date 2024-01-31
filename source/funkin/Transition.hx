@@ -49,21 +49,19 @@ class Transition extends ResizableSprite {
         times.open = openTime;
         times.close = closeTime;
         
-        /*if (bitmap.bitmapData != null) {
-            bitmap.bitmapData.dispose();
-            bitmap.bitmapData.disposeImage();
-            bitmap.bitmapData = null;
-        }*/
-        
         if (asset != null) {
-            if (asset is String) bitmap.bitmapData = AssetManager.getRawBitmap(cast(asset, String));
+            if (asset is String) {
+                bitmap.bitmapData = AssetManager.getFileBitmap(asset, true);
+            }
             else if (asset is FlxGraphic) {
                 final _graphic = cast(asset, FlxGraphic);
                 bitmap.bitmapData = _graphic.bitmap;
                 _graphic.persist = true;
                 _graphic.destroyOnNoUse = false;
             } 
-            else if (asset is BitmapData) bitmap.bitmapData = cast(asset, BitmapData);
+            else if (asset is BitmapData) {
+                bitmap.bitmapData = asset;
+            }
             updateScale();
         }
         else {

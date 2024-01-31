@@ -74,9 +74,8 @@ class JsonUtil {
 		return returnJson;
 	}
 
-	inline public static function getAsepritePacker(path:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		var jsonData:JsonSpritesheet = Json.parse(CoolUtil.getFileContent(Paths.file('images/$path.json', TEXT, library)));
-		var graphic:FlxGraphic = FlxG.bitmap.add(Paths.image(path, library, false, false, gpu));
+	inline public static function getAsepritePacker(graphic:FlxGraphic, sourceJson:String):FlxAtlasFrames {
+		var jsonData:JsonSpritesheet = Json.parse(sourceJson);
 		var frames:FlxAtlasFrames = new FlxAtlasFrames(graphic);
 
 		var framesTagData:Array<Array<Dynamic>> = [];

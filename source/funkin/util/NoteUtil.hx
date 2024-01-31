@@ -68,18 +68,6 @@ class NoteUtil {
 		return typeJson;
 	}
 
-    public static function clearSkinCache() {
-        for (skin => data in skinSpriteMap) {
-            AssetManager.removeGraphicByKey(data.baseSprite.imageKey);
-            #if !hl
-            Preloader.disposeTexture(data.baseSprite.imageKey);
-            #end
-            data.baseSprite = FlxDestroyUtil.destroy(data.baseSprite);
-            data.skinJson = null;
-            skinSpriteMap.remove(skin);
-        }
-    }
-
     /*
      *  Setup the bitmaps for the sustains and the default note FlxSprite
      */
@@ -96,8 +84,9 @@ class NoteUtil {
         }
         skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
-        final refSprite:FlxSpriteExt = new FlxSpriteExt();
-        refSprite.loadImage('skins/$skin/${skinJson.imagePath}');
+        var spriteKey = 'skins/$skin/${skinJson.imagePath}';
+        var refSprite:FlxSpriteExt = new FlxSpriteExt();
+        refSprite.loadImage(spriteKey);
         refSprite.setScale(skinJson.scale);
         refSprite.antialiasing = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
         for (anim in skinJson.anims)
@@ -107,12 +96,22 @@ class NoteUtil {
             CoolUtil.cacheImage(refSprite.frame.parent, null, PlayState.instance.camHUD);
         }
 
-        final addMap:SkinSpriteData = {
+        var skinData:SkinSpriteData = {
             baseSprite: refSprite,
             skinJson: skinJson
         }
-        skinSpriteMap.set(skin, addMap);
-        return addMap;
+
+        AssetManager.getAsset(Paths.png(spriteKey)).onDispose = () -> {
+            if (skinData != null) {
+                skinData.baseSprite = FlxDestroyUtil.destroy(skinData.baseSprite);
+                skinData.skinJson = null;
+                skinSpriteMap.remove(skin);
+                skinData = null;
+            }
+        }
+
+        skinSpriteMap.set(skin, skinData);
+        return skinData;
     }
     
     public static function getSkinSprites(skin:String):SkinSpriteData {
@@ -158,7 +157,7 @@ class NoteAtlas {
             __calcMatrix.setTo(1, 0, 0, 1, i * parent.width, 0);
             bitmap.draw(colorBitmap, __calcMatrix);
 
-            AssetManager.disposeBitmap(colorBitmap);
+            colorBitmap.dispose();
         }
         
         // Store base frames

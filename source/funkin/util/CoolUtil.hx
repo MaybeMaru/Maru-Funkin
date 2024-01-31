@@ -13,9 +13,8 @@ import neko.vm.Gc;
 #end
 
 typedef CacheClearing =  {
-	?bitmap:Bool,
-	?skins:Bool,
-	?sounds:Bool,
+	?tempCache:Bool,
+	?staticCache:Bool,
 	?shaders:Bool
 }
 
@@ -49,6 +48,11 @@ class CoolUtil {
 	public static var matrix:FlxMatrix = new FlxMatrix();
 	public static var rectangle:Rectangle = new Rectangle();
 
+	public inline static function resetMatrix():FlxMatrix {
+		inline matrix.setTo(1, 0, 0, 1, 0, 0);
+		return matrix;
+	}
+
 	inline public static function openUrl(url:String) {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url, "&"]);
@@ -77,18 +81,19 @@ class CoolUtil {
 	}
 
 	static final DEFAULT_CACHE_CLEARING:CacheClearing = {
-		bitmap: true,
-		skins: true,
-		sounds: true,
+		tempCache: true,
+		staticCache: false,
 		shaders: true
 	}
 
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
 		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
-		if (cacheClear.bitmap) AssetManager.clearBitmapCache();
-		if (cacheClear.skins) NoteUtil.clearSkinCache();
-		if (cacheClear.sounds) AssetManager.clearSoundCache(!softClear);
+
 		if (cacheClear.shaders) Shader.clearShaders();
+
+		if (cacheClear.tempCache) AssetManager.clearTempCache(false);
+		if (cacheClear.staticCache) AssetManager.clearTempCache(false);
+
 		gc(true);
 	}
 	

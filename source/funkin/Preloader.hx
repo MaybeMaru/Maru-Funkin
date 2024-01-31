@@ -1,10 +1,5 @@
 package funkin;
 
-import openfl.display.BitmapData;
-#if !hl
-import openfl.display3D.textures.Texture;
-import openfl.display3D.Context3D;
-#end
 import flixel.addons.util.FlxAsyncLoop;
 
 /*
@@ -12,67 +7,9 @@ import flixel.addons.util.FlxAsyncLoop;
 	Credits to Rozebud
 */
 
-class Preloader extends flixel.FlxState {
-    public static var cachedGraphics:Map<String, FlxGraphic> = [];
-    #if !hl
-    public static var cachedTextures:Map<String, Texture> = [];
-    #end
-
-    inline public static function addBitmap(key:String) {
-        addFromBitmap(OpenFlAssets.getBitmapData(key, false), key);
-    }
-
-    inline public static function getGraphic(key:String):FlxGraphic {
-        return cachedGraphics.get(key);
-    }
-
-    inline public static function existsGraphic(key:String):Bool {
-        return cachedGraphics.exists(key);
-    }
-
-    public static inline function makeGraphic(bpm:BitmapData, key:String):FlxGraphic {
-        final graphic = FlxGraphic.fromBitmapData(makeBitmap(bpm, key));
-        graphic.persist = true;
-        graphic.destroyOnNoUse = false;
-        return graphic;
-    }
-
-    public static inline function makeBitmap(bmp:BitmapData, key:String):BitmapData {
-        return #if hl bmp #else BitmapData.fromTexture(uploadTexture(bmp, key))#end ;
-    }
-
-    #if !hl
-    public static function uploadTexture(bmp:BitmapData, key:String) {
-        if (cachedTextures.exists(key))  return cachedTextures.get(key);
-        final _texture = FlxG.stage.context3D.createTexture(bmp.width, bmp.height, BGR_PACKED, true);
-        _texture.uploadFromBitmapData(bmp);
-        AssetManager.disposeBitmap(bmp);
-        cachedTextures.set(key, _texture);
-        return _texture;
-    }
-    #end
-
-    public static function addFromBitmap(bmp:BitmapData, key:String) {        
-        final graphic:FlxGraphic = makeGraphic(bmp, key);
-        cachedGraphics.set(key, graphic);
-        return graphic;
-    }
-
-    public static function removeByKey(key:String, disposeTex:Bool = false) {
-        if(!existsGraphic(key)) return;
-        final graphic = getGraphic(key);
-        cachedGraphics.remove(key);
-        AssetManager.destroyGraphic(graphic);
-        if (disposeTex) disposeTexture(key);
-    }
-
-    public static function disposeTexture(key:String) {
-        #if !hl
-        if (!cachedTextures.exists(key)) return;
-        final texture = cachedTextures.get(key);
-        cachedTextures.remove(key);
-        texture.dispose();
-        #end
+class Preloader extends FlxState {
+    inline public static function cacheImage(key:String) {
+        AssetManager.cacheGraphicPath(key, true);
     }
     
     function fixFileList(list:Array<String>, typeFolder:String = 'images/', noLibFolder:String = 'assets/weeks'):Array<String> {
@@ -129,7 +66,7 @@ class Preloader extends flixel.FlxState {
 
         final cacheStr = imageCache[0];
         if (cacheStr != null) {
-            addBitmap(Paths.getPath('images/$cacheStr.png', IMAGE, null, false, false));
+            cacheImage(Paths.png(cacheStr));
             imageCache.splice(imageCache.indexOf(cacheStr), 1);
 
             cachePart.text = 'Preloading Sprites...\n' + cacheStr;

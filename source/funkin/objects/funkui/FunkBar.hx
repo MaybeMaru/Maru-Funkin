@@ -145,7 +145,7 @@ class FunkBar extends FlxSpriteExt {
             if (percent != 100) {
                 color = colors[0];
                 _frame.frame.x = 0;
-                _frame.frame.width = percentCut;
+                _frame.frame.width = percentCut * lodDiv;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
     
@@ -153,8 +153,8 @@ class FunkBar extends FlxSpriteExt {
 
             if (percent != 0) {
                 color = colors[1];
-                _frame.frame.x = percentCut;
-                _frame.frame.width = percentWidth;
+                _frame.frame.x = percentCut * lodDiv;
+                _frame.frame.width = percentWidth * lodDiv;
                 camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
             }
 

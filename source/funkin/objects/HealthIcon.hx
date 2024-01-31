@@ -20,19 +20,21 @@ class HealthIcon extends FlxSpriteExt {
 
 	public function makeIcon(char:String = 'bf', forced:Bool = false):Void {
 		if (iconName == char && !forced) return; // skip loading shit
-		antialiasing = Preferences.getPref('antialiasing');
 		iconName = char;
+
 		if (PIXEL_ICONS.contains(char) || char.contains('-pixel')) antialiasing = false;
+		else antialiasing = Preferences.getPref('antialiasing');
 
-		var icon:FlxGraphicAsset = Paths.image('icons/face');
-		if (Paths.exists(Paths.image('icons/$char', null, true), IMAGE))
-			icon = Paths.image('icons/$char', null, false);
+		var icon = "face";
+		if (Paths.exists(Paths.png('icons/$char', null, true), IMAGE)) // Check if icon exists
+			icon = char;
 
-		loadImage('icons/$char');	//	Load it first to get the width and height
+		loadImage('icons/$icon', true); // Load first to get the resolution
+		
 		if (packer == IMAGE) {
 			singleAnim = !(width >= height * 1.25); // Id make it 2 but theres some weird ass resolutions out there
 			if (!singleAnim) {
-				loadGraphic(icon, true, Math.floor(width * 0.5), cast height);
+				loadGraphic(graphic, true, Math.floor(width * lodDiv * 0.5), Std.int(height * lodDiv));
 				animation.add('healthy', [0], 0, false);
 				animation.add('dying', [1], 0, false);
 				addOffset('healthy', 0,0);
@@ -57,8 +59,8 @@ class HealthIcon extends FlxSpriteExt {
 	var coolOffset:Float = 0.0;
 
 	function initBumpVars() {
-		_height = height * 0.55;
-		_width = width;
+		_height = height * lodScale * 0.55;
+		_width = width * lodScale;
 
 		if (Preferences.getPref('vanilla-ui')) {
 			bumpLerp = 0.75;
@@ -66,7 +68,7 @@ class HealthIcon extends FlxSpriteExt {
 		}
 		else {
 			bumpLerp = 0.15;
-			coolOffset = 23 + width * 0.333;
+			coolOffset = 23 + width * lodScale * 0.333;
 		}
 	}
 
@@ -77,8 +79,8 @@ class HealthIcon extends FlxSpriteExt {
 
 	public dynamic function animCheck():Void {
 		if (!singleAnim) {
-			final newAnim:String = isDying ? 'dying' : 'healthy';
-			if (newAnim != (animation?.curAnim?.name ?? "")) {
+			var newAnim:String = isDying ? 'dying' : 'healthy';
+			if (newAnim != (animation.curAnim?.name ?? "")) {
 				playAnim(newAnim);
 				updateHitbox();
 			}
@@ -87,26 +89,32 @@ class HealthIcon extends FlxSpriteExt {
 
 	public function setSprTrackerPos():Void {
 		if (sprTracker != null) {
-			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height * 0.5 - sprTracker.height * 0.5));
+			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height * (singleAnim ? 1.0 : lodScale) * 0.5 - sprTracker.height * 0.5));
 		}
 	}
 
 	override function update(elapsed:Float):Void {
-		if (playIcon && PlayState.instance != null) {
-			final healthBar = PlayState.instance.healthBar;
+		var play = PlayState.instance;
+		if (playIcon && play != null)
+		{
+			var healthBar = play.healthBar;
+			
 			if (isPlayer) {
 				isDying = healthBar.percent < 20;
 				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - _height);
 			}
 			else {
 				isDying = healthBar.percent > 80;
-				setPosition(healthBar.barPoint.x - width + _width - coolOffset, healthBar.barPoint.y - _height);
+				setPosition(healthBar.barPoint.x - (width * lodScale) + _width - coolOffset, healthBar.barPoint.y - _height);
 			}
 
 			animCheck();
 			setScale(CoolUtil.coolLerp(scale.x, staticSize, bumpLerp));
 		}
-		else setSprTrackerPos();
+		else {
+			setSprTrackerPos();
+		}
+		
 		super.update(elapsed);
 	}
 }

@@ -10,6 +10,7 @@ Current version is beta 2.0, full release soon to come!
 * [Rudyrue](https://www.youtube.com/@rudyrue3694) - Base game song offsets
 * [Mark-Zer0](https://twitter.com/MarkimusZer0) - Optimized GF export
 * [Doggo](https://twitter.com/_d1ggo) / [Crowplexus](https://twitter.com/crowplexus) - Github workflows
+* [Midnight](https://github.com/what-is-a-git) - More accurate memory counter
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
 

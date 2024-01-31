@@ -6,8 +6,11 @@ class PreferencesState extends MusicBeatState {
     var prefItems:Array<PrefItem> = [];
     var camFollow:FlxObject;
 
+    var initQuality:String;
+
     override function create():Void {
         persistentUpdate = persistentDraw = true;
+        initQuality = Preferences.getPref("quality");
 
         camFollow = new FlxObject(FlxG.width * .5, 0);
         FlxG.camera.follow(camFollow, null, 0.16);
@@ -135,6 +138,17 @@ class PreferencesState extends MusicBeatState {
                 hitBack = true;
                 switchState(new OptionsState());
             }
+        }
+    }
+
+    override function destroy() {
+        super.destroy();
+
+        // Clear all assets from cache on quality change
+        var newQuality = Preferences.getPref("quality");
+        if (newQuality != initQuality) {
+            AssetManager.clearAllCache(true, false);
+            AssetManager.setLodQuality(newQuality);
         }
     }
 }

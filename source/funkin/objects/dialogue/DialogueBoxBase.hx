@@ -58,7 +58,8 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 		jsonParsed = JsonUtil.checkJsonDefaults(defaultDialogue, jsonParsed);
 		dialogueChars = [jsonParsed.dad,jsonParsed.bf,jsonParsed.gf];
 		
-		if (Paths.exists(Paths.music(jsonParsed.music, true), MUSIC)) {
+		var musicPath = Paths.musicFolder(jsonParsed.music);
+		if (Paths.exists(musicPath,  MUSIC)) {
 			FlxG.sound.playMusic(Paths.music(jsonParsed.music), 0);
 			FlxG.sound.music.fadeIn(1, 0, 0.8);
 		}

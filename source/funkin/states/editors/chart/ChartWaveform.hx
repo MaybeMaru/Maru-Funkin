@@ -10,6 +10,8 @@ import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
 /*
     Inspired by the Kade Engine waveform class
     https://github.com/Kade-github/Kade-Engine/blob/stable/source/Waveform.hx
+
+    TODO: rewrite this for better performance
 */
 
 class ChartWaveform extends FlxSprite {
@@ -23,12 +25,16 @@ class ChartWaveform extends FlxSprite {
             visible = false;
             return;
         }
+
         @:privateAccess {
             if (sound._sound == null || sound._sound.__buffer == null) return;
             audioBuffer = sound._sound.__buffer;
             audioBytes = sound._sound.__buffer.data.toBytes();
         }
-        frames = AssetManager.addGraphic(GRID_SIZE * Conductor.STRUMS_LENGTH, GRID_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.TRANSPARENT, 'waveform$_color').imageFrame;
+
+        var graphicWidth = GRID_SIZE * Conductor.STRUMS_LENGTH;
+        var graphicHeight = GRID_SIZE * Conductor.STEPS_PER_MEASURE;
+        makeGraphic(graphicWidth, graphicHeight, FlxColor.TRANSPARENT, false, 'waveform$_color');
         antialiasing = false;
 
         color = _color;

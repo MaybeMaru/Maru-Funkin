@@ -28,9 +28,10 @@ class Print extends Sprite {
     static inline var frameSize:Int = 16;
     static var iconFrames:Array<BitmapData> = [];
     public static function initFrames() {
-        final bmp = AssetManager.getRawBitmap(Paths.image("options/console", null, true));
+        @:privateAccess
+        var bmp = AssetManager.__getFileBitmap(Paths.png("options/console"));
         for (i in 0...3) {
-            final frame = new BitmapData(frameSize,frameSize,true,FlxColor.TRANSPARENT);
+            var frame = new BitmapData(frameSize,frameSize,true,FlxColor.TRANSPARENT);
             frame.copyPixels(bmp, new Rectangle(i*frameSize,0,frameSize,frameSize), new Point(0,0));
             iconFrames.push(frame);
         }

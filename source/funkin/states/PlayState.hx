@@ -534,15 +534,17 @@ class PlayState extends MusicBeatState {
 			}
 			#if desktop
 			else if (FlxG.keys.justPressed.SIX) {
+				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Stage Editor", null, null, true);
 				switchState(new StageDebug(stageJsonData));
 			}
 			else if (FlxG.keys.justPressed.SEVEN) {
-				clearCacheData = {sounds: false};
+				clearCacheData = {tempCache: false};
 				switchState(new ChartingState());
 				DiscordClient.changePresence("Chart Editor", null, null, true);
 			}
 			else if (FlxG.keys.justPressed.EIGHT) {
+				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Character Editor", null, null, true);
 	
 				/* 	8 for opponent char
@@ -658,8 +660,7 @@ class PlayState extends MusicBeatState {
 
 		clearCache = true;
 		clearCacheData = { // Clear last song audio and shaders
-			bitmap: false,
-			skins: false
+			tempCache: false
 		}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
 		switchState(new PlayState(), true);

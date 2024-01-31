@@ -68,7 +68,8 @@ class JudgeRating extends RemoveRating {
     public function new() {
         super();
         for (i in judgeRatings) {
-            if (Paths.exists(Paths.image('skins/${SkinUtil.curSkin}/ratings/$i', null, true), IMAGE)) {
+            var oldJudge = Paths.png('skins/${SkinUtil.curSkin}/ratings/$i');
+            if (Paths.exists(oldJudge, IMAGE)) {
                 animated = false; // Backwards compatibility ???
                 break;
             }
@@ -77,9 +78,11 @@ class JudgeRating extends RemoveRating {
         if (animated) {
             var imagePath = 'skins/${SkinUtil.curSkin}/ratings/ratings';
             loadImage(imagePath);
-            var _length = CoolUtil.returnJudgements.length + 1;
-            loadImageAnimated(imagePath, Std.int(width / _length), Std.int(height));
-            for (i in 0..._length) animation.add(judgeRatings[i], [i], 1);
+
+            var length = CoolUtil.returnJudgements.length + 1;
+            loadGraphic(graphic, true, Std.int(width / length / lodScale), Std.int(height / lodScale));
+            for (i in 0...length)
+                animation.add(judgeRatings[i], [i], 1);
         }
     }
 
@@ -113,7 +116,7 @@ class NumRating extends RemoveRating {
         super();
         final imagePath = 'skins/${SkinUtil.curSkin}/ratings/nums';
         loadImage(imagePath);
-        loadImageAnimated(imagePath, Std.int(width * 0.1), Std.int(height));
+        loadGraphic(graphic, true, Std.int(width * 0.1 / lodScale), Std.int(height / lodScale));
         for (i in 0...10) animation.add(Std.string(i), [i], 1);
         setScale(scale.x);
         initScale = scale.x;
@@ -125,7 +128,7 @@ class NumRating extends RemoveRating {
         updateHitbox();
         start(Conductor.crochet * 0.001 * 2, Conductor.stepCrochet * 0.025);
         jump(0.8);
-        offset.x = width * id;
+        offset.x = width * lodScale * id;
     }
 }
 

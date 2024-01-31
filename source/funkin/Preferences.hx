@@ -10,6 +10,7 @@ class Preferences {
     public static var arrayPrefs:Map<String, ArrayPref> = [];
     
     #if desktop
+    static inline var default_resolution:String = "1280x720";
     public static final resolutions:Array<String> = [
         "256x144",
         "640x360",
@@ -31,7 +32,7 @@ class Preferences {
         addPref('botplay',        'botplay mode',    false);
         addPref('practice',       'practice mode',   false);
         addPref('downscroll',     'downscroll',      false);
-        addPref('ghost-tap-style', 'ghost tapping', {array:["dad turn", "off", "on"], value: "off"});
+        addPref('ghost-tap-style', 'ghost tapping', {array:["dad turn", "off", "on"], value:"off"});
         addPref('use-const-speed', 'use constant speed', false);
         addPref('const-speed', 'constant speed', 1.0);
 
@@ -47,8 +48,9 @@ class Preferences {
         /****/addHeader("PERFORMANCE");/****/
 
         addPref('antialiasing',   'antialiasing',    true);
+        addPref('quality', 'quality', {array:["high", "medium", "low", "rudy"], value:"high"});
         #if desktop
-        addPref('resolution',   'resolution',    {array:resolutions, value: "1280x720"});
+        addPref('resolution',   'resolution',    {array:resolutions, value:default_resolution});
         #end
         #if !hl
         addPref('clear-gpu',      'clear gpu cache', true);
@@ -90,6 +92,7 @@ class Preferences {
         FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
         Main.fpsCounter.visible = getPref('fps-counter');
+        AssetManager.setLodQuality(getPref('quality'));
         #if desktop
         Main.resizeGame(getPref('resolution'));
         #end

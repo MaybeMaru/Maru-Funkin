@@ -13,9 +13,6 @@ class InitState extends FlxState {
         super.create();
 
 		//Load Settings / Mods
-        SaveData.init();
-		Controls.setupBindings();
-		Preferences.setupPrefs();
         Conductor.init();
 		CoolUtil.init();
 		Highscore.load();

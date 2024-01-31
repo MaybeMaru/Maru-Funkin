@@ -15,13 +15,14 @@ class ModItem extends FlxSpriteGroup {
         modBox.alpha = 0.6;
         add(modBox);
 
-        final _tryImage = 'mods/${mod.folder}/${mod.icon}.png';
-        final iconGraphic = Paths.exists(_tryImage, IMAGE) ? AssetManager.getImage(_tryImage) : Paths.image('options/' + switch(mod.folder.substring(0, 4)) {
+        var modIcon = 'mods/${mod.folder}/${mod.icon}.png';
+        var iconGraphic = Paths.exists(modIcon, IMAGE) ? AssetManager.cacheGraphicPath(modIcon) :Paths.image('options/' + switch(mod.folder.substring(0, 4)) {
             case "osu-": "osuMod";
             case "qua-": "quaverMod";
             default: "blankMod";
         });
-        final modIcon:FlxSpriteExt = new FlxSpriteExt();
+
+        var modIcon:FlxSpriteExt = new FlxSpriteExt();
         modIcon.loadGraphic(iconGraphic);
         modIcon.setScale(0.6);
         modIcon.setPosition(15, modBox.height * 0.5 - modIcon.height * 0.5);
@@ -36,7 +37,7 @@ class ModItem extends FlxSpriteGroup {
         modDesc.wordWrap = true;
         add(modDesc);
 
-        enableButton = new FlxSpriteExt(modBox.width,modBox.height).loadImageAnimated('options/modButton', 60, 58);
+        enableButton = new FlxSpriteExt(modBox.width,modBox.height).loadImageTiled('options/modButton', 60, 58);
         enableButton.animation.add('on', [0]);
         enableButton.animation.add('off', [1]);
         enableButton.x -= enableButton.width + 5;

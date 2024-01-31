@@ -1,5 +1,7 @@
 package funkin.util;
 
+import funkin.util.backend.AtlasFrames;
+import openfl.media.Sound;
 import haxe.io.Path;
 import flixel.system.FlxAssets;
 import flixel.system.FlxAssets.FlxSoundAsset;
@@ -123,38 +125,66 @@ class Paths
 		return getPath('data/shaders/$key.frag', TEXT, library);
 	}
 
-	static public function sound(key:String, ?library:String, ?level:String, forcePath:Bool = false):FlxSoundAsset
-	{
-		var soundPath:String = getPath('sounds/$key.$SOUND_EXT', SOUND, library, false, true, level);
-		return forcePath ? soundPath : AssetManager.getSound(soundPath);
+	/*
+	 * SOUNDS
+	**/
+
+	inline static public function soundExt(key:String, folder:String, ?library:String, ?level:String):String {
+		return getPath('$folder/$key.$SOUND_EXT', SOUND, library, false, true, level);
 	}
 
-	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String):FlxSoundAsset
-	{
-		return sound('$key${FlxG.random.int(min, max)}', library);
+	inline static public function soundFolder(key:String, ?library:String, ?level:String):String {
+		return soundExt(key, "sounds", library, level);
 	}
 
-	inline static public function music(key:String, ?library:String, forcePath:Bool = false):FlxSoundAsset
-	{
-		var musicPath:String = getPath('music/$key.$SOUND_EXT', MUSIC, library);
-		var soundFile:FlxSoundAsset = AssetManager.getSound(musicPath);
-		return forcePath ? musicPath : soundFile;
+	inline static public function sound(key:String, ?library:String, ?level:String):Sound {
+		var soundPath = soundFolder(key, library, level);
+		return AssetManager.cacheSoundPath(soundPath);
 	}
 
-	inline static public function voices(song:String, forcePath:Bool = false):FlxSoundAsset
-	{
-		var voicesPath:String = getPath('${Song.formatSongFolder(song)}/audio/Voices.$SOUND_EXT', MUSIC, 'songs');
-		return forcePath ? voicesPath : AssetManager.getSound(voicesPath);
+	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String):Sound {
+		return sound(key + FlxG.random.int(min, max), library);
 	}
 
-	inline static public function inst(song:String, forcePath:Bool = false, global:Bool = false):FlxSoundAsset
-	{
-		var instPath:String = getPath('${Song.formatSongFolder(song)}/audio/Inst.$SOUND_EXT', MUSIC, 'songs', global);
-		return forcePath ? instPath : AssetManager.getSound(instPath);
+	inline static public function musicFolder(key:String, ?library:String, ?level:String):String {
+		return soundExt(key, "music", library, level);
+	}
+
+	inline static public function music(key:String, ?library:String, ?level:String):Sound {
+		var musicPath = musicFolder(key, library, level);
+		return AssetManager.cacheSoundPath(musicPath);
+	}
+
+	/*
+	 * SONGS
+	**/
+
+	inline static public function songAudioAssetPath(song:String, asset:String, ?globalAsset:Bool):String {
+		return getPath('${Song.formatSongFolder(song)}/audio/$asset.$SOUND_EXT', MUSIC, 'songs', globalAsset);
+	}
+
+	inline static public function voicesPath(song:String, ?globalAsset:Bool):String {
+		return songAudioAssetPath(song, "Voices", globalAsset);
+	}
+
+	inline static public function voices(song:String, ?globalAsset:Bool):Sound {
+		var voicesPath:String = voicesPath(song, globalAsset);
+		return AssetManager.cacheSoundPath(voicesPath);
+	}
+
+	inline static public function instPath(song:String, ?globalAsset:Bool):String {
+		return songAudioAssetPath(song, "Inst", globalAsset);
+	}
+
+	inline static public function inst(song:String, ?globalAsset:Bool):Sound {
+		var instPath:String = instPath(song, globalAsset);
+		return AssetManager.cacheSoundPath(instPath);
 	}
 
 	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
-		ext = ext.startsWith('/') ? ext : '.$ext';
+		if (!ext.startsWith('/'))
+			ext = '.$ext';
+
 		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
 	}
 
@@ -162,9 +192,17 @@ class Paths
 		return getPath('${Song.formatSongFolder(song)}/charts/songMeta.json', TEXT, 'songs');
 	}
 
-	inline static public function image(key:String, ?library:String, forcePath:Bool = false, allMods:Bool = false, gpu:Bool = true):FlxGraphicAsset {
-		var imagePath:String = getPath('images/$key.png', IMAGE, library, allMods);
-		return forcePath ? imagePath : AssetManager.getImage(imagePath, gpu);
+	/*
+	 * GRAPHICS
+	**/
+
+	inline static public function png(key:String, ?library:String, ?globalAsset:Bool):String {
+		return getPath('images/$key.png', IMAGE, library, globalAsset ?? false);
+	}
+
+	inline static public function image(key:String, ?library:String, ?globalAsset:Bool, ?useTexture:Bool, ?lodLevel:LodLevel):LodGraphic {
+		var pngPath = png(key, library, globalAsset);
+		return AssetManager.cacheGraphicPath(pngPath, false, useTexture, lodLevel);
 	}
 
 	inline static public function font(key:String, ?library:String):String {
@@ -193,21 +231,53 @@ class Paths
 		return [dirParts[1], dirParts[dirParts.length-1].split('.')[0]];
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSparrow(image(key, library, false, false, gpu), CoolUtil.getFileContent(file('images/$key.xml', library)));
+	inline static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
+		var image = image(key, library, false, useTexture, lodLevel);
+		var xml = CoolUtil.getFileContent(file('images/$key.xml', library));
+		
+		return __checkLodFrames(AtlasFrames.fromSparrow(image, xml));
 	}
 
-	inline static public function getPackerAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, false, false, gpu), CoolUtil.getFileContent(file('images/$key.txt', library)));
+	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
+		var image = image(key, library, false, useTexture, lodLevel);
+		var txt = CoolUtil.getFileContent(file('images/$key.txt', library));
+
+		return __checkLodFrames(FlxAtlasFrames.fromSpriteSheetPacker(image, txt));
 	}
 
-	inline static public function getAsepriteAtlas(key:String, ?library:String, gpu:Bool = true):FlxAtlasFrames {
-		return JsonUtil.getAsepritePacker(key, library, gpu);
+	inline static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
+		var image = image(key, library, false, useTexture, lodLevel);
+		var json = CoolUtil.getFileContent(file('images/$key.json', library));
+		
+		return __checkLodFrames(JsonUtil.getAsepritePacker(image, json));
 	}
 
-	inline static public function getTextureAtlas(key:String, ?library:String):FlxAtlasFrames {
-		return null;
-		//return TextureAtlas.fromAtlas(file('images/$key/Animation.json', TEXT, library).replace("/Animation.json", ""));
+	//inline static public function getAnimateAtlas(key:String, ?library:String):FlxAtlasFrames {
+	//	return null;
+	//}
+
+	@:noCompletion
+	inline private static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {
+		var parent:LodGraphic = cast(frames.parent, LodGraphic);
+		if (parent.lodLevel == 0 || parent.parsedChildren)
+			return frames;
+
+		var lodScale = parent.lodScale;
+		for (frame in frames.frames) {
+			var rect = frame.frame;
+			rect.x /= lodScale;
+            rect.y /= lodScale;
+            rect.width /= lodScale;
+            rect.height /= lodScale;
+
+			var offset = frame.offset;
+			offset.x /= lodScale;
+			offset.y /= lodScale;
+		}
+
+		parent.parsedChildren = true;
+
+		return frames;
 	}
 
 	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String> {
@@ -272,9 +342,9 @@ class Paths
 	}
 
 	inline static public function getAssetPath(key:String, type:AssetType = IMAGE):String {
-		switch (type) {
-			case SOUND: return cast sound(key, null, null, true);
-			default: 	return cast image(key, null, true);
+		return switch (type) {
+			case SOUND: soundFolder(key);
+			default: 	png(key);
 		}
 	}
 }

@@ -187,10 +187,15 @@ class Shader
 		return false;
 	}
 
-	inline public static function setSampler2D(shader:String, prop:String, path:String, ?bitmap:BitmapData)
+	inline public static function setSampler2D(shader:String, prop:String, ?path:String, ?bitmap:BitmapData)
 	{
 		if (existsShader(shader)) {
-			getShader(shader).setSampler2D(prop, bitmap != null ? bitmap : AssetManager.getBitmapData(Paths.image(path, null, true), true));
+			if (bitmap == null) {
+				if (path == null) throw 'No BitmapData given for variable $prop on shader $shader';
+				bitmap = AssetManager.cacheGraphicPath(path).bitmap;
+			}
+
+			getShader(shader).setSampler2D(prop, bitmap);	
 		}
 	}
 

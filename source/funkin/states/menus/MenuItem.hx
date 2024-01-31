@@ -9,9 +9,13 @@ class MenuItem extends FlxSpriteGroup {
 
 	public function new(targetY:Int = 0, weekName:String = 'week1'):Void {
 		super();
-		final imagePath = Paths.image('storymenu/weeks/$weekName', null, true, true);
-		weekSpr = (Paths.exists(imagePath, IMAGE) ? new FlxSpriteExt().loadImage('storymenu/weeks/$weekName', true) :
-													new FlxText(0,0,0,weekName).setFormat(Paths.font("phantommuff"), 80));
+		
+		var png = Paths.png('storymenu/weeks/$weekName', null, true);
+		
+		weekSpr = Paths.exists(png, IMAGE) ?
+		new FlxSpriteExt().loadImage('storymenu/weeks/$weekName', true) :
+		new FlxText(0, 0, 0, weekName).setFormat(Paths.font("phantommuff"), 80);
+
 		add(weekSpr);
 		screenCenter(X);
 
@@ -30,6 +34,7 @@ class MenuItem extends FlxSpriteGroup {
 	// I'm still learning how math works thanks whoever is reading this lol
 
 	// I indeed enjoyed reading this, thanks for your amazing words mr Muffin
+	
 	var flashingInt:Int = 0;
 	var fakeFramerate:Int = 0;
 	var isFlashing:Bool = false;

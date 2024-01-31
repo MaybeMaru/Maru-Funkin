@@ -21,6 +21,10 @@ class FlxFunkGame extends FlxGame {
     }
 
     override function create(_:openfl.events.Event) {
+        SaveData.init();
+        Controls.setupBindings();
+        Preferences.setupPrefs();
+        
         super.create(_);
 
         addChild(Main.transition = transition = new Transition());
@@ -32,6 +36,7 @@ class FlxFunkGame extends FlxGame {
         #end
 
         FlxG.mouse.useSystemCursor = true;
+        
         Preferences.effectPrefs();
     }
 

@@ -232,16 +232,17 @@ class StoryMenuState extends MusicBeatState {
 
 		var _spr:FlxSprite;
 		final diffPath = 'storymenu/difficulties/' + curWeekDiffs[curDifficulty].toLowerCase();
-		final _tryPath = Paths.image(diffPath, null, true, true);
+		final tryPath = Paths.png(diffPath, null, true);
 		
-		if (Paths.exists(_tryPath, IMAGE)) {
+		if (Paths.exists(tryPath, IMAGE)) {
 			sprDiff.loadImage(diffPath, true);
 			diffText.visible = false;
 			sprDiff.visible = true;
 			sprDiff.screenCenter(X);
 			sprDiff.x += FlxG.width*0.335;
 			_spr = sprDiff;
-		} else {
+		}
+		else {
 			diffText.text = curWeekDiffs[curDifficulty];
 			diffText.visible = true;
 			diffText.color = 0xc508ff;

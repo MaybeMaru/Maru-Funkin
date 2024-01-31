@@ -63,10 +63,15 @@ class Conductor {
 			inst = new FlxSound().loadEmbedded(Paths.inst(song));
 			inst.persist = true;
 			FlxG.sound.list.add(inst);
-			hasVocals = Paths.exists(Paths.voices(song, true), MUSIC);
+
+			hasVocals = Paths.exists(Paths.voicesPath(song), MUSIC);
 			vocals = hasVocals ? new FlxSound().loadEmbedded(Paths.voices(song)) : new FlxSound();
 			vocals.persist = true;
 			FlxG.sound.list.add(vocals);
+
+			AssetManager.getAsset(Paths.instPath(song)).onDispose = () -> {
+				_loadedSong = ""; // Reload song file on dispose
+			}
 		}
 		_loadedSong = song;
 		inst.onComplete = function () {}

@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.util.typeLimit.OneOfTwo;
 import flixel.graphics.frames.FlxFrame;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.util.FlxDestroyUtil;
@@ -61,20 +62,21 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	public function loadImageAnimated(path:String, _frameWidth:Int = 0, _frameHeight:Int = 0, global:Bool = false, gpu:Bool = true):FlxSpriteExt {
-		loadGraphic(Paths.image(path, null, !gpu, global), true, _frameWidth, _frameHeight);
+	public function loadImageTiled(path:String, frameWidth:Int = 0, frameHeight:Int = 0, globalAsset:Bool = false, useTexture:Bool = true, ?library:String):FlxSpriteExt {
+		var image = Paths.image(path, library, globalAsset, useTexture);
+		loadGraphic(image, true, Std.int(frameWidth / image.lodScale), Std.int(frameHeight / image.lodScale));
 		return this;
 	}
 
-	public function loadImage(path:String, global:Bool = false, gpu:Bool = true, ?library:String):FlxSpriteExt {
+	public function loadImage(path:String, globalAsset:Bool = false, useTexture:Bool = true, ?library:String):FlxSpriteExt {
 		packer = Paths.getPackerType(path);
 		imageKey = path;
 		switch (packer) {
-			default:			loadGraphic(Paths.image(path, library, false, global, gpu));
-			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, gpu);
-			case SHEETPACKER: 	frames = Paths.getPackerAtlas(path, library, gpu);
-			case JSON:			frames = Paths.getAsepriteAtlas(path, library, gpu);
-			case ATLAS: 		frames = Paths.getTextureAtlas(path);	
+			default:			loadGraphic(Paths.image(path, library, globalAsset, useTexture));
+			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, useTexture);
+			case SHEETPACKER: 	frames = Paths.getSpriteSheetAtlas(path, library, useTexture);
+			case JSON:			frames = Paths.getAsepriteAtlas(path, library, useTexture);
+			case ATLAS: 		//frames = Paths.getTextureAtlas(path);	
 		}
 		return this;
 	}
@@ -185,6 +187,22 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		__superDrawComplex(camera);
 	}
 
+	public var lodDiv(default, null):Float = 1.0;
+	public var lodScale(default, set):Float = 1.0;
+	inline function set_lodScale(value:Float) {
+		lodDiv = 1 / value;
+		return lodScale = value;
+	}
+
+	override function set_graphic(value:FlxGraphic):FlxGraphic {
+		if (graphic != value) {
+			lodScale = (value is LodGraphic) ? cast(value, LodGraphic).lodScale : 1.0;			
+			graphic = value;
+		}
+		
+		return value;
+	}
+
 	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
 		@:privateAccess {
 			mat.a = frame.tileMatrix[0];
@@ -208,6 +226,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (flipY != frame.flipY) {
 			inline mat.scale(1, -1);
 			inline mat.translate(0, frame.sourceSize.y);
+		}
+
+		if (lodScale != 1.0) {
+			inline mat.scale(lodScale, lodScale);
 		}
 	}
 
@@ -256,7 +278,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
 		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
 		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
-		newRect.setSize(frameWidth * Math.abs(scale.x), frameHeight * Math.abs(scale.y));
+		newRect.setSize(frameWidth * Math.abs(scale.x * lodScale), frameHeight * Math.abs(scale.y * lodScale));
 		
 		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
 	}
@@ -358,12 +380,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	inline public function stampBitmap(Brush:BitmapData, X:Float = 0, Y:Float = 0):Void {
-		var matrix = CoolUtil.matrix;
-		inline matrix.setTo(1, 0, 0, 1, X, Y);
+		var matrix = CoolUtil.resetMatrix();
+		matrix.tx = X;
+		matrix.ty = Y;
 		graphic.bitmap.draw(Brush, matrix);
 	}
 
 	inline public function uploadGpu(?key:String):FlxGraphic {
-		return AssetManager.uploadSpriteGpu(this, key ?? imageKey);
+		return AssetManager.uploadGraphicTexture(graphic);
 	}
 }
