@@ -140,12 +140,12 @@ class AssetManager
 	}
 
 	public static inline function clearStaticCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
-		staticAssets = __clearCacheFromKeys(staticAssets, clearGraphics, clearSounds);
+		__clearCacheFromKeys(staticAssets, clearGraphics, clearSounds);
 		if (runGc) CoolUtil.gc(true);
 	}
 
 	public static inline function clearTempCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
-		tempAssets = __clearCacheFromKeys(tempAssets, clearGraphics, clearSounds);
+		__clearCacheFromKeys(tempAssets, clearGraphics, clearSounds);
 		if (runGc) CoolUtil.gc(true);
 	}
 
@@ -305,8 +305,8 @@ class AssetManager
 		asset.dispose();
 		assetsMap.remove(key);
 
-		if (tempAssets.contains(key)) tempAssets.remove(key);
-		else if (staticAssets.contains(key)) staticAssets.remove(key);
+		if (tempAssets.contains(key)) tempAssets.splice(tempAssets.indexOf(key), 1);
+		else if (staticAssets.contains(key)) staticAssets.splice(staticAssets.indexOf(key), 1);
 
 		return true;
 	}
@@ -317,21 +317,52 @@ class AssetManager
 		return asset != null ? asset.asset : null;
 	}
 
+	/*inline static function __disposeKeyFromKeys(key:String, keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Void {
+		var asset = assetsMap.get(key);
+		if (asset != null) {
+			var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
+			if (dispose) {
+				keys.remove(key);
+				asset.dispose();
+				assetsMap.remove(key);
+			}
+		}
+	}*/
+
 	@:noCompletion
-	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool) {
+	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Array<String> {
+		var removeKeys:Array<String> = [];
+		
 		for (i in 0...keys.length) {
 			var key = keys[i];
 			var asset = assetsMap.get(key);
-
 			if (asset != null) {
 				var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
 				if (dispose) {
+					removeKeys.push(key);
 					asset.dispose();
 					assetsMap.remove(key);
 				}
 			}
 		}
 
-		return FlxArrayUtil.clearArray(keys);
+		for (key in removeKeys)
+			keys.remove(key);
+
+		return keys;
 	}
+
+	/*
+	@:noCompletion
+	inline static function __clearCacheFromMod(keys:Array<String>, mod:String, clearGraphics:Bool, clearSounds:Bool):Array<String> {
+		for (i in 0...keys.length) {
+			var key = keys[i];
+			var keyMod = key.split("/")[1];
+			if (keyMod != mod) continue;
+
+			__disposeKeyFromKeys(key, keys, clearGraphics, clearSounds);
+		}
+
+		return keys;
+	}*/
 }

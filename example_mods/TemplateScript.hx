@@ -537,6 +537,11 @@ function endWeek()
     //  Called when the week is finished on story mode
 }
 
+function exitFreeplay()
+{
+    // Called when a freeplay song is finished
+}
+
 function switchSong(nextSongName:String, nextSongDifficulty:String)
 {
     // Called when the next song on the story mode playlist is loaded

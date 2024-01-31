@@ -17,11 +17,11 @@ import openfl.geom.Rectangle;
 
 class AtlasFrames extends FlxAtlasFrames
 {
-	public static function fromSparrow(source:FlxGraphicAsset, xml:FlxXmlAsset):FlxAtlasFrames
+	public static function fromSparrow(?graphic:LodGraphic, xml:FlxXmlAsset):FlxAtlasFrames
 	{
-		var graphic:FlxGraphic = FlxG.bitmap.add(source);
 		if (graphic == null)
 			return null;
+		
 		// No need to parse data again
 		var frames:FlxAtlasFrames = FlxAtlasFrames.findFrame(graphic);
 		if (frames != null)

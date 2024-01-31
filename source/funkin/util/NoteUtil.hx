@@ -113,6 +113,15 @@ class NoteUtil {
         skinSpriteMap.set(skin, skinData);
         return skinData;
     }
+
+    public static function clearSkinsData() {
+        for (key => data in skinSpriteMap) {
+            data.baseSprite = FlxDestroyUtil.destroy(data.baseSprite);
+            data.skinJson = null;
+            skinSpriteMap.remove(key);
+            data = null;
+        }
+    }
     
     public static function getSkinSprites(skin:String):SkinSpriteData {
         if (!skinSpriteMap.exists(skin)) setupSkinSprites(skin);
@@ -242,7 +251,6 @@ class NoteAtlas {
 
         // And replace old bitmap
         coloredParent.bitmap.dispose();
-        coloredParent.bitmap.disposeImage();
         coloredParent.bitmap = strumBitmap;
 
         // TODO: add default frames and optimize the ammount of stuff needed to add on the bitmap

@@ -628,7 +628,8 @@ class PlayState extends MusicBeatState {
 			storyPlaylist.length <= 0 ? endWeek() : switchSong();
 		}
 		else {
-			trace('WENT BACK TO FREEPLAY??');
+			ModdingUtil.addCall('exitFreeplay');
+
 			clearCache = true;
 			switchState(new FreeplayState());
 		}
@@ -659,9 +660,7 @@ class PlayState extends MusicBeatState {
 		Conductor.stop();
 
 		clearCache = true;
-		clearCacheData = { // Clear last song audio and shaders
-			tempCache: false
-		}
+		clearCacheData = {tempCache: false, skins: false}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
 		switchState(new PlayState(), true);
 	}

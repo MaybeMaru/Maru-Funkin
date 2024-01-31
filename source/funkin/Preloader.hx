@@ -66,7 +66,8 @@ class Preloader extends FlxState {
 
         final cacheStr = imageCache[0];
         if (cacheStr != null) {
-            cacheImage(Paths.png(cacheStr));
+            var png = Paths.getPath('images/$cacheStr.png', IMAGE, null, false, false);
+            cacheImage(png);
             imageCache.splice(imageCache.indexOf(cacheStr), 1);
 
             cachePart.text = 'Preloading Sprites...\n' + cacheStr;

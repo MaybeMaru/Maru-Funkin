@@ -123,7 +123,8 @@ class FlxRepeatSprite extends FlxSpriteExt {
         // Fix bug of tiles duplicating
         __lastMatrix.set(-1, -1);
 
-        final fw:Float = frameWidth * scale.x; // TODO: replace this shit same way as Height
+        var scaleX = scaleX();
+        var fw:Float = frameWidth * scaleX; // TODO: replace this shit same way as Height
 
         switch (drawStyle) {
             // Draw from left top to right bottom style
@@ -133,17 +134,17 @@ class FlxRepeatSprite extends FlxSpriteExt {
                     for (yi in 0...tilesY) {
                         setupTile(xi, yi, frame);
                         
-                        final addW = fw * (xi + 1);
+                        var addW = fw * (xi + 1);
                         if (addW > repeatWidth) // Cut frame width
-                            _frame.frame.width = (fw + (repeatWidth - addW)) / scale.x;
+                            _frame.frame.width = (fw + (repeatWidth - addW)) / scaleX;
                         
                         heightPos += tempPoint.y;
                         if (heightPos > repeatHeight) // Cut frame height
-                            _frame.frame.height = (tempPoint.y + (repeatHeight - heightPos)) / scale.y;
+                            _frame.frame.height = (tempPoint.y + (repeatHeight - heightPos)) / scaleY();
         
                         // Position and draw
-                        final addX = addW - fw;
-                        final addY = heightPos - tempPoint.y;
+                        var addX = addW - fw;
+                        var addY = heightPos - tempPoint.y;
 
                         _matrix.tx = point.x + (addX * _cosAngle) + (addY * -_sinAngle);
                         _matrix.ty = point.y + (addX * _sinAngle) + (addY * _cosAngle);
@@ -159,19 +160,20 @@ class FlxRepeatSprite extends FlxSpriteExt {
                     for (yi in 0...tilesY) {
                         setupTile(xi, yi, frame);
 
-                        final addW = fw * (xi + 1);
+                        var addW = fw * (xi + 1);
                         if (addW > repeatWidth) // Cut frame width
-                            _frame.frame.width = (fw + (repeatWidth - addW)) / scale.x;
+                            _frame.frame.width = (fw + (repeatWidth - addW)) / scaleX;
 
                         heightPos -= tempPoint.y;
                         if (heightPos < 0) {
-                            _frame.frame.height += heightPos / scale.y;
-                            _frame.frame.y -= heightPos / scale.y;
+                            var scaleY = scaleY();
+                            _frame.frame.height += heightPos / scaleY;
+                            _frame.frame.y -= heightPos / scaleY;
                             heightPos = 0;
                         }
 
                         // Position and draw
-                        final addX = addW - fw;
+                        var addX = addW - fw;
                         _matrix.tx = point.x + (addX * _cosAngle) + (heightPos * -_sinAngle);
                         _matrix.ty = point.y + (addX * _sinAngle) + (heightPos * _cosAngle);
                         
@@ -191,7 +193,7 @@ class FlxRepeatSprite extends FlxSpriteExt {
     // Prepare tile dimensions
     function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
         var frame = baseFrame.frame;
-        var point = __tempPoint.set(frame.width * scale.y, frame.height * scale.y);
+        var point = __tempPoint.set(frame.width * scaleX(), frame.height * scaleY());
         _frame.frame.copyFrom(frame);
         _frame.angle = baseFrame.angle;
         return point;
@@ -225,12 +227,18 @@ class FlxRepeatSprite extends FlxSpriteExt {
         camera.drawPixels(tileFrame, bitmap, tileMatrix, colorTransform, blend, antialiasing, shader);
     }
 
+    @:noCompletion
+    inline private function scaleX() return scale.x * lodScale;
+
+    @:noCompletion
+    inline private function scaleY() return scale.y * lodScale;
+
     inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool {
         var rect = CoolUtil.rect.set(
             x,
             y,
-            w * Math.abs(scale.x),
-            h * Math.abs(scale.y)
+            w * Math.abs(scaleX()),
+            h * Math.abs(scaleY())
         );
         return cam.containsRect(rect.getRotatedBounds(angle, null, rect));
     }
@@ -242,38 +250,42 @@ class FlxRepeatSprite extends FlxSpriteExt {
         var frame = tileFrame.frame;
         var baseFrame = baseFrame.frame;
 
+        var scaleX = scaleX();
+
         // Cut if clipping left
         if (tilePos.x < 0) {
-            var offX = tilePos.x / scale.x;
+            var offX = tilePos.x / scaleX;
             frame.width += offX;
             frame.x -= offX;
-            translateWithTrig(-offX * scale.x, 0);
+            translateWithTrig(-offX * scaleX, 0);
             if (frame.width <= 0) return false; // Dont draw it
         }
 
         // Cut if clipping right
         if ((clipRect.width - clipRect.x) < repeatWidth) {
-            var cutX = (tilePos.x + (baseFrame.width * scale.x)) - clipRect.width;
+            var cutX = (tilePos.x + (baseFrame.width * scaleX)) - clipRect.width;
             if (cutX > 0) {
-                frame.width -= cutX / scale.x;
+                frame.width -= cutX / scaleX;
                 if (frame.width <= 0) return false; // Dont draw it
             }
         }
 
+        var scaleY = scaleY();
+
         // Cut if clipping top
         if (tilePos.y < 0) {
-            var offY = tilePos.y / scale.y;
+            var offY = tilePos.y / scaleY;
             frame.height += offY;
             frame.y -= offY;
-            translateWithTrig(0, -offY * scale.y);
+            translateWithTrig(0, -offY * scaleY);
             if (frame.height <= 0) return false; // Dont draw it
         }
         
         // Cut if clipping bottom
         if ((clipRect.height - clipRect.y) < repeatHeight) {
-            var cutY = (tilePos.y + (baseFrame.height * scale.y)) - clipRect.height;
+            var cutY = (tilePos.y + (baseFrame.height * scaleY)) - clipRect.height;
             if (cutY > 0) {
-                frame.height -= cutY / scale.y;
+                frame.height -= cutY / scaleY;
                 if (frame.height <= 0) return false; // Dont draw it
             }
         }

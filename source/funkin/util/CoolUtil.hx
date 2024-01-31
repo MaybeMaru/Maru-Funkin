@@ -15,7 +15,8 @@ import neko.vm.Gc;
 typedef CacheClearing =  {
 	?tempCache:Bool,
 	?staticCache:Bool,
-	?shaders:Bool
+	?shaders:Bool,
+	?skins:Bool
 }
 
 enum abstract SoundType(String) {
@@ -83,13 +84,15 @@ class CoolUtil {
 	static final DEFAULT_CACHE_CLEARING:CacheClearing = {
 		tempCache: true,
 		staticCache: false,
-		shaders: true
+		shaders: true,
+		skins: true
 	}
 
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
 		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
 
 		if (cacheClear.shaders) Shader.clearShaders();
+		if (cacheClear.skins) NoteUtil.clearSkinsData();
 
 		if (cacheClear.tempCache) AssetManager.clearTempCache(false);
 		if (cacheClear.staticCache) AssetManager.clearTempCache(false);

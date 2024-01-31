@@ -53,7 +53,6 @@ class Preferences {
         addPref('resolution',   'resolution',    {array:resolutions, value:default_resolution});
         #end
         #if !hl
-        addPref('clear-gpu',      'clear gpu cache', true);
         addPref('preload',        'preload at start', true);
         #end
 
