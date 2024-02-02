@@ -114,9 +114,17 @@ class LodGraphic extends FlxGraphic
 		bitmap = lodBitmap;
 
 		imageFrame.frame.sourceSize *= lodScale;
+	}
 
-		//width = bitmap.width << level;
-		//height = bitmap.height << level;
+	override function set_bitmap(value:BitmapData):BitmapData {
+		if (value != null)
+		{
+			bitmap = value;
+			width = bitmap.width << lodLevel;
+			height = bitmap.height << lodLevel;
+		}
+
+		return value;
 	}
 }
 
@@ -317,18 +325,6 @@ class AssetManager
 		return asset != null ? asset.asset : null;
 	}
 
-	/*inline static function __disposeKeyFromKeys(key:String, keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Void {
-		var asset = assetsMap.get(key);
-		if (asset != null) {
-			var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
-			if (dispose) {
-				keys.remove(key);
-				asset.dispose();
-				assetsMap.remove(key);
-			}
-		}
-	}*/
-
 	@:noCompletion
 	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Array<String> {
 		var removeKeys:Array<String> = [];
@@ -352,17 +348,29 @@ class AssetManager
 		return keys;
 	}
 
-	/*
 	@:noCompletion
 	inline static function __clearCacheFromMod(keys:Array<String>, mod:String, clearGraphics:Bool, clearSounds:Bool):Array<String> {
+		var removeKeys:Array<String> = [];
+		
 		for (i in 0...keys.length) {
 			var key = keys[i];
 			var keyMod = key.split("/")[1];
 			if (keyMod != mod) continue;
 
-			__disposeKeyFromKeys(key, keys, clearGraphics, clearSounds);
+			var asset = assetsMap.get(key);
+			if (asset != null) {
+				var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
+				if (dispose) {
+					removeKeys.push(key);
+					asset.dispose();
+					assetsMap.remove(key);
+				}
+			}
 		}
 
+		for (key in removeKeys)
+			keys.remove(key);
+
 		return keys;
-	}*/
+	}
 }

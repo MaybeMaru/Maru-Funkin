@@ -1,10 +1,7 @@
 package funkin.util;
 
-import funkin.util.backend.AtlasFrames;
 import openfl.media.Sound;
 import haxe.io.Path;
-import flixel.system.FlxAssets;
-import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
@@ -235,7 +232,7 @@ class Paths
 		var image = image(key, library, false, useTexture, lodLevel);
 		var xml = CoolUtil.getFileContent(file('images/$key.xml', library));
 		
-		return __checkLodFrames(AtlasFrames.fromSparrow(image, xml));
+		return __checkLodFrames(FlxAtlasFrames.fromSparrow(image, xml));
 	}
 
 	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {

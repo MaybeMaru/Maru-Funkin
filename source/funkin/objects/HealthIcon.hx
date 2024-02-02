@@ -55,12 +55,22 @@ class HealthIcon extends FlxSpriteExt {
 
 	var _height:Float = 0;
 	var _width:Float = 0;
+	var _lodOffset:Float = 0;
 	var bumpLerp:Float = 0.0;
 	var coolOffset:Float = 0.0;
 
 	function initBumpVars() {
-		_height = height * lodScale * 0.55;
-		_width = width * lodScale;
+		_height = height * __getScale() * 0.55;
+		_width = width * __getScale();
+
+		// This is probably some primary school type formula
+		// ..but im too tired to fuck around and find out
+		_lodOffset = singleAnim ? 0.0 : switch (Std.int(lodScale)) {
+			case 2: 0.5;
+			case 4: 0.75;
+			case 8: 1.0;
+			default: 0.0;
+		}
 
 		if (Preferences.getPref('vanilla-ui')) {
 			bumpLerp = 0.75;
@@ -68,7 +78,7 @@ class HealthIcon extends FlxSpriteExt {
 		}
 		else {
 			bumpLerp = 0.15;
-			coolOffset = 23 + width * lodScale * 0.333;
+			coolOffset = 23 + _width * 0.333;
 		}
 	}
 
@@ -87,9 +97,12 @@ class HealthIcon extends FlxSpriteExt {
 		}
 	}
 
+	inline function __getScale()
+		return singleAnim ? 1.0 : lodScale;
+
 	public function setSprTrackerPos():Void {
 		if (sprTracker != null) {
-			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height * (singleAnim ? 1.0 : lodScale) * 0.5 - sprTracker.height * 0.5));
+			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - (height * __getScale() * 0.5 - sprTracker.height * 0.5));
 		}
 	}
 
@@ -101,11 +114,11 @@ class HealthIcon extends FlxSpriteExt {
 			
 			if (isPlayer) {
 				isDying = healthBar.percent < 20;
-				setPosition(healthBar.barPoint.x - (_width * 0.25) + coolOffset, healthBar.barPoint.y - _height);
+				setPosition(healthBar.barPoint.x - (_width * 0.25) + (_width * _lodOffset) + coolOffset, healthBar.barPoint.y - _height);
 			}
 			else {
 				isDying = healthBar.percent > 80;
-				setPosition(healthBar.barPoint.x - (width * lodScale) + _width - coolOffset, healthBar.barPoint.y - _height);
+				setPosition(healthBar.barPoint.x - (width * __getScale()) + _width - coolOffset, healthBar.barPoint.y - _height);
 			}
 
 			animCheck();

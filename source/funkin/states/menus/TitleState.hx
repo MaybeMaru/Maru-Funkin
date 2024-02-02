@@ -163,20 +163,20 @@ class TitleState extends MusicBeatState {
 
 		if (getKey('ACCEPT-P')) {
 			if (!transitioning && (skippedIntro || openedGame) ) {
-			transitioning = true;
-			titleText.playAnim('press');
-			titleText.color = FlxColor.WHITE;
-			openedGame = true;
+				transitioning = true;
+				titleText.playAnim('press');
+				titleText.color = FlxColor.WHITE;
+				openedGame = true;
 
-			FlxG.sound.music.pitch = 1.0;
-			FlxG.timeScale = 1.0;
+				FlxG.sound.music.pitch = 1.0;
+				FlxG.timeScale = 1.0;
 
-			CoolUtil.playSound('confirmMenu', 0.7);
-			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
+				CoolUtil.playSound('confirmMenu', 0.7);
+				FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
 
-			new FlxTimer().start(2, function(tmr:FlxTimer) {
-				switchState(new MainMenuState());
-			});
+				new FlxTimer().start(2, function(tmr:FlxTimer) {
+					switchState(new MainMenuState());
+				});
 			}
 			else if (!skippedIntro) {
 				skipIntro();
