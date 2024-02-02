@@ -60,7 +60,6 @@ class Asset
 				texture.__textureContext = null;
 				texture.__context = null;
 			}
-
 		}
 	}
 
@@ -161,6 +160,7 @@ class AssetManager
 	 * GRAPHIC CACHE
 	 */
 
+	public static var gpuTextures:Bool = #if hl false; #else true; #end
 	public static var lodQuality:LodLevel = HIGH;
 	public static function setLodQuality(level:String):LodLevel {
 		return lodQuality = switch (level) {
@@ -172,7 +172,7 @@ class AssetManager
 		}
 	}
 
-	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, useTexture:Bool = true, ?lodLevel:LodLevel, ?key:String):LodGraphic
+	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, ?useTexture:Bool, ?lodLevel:LodLevel, ?key:String):LodGraphic
 	{
 		if (key == null)
 			key = path;
@@ -192,7 +192,10 @@ class AssetManager
 		if (cast(lodLevel, Int) > 0)
 			graphic.generateLod(lodLevel);
 
-		if (useTexture)
+		if (useTexture == null)
+			useTexture = gpuTextures;
+
+		if (gpuTextures)
 			graphic = cast uploadGraphicTexture(graphic);
 		
 		var asset = Asset.fromAsset(graphic);

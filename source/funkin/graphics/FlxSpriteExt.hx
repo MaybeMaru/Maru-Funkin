@@ -62,13 +62,13 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	public function loadImageTiled(path:String, frameWidth:Int = 0, frameHeight:Int = 0, globalAsset:Bool = false, useTexture:Bool = true, ?library:String):FlxSpriteExt {
+	public function loadImageTiled(path:String, frameWidth:Int = 0, frameHeight:Int = 0, globalAsset:Bool = false, ?useTexture:Bool, ?library:String):FlxSpriteExt {
 		var image = Paths.image(path, library, globalAsset, useTexture);
 		loadGraphic(image, true, Std.int(frameWidth / image.lodScale), Std.int(frameHeight / image.lodScale));
 		return this;
 	}
 
-	public function loadImage(path:String, globalAsset:Bool = false, useTexture:Bool = true, ?library:String):FlxSpriteExt {
+	public function loadImage(path:String, globalAsset:Bool = false, ?useTexture:Bool, ?library:String):FlxSpriteExt {
 		packer = Paths.getPackerType(path);
 		imageKey = path;
 		switch (packer) {

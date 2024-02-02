@@ -31,7 +31,7 @@ class Preloader extends FlxState {
 	override public function create():Void {
 		super.create();
 
-        if (#if hl true #else !Preferences.getPref('preload') #end) {
+        if (!Preferences.getPref('preload')) {
             skipPreload = true;
             return;
         }

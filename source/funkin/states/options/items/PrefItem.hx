@@ -91,7 +91,10 @@ class PrefItem extends FlxSpriteGroup {
         if (usePrefs) {
             Preferences.setPref(itemPref, prefValue);
             switch (itemPref) {
-                case "framerate" | "fps-counter" | "resolution": Preferences.effectPrefs();
+                case "framerate": Preferences.updateFramerate();
+                case "fps-counter": Preferences.updateFpsCounter();
+                case "resolution": Preferences.updateResolution();
+                case "gpu-textures": Preferences.updateGpuTextures();
                 case "antialiasing": applyAntiGroup(FlxG.state.members, cast prefValue);
             }
         }

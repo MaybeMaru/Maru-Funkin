@@ -47,14 +47,15 @@ class Preferences {
         
         /****/addHeader("PERFORMANCE");/****/
 
-        addPref('antialiasing',   'antialiasing',    true);
-        addPref('quality', 'quality', {array:["high", "medium", "low", "rudy"], value:"high"});
         #if desktop
         addPref('resolution',   'resolution',    {array:resolutions, value:default_resolution});
         #end
+        addPref('antialiasing',   'antialiasing',    true);
+        addPref('quality', 'quality', {array:["high", "medium", "low", "rudy"], value:"high"});
         #if !hl
-        addPref('preload',        'preload at start', true);
+        addPref('gpu-textures',   'gpu textures', true);
         #end
+        addPref('preload',      'preload at start', true);
 
         /****/addHeader("MISCELLANEOUS");/****/
 
@@ -87,14 +88,27 @@ class Preferences {
         if (!preferences.exists(id)) preferences.set(id, defaultValue);
     }
 
-    public static function effectPrefs():Void {
+    public static inline function updateFramerate():Void
         FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
-        FlxSprite.defaultAntialiasing = getPref('antialiasing');
+
+    public static inline function updateFpsCounter():Void
         Main.fpsCounter.visible = getPref('fps-counter');
+
+    public static inline function updateResolution():Void {
+        #if desktop Main.resizeGame(getPref('resolution')); #end
+    }
+
+    public static inline function updateGpuTextures():Void {
+        #if !hl AssetManager.gpuTextures = getPref('gpu-textures'); #end
+    }
+
+
+    public static function effectPrefs():Void {
+        updateFramerate();
+        updateFpsCounter();
+        FlxSprite.defaultAntialiasing = getPref('antialiasing');
         AssetManager.setLodQuality(getPref('quality'));
-        #if desktop
-        Main.resizeGame(getPref('resolution'));
-        #end
+        updateGpuTextures();
     }
 
     private static function fixOldPrefs() {

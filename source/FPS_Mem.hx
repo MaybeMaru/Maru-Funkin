@@ -71,7 +71,7 @@ class FPS_Mem extends TextField
 		final fps:Int = times.length;
 
 		#if desktop
-			final bytes = System.totalMemory;//#if cpp Memory.getCurrentUsage(); #else System.totalMemory; #end
+			final bytes = #if cpp Memory.getCurrentUsage(); #else System.totalMemory; #end
 			final memCur = formatBytes(bytes);
 
 			if (memCur > memPeak)

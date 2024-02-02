@@ -223,9 +223,10 @@ getPref(prefName:String);
     'camera-zoom'       => Camera Zooms
 
     // Performance
-    'antialiasing'      => Antialiasing
     'resolution'        => Game Resolution ("256x144", "640x360", "854x480", "960x540", "1024x576", "1280x720", "native")
-    'clear-gpu'         => Clear Mod GPU Cache
+    'antialiasing'      => Antialiasing
+    'quality'           => Image LOD Quality ("high", "medium", "low", "rudy")
+    'gpu-textures'      => Use GPU Textures Caching
     'preload'           => Preload Assets At Start
 
     // Miscellaneous
