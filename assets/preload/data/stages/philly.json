@@ -5,5 +5,52 @@
 	"bfOffsets": [-75,0],
 	"startCamOffsets": [-800,-350],
 	"dadCamOffsets": [-100, 0],
-	"bfCamOffsets": [100, 0]
+	"bfCamOffsets": [100, 0],
+	"layers": {
+		"bg": [
+			{
+				"tag": "sky",
+				"imagePath": "sky",
+				"position": [-100, 0],
+				"scrolls": [0.1, 0.1]
+			},
+			{
+				"tag": "city",
+				"imagePath": "city",
+				"position": [-10, 0],
+				"scrolls":  [0.3,0.3],
+				"scale": 0.85
+			},
+			{
+				"tag": "lights",
+				"imagePath": "phillyWindow",
+				"position": [-10, 0],
+				"scrolls":  [0.3,0.3],
+				"scale": 0.85
+			},
+			{
+				"tag": "blur",
+				"imagePath": "phillyWindow-blur",
+				"position": [-10, 0],
+				"scrolls":  [0.3,0.3],
+				"scale": 0.85
+			},
+			{
+				"tag": "tracks",
+				"imagePath": "behindTrain",
+				"position": [-40, 50]
+			},
+			{
+				"tag": "train",
+				"imagePath": "train",
+				"position": [2000, 360]
+			},
+			{
+				"tag": "street",
+				"imagePath": "street",
+				"position": [-40, 50]
+			}
+		],
+		"fg": []
+	}
 }

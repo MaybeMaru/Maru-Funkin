@@ -221,8 +221,24 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			return manager;
 		});
 
-		set('addSpr', function(spr:Dynamic, key:String = 'coolswag', onTop:Bool = false):Void {
-			ScriptUtil.addSprite(spr,key,onTop);
+		set('addSpr', function(spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
+			return ScriptUtil.addSprite(spr, key, onTop);
+		});
+
+		set('insertSpr', function(spr:Dynamic, ?key:String, position:Int, onTop:Bool = false):Dynamic {
+			return ScriptUtil.insertSprite(spr, key, position, onTop);
+		});
+
+		set('insertBehind', function(spr:Dynamic, ?key:String, behindKey:String) {
+			var layer = ScriptUtil.getSpriteLayer(behindKey);
+			var bSpr = ScriptUtil.getSprite(behindKey);
+			ScriptUtil.insertSprite(spr, key, layer.indexOf(bSpr) - 1, layer);
+		});
+
+		set('insertAbove', function(spr:Dynamic, ?key:String, aboveKey:String) {
+			var layer = ScriptUtil.getSpriteLayer(aboveKey);
+			var aSpr = ScriptUtil.getSprite(aboveKey);
+			ScriptUtil.insertSprite(spr, key, layer.indexOf(aSpr), layer);
 		});
 
 		set('setObjMap', function(object:Dynamic, key:String) {

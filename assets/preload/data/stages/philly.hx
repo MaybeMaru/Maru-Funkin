@@ -1,141 +1,105 @@
-//Lights
-var phillyLightsColors:Array<Int> = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
-var phillyCityLights:FunkinSprite;
-var phillyCityLightsBlur:FunkinSprite; // Was gonna use a shader but takes too much memory, so fuck it
-var phillyColor:Int = 0;
+var colors = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
+var color = 0;
+var start;
+var sound;
 
-//Train
-var phillyTrain:FunkinSprite;
-var trainSound:FlxSound;
+function createPost() {
+	lights.blend = getBlendMode("add");
+	blur.blend = getBlendMode("add");
 
-var startedMoving:Bool = false;
-var trainMoving:Bool = false;
-var trainFrameTiming:Float = 0;
+	lights.alpha = 0;
+	blur.alpha = 0;
 
-var trainCars:Int = 8;
-var trainFinishing:Bool = false;
-var trainCooldown:Int = 0;
+	start = switch (State.curSong) {
+		case "Pico": 2;
+		default: 0;
+	}
 
-function create():Void {
-	var bg:FunkinSprite = new FunkinSprite('philly/sky', [-100, 0], [0.1,0.1]);
-	addSpr(bg, 'phillyBg');
-
-	var city:FunkinSprite = new FunkinSprite('philly/city', [-10, 0], [0.3,0.3]);
-	city.setScale(0.85);
-	addSpr(city, 'phillyCity');
-
-	phillyCityLights = new FunkinSprite('philly/phillyWindow', [city.x, 0], [0.3,0.3]);
-	phillyCityLights.visible = false;
-	phillyCityLights.setScale(0.85);
-	phillyCityLights.blend = getBlendMode('add');
-	addSpr(phillyCityLights, 'phillyWindow');
-
-	phillyCityLightsBlur = new FunkinSprite('philly/phillyWindow-blur', [city.x, 0], [0.3,0.3]);
-	phillyCityLightsBlur.visible = false;
-	phillyCityLightsBlur.setScale(0.85);
-	phillyCityLightsBlur.blend = getBlendMode('add');
-	addSpr(phillyCityLightsBlur, 'phillyWindowBlur');
-
-	var streetBehind:FunkinSprite = new FunkinSprite('philly/behindTrain', [-40, 50]);
-	addSpr(streetBehind, 'streetBehind');
-
-	phillyTrain = new FunkinSprite('philly/train', [2000, 360]);
-	addSpr(phillyTrain, 'phillyTrain');
-
-	var street:FunkinSprite = new FunkinSprite('philly/street', [-40, streetBehind.y]);
-	addSpr(street, 'phillyStreet');
-
-	trainSound = getSound('train_passes');
-	phillyColor += FlxG.random.int(0,3);
+	sound = getSound('train_passes');
+	color += FlxG.random.int(0, colors.length);
 }
 
-function beatHit(curBeat):Void {
-	var genTrain:Bool = (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8 && !trainSound.playing);
-	var inBlammed:Bool = (State.curSong == 'Blammed' && curBeat >= 100);
-
-	if (!trainMoving) {
-        trainCooldown++;
-	}
-
-    if (genTrain && !inBlammed) {
-        trainStart();
-    }
-}
-
-function sectionHit(curSection):Void {
-	var stuffToColor:Array<Null<FunkinSprite>> = [phillyCityLights, phillyCityLightsBlur];
-	if (existsSpr('blammedOverlay')) { // Prevent getting a null sprite error
-		for (i in ['blammedOverlay', 'tunnelLights', 'tunnelLightsBlur'])
-			stuffToColor.push(getSpr(i));
-	}
-
-	var curColor:Int = phillyLightsColors[phillyColor];
-	for (obj in stuffToColor) {
-		if (obj != null) {	//	BLAMMED COLORS
-			obj.color = curColor;
-		}
-	}
+function sectionHit(section) {
+	if (section < start) return;
 	
-	var showLights:Bool = true;
-	switch(State.curSong) {
-		case 'Pico': showLights = (curSection > 1);	//	PICO CUTSCENE
-	}
-	phillyCityLights.visible = showLights;
-	phillyCityLightsBlur.visible = showLights;
-	phillyCityLights.alpha = 1;
-	phillyCityLightsBlur.alpha = 1;
-	phillyColor = FlxMath.wrap(phillyColor + 1, 0, 4);
+	color = FlxMath.wrap(color + 1, 0, 4);
+
+	var lightsColor = colors[color];
+	lights.color = lightsColor;
+	blur.color = lightsColor;
+
+	lights.alpha = 1;
+	blur.alpha = 1;
 }
 
-function update(elapsed):Void {
-	var alphaLight:Float = Conductor.crochetMills * elapsed;
-	phillyCityLights.alpha = Math.max(phillyCityLights.alpha - alphaLight * 2, 0.001);
-	phillyCityLightsBlur.alpha = Math.max(phillyCityLightsBlur.alpha - alphaLight * 2.5, 0.001);
+function updatePost(elapsed) {
+	var speed = Conductor.crochetMills * elapsed * 2;
+	lights.alpha -= speed;
+	blur.alpha -= speed * 1.25;
 
-    if (trainMoving) {
-        trainFrameTiming += elapsed;
-        if (trainFrameTiming >= 1 / 24) {
-            updateTrainPos();
-            trainFrameTiming = 0;
-        }
+	trainMoving = sound.playing && sound.time > 4650;
+	if (trainMoving && !finishedMove)
+		updateTrain(elapsed);
+}
+
+/*
+ * TRAIN CRAP
+**/
+
+var trainFrame = 0;
+var trainCars = 8;
+var trainMoving = false;
+var trainFinished = false;
+var trainCooldown = 0;
+var finishedMove = false;
+
+function beatHit(beat) {
+	if (!trainMoving)
+        trainCooldown++;
+
+	var moveTrain = (!trainMoving && trainCooldown > 8) && (beat % 8 == 4 && FlxG.random.bool(30));
+	if (moveTrain)
+		startTrain();
+}
+
+function startTrain() {
+	trainCooldown = FlxG.random.int(-4, 0);
+	finishedMove = false;
+	sound.play(true);
+}
+
+function updateTrain(elapsed) {
+	trainFrame += elapsed;
+    if (trainFrame >= 1 / 24) {
+        moveTrain();
+        trainFrame = 0;
     }
 }
 
-function trainStart():Void {
-	trainCooldown = FlxG.random.int(-4, 0);
-	trainMoving = true;
-	if (!trainSound.playing) {
-		trainSound.play(true);
+function moveTrain() {
+	train.x -= 400;
+	if (!trainFinished) {
+		if (train.x < 800)
+			State.gf.playAnim('hairBlow');
+		
+		if (train.x < -1900) {
+			train.x = -850; 
+			trainCars--;
+			if (trainCars < 1)
+				trainFinished = true;
+		}
+	}
+
+	if (train.x < -4000 && trainFinished) {
+		resetTrain();
 	}
 }
 
-function updateTrainPos():Void {
-	if (trainSound.time >= 4700) {
-		startedMoving = true;
-		State.gf.playAnim('hairBlow');
-	}
-
-	if (startedMoving) {
-		phillyTrain.x -= 400;
-		if (phillyTrain.x < -2000 && !trainFinishing) {
-			phillyTrain.x = -1150;
-			trainCars -= 1;
-		    if (trainCars <= 0) {
-				trainFinishing = true;
-			}
-		}
-
-		if (phillyTrain.x < -4000 && trainFinishing) {
-			trainReset();
-		}
-	}
-}
-
-function trainReset():Void {
+function resetTrain() {
 	State.gf.playAnim('hairFall');
-	phillyTrain.x = FlxG.width + 200;
-	trainMoving = false;
+	train.x = 2000;
 	trainCars = 8;
-	trainFinishing = false;
-	startedMoving = false;
+	trainFinished = false;
+	trainMoving = false;
+	finishedMove = true;
 }

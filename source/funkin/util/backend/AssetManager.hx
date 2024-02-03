@@ -25,6 +25,13 @@ class Asset
 		isGraphicAsset = asset is LodGraphic;
 		isSoundAsset = !isGraphicAsset;
 		this.asset = asset;
+
+		if (isGraphicAsset) {
+			var graphic = cast(asset, LodGraphic);
+			graphic.persist = true;
+			graphic.destroyOnNoUse = false;
+		}
+
 		return this;
 	}
 
@@ -183,6 +190,11 @@ class AssetManager
 
 		var bitmap = __getFileBitmap(path);
 		
+		return __cacheFromBitmap(key, bitmap, staticAsset, lodLevel, useTexture);
+	}
+
+	@:noCompletion
+	private static inline function __cacheFromBitmap(key:String, bitmap:BitmapData, staticAsset:Bool, ?lodLevel:LodLevel, ?useTexture:Bool) {
 		@:privateAccess
 		var graphic = new LodGraphic(null, bitmap);
 

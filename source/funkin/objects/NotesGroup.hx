@@ -100,9 +100,13 @@ class NotesGroup extends Group
 		game = isPlayState ? PlayState.instance : null;
 		this.isPlayState = isPlayState;
         SONG = Song.checkSong(_SONG, null, false); //Double check null values
-        Conductor.mapBPMChanges(SONG);
+		curSong = SONG.song;
+        
+		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
 		Conductor.songOffset = SONG.offsets;
+		Conductor.loadMusic(curSong);
+		
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
 		vanillaUI = getPref('vanilla-ui');
@@ -199,21 +203,14 @@ class NotesGroup extends Group
     }
 
 	private function generateSong():Void {
-		final songData:SwagSong = SONG;
-		ModdingUtil.addCall('generateSong', [songData]);
+		ModdingUtil.addCall('generateSong', [SONG]);
 
 		unspawnNotes = [];
 		events = [];
 		notes = new TypedGroup<BasicNote>();
 		add(notes);
 	
-		final noteData:Array<SwagSection> = songData.notes;
-		curSong = songData.song;
-
-        Conductor.loadMusic(curSong);
-		Conductor.bpm = songData.bpm;
-	
-		for (section in noteData) {
+		for (section in SONG.notes) {
 			for (songNotes in section.sectionNotes) {
 				final strumTime:Float = songNotes[0];
 				final susLength:Null<Float> = songNotes[2];

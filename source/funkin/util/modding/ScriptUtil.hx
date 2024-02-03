@@ -1,5 +1,6 @@
 package funkin.util.modding;
 
+import flixel.util.typeLimit.OneOfTwo;
 import flixel.util.typeLimit.OneOfThree;
 
 typedef SpriteLayer = OneOfThree<FlxTypedGroup<Dynamic>, String, Bool>;
@@ -8,9 +9,15 @@ typedef SpriteLayer = OneOfThree<FlxTypedGroup<Dynamic>, String, Bool>;
 class ScriptUtil {
     public static var objMap:Map<String, Dynamic> = [];
     
-    inline public static function addSprite(sprite:Dynamic, key:String, layer:SpriteLayer = "bg") {
+    inline public static function addSprite(sprite:Dynamic, ?key:String, layer:SpriteLayer = "bg") {
         objMap.set(formatSpriteKey(key, layer), sprite);
         getLayer(layer).add(sprite);
+        return sprite;
+    }
+
+    inline public static function insertSprite(sprite:Dynamic, ?key:String, position:Int = 0, layer:SpriteLayer = "bg") {
+        objMap.set(formatSpriteKey(key, layer), sprite);
+        getLayer(layer).insert(position, sprite);
         return sprite;
     }
 
@@ -28,7 +35,7 @@ class ScriptUtil {
         else return cast(layer, FlxTypedGroup<Dynamic>);
     }
     
-    public static function getSprite(key:String) {
+    public static function getSprite(key:String):Dynamic {
         for (i in ['fg', 'bg']) {
             final sprKey = getSpriteKey(i, key);
             if (objMap.exists(sprKey))
@@ -38,7 +45,7 @@ class ScriptUtil {
         return null;
     }
 
-    public static function existsSprite(key:String) {
+    public static function existsSprite(key:String):Bool {
         for (i in ['fg', 'bg']) {
             if (objMap.exists(getSpriteKey(i, key)))
                 return true;
@@ -46,8 +53,23 @@ class ScriptUtil {
         return false;	
     }
 
-    inline public static function formatSpriteKey(key:String, layer:SpriteLayer) {
-        return getSpriteKey(getLayerKey(layer), key);
+    public static function getSpriteLayer(key:String):String {
+        for (i in ['fg', 'bg']) {
+            final sprKey = getSpriteKey(i, key);
+            if (objMap.exists(sprKey))
+                return i;
+        }
+        ModdingUtil.errorPrint('Sprite not found: $key');
+        return null;
+    }
+
+    inline public static function formatSpriteKey(?key:String, layer:SpriteLayer) {
+        var layerKey = getLayerKey(layer);
+        
+        if (key == null)
+            key = layerKey + getLayer(layer).length;
+
+        return getSpriteKey(layerKey, key);
     }
 
     inline public static function getSpriteKey(group:String, key:String) {
@@ -105,3 +127,42 @@ class ScriptUtil {
         }
     }
 }
+
+/*
+typedef LayerKey = OneOfTwo<Bool, String>;
+typedef Layer = FlxTypedGroup<Dynamic>;
+
+class StageSystem
+{
+    public var layers:Map<String, Layer> = [
+        "bg" => new Layer(),
+        "fg" => new Layer()
+    ];
+
+    public var layersOrder:Array<String> = ["bg", "fg"];
+
+    public function getLayers():Array<Layer> {
+        var array:Array<Layer> = [];
+
+        for (layer in layersOrder) {
+            var layer = getLayer(layer);
+            if (layer != null)
+                array.push(layer);
+        }
+
+        return array;
+    }
+
+    public function getLayer(key:LayerKey):Layer {
+        return layers.get(__resolveLayerKey(key));
+    }
+
+    public function addLayer(layer:Layer, key:String) {
+        layers.set(key, layer);
+        layersOrder.push(key);
+    }
+    
+    function __resolveLayerKey(key:LayerKey):String {
+        return key is Bool ? (key ? "fg" : "bg") : key;
+    }
+}*/

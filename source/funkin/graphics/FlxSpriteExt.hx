@@ -205,6 +205,41 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return value;
 	}
 
+	public function makeRect(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String):FlxSpriteExt {
+		makeGraphic(1, 1, color, unique, key);
+		antialiasing = false;
+		scale.set(width, height);
+		updateHitbox();
+		return this;
+	}
+
+	override function makeGraphic(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String):FlxSprite {
+		if (key == null)
+			key = '::g::w$width::h$height::c$color::';
+		
+		if (unique) {
+			var i:Int = 0;
+			while (AssetManager.existsAsset(key + i))
+				i++;
+
+			key = key + i;
+		}
+		else {
+			var asset = AssetManager.getAssetGraphic(key);
+			if (asset != null) {
+				frames = asset.imageFrame;
+				return this;
+			}
+		}
+
+		var bitmap = new BitmapData(width, height, true, color);
+
+		@:privateAccess
+		var graphic = AssetManager.__cacheFromBitmap(key, bitmap, false, 0, false);
+		frames = graphic.imageFrame;
+		return this;
+	}
+
 	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
 		@:privateAccess {
 			mat.a = frame.tileMatrix[0];
