@@ -158,8 +158,8 @@ function beatHit(beat) {
 				case 0xFFFBA633: 0xFF31A2FD;
 			}, Conductor.crochet / 250);
 
-			gradient.destroy();
-			transTrain.destroy();
+			gradient.visible = false;
+			transTrain.visible = false;
 
 			for (i in cars)
 				i.visible = true;

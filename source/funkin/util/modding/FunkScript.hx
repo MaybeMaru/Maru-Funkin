@@ -225,7 +225,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			return ScriptUtil.addSprite(spr, key, onTop);
 		});
 
-		set('insertSpr', function(spr:Dynamic, ?key:String, position:Int, onTop:Bool = false):Dynamic {
+		set('insertSpr', function(position:Int = 0, spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
 			return ScriptUtil.insertSprite(spr, key, position, onTop);
 		});
 
@@ -243,11 +243,6 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		set('setObjMap', function(object:Dynamic, key:String) {
 			ScriptUtil.objMap.set(key, object);
-		});
-		
-		set('insertSpr', function(order:Int = 0, spr:Dynamic, key:String = 'coolswag', OnTop:Bool = false) {
-			ScriptUtil.objMap.set(ScriptUtil.formatSpriteKey(key, OnTop), spr);
-			OnTop ? PlayState.instance.fgSpr.insert(order, spr) : PlayState.instance.bgSpr.insert(order, spr);
 		});
 
 		set('getSpr', function(key:String):Null<Dynamic> {
