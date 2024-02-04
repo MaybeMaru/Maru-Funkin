@@ -3,5 +3,36 @@
 	"gfOffsets": [0,0],
 	"dadOffsets": [50,0],
 	"bfOffsets": [-50,0],
-	"startCamOffsets": [-400,-600]
+	"startCamOffsets": [-400,-600],
+	"layers": {
+		"bg": [
+			{
+				"tag": "bg",
+				"imagePath": "halloweenBg",
+				"position": [-200,-80],
+				"anims": [
+					{
+						"animName": "thunder",
+						"animFile": "strike"
+					},
+					{
+						"animName": "static",
+						"animFile": "strike",
+						"indices": [3]
+					}
+				]
+			},
+			{
+				"tag": "dark",
+				"position": [-500, -500]
+			},
+			{
+				"tag": "thunder",
+				"imagePath": "lightningStrike",
+				"position": [250, 80]
+			}
+		],
+		"fg": [
+		]
+	}
 }

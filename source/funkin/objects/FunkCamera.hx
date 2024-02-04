@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import flixel.util.typeLimit.OneOfTwo;
 import openfl.display.Shape;
 import openfl.display.Bitmap;
 import openfl.display.BlendMode;
@@ -11,19 +12,43 @@ import openfl.geom.ColorTransform;
 
 using flixel.util.FlxColorTransformUtil;
 
+class CameraShape extends Shape {
+    public function new() {
+        super();
+        alpha = 0.0;
+    }
+
+    var alphaMult:Float = 1.0;
+    var color:FlxColor;
+
+    public inline function setAlpha(Alpha:Float)
+        alpha = Alpha * alphaMult;
+
+    public inline function setColor(Color:FlxColor) {
+        if (color != Color) {
+            color = Color;
+            color = FlxColor.fromInt(color);
+            alphaMult = color.alphaFloat; // Make the alpha part of the sprite, not the rect
+            
+            graphics.clear();
+            graphics.beginFill(FlxColor.fromRGB(color.red, color.green, color.blue, 255));
+            graphics.drawRect(0, 0, 1, 1);
+            graphics.endFill();
+        }
+    }
+}
+
 class FunkCamera extends FlxCamera {    
-    var __fadeShape:Shape;
-    var __flashShape:Shape;
+    var __fadeShape:CameraShape;
+    var __flashShape:CameraShape;
     
-    override public function new(?X,?Y,?W,?H,?Z) {
+    override public function new(?X, ?Y, ?W, ?H, ?Z) {
         super(X,Y,W,H,Z);
        
-        __fadeShape = new Shape();
-        __fadeShape.alpha = 0.0;
+        __fadeShape = new CameraShape();
         _scrollRect.addChild(__fadeShape);
 
-        __flashShape = new Shape();
-        __flashShape.alpha = 0.0;
+        __flashShape = new CameraShape();
         _scrollRect.addChild(__flashShape);
 
         #if FLX_DEBUG
@@ -39,20 +64,6 @@ class FunkCamera extends FlxCamera {
         __flashShape = null;
         
         super.destroy();
-    }
-
-    inline private function __setFadeColor(color:Int) {
-        __drawToShape(__fadeShape, color);
-    }
-
-    inline private function __setFlashColor(color:Int) {
-        __drawToShape(__flashShape, color);
-    }
-
-    inline private static function __drawToShape(shape:Shape, color:Int) {
-        shape.graphics.beginFill(color);
-        shape.graphics.drawRect(0, 0, 1, 1);
-        shape.graphics.endFill();
     }
 
     public var updateFX:Bool = true;
@@ -85,7 +96,7 @@ class FunkCamera extends FlxCamera {
     override function updateFlash(elapsed:Float):Void {
         if (_fxFlashAlpha > 0.0) {
 			_fxFlashAlpha -= elapsed / _fxFlashDuration;
-            __flashShape.alpha = _fxFlashAlpha;
+            __flashShape.setAlpha(_fxFlashAlpha);
 			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null)) {
 				_fxFlashComplete();
 			}
@@ -97,7 +108,7 @@ class FunkCamera extends FlxCamera {
 
 		if (_fxFadeIn) {
 			_fxFadeAlpha -= elapsed / _fxFadeDuration;
-            __fadeShape.alpha = _fxFadeAlpha;
+            __fadeShape.setAlpha(_fxFadeAlpha);
 			if (_fxFadeAlpha <= 0.0) {
 				_fxFadeAlpha = 0.0;
 				completeFade();
@@ -105,7 +116,7 @@ class FunkCamera extends FlxCamera {
 		}
 		else {
 			_fxFadeAlpha += elapsed / _fxFadeDuration;
-            __fadeShape.alpha = _fxFadeAlpha;
+            __fadeShape.setAlpha(_fxFadeAlpha);
 			if (_fxFadeAlpha >= 1.0) {
 				_fxFadeAlpha = 1.0;
 				completeFade();
@@ -117,7 +128,7 @@ class FunkCamera extends FlxCamera {
 		if (_fxFadeDuration > 0 && !Force) return;
 
 		_fxFadeColor = Color;
-        __setFadeColor(Color);
+        __fadeShape.setColor(Color);
 		
         if (Duration <= 0) Duration = 0.000001;
 		_fxFadeIn = FadeIn;
@@ -130,7 +141,7 @@ class FunkCamera extends FlxCamera {
 		if (!Force && (_fxFlashAlpha > 0.0)) return;
 
 		_fxFlashColor = Color;
-        __setFlashColor(Color);
+        __flashShape.setColor(Color);
 		
         if (Duration <= 0) Duration = 0.000001;
 		_fxFlashDuration = Duration;

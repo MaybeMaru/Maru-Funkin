@@ -131,11 +131,9 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		if (flippedOffsets) {
 			flipX = !flipX;
 			scale.x = -scale.x;
-			lodScale = -lodScale;
 			__superDraw();
 			flipX = !flipX;
 			scale.x = -scale.x;
-			lodScale = -lodScale;
 		}
 		else __superDraw();
 	}
@@ -255,9 +253,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 			inline mat.translate(frame.sourceSize.y, frame.sourceSize.x);
 		}
 
-		if (lodScale != 1.0) {
+		if (lodScale != 1.0)
 			inline mat.scale(lodScale, lodScale);
-		}
 
 		if (flipX != frame.flipX) {
 			inline mat.scale(-1, 1);

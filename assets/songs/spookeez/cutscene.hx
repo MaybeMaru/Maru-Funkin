@@ -1,13 +1,14 @@
 // It would be so awesome, it would be so cool
 var scriptedThunder:Array<Int> = [4,144,160,176,192,208,224];
+var overlay;
 
 function createPost() {
     State.defaultCamZoom = 1.2;
     State.camGame.zoom = State.defaultCamZoom;
-    var intro:FunkinSprite = new FunkinSprite('', [-200,-200], [1,1]).makeGraphic(FlxG.width*2, FlxG.height*2, 0xff150415);
-    intro.blend = getBlendMode('multiply');
-    intro.alpha = 0.6;
-    addSpr(intro, 'intro', true);
+    overlay = new FlxSprite(-500, -500).makeRect(FlxG.width*2, FlxG.height*2, 0xff32325a);
+    overlay.blend = getBlendMode('multiply');
+    overlay.alpha = 0.8;
+    addSpr(overlay, 'overlay', true);
 }
 
 function startCountdown() {
@@ -30,7 +31,7 @@ function beatHit(curBeat) {
     if (!closeThunder) getSpr('bg')._dynamic.calcThunder();
 
     if (curBeat == 4) {
-        getSpr('intro').visible = false;
+        overlay.visible = false;
         State.showUI(true);
         State.defaultCamZoom = 1.05;
     }
