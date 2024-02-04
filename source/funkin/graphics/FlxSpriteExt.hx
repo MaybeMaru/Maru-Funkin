@@ -203,11 +203,15 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return value;
 	}
 
-	public function makeRect(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String):FlxSpriteExt {
+	public function makeRect(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String, ?useTexture:Bool):FlxSpriteExt {
 		makeGraphic(1, 1, color, unique, key);
 		antialiasing = false;
 		scale.set(width, height);
 		updateHitbox();
+		
+		if (useTexture ?? AssetManager.gpuTextures)
+			AssetManager.uploadGraphicTexture(graphic);
+		
 		return this;
 	}
 
@@ -225,12 +229,14 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		else {
 			var asset = AssetManager.getAssetGraphic(key);
 			if (asset != null) {
+				imageKey = key;
 				frames = asset.imageFrame;
 				return this;
 			}
 		}
 
 		var bitmap = new BitmapData(width, height, true, color);
+		imageKey = key;
 
 		@:privateAccess
 		var graphic = AssetManager.__cacheFromBitmap(key, bitmap, false, 0, false);

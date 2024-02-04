@@ -29,18 +29,22 @@ class StageDebug extends MusicBeatState {
 
         /// Characters
 
-        final __dad = new FunkinSprite("options/bf_offset", [100, 450]);
-        __dad.alpha = 0.4;
-        add(__dad);
+        var dadOff = stageData.dadOffsets;
+        var bfOff = stageData.bfOffsets;
 
-        final __bf = new FunkinSprite("options/bf_offset", [770, 450]);
-        __bf.flipX = true;
-        __bf.alpha = 0.4;
-        add(__bf);
+        var dad = new FunkinSprite("options/bf_offset", [100 - dadOff[0], 450 - dadOff[1]]);
+        dad.alpha = 0.4;
+        add(dad);
+
+        var bf = new FunkinSprite("options/bf_offset", [770 - bfOff[0], 450 - bfOff[1]]);
+        bf.flipX = true;
+        bf.alpha = 0.4;
+        add(bf);
 
         /// Characters
 
-        final fgGroup = new LayerGroup(); fgGroup.ID = 1;
+        var fgGroup = new LayerGroup();
+        fgGroup.ID = 1;
         add(fgGroup);
 
         // TODO add a better layer system you big goof

@@ -297,7 +297,8 @@ class NotesGroup extends Group
 		if (value != scrollSpeed) {
 			for (i in 0...unspawnNotes.length) unspawnNotes[i].noteSpeed = value;
 			for (i in 0...notes.members.length) notes.members[i].noteSpeed = value;
-			if (value < scrollSpeed) inline spawnNotes();
+			if (value < scrollSpeed)
+				inline spawnNotes();
 		}
 		return scrollSpeed = value;
 	}

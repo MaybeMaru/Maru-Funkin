@@ -4,5 +4,34 @@
 	"dadOffsets": [0,0],
 	"bfOffsets": [-250,0],
 	"startCamOffsets": [-800,-400],
-	"bfCamOffsets": [150,0]
+	"bfCamOffsets": [150,0],
+	"layers": {
+		"bg": [
+			{
+				"tag": "bg",
+				"imagePath": "evilBG",
+				"position": [-400,-500],
+				"scrolls": [0.2,0.2],
+				"scale": 0.8
+			},
+			{
+				"tag": "tree",
+				"imagePath": "evilTree",
+				"position": [300,-300],
+				"scrolls": [0.25,0.25]
+			},
+			{
+				"tag": "snow",
+				"imagePath": "evilSnow",
+				"position": [-550,700]
+			}
+		],
+		"fg": [
+			{
+				"tag": "fgsnow",
+				"imagePath": "fgEvilSnow",
+				"position": [-575, 775]
+			}
+		]
+	}
 }

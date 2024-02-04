@@ -346,10 +346,10 @@ class Paths
 	}
 }
 
-enum PackerType {
-	IMAGE;
-	SPARROW;
-	SHEETPACKER;
-	JSON;
-	ATLAS;
+enum abstract PackerType(Int) from Int to Int {
+	var IMAGE = 0;
+	var SPARROW = 1;
+	var SHEETPACKER = 2;
+	var JSON = 3;
+	var ATLAS = 4;
 }

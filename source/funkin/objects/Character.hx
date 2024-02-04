@@ -133,10 +133,10 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function getAnimationPrefixes():Array<String> {
-		final prefixes:Array<String> = [];
+		var prefixes:Array<String> = [];
 		if (frames == null) return prefixes;
 		for (i in frames.frames) {
-			final anim = i.name.split('0')[0];
+			var anim = i.name.split('0')[0];
 			if (!prefixes.contains(anim)) prefixes.push(anim);
 		}
 		return prefixes;
@@ -156,9 +156,7 @@ class Character extends FlxSpriteExt {
 
 	public function flipCharOffsets():Void {
 		flippedOffsets = true;
-		//worldOffsets.x *= -1; IDK
-		//stageOffsets.x *= -1;
-		camOffsets.x *= -1;
+		camOffsets.x = -camOffsets.x;
 		if (!debugMode) { // Switch anims
 			switchAnim('danceLeft', 'danceRight');
 			for (i in animOffsets.keys()) {
@@ -197,9 +195,11 @@ class Character extends FlxSpriteExt {
 		__superUpdate(elapsed);
 	}
 
-	public function prepareCamPoint(point:FlxPoint) {
-		final midPoint = this.getMidpoint();
-		return point.set(midPoint.x - camOffsets.x - stageCamOffsets.x, midPoint.y - camOffsets.y - stageCamOffsets.y);
+	public function prepareCamPoint(?point:Null<FlxPoint>) {
+		point = getMidpoint(point);
+		point.subtract(camOffsets.x, camOffsets.y);
+		point.subtract(flippedOffsets ? -stageCamOffsets.x : stageCamOffsets.x, stageCamOffsets.y);
+		return point;
 	}
 
 	public inline function copyStatusFrom(char:Character) {
