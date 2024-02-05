@@ -210,7 +210,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		updateHitbox();
 		
 		if (useTexture ?? AssetManager.gpuTextures)
-			AssetManager.uploadGraphicTexture(graphic);
+			uploadGpu();
 		
 		return this;
 	}
@@ -426,7 +426,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		graphic.bitmap.draw(Brush, matrix);
 	}
 
-	inline public function uploadGpu(?key:String):FlxGraphic {
+	inline public function uploadGpu():FlxGraphic {
 		return AssetManager.uploadGraphicTexture(graphic);
 	}
 }

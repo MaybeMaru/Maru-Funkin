@@ -303,16 +303,17 @@ class NotesGroup extends Group
 		return scrollSpeed = value;
 	}
 
-    public var goodNoteHit:Dynamic = null;
-    public var goodSustainPress:Dynamic = null;
-    public var noteMiss:Dynamic = null;
-    public var badNoteHit:Dynamic = null;
+    public var goodNoteHit:(Note)->Void;
+    public var goodSustainPress:(Sustain)->Void;
+    public var noteMiss:(Int, BasicNote)->Void;
+    public var badNoteHit:()->Void;
     
-    public var opponentNoteHit:Dynamic = null;
-    public var opponentSustainPress:Dynamic = null;
+    public var opponentNoteHit:(Note)->Void;
+    public var opponentSustainPress:(Sustain)->Void;
 
+	static final EMPTY_ARRAY:Array<Dynamic> = [];
     public inline function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
-        if (callback != null) Reflect.callMethod(this, callback, args ?? []); // Prevent null
+        if (callback != null) Reflect.callMethod(this, callback, args ?? EMPTY_ARRAY); // Prevent null
     }
 
     //Makes the conductor song go vroom vroom
@@ -422,19 +423,15 @@ class NotesGroup extends Group
 		inline checkStrumAnims();
     }
 
-    //public var holdingArray:Array<Bool> = [];
 	public var controlArray:Array<Bool> = [];
 
 	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
-		for (i in strums) {
-			//holdingArray.push(value ? false : i.getControl());
+		for (i in strums)
 			controlArray.push(value ? false : i.getControl("-P"));
-		}
 	}
 
     private inline function controls():Void {
-		//holdingArray = [];
-		controlArray = [];
+		controlArray.splice(0, controlArray.length);
 		pushControls(playerStrums, inBotplay);
 		pushControls(opponentStrums, dadBotplay);
 
@@ -515,26 +512,37 @@ class NotesGroup extends Group
 		}
 	}
 
-	function checkStrumAnims():Void {
-		final checkStrums:Array<NoteStrum> = (inBotplay ? [] : playerStrums.members).concat(dadBotplay ? [] : opponentStrums.members);
-		for (strum in checkStrums) {
-			final strumAnim = strum.animation.curAnim;
-			if (strumAnim == null) continue; // Lil null check
-			if (strum.getControl("-P") && !strumAnim.name.startsWith('confirm'))
-				strum.playStrumAnim('pressed');
-			if (!strum.getControl())
-				strum.playStrumAnim('static');
+	inline function checkStrums(array:Array<NoteStrum>) {
+		for (i in array) {
+			final anim = i.animation.curAnim;
+			if (anim == null) continue; // Lil null check
+			if (i.getControl("-P") && !anim.name.startsWith('confirm'))
+				i.playStrumAnim('pressed');
+			if (!i.getControl())
+				i.playStrumAnim('static');
 		}
+	}
 
-        if (!isPlayState) return; // Botplay handles sing anims and strums, not necessary
-		if (!inBotplay) checkOverSinging(game.boyfriend, playerStrums);
-		if (!dadBotplay) checkOverSinging(game.dad, opponentStrums);
+	function checkStrumAnims():Void {
+		if (!inBotplay) checkStrums(playerStrums.members);
+		if (!dadBotplay) checkStrums(opponentStrums.members);
+
+		// Check for sing animations in PlayState characters
+        if (isPlayState) {
+			if (!inBotplay) checkOverSinging(game.boyfriend, playerStrums);
+			if (!dadBotplay) checkOverSinging(game.dad, opponentStrums);
+		}
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup) {
-		final overSinging:Bool = (char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
-		&& char.animation.curAnim.name.startsWith('sing')
-		&& !char.animation.curAnim.name.endsWith('miss'));
+		var anim = char.animation.curAnim;
+		if (anim == null) return;
+		var name:String = anim.name;
+		
+		var overSinging:Bool =
+		(char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
+		&& name.startsWith('sing')
+		&& !name.endsWith('miss'));
 
 		if (overSinging) {
 			var isHolding:Bool = false;
@@ -544,15 +552,18 @@ class NotesGroup extends Group
 					break;
 				}
 			}
-			if (!isHolding) char.restartDance();
+
+			if (!isHolding)
+				char.restartDance();
 		}
 	}
 
 	public function playStrumAnim(note:BasicNote, anim:String = 'confirm', forced:Bool = true) {
-		final strum = note.targetStrum;
-		if (strum == null) return;
-		strum.playStrumAnim(anim, forced);
-		strum.staticTime = Conductor.stepCrochetMills;
+		var strum = note.targetStrum;
+		if (strum != null) {
+			strum.playStrumAnim(anim, forced);
+			strum.staticTime = Conductor.stepCrochetMills;
+		}
 	}
 
 	override function destroy() {
