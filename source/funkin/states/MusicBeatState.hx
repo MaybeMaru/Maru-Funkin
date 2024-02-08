@@ -27,11 +27,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	public function startTransition():Void {} // Called in CoolUtil
 
-	public function new() {
-		super();
-		ScriptUtil.objMap = new Map<String, Dynamic>();
-	}
-
 	override function create():Void {
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);

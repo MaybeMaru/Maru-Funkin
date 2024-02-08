@@ -5,5 +5,72 @@
 	"dadOffsets": [0,0],
 	"bfOffsets": [-260,240],
 	"bfCamOffsets": [0,-50],
-	"startCamOffsets": [-400,-400]
+	"startCamOffsets": [-400,-400],
+
+	"layersOrder": ["bg", "limo", "gore", "gf", "dad", "bf", "fg"],
+	"layers": {
+		"bg": [
+			{
+				"tag": "sky",
+				"imagePath": "limo/limoSunset",
+				"position": [-120,-50],
+				"scrolls": [0.1,0.1]
+			},
+			{
+				"tag": "pole",
+				"imagePath": "limo/metalPole",
+				"position": [-600, 200],
+				"scrolls": [0.4,0.4]
+			}
+		],
+		"limo": [
+			{
+				"tag": "limo",
+				"imagePath": "limo/bgLimo",
+				"position": [-200, 480],
+				"scrolls": [0.4,0.4],
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "background limo pink",
+						"loop": true
+					}
+				]
+			}
+		],
+		"dad": [
+			{
+				"tag": "light",
+				"imagePath": "limo/highwayLight",
+				"position": [-600, 120],
+				"scrolls": [0.4,0.4]
+			},
+			{
+				"tag": "driveLimo",
+				"imagePath": "limo/limoDrive",
+				"position": [-120, 570],
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "Limo stage",
+						"loop": true
+					}
+				]
+			}
+		],
+		"fg": [
+			{
+				"tag": "car",
+				"imagePath": "limo/fastCarLol",
+				"position": [0, 250],
+				"scrolls": [1.5,1.5]
+			},
+			{
+				"tag": "overlay",
+				"imagePath": "limo/limoOverlay",
+				"position": [-600,-600],
+				"scrolls": [0.7,0.7]
+			}
+		]
+	}
 }

@@ -12,7 +12,6 @@ class PlayState extends MusicBeatState {
 	public static var clearCache:Bool = true;
 	public static var clearCacheData:Null<CacheClearing> = null;
 
-	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:String = 'tutorial';
@@ -21,9 +20,13 @@ class PlayState extends MusicBeatState {
 	public static var inChartEditor:Bool = false;
 	public static var deathCounter:Int = 0;
 
-	private var stageJsonData:StageJson;
-	public var bgSpr:FlxTypedGroup<Dynamic>;
-	public var fgSpr:FlxTypedGroup<Dynamic>;
+	public static var curStage:String = '';
+	public var stageData:StageJson;
+	public var stage:Stage;
+	
+	//private var stageJsonData:StageJson;
+	//public var bgSpr:FlxTypedGroup<Dynamic>;
+	//public var fgSpr:FlxTypedGroup<Dynamic>;
 
 	public var dad:Character;
 	public var gf:Character;
@@ -145,42 +148,33 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
 
 		//FG & BG SPRITES
-		bgSpr = new FlxTypedGroup<Dynamic>();
-		fgSpr = new FlxTypedGroup<Dynamic>();
+		//bgSpr = new FlxTypedGroup<Dynamic>();
+		//fgSpr = new FlxTypedGroup<Dynamic>();
 
 		gfGroup = new FlxTypedSpriteGroup<Dynamic>();
 		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
 		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
-		final GF_POS:FlxPoint = FlxPoint.get(400,360);
-		final DAD_POS:FlxPoint = FlxPoint.get(100, 450);
-		final BOYFRIEND_POS:FlxPoint = FlxPoint.get(770, 450);
+		// MAKE CHARACTERS
+		gf = new Character(0, 0, SONG.players[2]);
+		dad = new Character(0, 0, SONG.players[1]);
+		boyfriend = new Character(0, 0, SONG.players[0], true);
 
-		//MAKE CHARACTERS
-		gf = new Character(GF_POS.x, GF_POS.y, SONG.players[2]);
-		dad = new Character(DAD_POS.x, DAD_POS.y, SONG.players[1]);
-		boyfriend = new Character(BOYFRIEND_POS.x, BOYFRIEND_POS.y, SONG.players[0], true);
-
-		//Cache Gameover Character
+		// Cache Gameover Character
 		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
 		if (deadChar.frame != null) CoolUtil.cacheImage(deadChar.frame.parent, null, camGame);
 		GameOverSubstate.cacheSounds();
 
 		// GET THE STAGE JSON SHIT
 		curStage = SONG.stage;
-		stageJsonData = Stage.getJsonData(curStage);
-		defaultCamZoom = stageJsonData.zoom;
-		Paths.currentLevel = stageJsonData.library;
-		SkinUtil.setCurSkin(stageJsonData.skin);
-
-		//ADD CHARACTER OFFSETS
-		Stage.applyData(stageJsonData, boyfriend, dad, gf);
-		boyfriend.setXY(BOYFRIEND_POS.x, BOYFRIEND_POS.y);
-		dad.setXY(DAD_POS.x, DAD_POS.y);
-		gf.setXY(GF_POS.x, GF_POS.y,);
+		stageData = Stage.getJson(curStage);
+		
+		defaultCamZoom = stageData.zoom;
+		Paths.currentLevel = stageData.library;
+		SkinUtil.setCurSkin(stageData.skin);
 
 		//STAGE START CAM OFFSET
-		final camPos:FlxPoint = FlxPoint.weak(-stageJsonData.startCamOffsets[0], -stageJsonData.startCamOffsets[1]);
+		final camPos:FlxPoint = FlxPoint.weak(-stageData.startCamOffsets[0], -stageData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -188,9 +182,19 @@ class PlayState extends MusicBeatState {
 		*/
 		ModdingUtil.clearScripts(); //Clear any scripts left over
 
-		//Stage Script
-		final stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
-		Stage.createStageObjects(stageJsonData.layers, stageScript); // Json created stages
+		// Stage Script
+		var stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
+		stage = Stage.fromJson(stageData, stageScript);
+		add(stage);
+
+		if (stageScript != null)
+			stageScript.set("ScriptStage", stage);
+
+		// Set stage character positions
+		stage.applyData(boyfriend, dad, gf);
+		boyfriend.setXY(770, 450);
+		dad.setXY(100, 450);
+		gf.setXY(400, 360);
 
 		// Set up stuff for scripts
 		gf.group = gfGroup;
@@ -218,8 +222,6 @@ class PlayState extends MusicBeatState {
 		final globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
 		ModdingUtil.addScriptList(globalScripts);
 
-		add(bgSpr);
-
 		notesGroup = new NotesGroup(SONG); // Should be after fg is created but makin sure
 
 		ModdingUtil.addCall('create');
@@ -229,24 +231,26 @@ class PlayState extends MusicBeatState {
 
 		// Make Dad GF
 		if (SONG.players[1] == SONG.players[2] && dad.isGF) {
-			dadGroup.setPosition(GF_POS.x - DAD_POS.x, GF_POS.y - DAD_POS.y);
-			gfGroup.alpha = 0;
+			dadGroup.setPosition(gf.OG_X - dad.OG_X, gf.OG_Y - dad.OG_Y);
+			gfGroup.group.visible = false;
 		}
-		BOYFRIEND_POS.put(); DAD_POS.put(); GF_POS.put();
 
-		//Sprites order
+		// Set character groups
 
-		add(gfGroup);
 		gfGroup.add(gf);
-		gfGroup.scrollFactor.set(0.95, 0.95);
-		
-		add(dadGroup);
 		dadGroup.add(dad);
-
-		add(boyfriendGroup);
 		boyfriendGroup.add(boyfriend);
+		
+		gfGroup.scrollFactor.set(0.95, 0.95);
 
-		add(fgSpr);
+		if (stage.existsLayer("gf"))
+			stage.getLayer("gf").add(gfGroup);
+		
+		if (stage.existsLayer("dad"))
+			stage.getLayer("dad").add(dadGroup);
+
+		if (stage.existsLayer("bf"))
+			stage.getLayer("bf").add(boyfriendGroup);
 
 		//Cam Follow
 		if (prevCamFollow != null) {
@@ -541,7 +545,7 @@ class PlayState extends MusicBeatState {
 			else if (FlxG.keys.justPressed.SIX) {
 				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Stage Editor", null, null, true);
-				switchState(new StageDebug(stageJsonData));
+				switchState(new StageDebug(stageData));
 			}
 			else if (FlxG.keys.justPressed.SEVEN) {
 				clearCacheData = {tempCache: false};
@@ -820,7 +824,7 @@ class PlayState extends MusicBeatState {
 	public var generatedMusic(get,never):Bool;	inline function get_generatedMusic()return notesGroup.generatedMusic;
 	public var inst(get, never):FlxSound; inline function get_inst()return Conductor.inst;
 	public var vocals(get, never):FlxSound; inline function get_vocals()return Conductor.vocals;
-	public var objMap(get, never):Map<String, Dynamic>; inline function get_objMap()return ScriptUtil.objMap;
+	public var objMap(get, never):Map<String, Dynamic>; inline function get_objMap()return stage.objects;
 	
 	public var skipStrumIntro(get,set):Bool; inline function get_skipStrumIntro()return notesGroup.skipStrumIntro;
 	inline function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;

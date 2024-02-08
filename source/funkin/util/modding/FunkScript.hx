@@ -1,5 +1,6 @@
 package funkin.util.modding;
 
+import hscript.Script;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 enum HscriptFunctionCallback {
@@ -222,14 +223,14 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('addSpr', function(spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
-			return ScriptUtil.addSprite(spr, key, onTop);
+			return ScriptUtil.addObject(spr, key, onTop);
 		});
 
 		set('insertSpr', function(position:Int = 0, spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
-			return ScriptUtil.insertSprite(spr, key, position, onTop);
+			return ScriptUtil.insertObject(position, spr, key, onTop);
 		});
 
-		set('insertBehind', function(spr:Dynamic, ?key:String, behindKey:String) {
+		/*set('insertBehind', function(spr:Dynamic, ?key:String, behindKey:String) {
 			var layer = ScriptUtil.getSpriteLayer(behindKey);
 			var bSpr = ScriptUtil.getSprite(behindKey);
 			ScriptUtil.insertSprite(spr, key, layer.indexOf(bSpr) - 1, layer);
@@ -239,54 +240,63 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			var layer = ScriptUtil.getSpriteLayer(aboveKey);
 			var aSpr = ScriptUtil.getSprite(aboveKey);
 			ScriptUtil.insertSprite(spr, key, layer.indexOf(aSpr), layer);
+		});*/
+
+		set('setObjMap', function(object:Dynamic, key:String):Void {
+			ScriptUtil.objects.set(key, object);
 		});
 
-		set('setObjMap', function(object:Dynamic, key:String) {
-			ScriptUtil.objMap.set(key, object);
+		set('getSpr', function(key:String):Null<FlxObject> {
+			return ScriptUtil.getObject(key);
 		});
 
-		set('getSpr', function(key:String):Null<Dynamic> {
-			return ScriptUtil.getSprite(key);					
-		});
-
+		// TODO: improve this shit
 		set('getSprOrder', function(key:String):Int {
-			for (i in ['fg', 'bg']) {
-				var sprKey = ScriptUtil.getSpriteKey(i, key);
-				if (ScriptUtil.objMap.exists(sprKey))
-					return ScriptUtil.getGroup(i).members.indexOf(ScriptUtil.objMap.get(sprKey));
+			var sprite = ScriptUtil.getObject(key);
+			if (sprite != null)
+			{
+				var layer = ScriptUtil.stage.getObjectLayer(sprite);
+				return	layer == null ? -1 : layer.members.indexOf(sprite);
 			}
-			errorPrint('Sprite not found: $key');
-			return 0;
+
+			return -1;
 		});
 
-		set('existsSpr', function(key:String):Null<Dynamic> {
-			return ScriptUtil.existsSprite(key);					
+		set('existsSpr', function(key:String):Bool {
+			return ScriptUtil.existsObject(key);					
 		});
 
+		// TODO: improve this shit
 		set('removeSpr', function(key:String) {
-			for (i in ['fg', 'bg']) {
-				var sprKey = ScriptUtil.getSpriteKey(i, key);
-				var group = ScriptUtil.getGroup(i);
-				if (ScriptUtil.objMap.exists(sprKey)) {
-					group.remove(ScriptUtil.getSprite(key));
-					ScriptUtil.objMap.remove(sprKey);
-				}
+			var sprite = ScriptUtil.getObject(key);
+			if (sprite != null)
+			{
+				var layer = ScriptUtil.stage.getObjectLayer(sprite);
+				if (layer != null)
+					layer.remove(sprite, true);
+
+				ScriptUtil.objects.remove(key);
 			}
 		});
 
-		set('makeGroup', function(key:String, ?order:Int):FlxTypedGroup<Dynamic> {
-			var newGroup:FlxTypedGroup<Dynamic> = new FlxTypedGroup<Dynamic>();
-			order != null ? FlxG.state.insert(order, newGroup) : FlxG.state.add(newGroup);
-			if (cast FlxG.state is PlayState) ScriptUtil.objMap.set(ScriptUtil.getGroupKey(key), newGroup);
-			return newGroup;
+		set('makeLayer', function(?maxSize:Int) {
+			return new Layer(maxSize);
 		});
 
-		set('getGroup', function(key:String):Null<FlxTypedGroup<Dynamic>> {
-			return ScriptUtil.getGroup(key);
+		set('addLayer', function(layer:Layer, key:String) {
+			ScriptUtil.addLayer(layer, key);
 		});
 
-		set('existsGroup', function(key:String):Bool {
-			return ScriptUtil.existsGroup(key);			
+		set('insertLayer', function (index:Int = 0, layer:Layer, key:String) {
+			ScriptUtil.stage.insertLayer(index, layer, key);
+		});
+
+		set('getLayer', function (key:String) {
+			return ScriptUtil.getLayer(key);
+		});
+
+		set('existsLayer', function (key:String) {
+			return ScriptUtil.existsLayer(key);
 		});
 
 		set('cacheCharacter', function(name:String):Character {

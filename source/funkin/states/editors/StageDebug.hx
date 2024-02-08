@@ -20,45 +20,43 @@ class StageDebug extends MusicBeatState {
         FlxG.camera.follow(camFollow);
         FlxG.mouse.visible = true;
 
-        final gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
-		gridBG.scrollFactor.set(0.5, 0.5);
-		add(gridBG);
+        var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
+		//grid.scrollFactor.set(0.5, 0.5);
+		add(grid);
 
-        final bgGroup = new LayerGroup(); bgGroup.ID = 0;
-        add(bgGroup);
-
-        /// Characters
+        // Characters
 
         var dadOff = stageData.dadOffsets;
         var bfOff = stageData.bfOffsets;
 
         var dad = new FunkinSprite("options/bf_offset", [100 - dadOff[0], 450 - dadOff[1]]);
         dad.alpha = 0.4;
-        add(dad);
 
         var bf = new FunkinSprite("options/bf_offset", [770 - bfOff[0], 450 - bfOff[1]]);
         bf.flipX = true;
         bf.alpha = 0.4;
-        add(bf);
 
-        /// Characters
+        // Stage
 
-        var fgGroup = new LayerGroup();
-        fgGroup.ID = 1;
-        add(fgGroup);
+        var stage = Stage.fromJson(stageData);
+        add(stage);
+        
+        if (stage.existsLayer("dad"))
+            stage.getLayer("dad").add(dad);
 
-        // TODO add a better layer system you big goof
-        Stage.createStageObjects(stageData.layers, null, ["bg" => bgGroup, "fg" => fgGroup]);
+        if (stage.existsLayer("bf"))
+            stage.getLayer("bf").add(bf);
+
         FlxG.camera.zoom = stageData.zoom;
     }
     
-    final speed = 50;
+    var speed = 50;
 
     override function update(elapsed:Float) {
         super.update(elapsed);
         
-        final moveX = FlxG.keys.pressed.A ? -speed : FlxG.keys.pressed.D ? speed : 0;
-        final moveY = FlxG.keys.pressed.W ? -speed : FlxG.keys.pressed.S ? speed : 0;
+        var moveX = FlxG.keys.pressed.A ? -speed : FlxG.keys.pressed.D ? speed : 0;
+        var moveY = FlxG.keys.pressed.W ? -speed : FlxG.keys.pressed.S ? speed : 0;
         camFollow.x += moveX * elapsed * 10;
         camFollow.y += moveY * elapsed * 10;
 

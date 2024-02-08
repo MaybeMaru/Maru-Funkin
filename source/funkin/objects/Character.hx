@@ -103,7 +103,7 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function new(?X:Float, ?Y:Float, character:String = "bf", isPlayer:Bool = false, debugMode:Bool = false, ?inputJson:CharacterJson):Void {
-		super(X,Y);
+		super(X, Y);
 		worldOffsets = FlxPoint.get();
 		stageOffsets = FlxPoint.get();
 		stageCamOffsets = FlxPoint.get();
@@ -123,7 +123,7 @@ class Character extends FlxSpriteExt {
 		gameOverChar = charJson.gameOverChar;
 		gameOverSuffix = charJson.gameOverSuffix;
 		setFlipX(charJson.flipX);
-		setXY(x,y);
+		setXY(x, y);
 		antialiasing = charJson.antialiasing ? Preferences.getPref('antialiasing') : false;
 		icon = charJson.icon;
 

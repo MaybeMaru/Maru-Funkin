@@ -1,5 +1,8 @@
 package funkin.objects;
 
+import flixel.graphics.tile.FlxDrawBaseItem;
+import flixel.graphics.tile.FlxDrawBaseItem.FlxDrawItemType;
+import flixel.graphics.tile.FlxDrawQuadsItem;
 import flixel.util.typeLimit.OneOfTwo;
 import openfl.display.Shape;
 import openfl.display.Bitmap;

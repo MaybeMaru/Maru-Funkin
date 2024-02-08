@@ -1,5 +1,7 @@
 package flixel.graphics.tile;
 
+import openfl.display.BlendMode;
+import openfl.display.Graphics;
 #if FLX_DRAW_QUADS
 import flixel.FlxCamera;
 import flixel.graphics.frames.FlxFrame;
@@ -38,9 +40,10 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		transforms.length = 0;
 		alphas.splice(0, alphas.length);
 		if (colorMultipliers != null)
+		{
 			colorMultipliers.splice(0, colorMultipliers.length);
-		if (colorOffsets != null)
 			colorOffsets.splice(0, colorOffsets.length);
+		}
 	}
 
 	override public function dispose():Void
@@ -75,10 +78,10 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (colored || hasColorOffsets)
 		{
 			if (colorMultipliers == null)
+			{
 				colorMultipliers = [];
-
-			if (colorOffsets == null)
 				colorOffsets = [];
+			}
 
 			if (transform != null)
 			{
@@ -87,13 +90,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 					colorMultipliers.push(transform.redMultiplier);
 					colorMultipliers.push(transform.greenMultiplier);
 					colorMultipliers.push(transform.blueMultiplier);
+					colorMultipliers.push(1);
 
 					colorOffsets.push(transform.redOffset);
 					colorOffsets.push(transform.greenOffset);
 					colorOffsets.push(transform.blueOffset);
 					colorOffsets.push(transform.alphaOffset);
-
-					colorMultipliers.push(1);
 				}
 			}
 			else
@@ -103,13 +105,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 					colorMultipliers.push(1);
 					colorMultipliers.push(1);
 					colorMultipliers.push(1);
-
-					colorOffsets.push(0);
-					colorOffsets.push(0);
-					colorOffsets.push(0);
-					colorOffsets.push(0);
-
 					colorMultipliers.push(1);
+
+					colorOffsets.push(0);
+					colorOffsets.push(0);
+					colorOffsets.push(0);
+					colorOffsets.push(0);
 				}
 			}
 		}
@@ -121,7 +122,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (rects.length == 0)
 			return;
 
-		var shader = shader != null ? shader : graphics.shader;
+		final shader = shader != null ? shader : graphics.shader;
 		if (shader == null)
 			return;
 
@@ -129,7 +130,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
 
-		var hasColors = colored || hasColorOffsets;
+		final hasColors = colored || hasColorOffsets;
 		if (hasColors)
 		{
 			shader.colorMultiplier.value = colorMultipliers;
@@ -138,12 +139,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, hasColors);
-
-		#if (openfl > "8.7.0")
-		inline camera.canvas.graphics.overrideBlendMode(blend);
-		#end
-		inline camera.canvas.graphics.beginShaderFill(shader);
-		inline camera.canvas.graphics.drawQuads(rects, null, transforms);
+		drawFlxQuad(camera.canvas.graphics, blend, shader, rects, transforms);
 		
 		#if FLX_DEBUG
 		FlxDrawBaseItem.drawCalls++;
@@ -155,6 +151,61 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (parameter.value == null)
 			parameter.value = [];
 		parameter.value[0] = value;
+	}
+
+	// Copy pasted from openfl Graphics, just inlines some stuff and removes indices since flixel quads dont need those
+
+	inline function drawFlxQuad(graphics:Graphics, blendMode:BlendMode, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>) @:privateAccess
+	{
+		final commands = graphics.__commands;
+
+		// Override blend mode
+		inline commands.overrideBlendMode(blendMode);
+
+		// Begin shader fill
+		final shaderBuffer = inline graphics.__shaderBufferPool.get();
+		inline graphics.__usedShaderBuffers.add(shaderBuffer);
+		inline shaderBuffer.update(cast shader);
+		inline commands.beginShaderFill(shaderBuffer);
+		
+		// Draw the quad
+		var tileRect = CoolUtil.rectangle;
+		var tileTransform = CoolUtil.matrix;
+
+		var minX = Math.POSITIVE_INFINITY;
+		var minY = minX;
+		var maxX = Math.NEGATIVE_INFINITY;
+		var maxY = maxX;
+
+		tileRect.x = 0;
+		tileRect.y = 0;
+		tileRect.width =rects[6];
+		tileRect.height = rects[7];
+
+		if (tileRect.width > 0 && tileRect.height > 0)
+		{
+			tileTransform.a = transforms[6];
+			tileTransform.b = transforms[7];
+			tileTransform.c = transforms[8];
+			tileTransform.d = transforms[9];
+			tileTransform.tx = transforms[10];
+			tileTransform.ty = transforms[11];
+
+			inline tileRect.__transform(tileRect, tileTransform);
+	
+			if (minX > tileRect.x) minX = tileRect.x;
+			if (minY > tileRect.y) minY = tileRect.y;
+			if (maxX < tileRect.right) maxX = tileRect.right;
+			if (maxY < tileRect.bottom) maxY = tileRect.bottom;
+		}
+
+		inline graphics.__inflateBounds(minX, minY);
+		inline graphics.__inflateBounds(maxX, maxY);
+
+		inline commands.drawQuads(rects, null, transforms);
+
+		graphics.__dirty = true;
+		graphics.__visible = true;
 	}
 	#end
 }
