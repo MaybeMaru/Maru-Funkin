@@ -204,15 +204,13 @@ class PlayState extends MusicBeatState {
 		for (char in [boyfriend, dad, gf]) addCharScript(char);
 
 		//Song Scripts
-		final songScripts:Array<String> = ModdingUtil.getScriptList('songs/${Song.formatSongFolder(SONG.song)}');
-		ModdingUtil.addScriptList(songScripts);
+		ModdingUtil.addScriptFolder('songs/${Song.formatSongFolder(SONG.song)}');
 
 		//Skin Script
 		ModdingUtil.addScript(Paths.script('skins/${SkinUtil.curSkin}'));
 
 		//Global Scripts
-		final globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
-		ModdingUtil.addScriptList(globalScripts);
+		ModdingUtil.addScriptFolder('data/scripts/global');
 
 		notesGroup = new NotesGroup(SONG);
 

@@ -4,5 +4,103 @@
 	"gfOffsets": [30,50],
 	"dadOffsets": [-75,20],
 	"bfOffsets": [-75,0],
-	"startCamOffsets": [-400,-580]
+	"startCamOffsets": [-400,-580],
+
+	"layersOrder": ["bg", "pico", "gf", "dad", "bf", "fg"],
+	"layers": {
+		"bg": [
+			{
+				"tag": "sky",
+				"imagePath": "tankSky",
+				"position": [-400, -400],
+				"scrolls": [0.1, 0.1]
+			},
+			{
+				"tag": "clouds",
+				"imagePath": "tankClouds",
+				"position": [-400, -20],
+				"scrolls": [0.15, 0.15]
+			},
+			{
+				"tag": "mountains",
+				"imagePath": "tankMountains",
+				"position": [-300, -20],
+				"scrolls": [0.2, 0.2],
+				"scale": 1.2
+			},
+			{
+				"tag": "buildings",
+				"imagePath": "tankBuildings",
+				"position": [-250, 0],
+				"scrolls": [0.3, 0.3],
+				"scale": 1.1
+			},
+			{
+				"tag": "ruins",
+				"imagePath": "tankRuins",
+				"position": [-250, 0],
+				"scrolls": [0.35, 0.35],
+				"scale": 1.1
+			},
+			{
+				"tag": "smokeLeft",
+				"imagePath": "smokeLeft",
+				"position": [-200, -100],
+				"scrolls": [0.4, 0.4],
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "SmokeBlurLeft",
+						"loop": true
+					}
+				]
+			},
+			{
+				"tag": "smokeRight",
+				"imagePath": "smokeRight",
+				"position": [1100, -100],
+				"scrolls": [0.4, 0.4],
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "SmokeRight",
+						"loop": true
+					}
+				]
+			},
+			{
+				"tag": "watchtower",
+				"imagePath": "tankWatchtower",
+				"position": [0, 50],
+				"scrolls": [0.5, 0.5],
+				"anims": [
+					{
+						"animName": "idle",
+						"animFile": "watchtower gradient color"
+					}
+				]
+			},
+			{
+				"tag": "tank",
+				"imagePath": "tankRolling",
+				"position": [300, 300],
+				"scrolls": [0.5, 0.5],
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "BG tank w lighting",
+						"loop": true
+					}
+				]
+			}
+		],
+		"gf": [
+			{
+				"tag": "ground",
+				"imagePath": "tankGround",
+				"position": [-420, -150],
+				"scale": 1.15
+			}
+		]
+	}
 }

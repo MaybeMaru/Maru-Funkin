@@ -125,6 +125,11 @@ class ModdingUtil {
         }
     }
 
+    inline public static function addScriptFolder(folder:String) {
+        final list = getScriptList(folder);
+        addScriptList(list);
+    }
+
     inline public static function addScriptList(list:Array<String>, ?tags:Array<String>) {
         tags = tags ?? [];
         for (i in 0...list.length)
