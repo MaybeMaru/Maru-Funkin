@@ -138,14 +138,14 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		else __superDraw();
 	}
 
-	override function checkEmptyFrame():Void {
+	override inline function checkEmptyFrame():Void {
 		if (_frame == null)
 			frames = Main.DEFAULT_GRAPHIC.imageFrame;
 	}
 
 	@:noCompletion
 	private inline function __superDraw():Void {
-		inline checkEmptyFrame();
+		checkEmptyFrame();
 		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
@@ -256,7 +256,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 		if (frame.angle == 180) {
 			mat.rotateBy180();
-			inline mat.translate(frame.sourceSize.y, frame.sourceSize.x);
+			mat.tx += frame.sourceSize.y;
+			mat.ty += frame.sourceSize.x;
 		}
 
 		if (lodScale != 1.0)
@@ -264,12 +265,12 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 		if (flipX != frame.flipX) {
 			inline mat.scale(-1, 1);
-			inline mat.translate(frame.sourceSize.x, 0);
+			mat.tx += frame.sourceSize.x;
 		}
 
 		if (flipY != frame.flipY) {
 			inline mat.scale(1, -1);
-			inline mat.translate(0, frame.sourceSize.y);
+			mat.ty += frame.sourceSize.y;
 		}
 	}
 

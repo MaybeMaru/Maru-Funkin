@@ -1,12 +1,11 @@
-import flixel.util.FlxTimer;
+import funkin.util.song.WeekSetup;
 
 var naughty;
 var random;
-
-var dancers = [];
-
 var limbs = [];
 var bloods = [];
+
+var dancers = [];
 
 function createPost()
 {
@@ -173,6 +172,7 @@ function killDancer(id)
 var lastTime = 0;
 var doingGore = false;
 var didGore = false;
+var dodged = false;
 var goreIndex = 0;
 
 function sectionHit()
@@ -190,6 +190,11 @@ function startGore()
 
 function updatePost()
 {
+	if (!carCanDrive) {
+		if (FlxG.mouse.overlaps(car) && FlxG.mouse.justPressed)
+			WeekSetup.loadSong("", "ridge", "normal");
+	}
+	
 	if (!doingGore) 
 		return;
 
@@ -201,6 +206,11 @@ function updatePost()
 		if (!didGore) {
 			FlxG.sound.play(Paths.sound("gore"));
 			didGore = true;
+		}
+
+		if (!dodged && pole.x > 725) {
+			State.gf._dynamic.dodge();
+			dodged = true;
 		}
 
 		var dancer = dancers[goreIndex];
@@ -233,9 +243,10 @@ function resetLimo()
 				FlxTween.tween(i, {x: i.x - 1480}, time, {ease: FlxEase.backOut});
 			}
 
-			FlxTween.tween(limo, {x: -200}, time, {ease: FlxEase.backOut, onComplete: function ()
-			{
+			// Get the limo back on screen
+			FlxTween.tween(limo, {x: -200}, time, {ease: FlxEase.backOut, onComplete: function () {
 				doingGore = false;
+				dodged = false;
 				goreIndex = 0;
 			}});
 		});

@@ -239,6 +239,7 @@ class FlxFunkText extends FlxSpriteExt {
 
             default:
         }
+        
         __superDrawComplex(camera);
     }
 

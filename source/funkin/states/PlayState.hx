@@ -23,10 +23,6 @@ class PlayState extends MusicBeatState {
 	public static var curStage:String = '';
 	public var stageData:StageJson;
 	public var stage:Stage;
-	
-	//private var stageJsonData:StageJson;
-	//public var bgSpr:FlxTypedGroup<Dynamic>;
-	//public var fgSpr:FlxTypedGroup<Dynamic>;
 
 	public var dad:Character;
 	public var gf:Character;
@@ -147,15 +143,11 @@ class PlayState extends MusicBeatState {
 		}
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
 
-		//FG & BG SPRITES
-		//bgSpr = new FlxTypedGroup<Dynamic>();
-		//fgSpr = new FlxTypedGroup<Dynamic>();
-
+		// MAKE CHARACTERS
 		gfGroup = new FlxTypedSpriteGroup<Dynamic>();
 		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
 		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
 
-		// MAKE CHARACTERS
 		gf = new Character(0, 0, SONG.players[2]);
 		dad = new Character(0, 0, SONG.players[1]);
 		boyfriend = new Character(0, 0, SONG.players[0], true);
@@ -222,9 +214,11 @@ class PlayState extends MusicBeatState {
 		final globalScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/global');
 		ModdingUtil.addScriptList(globalScripts);
 
-		notesGroup = new NotesGroup(SONG); // Should be after fg is created but makin sure
+		notesGroup = new NotesGroup(SONG);
 
+		targetLayer = stage.getLayer("bg");
 		ModdingUtil.addCall('create');
+		targetLayer = null;
 
 		add(notesGroup);
 		notesGroup.init();
@@ -278,7 +272,8 @@ class PlayState extends MusicBeatState {
 		add(healthBar);
 
 		add(iconGroup);
-		for (i in [iconP1,iconP2]) iconGroup.add(i);
+		iconGroup.add(iconP1);
+		iconGroup.add(iconP2);
 
 		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.weak(FlxG.width, 20));
 		add(scoreTxt);

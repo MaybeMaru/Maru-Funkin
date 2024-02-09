@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.util.typeLimit.OneOfTwo;
 import funkin.util.modding.ScriptUtil;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
@@ -43,6 +44,15 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		}
 
 		Main.transition.exitTrans();
+	}
+
+	// Only for backwards compatibility
+	public var targetLayer:Layer;
+	override function add(basic:OneOfTwo<FlxBasic, FlxObject>):FlxBasic {
+		if (targetLayer == null)
+			return super.add(basic);
+
+		return targetLayer.add(basic);
 	}
 
 	override function draw() {

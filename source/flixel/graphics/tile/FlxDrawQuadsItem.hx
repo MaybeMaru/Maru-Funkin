@@ -179,7 +179,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 		tileRect.x = 0;
 		tileRect.y = 0;
-		tileRect.width =rects[6];
+		tileRect.width = rects[6];
 		tileRect.height = rects[7];
 
 		if (tileRect.width > 0 && tileRect.height > 0)
