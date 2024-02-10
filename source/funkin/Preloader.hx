@@ -14,11 +14,11 @@ class Preloader extends FlxState {
     
     function fixFileList(list:Array<String>, typeFolder:String = 'images/', noLibFolder:String = 'assets/weeks'):Array<String> {
         final finalList:Array<String> = [];
-        for (file in list) {
-            if (!file.startsWith(noLibFolder) && !file.contains('unused/')) {
+        list.fastForEach((file, i) -> {
+            if (!file.startsWith(noLibFolder) && !file.contains('unused/'))
                 finalList.push(file.split(typeFolder)[1].split('.')[0]);
-            }
-        }
+        });
+
         return finalList;
     }
 

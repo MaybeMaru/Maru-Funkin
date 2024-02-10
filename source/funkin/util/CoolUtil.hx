@@ -19,9 +19,9 @@ typedef CacheClearing =  {
 	?skins:Bool
 }
 
-enum abstract SoundType(String) {
-	var SOUND = "sound";
-	var MUSIC = "music";
+enum abstract SoundType(Int) from Int to Int {
+	var SOUND = 0;
+	var MUSIC = 1;
 }
 
 class CoolUtil {
@@ -116,9 +116,16 @@ class CoolUtil {
 		#end
 	}
 
-	inline public static function setGlobalManager(active:Bool = true) {
-		FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if (!tmr.finished) tmr.active = active);
-		FlxTween.globalManager.forEach(function(twn:FlxTween) if (!twn.finished) twn.active = active);
+	inline public static function setGlobalManager(active:Bool = true) @:privateAccess {
+		FlxTimer.globalManager._timers.fastForEach((timer, i) -> {
+			if (!timer.finished)
+				timer.active = active;
+		});
+
+		FlxTween.globalManager._tweens.fastForEach((tween, i) -> {
+			if (!tween.finished)
+				tween.active = active;
+		});
 	}
 
 	inline static function soundFromAsset(asset:FlxSoundAsset, kill:Bool = false):FlxSound {

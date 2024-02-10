@@ -305,7 +305,8 @@ class PlayState extends MusicBeatState {
 		super.create();
 		destroySubStates = false;
 		pauseSubstate = new PauseSubState();
-		CoolUtil.gc(false);
+		
+		CoolUtil.gc(true);
 	}
 
 	public function startVideo(path:String, ?completeFunc:()->Void):Void {

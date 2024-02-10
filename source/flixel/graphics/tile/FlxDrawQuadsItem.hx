@@ -160,8 +160,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		final commands = graphics.__commands;
 
 		// Override blend mode
-		if (blendMode != null)
-			inline commands.overrideBlendMode(blendMode);
+		inline commands.overrideBlendMode(blendMode ?? NORMAL);
 
 		// Begin shader fill
 		final shaderBuffer = inline graphics.__shaderBufferPool.get();

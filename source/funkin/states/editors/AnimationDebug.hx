@@ -107,6 +107,7 @@ class AnimationDebug extends MusicBeatState {
 		addCharacterUI();
 		addAnimationUI();
 		loadCharacter(createChar);
+		focus = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
 		super.create();
 	}
 
@@ -282,17 +283,20 @@ class AnimationDebug extends MusicBeatState {
 		var autoButton:FlxUIButton = new FlxUIButton(updateButton.x, removeButton.y + 45, 'Auto Anims', function () {
 			openSubState(new PromptSubstate('Are you sure you want to\nuse auto animations?\nPreviously created animations\nwill be deleted\n\n\nPress back to cancel', function () {
 				final prefixes = displayChar.getAnimationPrefixes();
-				for (i in displayChar.animDatas.keys()) removeAnimation(i);
-				for (i in prefixes) {
+				for (i in displayChar.animDatas.keys())
+					removeAnimation(i);
+				
+				prefixes.fastForEach((prefix, i) -> {
 					addAnimation({
-						animName: i,
-						animFile: i,
+						animName: prefix,
+						animFile: prefix,
 						offsets: [0.0,0.0],
 						framerate: Std.int(stepper_animFramerate.value),
 						indices: [],
 						loop: false
 					});
-				}
+				});
+
 				changeCurAnim();
 			}));
 		});
@@ -369,10 +373,10 @@ class AnimationDebug extends MusicBeatState {
 
 	function removeAnimation(label:String) {
 		if (dropDown_anims.list.length > 0 && displayChar.animOffsets.exists(label)) {
-			for (i in [displayChar, ghostChar]) {
-				i.animDatas.remove(label);
-				i.animOffsets.remove(label);
-			}
+			displayChar.animDatas.remove(label);
+			displayChar.animOffsets.remove(label);
+			ghostChar.animDatas.remove(label);
+			ghostChar.animOffsets.remove(label);
 		}
 		updateAnimUI(null);
 	}
@@ -424,17 +428,19 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function clearCharGroup():Void {
-		for (member in charGroup.members) {
-			member.visible = false;
-			member.kill();
+		charGroup.members.fastForEach((member, i) -> {
 			charGroup.remove(member);
 			member.destroy();
-		}
+		});
+		
+		charGroup.clear();
 	}
 
 	function clearOffsetText() {
-		animsList = [];
-		for (i in animsText) i.kill();
+		animsList.splice(0, animsList.length);
+		animsText.members.fastForEach((text, i) -> {
+			text.kill();
+		});
 	}
 
 	function funcColor (txt:FunkinText, isCurAnim:Bool) {
@@ -443,13 +449,14 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function updateOffsetText(create:Bool = false):Void {
-		var _anims:Array<String> = [];
-		for (i in displayChar.animOffsets.keys()) _anims.push(i);
-		_anims.sort(CoolUtil.sortAlphabetically);
+		final anims:Array<String> = [];
+		for (i in displayChar.animOffsets.keys()) anims.push(i);
+		anims.sort(CoolUtil.sortAlphabetically);
 		
-		if (create) clearOffsetText();
-		var i:Int = 0;
-		for (anim in _anims) {
+		if (create)
+			clearOffsetText();
+		
+		anims.fastForEach((anim, i) -> {
 			final charOffsets = displayChar.animOffsets.get(anim);
 			var offsetText:String = '$anim: [${charOffsets.x}, ${charOffsets.y}]';
 			final isCurAnim = i == curAnimIndex;
@@ -469,8 +476,7 @@ class AnimationDebug extends MusicBeatState {
 				if (animsList[i] != null)
 					animsList[i] = anim;
 			}
-			i++;
-		}
+		});
 	}
 
 	function setUIValues():Void {
@@ -605,13 +611,15 @@ class AnimationDebug extends MusicBeatState {
 		pushJsonAnims();
 	}
 
+	var focus:Array<FlxUIInputText>;
+
 	function checkFocus():Bool {
-		for (input in [input_icon, input_imagePath, input_animName, input_animFile, input_indices]) {
+		focus.fastForEach((input, i) -> {
 			if (input.hasFocus) {
 				Main.game.enabledSoundTray = false;
 				return true;
 			}
-		}
+		});
 		Main.game.enabledSoundTray = true;
 		return false;
 	}

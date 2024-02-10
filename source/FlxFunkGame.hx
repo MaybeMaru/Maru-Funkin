@@ -45,13 +45,15 @@ class FlxFunkGame extends FlxGame {
     override function update() {
         super.update();
 
-        transition.update(FlxG.elapsed);
-        console.update(FlxG.elapsed);
+        final elapsed = FlxG.elapsed;
+
+        transition.update(elapsed);
+        console.update(elapsed);
 
         if (FlxG.state.persistentUpdate && updateObjects.length != 0) {
-            for (object in updateObjects) {
-                object.update(FlxG.elapsed);
-            }
+            updateObjects.fastForEach((object, i) -> {
+                object.update(elapsed);
+            });
         }
     }
     
