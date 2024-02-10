@@ -4,10 +4,9 @@ import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 import flixel.graphics.frames.FlxFrame;
 
-
-enum RepeatDrawStyle {
-    TOP_BOTTOM;
-    BOTTOM_TOP;
+enum abstract RepeatDrawStyle(Int) from Int to Int {
+    var TOP_BOTTOM = 0;
+    var BOTTOM_TOP = 1;
 }
 
 /**
@@ -16,7 +15,8 @@ enum RepeatDrawStyle {
  *
  * @author maybemaru
  */
-class FlxRepeatSprite extends FlxSpriteExt {    
+class FlxRepeatSprite extends FlxSpriteExt
+{    
     public var repeatWidth:Float;
     public var repeatHeight:Float;
     public var drawStyle:RepeatDrawStyle = TOP_BOTTOM;

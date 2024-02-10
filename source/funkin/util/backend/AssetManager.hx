@@ -37,20 +37,15 @@ class Asset
 
 	public inline function dispose():Void {
 		if (asset != null) {
-			if (isGraphicAsset) {
-				asset = __disposeGraphic(asset);
-			}
-			else {
-				asset = __disposeSound(asset);
-			}
+			isGraphicAsset ? __disposeGraphic(asset) : __disposeSound(asset);
+			asset = null;
 
 			if (onDispose != null)
 				onDispose();
 		}
 	}
 
-	inline function __disposeBitmap(bitmap:BitmapData, disposeTexture:Bool = true):BitmapData {
-		@:privateAccess
+	inline function __disposeBitmap(bitmap:BitmapData, disposeTexture:Bool = true):BitmapData @:privateAccess {
 		if (disposeTexture)
 			__disposeTexture(bitmap.__texture);
 		
@@ -59,20 +54,17 @@ class Asset
 		return null;
 	}
 
-	inline function __disposeTexture(texture:TextureBase) {
-		if (texture != null) {
+	inline function __disposeTexture(texture:TextureBase):TextureBase @:privateAccess {
+		if (texture != null)
 			texture.dispose();
 
-			@:privateAccess {
-				texture.__textureContext = null;
-				texture.__context = null;
-			}
-		}
+		return null;
 	}
 
 	inline function __disposeGraphic(graphic:LodGraphic):LodGraphic {
 		__disposeBitmap(graphic.bitmap);
 		graphic.destroy();
+		
 		return null;
 	}
 

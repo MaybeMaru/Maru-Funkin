@@ -208,8 +208,10 @@ function updatePost()
 			didGore = true;
 		}
 
-		if (!dodged && pole.x > 725) {
-			State.gf._dynamic.dodge();
+		if (!dodged && pole.x > 600) {
+			if (State.gf._dynamic.dodge != null)
+				State.gf._dynamic.dodge();
+			
 			dodged = true;
 		}
 

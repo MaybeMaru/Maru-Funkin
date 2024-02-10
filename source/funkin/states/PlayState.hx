@@ -221,28 +221,24 @@ class PlayState extends MusicBeatState {
 		add(notesGroup);
 		notesGroup.init();
 
-		// Make Dad GF
-		if (SONG.players[1] == SONG.players[2] && dad.isGF) {
-			dadGroup.setPosition(gf.OG_X - dad.OG_X, gf.OG_Y - dad.OG_Y);
-			gfGroup.group.visible = false;
-		}
-
 		// Set character groups
-
 		gfGroup.add(gf);
 		dadGroup.add(dad);
 		boyfriendGroup.add(boyfriend);
-		
-		gfGroup.scrollFactor.set(0.95, 0.95);
 
-		if (stage.existsLayer("gf"))
-			stage.getLayer("gf").add(gfGroup);
-		
-		if (stage.existsLayer("dad"))
-			stage.getLayer("dad").add(dadGroup);
+		// Make Dad GF
+		if (SONG.players[1] == SONG.players[2] && dad.isGF)  {
+			dadGroup.setPosition(gf.OG_X - dad.OG_X, gf.OG_Y - dad.OG_Y);
+			dadGroup.scrollFactor.set(0.95, 0.95);
+			stage.__existsAddToLayer("gf", dadGroup);
+		}
+		else {
+			gfGroup.scrollFactor.set(0.95, 0.95);
+			stage.__existsAddToLayer("gf", gfGroup);
+			stage.__existsAddToLayer("dad", dadGroup);
+		}
 
-		if (stage.existsLayer("bf"))
-			stage.getLayer("bf").add(boyfriendGroup);
+		stage.__existsAddToLayer("bf", boyfriendGroup);
 
 		//Cam Follow
 		if (prevCamFollow != null) {

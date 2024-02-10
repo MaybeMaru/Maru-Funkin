@@ -1,8 +1,8 @@
 package funkin.graphics;
 
-enum RenderMode {
-    QUAD;
-    REPEAT;
+enum abstract RenderMode(Int) from Int to Int {
+    var QUAD = 0;
+    var REPEAT = 1;
 }
 
 class SmartSprite extends FlxSkewRepeatSprite {

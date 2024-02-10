@@ -190,6 +190,11 @@ class Stage extends TypedGroup<Layer>
         objects.set(tag, object);
     }
 
+    public function __existsAddToLayer(layerkey:LayerKey, object:FlxObject) {
+        if (existsLayer(layerkey))
+            getLayer(layerkey).add(object);
+    }
+
     // TODO: improve this
 
     public function getObjectLayer(object:FlxObject) {
@@ -233,6 +238,11 @@ class Stage extends TypedGroup<Layer>
         layers.set(tag, layer);
         layersOrder.push(tag);
         add(layer);
+    }
+
+    public function removeLayer(layerKey:LayerKey) {
+        layers.remove(__resolveLayerKey(layerKey));
+        layersOrder.splice(getLayerIndex(layerKey), 1);
     }
 
     public function insertLayer(index:Int = 0, layer:Layer, layerKey:LayerKey) {
