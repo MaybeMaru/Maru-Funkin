@@ -203,10 +203,10 @@ class ModdingUtil {
 
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
         var calledStop:Bool = false;
-        for (script in scripts) {
-            if (script.callback(name, args) == STOP_FUNCTION)
+        scripts.fastForEach((script, i) -> {
+            if (script != null && script.callback(name, args) == STOP_FUNCTION)
                 calledStop = true;
-        }
+        });
         return calledStop;
     }
 
@@ -247,10 +247,10 @@ class ModdingUtil {
 
     public static inline function runFunctionMods(mods:Array<String>, func:Dynamic) {
         final lastMod = curModFolder;
-        for (i in 0...mods.length) {
-            curModFolder = mods[i];
+        mods.fastForEach((mod, i) -> {
+            curModFolder = mod;
             func();
-        }
+        });
         curModFolder = lastMod;
     }
 }

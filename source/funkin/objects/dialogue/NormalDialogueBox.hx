@@ -3,7 +3,7 @@ package funkin.objects.dialogue;
 class NormalDialogueBox extends DialogueBoxBase {
     public var speechBubble:FunkinSprite;
     public var swagDialogue:TypedAlphabet;
-    public var blackBG:FlxSprite;
+    public var blackBG:FlxSpriteExt;
 
     public var portraitGroup:FlxSpriteGroup;
 	public var portraitDad:NormalPortrait;
@@ -12,11 +12,8 @@ class NormalDialogueBox extends DialogueBoxBase {
 
     public function new():Void {
         super();
-        blackBG = new FlxSprite(-100,-100).makeGraphic(1,1, FlxColor.BLACK);
-        blackBG.scale.set(FlxG.width*2, FlxG.height*2);
-        blackBG.antialiasing = false;
-        blackBG.updateHitbox();
-        blackBG.alpha = 0.000001;
+        blackBG = new FlxSpriteExt(-100,-100).makeRect(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
+        blackBG.alpha = 0;
         add(blackBG);
 
         portraitGroup = new FlxSpriteGroup();

@@ -212,10 +212,14 @@ class AssetManager
 	{
 		var bitmap = graphic.bitmap;
 
-		if (bitmap.readable) {
+		if (bitmap.readable)
+		{
 			var texture = FlxG.stage.context3D.createTexture(bitmap.width, bitmap.height, BGR_PACKED, true);
 			texture.uploadFromBitmapData(bitmap);
 
+			if (bitmap.image != null && bitmap.image.data != null)
+				bitmap.image.data = null;
+			
 			bitmap.dispose();
 
 			graphic.bitmap = BitmapData.fromTexture(texture);
@@ -336,8 +340,7 @@ class AssetManager
 	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Array<String> {
 		var removeKeys:Array<String> = [];
 		
-		for (i in 0...keys.length) {
-			var key = keys[i];
+		keys.fastForEach((key, i) -> {
 			var asset = assetsMap.get(key);
 			if (asset != null) {
 				var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
@@ -347,10 +350,11 @@ class AssetManager
 					assetsMap.remove(key);
 				}
 			}
-		}
+		});
 
-		for (key in removeKeys)
+		removeKeys.fastForEach((key, i) -> {
 			keys.remove(key);
+		});
 
 		return keys;
 	}
@@ -358,25 +362,25 @@ class AssetManager
 	@:noCompletion
 	inline static function __clearCacheFromMod(keys:Array<String>, mod:String, clearGraphics:Bool, clearSounds:Bool):Array<String> {
 		var removeKeys:Array<String> = [];
-		
-		for (i in 0...keys.length) {
-			var key = keys[i];
-			var keyMod = key.split("/")[1];
-			if (keyMod != mod) continue;
 
-			var asset = assetsMap.get(key);
-			if (asset != null) {
-				var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
-				if (dispose) {
-					removeKeys.push(key);
-					asset.dispose();
-					assetsMap.remove(key);
+		keys.fastForEach((key, i) -> {
+			var keyMod = key.split("/")[1];
+			if (keyMod == mod) {
+				var asset = assetsMap.get(key);
+				if (asset != null) {
+					var dispose = (asset.isGraphicAsset && clearGraphics) || (asset.isSoundAsset && clearSounds);
+					if (dispose) {
+						removeKeys.push(key);
+						asset.dispose();
+						assetsMap.remove(key);
+					}
 				}
 			}
-		}
+		});
 
-		for (key in removeKeys)
+		removeKeys.fastForEach((key, i) -> {
 			keys.remove(key);
+		});
 
 		return keys;
 	}

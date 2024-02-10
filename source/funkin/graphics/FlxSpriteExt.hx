@@ -95,10 +95,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		folder = folder.length > 0 ? '$folder/' : '';
 		loadImage(specialImage ?? '$folder${spriteJson.imagePath}', global);
 
-		for (anim in spriteJson.anims) {
-			anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
+		spriteJson.anims.fastForEach((anim, i) -> {
+			final anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-		}
+		});
 		
 		setScale(spriteJson.scale, true);
 
@@ -203,7 +203,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return value;
 	}
 
-	public function makeRect(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String, ?useTexture:Bool):FlxSpriteExt {
+	public function makeRect(width:Float, height:Float, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String, ?useTexture:Bool):FlxSpriteExt {
 		makeGraphic(1, 1, color, unique, key);
 		antialiasing = false;
 		scale.set(width, height);

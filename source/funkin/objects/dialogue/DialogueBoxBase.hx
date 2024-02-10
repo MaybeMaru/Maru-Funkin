@@ -35,11 +35,11 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 	public var curBubbleType:String = '';
 
 	//	Im too lazy to find better ways
-	public var startCallback:Void->Void;
-	public var skipCallback:Void->Void;
-	public var nextCallback:Void->Void;
-	public var endCallback:Void->Void;
-	public var closeCallback:Void->Void;
+	public var startCallback:()->Void;
+	public var skipCallback:()->Void;
+	public var nextCallback:()->Void;
+	public var endCallback:()->Void;
+	public var closeCallback:()->Void;
 
 	public function new():Void {
 		super();

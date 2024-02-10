@@ -3,9 +3,9 @@ package funkin.util.modding;
 import hscript.Script;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
-enum HscriptFunctionCallback {
-	STOP_FUNCTION;
-	CONTINUE_FUNCTION;
+enum abstract HscriptFunctionCallback(Int) from Int to Int {
+	var CONTINUE_FUNCTION = 0;
+	var STOP_FUNCTION = 1;
 }
 
 class FunkScript extends hscript.Script implements IFlxDestroyable {

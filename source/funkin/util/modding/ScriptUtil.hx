@@ -1,10 +1,5 @@
 package funkin.util.modding;
 
-import flixel.util.typeLimit.OneOfThree;
-
-//typedef SpriteLayer = OneOfThree<FlxTypedGroup<Dynamic>, String, Bool>;
-// TODO make layering less hardcoded, allow for multiple layers instead of only "bg" and "fg"
-
 class ScriptUtil
 {
     // Just some shortcuts, lol

@@ -178,10 +178,10 @@ class NotesGroup extends Group
 		}
 
 		badNoteHit = function () {
-			for (i in 0...controlArray.length) {
-				if (controlArray[i])
+			controlArray.fastForEach((control, i) -> {
+				if (control)
 					checkCallback(noteMiss, [i]);
-			}
+			});
 		}
     }
 
@@ -294,9 +294,16 @@ class NotesGroup extends Group
 
 	public var scrollSpeed(default, set):Float = 1.0; // Shortcut to change all notes scroll speed
 	public function set_scrollSpeed(value:Float = 1.0) {
-		if (value != scrollSpeed) {
-			for (i in 0...unspawnNotes.length) unspawnNotes[i].noteSpeed = value;
-			for (i in 0...notes.members.length) notes.members[i].noteSpeed = value;
+		if (value != scrollSpeed)
+		{
+			unspawnNotes.fastForEach((note, i) -> {
+				note.noteSpeed = value;
+			});
+
+			notes.members.fastForEach((note, i) -> {
+				note.noteSpeed = value;
+			});
+			
 			if (value < scrollSpeed)
 				inline spawnNotes();
 		}
@@ -377,7 +384,7 @@ class NotesGroup extends Group
 		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
 	}
 
-	public function checkCpuNote(note:BasicNote) {
+	public inline function checkCpuNote(note:BasicNote) {
 		if (!isCpuNote(note)) return;
 		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
 			if (note.isSustainNote) {
@@ -391,7 +398,7 @@ class NotesGroup extends Group
 		}
 	}
 
-	public function checkMissNote(note:BasicNote) {
+	public inline function checkMissNote(note:BasicNote) {
 		if (note.activeNote || note.isSustainNote) return;
 		if (!isCpuNote(note) && note.mustHit)
 			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
@@ -411,10 +418,11 @@ class NotesGroup extends Group
 		if (!generatedMusic) return; // Stuff that needs notes / events
 		inline spawnNotes();
 		inline checkEvents();
-		for (note in notes) {
-			inline checkCpuNote(note);
-			inline checkMissNote(note);
-		}
+
+		notes.members.fastForEach((note, i) -> {
+			checkCpuNote(note);
+			checkMissNote(note);
+		});
 
         if (isPlayState) {
             if (game.inCutscene) return; // No controls in cutscenes >:(
@@ -426,8 +434,9 @@ class NotesGroup extends Group
 	public var controlArray:Array<Bool> = [];
 
 	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
-		for (i in strums)
-			controlArray.push(value ? false : i.getControl("-P"));
+		strums.members.fastForEach((strum, i) -> {
+			controlArray.push(value ? false : strum.getControl("-P"));
+		});
 	}
 
     private inline function controls():Void {
@@ -440,8 +449,8 @@ class NotesGroup extends Group
 			final ignoreList:Array<Int> = [];
 			final removeList:Array<Note> = [];
 
-			notes.forEachAlive(function(note:BasicNote) {
-				if (isCpuNote(note)) return; // Skip Cpu notes
+			notes.forEachAlive(function (note:BasicNote) {
+				if (isCpuNote(note)) return;
 
 				if (note.isSustainNote) { // Handle sustain notes
 					final sus:Sustain = note.toSustain();
@@ -469,7 +478,7 @@ class NotesGroup extends Group
 						final note:Note = note.toNote();
 						if (note.canBeHit && !note.wasGoodHit) {
 							if (ignoreList.contains(note.noteData)) {
-								for (i in 0...possibleNotes.length) {
+								possibleNotes.fastForEach((possibleNote, i) -> {
 									final possibleNote:Note = possibleNotes[i];
 									if (possibleNote.noteData == note.noteData && Math.abs(note.strumTime - possibleNote.strumTime) < 10) {
 										removeList.push(note);
@@ -478,7 +487,7 @@ class NotesGroup extends Group
 										possibleNotes.remove(possibleNote);
 										possibleNotes.push(note);
 									}
-								}
+								});
 							}
 							else {
 								possibleNotes.push(note);
@@ -490,20 +499,24 @@ class NotesGroup extends Group
 			});
 
 			if (controlArray.contains(true)) {
-				for (badNote in removeList) badNote.removeNote();
+				removeList.fastForEach((note, i) -> {
+					note.removeNote();
+				});
+				
 				final onGhost = isPlayState ? game.ghostTapEnabled : true;
 
 				if (possibleNotes.length > 0) {
 					if (!onGhost) {
-						for (i in 0...controlArray.length) {
-							if (controlArray[i] && !ignoreList.contains(i)) checkCallback(badNoteHit);
-						}
+						controlArray.fastForEach((control, i) -> {
+							if (control && !ignoreList.contains(i))
+								checkCallback(badNoteHit);
+						});
 					}
 
-					for (possibleNote in possibleNotes) {
-						if (possibleNote.targetStrum.getControl("-P"))
-							checkCallback(possibleNote.mustPress ? goodNoteHit : opponentNoteHit, [possibleNote]);
-					}
+					possibleNotes.fastForEach((note, i) -> {
+						if (note.targetStrum.getControl("-P"))
+							checkCallback(note.mustPress ? goodNoteHit : opponentNoteHit, [note]);
+					});
 				}
 				else if (!onGhost) {
                     checkCallback(badNoteHit);
@@ -513,14 +526,16 @@ class NotesGroup extends Group
 	}
 
 	inline function checkStrums(array:Array<NoteStrum>) {
-		for (i in array) {
-			final anim = i.animation.curAnim;
+		array.fastForEach((strum, i) -> {
+			final anim = strum.animation.curAnim;
 			if (anim == null) continue; // Lil null check
-			if (i.getControl("-P") && !anim.name.startsWith('confirm'))
-				i.playStrumAnim('pressed');
-			if (!i.getControl())
-				i.playStrumAnim('static');
-		}
+			
+			if (strum.getControl("-P") && !anim.name.startsWith('confirm'))
+				strum.playStrumAnim('pressed');
+			
+			if (!strum.getControl())
+				strum.playStrumAnim('static');
+		});
 	}
 
 	function checkStrumAnims():Void {
@@ -546,12 +561,12 @@ class NotesGroup extends Group
 
 		if (overSinging) {
 			var isHolding:Bool = false;
-			for (strum in strums) {
+			strums.members.fastForEach((strum, i) -> {
 				if (strum.animation.curAnim.name.startsWith('confirm')) {
 					isHolding = true;
 					break;
 				}
-			}
+			});
 
 			if (!isHolding)
 				char.restartDance();

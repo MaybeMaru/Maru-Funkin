@@ -55,7 +55,7 @@ class Character extends FlxSpriteExt {
 	//	Gameplay
 	public var holdTimer:Float = 0;
 	public var forceDance:Bool = true;
-	public var group:FlxTypedSpriteGroup<Dynamic> = null;
+	public var group:FlxSpriteGroup;
 
 	inline public function callScript(field:String, ?values:Array<Dynamic>):Void {
 		if (script != null) script.call(field, values);

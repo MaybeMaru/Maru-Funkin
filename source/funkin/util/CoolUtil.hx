@@ -148,16 +148,21 @@ class CoolUtil {
 
 	public static var resumeSoundsList:Array<FlxSound> = [];
 	inline public static function pauseSounds() {
-		resumeSoundsList = FlxArrayUtil.clearArray(resumeSoundsList);
-		for (sound in FlxG.sound.list) {
-			if (sound.playing) resumeSoundsList.push(sound);
+		resumeSoundsList.splice(0, resumeSoundsList.length);
+		FlxG.sound.list.members.fastForEach((sound, i) -> {
+			if (sound.playing)
+				resumeSoundsList.push(sound);
+
 			sound.pause();
-		}
+		});
 	}
 
 	inline public static function resumeSounds() {
-		for (sound in resumeSoundsList) sound.play();
-		resumeSoundsList = FlxArrayUtil.clearArray(resumeSoundsList);
+		resumeSoundsList.fastForEach((sound, i) -> {
+			sound.play();
+		});
+
+		resumeSoundsList.splice(0, resumeSoundsList.length);
 	}
 
 	public static inline var PI:Float = 3.14159265358979323846;

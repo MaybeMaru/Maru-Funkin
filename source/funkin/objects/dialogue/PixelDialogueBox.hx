@@ -6,8 +6,8 @@ class PixelDialogueBox extends DialogueBoxBase {
 	 *	Adding new dialogue box skins
 	 *	Type => [imagePath, [openAnim, indices], [idleAnim, indices]]
 	 */
-	inline public static var PIXEL_ZOOM:Int = 6;
-	public static var boxTypes:Map<String, Array<Dynamic>> = [
+	public static inline var PIXEL_ZOOM:Int = 6;
+	public static final boxTypes:Map<String, Array<Dynamic>> = [
 		'pixel'	=> 	['pixel/dialogueBox-pixel',		['Text Box Appear'],		 	['Text Box Appear', 		   [4]]],
 		'mad'	=> 	['pixel/dialogueBox-senpaiMad',	['SENPAI ANGRY IMPACT SPEECH'], ['SENPAI ANGRY IMPACT SPEECH', [4]]],
 		'evil'	=> 	['pixel/dialogueBox-evil', 		['Spirit Textbox spawn'], 		['Spirit Textbox spawn', 	   [11]]]
@@ -21,14 +21,14 @@ class PixelDialogueBox extends DialogueBoxBase {
 	public var box:FunkinSprite;
 	public var swagDialogue:FlxTypeText;
 	public var handSelect:FunkinSprite;
-	public var bgFade:FlxSprite;
+	public var bgFade:FlxSpriteExt;
 
 	public var clickSound:FlxSound = null;
 
 	public function new(skin:String = 'pixel'):Void {
 		super();
 
-		bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), 0xFFB3DFd8);
+		bgFade = new FlxSpriteExt(-200, -200).makeRect(FlxG.width * 1.3, FlxG.height * 1.3, 0xFFB3DFd8);
 		bgFade.alpha = 0;
 		bgFade.blend = OVERLAY;
 		add(bgFade);
@@ -83,20 +83,22 @@ class PixelDialogueBox extends DialogueBoxBase {
 		clickSound.volume = 0.8;
 	}
 
-    override public function update(elapsed:Float):Void {
+    override public function update(elapsed:Float):Void
+	{
+		textFinished = swagDialogue.text.length == targetDialogue.length;
 
-        textFinished = swagDialogue.text.length == targetDialogue.length;
-		if (handSelect.animation.curAnim != null) {
-			if (!textFinished && handSelect.animation.curAnim.finished) {
-				handSelect.playAnim('load');
-			} else if (textFinished && handSelect.animation.curAnim.name == 'load') {
-				handSelect.playAnim('enter');
-			}
+		final handAnim = handSelect.animation.curAnim;
+		if (handAnim != null)
+		{
+			if (!textFinished && handAnim.finished) handSelect.playAnim("load");
+			else if (textFinished && handAnim.name == "load") handSelect.playAnim("enter");
 		}
 
-        if (box.animation.curAnim != null) {
-			if (box.animation.curAnim.name == 'normalOpen' && box.animation.curAnim.finished) {
-				box.animation.play('normal');
+		final boxAnim = box.animation.curAnim;
+		if (boxAnim != null)
+		{
+			if (boxAnim.name == "normalOpen" && boxAnim.finished) {
+				box.playAnim("normal");
 				dialogueOpened = true;
 			}
 		}
@@ -146,22 +148,16 @@ class PixelDialogueBox extends DialogueBoxBase {
     }
 }
 
-class PixelPortrait extends FlxSprite {
-	public function new(path:String, isPlayer:Bool = false):Void {
+class PixelPortrait extends FlxSpriteExt
+{
+	public function new (char:String, isPlayer:Bool = false) {
 		super(isPlayer ? 0 : -20, 40);
 
-		frames = Paths.getSparrowAtlas('portraits/$path');
-		animation.addByPrefix('enter', 'Portrait Enter', 24, false);
+		loadImage('portraits/$char');
+		addAnim("enter", "Portrait Enter");
 
-		if (path.endsWith('-pixel')) {
-			antialiasing = false;
-			setGraphicSize(width * PixelDialogueBox.PIXEL_ZOOM * 0.9);
-			updateHitbox();
-		}
-		else {
-			antialiasing = Preferences.getPref('antialiasing');
-		}
-
+		antialiasing = false;
+		setScale(PixelDialogueBox.PIXEL_ZOOM * .9);
 		scrollFactor.set();
 		visible = false;
 	}

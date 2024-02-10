@@ -36,30 +36,33 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
         return members.indexOf(null);
     }
 
+	override function forEachAlive(func:T -> Void, recurse:Bool = false) {
+		members.fastForEach((basic, i) -> {
+			if (basic != null && basic.exists && basic.alive)
+				func(basic);
+		});
+	}
+
 	override public function draw():Void @:privateAccess
 	{
 		final oldDefaultCameras = FlxCamera._defaultCameras;
 		if (cameras != null)
 			FlxCamera._defaultCameras = cameras;
 
-		for (i in 0...members.length)
-		{
-			final basic = members[i];
+		members.fastForEach((basic, i) -> {
 			if (basic != null && basic.exists && basic.visible)
 				basic.draw();
-		}
+		});
 
 		FlxCamera._defaultCameras = oldDefaultCameras;
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		for (i in 0...members.length)
-		{
-			var basic = members[i];
+		members.fastForEach((basic, i) -> {
 			if (basic != null && basic.exists && basic.active)
 				basic.update(elapsed);
-		}
+		});
 	}
 }
 typedef SpriteGroup = TypedSpriteGroup<FlxSprite>;

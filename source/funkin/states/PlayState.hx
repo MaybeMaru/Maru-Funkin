@@ -28,15 +28,15 @@ class PlayState extends MusicBeatState {
 	public var gf:Character;
 	public var boyfriend:Character;
 
-	public var dadGroup:FlxTypedSpriteGroup<Dynamic>;
-	public var gfGroup:FlxTypedSpriteGroup<Dynamic>;
-	public var boyfriendGroup:FlxTypedSpriteGroup<Dynamic>;
+	public var dadGroup:FlxSpriteGroup;
+	public var gfGroup:FlxSpriteGroup;
+	public var boyfriendGroup:FlxSpriteGroup;
 
 	private var camFollow:FlxObject;
 	private var targetCamPos:FlxPoint;
 	private static var prevCamFollow:FlxObject;
 
-	private var curSectionData:SwagSection = null;
+	private var curSectionData:SwagSection;
 
 	public var notesGroup:NotesGroup;
 	private var ratingGroup:RatingGroup;
@@ -144,9 +144,9 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
 
 		// MAKE CHARACTERS
-		gfGroup = new FlxTypedSpriteGroup<Dynamic>();
-		dadGroup = new FlxTypedSpriteGroup<Dynamic>();
-		boyfriendGroup = new FlxTypedSpriteGroup<Dynamic>();
+		gfGroup = new FlxSpriteGroup();
+		dadGroup = new FlxSpriteGroup();
+		boyfriendGroup = new FlxSpriteGroup();
 
 		gf = new Character(0, 0, SONG.players[2]);
 		dad = new Character(0, 0, SONG.players[1]);
@@ -275,7 +275,8 @@ class PlayState extends MusicBeatState {
 		if (getPref('vanilla-ui')) {
 			scoreTxt.setPosition(healthBar.x + healthBar.width - 190, healthBar.y + 30);
 			scoreTxt.style = TextStyle.OUTLINE(1, 6, FlxColor.BLACK);
-		} else {
+		}
+		else {
 			scoreTxt.size = 20;
 			scoreTxt.style = TextStyle.OUTLINE(2, 6, FlxColor.BLACK);
 			scoreTxt.alignment = "center";
@@ -307,7 +308,7 @@ class PlayState extends MusicBeatState {
 		CoolUtil.gc(false);
 	}
 
-	public function startVideo(path:String, ?completeFunc:Dynamic):Void {
+	public function startVideo(path:String, ?completeFunc:()->Void):Void {
 		completeFunc = completeFunc ?? startCountdown;
 		#if VIDEOS_ALLOWED
 		final video:FlxVideo = new FlxVideo();
@@ -330,20 +331,16 @@ class PlayState extends MusicBeatState {
 		ModdingUtil.addCall('postCreateDialogue'); // Setup transitions
 
 		openDialogueFunc = openDialogueFunc ?? function () { // Default transition
-			final black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			var black = new FlxSpriteExt(-100, -100).makeRect(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 			black.scrollFactor.set();
 			add(black);
 
-			if (black.alpha > 0) {
-				FlxTween.tween(black, {alpha: 0}, 1.5, { ease: FlxEase.circOut,
+			FlxTween.tween(black, {alpha: 0}, black.alpha > 0 ? 1.5 : 0.000001, {ease: FlxEase.circOut,
 				onComplete: function(twn:FlxTween) {
 					quickDialogueBox();
-					remove(black);
-				}});
-			} else {
-				quickDialogueBox();
-				remove(black);
-			}
+					remove(black, true);
+					black.destroy();
+			}});
 		}
 		openDialogueFunc();
 	}
@@ -687,8 +684,9 @@ class PlayState extends MusicBeatState {
 		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
 
 		if (!getPref('stack-rating')) {
-			for (rating in ratingGroup)
+			ratingGroup.members.fastForEach((rating, i) -> {
 				rating.kill();
+			});
 		}
 		
 		ratingGroup.drawComplete(noteRating, combo);
@@ -773,12 +771,14 @@ class PlayState extends MusicBeatState {
 		
 		// Clear character group
 		targetChar.callScript("destroyChar", [targetChar, newChar, newCharName]);
-		final _grp = targetChar.group;
-		for (i in _grp) i.destroy();
-		_grp.clear();
+		final group = targetChar.group;
+		group.members.fastForEach((object, i) -> {
+			object.destroy();
+		});
 
 		// Character script
-		_grp.add(newChar);
+		group.clear();
+		group.add(newChar);
 		addCharScript(newChar);
 
 		switch (type) {
