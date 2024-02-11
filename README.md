@@ -3,7 +3,11 @@
 Hi everyone! This is a silly little Funkin 0.2.7.1 fork that ive been working on for some time now.
 Theres no specific goal with it, just to add whatever comes to mind and have fun!
 At the moment all of base game is softcoded, as well as having mod folders support.
-Current version is beta 2.0, full release soon to come!
+Current version is beta 2.0, beta 3.0 soon to come!
+
+> [!NOTE]
+> THIS IS NOT A SERIOUS ENGINE, I HAVE NO IDEA WHAT IM DOING!!
+> For your own sanity use better engines like psych, codename or fps+
 
 ## Credits
 * [LinkMain](https://www.youtube.com/@uppybuppy) - Music
@@ -14,10 +18,9 @@ Current version is beta 2.0, full release soon to come!
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
 
-## NOTE
-
-At the moment HashLink support is extremely experimental. Dont expect it to be super stable or
-optimized just yet (it bad lol). Please just use Windows or Linux builds.
+> [!WARNING]
+> HashLink builds do not work with gpu textures and may crash randomly.
+> Unless you want quick compilation testing, please compile to Windows or Linux.
 
 ## How to make a mod
 

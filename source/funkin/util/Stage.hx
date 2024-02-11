@@ -222,11 +222,11 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
     public function getLayers():Array<Layer> {
         var array:Array<Layer> = [];
 
-        for (layer in layersOrder) {
-            var layer = getLayer(layer);
+        layersOrder.fastForEach((layer, i) -> {
+            final layer = getLayer(layer);
             if (layer != null)
                 array.push(layer);
-        }
+        });
 
         return array;
     }
