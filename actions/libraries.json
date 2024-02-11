@@ -36,7 +36,7 @@
             "version": null
         },
         {
-            "name": "maru-hxCodec",
+            "name": "hxCodec",
             "type": "git",
             "dir": null,
             "ref": "main",
