@@ -1,12 +1,12 @@
 # Maru-Funkin
 
-Hi everyone! This is a silly little Funkin 0.2.7.1 fork that ive been working on for some time now.
-Theres no specific goal with it, just to add whatever comes to mind and have fun!
-At the moment all of base game is softcoded, as well as having mod folders support.
+Hi everyone! This is a silly little Funkin 0.2.7.1 fork that ive been working on for some time now.<br>
+Theres no specific goal with it, just to add whatever comes to mind and have fun!<br>
+At the moment all of base game is softcoded, as well as having mod folders support.<br>
 Current version is beta 2.0, beta 3.0 soon to come!
 
 > [!NOTE]
-> THIS IS NOT A SERIOUS ENGINE, I HAVE NO IDEA WHAT IM DOING!!
+> THIS IS NOT A SERIOUS ENGINE, I HAVE NO IDEA WHAT IM DOING!!<br>
 > For your own sanity use better engines like psych, codename or fps+
 
 ## Credits
@@ -19,13 +19,13 @@ Current version is beta 2.0, beta 3.0 soon to come!
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
 
 > [!WARNING]
-> HashLink builds do not work with gpu textures and may crash randomly.
+> HashLink builds do not work with gpu textures and may crash randomly.<br>
 > Unless you want quick compilation testing, please compile to Windows or Linux.
 
 ## How to make a mod
 
-Documentation on how to make mods is being done on the repo's github wiki! Ill add more stuff
-as time goes on and i add more features.
+Documentation on how to make mods is being done on the repo's github wiki!<br>
+Ill add more stuff as time goes on and i add more features.
 
 ## Stuff you will need to compile
 
@@ -46,8 +46,8 @@ haxelib install flixel-addons
 haxelib install flixel-ui
 haxelib install hxcpp-gh-release
 haxelib git maru-hscript https://github.com/MaybeMaru/hscript-improved
+haxelib git maru-hxCodec https://github.com/MaybeMaru/hxCodec
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 ```
 You should have everything ready for compiling the game!
 For the rest follow the [base game compile guide](https://github.com/FunkinCrew/Funkin#compiling-game)

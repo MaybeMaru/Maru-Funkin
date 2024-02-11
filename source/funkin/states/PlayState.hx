@@ -309,22 +309,33 @@ class PlayState extends MusicBeatState {
 		CoolUtil.gc(true);
 	}
 
+	#if VIDEOS_ALLOWED public var video:FlxVideo; #end
+
 	public function startVideo(path:String, ?completeFunc:()->Void):Void {
 		completeFunc = completeFunc ?? startCountdown;
 		#if VIDEOS_ALLOWED
-		final video:FlxVideo = new FlxVideo();
+		video = new FlxVideo();
 		final vidFunc = function () {
 			video.dispose();
+			video = null;
 			completeFunc();
 		}
 		video.onEndReached.add(vidFunc);
 		video.play(Paths.video(path));
 		#else
-			completeFunc();
+		ModdingUtil.warningPrint("Videos are not allowed on this build.");
+		completeFunc();
 		#end
 	}
 
-	public var openDialogueFunc:Dynamic = null;
+	public function endVideo() {
+		#if VIDEOS_ALLOWED
+		if (video != null)
+			video.onEndReached.dispatch();
+		#end
+	}
+
+	public var openDialogueFunc:()->Void;
 
 	function createDialogue():Void {
 		showUI(false);
@@ -387,15 +398,15 @@ class PlayState extends MusicBeatState {
 		final countdownSounds:Array<FlxSoundAsset> = []; // Cache countdown assets
 		final countdownImages:Array<FlxGraphicAsset> = [];
 
-		for (i in ['intro3','intro2','intro1','introGo']) {
-			final soundKey = SkinUtil.getAssetKey(i,SOUND);
+		['intro3','intro2','intro1','introGo'].fastForEach((key, i) -> {
+			final soundKey = SkinUtil.getAssetKey(key, SOUND);
 			countdownSounds.push(Paths.sound(soundKey));
-		}
+		});
 
-		for (i in ['ready','set','go']) {
-			final spriteKey:String = SkinUtil.getAssetKey(i,IMAGE);
+		['ready','set','go'].fastForEach((key, i) -> {
+			final spriteKey:String = SkinUtil.getAssetKey(key, IMAGE);
 			countdownImages.push(CoolUtil.cacheImage(spriteKey, null, camHUD));
-		}
+		});
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			beatCharacters();
@@ -739,6 +750,14 @@ class PlayState extends MusicBeatState {
 		Conductor.stop();
 		CoolUtil.destroyMusic();
 		SkinUtil.setCurSkin('default');
+		
+		#if VIDEOS_ALLOWED
+		if (video != null) {
+			video.dispose();
+			video = null;
+		}
+		#end
+
 		ModdingUtil.addCall('destroy');
 
 		FlxG.camera.bgColor = FlxColor.BLACK;

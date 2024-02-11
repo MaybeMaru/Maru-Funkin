@@ -36,11 +36,11 @@
             "version": null
         },
         {
-            "name": "hxCodec",
+            "name": "maru-hxCodec",
             "type": "git",
             "dir": null,
             "ref": "main",
-            "url": "https://github.com/polybiusproxy/hxCodec"
+            "url": "https://github.com/MaybeMaru/hxCodec"
         },
         {
             "name": "maru-hscript",
