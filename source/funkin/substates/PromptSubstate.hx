@@ -1,21 +1,25 @@
 package funkin.substates;
 
 class PromptSubstate extends MusicBeatSubstate {
-    var acceptFunction:Dynamic = null;
-    var acceptRequirement:Dynamic = null;
+    var acceptFunction:()->Void;
+    var acceptRequirement:()->Bool;
     
-    public function new(text:String, ?acceptFunction:Dynamic, ?acceptRequirement:Dynamic, textScale:Float = 0.8) {
+    public function new(text:String, ?acceptFunction:()->Void, ?acceptRequirement:()->Bool, textScale:Float = 0.8) {
         super();
         this.acceptFunction = acceptFunction;
         this.acceptRequirement = acceptRequirement;
 
-        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0.6;
-		add(bg);
+        var bg = new FlxSpriteExt().makeRect(FlxG.width, FlxG.height, FlxColor.BLACK);
+        bg.alpha = 0.6;
+        add(bg);
 
-        var prompBox:FlxSprite = new FlxSprite().makeGraphic(1200, 500, 0xFFFAFD6D);
+        var prompBox = new FlxSpriteExt().makeRect(1200, 500, 0xFFFAFD6D);
         prompBox.screenCenter();
         add(prompBox);
+
+        //var prompBox:FlxSprite = new FlxSprite().makeGraphic(1200, 500, 0xFFFAFD6D);
+        //prompBox.screenCenter();
+        //add(prompBox);
 
         var prompText:Alphabet = new Alphabet(FlxG.width * 0.5 ,prompBox.y + 75, text, true, 0, textScale);
         prompText.alignment = CENTER;

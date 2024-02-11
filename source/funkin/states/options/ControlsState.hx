@@ -49,7 +49,7 @@ class ControlsState extends MusicBeatState {
 		add(menuItems = new FlxTypedGroup<Alphabet>());
 
 		reloadValues();
-		menuCam.follow(camFollow, null, 0.08);
+		menuCam.follow(camFollow, null, 0.16);
 		
 		super.create();
 	}

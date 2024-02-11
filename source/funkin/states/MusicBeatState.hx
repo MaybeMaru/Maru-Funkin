@@ -5,11 +5,14 @@ import funkin.util.modding.ScriptUtil;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
 
-interface IMusicGetter {
-    /*@:optional*/ public var musicBeat(default, null):MusicBeat;
+interface IMusicHit {
 	public function stepHit(curStep:Int):Void;
 	public function beatHit(curBeat:Int):Void;
 	public function sectionHit(curSection:Int):Void;
+}
+
+interface IMusicGetter extends IMusicHit {
+    /*@:optional*/ public var musicBeat(default, null):MusicBeat;
 
 	public var curStep(get, never):Int;
 	public var curBeat(get, never):Int;
@@ -100,17 +103,36 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}
 
 	public function stepHit(curStep:Int):Void {
-		//callOnObjects('stepHit', [curStep]);
+		members.fastForEach((basic, i) -> {
+			if (basic is IMusicHit) {
+				if (basic != null && basic.exists && basic.active)
+					cast(basic, IMusicHit).stepHit(curStep);
+			}
+		});
+
+		
 		ModdingUtil.addCall('stateStepHit', [curStep]);
 	}
 
 	public function beatHit(curBeat:Int):Void {
-		//callOnObjects('beatHit', [curBeat]);
+		members.fastForEach((basic, i) -> {
+			if (basic is IMusicHit) {
+				if (basic != null && basic.exists && basic.active)
+					cast(basic, IMusicHit).beatHit(curBeat);
+			}
+		});
+
 		ModdingUtil.addCall('stateBeatHit', [curBeat]);
 	}
 
 	public function sectionHit(curSection:Int):Void {
-		//callOnObjects('sectionHit', [curSection]);
+		members.fastForEach((basic, i) -> {
+			if (basic is IMusicHit) {
+				if (basic != null && basic.exists && basic.active)
+					cast(basic, IMusicHit).sectionHit(curSection);
+			}
+		});
+
 		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
 

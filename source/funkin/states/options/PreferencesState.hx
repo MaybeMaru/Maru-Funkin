@@ -26,10 +26,7 @@ class PreferencesState extends MusicBeatState {
         var y:Float = 0;
 
         for (header in Preferences.headers) {
-            var back = new FlxSprite(0, y - 10).makeGraphic(1, 1, FlxColor.BLACK);
-            back.antialiasing = false;
-            back.scale.set(FlxG.width, 85);
-            back.updateHitbox();
+            var back = new FlxSpriteExt(0, y - 10).makeRect(FlxG.width, 85, FlxColor.BLACK);
             back.alpha = 0.4;
             add(back);
             

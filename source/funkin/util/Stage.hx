@@ -30,7 +30,7 @@ typedef StageJson = {
     var layers:Dynamic;
 }
 
-class Stage extends TypedGroup<Layer>
+class Stage extends TypedGroup<Layer> implements IMusicHit
 {
     public static final DEFAULT_ORDER:Array<String> = [
         "bg",
@@ -263,5 +263,20 @@ class Stage extends TypedGroup<Layer>
     
     function __resolveLayerKey(key:LayerKey):String {
         return key is Bool ? (key ? "fg" : "bg") : key;
+    }
+
+    public function stepHit(curStep:Int):Void
+    {
+
+    }
+
+    public function beatHit(curBeat:Int):Void
+    {
+        
+    }
+
+    public function sectionHit(curSection:Int):Void
+    {
+        
     }
 }

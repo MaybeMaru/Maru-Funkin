@@ -24,7 +24,7 @@ class LatencyState extends MusicBeatState
 		offsetText.alignment = CENTER;
 		add(offsetText);
 
-		var txtLine:FlxSprite = new FlxSprite(0,25).makeGraphic(FlxG.width,70,FlxColor.BLACK);
+		var txtLine = new FlxSpriteExt(0,25).makeRect(FlxG.width,70,FlxColor.BLACK);
 		add(txtLine);
 
 		var txtStr = "Sync your beats by tapping the space bar in rhythm to measure your offset.\nHit enter when done to save your calculated offset.\nHit escape to exit without saving your calculated offset.";
