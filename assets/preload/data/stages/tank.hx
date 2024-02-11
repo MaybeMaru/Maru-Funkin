@@ -6,10 +6,6 @@ function createPost()
 
 	clouds.x = FlxG.random.int(-800, -300);
 	clouds.velocity.x = FlxG.random.float(5, 15);
-
-	smokeLeft.playAnim("loop");
-	smokeRight.playAnim("loop");
-	tank.playAnim("loop");
 	
 	var boppersData = [
 		['tank5', [1620, 700], 	[1.5, 1.5], 'fg tankhead far right instance 1'],

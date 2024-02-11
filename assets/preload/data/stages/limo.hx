@@ -11,9 +11,6 @@ function createPost()
 {
 	State.camGame.bgColor = 0xff516bdf;
 
-	limo.playAnim("loop");
-	driveLimo.playAnim("loop");
-
 	var layer = getLayer("limo");
 	for (i in 0...4) {
 		var dancer = new FunkinSprite('limo/limoDancer', [130 + (370 * i), 80], [0.4, 0.4]);
@@ -136,10 +133,6 @@ function createPost()
 	}
 
 	light.offset.set(185, 0);
-
-	overlay.alpha = 0.15;
-	overlay.blend = getBlendMode('add');
-
 	resetCar();
 }
 

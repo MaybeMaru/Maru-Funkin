@@ -5,6 +5,12 @@ import lime.media.AudioSource;
 import openfl.media.SoundTransform;
 import openfl.media.Sound;
 
+/*
+ * Copy of FlxSound with some changes
+ * Skip sound channel / audio source on-stop disposing
+ * Interpolated sound time for more accuracy
+**/
+
 @:access(lime.media.AudioSource)
 @:access(openfl.media.SoundMixer)
 @:access(openfl.media.Sound)
@@ -24,11 +30,16 @@ class FlxFunkSound extends FlxBasic
 
     override function destroy() {
         source.onComplete.removeAll();
+        dispose();
         
         transform = null;
         source = null;
         
         super.destroy();
+    }
+
+    public function dispose() {
+        source.dispose();
     }
 
     function set_sound(value:Sound) {
@@ -81,6 +92,17 @@ class FlxFunkSound extends FlxBasic
 
     inline function updateVolume() {
         source.gain = _gain * volume * FlxG.sound.volume;
+    }
+
+    public function fadeIn(duration:Float = 1.0, startVolume:Float = 0, ?endVolume:Float) {
+        endVolume ??= volume;
+        volume = startVolume;
+        updateVolume();
+        fadeOut(duration, endVolume);
+    }
+
+    public function fadeOut(duration:Float = 1.0, endVolume:Float = 0) {
+        FlxTween.tween(this, {volume: endVolume}, duration);
     }
 
     override function update(elapsed:Float) {

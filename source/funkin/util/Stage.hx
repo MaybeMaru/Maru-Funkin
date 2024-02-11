@@ -1,5 +1,6 @@
 package funkin.util;
 
+import funkin.util.modding.ScriptUtil;
 import flixel.util.typeLimit.OneOfTwo;
 
 typedef LayerKey = OneOfTwo<Bool, String>;
@@ -10,6 +11,8 @@ typedef StageObject = {
     var position:Array<Float>;
     var scrolls:Array<Float>;
     var flipY:Bool;
+    var blend:String;
+    var alpha:Float;
 } & SpriteJson;
 
 typedef StageJson = {
@@ -69,10 +72,12 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         imagePath: "keoiki",
         position: [0,0],
         scrolls: [1,1],
-        flipY: false,
         flipX: false,
+        flipY: false,
         anims: [],
         scale: 1,
+        blend: "normal",
+        alpha: 1,
         antialiasing: true
     }
 
@@ -164,6 +169,13 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         sprite.loadJsonInput(JsonUtil.copyJson(input)); // Deal with it
         sprite.flipX = input.flipX;
         sprite.flipY = input.flipY;
+        sprite.alpha = input.alpha;
+
+        if (sprite.animOffsets.exists("loop"))
+            sprite.playAnim("loop");
+
+        if (input.blend != "normal")
+            sprite.blend = ScriptUtil.stringToBlend(input.blend);
         
         return sprite;
     }

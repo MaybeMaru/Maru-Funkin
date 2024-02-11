@@ -69,7 +69,9 @@
 				"tag": "overlay",
 				"imagePath": "limo/limoOverlay",
 				"position": [-600,-600],
-				"scrolls": [0.7,0.7]
+				"scrolls": [0.7,0.7],
+				"alpha": 0.15,
+				"blend": "add"
 			}
 		]
 	}
