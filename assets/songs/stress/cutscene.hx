@@ -46,8 +46,8 @@ function create() {
         State.dadGroup.add(cutsceneTankman_Body);
         State.dadGroup.add(cutsceneTankman_Head);
 
-        add(john);
-        add(steve);
+        State.gfGroup.add(john);
+        State.gfGroup.add(steve);
         State.gfGroup.add(demonGf);
 
         john.visible = steve.visible = false;
@@ -246,10 +246,13 @@ function updatePost() {
                 }
             }
         }
-        
-        if (cutsceneTankman_Head.animation.curAnim.name == 'godEffingDamnIt') {
-            cutsceneTankman_Head.visible = !cutsceneTankman_Head.animation.curAnim.finished;
+
+        var headAnim = cutsceneTankman_Head.animation.curAnim;
+        if (headAnim != null) {
+            if (headAnim.name == 'godEffingDamnIt')
+                cutsceneTankman_Head.visible = !headAnim.finished;
         }
+
         
         if (killedDudes) {
             john.visible = !john.animation.curAnim.finished;
