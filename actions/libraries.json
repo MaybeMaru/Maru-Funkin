@@ -26,11 +26,6 @@
             "version": null
         },
         {
-            "name": "hxcpp-gh-release",
-            "type": "install",
-            "version": null
-        },
-        {
             "name": "hxcpp-debug-server",
             "type": "install",
             "version": null

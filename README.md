@@ -44,9 +44,8 @@ Other installations you'd need are the additional libraries, a fully updated lis
 haxelib install flixel
 haxelib install flixel-addons
 haxelib install flixel-ui
-haxelib install hxcpp-gh-release
 haxelib git maru-hscript https://github.com/MaybeMaru/hscript-improved
-haxelib git hxCodec https://github.com/MaybeMaru/hxCodec
+haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 ```
 You should have everything ready for compiling the game!
