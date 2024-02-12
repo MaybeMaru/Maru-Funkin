@@ -47,13 +47,12 @@ class Sustain extends BasicNote {
         return missedPress = value;
     }
 
-    override function update(elapsed:Float) {
+    override function update(elapsed:Float):Void {
         super.update(elapsed);
 
         if (targetStrum != null) {
-            if (missedPress && !activeNote) {
+            if (missedPress && !activeNote)
                 removeNote();
-            }
         }
     }
 

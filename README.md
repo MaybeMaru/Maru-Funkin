@@ -18,14 +18,14 @@ Current version is beta 2.0, beta 3.0 soon to come!
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
 
-> [!WARNING]
-> HashLink builds do not work with gpu textures and may crash randomly.<br>
-> Unless you want quick compilation testing, please compile to Windows or Linux.
-
 ## How to make a mod
 
 Documentation on how to make mods is being done on the repo's github wiki!<br>
 Ill add more stuff as time goes on and i add more features.
+
+> [!WARNING]
+> HashLink builds do not work with gpu textures and may crash randomly.<br>
+> Unless you want quick compilation testing, please compile to Windows or Linux.
 
 ## Stuff you will need to compile
 

@@ -32,7 +32,7 @@ class BasicNote extends SmartSprite implements INoteData {
 
     private var curSkinData:SkinSpriteData;
     public var skin(default, set):String = "default";
-    inline function set_skin(?value:String) {
+    inline function set_skin(?value:String):String {
         skin = value ?? SkinUtil.curSkin;
         curSkinData = NoteUtil.getSkinSprites(skin);
         updateSprites();
@@ -57,7 +57,7 @@ class BasicNote extends SmartSprite implements INoteData {
     var _approachCos(default, null):Float = 1.0;
     var _approachSin(default, null):Float = 0.0;
 
-    inline function calcApproachTrig(value:Float) {
+    inline function calcApproachTrig(value:Float):Void {
         final rads = value * CoolUtil.TO_RADS;
         _approachCos = CoolUtil.cos(rads);
         _approachSin = CoolUtil.sin(rads);
@@ -78,10 +78,13 @@ class BasicNote extends SmartSprite implements INoteData {
     public var moving:Bool = true;
     public var susLength:Float = 0.0;
 
-    public function removeNote() {
+    public function removeNote():Void {
         alive = exists = false;
         FlxG.signals.preUpdate.addOnce(function () {
-            if (NotesGroup.instance != null) NotesGroup.instance.notes.remove(this, true);
+            final instance = NotesGroup.instance;
+            if (instance != null)
+                instance.notes.remove(this, true);
+
             this.destroy();
         });
     }
@@ -107,7 +110,7 @@ class BasicNote extends SmartSprite implements INoteData {
         x -= noteMove * -_approachSin;
     }
 
-    inline public function setPositionToStrum() {
+    inline public function setPositionToStrum():Void {
         y = targetStrum.y + yDisplace;
         x = targetStrum.x + xDisplace;
     }
@@ -159,7 +162,7 @@ class BasicNote extends SmartSprite implements INoteData {
             noteType = value;
     }
 
-    override function destroy() {
+    override function destroy():Void {
         super.destroy();
         curSkinData = null;
         parent = null;
