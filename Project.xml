@@ -100,7 +100,6 @@
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="maru-hscript" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
-	<haxelib name="hxcpp-gh-release" />
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
