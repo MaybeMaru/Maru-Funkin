@@ -37,14 +37,14 @@ class FunkinSprite extends FlxSpriteExt {
         }
     }
     
-    public function dance():Void {
+    public function dance(forced:Bool = false):Void {
         danced = !danced;
         if (animated) {
             if (animOffsets.exists('danceRight') && animOffsets.exists('danceLeft')) {
-                playAnim(danced ? 'danceRight' : 'danceLeft');
+                playAnim(danced ? 'danceRight' : 'danceLeft', forced);
             }
             else if (animOffsets.exists('idle')) {
-                playAnim('idle');
+                playAnim('idle', forced);
             }
         }
 	}

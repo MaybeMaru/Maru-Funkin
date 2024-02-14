@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import funkin.objects.FunkCamera;
+import funkin.states.editors.stage.LayersBar;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxBackdrop;
 
@@ -13,15 +15,30 @@ class StageDebug extends MusicBeatState {
         super();
         this.stageData = stageData;
     }
+
+    var camStage:FunkCamera;
+    var camUI:FunkCamera;
     
     override function create() {
         super.create();
+        
+        camStage = new FunkCamera();
+        camUI = new FunkCamera();
+        
+        camUI.bgColor.alpha = 0;
+        FlxG.cameras.remove(FlxG.camera);
+        FlxG.camera = camStage;
+
+        FlxG.cameras.add(camStage, false);
+		FlxG.cameras.add(camUI);
+		FlxG.cameras.setDefaultDrawTarget(camUI, true);
+        
         camFollow = new FlxObject(FlxG.width*0.5, FlxG.height*0.5);
-        FlxG.camera.follow(camFollow);
+        camStage.follow(camFollow);
         FlxG.mouse.visible = true;
 
         var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
-		//grid.scrollFactor.set(0.5, 0.5);
+        grid.camera = camStage;
 		add(grid);
 
         // Characters
@@ -39,6 +56,7 @@ class StageDebug extends MusicBeatState {
         // Stage
 
         var stage = Stage.fromJson(stageData);
+        stage.camera = camStage;
         add(stage);
         
         if (stage.existsLayer("dad"))
@@ -47,7 +65,15 @@ class StageDebug extends MusicBeatState {
         if (stage.existsLayer("bf"))
             stage.getLayer("bf").add(bf);
 
-        FlxG.camera.zoom = stageData.zoom;
+        camStage.zoom = stageData.zoom;
+
+        addUI();
+    }
+
+    function addUI()
+    {
+        var layersBar = new LayersBar(stageData);
+        add(layersBar);
     }
     
     var speed = 50;

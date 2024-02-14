@@ -109,11 +109,11 @@ class FlxFunkSound extends FlxBasic
         updateVolume();
     }
 
-    var lastTime:Int;
+    var _lastStopTime:Int;
 
     public function stop():Void {
         if (playing) {
-            lastTime = Std.int(time);
+            _lastStopTime = Std.int(time);
             source.stop();
             playing = false;
         }
@@ -121,7 +121,7 @@ class FlxFunkSound extends FlxBasic
 
     public function pause():Void {
         if (playing) {
-            lastTime = Std.int(time);
+            _lastStopTime = Std.int(time);
             source.pause();
             playing = false;
         }
@@ -134,7 +134,7 @@ class FlxFunkSound extends FlxBasic
 
     inline function __play() {
         source.play();
-        source.currentTime = lastTime;
+        source.currentTime = _lastStopTime;
         playing = true;
     }
 
