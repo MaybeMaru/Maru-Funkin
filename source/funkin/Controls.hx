@@ -3,7 +3,14 @@ import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 
-class Controls {
+enum abstract InputType(Int) from Int to Int {
+    var PRESSED = 0;
+    var JUST_PRESSED = 1;
+    var JUST_RELEASED = 2;
+}
+
+class Controls
+{
     public static var controlBindings:Map<String, Array<String>>;
     public static var controlGamepadBindings:Map<String, Array<String>>;
     public static var controlArray:Array<String> = [];
@@ -35,15 +42,21 @@ class Controls {
 		controlGamepadBindings = SaveData.getSave('controls').get('gamepadBinds');
         initGamepads();
 
+        /****/addHeader("NOTES");/****/
+        
         addBinding('NOTE_LEFT',  ['D', 'LEFT'],           ['DPAD_LEFT',  'LEFT_STICK_DIGITAL_LEFT']);
         addBinding('NOTE_DOWN',  ['F', 'DOWN'],           ['DPAD_DOWN',  'LEFT_STICK_DIGITAL_DOWN']);
         addBinding('NOTE_UP',    ['J', 'UP'],             ['DPAD_UP',    'LEFT_STICK_DIGITAL_UP']);
         addBinding('NOTE_RIGHT', ['K', 'RIGHT'],          ['DPAD_RIGHT', 'LEFT_STICK_DIGITAL_RIGHT']);
 
+        /****/addHeader("UI");/****/
+
         addBinding('UI_LEFT',    ['A', 'LEFT'],           ['DPAD_LEFT',  'LEFT_STICK_DIGITAL_LEFT']);
         addBinding('UI_DOWN',    ['S', 'DOWN'],           ['DPAD_DOWN',  'LEFT_STICK_DIGITAL_DOWN']);
         addBinding('UI_UP',      ['W', 'UP'],             ['DPAD_UP',    'LEFT_STICK_DIGITAL_UP']);
         addBinding('UI_RIGHT',   ['D', 'RIGHT'],          ['DPAD_RIGHT', 'LEFT_STICK_DIGITAL_RIGHT']);
+
+        /****/addHeader("MISCELLANEOUS");/****/
 
         addBinding('ACCEPT',     ['ENTER', 'SPACE'],      ['START','A']);
         addBinding('BACK',       ['BACKSPACE', 'ESCAPE'], ['BACK','B']);
@@ -53,30 +66,43 @@ class Controls {
         SaveData.flushData();
     }
 
-    inline public static function getKey(bind:String):Bool {
-        bind = bind.toUpperCase().trim();
-		final bindParts:Array<String> = bind.split('-');
-		final bindName:String = bindParts[0];
-		final bindType:String = bindParts[1] ?? '';
+    inline public static function getKey(key:String, inputType:InputType = PRESSED):Bool {
+        final gamepad = inGamepad();
+        var keys:Array<Int> = [];
+        key = key.toUpperCase();
 
-        if (!inGamepad()) {
-            final bindArray:Array<FlxKey> = [];
-            for (bind in controlBindings.get(bindName)) bindArray.push(FlxKey.fromString(bind));
-            return checkKey(bindType, FlxG.keys, bindArray);
+        if (gamepad) {
+            controlGamepadBindings.get(key).fastForEach((string, i) -> {
+                keys.push(FlxGamepadInputID.fromStringMap.get(string));
+            });
         }
         else {
-            final gamepadBindArray:Array<FlxGamepadInputID> = [];
-            for (bind in controlGamepadBindings.get(bindName)) gamepadBindArray.push(FlxGamepadInputID.fromString(bind));
-            return checkKey(bindType, gamepad, gamepadBindArray);
+            controlBindings.get(key).fastForEach((string, i) -> {
+                keys.push(FlxKey.fromStringMap.get(string));
+            });
+        }
+
+        return checkKey(inputType, keys, gamepad);
+    }
+
+    inline private static function checkKey(inputType:InputType, keys:Array<Int>, isGamepad:Bool):Bool {
+        return switch (inputType) {
+            case PRESSED: isGamepad ? gamepad.anyPressed(keys) : FlxG.keys.anyPressed(keys);
+            case JUST_PRESSED: isGamepad ? gamepad.anyJustPressed(keys) : FlxG.keys.anyJustPressed(keys);
+            case JUST_RELEASED: isGamepad ? gamepad.anyJustReleased(keys) : FlxG.keys.anyJustReleased(keys);
         }
     }
 
-    inline private static function checkKey(bindType:String, controller:Dynamic, binds:Array<Dynamic>):Bool {
-        return switch (bindType.toUpperCase().trim()) {
-            case 'R':   controller.anyJustReleased(binds);    //  Release Key
-            case 'P':   controller.anyJustPressed(binds);     //  Press Key
-            default:    controller.anyPressed(binds);         //  Hold Key
-        }
+    //@:deprecated("Use getKey with the inputType argument instead")
+    inline public static function getKeyOld(key:String):Bool {
+        key = key.toUpperCase();
+		var parts:Array<String> = key.split('-');
+
+        return getKey(parts[0], switch (parts[1]) {
+            case "R": JUST_RELEASED;
+            case "P": JUST_PRESSED;
+            default: PRESSED;
+        });
     }
 
     inline public static function getBinding(bind:String):Array<String> {
@@ -93,10 +119,26 @@ class Controls {
         SaveData.flushData();
     }
 
+    private static var curHeader:String;
+    public static var headers:Array<String> = [];
+    public static var headerContents:Map<String, Array<String>> = [];
+
+    static function addHeader(name:String) {
+        if (name != curHeader) {
+            curHeader = name;
+            headerContents.set(name, []);
+            headers.push(name);
+        }
+    }
+
     inline public static function addBinding(bind:String, keys:Array<String>, gamepadKeys:Array<String>):Void {
         bind = bind.toUpperCase().trim();
-        for (i in 0...keys.length) keys[i] = keys[i].toUpperCase().trim();
+        for (i in 0...keys.length)
+            keys[i] = keys[i].toUpperCase().trim();
+       
         controlArray.push(bind);
+        headerContents.get(curHeader).push(bind);
+        
         if (!controlBindings.exists(bind))          controlBindings.set(bind, keys);
         if (!controlGamepadBindings.exists(bind))   controlGamepadBindings.set(bind, gamepadKeys);
     }

@@ -37,11 +37,11 @@ class GitarooPauseSubState extends MusicBeatSubstate {
 	}
 
 	override function update(elapsed:Float):Void {
-		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P')) {
+		if (getKey('UI_LEFT', JUST_PRESSED) || getKey('UI_RIGHT', JUST_PRESSED)) {
 			changeThing();
 		}
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT', JUST_PRESSED)) {
 			replaySelect ? FlxG.switchState(new PlayState()) : close();
 		}
 

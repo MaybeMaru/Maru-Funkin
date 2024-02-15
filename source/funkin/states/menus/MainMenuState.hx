@@ -82,14 +82,14 @@ class MainMenuState extends MusicBeatState {
 		}
 
 		if (!selectedSomethin) {
-			if (getKey('UI_UP-P')) {
+			if (getKey('UI_UP', JUST_PRESSED)) {
 				changeItem(-1);
 			}
-			if (getKey('UI_DOWN-P')) {
+			if (getKey('UI_DOWN', JUST_PRESSED)) {
 				changeItem(1);
 			}
 
-			if (getKey('BACK-P')) {
+			if (getKey('BACK', JUST_PRESSED)) {
 				selectedSomethin = true;
 				switchState(new TitleState());
 			}
@@ -101,7 +101,7 @@ class MainMenuState extends MusicBeatState {
 			}
 			#end
 
-			if (getKey('ACCEPT-P')) {
+			if (getKey('ACCEPT', JUST_PRESSED)) {
 				if (optionShit[curSelected] == 'donate') {
 					CoolUtil.openUrl("https://ninja-muffin24.itch.io/funkin");
 				}

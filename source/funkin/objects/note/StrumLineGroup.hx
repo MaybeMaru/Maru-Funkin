@@ -19,11 +19,11 @@ class StrumLineGroup extends FlxTypedSpriteGroup<NoteStrum> {
 		}
     }
 
-    public static final DEFAULT_CONTROL_CHECKS:Array<Dynamic> = [
-        function (t) return Controls.getKey('NOTE_LEFT' + t),
-        function (t) return Controls.getKey('NOTE_DOWN' + t),
-        function (t) return Controls.getKey('NOTE_UP' + t),
-        function (t) return Controls.getKey('NOTE_RIGHT' + t),
+    public static final DEFAULT_CONTROL_CHECKS:Array<(InputType)->Bool> = [
+        function (t:InputType) return Controls.getKey('NOTE_LEFT', t),
+        function (t:InputType) return Controls.getKey('NOTE_DOWN', t),
+        function (t:InputType) return Controls.getKey('NOTE_UP', t),
+        function (t:InputType) return Controls.getKey('NOTE_RIGHT', t),
     ];
 
     static var seperateWidth(default, never) = NoteUtil.swagWidth + 5;

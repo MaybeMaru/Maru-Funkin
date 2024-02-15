@@ -164,11 +164,11 @@ class FreeplayState extends MusicBeatState {
 		scoreText.x = Math.max(CoolUtil.coolLerp(scoreText.x, lerpPosition, 0.2), 0);
 		diffText.x = CoolUtil.coolLerp(diffText.x, lerpPosition, 0.2);
 
-		if (getKey('UI_LEFT-P'))	changeDiff(-1);
-		if (getKey('UI_RIGHT-P'))	changeDiff(1);
+		if (getKey('UI_LEFT', JUST_PRESSED))	changeDiff(-1);
+		if (getKey('UI_RIGHT', JUST_PRESSED))	changeDiff(1);
 		detectChangeSelection();
 
-		if (getKey('BACK-P')) {
+		if (getKey('BACK', JUST_PRESSED)) {
 			switchState(new MainMenuState());
 		}
 
@@ -194,7 +194,7 @@ class FreeplayState extends MusicBeatState {
 			switchState(new ChartingState());
 		}
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT', JUST_PRESSED)) {
 			setupSong();
 			CoolUtil.switchMusicState(new PlayState());
 		}
@@ -203,21 +203,21 @@ class FreeplayState extends MusicBeatState {
 	var startTmr:Float = 0;
 	var tmr:Float = 0;
 	function detectChangeSelection():Void { //Unecessary but cool
-		if (getKey('UI_UP-P') || getKey('UI_DOWN-P')) {
+		if (getKey('UI_UP', JUST_PRESSED) || getKey('UI_DOWN', JUST_PRESSED)) {
 			startTmr = tmr = 0;
-			changeSelection(getKey('UI_UP-P') ? -1 : 1);
+			changeSelection(getKey('UI_UP', JUST_PRESSED) ? -1 : 1);
 		}
 
 		if (FlxG.mouse.wheel != 0)
 			changeSelection(-FlxG.mouse.wheel);
 
-		if (getKey('UI_UP') || getKey('UI_DOWN')) {
+		if (getKey('UI_UP', PRESSED) || getKey('UI_DOWN', PRESSED)) {
 			startTmr +=  FlxG.elapsed;
 			if (startTmr >= 0.333) {
 				tmr += FlxG.elapsed;
 				if (tmr >= 0.1333) {
 					tmr = 0;
-					changeSelection(getKey('UI_UP') ? -1 : 1);
+					changeSelection(getKey('UI_UP', PRESSED) ? -1 : 1);
 				}
 			}
 		} else {

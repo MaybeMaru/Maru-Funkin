@@ -71,11 +71,11 @@ class GameOverSubstate extends MusicBeatSubstate {
 			}
 		}
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT', JUST_PRESSED)) {
 			restartSong();
 		}
  
-		if (getKey('BACK-P')) {
+		if (getKey('BACK', JUST_PRESSED)) {
 			if (FlxG.sound.music != null) FlxG.sound.music.stop();
 			PlayState.deathCounter = 0;
 			PlayState.clearCache = true;

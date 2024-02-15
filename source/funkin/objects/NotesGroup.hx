@@ -435,7 +435,7 @@ class NotesGroup extends Group
 
 	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
 		strums.members.fastForEach((strum, i) -> {
-			controlArray.push(value ? false : strum.getControl("-P"));
+			controlArray.push(value ? false : strum.getControl(JUST_PRESSED));
 		});
 	}
 
@@ -461,7 +461,7 @@ class NotesGroup extends Group
 							return;
 						}
 						if (sus.startedPress) {
-							final holding = sus.targetStrum.getControl();
+							final holding = sus.targetStrum.getControl(PRESSED);
 							if (!holding) { // Sustain stopped being pressed
 								sustainMiss(sus); 
 								return;
@@ -514,7 +514,7 @@ class NotesGroup extends Group
 					}
 
 					possibleNotes.fastForEach((note, i) -> {
-						if (note.targetStrum.getControl("-P"))
+						if (note.targetStrum.getControl(JUST_PRESSED))
 							checkCallback(note.mustPress ? goodNoteHit : opponentNoteHit, [note]);
 					});
 				}
@@ -530,7 +530,7 @@ class NotesGroup extends Group
 			final anim = strum.animation.curAnim;
 			if (anim == null) continue; // Lil null check
 			
-			if (strum.getControl("-P") && !anim.name.startsWith('confirm'))
+			if (strum.getControl(JUST_PRESSED) && !anim.name.startsWith('confirm'))
 				strum.playStrumAnim('pressed');
 			
 			if (!strum.getControl())

@@ -95,12 +95,12 @@ class PauseSubState extends MusicBeatSubstate {
 
 		super.update(elapsed);
 
-		if (getKey('UI_UP-P')) 		changeSelection(-1);
-		if (getKey('UI_DOWN-P')) 	changeSelection(1);
+		if (getKey('UI_UP', JUST_PRESSED)) 		changeSelection(-1);
+		if (getKey('UI_DOWN', JUST_PRESSED)) 	changeSelection(1);
 
 		if (coolDown > 0) coolDown-=elapsed;
 		else {
-			if (getKey('ACCEPT-P')) {
+			if (getKey('ACCEPT', JUST_PRESSED)) {
 				switch (menuItems[curSelected]) {
 					case "Resume":	
 						CoolUtil.resumeSounds();

@@ -185,7 +185,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('getKey', function(key:String):Bool {
-			return Controls.getKey(key);
+			return Controls.getKeyOld(key);
 		});
 		
 		set("trace", Reflect.makeVarArgs(function(el) {

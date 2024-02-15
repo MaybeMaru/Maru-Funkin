@@ -71,10 +71,10 @@ class OptionsState extends MusicBeatState {
 	}
 
 	function controlShit():Void {
-		if (getKey('UI_UP-P')) changeSelection(-1);
-		if (getKey('UI_DOWN-P')) changeSelection(1);
+		if (getKey('UI_UP', JUST_PRESSED)) changeSelection(-1);
+		if (getKey('UI_DOWN', JUST_PRESSED)) changeSelection(1);
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT', JUST_PRESSED)) {
 			selectedSomethin = true;
 			if (optionItems[curSelected] == 'Exit') {
 				exitOptions();
@@ -98,7 +98,7 @@ class OptionsState extends MusicBeatState {
 			}
 		}
 
-		if (Controls.getKey('BACK-P')) {
+		if (Controls.getKey('BACK', JUST_PRESSED)) {
 			selectedSomethin = true;
 			exitOptions();
 		}

@@ -77,9 +77,9 @@ class PreferencesState extends MusicBeatState {
     }
 
     function selectPref() {
-        final leftP:Bool = getKey('UI_LEFT-P');
-		final rightP:Bool = getKey('UI_RIGHT-P');
-		final accepted:Bool = getKey('ACCEPT-P');
+        final leftP:Bool = getKey('UI_LEFT', JUST_PRESSED);
+		final rightP:Bool = getKey('UI_RIGHT', JUST_PRESSED);
+		final accepted:Bool = getKey('ACCEPT', JUST_PRESSED);
 
         if (accepted || leftP || rightP) {
             if (curItem != null) {
@@ -126,11 +126,11 @@ class PreferencesState extends MusicBeatState {
     override function update(elapsed:Float):Void {
         super.update(elapsed);
         if (!hitBack) {
-            if (getKey('UI_UP-P'))    changeSelection(-1);
-            if (getKey('UI_DOWN-P'))  changeSelection(1);
+            if (getKey('UI_UP', JUST_PRESSED))    changeSelection(-1);
+            if (getKey('UI_DOWN', JUST_PRESSED))  changeSelection(1);
             selectPref();
     
-            if (getKey('BACK-P')) {
+            if (getKey('BACK', JUST_PRESSED)) {
                 SaveData.flushData();
                 hitBack = true;
                 switchState(new OptionsState());

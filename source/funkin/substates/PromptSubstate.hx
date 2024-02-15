@@ -39,13 +39,13 @@ class PromptSubstate extends MusicBeatSubstate {
             if (startTimer <= 0) canClick = true;
         }
 
-        if (getKey('BACK-P')) {
+        if (getKey('BACK', JUST_PRESSED)) {
             close();
             CoolUtil.playSound("cancelMenu");
             return;
         }
 
-        if (canClick && (acceptRequirement == null ? getKey('ACCEPT-P') : acceptRequirement())) {
+        if (canClick && (acceptRequirement == null ? getKey('ACCEPT', JUST_PRESSED) : acceptRequirement())) {
             if (acceptFunction != null) {
                 acceptFunction();
                 close();

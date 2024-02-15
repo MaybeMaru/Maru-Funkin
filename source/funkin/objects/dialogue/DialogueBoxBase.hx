@@ -77,7 +77,7 @@ class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
 			ModdingUtil.addCall('startDialogue');
 		}
 
-		if (Controls.getKey('ACCEPT-P') && dialogueStarted && !isEnding) {
+		if (Controls.getKey('ACCEPT', JUST_PRESSED) && dialogueStarted && !isEnding) {
 			if (!textFinished) {
 				skipCallback();
 				ModdingUtil.addCall('skipDialogueLine', [jsonParsed.lines[0]]);

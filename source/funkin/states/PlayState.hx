@@ -535,7 +535,7 @@ class PlayState extends MusicBeatState {
 			changeOldIcon();
 		}
 		else if (canDebug) {
-			if (getKey('PAUSE-P') && startedCountdown && canPause) {
+			if (getKey('PAUSE', JUST_PRESSED) && startedCountdown && canPause) {
 				openPauseSubState(true);
 				DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
 			}
@@ -578,7 +578,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		// RESET -> Quick Game Over Screen
-		if (getKey('RESET-P') && !inCutscene && canDebug) health = 0;
+		if (getKey('RESET', JUST_PRESSED) && !inCutscene && canDebug) health = 0;
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}

@@ -161,7 +161,7 @@ class TitleState extends MusicBeatState {
 			checkCode();
 		}
 
-		if (getKey('ACCEPT-P')) {
+		if (getKey('ACCEPT', JUST_PRESSED)) {
 			if (!transitioning && (skippedIntro || openedGame) ) {
 				transitioning = true;
 				titleText.playAnim('press');
@@ -185,11 +185,11 @@ class TitleState extends MusicBeatState {
 
 		// Color and pitch easter egg
 		if (!transitioning && (skippedIntro || openedGame)) {
-			if (getKey('UI_LEFT')) updateColor(-elapsed);
-			if (getKey('UI_RIGHT')) updateColor(elapsed);
+			if (getKey('UI_LEFT', PRESSED)) updateColor(-elapsed);
+			if (getKey('UI_RIGHT', PRESSED)) updateColor(elapsed);
 	
-			if (getKey('UI_UP')) updatePitch(-elapsed);
-			if (getKey('UI_DOWN')) updatePitch(elapsed);
+			if (getKey('UI_UP', PRESSED)) updatePitch(-elapsed);
+			if (getKey('UI_DOWN', PRESSED)) updatePitch(elapsed);
 		}
 
 		super.update(elapsed);

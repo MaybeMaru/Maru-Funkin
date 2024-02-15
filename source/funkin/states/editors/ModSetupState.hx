@@ -199,7 +199,7 @@ class ModSetupState extends MusicBeatState {
         super.update(elapsed);
 
         if (modTab.getFocus()) return;
-        if (getKey('BACK-P')) {
+        if (getKey('BACK', JUST_PRESSED)) {
             switchState(new MainMenuState());
         }
     }

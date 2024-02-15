@@ -8,21 +8,9 @@ import funkin.substates.PromptSubstate;
 //	TODO: Clean this shit up!!!
 
 class ControlsState extends MusicBeatState {
-	var controlItems:FlxTypedGroup<ControlItem>;
-	var menuItems:FlxTypedGroup<Alphabet>;
+	var controlItems:TypedGroup<ControlItem>;
 	var curSelected:Int = 0;
 	var curBind:Int = 0;
-
-	public static var controlList:Array<String> = [];
-	private static var optionArray:Array<String> = ['LEFT','DOWN','UP','RIGHT','ACCEPT','BACK','PAUSE','RESET'];
-	private static var menuList:Array<String> =  [
-				    'NOTE',
-		'LEFT', 'DOWN', 'UP', 'RIGHT',
-		'', 		 'UI',
-		'LEFT', 'DOWN', 'UP', 'RIGHT',
-		'', 	   'GENERAL',
-		'ACCEPT', 'BACK', 'PAUSE', 'RESET',
-	];
 
 	inline static function resetGamepad(gamepad:FlxGamepad) {
 		FlxG.resetState();
@@ -30,6 +18,7 @@ class ControlsState extends MusicBeatState {
 
 	var menuCam:FlxCamera;
 	var camFollow:FlxObject;
+	var selectRect:FlxSpriteExt;
 
 	override function create():Void {
 		FlxG.gamepads.deviceConnected.add(resetGamepad);
@@ -45,8 +34,25 @@ class ControlsState extends MusicBeatState {
 		bg.setScale(1.1, false);
         add(bg);
 
-		add(controlItems = new FlxTypedGroup<ControlItem>());
-		add(menuItems = new FlxTypedGroup<Alphabet>());
+		selectRect = new FlxSpriteExt(150 + 380).makeRect(320, 85);
+		selectRect.ID = Std.int(selectRect.offset.x);
+		selectRect.alpha = 0.4;
+		add(selectRect);
+
+		add(controlItems = new TypedGroup<ControlItem>());
+
+		var y:Float = 0;
+		for (header in Controls.headers) {
+			var back = new FlxSpriteExt(0, y - 10).makeRect(FlxG.width, 85, FlxColor.BLACK);
+            back.alpha = 0.4;
+            add(back);
+
+			var title = new Alphabet(FlxG.width * .5, y, header);
+            title.alignment = CENTER;
+            add(title);
+
+			y += 130 + (Controls.headerContents.get(header).length * 100);
+		}
 
 		reloadValues();
 		menuCam.follow(camFollow, null, 0.16);
@@ -54,40 +60,36 @@ class ControlsState extends MusicBeatState {
 		super.create();
 	}
 
-	function clearGroup(group:FlxTypedGroup<Dynamic>) {
-		for (i in group) {
-			group.remove(i);
-			i.destroy();
-		}
-		group.clear();
-	}
-
 	private function reloadValues():Void {
-		clearGroup(menuItems);
-		clearGroup(controlItems);
+		controlItems.members.fastForEach((basic, i) -> {
+			basic.destroy();
+		});
+		controlItems.clear();
 
-		var c:Int = 0;
-		controlList = Controls.controlArray;
-		for (i in 0...menuList.length) {
-			var item = menuList[i];
-			if (item.length <= 0) continue;
-			var itemY = i * 75;
-			
-			if (optionArray.contains(item)) {
-				var bindArray:Array<String> = Controls.getBinding(controlList[c]);
-				var controlItem:ControlItem = new ControlItem(item,
-					InputFormatter.shortenButtonName(InputFormatter.getKeyName(bindArray[0])),
-					InputFormatter.shortenButtonName(InputFormatter.getKeyName(bindArray[1])),
-					itemY);
-				controlItem.ID = c;
-				controlItem.bindSelected = curBind;
-				controlItems.add(controlItem);
-				c++;
-			} else {
-				var titleTxt:Alphabet = new Alphabet(FlxG.width/2, itemY-50, item);
-				titleTxt.alignment = CENTER;
-				menuItems.add(titleTxt);
-			}
+		var id:Int = 0;
+        var y:Float = 0;
+
+		var formatKey = function (key:String) {
+			return InputFormatter.shortenButtonName(InputFormatter.getKeyName(key));
+		}
+		
+		for (header in Controls.headers) {
+			y += 40;
+
+            for (control in Controls.headerContents.get(header)) {
+				var binds = Controls.getBinding(control);
+				var item = new ControlItem(control, formatKey(binds[0]), formatKey(binds[1]));
+				item.ID = id;
+				item.y = y + 75;
+
+				item.bindSelected = curBind;
+				controlItems.add(item);
+
+                id++;
+                y += 100;
+            }
+
+            y += 90;
 		}
 
 		changeSelection();
@@ -103,10 +105,10 @@ class ControlsState extends MusicBeatState {
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (getKey('UI_UP-P'))		changeSelection(-1);
-		if (getKey('UI_DOWN-P'))	changeSelection(1);
+		if (getKey('UI_UP', JUST_PRESSED))		changeSelection(-1);
+		if (getKey('UI_DOWN', JUST_PRESSED))	changeSelection(1);
 
-		if (getKey('UI_LEFT-P') || getKey('UI_RIGHT-P')) {
+		if (getKey('UI_LEFT', JUST_PRESSED) || getKey('UI_RIGHT', JUST_PRESSED)) {
 			curBind = (curBind + 1) % 2;
 			CoolUtil.playSound('scrollMenu');
 			for (item in controlItems.members) {
@@ -115,25 +117,34 @@ class ControlsState extends MusicBeatState {
 			}
 		}
 
-		if (getKey('BACK-P')) {
+		selectRect.offset.x = FlxMath.lerp(selectRect.offset.x, (curBind * -400) + selectRect.ID, elapsed * 30);
+
+		if (getKey('BACK', JUST_PRESSED)) {
 			FlxG.gamepads.deviceConnected.remove(resetGamepad);
 			FlxG.gamepads.deviceDisconnected.remove(resetGamepad);
 			switchState(new OptionsState());
 		}
 
-		if (getKey('ACCEPT-P')) {
-			openSubState(new PromptSubstate('Press any key to rebind\n\n\n\nEscape to cancel', function () {
-				final keyCode:Int = Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
-				final pressedKey:String = Controls.inGamepad() ? FlxGamepadInputID.toStringMap.get(keyCode) : FlxKey.toStringMap.get(keyCode);
-				if (pressedKey != 'ESCAPE') {
-					Controls.setBinding(controlList[curSelected], pressedKey, curBind);
+		if (getKey('ACCEPT', JUST_PRESSED) && curItem != null) {
+			final gamepad = Controls.inGamepad();
+
+			openSubState(new PromptSubstate('Press any key to rebind\n\n\n\nEscape to cancel', function ()
+			{	
+				var code:Int = gamepad ? Controls.gamepad.firstJustPressedID() : FlxG.keys.firstJustPressed();
+				var keyPress:String = gamepad ? FlxGamepadInputID.toStringMap.get(code) : FlxKey.toStringMap.get(code);
+				
+				if (keyPress != 'ESCAPE') {
+					Controls.setBinding(curItem.key, keyPress, curBind);
 					CoolUtil.playSound('confirmMenu');
 				}
-			}, function ():Bool {
-				return Controls.inGamepad() ? Controls.gamepad.firstJustPressedID() != FlxGamepadInputID.NONE : FlxG.keys.firstJustPressed() != FlxKey.NONE;
+			},
+			function ():Bool {
+				return gamepad ? Controls.gamepad.firstJustPressedID() != FlxGamepadInputID.NONE : FlxG.keys.firstJustPressed() != FlxKey.NONE;
 			}, 1));
 		}
 	}
+
+	var curItem:ControlItem;
 
 	function changeSelection(change:Int = 0):Void {
 		curSelected = FlxMath.wrap(curSelected + change, 0, controlItems.length - 1);
@@ -142,8 +153,10 @@ class ControlsState extends MusicBeatState {
 		for (item in controlItems.members) {
 			item.selected = false;
 			if (curSelected == item.ID) {
+				curItem = item;
 				item.selected = true;
-				camFollow.y = item.targetY;
+				camFollow.y = item.y;
+				selectRect.y = item.y - 10;
 			}
 			item.updateDisplay();
 		}

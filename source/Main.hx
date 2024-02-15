@@ -47,9 +47,9 @@ class InitState extends FlxState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		var accept = Controls.getKey('ACCEPT-P');
+		var accept = Controls.getKey('ACCEPT', JUST_PRESSED);
 
-		if (accept || Controls.getKey('BACK-P') && !selected) {
+		if (accept || Controls.getKey('BACK', JUST_PRESSED) && !selected) {
 			selected = true;
 			CoolUtil.playSound("confirmMenu");
 			FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {

@@ -156,17 +156,17 @@ class StoryMenuState extends MusicBeatState {
 
 		if (!movedBack) {
 			if (!selectedWeek) {
-				if (getKey('UI_UP-P'))		changeWeek(-1);
-				if (getKey('UI_DOWN-P'))	changeWeek(1);
+				if (getKey('UI_UP', JUST_PRESSED))		changeWeek(-1);
+				if (getKey('UI_DOWN', JUST_PRESSED))	changeWeek(1);
 
-				rightArrow.playAnim(getKey('UI_RIGHT') ? 'press' : 'idle');
-				leftArrow.playAnim(getKey('UI_LEFT') ? 'press' : 'idle');
+				rightArrow.playAnim(getKey('UI_RIGHT', PRESSED) ? 'press' : 'idle');
+				leftArrow.playAnim(getKey('UI_LEFT', PRESSED) ? 'press' : 'idle');
 
-				if (getKey('UI_RIGHT-P'))	changeDifficulty(1);
-				if (getKey('UI_LEFT-P'))	changeDifficulty(-1);
+				if (getKey('UI_RIGHT', JUST_PRESSED))	changeDifficulty(1);
+				if (getKey('UI_LEFT', JUST_PRESSED))	changeDifficulty(-1);
 			}
 
-			if (getKey('ACCEPT-P')) {
+			if (getKey('ACCEPT', JUST_PRESSED)) {
 				selectWeek();
 			}
 		}
@@ -174,7 +174,7 @@ class StoryMenuState extends MusicBeatState {
 		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeks[curWeek].name);
 		leftArrow.visible = rightArrow.visible = curWeekDiffs.length > 1;
 
-		if ((getKey('BACK-P')) && !movedBack && !selectedWeek) {
+		if ((getKey('BACK', JUST_PRESSED)) && !movedBack && !selectedWeek) {
 			movedBack = true;
 			CoolUtil.playSound('cancelMenu');
 			switchState(new MainMenuState());
