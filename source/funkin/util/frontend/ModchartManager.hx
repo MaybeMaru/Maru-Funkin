@@ -43,19 +43,19 @@ class ModchartManager extends EventHandler {
         return tweenStrum(l,s, {x: X, y:Y}, time, {ease: ease ?? FlxEase.linear});
     }
 
-    inline public function setStrumLineSine(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startY:Float) {
+    inline public function setStrumLineSin(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startY:Float) {
         for (i in 0... getStrumLine(l).members.length)
-            setStrumSine(l, i, offPerNote * i, size, startY);
+            setStrumSin(l, i, offPerNote * i, size, startY);
     }
 
-    inline public function setStrumLineCosine(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startX:Float) {
+    inline public function setStrumLineCos(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startX:Float) {
         for (i in 0... getStrumLine(l).members.length)
-            setStrumCosine(l, i, offPerNote * i, size, startX);
+            setStrumCos(l, i, offPerNote * i, size, startX);
     }
 
     // Requires the manager to be added to the state to work
 
-    inline public function setStrumSine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
+    inline public function setStrumSin(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
         final strum = getStrum(l, s);
         sinStrums.remove(strum);
 
@@ -65,7 +65,7 @@ class ModchartManager extends EventHandler {
         sinStrums.push(strum);
     }
 
-    inline public function setStrumCosine(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startX:Float) {
+    inline public function setStrumCos(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startX:Float) {
         final strum = getStrum(l, s);
         cosStrums.remove(strum);
 
@@ -81,10 +81,11 @@ class ModchartManager extends EventHandler {
     var timeElapsed:Float = 0.0;
     var speed:Float = 1.0;
 
-    override function update(elapsed:Float) {
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
         timeElapsed += elapsed * speed;
         timeElapsed %= CoolUtil.DOUBLE_PI;
-        super.update(elapsed);
 
         if (sinStrums.length > 0 || cosStrums.length > 0) {
             for (i in sinStrums)

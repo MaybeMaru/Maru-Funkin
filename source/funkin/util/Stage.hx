@@ -1,5 +1,6 @@
 package funkin.util;
 
+import openfl.display.BitmapData;
 import funkin.util.modding.ScriptUtil;
 import flixel.util.typeLimit.OneOfTwo;
 
@@ -32,6 +33,8 @@ typedef StageJson = {
     var layersOrder:Array<String>;
     var layers:Dynamic;
 }
+
+typedef TempBitmap = {key:String, bitmap:BitmapData};
 
 class Stage extends TypedGroup<Layer> implements IMusicHit
 {
@@ -121,6 +124,50 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         stage.loadInput(data);
         return stage;
     }
+
+    /*public static function cacheStageAssets(data:StageJson):Void @:privateAccess {
+        var assets:Array<String> = [];
+        
+        for (key in data.layersOrder)
+        {
+            var objects:Array<StageObject> = Reflect.field(data.layers, key);
+            if (objects != null)
+            {
+                for (object in objects)
+                {
+                    if (!assets.contains(object.imagePath))
+                        assets.push(object.imagePath);
+                }
+            }
+        }
+
+        Paths.currentLevel = data.library;
+        var bitmaps:Array<TempBitmap> = [];
+        var totalAssets:Int = assets.length;
+        var curAssets:Int = 0;
+
+        var cache = function (assets:Array<String>) {
+            assets.fastForEach((asset, i) -> {
+                var path = Paths.png(asset);
+                var bitmap = AssetManager.__getFileBitmap(path);
+                bitmaps.push({key: path, bitmap: bitmap});
+                curAssets++;
+            });
+        }
+
+        var div = Std.int(assets.length / 2);
+        var assets1 = assets.copy().splice(0, div);
+        var assets2 = assets.splice(div, assets.length);
+        
+        FunkThread.run(function () cache(assets1));
+        FunkThread.run(function () cache(assets2));
+        
+        while (curAssets < totalAssets) {}
+
+        bitmaps.fastForEach((data, i) -> {
+            AssetManager.__cacheFromBitmap(data.key, data.bitmap, false);
+        });
+    }*/
 
     public function loadInput(input:StageJson):Stage
     {

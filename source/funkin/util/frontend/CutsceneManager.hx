@@ -2,14 +2,14 @@ package funkin.util.frontend;
 
 typedef SimpleEvent = {
     var time:Float;
-    var callback:Dynamic;
+    var callback:()->Void;
 }
 
 class EventHandler extends flixel.FlxBasic {
     public var events:Array<SimpleEvent> = [];
     public var position:Float = 0;
     
-    public function pushEvent(time:Float, callback:Dynamic) {
+    public function pushEvent(time:Float, callback:()->Void) {
         events.push({
             time: time*1000,
             callback: callback
@@ -17,16 +17,16 @@ class EventHandler extends flixel.FlxBasic {
         events.sort((a, b) -> Std.int(a.time - b.time));
     }
 
-    public function pushStep(step:Int = 0, event:Dynamic) {
-        pushEvent(step * Conductor.stepCrochetMills, event);
+    public function pushStep(step:Int = 0, callback:()->Void) {
+        pushEvent(step * Conductor.stepCrochetMills, callback);
     }
 
-    public function pushBeat(beat:Int = 0, event:Dynamic) {
-        pushEvent(beat * Conductor.crochetMills, event);
+    public function pushBeat(beat:Int = 0, callback:()->Void) {
+        pushEvent(beat * Conductor.crochetMills, callback);
     }
 
-    public function pushSection(section:Int = 0, event:Dynamic) {
-        pushEvent(section * Conductor.sectionCrochetMills, event);
+    public function pushSection(section:Int = 0, callback:()->Void) {
+        pushEvent(section * Conductor.sectionCrochetMills, callback);
         //Song.getSectionTime(PlayState.SONG, section) TODO maybe??
     }
 
@@ -59,7 +59,7 @@ class EventHandler extends flixel.FlxBasic {
 			while (events.length > 0 && events[0].time <= position) {
                 var event = events[0];
                 event.callback();
-                events.splice(events.indexOf(event), 1);
+                events.splice(0, 1);
 			}
 		}/* else {
             destroy();

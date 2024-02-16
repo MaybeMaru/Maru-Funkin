@@ -86,8 +86,8 @@ class Transition extends ResizableSprite {
 
     var inExit:Bool;
 
-    public function startTrans(?nextState:FlxState, ?completeCallback:Dynamic) {
-        final _func = function (?tween:FlxTween) {
+    public function startTrans(?nextState:FlxState, ?completeCallback:()->Void) {
+        final _func = function () {
             if (completeCallback != null) completeCallback();
             if (nextState != null) FlxG.switchState(nextState);
         }
@@ -96,13 +96,13 @@ class Transition extends ResizableSprite {
         setupTrans(0, height, times.open, _func, true);
     }
 
-    public function exitTrans(?completeCallback:Dynamic) {
+    public function exitTrans(?completeCallback:()->Void) {
         scaleY = Math.abs(scaleY);
         inExit = true;
         setupTrans(-height * 0.5, height * 0.5, times.close, completeCallback, false);
     }
 
-    function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:Dynamic, isOpen:Bool) {
+    function setupTrans(start:Float = 0, end:Float = 0, time:Float = 1, ?callback:()->Void, isOpen:Bool) {
         final skipBool:Bool = (isOpen ? skipTransOpen : skipTransClose);
         
         y = startPosition = start;
@@ -110,7 +110,7 @@ class Transition extends ResizableSprite {
         endPosition = end;
         transDuration = time;
         timeElapsed = 0;
-        finishCallback = callback;
+        onComplete = callback;
         inTransition = true;
         
         if (skipBool) {
@@ -124,7 +124,7 @@ class Transition extends ResizableSprite {
     var startPosition:Float = 0;
     var endPosition:Float = 720;
 
-    var finishCallback:Dynamic = null;
+    var onComplete:()->Void;
     public var inTransition(default, null):Bool = false;
 
     public function update(elapsed:Float) {
@@ -133,16 +133,19 @@ class Transition extends ResizableSprite {
             final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
             y = FlxMath.lerp(startPosition, endPosition, lerpValue);
         
-            if (timeElapsed >= transDuration) {
+            if (timeElapsed >= transDuration)
                 __finishTrans();
-            }
         }
     }
 
     @:noCompletion
-    function __finishTrans() {
-        if (finishCallback != null) Reflect.callMethod(null, finishCallback, []);
-        if (inExit) visible = false;
+    private function __finishTrans() {
+        if (onComplete != null)
+            onComplete();
+
+        if (inExit)
+            visible = false;
+
         inTransition = false;
     }
 }

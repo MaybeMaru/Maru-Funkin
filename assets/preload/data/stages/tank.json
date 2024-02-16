@@ -6,7 +6,7 @@
 	"bfOffsets": [-75,0],
 	"startCamOffsets": [-400,-580],
 
-	"layersOrder": ["bg", "pico", "gf", "dad", "bf", "fg"],
+	"layersOrder": ["bg", "tankmenRun", "gf", "dad", "bf", "fg"],
 	"layers": {
 		"bg": [
 			{

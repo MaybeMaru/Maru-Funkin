@@ -62,7 +62,7 @@ function initTankmen() {
             if (FlxG.random.bool(16)) {
                 var spritePath = 'stress/tankmenShot' + (getPref('naughty') ? '' : '-censor');
                 
-                var tankman = new FlxSpriteExt(500, 200 + FlxG.random.int(50, 100)).loadImage(spritePath);
+                var tankman = new FlxSpriteExt(500, 180 + FlxG.random.int(50, 100)).loadImage(spritePath);
                 tankman.flipX = picoNotes_[i][1] > 2;
                 tankman.scrollFactor.set(0.9, 0.9);
                 tankman.setScale(0.8);
@@ -112,6 +112,7 @@ function handleTankmen(tankman, tankClass)
             tankman.active = true;
         
             var diff = (Conductor.songPosition - tankClass.strumTime) * tankClass.tankSpeed;
+            tankman.offset.y = diff * 0.2;
             
             if (tankman.flipX)
             {

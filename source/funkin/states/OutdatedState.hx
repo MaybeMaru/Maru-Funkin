@@ -30,7 +30,7 @@ class OutdatedState extends MusicBeatState {
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 		if (getKey('ACCEPT', JUST_PRESSED)) {
-			FlxG.openURL("https://github.com/MaybeMaru/Maru-Funkin");
+			CoolUtil.openUrl("https://github.com/MaybeMaru/Maru-Funkin");
 		}
 		if (getKey('BACK', JUST_PRESSED)) {
 			leftState = true;

@@ -331,7 +331,7 @@ class CoolUtil {
 
 	inline public static function resetState(skipTransOpen:Bool = false, ?skipTransClose:Bool) {
 		Transition.setSkip(skipTransOpen, skipTransClose);
-		Main.transition.startTrans(null, function () FlxG.resetState());
+		Main.transition.startTrans(null, FlxG.resetState);
 		__pauseState();
 	}
 
