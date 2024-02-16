@@ -1,5 +1,6 @@
 {
 	"imagePath": "week6/senpaiMad",
+	"allowLod": false,
 	"isGF": false,
 	"camOffsets": [100,450],
 	"icon": "senpai",

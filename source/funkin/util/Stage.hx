@@ -73,6 +73,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
     public static final DEFAULT_OBJECT:StageObject = {
         tag: "coolswag",
         imagePath: "keoiki",
+        allowLod: true,
         position: [0,0],
         scrolls: [1,1],
         flipX: false,

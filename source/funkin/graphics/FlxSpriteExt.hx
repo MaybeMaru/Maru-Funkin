@@ -8,6 +8,24 @@ import flixel.math.FlxMatrix;
 import openfl.display.BitmapData;
 import flixel.FlxBasic;
 
+typedef SpriteAnimation = {
+    var animName:String;
+	var animFile:String;
+	var offsets:Array<Float>;
+	var indices:Array<Int>;
+	var framerate:Int;
+	var loop:Bool;
+}
+
+typedef SpriteJson = {
+	var anims:Array<SpriteAnimation>;
+	var imagePath:String;
+	var allowLod:Bool;
+	var scale:Float;
+	var antialiasing:Bool;
+	var flipX:Bool;
+}
+
 /*
     Just FlxSprite but with helper functions
 */
@@ -16,7 +34,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
-		scale: 1,
+		allowLod: true,
+		scale: 1.0,
 		antialiasing: true,
 		flipX: false,
 	}
@@ -62,20 +81,20 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	public function loadImageTiled(path:String, frameWidth:Int = 0, frameHeight:Int = 0, globalAsset:Bool = false, ?useTexture:Bool, ?library:String):FlxSpriteExt {
-		var image = Paths.image(path, library, globalAsset, useTexture);
+	public function loadImageTiled(path:String, frameWidth:Int = 0, frameHeight:Int = 0, globalAsset:Bool = false, ?useTexture:Bool, ?library:String, ?lodLevel:LodLevel):FlxSpriteExt {
+		var image = Paths.image(path, library, globalAsset, useTexture, lodLevel);
 		loadGraphic(image, true, Std.int(frameWidth / image.lodScale), Std.int(frameHeight / image.lodScale));
 		return this;
 	}
 
-	public function loadImage(path:String, globalAsset:Bool = false, ?useTexture:Bool, ?library:String):FlxSpriteExt {
+	public function loadImage(path:String, globalAsset:Bool = false, ?useTexture:Bool, ?library:String, ?lodLevel:LodLevel):FlxSpriteExt {
 		packer = Paths.getPackerType(path);
 		imageKey = path;
 		switch (packer) {
-			default:			loadGraphic(Paths.image(path, library, globalAsset, useTexture));
-			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, useTexture);
-			case SHEETPACKER: 	frames = Paths.getSpriteSheetAtlas(path, library, useTexture);
-			case JSON:			frames = Paths.getAsepriteAtlas(path, library, useTexture);
+			default:			loadGraphic(Paths.image(path, library, globalAsset, useTexture, lodLevel));
+			case SPARROW:		frames = Paths.getSparrowAtlas(path, library, useTexture, lodLevel);
+			case SHEETPACKER: 	frames = Paths.getSpriteSheetAtlas(path, library, useTexture, lodLevel);
+			case JSON:			frames = Paths.getAsepriteAtlas(path, library, useTexture, lodLevel);
 			case ATLAS: 		//frames = Paths.getTextureAtlas(path);	
 		}
 		return this;
@@ -93,7 +112,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
-		loadImage(specialImage ?? '$folder${spriteJson.imagePath}', global);
+		
+		final path:String = specialImage ?? '$folder${spriteJson.imagePath}';
+		final lodLevel:Null<LodLevel> = spriteJson.allowLod ? null : HIGH;
+
+		loadImage(path, global, null, null, lodLevel);
 
 		spriteJson.anims.fastForEach((anim, i) -> {
 			final anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
@@ -239,7 +262,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		imageKey = key;
 
 		@:privateAccess
-		var graphic = AssetManager.__cacheFromBitmap(key, bitmap, false, 0, false);
+		var graphic = AssetManager.__cacheFromBitmap(key, bitmap, false, HIGH, false);
 		frames = graphic.imageFrame;
 		return this;
 	}

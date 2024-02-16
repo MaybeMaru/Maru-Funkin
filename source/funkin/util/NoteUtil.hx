@@ -32,6 +32,7 @@ class NoteUtil {
     public static var DEFAULT_NOTE_SKIN(default, never):NoteSkinData = {
 		anims: [],
 		imagePath: "noteAssets",
+        allowLod: true,
 		scale: 0.7,
 		antialiasing: true,
 		flipX: false,
@@ -73,40 +74,44 @@ class NoteUtil {
      */
 
     public static var skinSpriteMap:Map<String, SkinSpriteData> = [];
-    public static function setupSkinSprites(skin:String):SkinSpriteData {
-        if (skinSpriteMap.exists(skin)) return skinSpriteMap.get(skin);
+    public static function setupSkinSprites(skin:String):SkinSpriteData
+    {
+        if (skinSpriteMap.exists(skin))
+            return skinSpriteMap.get(skin);
+        
         var skinJson:NoteSkinData;
         try { // Prevent null skins
             skinJson = SkinUtil.getSkinData(skin).noteData;
-        } catch(e) {
+        }
+        catch(e) {
             skin = '_missing_skin';
             skinJson = SkinUtil.getSkinData(skin).noteData;
         }
+
         skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
-        var spriteKey = 'skins/$skin/${skinJson.imagePath}';
-        var refSprite:FlxSpriteExt = new FlxSpriteExt();
-        refSprite.loadImage(spriteKey);
-        refSprite.setScale(skinJson.scale);
-        refSprite.antialiasing = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
-        for (anim in skinJson.anims)
-            refSprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+        final key:String = 'skins/$skin/${skinJson.imagePath}';
+        final lodLevel:Null<LodLevel> = skinJson.allowLod ? null : HIGH;
+        final antialiasing:Bool = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
+        
+        final sprite = new FlxSpriteExt().loadImage(key, false, null, null, lodLevel);
+        sprite.setScale(skinJson.scale);
+        sprite.antialiasing = antialiasing;
 
-        if ((PlayState.instance != null) && (refSprite.frame != null)) {
-            CoolUtil.cacheImage(refSprite.frame.parent, null, PlayState.instance.camHUD);
-        }
+        skinJson.anims.fastForEach((anim, i) -> {
+            sprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+        });
 
-        var skinData:SkinSpriteData = {
-            baseSprite: refSprite,
+        final skinData:SkinSpriteData = {
+            baseSprite: sprite,
             skinJson: skinJson
         }
 
-        AssetManager.getAsset(Paths.png(spriteKey)).onDispose = () -> {
+        AssetManager.getAsset(Paths.png(key)).onDispose = () -> {
             if (skinData != null) {
                 skinData.baseSprite = FlxDestroyUtil.destroy(skinData.baseSprite);
                 skinData.skinJson = null;
                 skinSpriteMap.remove(skin);
-                skinData = null;
             }
         }
 

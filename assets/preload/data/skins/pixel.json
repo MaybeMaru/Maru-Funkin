@@ -40,6 +40,7 @@
             }
         ],
         "imagePath": "noteAssets",
+        "allowLod": false,
         "antialiasing": false,
         "scale": 6,
         "noteColorArray" : ["0xffe276ff", "0xff3dcaff", "0xff71e300", "0xffff884e"]
@@ -85,6 +86,7 @@
             }
         ],
         "imagePath": "strumAssets",
+        "allowLod": false,
         "antialiasing": false,
         "scale": 6
     },
@@ -113,6 +115,7 @@
             }
         ],
         "imagePath": "splashAssets",
+        "allowLod": false,
         "antialiasing": false,
         "scale": 6
     },

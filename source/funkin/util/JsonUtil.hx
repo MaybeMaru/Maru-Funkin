@@ -30,23 +30,6 @@ typedef JsonSpritesheet = {
 	var meta:{frameTags:Array<JsonTag>};
 }
 
-//Default Json sprite format
-typedef SpriteAnimation = {
-    var animName:String;
-	var animFile:String;
-	var offsets:Array<Float>;
-    var indices:Array<Int>;
-	var framerate:Int;
-    var loop:Bool;
-}
-typedef SpriteJson = {
-	var anims:Array<SpriteAnimation>;
-    var imagePath:String;
-    var scale:Float;
-	var antialiasing:Bool;
-	var flipX:Bool;
-}
-
 class JsonUtil {
 	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
         subFolders = subFolders == null ? [] : subFolders;

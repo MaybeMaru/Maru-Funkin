@@ -16,6 +16,7 @@ class Character extends FlxSpriteExt {
 	public static final DEFAULT_CHARACTER:CharacterJson = {
 		anims: [],
 		imagePath: "week1/BOYFRIEND",
+		allowLod: true,
 		icon: 'bf',
 		scale: 1,
 		antialiasing: true,
@@ -95,11 +96,13 @@ class Character extends FlxSpriteExt {
 
 	public function loadCharJson(inputJson:CharacterJson):Void {
 		final imagePath:String = (!inputJson.imagePath.startsWith('characters/')) ? 'characters/${inputJson.imagePath}' : inputJson.imagePath;
-		loadImage(imagePath);
-		for (anim in inputJson.anims) {
-			anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);
+		final lodLevel:Null<LodLevel> = inputJson.allowLod ? null : HIGH;
+		loadImage(imagePath, false, null, null, lodLevel);
+		
+		inputJson.anims.fastForEach((anim, i) -> {
+			final anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
-		}
+		});
 	}
 
 	public function new(?X:Float, ?Y:Float, character:String = "bf", isPlayer:Bool = false, debugMode:Bool = false, ?inputJson:CharacterJson):Void {

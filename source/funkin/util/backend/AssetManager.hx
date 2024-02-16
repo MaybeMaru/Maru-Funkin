@@ -175,10 +175,16 @@ class AssetManager
 	{
 		if (key == null)
 			key = path;
+
+		if (lodLevel == null)
+			lodLevel = lodQuality;
 		
 		var asset = getAsset(key); // Check if asset is already cached
-		if (asset != null)
-			return asset.asset;
+		if (asset != null) {
+			final graphic:LodGraphic = asset.asset;
+			if (graphic.lodLevel == lodLevel) // TODO: May need some disposing if this is false
+				return graphic;
+		}
 
 		var bitmap = __getFileBitmap(path);
 		
@@ -193,7 +199,7 @@ class AssetManager
 		if (lodLevel == null)
 			lodLevel = lodQuality;
 		
-		if (cast(lodLevel, Int) > 0)
+		if (lodLevel != HIGH)
 			graphic.generateLod(lodLevel);
 
 		if (useTexture == null)

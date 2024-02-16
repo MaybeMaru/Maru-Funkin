@@ -1,5 +1,6 @@
 {
 	"imagePath": "week6/spirit",
+	"allowLod": false,
 	"icon": "spirit",
 	"camOffsets": [-50,400],
 	"isGF": false,

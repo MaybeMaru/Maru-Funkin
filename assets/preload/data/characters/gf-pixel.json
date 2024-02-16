@@ -1,5 +1,6 @@
 {
 	"imagePath": "week6/gfPixel",
+	"allowLod": false,
 	"camOffsets": [0,0],
 	"icon": "gf",
 	"isGF": false,

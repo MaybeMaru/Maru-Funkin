@@ -1,5 +1,6 @@
 {
 	"imagePath": "week6/bfPixel",
+	"allowLod": false,
 	"isGF": false,
 	"camOffsets": [400,300],
 	"icon": "bf-pixel",

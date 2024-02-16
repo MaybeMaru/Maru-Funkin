@@ -14,6 +14,7 @@ class MenuCharacter extends FlxSpriteExt {
 		antialiasing: true,
 		scale: 0.9,
 		imagePath: "bf",
+		allowLod: true,
 		anims: [
 			FlxSpriteExt.DEFAULT_ANIM
 		],
