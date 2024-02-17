@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import flixel.util.FlxSignal;
 import flixel.util.typeLimit.OneOfTwo;
 import funkin.objects.note.Sustain;
 import funkin.objects.note.BasicNote;
@@ -110,39 +111,48 @@ class NotesGroup extends Group
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
 		vanillaUI = getPref('vanilla-ui');
+
+		goodNoteHit = new FlxTypedSignal<(Note)->Void>();
+		goodSustainPress = new FlxTypedSignal<(Sustain)->Void>();
+		
+		noteMiss = new FlxTypedSignal<(Int, BasicNote)->Void>();
+		badNoteHit = new FlxSignal();
+		
+		opponentNoteHit = new FlxTypedSignal<(Note)->Void>();
+		opponentSustainPress = new FlxTypedSignal<(Sustain)->Void>();
 		
 		// Setup functions
-		goodNoteHit = function (note:Note) {
+		goodNoteHit.add(function (note:Note) {
 			if (note.wasGoodHit) return;
 			hitNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, true]);
 			note.removeNote();
-		}
+		});
 
-		goodSustainPress = function (sustain:Sustain) {
+		goodSustainPress.add(function (sustain:Sustain) {
 			pressSustain(sustain, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodSustainPress', [sustain]);
 			ModdingUtil.addCall('sustainPress', [sustain, true]);
-		}
+		});
 
-		opponentNoteHit = function (note:Note) {
+		opponentNoteHit.add(function (note:Note) {
 			if (note.wasGoodHit) return;
 			hitNote(note, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentNoteHit', [note]);
 			ModdingUtil.addCall('noteHit', [note, false]);
 			note.removeNote();
-		}
+		});
 
-		opponentSustainPress = function (sustain:Sustain) {
+		opponentSustainPress.add(function (sustain:Sustain) {
 			pressSustain(sustain, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentSustainPress', [sustain]);
 			ModdingUtil.addCall('sustainPress', [sustain, false]);
-		}
+		});
 
 		if (!isPlayState) return;
 
-		noteMiss = function(direction:Int = 1, ?note:BasicNote):Void {
+		noteMiss.add(function(direction:Int = 1, ?note:BasicNote):Void {
 			if (note == null) {
 				game.health -= 0.04;
 				game.songScore -= 10;
@@ -175,14 +185,14 @@ class NotesGroup extends Group
 			missChar.sing(direction, 'miss');
 			
 			game.updateScore();
-		}
+		});
 
-		badNoteHit = function () {
+		badNoteHit.add(function () {
 			controlArray.fastForEach((control, i) -> {
 				if (control)
-					checkCallback(noteMiss, [i]);
+					noteMiss.dispatch(i, null);
 			});
-		}
+		});
     }
 
     public function init(startPos:Float = -5000) {
@@ -310,18 +320,14 @@ class NotesGroup extends Group
 		return scrollSpeed = value;
 	}
 
-    public var goodNoteHit:(Note)->Void;
-    public var goodSustainPress:(Sustain)->Void;
-    public var noteMiss:(Int, BasicNote)->Void;
-    public var badNoteHit:()->Void;
+    public var goodNoteHit:FlxTypedSignal<(Note)->Void>;
+    public var goodSustainPress:FlxTypedSignal<(Sustain)->Void>;
     
-    public var opponentNoteHit:(Note)->Void;
-    public var opponentSustainPress:(Sustain)->Void;
-
-	static final EMPTY_ARRAY:Array<Dynamic> = [];
-    public inline function checkCallback(callback:Dynamic, ?args:Array<Dynamic>) {
-        if (callback != null) Reflect.callMethod(this, callback, args ?? EMPTY_ARRAY); // Prevent null
-    }
+	public var noteMiss:FlxTypedSignal<(Int, BasicNote)->Void>;
+    public var badNoteHit:FlxSignal;
+    
+    public var opponentNoteHit:FlxTypedSignal<(Note)->Void>;
+    public var opponentSustainPress:FlxTypedSignal<(Sustain)->Void>;
 
     //Makes the conductor song go vroom vroom
     function updateConductor(elapsed:Float = 0) {
@@ -390,10 +396,13 @@ class NotesGroup extends Group
 			if (note.isSustainNote) {
 				final sus:Sustain = note.toSustain();
 				sus.pressSustain();
-				if (sus.pressed) checkCallback(note.mustPress ? goodSustainPress : opponentSustainPress, [note]);
-			} else {
+				
+				if (sus.pressed)
+					note.mustPress ? goodSustainPress.dispatch(sus) : opponentSustainPress.dispatch(sus);
+			}
+			else {
 				note.strumTime = Conductor.songPosition; // force sick rating (because lag)
-				checkCallback(note.mustPress ? goodNoteHit : opponentNoteHit, [note]);
+				note.mustPress ? goodNoteHit.dispatch(note.toNote()) : opponentNoteHit.dispatch(note.toNote());
 			}
 		}
 	}
@@ -401,14 +410,15 @@ class NotesGroup extends Group
 	public inline function checkMissNote(note:BasicNote) {
 		if (note.activeNote || note.isSustainNote) return;
 		if (!isCpuNote(note) && note.mustHit)
-			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
+			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
+
 		note.removeNote();
 	}
 
 	public function sustainMiss(note:Sustain) {
 		note.missedPress = true;
 		if (note.mustHit)
-			checkCallback(noteMiss, [note.noteData%Conductor.NOTE_DATA_LENGTH, note]);
+			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
 	}
 
     override function update(elapsed:Float) {
@@ -468,7 +478,8 @@ class NotesGroup extends Group
 							}
 							else {
 								if (holding) sus.pressSustain(); // Pressed sustain
-								if (sus.pressed) checkCallback(sus.mustPress ? goodSustainPress : opponentSustainPress, [sus]);
+								if (sus.pressed)
+									sus.mustPress ? goodSustainPress.dispatch(sus) : opponentSustainPress.dispatch(sus);
 							}
 						}
 					}
@@ -509,18 +520,17 @@ class NotesGroup extends Group
 					if (!onGhost) {
 						controlArray.fastForEach((control, i) -> {
 							if (control && !ignoreList.contains(i))
-								checkCallback(badNoteHit);
+								badNoteHit.dispatch();
 						});
 					}
 
 					possibleNotes.fastForEach((note, i) -> {
 						if (note.targetStrum.getControl(JUST_PRESSED))
-							checkCallback(note.mustPress ? goodNoteHit : opponentNoteHit, [note]);
+							note.mustPress ? goodNoteHit.dispatch(note) : opponentNoteHit.dispatch(note);
 					});
 				}
-				else if (!onGhost) {
-                    checkCallback(badNoteHit);
-				}
+				else if (!onGhost)
+					badNoteHit.dispatch();
 			}
 		}
 	}

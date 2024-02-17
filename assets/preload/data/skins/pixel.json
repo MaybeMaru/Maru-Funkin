@@ -120,5 +120,6 @@
         "scale": 6
     },
     "antialiasing": false,
+    "allowLod": false,
     "scale": 5
 }

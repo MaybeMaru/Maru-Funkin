@@ -399,13 +399,14 @@ class PlayState extends MusicBeatState {
 		final countdownImages:Array<FlxGraphicAsset> = [];
 
 		['intro3','intro2','intro1','introGo'].fastForEach((key, i) -> {
-			final soundKey = SkinUtil.getAssetKey(key, SOUND);
-			countdownSounds.push(Paths.sound(soundKey));
+			final key = SkinUtil.getAssetKey(key, SOUND);
+			countdownSounds.push(Paths.sound(key));
 		});
 
 		['ready','set','go'].fastForEach((key, i) -> {
-			final spriteKey:String = SkinUtil.getAssetKey(key, IMAGE);
-			countdownImages.push(CoolUtil.cacheImage(spriteKey, null, camHUD));
+			final key:String = SkinUtil.getAssetKey(key, IMAGE);
+			final lodLevel:Null<LodLevel> = SkinUtil.curSkinData.allowLod ? null : HIGH;
+			countdownImages.push(Paths.image(key, null, null, null, lodLevel));
 		});
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
@@ -810,14 +811,15 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function showUI(bool:Bool):Void {
-		final displayObjects:Array<Dynamic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
-		for (i in 0...displayObjects.length) displayObjects[i].visible = bool;
+		final displayObjects:Array<FlxBasic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
+		displayObjects.fastForEach((object, i) -> {
+			object.visible = bool;
+		});
 	}
 
-	// For backwards compatibility and my own sanity, its ugly i know!!
+	// For backwards compatibility and my own sanity, its ugly i know!! TODO: make this a macro?? maybe??
 	public var notes(get,never):FlxTypedGroup<BasicNote>; inline function get_notes()return notesGroup.notes;
 	public var unspawnNotes(get,never):Array<BasicNote>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
-	//public var holdingArray(get,never):Array<Bool>; inline function get_holdingArray()return notesGroup.holdingArray;
 	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
 	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;
 	public var playerStrums(get,never):StrumLineGroup; inline function get_playerStrums()return notesGroup.playerStrums;
@@ -833,7 +835,7 @@ class PlayState extends MusicBeatState {
 	public var generatedMusic(get,never):Bool;	inline function get_generatedMusic()return notesGroup.generatedMusic;
 	public var inst(get, never):FlxSound; inline function get_inst()return Conductor.inst;
 	public var vocals(get, never):FlxSound; inline function get_vocals()return Conductor.vocals;
-	public var objMap(get, never):Map<String, Dynamic>; inline function get_objMap()return stage.objects;
+	public var objMap(get, never):Map<String, FlxObject>; inline function get_objMap()return stage.objects;
 	
 	public var skipStrumIntro(get,set):Bool; inline function get_skipStrumIntro()return notesGroup.skipStrumIntro;
 	inline function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;

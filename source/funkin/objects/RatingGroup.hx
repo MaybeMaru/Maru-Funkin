@@ -67,17 +67,17 @@ class JudgeRating extends RemoveRating {
     var animated:Bool = true;
     public function new() {
         super();
-        for (i in judgeRatings) {
+        judgeRatings.fastForEach((i, _) -> {
             var oldJudge = Paths.png('skins/${SkinUtil.curSkin}/ratings/$i');
             if (Paths.exists(oldJudge, IMAGE)) {
                 animated = false; // Backwards compatibility ???
                 break;
             }
-        }
+        });
 
         if (animated) {
             var imagePath = 'skins/${SkinUtil.curSkin}/ratings/ratings';
-            loadImage(imagePath);
+            loadImage(imagePath, false, null, null, lodLevel);
 
             var length = CoolUtil.returnJudgements.length + 1;
             loadGraphic(graphic, true, Std.int(width / length / lodScale), Std.int(height / lodScale));
@@ -88,7 +88,7 @@ class JudgeRating extends RemoveRating {
 
     public function init(judgement:String) {
         setPosition();
-        animated ? animation.play(judgement, true) : loadImage('skins/${SkinUtil.curSkin}/ratings/$judgement');
+        animated ? animation.play(judgement, true) : loadImage('skins/${SkinUtil.curSkin}/ratings/$judgement', false, null, null, lodLevel);
         updateHitbox();
         start(Conductor.crochet * 0.001, Conductor.stepCrochet * 0.025);
         jump();
@@ -98,7 +98,7 @@ class JudgeRating extends RemoveRating {
 class ComboRating extends RemoveRating {
     public function new() {
         super();
-        loadImage('skins/${SkinUtil.curSkin}/ratings/combo');
+        loadImage('skins/${SkinUtil.curSkin}/ratings/combo', false, null, null, lodLevel);
     }
 
     public function init() {
@@ -114,10 +114,13 @@ class NumRating extends RemoveRating {
     
     public function new() {
         super();
-        final imagePath = 'skins/${SkinUtil.curSkin}/ratings/nums';
-        loadImage(imagePath);
+        final path:String = 'skins/${SkinUtil.curSkin}/ratings/nums';
+        loadImage(path, false, null, null, lodLevel);
+        
         loadGraphic(graphic, true, Std.int(width * 0.1 / lodScale), Std.int(height / lodScale));
-        for (i in 0...10) animation.add(Std.string(i), [i], 1);
+        for (i in 0...10)
+            animation.add(Std.string(i), [i], 1);
+        
         setScale(scale.x);
         initScale = scale.x;
     }
@@ -132,22 +135,27 @@ class NumRating extends RemoveRating {
     }
 }
 
-class RemoveRating extends FlxSpriteExt {
+class RemoveRating extends FlxSpriteExt
+{
     public var lifeTime:Float = 1;
     public var alphaSpeed:Float = 1;
+    var lodLevel:Null<LodLevel>;
+
     public function new() {
         super();
-        _dynamic.update = function (elapsed:Float) {
-            if (lifeTime > 0) lifeTime -= elapsed; 
-            else if (alive) {
-                if (alpha > 0)  alpha -= elapsed * alphaSpeed;
-                else            kill();
-            }
-        }
-
         var skinData = SkinUtil.getSkinData(SkinUtil.curSkin);
         setScale(skinData.scale);
+        lodLevel = skinData.allowLod ? null : HIGH;
         antialiasing = skinData.antialiasing ? Preferences.getPref('antialiasing') : false;
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        if (lifeTime > 0) lifeTime -= elapsed; 
+        else if (alive) {
+            if (alpha > 0)  alpha -= elapsed * alphaSpeed;
+            else            kill();
+        }
     }
 
     public function start(lifeTime:Float = 1, alphaSpeed:Float = 1) {
