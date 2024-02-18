@@ -1,6 +1,6 @@
 package funkin.objects.note;
 
-class StrumLineGroup extends FlxTypedSpriteGroup<NoteStrum> {
+class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
     public var initPos:Array<FlxPoint> = [];
     public static var strumLineY:Float = 50;
     

@@ -4,6 +4,7 @@ import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 enum abstract InputType(Int) from Int to Int {
+    var RELEASED = -1;
     var PRESSED = 0;
     var JUST_PRESSED = 1;
     var JUST_RELEASED = 2;
@@ -87,6 +88,7 @@ class Controls
 
     inline private static function checkKey(inputType:InputType, keys:Array<Int>, isGamepad:Bool):Bool {
         return switch (inputType) {
+            case RELEASED: isGamepad ? !gamepad.anyPressed(keys) : !FlxG.keys.anyPressed(keys);
             case PRESSED: isGamepad ? gamepad.anyPressed(keys) : FlxG.keys.anyPressed(keys);
             case JUST_PRESSED: isGamepad ? gamepad.anyJustPressed(keys) : FlxG.keys.anyJustPressed(keys);
             case JUST_RELEASED: isGamepad ? gamepad.anyJustReleased(keys) : FlxG.keys.anyJustReleased(keys);

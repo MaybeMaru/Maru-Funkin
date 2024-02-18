@@ -17,8 +17,7 @@ import funkin.util.backend.AssetManager;
 import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
 import funkin.util.frontend.Shader;
-import funkin.util.backend.Discord;
-import funkin.util.backend.Discord.DiscordClient;
+import funkin.util.backend.DiscordClient;
 #if desktop
 #if VIDEOS_ALLOWED
 import hxcodec.flixel.FlxVideo;
@@ -69,7 +68,6 @@ import funkin.graphics.FunkinText;
 import funkin.graphics.FlxFunkText;
 import funkin.graphics.TypedGroup.Group;
 import funkin.graphics.TypedGroup.SpriteGroup;
-import funkin.graphics.TypedGroup.DynamicSpriteGroup;
 import funkin.graphics.TypedGroup.TypedGroup;
 import funkin.graphics.TypedGroup.TypedSpriteGroup;
 

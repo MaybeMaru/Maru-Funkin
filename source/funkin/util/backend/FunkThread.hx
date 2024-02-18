@@ -14,13 +14,13 @@ class FunkThread {
     #if sys
     static var threadPool:FixedThreadPool = new FixedThreadPool(4);
     
-    public static function run(task:Void->Void) {
+    public static function run(task:()->Void) {
         threadPool.run(task);
     }
     
     #else
 
-    public static function run(task:Void->Void) {
+    public static function run(task:()->Void) {
         task();
     }
 

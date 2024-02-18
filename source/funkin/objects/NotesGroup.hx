@@ -108,6 +108,9 @@ class NotesGroup extends Group
 		Conductor.songOffset = SONG.offsets;
 		Conductor.loadMusic(curSong);
 		
+		Conductor.play(); // Weird flxsound caching bullshit
+		Conductor.stop();
+		
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
 		vanillaUI = getPref('vanilla-ui');
@@ -361,7 +364,11 @@ class NotesGroup extends Group
 
 	inline function spawnNotes() { // Generate notes
 		if (curSpawnNote != null) {
-			while (unspawnNotes.length > 0 && curSpawnNote.strumTime - Conductor.songPosition < 1500 / curSpawnNote.noteSpeed / camera.zoom * curSpawnNote.spawnMult) {
+			final zoom = camera.zoom;
+			
+			while (unspawnNotes.length > 0 &&
+				((curSpawnNote.strumTime - Conductor.songPosition) < (((1500 / curSpawnNote.noteSpeed) / zoom) * curSpawnNote.spawnMult)))
+			{
 				final spawnNote:BasicNote = curSpawnNote;
 				spawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [spawnNote]);
@@ -370,6 +377,7 @@ class NotesGroup extends Group
 				// Skip sorting
 				if (spawnNote.isSustainNote)	notes.insert(0, spawnNote);
 				else							notes.add(spawnNote);
+				
 				curSpawnNote = unspawnNotes[0];
 			}
 		}

@@ -28,9 +28,9 @@ class PlayState extends MusicBeatState {
 	public var gf:Character;
 	public var boyfriend:Character;
 
-	public var dadGroup:FlxSpriteGroup;
-	public var gfGroup:FlxSpriteGroup;
-	public var boyfriendGroup:FlxSpriteGroup;
+	public var dadGroup:SpriteGroup;
+	public var gfGroup:SpriteGroup;
+	public var boyfriendGroup:SpriteGroup;
 
 	private var camFollow:FlxObject;
 	private var targetCamPos:FlxPoint;
@@ -58,7 +58,7 @@ class PlayState extends MusicBeatState {
 	public var noteCount:Int = 0;
 	public var noteTotal:Float = 0;
 
-	private var iconGroup:FlxSpriteGroup;
+	private var iconGroup:SpriteGroup;
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
 	public var healthBar:FunkBar;
@@ -144,9 +144,9 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
 
 		// MAKE CHARACTERS
-		gfGroup = new FlxSpriteGroup();
-		dadGroup = new FlxSpriteGroup();
-		boyfriendGroup = new FlxSpriteGroup();
+		gfGroup = new SpriteGroup();
+		dadGroup = new SpriteGroup();
+		boyfriendGroup = new SpriteGroup();
 
 		gf = new Character(0, 0, SONG.players[2]);
 		dad = new Character(0, 0, SONG.players[1]);
@@ -193,7 +193,7 @@ class PlayState extends MusicBeatState {
 		dad.group = dadGroup;
 		boyfriend.group = boyfriendGroup;
 
-		iconGroup = new FlxSpriteGroup();
+		iconGroup = new SpriteGroup();
 		iconP1 = new HealthIcon(boyfriend.icon, true, true);
 		iconP2 = new HealthIcon(dad.icon, false, true);
 		dad.iconSpr = iconP2;
@@ -532,41 +532,48 @@ class PlayState extends MusicBeatState {
 		__superUpdate(elapsed);
 		ModdingUtil.addCall('update', [elapsed]);
 
-		if (FlxG.keys.justPressed.NINE && allowIconEasterEgg) {
-			changeOldIcon();
-		}
-		else if (canDebug) {
-			if (getKey('PAUSE', JUST_PRESSED) && startedCountdown && canPause) {
-				openPauseSubState(true);
-				DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+		if (canDebug) {
+			final justPressed = FlxG.keys.justPressed;
+			
+			if (canPause) {
+				if (getKey('PAUSE', JUST_PRESSED) && startedCountdown) {
+					openPauseSubState(true);
+					DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+				}
 			}
-			#if desktop
-			else if (FlxG.keys.justPressed.SIX) {
+
+			if (allowIconEasterEgg) {
+				if (justPressed.NINE)
+					changeOldIcon();
+			}
+
+			if (justPressed.ONE) {
+				if (CoolUtil.debugMode)
+					endSong();
+			}
+
+			if (justPressed.SIX) {
 				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Stage Editor", null, null, true);
 				switchState(new StageDebug(stageData));
 			}
-			else if (FlxG.keys.justPressed.SEVEN) {
+
+			if (justPressed.SEVEN) {
 				clearCacheData = {tempCache: false};
 				switchState(new ChartingState());
 				DiscordClient.changePresence("Chart Editor", null, null, true);
 			}
-			else if (FlxG.keys.justPressed.EIGHT) {
+
+			if (justPressed.EIGHT) {
 				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Character Editor", null, null, true);
 	
-				/* 	8 for opponent char
-				 *  SHIFT + 8 for player char
-				 *	CTRL + SHIFT + 8 for gf */
 				if (FlxG.keys.pressed.SHIFT) {
 					if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
 					else switchState(new AnimationDebug(SONG.players[0]));
 				}
 				else switchState(new AnimationDebug(SONG.players[1]));
 			}
-			#end
-			else if (FlxG.keys.justPressed.ONE && CoolUtil.debugMode)
-				endSong();
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -579,7 +586,8 @@ class PlayState extends MusicBeatState {
 		}
 
 		// RESET -> Quick Game Over Screen
-		if (getKey('RESET', JUST_PRESSED) && !inCutscene && canDebug) health = 0;
+		if (getKey('RESET', JUST_PRESSED) && !inCutscene && canDebug)
+			health = 0;
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}

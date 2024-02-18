@@ -76,7 +76,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 					FlxCamera._defaultCameras = cameras;
 		
 				members.fastForEach((basic, i) -> {
-					if (basic != null && basic.exists && basic.visible)
+					final basic:FlxBasic = basic;
+					if (basic != null) if (basic.exists) if (basic.visible)
 						basic.draw();
 				});
 		
@@ -97,7 +98,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		
 		members.fastForEach((basic, i) -> {
-			if (basic != null && basic.exists && basic.active)
+			final basic:FlxBasic = basic;
+			if (basic != null) if (basic.exists) if (basic.active)
 				basic.update(elapsed);
 		});
 	}
@@ -105,7 +107,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function stepHit(curStep:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				if (basic != null && basic.exists && basic.active)
+				final basic:FlxBasic = basic;
+				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).stepHit(curStep);
 			}
 		});
@@ -117,7 +120,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function beatHit(curBeat:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				if (basic != null && basic.exists && basic.active)
+				final basic:FlxBasic = basic;
+				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).beatHit(curBeat);
 			}
 		});
@@ -128,25 +132,14 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function sectionHit(curSection:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				if (basic != null && basic.exists && basic.active)
+				final basic:FlxBasic = basic;
+				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).sectionHit(curSection);
 			}
 		});
 
 		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
-
-	/*function callOnObjects(func:String, ?args:Array<Dynamic>) {
-		var i:Int = 0;
-		var getter:Dynamic = null;
-		while (i < length) {
-			getter = cast members[i++];
-			if (getter != null && getter is IMusicGetter && getter != null && getter.exists && getter.active) {
-				var _func = cast Reflect.field(getter, func);
-				if (_func != null) Reflect.callMethod(getter, _func, args);
-			}
-		}
-	}*/
 
 	override function destroy() {
 		instance = null;

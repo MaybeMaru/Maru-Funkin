@@ -87,13 +87,12 @@ class Transition extends ResizableSprite {
     var inExit:Bool;
 
     public function startTrans(?nextState:FlxState, ?completeCallback:()->Void) {
-        final _func = function () {
-            if (completeCallback != null) completeCallback();
-            if (nextState != null) FlxG.switchState(nextState);
-        }
         scaleY = -Math.abs(scaleY);
         inExit = false;
-        setupTrans(0, height, times.open, _func, true);
+        setupTrans(0, height, times.open, function () {
+            if (completeCallback != null) completeCallback();
+            if (nextState != null) FlxG.switchState(nextState);
+        }, true);
     }
 
     public function exitTrans(?completeCallback:()->Void) {

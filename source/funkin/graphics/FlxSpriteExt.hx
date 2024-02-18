@@ -169,15 +169,19 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	@:noCompletion
 	private inline function __superDraw():Void {
 		checkEmptyFrame();
-		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == FlxFrameType.EMPTY #end) return;
-		if (dirty) calcFrame(useFramePixels);  // rarely
+		
+		if (alpha == 0 || !visible || _frame.type == FlxFrameType.EMPTY)
+			return;
+		
+		if (dirty)
+			calcFrame(useFramePixels);  // rarely
 
-		for (i in 0...cameras.length) {
-			var camera = cameras[i];
-			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
-			drawComplex(camera);
-			#if FLX_DEBUG FlxBasic.visibleCount++; #end
-		}
+		cameras.fastForEach((camera, i) -> {
+			if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
+				drawComplex(camera);
+				#if FLX_DEBUG FlxBasic.visibleCount++; #end
+			}
+		});
 
 		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
 	}

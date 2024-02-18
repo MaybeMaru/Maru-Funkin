@@ -32,6 +32,14 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		return _cameras = Value;
 	}
 
+	public inline function quickSplice(object:T) {
+		var index:Int = members.indexOf(object);
+		if (index != -1) {
+			members.splice(index, 1);
+			length--;
+		}
+	}
+
     override inline function getFirstNull():Int {
         return members.indexOf(null);
     }
@@ -50,7 +58,8 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 			FlxCamera._defaultCameras = cameras;
 
 		members.fastForEach((basic, i) -> {
-			if (basic != null && basic.exists && basic.visible)
+			final basic:FlxBasic = basic;
+			if (basic != null) if (basic.exists) if (basic.visible)
 				basic.draw();
 		});
 
@@ -60,15 +69,26 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 	override public function update(elapsed:Float):Void
 	{
 		members.fastForEach((basic, i) -> {
-			if (basic != null && basic.exists && basic.active)
+			final basic:FlxBasic = basic;
+			if (basic != null) if (basic.exists) if (basic.active)
 				basic.update(elapsed);
 		});
 	}
 }
 typedef SpriteGroup = TypedSpriteGroup<FlxSprite>;
-typedef DynamicSpriteGroup = TypedSpriteGroup<Dynamic>;
 
-class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
+class TypedSpriteGroup<T:FlxSprite> extends FlxTypedSpriteGroup<T>
+{
+	public function new(x:Float = 0, y:Float = 0, maxSize:Int = 0) {
+		super(x, y, maxSize);
+		group.destroy();
+
+		group = new TypedGroup<T>(maxSize);
+		_sprites = cast group.members;
+	}
+}
+
+/*class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
 	public var group:TypedGroup<T>; // Group containing everything
 	override inline function get_camera():FlxCamera return group.camera;
     override inline function set_camera(Value:FlxCamera):FlxCamera return group.camera = Value;
@@ -177,7 +197,7 @@ class TypedSpriteGroup<T:FlxSprite> extends FlxObject {
 			FlxCamera._defaultCameras = oldDefaultCameras;
 		}
 	}
-}
+}*/
 
 /*
 class BaseTypedSpriteGroup<T:FlxSprite> extends TypedGroup<T>
