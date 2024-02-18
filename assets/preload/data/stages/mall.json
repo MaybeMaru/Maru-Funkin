@@ -5,5 +5,106 @@
 	"dadOffsets": [250,0],
 	"bfOffsets": [-300,0],
 	"startCamOffsets": [-200, 0],
-	"bfCamOffsets": [200,75]
+	"bfCamOffsets": [200,75],
+
+	"layers": {
+		"bg": [
+			{
+				"tag": "bg",
+				"imagePath": "bgWalls",
+				"position": [-750, -450],
+				"scrolls": [0.2,0.2],
+				"scale": 0.8
+			},
+			{
+				"tag": "bgSnow",
+				"imagePath": "snow loop",
+				"position": [-550, -400],
+				"scrolls": [0.1,0.15],
+				"scale": 0.8,
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "snow loop",
+						"loop": true
+					}
+				]
+			},
+			{
+				"tag": "roof",
+				"imagePath": "snow roof",
+				"position": [-375, -450],
+				"scrolls": [0.2,0.2],
+				"scale": 0.8
+			},
+			{
+				"tag": "upperCrowd",
+				"imagePath": "upper crowd",
+				"position": [-450, -90],
+				"scrolls": [0.33,0.33],
+				"scale": 0.85,
+				"anims": [
+					{
+						"animName": "idle",
+						"animFile": "Upper Crowd Bob"
+					}
+				]
+			},
+			{
+				"tag": "stairs",
+				"imagePath": "bgEscalator",
+				"position": [-1150, -575],
+				"scrolls": [0.3, 0.3],
+				"scale": 0.9
+			},
+			{
+				"tag": "floor",
+				"position": [-200, 590],
+				"scrolls": [0, 0.3]
+			},
+			{
+				"tag": "tree",
+				"imagePath": "christmasTree",
+				"position": [370, -300],
+				"scrolls": [0.4, 0.4]
+			},
+			{
+				"tag": "bottomCrowd",
+				"imagePath": "bottom bop",
+				"position": [-250,140],
+				"scrolls": [0.8,0.9],
+				"scale": 0.95,
+				"anims": [
+					{
+						"animName": "idle",
+						"animFile": "Bottom Level Boppers"
+					}
+				]
+			},
+			{
+				"tag": "snow",
+				"imagePath": "bgSnow",
+				"position": [-800,640]
+			}
+		],
+		"fg": [
+			{
+				"tag": "fgSnow",
+				"imagePath": "fgSnow",
+				"position": [-500, 760]
+			},
+			{
+				"tag": "santa",
+				"imagePath": "santa",
+				"position": [-750,175],
+				"anims": [
+					{
+						"animName": "idle",
+						"animFile": "santa idle in fear"
+					}
+				]
+
+			}
+		]
+	}
 }

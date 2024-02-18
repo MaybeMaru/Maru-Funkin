@@ -219,8 +219,17 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         sprite.flipY = input.flipY;
         sprite.alpha = input.alpha;
 
-        if (sprite.animOffsets.exists("loop"))
-            sprite.playAnim("loop");
+        if (sprite.animated)
+        {
+            if (sprite.animOffsets.exists("loop"))
+                sprite.playAnim("loop");
+            else
+            {
+                final firstAnim = input.anims[0];
+                if (firstAnim != null)
+                    sprite.playAnim(firstAnim.animName, true);
+            }
+        }
 
         if (input.blend != "normal")
             sprite.blend = ScriptUtil.stringToBlend(input.blend);

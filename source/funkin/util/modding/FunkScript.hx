@@ -12,20 +12,20 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var scriptID:String = '';
 
-	public function callback(method:String, ?args:Array<Dynamic>):Dynamic {
-		if (!exists(method)) return CONTINUE_FUNCTION;
-		return tryCall(method, args);
-	}
+	public inline function callback(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
+		var value:HscriptFunctionCallback = CONTINUE_FUNCTION;
 
-	public function tryCall(method:String, ?args:Array<Dynamic>) {
-		var value = null;
 		try {
-			value = call(method, args);
-		} catch(e) {
-			errorPrint(e);
-			return CONTINUE_FUNCTION;
+			final ret = call(method, args);
+			if (ret != null)
+				value = ret;
 		}
-		return value ?? CONTINUE_FUNCTION;
+		catch(e) {
+			errorPrint(e);
+			value = CONTINUE_FUNCTION;
+		}
+
+		return value;
 	}
 
 	public function new(hscriptCode:String, scriptID:String):Void {
