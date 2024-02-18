@@ -87,22 +87,42 @@ class FunkCamera extends FlxCamera {
         if (updateFX) {
             updateFlash(elapsed);
             updateFade(elapsed);
-            updateShake(elapsed);
         }
 
         flashSprite.filters = filtersEnabled ? filters : null;
         updateFlashSpritePosition();
+        updateShake(elapsed);
     }
 
-    override function drawFX():Void {} // Wont be using this anymore
+    private var _shakeX:Float = 0.0;
+    private var _shakeY:Float = 0.0;
+
+    override inline function updateShake(elapsed:Float):Void
+    {
+        if (_fxShakeDuration > 0)
+        {
+            _fxShakeDuration -= elapsed;
+            if (_fxShakeDuration <= 0)
+            {
+                if (_fxShakeComplete != null)
+                    _fxShakeComplete();
+            }
+            else
+            {
+                _shakeX = _fxShakeAxes.x ? FlxG.random.float(-1, 1) * _fxShakeIntensity * width : 0;
+                _shakeY = _fxShakeAxes.y ? FlxG.random.float(-1, 1) * _fxShakeIntensity * height : 0;
+            }
+        }
+    }
+
+    override inline function drawFX():Void {} // Wont be using this anymore
 
     override function updateFlash(elapsed:Float):Void {
         if (_fxFlashAlpha > 0.0) {
 			_fxFlashAlpha -= elapsed / _fxFlashDuration;
             __flashShape.setAlpha(_fxFlashAlpha);
-			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null)) {
+			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null))
 				_fxFlashComplete();
-			}
 		}
     }
 
@@ -201,6 +221,11 @@ class FunkCamera extends FlxCamera {
     }
     
     override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void {        
+        if (_fxShakeDuration > 0) {
+            matrix.tx += _shakeX;
+            matrix.ty += _shakeY;
+        }
+        
         if (pixelPerfect) {
             matrix.tx = Std.int(matrix.tx / pixelMult) * pixelMult;
             matrix.ty = Std.int(matrix.ty / pixelMult) * pixelMult;
@@ -234,10 +259,20 @@ class AngledCamera extends FunkCamera {
     }
 
     override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader) {
+        if (_fxShakeDuration > 0) {
+            matrix.tx += _shakeX;
+            matrix.ty += _shakeY;
+        }
+        
         if (angle != 0) {
-            inline matrix.translate(-width * .5, -height * .5);
+            final midX = width * .5;
+            final midY = height * .5;
+            
+            matrix.tx -= midX;
+            matrix.ty -= midY;
             matrix.rotateWithTrig(_cos, _sin);
-            inline matrix.translate(width * .5, height * .5);
+            matrix.tx += midX;
+            matrix.ty += midY;
         }
 
         if (pixelPerfect) {

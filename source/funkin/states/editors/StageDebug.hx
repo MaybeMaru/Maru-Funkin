@@ -5,8 +5,6 @@ import funkin.states.editors.stage.LayersBar;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxBackdrop;
 
-typedef LayerGroup = FlxTypedGroup<Dynamic>;
-
 class StageDebug extends MusicBeatState {
     var stageData:StageJson;
     var camFollow:FlxObject;

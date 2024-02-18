@@ -818,7 +818,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	// For backwards compatibility and my own sanity, its ugly i know!! TODO: make this a macro?? maybe??
-	public var notes(get,never):FlxTypedGroup<BasicNote>; inline function get_notes()return notesGroup.notes;
+	public var notes(get,never):TypedGroup<BasicNote>; inline function get_notes()return notesGroup.notes;
 	public var unspawnNotes(get,never):Array<BasicNote>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
 	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
 	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;

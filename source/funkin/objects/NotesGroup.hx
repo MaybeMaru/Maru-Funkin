@@ -57,7 +57,7 @@ class NotesGroup extends Group
 		grpNoteSplashes.spawnSplash(note);
 	}
 
-	function hitNote(note:Note, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	inline function hitNote(note:Note, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		note.wasGoodHit = true;
 		if (note.child != null) note.child.startedPress = true;
 
@@ -315,7 +315,7 @@ class NotesGroup extends Group
 			});
 			
 			if (value < scrollSpeed)
-				inline spawnNotes();
+				spawnNotes();
 		}
 		return scrollSpeed = value;
 	}
@@ -330,7 +330,7 @@ class NotesGroup extends Group
     public var opponentSustainPress:FlxTypedSignal<(Sustain)->Void>;
 
     //Makes the conductor song go vroom vroom
-    function updateConductor(elapsed:Float = 0) {
+    inline function updateConductor(elapsed:Float = 0) {
 		if (Conductor.inst.playing) {
 			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length && isPlayState) { // Prevent repeating vocals
 				Conductor.vocals.volume = 0;
@@ -338,10 +338,12 @@ class NotesGroup extends Group
 		}
 
 		if (isPlayState) {
-			if ((game.startingSong || Conductor.playing || Conductor.songPosition < game.songLength) && !game.inCutscene) {
+			final starting = game.startingSong;
+			if ((Conductor.playing || starting || Conductor.songPosition < game.songLength) && !game.inCutscene) {
 				Conductor.songPosition += elapsed * 1000;
-				if (game.startedCountdown && game.startingSong) {
-					if (Conductor.songPosition >= 0) game.startSong();
+				if (game.startedCountdown && starting) {
+					if (Conductor.songPosition >= 0)
+						game.startSong();
 				}
 				else if (!game.paused && !Conductor.inst.playing) Conductor.play();
 			}
@@ -357,7 +359,7 @@ class NotesGroup extends Group
 
 	public var curSpawnNote(default, null):BasicNote = null;
 
-	function spawnNotes() { // Generate notes
+	inline function spawnNotes() { // Generate notes
 		if (curSpawnNote != null) {
 			while (unspawnNotes.length > 0 && curSpawnNote.strumTime - Conductor.songPosition < 1500 / curSpawnNote.noteSpeed / camera.zoom * curSpawnNote.spawnMult) {
 				final spawnNote:BasicNote = curSpawnNote;
@@ -375,7 +377,7 @@ class NotesGroup extends Group
 
 	public var curCheckEvent(default, null):Event = null;
 
-	function checkEvents() {
+	inline function checkEvents() {
 		if (curCheckEvent != null) {
 			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
 				final runEvent:Event = curCheckEvent;
@@ -423,11 +425,11 @@ class NotesGroup extends Group
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        inline updateConductor(elapsed);
+        updateConductor(elapsed);
 
 		if (!generatedMusic) return; // Stuff that needs notes / events
-		inline spawnNotes();
-		inline checkEvents();
+		spawnNotes();
+		checkEvents();
 
 		notes.members.fastForEach((note, i) -> {
 			checkCpuNote(note);
@@ -438,7 +440,7 @@ class NotesGroup extends Group
             if (game.inCutscene) return; // No controls in cutscenes >:(
         }
         controls();
-		inline checkStrumAnims();
+		checkStrumAnims();
     }
 
 	public var controlArray:Array<Bool> = [];
@@ -548,7 +550,7 @@ class NotesGroup extends Group
 		});
 	}
 
-	function checkStrumAnims():Void {
+	inline function checkStrumAnims():Void {
 		if (!inBotplay) checkStrums(playerStrums.members);
 		if (!dadBotplay) checkStrums(opponentStrums.members);
 
@@ -594,6 +596,15 @@ class NotesGroup extends Group
 	override function destroy() {
 		super.destroy();
 		curSpawnNote = null;
+		curCheckEvent = null;
+		controlArray = null;
 		unspawnNotes = FlxDestroyUtil.destroyArray(unspawnNotes);
+
+		goodNoteHit = cast FlxDestroyUtil.destroy(goodNoteHit);
+		goodSustainPress = cast FlxDestroyUtil.destroy(goodSustainPress);
+		noteMiss = cast FlxDestroyUtil.destroy(noteMiss);
+		badNoteHit = cast FlxDestroyUtil.destroy(badNoteHit);
+		opponentNoteHit = cast FlxDestroyUtil.destroy(opponentNoteHit);
+		opponentSustainPress = cast FlxDestroyUtil.destroy(opponentSustainPress);
 	}
 }

@@ -23,7 +23,7 @@ typedef DialogueJson = {
 	var ?gf:String;
 }
 
-class DialogueBoxBase extends FlxTypedGroup<Dynamic> {
+class DialogueBoxBase extends Group {
 	public var skipIntro:Bool = false;
 	public var dialogueChars:Array<String> = ['senpai-pixel', 'bf-pixel', 'gf-pixel'];
 	public var jsonParsed:DialogueJson;

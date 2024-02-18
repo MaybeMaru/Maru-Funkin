@@ -55,7 +55,7 @@ class RatingGroup extends FlxTypedSpriteGroup<RemoveRating> {
         drawCombo(combo);
     }
 
-    function addTop(spr:Dynamic) {
+    function addTop(spr:RemoveRating) {
         add(spr);
         remove(spr, true);
         insert(members.length, spr);
@@ -63,7 +63,7 @@ class RatingGroup extends FlxTypedSpriteGroup<RemoveRating> {
 }
 
 class JudgeRating extends RemoveRating {
-    public static var judgeRatings:Array<String> =  ['shit', 'bad', 'good', 'sick'];
+    public static var judgeRatings:Array<String> = ['shit', 'bad', 'good', 'sick'];
     var animated:Bool = true;
     public function new() {
         super();
@@ -125,11 +125,11 @@ class NumRating extends RemoveRating {
         initScale = scale.x;
     }
 
-    public function init(num:Dynamic, id:Int = 0) {
+    public function init(num:String, id:Int = 0) {
         setPosition(0, 100);
-        animation.play(Std.string(num), true);
+        animation.play(num, true);
         updateHitbox();
-        start(Conductor.crochet * 0.001 * 2, Conductor.stepCrochet * 0.025);
+        start(Conductor.crochetMills * 2, Conductor.stepCrochet * 0.025);
         jump(0.8);
         offset.x = width * lodScale * id;
     }
