@@ -10,6 +10,7 @@ enum abstract HscriptFunctionCallback(Int) from Int to Int {
 
 class FunkScript extends hscript.Script implements IFlxDestroyable {
 	public static var globalVariables:Map<String, Dynamic> = [];
+	public var active:Bool = true;
 	public var scriptID:String = '';
 
 	public inline function callback(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {

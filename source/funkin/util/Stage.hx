@@ -197,6 +197,13 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return this;
     }
 
+    override function set_active(value:Bool):Bool {
+        if (script != null)
+            script.active = value;
+
+        return super.set_active(value);
+    }
+
     public function applyData(bf:Character, dad:Character, gf:Character)
     {
         bf.stageOffsets.set(data.bfOffsets[0], data.bfOffsets[1]);

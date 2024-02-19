@@ -204,8 +204,12 @@ class ModdingUtil {
     inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
         var calledStop:Bool = false;
         scripts.fastForEach((script, i) -> {
-            if (script != null && script.callback(name, args) == STOP_FUNCTION)
-                calledStop = true;
+            if (script != null) {
+                if (script.active) {
+                    if (script.callback(name, args) == STOP_FUNCTION)
+                        calledStop = true;
+                }
+            }
         });
         return calledStop;
     }

@@ -1,0 +1,6 @@
+{
+    "description": "Changes the stage to a new one\n\nValue 1: New stage name",
+    "values": [
+        "stage"
+    ]
+}
