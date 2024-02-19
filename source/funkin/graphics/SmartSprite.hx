@@ -23,14 +23,7 @@ class SmartSprite extends FlxSkewRepeatSprite {
         switch (renderMode) {
             case REPEAT: super.draw();
             case QUAD:
-                inline checkEmptyFrame();
-                if (alpha == 0 || _frame.type == EMPTY) return;
-                if (dirty)  calcFrame(useFramePixels); // rarely
-         
-                for (camera in cameras) {
-                    if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
-                    drawComplex(camera);
-                }
+                __superDraw();
         }
     }
 

@@ -5,5 +5,81 @@
 	"dadOffsets": [-125,0],
 	"dadCamOffsets": [0,-50],
 	"bfOffsets": [-50,0],
-	"startCamOffsets": [-650,-475]
+	"startCamOffsets": [-650,-475],
+
+	"layersOrder": ["bg", "freaks", "gf", "dad", "bf", "fg"],
+	"layers": {
+		"bg": [
+			{
+				"tag": "sky",
+				"imagePath": "school/sky",
+				"position": [-200, 0],
+				"scrolls": [0.1, 0.1],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "road",
+				"imagePath": "school/road",
+				"position": [-200, 0],
+				"scrolls": [0.95, 0.95],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "school",
+				"imagePath": "school/school",
+				"position": [-200, 0],
+				"scrolls": [0.6, 0.9],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "bgTrees",
+				"imagePath": "school/bgtrees",
+				"position": [-200, 0],
+				"scrolls": [0.85, 0.85],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "petals",
+				"imagePath": "school/petals",
+				"position": [600, 400],
+				"scrolls": [0.85, 0.85],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false,
+				"anims": [
+					{
+						"animName": "loop",
+						"animFile": "petals",
+						"loop": true
+					}
+				]
+			},
+			{
+				"tag": "trunks",
+				"imagePath": "school/trunks",
+				"position": [-200, 0],
+				"scrolls": [0.875, 0.875],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "trees",
+				"imagePath": "school/trees",
+				"position": [-200, 0],
+				"scrolls": [0.9, 0.9],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			}
+		]
+	}
 }

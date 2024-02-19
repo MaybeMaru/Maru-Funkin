@@ -2,8 +2,31 @@
 	"skin": "pixel",
 	"library": "week6",
 	"gfOffsets": [50,0],
-	"dadOffsets": [0,0],
+	"dadOffsets": [-100,0],
 	"bfOffsets": [0,0],
 	"bfCamOffsets": [0,-50],
-	"startCamOffsets": [-250,-500]
+	"startCamOffsets": [-250,-500],
+
+	"layers": {
+		"bg": [
+			{
+				"tag": "bg",
+				"imagePath": "weeb/evilSchoolBG",
+				"position": [-300, 0],
+				"scrolls": [0.8, 0.9],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			},
+			{
+				"tag": "fg",
+				"imagePath": "weeb/evilSchoolFG",
+				"position": [-300, 0],
+				"scrolls": [0.9, 0.95],
+				"scale": 6,
+				"antialiasing": false,
+				"allowLod": false
+			}
+		]
+	}
 }

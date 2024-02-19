@@ -1,12 +1,4 @@
-function create() {
-    var bg:FunkinSprite = new FunkinSprite('weeb/evilSchoolBG', [450,350], [0.8,0.9]);
-    bg.setScale(6, false);
-    addSpr(bg);
-
-    var fg:FunkinSprite = new FunkinSprite('weeb/evilSchoolFG', [450,350], [0.9, 0.95]);
-    fg.setScale(6, false);
-    addSpr(fg);
-
+function createPost() {
     initShader('thornsBg', 'bgThorns');
     initShader('thornsBg', 'fgThorns');
 
