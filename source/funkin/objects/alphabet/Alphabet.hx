@@ -6,7 +6,7 @@ enum abstract AlphabetAlign(String) {
     var RIGHT = 'right';
 }
 
-class Alphabet extends FlxTypedSpriteGroup<AlphabetCharacter> {
+class Alphabet extends TypedSpriteGroup<AlphabetCharacter> {
     public static var spaceWidth:Float = 50;
     public static var spaceHeight:Float = 70;
 

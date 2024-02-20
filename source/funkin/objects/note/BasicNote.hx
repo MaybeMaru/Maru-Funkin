@@ -79,14 +79,11 @@ class BasicNote extends SmartSprite implements INoteData {
     public var susLength:Float = 0.0;
 
     public function removeNote():Void {
-        alive = exists = visible = false;
-        FlxG.signals.preUpdate.addOnce(function () {
-            final instance = NotesGroup.instance;
-            if (instance != null)
-                instance.notes.quickSplice(this);
+        final instance = NotesGroup.instance;
+        if (instance != null)
+            instance.notes.setNull(this);
 
-            this.destroy();
-        });
+        destroy();
     }
 
     public var activeNote:Bool = true;

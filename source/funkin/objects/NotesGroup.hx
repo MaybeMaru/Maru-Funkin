@@ -440,8 +440,10 @@ class NotesGroup extends Group
 		checkEvents();
 
 		notes.members.fastForEach((note, i) -> {
-			checkCpuNote(note);
-			checkMissNote(note);
+			if (note != null) {
+				checkCpuNote(note);
+				checkMissNote(note);
+			}
 		});
 
         if (isPlayState) {

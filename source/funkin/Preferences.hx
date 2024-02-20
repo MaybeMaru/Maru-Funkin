@@ -1,5 +1,7 @@
 package funkin;
 
+//import funkin.input.GlobalKey;
+
 typedef ArrayPref = {array:Array<String>, value:String};
 
 class Preferences {
@@ -108,6 +110,7 @@ class Preferences {
         updateFpsCounter();
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
         AssetManager.setLodQuality(getPref('quality'));
+        //GlobalKey.system = US;
         updateGpuTextures();
     }
 

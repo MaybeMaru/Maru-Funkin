@@ -32,11 +32,10 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		return _cameras = Value;
 	}
 
-	public inline function quickSplice(object:T) {
+	public inline function setNull(object:T) {
 		var index:Int = members.indexOf(object);
 		if (index != -1) {
-			members.splice(index, 1);
-			length--;
+			members[index] = null;
 		}
 	}
 
@@ -46,7 +45,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 
 	override function forEachAlive(func:T -> Void, recurse:Bool = false) {
 		members.fastForEach((basic, i) -> {
-			if (basic != null && basic.exists && basic.alive)
+			if (basic != null) if (basic.exists) if (basic.alive)
 				func(basic);
 		});
 	}

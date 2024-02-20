@@ -61,7 +61,7 @@ class Sustain extends BasicNote {
     public var susEndHeight:Int = 15;
 
     public function pressSustain():Void {
-        if (Conductor.songPosition >= strumTime) {
+        if (Conductor.songPosition >= strumTime) if (clipRect != null) {
             pressed = true;
             moving = false;
             setPositionToStrum();

@@ -7,10 +7,14 @@ function eventHit(event) {
     }
 }
 
-function changeStage(stageName) {
+function changeStage(stageName)
+{
     var stage = cachedStages.get(stageName);
-    if (stage == null)
-        ModdingUtil.errorPrint("Couldn't switch to stage " + stageName);  
+    
+    if (stage == null) {
+        ModdingUtil.errorPrint("Couldn't change to stage " + stageName);  
+        return;
+    }
     
     State.stage.visible = false;
     State.stage.active = false;
