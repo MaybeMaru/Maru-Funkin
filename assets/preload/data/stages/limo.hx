@@ -6,6 +6,7 @@ var limbs = [];
 var bloods = [];
 
 var dancers = [];
+var sound;
 
 function createPost()
 {
@@ -132,6 +133,7 @@ function createPost()
 		}
 	}
 
+	sound = Paths.sound("gore");
 	light.offset.set(185, 0);
 	resetCar();
 }
@@ -197,7 +199,7 @@ function updatePost()
 	if (pole.x > 0)
 	{		
 		if (!didGore) {
-			FlxG.sound.play(Paths.sound("gore"));
+			FlxG.sound.play(sound);
 			didGore = true;
 		}
 

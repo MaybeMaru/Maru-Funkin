@@ -3,11 +3,15 @@ import funkin.util.Stage;
 
 function eventHit(event) {
     if (event.name == "changeStage") {
-        changeStage(cachedStages.get(event.values[0]));
+        changeStage(event.values[0]);
     }
 }
 
-function changeStage(stage) {
+function changeStage(stageName) {
+    var stage = cachedStages.get(stageName);
+    if (stage == null)
+        ModdingUtil.errorPrint("Couldn't switch to stage " + stageName);  
+    
     State.stage.visible = false;
     State.stage.active = false;
 
@@ -18,9 +22,9 @@ function changeStage(stage) {
     stage.active = true;
     
     stage.applyData(State.boyfriend, State.dad, State.gf);
-    State.boyfriend.setXY(770, 450);
-    State.dad.setXY(100, 450);
-    //State.gf.setXY(400, 360);
+    repositionChar(State.boyfriend, 770, 450);
+    repositionChar(State.dad, 100, 450);
+    repositionChar(State.gf, 400, 360);
 
     if (stage.script != null)
         stage.script.callback("changeStage");
@@ -28,6 +32,24 @@ function changeStage(stage) {
     State.defaultCamZoom = stage.data.zoom;
     
     State.stage = stage;
+}
+
+// Reposition correctly the group elements
+function repositionChar(char, x, y)
+{
+    var ogX = char.x;
+    var ogY = char.y;
+
+    char.setXY(x, y);
+
+    var diffX = char.x - ogX;
+    var diffY = char.y - ogY;
+
+    char.group.x += diffX;
+    char.group.y += diffY;
+
+    char.x -= diffX;
+    char.y -= diffY;
 }
 
 var cachedStages = [
