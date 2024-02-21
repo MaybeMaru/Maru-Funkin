@@ -74,6 +74,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		});
 	}
 }
+
 typedef SpriteGroup = TypedSpriteGroup<FlxSprite>;
 
 class TypedSpriteGroup<T:FlxSprite> extends FlxTypedSpriteGroup<T>

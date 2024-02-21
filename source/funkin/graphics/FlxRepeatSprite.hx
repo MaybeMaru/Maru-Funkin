@@ -63,20 +63,10 @@ class FlxRepeatSprite extends FlxSpriteExt
     }
 
     override function draw() {
-        if (tilesX == 0 || tilesY == 0) {
+        if (tilesX == 0 || tilesY == 0)
             return;
-        }
         
-        inline checkEmptyFrame();
-		if (alpha == 0 || !visible || (clipRect?.isEmpty)) return;
-		if (dirty) calcFrame(useFramePixels);
-
-		for (i in 0...cameras.length) {
-            var camera = cameras[i];
-			if (!camera.visible || !camera.exists || !isOnScreen(camera)) continue;
-			drawComplex(camera);
-            #if FLX_DEBUG FlxBasic.visibleCount++; #end
-		}
+        __superDraw();
     }
 
     override function getScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
@@ -247,10 +237,9 @@ class FlxRepeatSprite extends FlxSpriteExt
         translateWithTrig(clipRect.x, clipRect.y);
         tilePos.add(clipRect.x, clipRect.y);
 
-        var frame = tileFrame.frame;
-        var baseFrame = baseFrame.frame;
-
-        var scaleX = scaleX();
+        final frame = tileFrame.frame;
+        final baseFrame = baseFrame.frame;
+        final scaleX = scaleX();
 
         // Cut if clipping left
         if (tilePos.x < 0) {

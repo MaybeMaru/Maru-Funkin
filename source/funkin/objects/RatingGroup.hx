@@ -1,6 +1,6 @@
 package funkin.objects;
 
-class RatingGroup extends FlxTypedSpriteGroup<RemoveRating> {
+class RatingGroup extends TypedSpriteGroup<RemoveRating> {
     public var targetSpr:FlxObject = null;
     public var _offset:FlxPoint;
 

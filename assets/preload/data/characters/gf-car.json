@@ -1,8 +1,11 @@
 {
+	"allowLod": true,
 	"imagePath": "week4/gfCar",
-	"isGF": false,
-	"icon": "gf",
 	"camOffsets": [0,0],
+	"icon": "gf",
+	"isGF": false,
+	"scale": 1,
+	"charOffsets": [0,230],
 	"anims": [
 		{
 			"offsets": [0,0],
@@ -37,27 +40,25 @@
 			"animName": "danceLeft"
 		},
 		{
-			"offsets": [5,-66],
-			"indices": [],
-			"loop": false,
-			"framerate": 24,
-			"animFile": "GF Duck Hair Blowing",
-			"animName": "dodge"
-		},
-		{
 			"offsets": [0,0],
 			"indices": [11,12,13,14],
 			"loop": true,
 			"framerate": 24,
 			"animFile": "GF Dancing Beat Hair blowing CAR",
 			"animName": "danceLeft-loop"
+		},
+		{
+			"offsets": [5,-59],
+			"indices": [],
+			"loop": false,
+			"framerate": 24,
+			"animFile": "GF Duck Hair Blowing",
+			"animName": "dodge"
 		}
 	],
-	"charOffsets": [0,230],
-	"scale": 1,
-	"isPlayer": false,
 	"flipX": false,
-	"gameOverChar": "bf-dead",
+	"isPlayer": false,
 	"antialiasing": true,
+	"gameOverChar": "bf-dead",
 	"gameOverSuffix": ""
 }
