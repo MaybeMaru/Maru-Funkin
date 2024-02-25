@@ -61,7 +61,7 @@ class FunkBar extends FlxSpriteExt {
 
     override function draw() {
         inline checkEmptyFrame();
-		if (alpha == 0 || !visible || #if web _frame == null #elseif desktop _frame.type == EMPTY #end) return;
+		if (alpha == 0 || !visible || _frame.type == EMPTY) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
 		for (i in 0...cameras.length) {
@@ -78,7 +78,7 @@ class FunkBar extends FlxSpriteExt {
     }
 
     override function drawComplex(camera:FlxCamera) {
-		prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
+		prepareFrameMatrix(_frame, _matrix);
 		
 		inline _matrix.translate(-origin.x, -origin.y);
 		inline _matrix.scale(scale.x, scale.y);

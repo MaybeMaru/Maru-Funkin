@@ -97,6 +97,8 @@
 	<haxedev set='webgl' />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
+	<haxelib name="haxeui-core" />
+	<haxelib name="haxeui-openfl" />
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="maru-hscript" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>

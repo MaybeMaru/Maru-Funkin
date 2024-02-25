@@ -66,7 +66,19 @@ class FlxRepeatSprite extends FlxSpriteExt
         if (tilesX == 0 || tilesY == 0)
             return;
         
-        __superDraw();
+        inline checkEmptyFrame();
+        if (alpha == 0 || !visible || (clipRect?.isEmpty))
+            return;
+
+        if (dirty)
+            calcFrame(useFramePixels);  // rarely
+
+        cameras.fastForEach((camera, i) -> {
+            if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
+                drawComplex(camera);
+                #if FLX_DEBUG FlxBasic.visibleCount++; #end
+            }
+        });
     }
 
     override function getScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
@@ -86,7 +98,7 @@ class FlxRepeatSprite extends FlxSpriteExt
     static final __lastMatrix = FlxPoint.get(); // Nasty hack
 
     override function drawComplex(camera:FlxCamera) {
-        prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
+        prepareFrameMatrix(_frame, _matrix);
 		
 		inline _matrix.translate(-origin.x, -origin.y);
 		inline _matrix.scale(scale.x, scale.y);

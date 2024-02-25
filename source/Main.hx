@@ -7,6 +7,7 @@ import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import haxe.ui.Toolkit;
 
 class InitState extends FlxState {
     override function create() {
@@ -112,6 +113,10 @@ class Main extends Sprite
 		#if (mac || web || android) throw("no."); #end
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
+
+		// Init haxeui
+		Toolkit.theme = "dark";
+		Toolkit.init();
 
 		setupGame();
 	}

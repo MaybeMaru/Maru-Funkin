@@ -271,7 +271,15 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix, flipX:Bool, flipY:Bool):Void {
+	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix):Void {
+		var flipX = (flipX != _frame.flipX);
+		var flipY = (flipY != _frame.flipY);
+		if (animation.curAnim != null)
+		{
+			flipX != animation.curAnim.flipX;
+			flipY != animation.curAnim.flipY;
+		}
+		
 		@:privateAccess {
 			mat.a = frame.tileMatrix[0];
 			mat.b = frame.tileMatrix[1];
@@ -303,7 +311,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	@:noCompletion
 	private inline function __superDrawComplex(camera:FlxCamera):Void {
-		prepareFrameMatrix(_frame, _matrix, checkFlipX(), checkFlipY());
+		prepareFrameMatrix(_frame, _matrix);
 		
 		inline _matrix.translate(-origin.x, -origin.y);
 		inline _matrix.scale(scale.x, scale.y);

@@ -44,6 +44,8 @@ Other installations you'd need are the additional libraries, a fully updated lis
 haxelib install flixel
 haxelib install flixel-addons
 haxelib install flixel-ui
+haxelib git haxeui-openfl https://github.com/haxeui/haxeui-openfl
+haxelib git haxeui-core https://github.com/haxeui/haxeui-core
 haxelib git maru-hscript https://github.com/MaybeMaru/hscript-improved
 haxelib git hxCodec https://github.com/MaybeMaru/hxCodec
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
