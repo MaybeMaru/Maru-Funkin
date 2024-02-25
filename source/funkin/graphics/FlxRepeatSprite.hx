@@ -212,7 +212,7 @@ class FlxRepeatSprite extends FlxSpriteExt
         var mTx = _matrix.tx;
         var mTy = _matrix.ty;
         
-        if (doDraw && (lastMatrix.x != mTx || lastMatrix.y != mTy)) {
+        if (doDraw) if ((lastMatrix.x != mTx || lastMatrix.y != mTy)) {
             lastMatrix.set(mTx, mTy);
             translateWithTrig(-tileOffset.x, -tileOffset.y);
             

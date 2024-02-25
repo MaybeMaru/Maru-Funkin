@@ -51,7 +51,7 @@ class Sustain extends BasicNote {
         super.update(elapsed);
 
         if (targetStrum != null) {
-            if (missedPress && !activeNote)
+            if (missedPress) if (!activeNote)
                 removeNote();
         }
     }

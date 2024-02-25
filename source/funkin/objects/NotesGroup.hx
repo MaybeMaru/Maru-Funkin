@@ -332,30 +332,40 @@ class NotesGroup extends Group
     public var opponentSustainPress:FlxTypedSignal<(Sustain)->Void>;
 
     //Makes the conductor song go vroom vroom
-    inline function updateConductor(elapsed:Float = 0) {
-		if (Conductor.inst.playing) {
-			if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length && isPlayState) { // Prevent repeating vocals
-				Conductor.vocals.volume = 0;
-			}
-		}
+    inline function updateConductor(elapsed:Float)
+	{
+		final inst = Conductor.inst;
 
-		if (isPlayState) {
+		if (isPlayState)
+		{
+			// Prevent repeating vocals
+			if (inst.playing) {
+				final vocals = Conductor.vocals;
+				if (Conductor.songPosition - SONG.offsets[1] >= vocals.length)
+					vocals.volume = 0;
+			}
+
 			final starting = game.startingSong;
-			if ((Conductor.playing || starting || Conductor.songPosition < game.songLength) && !game.inCutscene) {
+			if (!game.inCutscene) if ((Conductor.playing || starting || Conductor.songPosition < game.songLength))
+			{
 				Conductor.songPosition += elapsed * 1000;
-				if (game.startedCountdown && starting) {
+				if (game.startedCountdown) if (starting) {
 					if (Conductor.songPosition >= 0)
 						game.startSong();
 				}
-				else if (!game.paused && !Conductor.inst.playing) Conductor.play();
+				else
+				{
+					if (!game.paused) if (!inst.playing)
+						Conductor.play();
+				}
 			}
 		}
-		else {
-            Conductor.songPosition += elapsed * 1000;
+		else
+		{
+			Conductor.songPosition += elapsed * 1000;
 			if (!Conductor.inst.playing) Conductor.play();
-			if (Conductor.songPosition % Conductor.stepCrochet <= 5) {
+			if (Conductor.songPosition % Conductor.stepCrochet <= 5)
 				Conductor.autoSync();
-			}
 		}
     }
 
@@ -396,12 +406,11 @@ class NotesGroup extends Group
 	}
 
 	inline public function isCpuNote(note:BasicNote) {
-		return (note.mustPress && inBotplay) || (!note.mustPress && dadBotplay);
+		return note.mustPress ? inBotplay : dadBotplay;
 	}
 
 	public inline function checkCpuNote(note:BasicNote) {
-		if (!isCpuNote(note)) return;
-		if (Conductor.songPosition >= note.strumTime && note.mustHit) {
+		if (isCpuNote(note)) if (note.mustHit) if (Conductor.songPosition >= note.strumTime) {
 			if (note.isSustainNote) {
 				final sus:Sustain = note.toSustain();
 				sus.pressSustain();
@@ -418,7 +427,7 @@ class NotesGroup extends Group
 
 	public inline function checkMissNote(note:BasicNote) {
 		if (note.activeNote || note.isSustainNote) return;
-		if (!isCpuNote(note) && note.mustHit)
+		if (!isCpuNote(note)) if (note.mustHit)
 			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
 
 		note.removeNote();
@@ -477,7 +486,7 @@ class NotesGroup extends Group
 					final sus:Sustain = note.toSustain();
 					sus.pressed = false;
 					if (!sus.missedPress) {
-						if ((Conductor.songPosition > sus.strumTime + Conductor.safeZoneOffset * sus.hitMult) && !sus.startedPress) {
+						if ((Conductor.songPosition > sus.strumTime + Conductor.safeZoneOffset * sus.hitMult)) if (!sus.startedPress) {
 							sustainMiss(sus);
 							return;
 						}
@@ -498,14 +507,13 @@ class NotesGroup extends Group
 				else { // Handle normal notes
 					if (controlArray.contains(true)) {
 						final note:Note = note.toNote();
-						if (note.canBeHit && !note.wasGoodHit) {
+						if (note.canBeHit) if (!note.wasGoodHit) {
 							if (ignoreList.contains(note.noteData)) {
 								possibleNotes.fastForEach((possibleNote, i) -> {
-									final possibleNote:Note = possibleNotes[i];
-									if (possibleNote.noteData == note.noteData && Math.abs(note.strumTime - possibleNote.strumTime) < 10) {
+									if (possibleNote.noteData == note.noteData) if (Math.abs(note.strumTime - possibleNote.strumTime) < 10) {
 										removeList.push(note);
 									}
-									else if (possibleNote.noteData == note.noteData && note.strumTime < possibleNote.strumTime) {
+									else if (possibleNote.noteData == note.noteData) if (note.strumTime < possibleNote.strumTime) {
 										possibleNotes.remove(possibleNote);
 										possibleNotes.push(note);
 									}
@@ -530,7 +538,7 @@ class NotesGroup extends Group
 				if (possibleNotes.length > 0) {
 					if (!onGhost) {
 						controlArray.fastForEach((control, i) -> {
-							if (control && !ignoreList.contains(i))
+							if (control) if (!ignoreList.contains(i))
 								badNoteHit.dispatch();
 						});
 					}
@@ -551,7 +559,7 @@ class NotesGroup extends Group
 			final anim = strum.animation.curAnim;
 			if (anim == null) continue; // Lil null check
 			
-			if (strum.getControl(JUST_PRESSED) && !anim.name.startsWith('confirm'))
+			if (strum.getControl(JUST_PRESSED)) if (!anim.name.startsWith('confirm'))
 				strum.playStrumAnim('pressed');
 			
 			if (!strum.getControl())

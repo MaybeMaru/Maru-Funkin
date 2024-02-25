@@ -55,7 +55,7 @@ class PlayState extends MusicBeatState
 	public var health(default, set):Float = 1;
 	function set_health(value:Float) {
 		healthBar.updateBar(value = FlxMath.bound(value, 0, 2));
-		if (value == 0 && validScore)
+		if (value == 0) if (validScore)
 			openGameOverSubstate();
 		return health = value;
 	}
@@ -541,21 +541,17 @@ class PlayState extends MusicBeatState
 			final justPressed = FlxG.keys.justPressed;
 			
 			if (canPause) {
-				if (getKey('PAUSE', JUST_PRESSED) && startedCountdown) {
+				if (startedCountdown) if (getKey('PAUSE', JUST_PRESSED)) {
 					openPauseSubState(true);
 					DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
 				}
 			}
 
-			if (allowIconEasterEgg) {
-				if (justPressed.NINE)
+			if (allowIconEasterEgg) if (justPressed.NINE)
 					changeOldIcon();
-			}
 
-			if (justPressed.ONE) {
-				if (CoolUtil.debugMode)
+			if (justPressed.ONE) if (CoolUtil.debugMode)
 					endSong();
-			}
 
 			if (justPressed.SIX) {
 				clearCacheData = {tempCache: false};
@@ -591,7 +587,7 @@ class PlayState extends MusicBeatState
 		}
 
 		// RESET -> Quick Game Over Screen
-		if (getKey('RESET', JUST_PRESSED) && !inCutscene && canDebug)
+		if (!inCutscene) if (canDebug) if (getKey('RESET', JUST_PRESSED))
 			health = 0;
 
 		ModdingUtil.addCall('updatePost', [elapsed]);
@@ -745,16 +741,18 @@ class PlayState extends MusicBeatState
 		curSectionData = SONG.notes[curSection];
 		cameraMovement();
 
-		if (curSectionData != null && curSectionData.changeBPM && curSectionData.bpm != Conductor.bpm)
-			Conductor.bpm = curSectionData.bpm;
-
-		if (camZooming && getPref('camera-zoom')) {
+		if (camZooming) if (getPref('camera-zoom')) {
 			camGame.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
 
-		if (getPref('ghost-tap-style') == "dad turn" && curSectionData != null)
-			ghostTapEnabled = !curSectionData.mustHitSection;
+		if (curSectionData != null) {
+			if (curSectionData.changeBPM) if (curSectionData.bpm != Conductor.bpm)
+				Conductor.bpm = curSectionData.bpm;
+
+			if (getPref('ghost-tap-style') == "dad turn")
+				ghostTapEnabled = !curSectionData.mustHitSection;
+		}
 
 		ModdingUtil.addCall('sectionHit', [curSection]);
 	}

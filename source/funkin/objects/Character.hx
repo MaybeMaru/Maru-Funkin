@@ -182,15 +182,18 @@ class Character extends FlxSpriteExt {
 					playAnim(loopAnim);
 			}
 
-			if (curName.startsWith('sing') && !specialAnim && !debugMode) {
-				holdTimer += elapsed;
+			if (!debugMode)
+			{
+				if (!specialAnim) if (curName.startsWith('sing')) {
+					holdTimer += elapsed;
 
-				var finishAnim:Bool = botMode ? (holdTimer >= Conductor.crochetMills) :
-				(curName.endsWith('miss') && curAnim.finished && !debugMode);
+					final finishAnim:Bool = botMode ? (holdTimer >= Conductor.crochetMills) :
+					(curName.endsWith('miss') && curAnim.finished);
 
-				if (finishAnim) {
-					restartDance();
-					holdTimer = 0;
+					if (finishAnim) {
+						restartDance();
+						holdTimer = 0;
+					}
 				}
 			}
 		}
@@ -238,9 +241,10 @@ class Character extends FlxSpriteExt {
 		if (hit) {
 			playAnim(singAnim, true);
 			_singHoldTimer = 0;
-		} else {
+		}
+		else {
 			_singHoldTimer += FlxG.elapsed;
-			if (_singHoldTimer >= ((holdFrame / 24) - 0.01) && !specialAnim) {
+			if (_singHoldTimer >= ((holdFrame / 24) - 0.01)) if (!specialAnim) {
 				playAnim(singAnim, true);
 				_singHoldTimer = 0;
 			}
@@ -285,7 +289,7 @@ class Character extends FlxSpriteExt {
 	}
 
 	public function dance() {
-		if (!debugMode && forceDance && !specialAnim)
+		if (!debugMode) if (forceDance) if (!specialAnim)
 			getDanceAnim();
 	}
 
@@ -302,9 +306,8 @@ class Character extends FlxSpriteExt {
 	}
 
 	@:deprecated("danceCheck() is deprecated, use danceInBeat() instead")
-	public inline function danceCheck() { // Backwards compatibility lol
+	public inline function danceCheck() // Backwards compatibility lol
 		danceInBeat();
-	}
 
 	function isDoubleDancer() {
 		for(i in animOffsets.keys()) {
