@@ -1,3 +1,5 @@
+package macros;
+
 import haxe.macro.Expr;
 
 macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {

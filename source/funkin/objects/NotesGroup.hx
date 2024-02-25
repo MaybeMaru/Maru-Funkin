@@ -1,10 +1,8 @@
 package funkin.objects;
 
 import flixel.util.FlxSignal;
-import flixel.util.typeLimit.OneOfTwo;
 import funkin.objects.note.Sustain;
 import funkin.objects.note.BasicNote;
-import flixel.util.FlxArrayUtil;
 import funkin.objects.note.StrumLineGroup;
 
 class NotesGroup extends Group
@@ -27,7 +25,8 @@ class NotesGroup extends Group
     public var skipStrumIntro:Bool = false;
 
 	public var strumLineNotes(get, never):Array<NoteStrum>;
-	public function get_strumLineNotes() return opponentStrums.members.concat(playerStrums.members);
+	inline function get_strumLineNotes() return opponentStrums.members.concat(playerStrums.members);
+	
 	public var playerStrums:StrumLineGroup;
 	public var opponentStrums:StrumLineGroup;
 	public var grpNoteSplashes:SplashGroup;

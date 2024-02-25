@@ -1,13 +1,18 @@
 package funkin.states;
 
-import funkin.util.modding.ScriptUtil;
 import funkin.states.editors.StageDebug;
 import funkin.objects.*;
 import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.FunkCamera.AngledCamera;
 
-class PlayState extends MusicBeatState {
+@:build(macros.GetSetBuilder.build([
+	"notes", "unspawnNotes", "controlArray", "playerStrums", "opponentStrums",
+	"grpNoteSplashes", "curSong", "generatedMusic", "skipStrumIntro", "inBotplay"
+], "notesGroup"))
+@:build(macros.GetSetBuilder.buildGet(["strumLineNotes", "strumLineInitPos", "playerStrumsInitPos", "opponentStrumsInitPos"], "notesGroup"))
+class PlayState extends MusicBeatState
+{	
 	public static var instance:PlayState;
 	public static var clearCache:Bool = true;
 	public static var clearCacheData:Null<CacheClearing> = null;
@@ -825,28 +830,13 @@ class PlayState extends MusicBeatState {
 		});
 	}
 
-	// For backwards compatibility and my own sanity, its ugly i know!! TODO: make this a macro?? maybe??
-	public var notes(get,never):TypedGroup<BasicNote>; inline function get_notes()return notesGroup.notes;
-	public var unspawnNotes(get,never):Array<BasicNote>; inline function get_unspawnNotes()return notesGroup.unspawnNotes;
-	public var controlArray(get,never):Array<Bool>; inline function get_controlArray()return notesGroup.controlArray;
-	public var strumLineNotes(get,never):Array<NoteStrum>; inline function get_strumLineNotes()return notesGroup.strumLineNotes;
-	public var playerStrums(get,never):StrumLineGroup; inline function get_playerStrums()return notesGroup.playerStrums;
-	public var opponentStrums(get,never):StrumLineGroup; inline function get_opponentStrums()return notesGroup.opponentStrums;
-	public var playerStrumNotes(get,never):Array<NoteStrum>; inline function get_playerStrumNotes()return notesGroup.playerStrums.members;
-	public var opponentStrumNotes(get,never):Array<NoteStrum>; inline function get_opponentStrumNotes()return notesGroup.opponentStrums.members;
-	public var strumLineInitPos(get,never):Array<FlxPoint>; inline function get_strumLineInitPos()return notesGroup.strumLineInitPos;
-	public var playerStrumsInitPos(get,never):Array<FlxPoint>; inline function get_playerStrumsInitPos()return notesGroup.playerStrumsInitPos;
-	public var songSpeed(get,never):Float; inline function get_songSpeed()return NotesGroup.songSpeed;
-	public var opponentStrumsInitPos(get,never):Array<FlxPoint>; inline function get_opponentStrumsInitPos()return notesGroup.opponentStrumsInitPos;
-	public var grpNoteSplashes(get,never):FlxTypedGroup<NoteSplash>; inline function get_grpNoteSplashes()return notesGroup.grpNoteSplashes;
-	public var curSong(get,never):String; inline function get_curSong()return notesGroup.curSong;
-	public var generatedMusic(get,never):Bool;	inline function get_generatedMusic()return notesGroup.generatedMusic;
-	public var inst(get, never):FlxSound; inline function get_inst()return Conductor.inst;
-	public var vocals(get, never):FlxSound; inline function get_vocals()return Conductor.vocals;
-	public var objMap(get, never):Map<String, FlxObject>; inline function get_objMap()return stage.objects;
-	
-	public var skipStrumIntro(get,set):Bool; inline function get_skipStrumIntro()return notesGroup.skipStrumIntro;
-	inline function set_skipStrumIntro(value)return notesGroup.skipStrumIntro = value;
-	public var inBotplay(get,set):Bool; inline function get_inBotplay()return notesGroup.inBotplay;
-	inline function set_inBotplay(value)return notesGroup.inBotplay = value;
+	// Some quick shortcuts
+
+	public var playerStrumNotes(get,never):Array<NoteStrum>; inline function get_playerStrumNotes() return notesGroup.playerStrums.members;
+	public var opponentStrumNotes(get,never):Array<NoteStrum>; inline function get_opponentStrumNotes() return notesGroup.opponentStrums.members;
+	public var objMap(get, never):Map<String, FlxObject>; inline function get_objMap() return stage.objects;
+
+	public var songSpeed(get,never):Float; inline function get_songSpeed() return NotesGroup.songSpeed;
+	public var inst(get, never):FlxSound; inline function get_inst() return Conductor.inst;
+	public var vocals(get, never):FlxSound; inline function get_vocals() return Conductor.vocals;
 }
