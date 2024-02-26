@@ -201,7 +201,7 @@ class ModdingUtil {
         Main.console.print(text, type);
     }
 
-    inline public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
+    public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
         var calledStop:Bool = false;
         scripts.fastForEach((script, i) -> {
             if (script != null) {

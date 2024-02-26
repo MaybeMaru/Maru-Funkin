@@ -19,7 +19,10 @@ class Controls
 
     // Returns if the controler is being used
 	inline public static function inGamepad():Bool {
-        return gamepad?.connected ?? false;
+        if (gamepad != null)
+            return gamepad.connected;
+
+        return false;
     }
 
     inline public static function addGamepad(newGamepad:FlxGamepad):Void {
@@ -67,12 +70,16 @@ class Controls
         SaveData.flushData();
     }
 
-    inline public static function getKey(key:String, inputType:InputType = PRESSED):Bool {
-        final gamepad = inGamepad();
-        var keys:Array<Int> = [];
+    static var keys:Array<Int> = [];
+
+    public static function getKey(key:String, inputType:InputType = PRESSED):Bool {
+        final isGamepad = inGamepad();
         key = key.toUpperCase();
 
-        if (gamepad) {
+        if (keys.length != 0)
+            keys.splice(0, keys.length);
+
+        if (isGamepad) {
             controlGamepadBindings.get(key).fastForEach((string, i) -> {
                 keys.push(FlxGamepadInputID.fromStringMap.get(string));
             });
@@ -83,10 +90,6 @@ class Controls
             });
         }
 
-        return checkKey(inputType, keys, gamepad);
-    }
-
-    inline private static function checkKey(inputType:InputType, keys:Array<Int>, isGamepad:Bool):Bool {
         return switch (inputType) {
             case RELEASED: isGamepad ? !gamepad.anyPressed(keys) : !FlxG.keys.anyPressed(keys);
             case PRESSED: isGamepad ? gamepad.anyPressed(keys) : FlxG.keys.anyPressed(keys);
@@ -96,7 +99,7 @@ class Controls
     }
 
     //@:deprecated("Use getKey with the inputType argument instead")
-    inline public static function getKeyOld(key:String):Bool {
+    public static function getKeyOld(key:String):Bool {
         key = key.toUpperCase();
 		var parts:Array<String> = key.split('-');
 

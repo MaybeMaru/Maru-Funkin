@@ -88,7 +88,7 @@
                     <checkbox id="must-hit-section" text="Must Hit Section" />
                     <hbox>
                         <checkbox id="change-bpm" text="Change BPM" verticalAlign="center" />
-                        <number-stepper id="change-bpm-value" pos="100" step="1" min="1" max="999" precision="1" />
+                        <number-stepper id="change-bpm-value" pos="100" step="1" min="10" max="522" precision="1" />
                     </hbox>
                 </vbox></frame>
 
@@ -151,7 +151,7 @@
                     <grid>
                         <vbox>
                             <label text = "Init BPM:"/>
-                            <number-stepper id="bpm-value" pos="100" step="1" min="1" max="999" precision="1" />
+                            <number-stepper id="bpm-value" pos="100" step="1" min="10" max="522" precision="1" />
                         </vbox> <vbox>
                             <label text = "Scroll Speed:"/>
                             <number-stepper id="speed-value" pos="1" step="0.1" min="0.1" max="10" precision="1" />

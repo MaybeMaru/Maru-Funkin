@@ -614,13 +614,15 @@ class PlayState extends MusicBeatState
 	public var camMove:Bool = true;
 	
 	public function cameraMovement():Void {
-		if (!camMove || !notesGroup.generatedMusic || curSectionData == null) return;
-		final mustHit:Bool = curSectionData.mustHitSection;
-		mustHit ? boyfriend.prepareCamPoint(targetCamPos) : dad.prepareCamPoint(targetCamPos);
+		if (camMove) if (notesGroup.generatedMusic) if (curSectionData != null) {
+			var camBf:Bool = curSectionData.mustHitSection;
+			camBf ? boyfriend.prepareCamPoint(targetCamPos, stageData.camBounds) :
+					dad.prepareCamPoint(targetCamPos, stageData.camBounds);
 
-		if (camFollow.x != targetCamPos.x || camFollow.y != targetCamPos.y) {
-			camFollow.setPosition(targetCamPos.x, targetCamPos.y);
-			ModdingUtil.addCall('cameraMovement', [mustHit ? 1 : 0, targetCamPos]);
+			if (camFollow.x != targetCamPos.x || camFollow.y != targetCamPos.y) {
+				camFollow.setPosition(targetCamPos.x, targetCamPos.y);
+				ModdingUtil.addCall('cameraMovement', [camBf ? 1 : 0, targetCamPos]);
+			}
 		}
 	}
 

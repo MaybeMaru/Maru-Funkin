@@ -18,8 +18,10 @@ typedef StageObject = {
 
 typedef StageJson = {
 	var library:String;
-    var zoom:Float;
     var skin:String;
+
+    var zoom:Float;
+    var camBounds:Array<Float>;
 
 	var gfOffsets:Array<Float>;
 	var dadOffsets:Array<Float>;
@@ -55,7 +57,9 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
     public static final DEFAULT_STAGE:StageJson = {
         library: "",
         skin: "default",
+
         zoom: 1.05,
+        camBounds: [-9999, -9999, 9999, 9999],
 
         gfOffsets: [0,0],
         dadOffsets: [0,0],

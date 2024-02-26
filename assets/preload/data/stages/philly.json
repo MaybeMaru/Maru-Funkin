@@ -1,5 +1,6 @@
 {
 	"library": "week3",
+	"camBounds": [600, -9999, 960, 600],
 	"gfOffsets": [-75,0],
 	"dadOffsets": [-50,0],
 	"bfOffsets": [-75,0],

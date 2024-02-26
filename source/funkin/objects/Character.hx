@@ -201,10 +201,16 @@ class Character extends FlxSpriteExt {
 		__superUpdate(elapsed);
 	}
 
-	public function prepareCamPoint(?point:Null<FlxPoint>) {
+	public function prepareCamPoint(?point:Null<FlxPoint>, ?bounds:Array<Float>) {
 		point = getMidpoint(point);
 		point.subtract(camOffsets.x, camOffsets.y);
 		point.subtract(flippedOffsets ? -stageCamOffsets.x : stageCamOffsets.x, stageCamOffsets.y);
+		
+		if (bounds != null) {
+			point.x = FlxMath.bound(point.x, bounds[0], bounds[2]);
+			point.y = FlxMath.bound(point.y, bounds[1], bounds[3]);
+		}
+		
 		return point;
 	}
 
