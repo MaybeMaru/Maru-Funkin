@@ -39,6 +39,32 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		}
 	}
 
+	public function insertTop(object:T) {
+		var index:Int = members.length;
+		while (index > 0) {
+			index--;
+			if (members[index] == null) {
+				members[index] = object;
+				return;
+			}
+		}
+
+		members.push(object);
+	}
+
+	public function insertBelow(object:T) {
+		var index:Int = 0;
+		while (index < members.length) {
+			index++;
+			if (members[index] == null) {
+				members[index] = object;
+				return;
+			}
+		}
+
+		members.insert(0, object);
+	}
+
     override inline function getFirstNull():Int {
         return members.indexOf(null);
     }

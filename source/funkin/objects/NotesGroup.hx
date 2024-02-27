@@ -221,6 +221,10 @@ class NotesGroup extends Group
 		events = [];
 		notes = new TypedGroup<BasicNote>();
 		add(notes);
+
+		// Prevent the need for pushing (in most songs)
+		for (i in 0...15)
+			notes.members.push(null);
 	
 		for (section in SONG.notes) {
 			for (songNotes in section.sectionNotes) {
@@ -313,7 +317,8 @@ class NotesGroup extends Group
 			});
 
 			notes.members.fastForEach((note, i) -> {
-				note.noteSpeed = value;
+				if (note != null)
+					note.noteSpeed = value;
 			});
 			
 			if (value < scrollSpeed)
@@ -384,8 +389,8 @@ class NotesGroup extends Group
 				unspawnNotes.splice(0, 1);
 
 				// Skip sorting
-				if (spawnNote.isSustainNote)	notes.insert(0, spawnNote);
-				else							notes.add(spawnNote);
+				if (spawnNote.isSustainNote)	notes.insertBelow(spawnNote);
+				else				notes.insertTop(spawnNote);
 				
 				curSpawnNote = unspawnNotes[0];
 			}

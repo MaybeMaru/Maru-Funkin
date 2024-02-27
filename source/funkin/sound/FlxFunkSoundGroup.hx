@@ -71,7 +71,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
         sounds.fastForEach((sound, i) -> {
             if (sound != null) {
                 sound.destroy();
-                remove(sound, false);
+                sounds[i] = null;
             }
         });
     }
