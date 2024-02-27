@@ -1,5 +1,6 @@
 package funkin.sound;
 
+import openfl.Lib;
 import openfl.media.SoundMixer;
 import lime.media.AudioSource;
 import openfl.media.SoundTransform;
@@ -19,6 +20,9 @@ class FlxFunkSound extends FlxBasic
     var sound(default, set):Sound;
     var transform:SoundTransform;
     var source:AudioSource;
+
+    public var pausable:Bool = true;
+    var __resume:Bool = false;
 
     public function new() {
         super();
@@ -62,8 +66,9 @@ class FlxFunkSound extends FlxBasic
             play(true);
     }
 
-    public function loadSound(sound:Sound) {
+    public function loadSound(sound:Sound):FlxFunkSound {
         this.sound = sound;
+        return this;
     }
 
     public var playing(default, null):Bool = false;
@@ -167,7 +172,7 @@ class FlxFunkSound extends FlxBasic
         __play();
     }
 
-    var __elapsed:Float = 0;
+    var __lastLibTime:Float = 0;
     var __lastTime:Float = 0;
 
     // Quick interpolate fix until the ninjamuffin lime pr gets merged
@@ -177,11 +182,10 @@ class FlxFunkSound extends FlxBasic
 
         if (time != __lastTime) {
             __lastTime = time;
-            __elapsed = 0;
+            __lastLibTime = Lib.getTimer();
             return time;
         }
 
-        __elapsed += FlxG.elapsed * 1000;
-        return time + __elapsed;
+        return time + Lib.getTimer() - __lastLibTime;
     }
 }

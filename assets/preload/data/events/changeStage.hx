@@ -12,7 +12,7 @@ function changeStage(stageName)
     var stage = cachedStages.get(stageName);
     
     if (stage == null) {
-        ModdingUtil.errorPrint("Couldn't change to stage " + stageName);  
+        ModdingUtil.errorPrint("Stage with name " + stageName + " not found.");  
         return;
     }
     
@@ -34,6 +34,7 @@ function changeStage(stageName)
         stage.script.callback("changeStage");
 
     State.defaultCamZoom = stage.data.zoom;
+    State.stageData = stage.data;
     
     State.stage = stage;
 }
