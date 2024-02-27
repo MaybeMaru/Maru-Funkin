@@ -9,9 +9,9 @@ typedef Group = TypedGroup<FlxBasic>;
 class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 {
     @:noCompletion
-	override inline function get_camera():FlxCamera {
-        @:privateAccess
-		return (_cameras == null || _cameras.length == 0) ? FlxCamera._defaultCameras[0] : _cameras[0];
+	override function get_camera():FlxCamera @:privateAccess {
+		if (_cameras != null) if (_cameras.length != 0) return _cameras[0];
+		return FlxCamera._defaultCameras[0];
 	}
 
 	@:noCompletion

@@ -255,6 +255,8 @@ class NotesGroup extends Group
 						sustain.mustPress = mustPress;
 						sustain.noteType = noteType;
 						unspawnNotes.push(sustain);
+
+						note.child = sustain;
 					}
 				}
 
@@ -431,11 +433,12 @@ class NotesGroup extends Group
 	}
 
 	public inline function checkMissNote(note:BasicNote) {
-		if (note.activeNote || note.isSustainNote) return;
-		if (!isCpuNote(note)) if (note.mustHit)
-			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
-
-		note.removeNote();
+		if (!note.activeNote) if (!note.isSustainNote) {
+			if (!isCpuNote(note)) if (note.mustHit)
+				noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
+	
+			note.removeNote();
+		}
 	}
 
 	public function sustainMiss(note:Sustain) {
