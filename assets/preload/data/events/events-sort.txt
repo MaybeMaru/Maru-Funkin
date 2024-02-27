@@ -1,1 +1,1 @@
-hey,playAnim,changeChar,changeStage,runCode
+hey,playAnim,addZoom,changeChar,changeStage,runCode
