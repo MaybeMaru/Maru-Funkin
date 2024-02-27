@@ -1,7 +1,7 @@
 {
     "description": "Adds to current cam zoom\n\nValue 1: Zoom to add to Game (Default: 0.03)\n\nValue 2: Zoom to add to HUD (Default: 0.015)",
     "values": [
-        "",
-        ""
+        "0.03",
+        "0.015"
     ]
 }
