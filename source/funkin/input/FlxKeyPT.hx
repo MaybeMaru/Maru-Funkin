@@ -2,12 +2,12 @@ package funkin.input;
 
 import flixel.system.macros.FlxMacroUtil;
 
-// American keyboard
-enum abstract FlxKeyUS(Int) from Int to Int {
-	public static var fromStringMap(default, null):Map<String, FlxKeyUS> = FlxMacroUtil.buildMap("funkin.input.FlxKeyUS");
-	public static var toStringMap(default, null):Map<FlxKeyUS, String> = FlxMacroUtil.buildMap("funkin.input.FlxKeyUS", true);
+// Portuguese keyboard
+enum abstract FlxKeyPT(Int) from Int to Int {
+	public static var fromStringMap(default, null):Map<String, FlxKeyPT> = FlxMacroUtil.buildMap("funkin.input.FlxKeyPT");
+	public static var toStringMap(default, null):Map<FlxKeyPT, String> = FlxMacroUtil.buildMap("funkin.input.FlxKeyPT", true);
 	
-	// Key Indicies
+    // Key Indicies
 	var ANY = -2;
 	var NONE = -1;
 	var A = 65;

@@ -1,5 +1,7 @@
 package;
 
+import funkin.input.GlobalKey;
+import haxe.ui.locale.LocaleManager;
 import openfl.display.BitmapData;
 import flixel.system.FlxAssets;
 import lime.app.Application;
@@ -117,6 +119,13 @@ class Main extends Sprite
 		// Init haxeui
 		Toolkit.theme = "dark";
 		Toolkit.init();
+		
+		// TODO: Only spanish and portuguese exist
+		GlobalKey.system = switch (LocaleManager.instance.language) {
+			case "es": ES;
+			case "pt": PT;
+			default: US;
+		}
 
 		setupGame();
 	}

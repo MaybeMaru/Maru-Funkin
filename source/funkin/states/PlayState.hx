@@ -162,6 +162,16 @@ class PlayState extends MusicBeatState
 		// GET THE STAGE JSON SHIT
 		curStage = SONG.stage;
 		stageData = Stage.getJson(curStage);
+		// Stage.cacheStageAssets(stageData); 
+		/*
+			TODO: Make a whole PlayState loading screen, not only the stage
+			
+			Thread 1: Stage assets
+			Thread 2: Characters
+			Thread 3: Inst / Vocals
+
+			What could possibly go wrong?
+		*/
 		
 		defaultCamZoom = stageData.zoom;
 		Paths.currentLevel = stageData.library;

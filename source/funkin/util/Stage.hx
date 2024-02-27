@@ -130,50 +130,53 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return stage;
     }
 
-    /*public static function cacheStageAssets(data:StageJson):Void @:privateAccess {
+    public static function cacheStageAssets(data:StageJson):Void @:privateAccess
+    {
         var assets:Array<String> = [];
-        
+        Paths.currentLevel = data.library;
+
         for (key in data.layersOrder)
         {
             var objects:Array<StageObject> = Reflect.field(data.layers, key);
             if (objects != null)
             {
-                for (object in objects)
-                {
-                    if (!assets.contains(object.imagePath))
-                        assets.push(object.imagePath);
-                }
+                objects.fastForEach((object, i) -> {
+                    var png = Paths.png(object.imagePath);
+                    if (!assets.contains(png)) if (!AssetManager.existsAsset(png))
+                        assets.push(png);
+                });
             }
         }
 
-        Paths.currentLevel = data.library;
+        if (assets.length == 0)
+            return;
+
         var bitmaps:Array<TempBitmap> = [];
-        var totalAssets:Int = assets.length;
+        var totalAssets:Int = assets.length - 1;
         var curAssets:Int = 0;
 
-        var cache = function (assets:Array<String>) {
-            assets.fastForEach((asset, i) -> {
-                var path = Paths.png(asset);
+        final cache = function (start:Int, end:Int) {
+            for (i in start...end) {
+                var path = assets[i];
                 var bitmap = AssetManager.__getFileBitmap(path);
                 bitmaps.push({key: path, bitmap: bitmap});
                 curAssets++;
-            });
+            }
         }
 
-        var div = Std.int(assets.length / 2);
-        var assets1 = assets.copy().splice(0, div);
-        var assets2 = assets.splice(div, assets.length);
-        
-        FunkThread.run(function () cache(assets1));
-        FunkThread.run(function () cache(assets2));
-        
-        while (curAssets < totalAssets) {}
+        var splitIndex:Int = Std.int(assets.length / 2);
+        FunkThread.run(function () cache(0, splitIndex));
+        FunkThread.run(function () cache(splitIndex + 1, assets.length));
+
+        while (curAssets < totalAssets) {
+            Sys.sleep(0.01);
+        }
 
         bitmaps.fastForEach((data, i) -> {
             AssetManager.__cacheFromBitmap(data.key, data.bitmap, false);
         });
-    }*/
-
+    }
+    
     public function loadInput(input:StageJson):Stage
     {
         data = input;

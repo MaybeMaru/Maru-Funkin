@@ -50,7 +50,13 @@ class CoolUtil {
 	public static var rectangle:Rectangle = new Rectangle();
 
 	public inline static function resetMatrix():FlxMatrix {
-		inline matrix.setTo(1, 0, 0, 1, 0, 0);
+		final matrix = matrix;
+		matrix.a = 1;
+		matrix.b = 0;
+		matrix.c = 0;
+		matrix.d = 1;
+		matrix.tx = 0;
+		matrix.ty = 0;
 		return matrix;
 	}
 

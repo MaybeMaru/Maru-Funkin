@@ -6,6 +6,11 @@ import flixel.system.macros.FlxMacroUtil;
 enum abstract FlxKeyES(Int) from Int to Int {
 	public static var fromStringMap(default, null):Map<String, FlxKeyES> = FlxMacroUtil.buildMap("funkin.input.FlxKeyES");
 	public static var toStringMap(default, null):Map<FlxKeyES, String> = FlxMacroUtil.buildMap("funkin.input.FlxKeyES", true);
+
+	var _N = 165; // Ñ
+	var _C = 128; // Ç
+
+	// Gotta rethink this a little
 	
 	// Key Indicies
 	var ANY = -2;
@@ -35,11 +40,7 @@ enum abstract FlxKeyES(Int) from Int to Int {
 	var W = 87;
 	var X = 88;
 	var Y = 89;
-	var Z = 90;
-
-	var _N = 165; // Ñ
-	var _C = 128; // Ç
-	
+	var Z = 90;	
 	var ZERO = 48;
 	var ONE = 49;
 	var TWO = 50;
