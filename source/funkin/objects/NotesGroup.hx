@@ -248,14 +248,14 @@ class NotesGroup extends Group
 				if (susLength > 0) {
 					final sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
 					sustain.noteSpeed = songSpeed;
-					sustain.targetStrum = targetStrum;
-					sustain.mustPress = mustPress;
-					sustain.noteType = noteType;
 					
-					if (sustain.alive) // Too short sustains shouldnt be added
+					// Too short sustains shouldnt be added
+					if (sustain.alive) {
+						sustain.targetStrum = targetStrum;
+						sustain.mustPress = mustPress;
+						sustain.noteType = noteType;
 						unspawnNotes.push(sustain);
-
-					note.child = sustain;
+					}
 				}
 
 				//	Add notetype for scripts

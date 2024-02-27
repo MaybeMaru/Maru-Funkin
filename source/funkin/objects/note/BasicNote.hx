@@ -84,6 +84,7 @@ class BasicNote extends SmartSprite implements INoteData {
             instance.notes.setNull(this);
 
         destroy();
+        alive = false;
     }
 
     public var activeNote:Bool = true;
