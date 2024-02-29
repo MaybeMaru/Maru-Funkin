@@ -22,17 +22,24 @@ class FlxFunkSound extends FlxBasic
     var source:AudioSource;
 
     public var pausable:Bool = true;
+    public var persist:Bool = false; // If sound can be destroyed from the group
+    
     var __resume:Bool = false;
+    var __gainFocus:Bool = false;
 
-    public function new() {
+    public function new(addGroup:Bool = true) {
         super();
         source = new AudioSource();
         transform = new SoundTransform();
 
         source.onComplete.add(__soundFinish);
+        
+        if (addGroup)
+            FlxFunkSoundGroup.group.add(this);
     }
 
     override function destroy() {
+        FlxFunkSoundGroup.group.remove(this);
         source.onComplete.removeAll();
         dispose();
         
@@ -51,6 +58,7 @@ class FlxFunkSound extends FlxBasic
         {
             source.buffer = value.__buffer;
             source.init();
+            _initMixer();
         }
         
         return sound = value;
@@ -62,8 +70,10 @@ class FlxFunkSound extends FlxBasic
         if (onComplete != null)
             onComplete();
         
-        if (looped)
-            play(true);
+        if (looped) {
+            _lastStopTime = 0;
+            __play();
+        }
     }
 
     public function loadSound(sound:Sound):FlxFunkSound {
@@ -85,6 +95,12 @@ class FlxFunkSound extends FlxBasic
         return pitch = value;
     }
 
+    public var loops(default, set):Int = 0;
+    inline function set_loops(value:Int) {
+        if (value < 1) loops = 1;
+        return loops = source.loops = value - 1;
+    }
+
     public var looped:Bool = false;
     public var offset(default, set):Float = 0.0;
     inline function set_offset(value:Float) {
@@ -96,7 +112,7 @@ class FlxFunkSound extends FlxBasic
     public var volume:Float = 1.0;
 
     inline function updateVolume() {
-        source.gain = _gain * volume * FlxG.sound.volume;
+        source.gain = FlxG.sound.muted ? 0 : _gain * volume * FlxG.sound.volume;
     }
 
     public function fadeIn(duration:Float = 1.0, startVolume:Float = 0, ?endVolume:Float) {
@@ -143,33 +159,29 @@ class FlxFunkSound extends FlxBasic
         playing = true;
     }
 
-    public function play(forced:Bool = false, ?offset:Float, loops:Int = 0) {
-        if (sound == null || (playing && !forced))
-            return;
-        
+    private function _initMixer()
+    {
         var pan = SoundMixer.__soundTransform.pan + transform.pan;
-		if (pan > 1) pan = 1;
-		else if (pan < -1) pan = -1;
+        if (pan > 1) pan = 1;
+        else if (pan < -1) pan = -1;
 
-		var volume = SoundMixer.__soundTransform.volume * transform.volume;
+        var volume = SoundMixer.__soundTransform.volume * transform.volume;
         _gain = volume;
         updateVolume();
 
-        if (offset != null)
-            this.offset = offset;
+        var position = source.position;
+        position.x = pan;
+        position.z = -1 * Math.sqrt(1 - Math.pow(pan, 2));
+        source.position = position;
+    }
 
-        if (loops > 1)
-            source.loops = loops - 1;
+    public function play(forced:Bool = false) {
+        if (forced || !playing) {
+            if (forced)
+                _lastStopTime = 0;
 
-        if (forced)
-            source.currentTime = 0;
-
-		var position = source.position;
-		position.x = pan;
-		position.z = -1 * Math.sqrt(1 - Math.pow(pan, 2));
-		source.position = position;
-
-        __play();
+            __play();
+        }
     }
 
     var __lastLibTime:Float = 0;

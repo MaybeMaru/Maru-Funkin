@@ -1,5 +1,6 @@
 package;
 
+import funkin.sound.*;
 import flixel.system.FlxAssets;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -20,10 +21,15 @@ class FlxFunkGame extends FlxGame {
         _customSoundTray = FlxFunkSoundTray;
     }
 
-    override function create(_:openfl.events.Event) {
+    override function create(_:openfl.events.Event)
+    {
+        // Init save data
         SaveData.init();
         Controls.setupBindings();
         Preferences.setupPrefs();
+
+        // Plugins
+        FlxG.plugins.addPlugin(FlxFunkSoundGroup.group = new FlxFunkSoundGroup<FlxFunkSound>());
         
         super.create(_);
 

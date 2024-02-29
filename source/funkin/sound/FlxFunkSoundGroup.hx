@@ -1,8 +1,36 @@
 package funkin.sound;
 
+import openfl.events.Event;
+
 class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
 {
+    public static var group:FlxFunkSoundGroup<FlxFunkSound>;
+
     public var sounds:Array<T> = [];
+
+    public function new() {
+        super();
+
+        @:privateAccess // Window lose focus, pause sounds
+        FlxG.stage.addEventListener(Event.DEACTIVATE, function (e) {
+            sounds.fastForEach((sound, i) -> {
+                if (sound.playing) {
+                    sound.__gainFocus = true;
+                    sound.pause();
+                }
+            });
+        });
+
+        @:privateAccess // Window gain focus, resume sounds
+        FlxG.stage.addEventListener(Event.ACTIVATE, function (e) {
+            sounds.fastForEach((sound, i) -> {
+                if (sound.__gainFocus) {
+                    sound.resume();
+                    sound.__gainFocus = false;
+                }
+            });
+        });
+    }
 
     override function update(elapsed:Float):Void
     {
@@ -69,7 +97,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
     public function destroySounds()
     {
         sounds.fastForEach((sound, i) -> {
-            if (sound != null) {
+            if (sound != null) if (!sound.persist) {
                 sound.destroy();
                 sounds[i] = null;
             }
