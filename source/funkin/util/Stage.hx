@@ -1,5 +1,6 @@
 package funkin.util;
 
+import funkin.util.backend.AssetManager.LoadImage;
 import openfl.display.BitmapData;
 import funkin.util.modding.ScriptUtil;
 import flixel.util.typeLimit.OneOfTwo;
@@ -130,9 +131,10 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return stage;
     }
 
-    public static function cacheStageAssets(data:StageJson):Void @:privateAccess
+    public static function getStageAssets(data:StageJson):Array<LoadImage>
     {
-        var assets:Array<String> = [];
+        var addedAssets:Array<String> = [];
+        var assets:Array<LoadImage> = [];
         Paths.currentLevel = data.library;
 
         for (key in data.layersOrder)
@@ -141,40 +143,21 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
             if (objects != null)
             {
                 objects.fastForEach((object, i) -> {
-                    var png = Paths.png(object.imagePath);
-                    if (!assets.contains(png)) if (!AssetManager.existsAsset(png))
-                        assets.push(png);
+                    if (object.imagePath != null) {
+                        var png = Paths.png(object.imagePath);
+                        if (!addedAssets.contains(png)) {
+                            assets.push({
+                                path: png,
+                                lod: object.allowLod ? null : HIGH
+                            });
+                            addedAssets.push(png);
+                        }
+                    }
                 });
             }
         }
 
-        if (assets.length == 0)
-            return;
-
-        var bitmaps:Array<TempBitmap> = [];
-        var totalAssets:Int = assets.length - 1;
-        var curAssets:Int = 0;
-
-        final cache = function (start:Int, end:Int) {
-            for (i in start...end) {
-                var path = assets[i];
-                var bitmap = AssetManager.__getFileBitmap(path);
-                bitmaps.push({key: path, bitmap: bitmap});
-                curAssets++;
-            }
-        }
-
-        var splitIndex:Int = Std.int(assets.length / 2);
-        FunkThread.run(function () cache(0, splitIndex));
-        FunkThread.run(function () cache(splitIndex + 1, assets.length));
-
-        while (curAssets < totalAssets) {
-            Sys.sleep(0.01);
-        }
-
-        bitmaps.fastForEach((data, i) -> {
-            AssetManager.__cacheFromBitmap(data.key, data.bitmap, false);
-        });
+        return assets;
     }
     
     public function loadInput(input:StageJson):Stage

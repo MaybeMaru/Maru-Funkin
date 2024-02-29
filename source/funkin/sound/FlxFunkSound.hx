@@ -58,7 +58,7 @@ class FlxFunkSound extends FlxBasic
         {
             source.buffer = value.__buffer;
             source.init();
-            _initMixer();
+            __initMixer();
         }
         
         return sound = value;
@@ -66,13 +66,17 @@ class FlxFunkSound extends FlxBasic
 
     public var onComplete:()->Void;
     
-    private function __soundFinish() {
+    private function __soundFinish() {        
         if (onComplete != null)
             onComplete();
         
         if (looped) {
             _lastStopTime = 0;
             __play();
+        }
+        else
+        {
+            stop();
         }
     }
 
@@ -148,6 +152,15 @@ class FlxFunkSound extends FlxBasic
         }
     }
 
+    public function play(forced:Bool = false) {
+        if (forced || !playing) {
+            if (forced)
+                _lastStopTime = 0;
+
+            __play();
+        }
+    }
+
     public function resume():Void {
         if (paused)
             __play();
@@ -159,7 +172,7 @@ class FlxFunkSound extends FlxBasic
         playing = true;
     }
 
-    private function _initMixer()
+    private function __initMixer()
     {
         var pan = SoundMixer.__soundTransform.pan + transform.pan;
         if (pan > 1) pan = 1;
@@ -173,15 +186,6 @@ class FlxFunkSound extends FlxBasic
         position.x = pan;
         position.z = -1 * Math.sqrt(1 - Math.pow(pan, 2));
         source.position = position;
-    }
-
-    public function play(forced:Bool = false) {
-        if (forced || !playing) {
-            if (forced)
-                _lastStopTime = 0;
-
-            __play();
-        }
     }
 
     var __lastLibTime:Float = 0;

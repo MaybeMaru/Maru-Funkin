@@ -10,6 +10,7 @@ typedef AssetClass = OneOfTwo<LodGraphic, Sound>;
 
 class Asset
 {
+	public var key:String;
 	public var asset(default, null):AssetClass;
 	public var isSoundAsset(default, null):Bool;
 	public var isGraphicAsset(default, null):Bool;
@@ -17,8 +18,10 @@ class Asset
 
 	public function new() {}
 
-	public static inline function fromAsset(asset:AssetClass):Asset {
-		return new Asset().setAsset(asset);
+	public static inline function fromAsset(asset:AssetClass, key:String):Asset {
+		var asset = new Asset().setAsset(asset);
+		asset.key = key;
+		return asset;
 	}
 
 	public inline function setAsset(asset:AssetClass):Asset {
@@ -50,6 +53,7 @@ class Asset
 			__disposeTexture(bitmap.__texture);
 		
 		bitmap.dispose();
+		OpenFlAssets.cache.removeBitmapData(key);
 
 		return null;
 	}
@@ -133,6 +137,17 @@ enum abstract LodLevel(Int) from Int to Int {
 	var RUDY = 3;
 }
 
+typedef LoadImage = {
+    var path:String;
+    var lod:Null<LodLevel>;
+}
+
+typedef LoadData = {
+	var stageImages:Array<LoadImage>;
+	var charImages:Array<LoadImage>;
+	var songSounds:Array<String>;
+}
+
 class AssetManager
 {
 	public static var assetsMap:Map<String, Asset> = [];
@@ -153,6 +168,62 @@ class AssetManager
 	public static inline function clearTempCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
 		__clearCacheFromKeys(tempAssets, clearGraphics, clearSounds);
 		if (runGc) CoolUtil.gc(true);
+	}
+
+	/*
+	 * LOADING SCREENS CRAP
+	 */
+
+	public static function loadAsync(data:LoadData, ?onComplete:()->Void)
+	{
+		var totalAssets:Int = data.stageImages.length + data.charImages.length + data.songSounds.length;
+		var assetsCached:Int = 0;
+
+		var bitmaps:Map<String, Dynamic> = [];
+		var sounds:Map<String, Sound> = [];
+
+        final cacheImages = function (arr:Array<LoadImage>) {
+			arr.fastForEach((asset, i) -> {
+                if (!existsAsset(asset.path)) {
+					var bitmap = __getFileBitmap(asset.path);
+					bitmaps.set(asset.path, {
+						bitmap: bitmap,
+						lod: asset.lod
+					});
+				}
+                assetsCached++;
+            });
+        }
+
+		final cacheSounds = function (arr:Array<String>) {
+			arr.fastForEach((asset, i) -> {
+				if (!existsAsset(asset)) {
+					var sound = __getFileSound(asset);
+					sounds.set(asset, sound);
+				}
+				assetsCached++;
+			});
+		}
+
+		FunkThread.run(function () cacheImages(data.stageImages));
+		FunkThread.run(function () cacheImages(data.charImages));
+		FunkThread.run(function () cacheSounds(data.songSounds));
+
+		while (assetsCached < totalAssets) {
+            Sys.sleep(0.01);
+        }
+		
+		for (key => bitmap in bitmaps) {
+			__cacheFromBitmap(key, bitmap.bitmap, false, bitmap.lod);
+		}
+
+		for (key => sound in sounds) {
+			var asset = Asset.fromAsset(sound, key);
+			setAsset(key, asset, false);
+		}
+
+		if (onComplete != null)
+			onComplete();
 	}
 
 	/*
@@ -208,7 +279,7 @@ class AssetManager
 		if (gpuTextures)
 			graphic = cast uploadGraphicTexture(graphic);
 		
-		var asset = Asset.fromAsset(graphic);
+		var asset = Asset.fromAsset(graphic, key);
 		setAsset(key, asset, staticAsset);
 
 		return graphic;
@@ -252,7 +323,7 @@ class AssetManager
 			return BitmapData.fromFile(desktopPath);
 		#end
 
-		return OpenFlAssets.getBitmapData(path, false);
+		return OpenFlAssets.getBitmapData(path, true);
 	}
 	
 	/*
@@ -269,9 +340,8 @@ class AssetManager
 			return asset.asset;
 
 		var sound = __getFileSound(path);
-		//sound.stop();
 
-		var asset = Asset.fromAsset(sound);
+		var asset = Asset.fromAsset(sound, key);
 		setAsset(key, asset, staticAsset);
 
 		return sound;
