@@ -94,10 +94,15 @@ class Character extends FlxSpriteExt {
 		flipX = isPlayer ? !value : value;
 	}
 
-	public function loadCharJson(inputJson:CharacterJson):Void {
-		final imagePath:String = (!inputJson.imagePath.startsWith('characters/')) ? 'characters/${inputJson.imagePath}' : inputJson.imagePath;
-		final lodLevel:Null<LodLevel> = inputJson.allowLod ? null : HIGH;
-		loadImage(imagePath, false, null, null, lodLevel);
+	public function loadCharJson(inputJson:CharacterJson):Void
+	{
+		var path = inputJson.imagePath;
+		if (!path.startsWith('characters/'))
+			path = 'characters/$path';
+
+		var lod:Null<LodLevel> = inputJson.allowLod ? null : HIGH;
+
+		loadImage(path, false, null, null, lod);
 		
 		inputJson.anims.fastForEach((anim, i) -> {
 			final anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);

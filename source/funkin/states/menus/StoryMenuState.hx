@@ -195,22 +195,27 @@ class StoryMenuState extends MusicBeatState {
 	var selectedWeek:Bool = false;
 	var stopCancelSpam:Bool = false;
 
-	function selectWeek():Void {
-		final _weekName = storyWeeks[curWeek].name;
-		if (Highscore.getWeekUnlock(_weekName)) {
-			PlayState.storyPlaylist = getCurData().songList.songs;
-			WeekSetup.setupSong(_weekName, PlayState.storyPlaylist[0], curWeekDiffs[curDifficulty]);
-
-			if (!selectedWeek) {
-				CoolUtil.playSound('confirmMenu');
-				grpWeekText.members[curWeek].startFlashing();
-				grpWeekCharacters.members[1].playAnim('confirm', true);
-			}
-
-			PlayState.isStoryMode = true;
+	function selectWeek():Void
+	{
+		var week = storyWeeks[curWeek].name;
+		if (Highscore.getWeekUnlock(week))
+		{
 			selectedWeek = true;
+
+			CoolUtil.playSound('confirmMenu');
+			grpWeekText.members[curWeek].startFlashing();
+			grpWeekCharacters.members[1].playAnim('confirm', true);
+
+			var playlist = getCurData().songList.songs;
+			var diff = curWeekDiffs[curDifficulty];
+
+			PlayState.storyPlaylist = playlist;
+			var firstSong = playlist[0];
+			
+			WeekSetup.setupSong(week, firstSong, diff, true);
+
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
-				CoolUtil.switchMusicState(new PlayState());
+				WeekSetup.loadTarget(PlayState, false);
 			});
 		}
 		else {

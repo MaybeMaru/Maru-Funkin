@@ -6,6 +6,8 @@ class LoadingState extends MusicBeatState
     var charAssets:Array<LoadImage>;
     var songAssets:Array<String>;
 
+    public var onComplete:()->Void;
+
     public function init(stage:StageJson, characters:Array<String>, song:String)
     {
         var addedAssets:Array<String> = []; // Prevent repeating assets
@@ -40,24 +42,25 @@ class LoadingState extends MusicBeatState
             songAssets.push(voices);
     }
 
+    public var onStart:()->Void;
+
     public function start()
     {
         var start = openfl.Lib.getTimer();
+
+        if (onStart != null)
+            onStart();
 
         AssetManager.loadAsync({
             stageImages: stageAssets,
             charImages: charAssets,
             songSounds: songAssets
-        }, function () {
+        },
+        function () {
+            trace("finished loading!", (openfl.Lib.getTimer() - start) / 1000);
 
-            //trace(AssetManager.tempAssets);
-            //trace(AssetManager.getAsset(Paths.instPath("milf")));
-            
-            //new funkin.sound.FlxFunkSound().loadSound(Paths.inst("milf")).play();
-            //new funkin.sound.FlxFunkSound().loadSound(Paths.voices("milf")).play();
-            
-            trace("finished!");
-            trace((openfl.Lib.getTimer() - start) / 1000);
+            if (onComplete != null)
+                onComplete();
         });
     }
 
@@ -71,21 +74,4 @@ class LoadingState extends MusicBeatState
             started = true;
         }
     }
-
-    /*override function create() {
-        super.create();
-    }
-
-    var timeElapsed:Float = 0.0;
-    var showTime:Bool = false;
-
-    override function update(elapsed:Float)
-    {
-        if (!showTime) {
-            timeElapsed += elapsed;
-            if (timeElapsed >= 3) {
-                showTime = true;
-            }
-        }
-    }*/
 }

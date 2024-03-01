@@ -97,7 +97,7 @@ class FlxFunkSoundTray extends FlxSoundTray {
         _bar.x = 2.5;
         addChild(_bar);
 
-        final tmp:Bitmap = new Bitmap(openfl.Assets.getBitmapData("assets/images/options/soundtray.png"), null, true);
+        final tmp:Bitmap = new Bitmap(openfl.Assets.getBitmapData("assets/images/options/soundtray.png", false), null, true);
         addChild(tmp);
         screenCenter();
         

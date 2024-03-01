@@ -205,12 +205,38 @@ class AssetManager
 			});
 		}
 
+		/*var cacheImagesRange = function (start:Int, end:Int, arr:Array<LoadImage>) {
+			for (i in start...end) {
+				var asset = arr[i];
+				if (asset != null) if (!existsAsset(asset.path)) {
+					var bitmap = __getFileBitmap(asset.path);
+					bitmaps.set(asset.path, {
+						bitmap: bitmap,
+						lod: asset.lod
+					});
+				}
+                assetsCached++;
+			}
+		}*/
+
+		//var mid = Std.int(data.stageImages.length / 2);
+		//FunkThread.run(function () cacheImagesRange(0, mid, data.stageImages));
+		//FunkThread.run(function () cacheImagesRange(mid, data.stageImages.length, data.stageImages));
+
 		FunkThread.run(function () cacheImages(data.stageImages));
 		FunkThread.run(function () cacheImages(data.charImages));
 		FunkThread.run(function () cacheSounds(data.songSounds));
 
+		var elapsed = 0.0;
+
 		while (assetsCached < totalAssets) {
+			//trace(assetsCached, totalAssets);
             Sys.sleep(0.01);
+
+			elapsed += 0.01;
+			if (elapsed >= 20) {
+				break; // Crash fail safe TODO: fix this crap!!
+			}
         }
 		
 		for (key => bitmap in bitmaps) {
@@ -221,6 +247,8 @@ class AssetManager
 			var asset = Asset.fromAsset(sound, key);
 			setAsset(key, asset, false);
 		}
+
+		CoolUtil.gc(true);
 
 		if (onComplete != null)
 			onComplete();

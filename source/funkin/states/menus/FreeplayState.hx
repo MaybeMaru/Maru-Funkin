@@ -189,15 +189,11 @@ class FreeplayState extends MusicBeatState {
 		}
 		#end
 
-		if(FlxG.keys.justPressed.SEVEN) {
-			setupSong();
-			switchState(new ChartingState());
-		}
+		if(FlxG.keys.justPressed.SEVEN)
+			loadSong(true);
 
-		if (getKey('ACCEPT', JUST_PRESSED)) {
-			setupSong();
-			CoolUtil.switchMusicState(new PlayState());
-		}
+		if (getKey('ACCEPT', JUST_PRESSED))
+			loadSong(false);
 	}
 
 	var startTmr:Float = 0;
@@ -226,9 +222,10 @@ class FreeplayState extends MusicBeatState {
 		}
 	}
 
-	function setupSong():Void {
-		PlayState.isStoryMode = false;
-		WeekSetup.setupSong(songs[curSelected].week, songs[curSelected].song, curWeekDiffs[curDifficulty]);
+	function loadSong(toChart:Bool):Void {
+		var songData = songs[curSelected];
+		var diff = curWeekDiffs[curDifficulty];
+		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, toChart ? ChartingState : null);
 	}
 
 	function changeDiff(change:Int = 0):Void {

@@ -1,5 +1,6 @@
 package funkin.util.song;
 
+import funkin.states.LoadingState;
 import flixel.util.FlxArrayUtil;
 
 /*
@@ -126,7 +127,8 @@ class WeekSetup {
 
     // Check for deprecated week values (pain)
     static function checkWeek(week:WeekJson) {
-        if (week == null) return JsonUtil.copyJson(DEFAULT_WEEK);
+        if (week == null)
+            return JsonUtil.copyJson(DEFAULT_WEEK);
 
         if (!Reflect.hasField(week, "storyCharacters"))
             week.storyCharacters = ["dad","bf","gf"];
@@ -135,7 +137,8 @@ class WeekSetup {
         for (i in 0...fields.length) {
             final field:String = fields[i];
             final fieldValue:Dynamic = Reflect.getProperty(week, field);
-            if (fieldValue == null) continue;
+            if (fieldValue == null)
+                continue;
             
             switch (field) {
                 case "storyDad":   week.storyCharacters[0] = fieldValue;
@@ -161,7 +164,7 @@ class WeekSetup {
         return weekMap.get(week);
     }
 
-    public static function setupSong(weekName:String, songName:String, songDiff:String):Void {
+    public static function setupSong(weekName:String, songName:String, songDiff:String, storyMode:Bool):Void {
         final _modFolder = weekMap.get(weekName)?.modFolder;
         if (_modFolder == null) { // Base game
             ModdingUtil.curModFolder = "";
@@ -172,6 +175,7 @@ class WeekSetup {
         }
 
         PlayState.storyWeek = weekName;
+        PlayState.isStoryMode = storyMode;
         PlayState.curDifficulty = songDiff;
         PlayState.SONG = Song.loadFromFile(songDiff, songName);
 		PlayState.inChartEditor = PlayState.seenCutscene = false;
@@ -179,9 +183,44 @@ class WeekSetup {
         curWeekDiffs = getWeekDiffs(weekName);
 	}
 
-    public static function loadSong(weekName:String, songName:String, songDiff:String, skipTrans:Bool = false) {
-        setupSong(weekName, songName, songDiff);
-        PlayState.isStoryMode = false;
-        CoolUtil.switchState(new PlayState(), skipTrans);
+    public static function loadSong(weekName:String, songName:String, songDiff:String, storyMode:Bool = false, skipTrans:Bool = false, ?target:Class<MusicBeatState>):Void
+    {
+        setupSong(weekName, songName, songDiff, storyMode);
+        loadTarget(target, skipTrans);
+    }
+
+    public static function loadTarget(?target:Class<MusicBeatState>, skipTrans:Bool = false)
+    {
+        target ??= PlayState;
+        
+        var instance:MusicBeatState = Type.createInstance(target, []);
+        if (target == PlayState)    loadPlayState(cast(instance, PlayState), skipTrans);
+        else                        CoolUtil.switchState(instance, skipTrans);
+    }
+
+    public static function loadPlayState(instance:PlayState, skipTrans:Bool = false):Void
+    {
+        var song = PlayState.SONG;
+        
+        var loadScreen:LoadingState = new LoadingState();
+        loadScreen.init(Stage.getJson(song.stage), song.players, song.song);
+        
+        // Pre-clear cache to make sure the loading screen stuff doesnt get disposed
+        loadScreen.onStart = function () {
+            PlayState.clearCache = false;
+            CoolUtil.clearCache();
+        }
+        
+        loadScreen.onComplete = function () {
+            Paths.currentLevel = PlayState.storyWeek;
+            CoolUtil.switchState(instance, true, skipTrans);
+        }        
+
+        Conductor.stop();
+        if (FlxG.sound.music != null) {
+            FlxG.sound.music.fadeOut(0.333);
+        }
+
+        CoolUtil.switchState(loadScreen, skipTrans, true);
     }
 }
