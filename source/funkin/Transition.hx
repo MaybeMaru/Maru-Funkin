@@ -111,10 +111,11 @@ class Transition extends ResizableSprite {
         timeElapsed = 0;
         onComplete = callback;
         inTransition = true;
+
+        update(0.0);
         
-        if (skipBool) {
+        if (skipBool)
             __finishTrans();
-        }
     }
 
     var timeElapsed:Float = 0;

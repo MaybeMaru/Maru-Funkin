@@ -48,19 +48,53 @@ class FlxFunkGame extends FlxGame {
 
     public var updateObjects:Array<IUpdateable> = [];
 
-    override function update() {
-        super.update();
+    override function update():Void
+    {
+        if (!_state.active || !_state.exists)
+			return;
 
-        final elapsed = FlxG.elapsed;
+		if (_nextState != null)
+			switchState();
 
+		#if FLX_DEBUG
+		if (FlxG.debugger.visible)
+			ticks = getTicks();
+		#end
+
+		updateElapsed();
+        var elapsed = FlxG.elapsed;
+
+		FlxG.signals.preUpdate.dispatch();
+
+		updateInput();
+
+		#if FLX_SOUND_SYSTEM
+		FlxG.sound.update(elapsed);
+		#end
+		FlxG.plugins.update(elapsed);
         transition.update(elapsed);
         console.update(elapsed);
 
-        if (FlxG.state.persistentUpdate && updateObjects.length != 0) {
+		_state.tryUpdate(elapsed);
+
+        if (_state.persistentUpdate && updateObjects.length != 0) {
             updateObjects.fastForEach((object, i) -> {
                 object.update(elapsed);
             });
         }
+
+		FlxG.cameras.update(elapsed);
+		FlxG.signals.postUpdate.dispatch();
+
+		#if FLX_DEBUG
+		debugger.stats.flixelUpdate(getTicks() - ticks);
+		#end
+
+		#if FLX_POINTER_INPUT
+		FlxArrayUtil.clearArray(FlxG.swipes);
+		#end
+
+		filters = filtersEnabled ? _filters : null;
     }
     
     public var enabledSoundTray(default, set):Bool = true;

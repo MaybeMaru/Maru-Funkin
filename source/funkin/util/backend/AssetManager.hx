@@ -135,6 +135,25 @@ enum abstract LodLevel(Int) from Int to Int {
 	var MEDIUM = 1;
 	var LOW = 2;
 	var RUDY = 3;
+
+	public static function fromString(value:String):LodLevel {
+		return (switch(value) {
+			case "high": HIGH;
+			case "medium": MEDIUM;
+			case "low": LOW;
+			case "rudy": RUDY;
+			default: HIGH;
+		});
+	}
+
+	public static function toString(value:LodLevel):String {
+		return (switch(value) {
+			case HIGH: "high";
+			case MEDIUM: "medium";
+			case LOW: "low";
+			case RUDY: "rudy";
+		});
+	}
 }
 
 typedef LoadImage = {
@@ -261,13 +280,7 @@ class AssetManager
 	public static var gpuTextures:Bool = #if hl false; #else true; #end
 	public static var lodQuality:LodLevel = HIGH;
 	public static function setLodQuality(level:String):LodLevel {
-		return lodQuality = switch (level) {
-			case "high": HIGH;
-			case "medium": MEDIUM;
-			case "low": LOW;
-			case "rudy": RUDY;
-			default: HIGH;
-		}
+		return lodQuality = LodLevel.fromString(level);
 	}
 
 	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, ?useTexture:Bool, ?lodLevel:LodLevel, ?key:String):LodGraphic

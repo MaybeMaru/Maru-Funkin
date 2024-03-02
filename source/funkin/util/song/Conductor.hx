@@ -66,9 +66,6 @@ class Conductor {
 		song = Song.formatSongFolder(song);
 		if (_loadedSong != song)
 		{
-			trace(AssetManager.existsAsset(Paths.instPath(song)), "inst " + song);
-			trace(AssetManager.existsAsset(Paths.voicesPath(song)), "vocs " + song);
-
 			inst.loadSound(Paths.inst(song));
 			
 			hasVocals = Paths.exists(Paths.voicesPath(song), MUSIC);
