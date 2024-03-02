@@ -245,11 +245,11 @@ class ModdingUtil {
         return list;
     }
 
-    public static inline function runFunctionMod(mod:String, func:Dynamic) {
+    public static inline function runFunctionMod(mod:String, func:()->Void) {
         runFunctionMods([mod], func);
     }
 
-    public static inline function runFunctionMods(mods:Array<String>, func:Dynamic) {
+    public static inline function runFunctionMods(mods:Array<String>, func:()->Void) {
         final lastMod = curModFolder;
         mods.fastForEach((mod, i) -> {
             curModFolder = mod;

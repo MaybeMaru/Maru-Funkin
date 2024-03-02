@@ -45,12 +45,13 @@ class FreeplayState extends MusicBeatState {
 
 		coolColors = new Map<String, FlxColor>();
 		for (i in 0...WeekSetup.getWeekList().length) {
-			final _data = WeekSetup.weekList[i];
-			final weekName = _data.name;
-			final week = _data.data;
+			final data = WeekSetup.weekList[i];
+			final weekName = data.name;
+			final week = data.data;
 			
-			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay) {
-				addWeek(week.songList.songs, week.songList.songIcons, weekName, _data.modFolder);
+			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay)
+			{
+				addWeek(week.songList.songs, week.songList.songIcons, weekName, data.modFolder);
 
 				final songColors = week.songList.songColors;
 				for (i in 0...week.songList.songs.length) {
@@ -66,17 +67,17 @@ class FreeplayState extends MusicBeatState {
 		grpSongs = new FlxTypedGroup<MenuAlphabet>();
 		add(grpSongs);
 
-		for (i in 0...songs.length) {
+		songs.fastForEach((song, i) -> {
 			var icon:HealthIcon = null;
-			ModdingUtil.runFunctionMod(songs[i].mod, function () {
-				icon = new HealthIcon(songs[i].char);
+			ModdingUtil.runFunctionMod(song.mod, function () {
+				icon = new HealthIcon(song.char);
 			});
 
-			final _width = Alphabet.spaceWidth * songs[i].song.length;
+			final _width = Alphabet.spaceWidth * song.song.length;
 			final _icoWidth = icon.width * 1.1 + 10;		
 			final _scale:Float = _icoWidth + _width > FlxG.width ? (FlxG.width - _icoWidth) / _width : 1;
 
-			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, songs[i].song, true, 0, _scale);
+			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, song.song, true, 0, _scale);
 			songText.targetY = i;
 			songText.setTargetPos();
 			grpSongs.add(songText);
@@ -87,7 +88,7 @@ class FreeplayState extends MusicBeatState {
 			icon.sprTracker = songText;
 			iconArray.push(icon);
 			add(icon);
-		}
+		});
 
 		lerpPosition = FlxG.width * 0.69; // nice
 

@@ -60,6 +60,9 @@ class FlxFunkSound extends FlxBasic
             source.buffer = value.__buffer;
             source.init();
             __initMixer();
+
+            source.currentTime = 0;
+            _lastStopTime = 0;
         }
         
         return sound = value;

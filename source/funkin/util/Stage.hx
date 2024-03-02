@@ -33,6 +33,7 @@ typedef StageJson = {
 	var dadCamOffsets:Array<Float>;
 	var bfCamOffsets:Array<Float>;
 
+    var cacheImages:Array<String>;
     var layersOrder:Array<String>;
     var layers:Dynamic;
 }
@@ -71,6 +72,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         dadCamOffsets: [0,0],
         bfCamOffsets: [0,0],
 
+        cacheImages: [],
         layersOrder: DEFAULT_ORDER,
         layers: DEFAULT_LAYERS
     };
@@ -133,7 +135,9 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
 
     public static function getStageAssets(data:StageJson):Array<LoadImage>
     {
-        var addedAssets:Array<String> = [];
+        var addedAssets:Array<String> = data.cacheImages;
+        addedAssets = CoolUtil.removeDuplicates(addedAssets);
+
         var assets:Array<LoadImage> = [];
         Paths.currentLevel = data.library;
 

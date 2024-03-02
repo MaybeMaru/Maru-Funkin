@@ -26,10 +26,10 @@ class HealthIcon extends FlxSpriteExt {
 		else antialiasing = Preferences.getPref('antialiasing');
 
 		var icon = "face";
-		if (Paths.exists(Paths.png('icons/$char', null, true), IMAGE)) // Check if icon exists
+		if (Paths.exists(Paths.png('icons/$char', null), IMAGE)) // Check if icon exists
 			icon = char;
 
-		loadImage('icons/$icon', true); // Load first to get the resolution
+		loadImage('icons/$icon'); // Load first to get the resolution
 		
 		if (packer == IMAGE) {
 			singleAnim = !(width >= height * 1.25); // Id make it 2 but theres some weird ass resolutions out there
