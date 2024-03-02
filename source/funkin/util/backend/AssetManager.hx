@@ -176,68 +176,68 @@ class AssetManager
 
 	public static function loadAsync(data:LoadData, ?onComplete:()->Void)
 	{
-		var totalAssets:Int = data.stageImages.length + data.charImages.length + data.songSounds.length;
-		var assetsCached:Int = 0;
+		var stageImages = data.stageImages;
+		var charImages = data.charImages;
+		var songSounds = data.songSounds;
 
 		var bitmaps:Map<String, Dynamic> = [];
 		var sounds:Map<String, Sound> = [];
 
         final cacheImages = function (arr:Array<LoadImage>) {
-			arr.fastForEach((asset, i) -> {
-                if (!existsAsset(asset.path)) {
+			while (arr[0] != null) {
+				var asset:LoadImage = arr[0];
+				
+				if (!existsAsset(asset.path)) if (!bitmaps.exists(asset.path)) {
 					var bitmap = __getFileBitmap(asset.path);
 					bitmaps.set(asset.path, {
 						bitmap: bitmap,
 						lod: asset.lod
 					});
 				}
-                assetsCached++;
-            });
+				
+				arr.splice(0, 1);
+			}
         }
 
-		final cacheSounds = function (arr:Array<String>) {
-			arr.fastForEach((asset, i) -> {
-				if (!existsAsset(asset)) {
-					var sound = __getFileSound(asset);
-					sounds.set(asset, sound);
-				}
-				assetsCached++;
-			});
+		final cacheSound = function (arr:Array<String>, asset:String) {
+			if (!existsAsset(asset)) if (!sounds.exists(asset)) {
+				var sound = __getFileSound(asset);
+				sounds.set(asset, sound);
+			}
+			arr.remove(asset);
 		}
 
-		/*var cacheImagesRange = function (start:Int, end:Int, arr:Array<LoadImage>) {
-			for (i in start...end) {
-				var asset = arr[i];
-				if (asset != null) if (!existsAsset(asset.path)) {
-					var bitmap = __getFileBitmap(asset.path);
-					bitmaps.set(asset.path, {
-						bitmap: bitmap,
-						lod: asset.lod
-					});
-				}
-                assetsCached++;
+		final cacheSounds = function (arr:Array<String>) {
+			while (arr[0] != null) {
+				var asset:String = arr[0];
+				cacheSound(arr, asset);
 			}
-		}*/
+		}
 
-		//var mid = Std.int(data.stageImages.length / 2);
-		//FunkThread.run(function () cacheImagesRange(0, mid, data.stageImages));
-		//FunkThread.run(function () cacheImagesRange(mid, data.stageImages.length, data.stageImages));
-
-		FunkThread.run(function () cacheImages(data.stageImages));
-		FunkThread.run(function () cacheImages(data.charImages));
-		FunkThread.run(function () cacheSounds(data.songSounds));
-
-		var elapsed = 0.0;
-
-		while (assetsCached < totalAssets) {
-			//trace(assetsCached, totalAssets);
-            Sys.sleep(0.01);
-
-			elapsed += 0.01;
-			if (elapsed >= 20) {
-				break; // Crash fail safe TODO: fix this crap!!
+		if (stageImages.length > 0)
+			FunkThread.run(function () cacheImages(stageImages));
+		
+		if (charImages.length > 0)
+			FunkThread.run(function () cacheImages(charImages));
+		
+		if (songSounds.length > 0)
+		{
+			// Extra thread is available
+			if (charImages.length == 0 || stageImages.length == 0)
+			{
+				FunkThread.run(function () cacheSound(songSounds, songSounds[0]));
+				if (songSounds[1] != null)
+					FunkThread.run(function () cacheSound(songSounds, songSounds[1]));
 			}
-        }
+			else
+			{
+				FunkThread.run(function () cacheSounds(songSounds));
+			}
+		}
+
+		while ((stageImages.length + charImages.length + songSounds.length) > 0) {
+			Sys.sleep(0.01);
+		}
 		
 		for (key => bitmap in bitmaps) {
 			__cacheFromBitmap(key, bitmap.bitmap, false, bitmap.lod);

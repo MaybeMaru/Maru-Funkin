@@ -107,9 +107,6 @@ class NotesGroup extends Group
 		Conductor.songOffset = SONG.offsets;
 		Conductor.loadMusic(curSong);
 		
-		Conductor.play(); // Weird flxsound caching bullshit
-		Conductor.stop();
-		
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
 		vanillaUI = getPref('vanilla-ui');

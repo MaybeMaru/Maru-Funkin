@@ -19,7 +19,7 @@ class ChartWaveform extends FlxSprite {
 	public var audioBytes:Bytes;
     public var soundOffset:Float = 0;
 
-    public function new(sound:FlxSound, _color:FlxColor = 0x5e3c92) {
+    public function new(sound:FlxFunkSound, _color:FlxColor = 0x5e3c92) {
         super();
         if (sound == null || sound.length <= 0) {
             visible = false;
@@ -27,9 +27,9 @@ class ChartWaveform extends FlxSprite {
         }
 
         @:privateAccess {
-            if (sound._sound == null || sound._sound.__buffer == null) return;
-            audioBuffer = sound._sound.__buffer;
-            audioBytes = sound._sound.__buffer.data.toBytes();
+            if (sound.sound == null || sound.sound.__buffer == null) return;
+            audioBuffer = sound.sound.__buffer;
+            audioBytes = sound.sound.__buffer.data.toBytes();
         }
 
         var graphicWidth = GRID_SIZE * Conductor.STRUMS_LENGTH;

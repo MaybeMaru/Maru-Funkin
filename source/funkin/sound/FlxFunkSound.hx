@@ -56,6 +56,7 @@ class FlxFunkSound extends FlxBasic
     function set_sound(value:Sound) {
         if (value != null)
         {
+            length = value.length;
             source.buffer = value.__buffer;
             source.init();
             __initMixer();
@@ -89,6 +90,7 @@ class FlxFunkSound extends FlxBasic
     public var paused(get, never):Bool;
     inline function get_paused() return !playing;
 
+    public var length:Float = 0.0;
     public var time(get, set):Float;
     inline function get_time() return getTime();
     inline function set_time(value:Float) return source.currentTime = Std.int(value);

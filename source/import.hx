@@ -61,6 +61,9 @@ import funkin.objects.alphabet.AlphabetCharacter;
 import funkin.objects.alphabet.MenuAlphabet;
 import funkin.objects.alphabet.TypedAlphabet;
 
+// Sound
+import funkin.sound.FlxFunkSound;
+
 //Main graphics
 import funkin.graphics.FlxSpriteExt;
 import funkin.graphics.FunkinSprite;

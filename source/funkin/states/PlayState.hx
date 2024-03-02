@@ -844,6 +844,6 @@ class PlayState extends MusicBeatState
 	public var objMap(get, never):Map<String, FlxObject>; inline function get_objMap() return stage.objects;
 
 	public var songSpeed(get,never):Float; inline function get_songSpeed() return NotesGroup.songSpeed;
-	public var inst(get, never):FlxSound; inline function get_inst() return Conductor.inst;
-	public var vocals(get, never):FlxSound; inline function get_vocals() return Conductor.vocals;
+	public var inst(get, never):FlxFunkSound; inline function get_inst() return Conductor.inst;
+	public var vocals(get, never):FlxFunkSound; inline function get_vocals() return Conductor.vocals;
 }
