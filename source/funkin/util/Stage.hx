@@ -135,11 +135,20 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
 
     public static function getStageAssets(data:StageJson):Array<LoadImage>
     {
-        var addedAssets:Array<String> = data.cacheImages;
-        addedAssets = CoolUtil.removeDuplicates(addedAssets);
-
+        var addedAssets:Array<String> = [];
         var assets:Array<LoadImage> = [];
         Paths.currentLevel = data.library;
+
+        data.cacheImages.fastForEach((path, i) -> {
+            var png = Paths.png(path);
+            if (!addedAssets.contains(png)) {
+                assets.push({
+                    path: png,
+                    lod: null // Uses settings lod
+                });
+                addedAssets.push(png);
+            }
+        });
 
         for (key in data.layersOrder)
         {
