@@ -347,7 +347,7 @@ class Character extends FlxSpriteExt {
 		stageOffsets = FlxDestroyUtil.put(stageOffsets);
 		stageCamOffsets = FlxDestroyUtil.put(stageCamOffsets);
 		camOffsets = FlxDestroyUtil.put(camOffsets);
-		ModdingUtil.removeScript(script);
+		script = ModdingUtil.removeScript(script);
 
 		if (heyTimer != null)
 			heyTimer = FlxDestroyUtil.destroy(heyTimer);

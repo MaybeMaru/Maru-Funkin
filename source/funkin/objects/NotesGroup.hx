@@ -76,17 +76,20 @@ class NotesGroup extends Group
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
-	inline function pressSustain(sustain:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	function pressSustain(sustain:Sustain, ?character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+		if (!sustain.exists)
+			return;
+		
 		if (isPlayState) {
 			character.sing(sustain.noteData, sustain.altAnim, false);
 			Conductor.vocals.volume = 1;
 		}
 
 		if (!botplayCheck || prefBot) {
-			if (isPlayState) game.health += sustain.hitHealth[1] * (FlxG.elapsed * 5);
-		} else {
-			sustain.pressSustain();
+			if (isPlayState)
+				game.health += sustain.hitHealth[1] * (FlxG.elapsed * 5);
 		}
+		else sustain.pressSustain();
 
 		botplayCheck ? if (!vanillaUI) playStrumAnim(sustain) :
 		sustain.targetStrum.playStrumAnim('confirm', true);

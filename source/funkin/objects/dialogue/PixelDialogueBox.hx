@@ -1,16 +1,27 @@
 package funkin.objects.dialogue;
 import flixel.addons.text.FlxTypeText;
 
-class PixelDialogueBox extends DialogueBoxBase {
-	/*
-	 *	Adding new dialogue box skins
-	 *	Type => [imagePath, [openAnim, indices], [idleAnim, indices]]
-	 */
+typedef PixelBox = {
+	var box:String;
+	var openAnim:String;
+}
+
+class PixelDialogueBox extends DialogueBoxBase
+{
 	public static inline var PIXEL_ZOOM:Int = 6;
-	public static final boxTypes:Map<String, Array<Dynamic>> = [
-		'pixel'	=> 	['pixel/dialogueBox-pixel',		['Text Box Appear'],		 	['Text Box Appear', 		   [4]]],
-		'mad'	=> 	['pixel/dialogueBox-senpaiMad',	['SENPAI ANGRY IMPACT SPEECH'], ['SENPAI ANGRY IMPACT SPEECH', [4]]],
-		'evil'	=> 	['pixel/dialogueBox-evil', 		['Spirit Textbox spawn'], 		['Spirit Textbox spawn', 	   [11]]]
+	public static final boxTypes:Map<String, PixelBox> = [
+		"pixel" => {
+			box: "pixel/dialogueBox-pixel",
+			openAnim: "Text Box Appear"
+		},
+		"mad" => {
+			box: "pixel/dialogueBox-senpaiMad",
+			openAnim: "SENPAI ANGRY IMPACT SPEECH"
+		},
+		"evil" => {
+			box: "pixel/dialogueBox-evil",
+			openAnim: "Spirit Textbox spawn"
+		}
 	];
 
 	public var boxType:String = 'pixel';
@@ -46,10 +57,10 @@ class PixelDialogueBox extends DialogueBoxBase {
 		portraitGroup.add(portraitRight);
 
 		boxType = boxTypes.exists(skin) ? skin : 'pixel';
-		var boxData:Array<Dynamic> = boxTypes.get(boxType);
+		var data:PixelBox = boxTypes.get(boxType);
 
-		box = new FunkinSprite('skins/${boxData[0]}', [0,0], [0,0]);
-		box.addAnim('normalOpen', boxData[1][1], 24, false, boxData[1][2]);
+		box = new FunkinSprite('skins/${data.box}', [0,0], [0,0]);
+		box.addAnim('normalOpen', data.openAnim);
 		box.playAnim('normalOpen');
 		box.setScale(PIXEL_ZOOM * 0.9);
 		box.screenCenter();

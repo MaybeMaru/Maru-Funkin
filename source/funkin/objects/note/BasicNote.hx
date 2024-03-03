@@ -67,7 +67,6 @@ class BasicNote extends SmartSprite implements INoteData {
 
     public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default"):Void {
         super();
-        initVariables();
         this.noteData = noteData;
         this.strumTime = strumTime;
         this.skin = skin;
@@ -129,14 +128,9 @@ class BasicNote extends SmartSprite implements INoteData {
 
     public var mustHit:Bool = true;
     public var altAnim:String = "";
-    public var hitHealth:Array<Float>;
-    public var missHealth:Array<Float>;
+    public var hitHealth:Array<Float> = [0.025, 0.0125];
+    public var missHealth:Array<Float> = [0.0475, 0.02375];
     public var hitMult:Float = 1.0;
-
-    inline function initVariables():Void {
-        hitHealth = [0.025, 0.0125];
-        missHealth = [0.0475, 0.02375];
-    }
 
     public var noteType(default, set):String = "default";
     inline function set_noteType(value:String):String {
@@ -160,20 +154,31 @@ class BasicNote extends SmartSprite implements INoteData {
             noteType = value;
     }
 
-    override function destroy():Void {
+    override function destroy():Void
+    {
         super.destroy();
+        
+        if (parent != null) {
+            parent.child = null;
+            parent = null;
+        }
+
+        if (child != null) {
+            child.parent = null;
+            child = null;
+        }
+
         curSkinData = null;
-        parent = null;
-        child = null;
+        targetStrum = null;
+        hitHealth = null;
+        missHealth = null;
     }
 
     // Casts the basic note as a Note
-    inline public function toNote():Note {
+    inline public function toNote():Note
         return cast(this, Note);
-    }
     
     // Casts the basic note as a Sustain
-    inline public function toSustain():Sustain {
+    inline public function toSustain():Sustain
         return cast(this, Sustain);
-    }
 }

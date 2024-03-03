@@ -163,14 +163,16 @@ class ModdingUtil {
         return code;
     }
 
-    inline public static function removeScript(?script:FunkScript) {
+    public static function removeScript(?script:FunkScript) {
         if (script != null) {
-            if (scriptsMap.exists(script.scriptID)) {
+            if (scriptsMap.exists(script.scriptID))
                 scriptsMap.remove(script.scriptID);
-            }
+
             script.destroy();
             scripts.remove(script);
         }
+
+        return null;
     }
 
     inline public static function removeScriptByTag(tag:String) {
