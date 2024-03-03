@@ -238,7 +238,7 @@ class AssetManager
 		
 		if (charImages.length > 0)
 			FunkThread.run(function () cacheImages(charImages));
-		
+
 		if (songSounds.length > 0)
 		{
 			// Extra thread is available
@@ -266,6 +266,12 @@ class AssetManager
 			var asset = Asset.fromAsset(sound, key);
 			setAsset(key, asset, false);
 		}
+
+		bitmaps.clear();
+		bitmaps = null;
+
+		sounds.clear();
+		sounds = null;
 
 		CoolUtil.gc(true);
 

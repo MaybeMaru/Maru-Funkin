@@ -77,7 +77,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		var autoSaveFunc = function () {
-			ChartingState.instance.openSubState(new PromptSubstate('Are you sure you want to\nload the song autosave?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+			ChartingState.instance.openSubState(new PromptSubstate('Are you sure you want to\nload the song autosave?\nUnsaved charts\nwont be restored\n\n\nPress back to cancel', function () {
 				ChartingState.instance.loadAutosave();
 			}));
 		}

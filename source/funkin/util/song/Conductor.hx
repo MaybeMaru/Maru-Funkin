@@ -74,12 +74,14 @@ class Conductor {
 
 			// Reload song file on dispose
 			AssetManager.getAsset(Paths.instPath(song)).onDispose = () -> {
+				inst.dispose();
+				vocals.dispose();
 				_loadedSong = "";
 			}
 		}
 		_loadedSong = song;
-		inst.onComplete = function () {}
-		vocals.onComplete = function () {}
+		inst.onComplete = null;
+		vocals.onComplete = null;
 	}
 
 	public static inline var safeFrames:Int = 15;
