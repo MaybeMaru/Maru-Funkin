@@ -13,6 +13,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 	public var active:Bool = true;
 	public var scriptID:String = '';
 
+	public function destroy():Void {
+		if (interp != null)
+			dispose();
+	}
+
 	public inline function callback(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
 		var value:HscriptFunctionCallback = CONTINUE_FUNCTION;
 
@@ -428,10 +433,6 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('remove', function(object:Dynamic) {
 			FlxG.state.remove(object);
 		});
-	}
-
-	public function destroy() {
-		this.interp = null;
 	}
 }
 

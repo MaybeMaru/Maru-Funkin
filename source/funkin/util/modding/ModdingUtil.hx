@@ -57,8 +57,8 @@ class ModdingUtil {
     inline public static function clearScripts():Void {
         FunkScript.globalVariables.clear();
         Main.console.clear();
-        for (i in scripts) removeScript(i);
-        FlxArrayUtil.clearArray(scripts);
+        for (i in scripts.copy()) removeScript(i);
+        scripts.splice(0, scripts.length);
 
         // Warn if the mod folder is outdated
         if (curModData != null && curModData.apiVersion != API_VERSION) {

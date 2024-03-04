@@ -1,5 +1,6 @@
 package flixel.graphics.tile;
 
+import openfl.geom.Matrix;
 import openfl.display.BlendMode;
 import openfl.display.Graphics;
 #if FLX_DRAW_QUADS
@@ -154,44 +155,43 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	}
 
 	// Copy pasted from openfl Graphics, just inlines some stuff and removes indices since flixel quads dont need those
-
-	inline function drawFlxQuad(graphics:Graphics, blendMode:BlendMode, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>) @:privateAccess
+	
+	function drawFlxQuad(graphics:Graphics, blendMode:BlendMode, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		final commands = graphics.__commands;
 
 		// Override blend mode
-		inline commands.overrideBlendMode(blendMode ?? NORMAL);
+		commands.overrideBlendMode(blendMode ?? NORMAL);
 
 		// Begin shader fill
-		final shaderBuffer = inline graphics.__shaderBufferPool.get();
-		inline graphics.__usedShaderBuffers.add(shaderBuffer);
-		inline shaderBuffer.update(cast shader);
-		inline commands.beginShaderFill(shaderBuffer);
+		final shaderBuffer = graphics.__shaderBufferPool.get();
+		graphics.__usedShaderBuffers.add(shaderBuffer);
+		shaderBuffer.update(cast shader);
+		commands.beginShaderFill(shaderBuffer);
 		
 		// Draw the quad
 		var tileRect = CoolUtil.rectangle;
-		var tileTransform = CoolUtil.matrix;
 
 		var minX = Math.POSITIVE_INFINITY;
 		var minY = minX;
 		var maxX = Math.NEGATIVE_INFINITY;
 		var maxY = maxX;
 
-		tileRect.x = 0;
-		tileRect.y = 0;
 		tileRect.width = rects[6];
 		tileRect.height = rects[7];
 
-		if (tileRect.width > 0 && tileRect.height > 0)
+		if (tileRect.width > 0) if (tileRect.height > 0)
 		{
-			tileTransform.a = transforms[6];
-			tileTransform.b = transforms[7];
-			tileTransform.c = transforms[8];
-			tileTransform.d = transforms[9];
-			tileTransform.tx = transforms[10];
-			tileTransform.ty = transforms[11];
+			var tileMatrix = CoolUtil.matrix;
 
-			inline tileRect.__transform(tileRect, tileTransform);
+			tileMatrix.a = transforms[6];
+			tileMatrix.b = transforms[7];
+			tileMatrix.c = transforms[8];
+			tileMatrix.d = transforms[9];
+			tileMatrix.tx = transforms[10];
+			tileMatrix.ty = transforms[11];
+
+			__transformRect(tileRect, tileMatrix);
 	
 			if (minX > tileRect.x) minX = tileRect.x;
 			if (minY > tileRect.y) minY = tileRect.y;
@@ -199,13 +199,43 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			if (maxY < tileRect.bottom) maxY = tileRect.bottom;
 		}
 
-		inline graphics.__inflateBounds(minX, minY);
-		inline graphics.__inflateBounds(maxX, maxY);
+		graphics.__inflateBounds(minX, minY);
+		graphics.__inflateBounds(maxX, maxY);
 
-		inline commands.drawQuads(rects, null, transforms);
+		commands.drawQuads(rects, null, transforms);
 
 		graphics.__dirty = true;
 		graphics.__visible = true;
+	}
+
+	// In draw quads, the rect always starts with x and y at 0, so we can skip some calculations here
+	function __transformRect(r:Rectangle, m:Matrix):Void
+	{
+		var w = r.width;
+		var h = r.height;
+		
+		var tx1 = 0.0;
+		var ty1 = 0.0;
+
+		var tx = m.a * w;
+		var ty = m.b * w;
+
+		if (tx > tx1) tx1 = tx;
+		if (ty > ty1) ty1 = ty;
+
+		tx = m.a * w + m.c * h;
+		ty = m.b * w + m.d * h;
+
+		if (tx > tx1) tx1 = tx;
+		if (ty > ty1) ty1 = ty;
+
+		tx = m.c * h;
+		ty = m.d * h;
+
+		if (tx > tx1) tx1 = tx;
+		if (ty > ty1) ty1 = ty;
+
+		r.setTo(m.tx, m.ty, tx1, ty1);
 	}
 	#end
 }

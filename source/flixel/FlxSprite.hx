@@ -129,7 +129,7 @@ using flixel.util.FlxColorTransformUtil;
 class FlxSprite extends FlxObject
 {
 	public var _dynamic:Dynamic = {};
-	
+
 	/**
 	 * The default value for `antialiasing` across all `FlxSprites`,
 	 * defaults to `false`.
@@ -281,13 +281,9 @@ class FlxSprite extends FlxObject
 	public var clipRect(default, set):FlxRect;
 
 	/**
-	 * GLSL shader for this sprite. Only works with OpenFL Next or WebGL.
-	 * Avoid changing it frequently as this is a costly operation.
+	 * GLSL shader for this sprite. Avoid changing it frequently as this is a costly operation.
 	 * @since 4.1.0
 	 */
-	#if openfl_legacy
-	@:noCompletion
-	#end
 	public var shader:FlxShader;
 
 	/**
@@ -762,10 +758,9 @@ class FlxSprite extends FlxObject
 	{
 		super.update(elapsed);
 		updateAnimation(elapsed);
+
 		if (_dynamic.update != null)
-		{
 			Reflect.callMethod(null, _dynamic.update, [elapsed]);
-		}
 	}
 
 	/**
@@ -781,6 +776,16 @@ class FlxSprite extends FlxObject
 	{
 		if (_frame == null)
 			loadGraphic("flixel/images/logo/default.png");
+		else if (graphic != null && graphic.isDestroyed)
+		{
+			// switch graphic but log and preserve size
+			final width = this.width;
+			final height = this.height;
+			FlxG.log.error('Cannot render a destroyed graphic, the placeholder image will be used instead');
+			loadGraphic("flixel/images/logo/default.png");
+			this.width = width;
+			this.height = height;
+		}
 	}
 
 	/**
@@ -1483,9 +1488,9 @@ class FlxSprite extends FlxObject
 	{
 		if (_angleChanged)
 		{
-			final rads:Float = angle * CoolUtil.TO_RADS;
-			_cosAngle = CoolUtil.cos(rads);
-			_sinAngle = CoolUtil.sin(rads);
+			var radians:Float = angle * CoolUtil.TO_RADS;
+			_sinAngle = CoolUtil.sin(radians);
+			_cosAngle = CoolUtil.cos(radians);
 			_angleChanged = false;
 		}
 	}

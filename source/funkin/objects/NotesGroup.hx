@@ -378,7 +378,7 @@ class NotesGroup extends Group
 
 	public var curSpawnNote(default, null):BasicNote = null;
 
-	inline function spawnNotes() { // Generate notes
+	inline function spawnNotes():Void { // Generate notes
 		if (curSpawnNote != null) {
 			final zoom = camera.zoom;
 			
@@ -401,7 +401,7 @@ class NotesGroup extends Group
 
 	public var curCheckEvent(default, null):Event = null;
 
-	inline function checkEvents() {
+	inline function checkEvents():Void {
 		if (curCheckEvent != null) {
 			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
 				final runEvent:Event = curCheckEvent;
@@ -412,11 +412,11 @@ class NotesGroup extends Group
 		}
 	}
 
-	inline public function isCpuNote(note:BasicNote) {
+	inline public function isCpuNote(note:BasicNote):Bool {
 		return note.mustPress ? inBotplay : dadBotplay;
 	}
 
-	public inline function checkCpuNote(note:BasicNote) {
+	public inline function checkCpuNote(note:BasicNote):Void {
 		if (isCpuNote(note)) if (note.mustHit) if (Conductor.songPosition >= note.strumTime) {
 			if (note.isSustainNote) {
 				final sus:Sustain = note.toSustain();
@@ -432,7 +432,7 @@ class NotesGroup extends Group
 		}
 	}
 
-	public inline function checkMissNote(note:BasicNote) {
+	public inline function checkMissNote(note:BasicNote):Void {
 		if (!note.activeNote) if (!note.isSustainNote) {
 			if (!isCpuNote(note)) if (note.mustHit)
 				noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
@@ -441,17 +441,20 @@ class NotesGroup extends Group
 		}
 	}
 
-	public function sustainMiss(note:Sustain) {
+	public function sustainMiss(note:Sustain):Void {
 		note.missedPress = true;
 		if (note.mustHit)
 			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
 	}
 
-    override function update(elapsed:Float) {
+    override function update(elapsed:Float):Void
+	{
         super.update(elapsed);
         updateConductor(elapsed);
 
-		if (!generatedMusic) return; // Stuff that needs notes / events
+		if (!generatedMusic)
+			return; // Stuff that needs notes / events
+		
 		spawnNotes();
 		checkEvents();
 
@@ -463,8 +466,10 @@ class NotesGroup extends Group
 		});
 
         if (isPlayState) {
-            if (game.inCutscene) return; // No controls in cutscenes >:(
+            if (game.inCutscene)
+				return; // No controls in cutscenes >:(
         }
+
         controls();
 		checkStrumAnims();
     }
@@ -477,7 +482,8 @@ class NotesGroup extends Group
 		});
 	}
 
-    private inline function controls():Void {
+    private function controls():Void
+	{
 		controlArray.splice(0, controlArray.length);
 		pushControls(playerStrums, inBotplay);
 		pushControls(opponentStrums, dadBotplay);
@@ -488,7 +494,8 @@ class NotesGroup extends Group
 			final removeList:Array<Note> = [];
 
 			notes.forEachAlive(function (note:BasicNote) {
-				if (isCpuNote(note)) return;
+				if (isCpuNote(note))
+					return;
 
 				if (note.isSustainNote) { // Handle sustain notes
 					final sus:Sustain = note.toSustain();
@@ -552,7 +559,7 @@ class NotesGroup extends Group
 					}
 
 					possibleNotes.fastForEach((note, i) -> {
-						if (note.targetStrum.getControl(JUST_PRESSED))
+						if (note.exists) if (note.targetStrum.getControl(JUST_PRESSED))
 							note.mustPress ? goodNoteHit.dispatch(note) : opponentNoteHit.dispatch(note);
 					});
 				}

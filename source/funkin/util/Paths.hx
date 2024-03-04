@@ -12,12 +12,14 @@ import sys.FileSystem;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-	public static var currentLevel(default, set):String;
+	public static var currentLevel(default, set):String = "";
 
 	public static function set_currentLevel(value:String)
 		return currentLevel = value.toLowerCase();
 
 	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
+		final hasLevel = currentLevel.length > 0;
+		
 		#if desktop
 		if (mods) {
 			final modFile:String = ((library?.length ?? 0) != 0 ? '$library/' : '') + file;
@@ -26,6 +28,12 @@ class Paths
 			final modFolderPath:String = getModPath(modFolder + modFile);
 			if (exists(modFolderPath, type))
 				return modFolderPath;
+
+			if (hasLevel) {
+				final levelPath = getLibraryPathForce(modFile, 'weeks', currentLevel, 'mods/$modFolder');
+				if (exists(levelPath, type))
+					return levelPath;
+			}
 			
 			if (allMods) {
 				for (i in ModdingUtil.activeMods.keys()) {
@@ -59,7 +67,7 @@ class Paths
 			}
 		}
 
-		if (currentLevel != null) {
+		if (hasLevel) {
 			final curLevelPath = getLibraryPathForce(file, 'weeks', currentLevel);
 			if (exists(curLevelPath, type))
 				return curLevelPath;
@@ -72,14 +80,14 @@ class Paths
 		return getPreloadPath(file);
 	}
 
-	static public function getLibraryPath(file:String, library = "preload", ?level:String):String
+	static public function getLibraryPath(file:String, library = "preload", ?level:String, root:String = "assets"):String
 	{
-		return (library == "preload" || library == "default") ? getPreloadPath(file) : getLibraryPathForce(file, library, level);
+		return (library == "preload" || library == "default") ? getPreloadPath(file) : getLibraryPathForce(file, library, level, root);
 	}
 
-	inline static function getLibraryPathForce(file:String, library:String, ?level:String):String
+	inline static function getLibraryPathForce(file:String, library:String, ?level:String, root:String = "assets"):String
 	{
-		return (level != null) ? '$library:assets/$library/$level/$file' : '$library:assets/$library/$file';
+		return (level != null) ? '$library:$root/$library/$level/$file' : '$library:$root/$library/$file';
 	}
 
 	inline static public function getModPath(file:String):String
