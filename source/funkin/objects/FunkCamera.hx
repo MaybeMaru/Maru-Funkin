@@ -15,6 +15,8 @@ import openfl.geom.ColorTransform;
 
 using flixel.util.FlxColorTransformUtil;
 
+private typedef FlxDrawItem = flixel.graphics.tile.FlxDrawQuadsItem;
+
 class CameraShape extends Shape {
     public function new() {
         super();
@@ -239,6 +241,65 @@ class FunkCamera extends FlxCamera {
             final drawItem = startQuadBatch(frame.parent, false, false, blend, smoothing, shader);
             drawItem.addQuad(frame, matrix, transform);
         }
+	}
+
+    @:noCompletion
+	public override function startQuadBatch(graphic:FlxGraphic, colored:Bool, hasColorOffsets:Bool = false, ?blend:BlendMode, smooth:Bool = false, ?shader:FlxShader)
+	{
+		#if FLX_RENDER_TRIANGLE
+		return startTrianglesBatch(graphic, smooth, colored, blend);
+		#else
+		var itemToReturn = null;
+		var blendInt:Int = FlxDrawBaseItem.blendToInt(blend);
+
+        if (_currentDrawItem != null)
+        if (_currentDrawItem.type == FlxDrawItemType.TILES)
+        {
+            var _headTiles = _headTiles;
+            if (_headTiles.graphics == graphic)
+            if (_headTiles.colored == colored)
+            if (_headTiles.hasColorOffsets == hasColorOffsets)
+            if (_headTiles.blending == blendInt)
+            if (_headTiles.blend == blend)
+            if (_headTiles.antialiasing == smooth)
+            if (_headTiles.shader == shader)
+                return _headTiles;
+        }
+
+        var storage = FlxCamera._storageTilesHead;
+        if (storage != null)
+		{
+			itemToReturn = storage;
+			var newHead = storage.nextTyped;
+			itemToReturn.reset();
+			FlxCamera._storageTilesHead = newHead;
+		}
+		else
+		{
+			itemToReturn = new FlxDrawItem();
+		}
+
+		itemToReturn.graphics = graphic;
+		itemToReturn.antialiasing = smooth;
+		itemToReturn.colored = colored;
+		itemToReturn.hasColorOffsets = hasColorOffsets;
+		itemToReturn.blending = blendInt;
+		itemToReturn.blend = blend;
+		itemToReturn.shader = shader;
+
+		itemToReturn.nextTyped = _headTiles;
+		_headTiles = itemToReturn;
+
+		if (_headOfDrawStack == null)
+			_headOfDrawStack = itemToReturn;
+
+		if (_currentDrawItem != null)
+			_currentDrawItem.next = itemToReturn;
+
+		_currentDrawItem = itemToReturn;
+
+		return itemToReturn;
+		#end
 	}
 }
 

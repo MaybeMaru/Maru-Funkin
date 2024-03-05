@@ -195,8 +195,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	
 			if (minX > tileRect.x) minX = tileRect.x;
 			if (minY > tileRect.y) minY = tileRect.y;
-			if (maxX < tileRect.right) maxX = tileRect.right;
-			if (maxY < tileRect.bottom) maxY = tileRect.bottom;
+			
+			var right = tileRect.right;
+			if (maxX < right) maxX = right;
+			
+			var bottom = tileRect.bottom;
+			if (maxY < bottom) maxY = bottom;
 		}
 
 		graphics.__inflateBounds(minX, minY);
