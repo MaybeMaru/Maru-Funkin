@@ -49,6 +49,9 @@
 	<!--If you want more accurate sprite angles, at cost of performance-->
 	<define name="FAST_MATH"/>
 
+	<!--If to enable custom classes support in Hscript-->
+	<define name="CUSTOM_CLASSES" />
+
 	<!--Web stuff, ill remove later probably-->
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" if="web"/>

@@ -10,7 +10,8 @@ import openfl.display.BitmapData;
     fix skew on angles other than 0 and 180 (Fr this shit fucking sucks)
 */
 
-class FlxSkewRepeatSprite extends FlxRepeatSprite {
+class FlxSkewRepeatSprite extends FlxRepeatSprite
+{
     static var idY:Int = -1;
 
     public var wigglePower:Float = 0.0;
@@ -36,7 +37,9 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
         var skewX = isLeftSkew() ? -lerpWiggle : lerpWiggle;
         _matrix.c = Math.tan(skewX * CoolUtil.TO_RADS); // Set skew X
 
-        if (clipRect == null) offsetSkew(tileFrame, baseFrame);
+        if (clipRect == null)
+            offsetSkew(tileFrame, baseFrame);
+        
         super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos, camera);
     }
 
@@ -46,7 +49,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     static var xOff:Float = 0.0;
 
-    inline function offsetSkew(tileFrame:FlxFrame, baseFrame:FlxFrame) {
+    function offsetSkew(tileFrame:FlxFrame, baseFrame:FlxFrame) {
         final percId = idY % (smoothTiles * 2);
         tileOffset.set();
 
@@ -67,7 +70,9 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite {
 
     override function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool {
         final _draw = super.handleClipRect(tileFrame, baseFrame, tilePos);
-        if (_draw && wigglePower != 0) offsetSkew(tileFrame, baseFrame);
+        if (_draw) if (wigglePower != 0)
+            offsetSkew(tileFrame, baseFrame);
+        
         return _draw;
     }
 }

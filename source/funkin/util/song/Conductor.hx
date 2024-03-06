@@ -185,9 +185,8 @@ class Conductor {
 	}
 
 	public static function soundSync(?sound:FlxFunkSound, offset:Float = 0) {
-		if (sound != null) {
+		if (sound != null)
 			sound.time = songPosition - offset - settingOffset;
-		}
 	}
 
 	public static function autoSync(maxOff:Int = 40):Void {

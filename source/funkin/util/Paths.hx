@@ -348,8 +348,8 @@ class Paths
 
 	inline static public function getAssetPath(key:String, type:AssetType = IMAGE):String {
 		return switch (type) {
-			case SOUND: soundFolder(key);
-			default: 	png(key);
+			case SOUND: 	soundFolder(key);
+			case IMAGE | _:	png(key);
 		}
 	}
 }
