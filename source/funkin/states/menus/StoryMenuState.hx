@@ -174,7 +174,7 @@ class StoryMenuState extends MusicBeatState {
 		difficultySelectors.visible = Highscore.getWeekUnlock(storyWeeks[curWeek].name);
 		leftArrow.visible = rightArrow.visible = curWeekDiffs.length > 1;
 
-		if ((getKey('BACK', JUST_PRESSED)) && !movedBack && !selectedWeek) {
+		if (!movedBack) if (!selectedWeek) if (getKey('BACK', JUST_PRESSED)) {
 			movedBack = true;
 			CoolUtil.playSound('cancelMenu');
 			switchState(new MainMenuState());
@@ -183,10 +183,10 @@ class StoryMenuState extends MusicBeatState {
 		lerpColor.lerp(targetColor ?? FlxColor.WHITE, 0.045, true);
 		storyBG.color = lerpColor.get();
 		
-		for (member in grpWeekCharacters) {
+		grpWeekCharacters.members.fastForEach((member, i) -> {
 			if (member.lerpColor)
 				member.color = storyBG.color;
-		}
+		});
 
 		super.update(elapsed);
 	}
@@ -279,10 +279,9 @@ class StoryMenuState extends MusicBeatState {
 			}
 		}
 
-		for (i in 0...grpWeekText.members.length) {
-			final item = grpWeekText.members[i];
+		grpWeekText.members.fastForEach((item, i) -> {
 			item.targetY = i - curWeek;
-		}
+		});
 
 		changeDifficulty();
 		updateText();
@@ -291,8 +290,10 @@ class StoryMenuState extends MusicBeatState {
 
 	function updateText():Void {
 		ModdingUtil.runFunctionMod(storyWeeks[curWeek].modFolder, function () {
-			for (i in 0...grpWeekCharacters.members.length)
-				grpWeekCharacters.members[i].setupChar(getWeekChars()[i]);
+			var weekChars = getWeekChars();
+			grpWeekCharacters.members.fastForEach((member, i) -> {
+				member.setupChar(weekChars[i]);
+			});
 		});
 
 		txtTracklist.text = 'Tracks\n';

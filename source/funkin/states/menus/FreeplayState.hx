@@ -44,22 +44,23 @@ class FreeplayState extends MusicBeatState {
 		#end
 
 		coolColors = new Map<String, FlxColor>();
-		for (i in 0...WeekSetup.getWeekList().length) {
-			final data = WeekSetup.weekList[i];
-			final weekName = data.name;
+
+		WeekSetup.getWeekList().fastForEach((data, i) -> {
+			final name = data.name;
 			final week = data.data;
 			
-			if (Highscore.getWeekUnlock(weekName) && !week.hideFreeplay)
+			if (!week.hideFreeplay) if (Highscore.getWeekUnlock(name))
 			{
-				addWeek(week.songList.songs, week.songList.songIcons, weekName, data.modFolder);
+				final list = week.songList;
+				addWeek(list.songs, list.songIcons, name, data.modFolder);
 
-				final songColors = week.songList.songColors;
-				for (i in 0...week.songList.songs.length) {
-					final songColor = FlxColorFix.fromString(songColors[cast FlxMath.bound(i, 0, songColors.length-1)]);
-					coolColors.set(formatColor(weekName, i), songColor);
+				final colors = list.songColors;
+				for (s in 0...list.songs.length) {
+					final color = FlxColorFix.fromString(colors[cast FlxMath.bound(s, 0, colors.length - 1)]);
+					coolColors.set(formatColor(name, s), color);
 				}
 			}
-		}
+		});
 
 		bg = new FunkinSprite('menuDesat');
 		add(bg);
@@ -160,7 +161,6 @@ class FreeplayState extends MusicBeatState {
 		if (Math.abs(lerpScore - intendedScore) <= 10) lerpScore = intendedScore;
 		scoreText.text = "PERSONAL BEST: " + lerpScore;
 
-		//for (i in [scoreText,diffText,scoreBG]) i.x = CoolUtil.coolLerp(i.x, lerpPosition, 0.2);
 		scoreBG.x = Math.max(CoolUtil.coolLerp(scoreBG.x, lerpPosition, 0.2), 0);
 		scoreText.x = Math.max(CoolUtil.coolLerp(scoreText.x, lerpPosition, 0.2), 0);
 		diffText.x = CoolUtil.coolLerp(diffText.x, lerpPosition, 0.2);
@@ -256,15 +256,17 @@ class FreeplayState extends MusicBeatState {
 				curDifficulty = curWeekDiffs.indexOf(lastWeekDiffs[curDifficulty]);
 			}
 		}
+
 		changeDiff();
 
-		for (i in 0...grpSongs.members.length) {
-			var item = grpSongs.members[i];
+		grpSongs.members.fastForEach((item, i) -> {
 			item.targetY = i - curSelected;
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;
-		}
+		});
 
-		for (i in iconArray) i.alpha = 0.6;
+		for (i in iconArray)
+			i.alpha = 0.6;
+		
 		iconArray[curSelected].alpha = 1;
 		targetColor = getBgColor();
 	}

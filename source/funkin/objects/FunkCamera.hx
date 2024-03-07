@@ -123,8 +123,9 @@ class FunkCamera extends FlxCamera {
         if (_fxFlashAlpha > 0.0) {
 			_fxFlashAlpha -= elapsed / _fxFlashDuration;
             __flashShape.setAlpha(_fxFlashAlpha);
-			if ((_fxFlashAlpha <= 0) && (_fxFlashComplete != null))
-				_fxFlashComplete();
+			
+            if (_fxFlashAlpha <= 0) if (_fxFlashComplete != null)
+                _fxFlashComplete();
 		}
     }
 
@@ -150,7 +151,8 @@ class FunkCamera extends FlxCamera {
 	}
 
     override public function fade(Color:FlxColor = FlxColor.BLACK, Duration:Float = 1, FadeIn:Bool = false, ?OnComplete:Void->Void, Force:Bool = false):Void {
-		if (_fxFadeDuration > 0 && !Force) return;
+        if (_fxFadeDuration > 0) if (!Force)
+            return;
 
 		_fxFadeColor = Color;
         __fadeShape.setColor(Color);
@@ -163,7 +165,8 @@ class FunkCamera extends FlxCamera {
 	}
 
     override public function flash(Color:FlxColor = FlxColor.WHITE, Duration:Float = 1, ?OnComplete:Void->Void, Force:Bool = false):Void {
-		if (!Force && (_fxFlashAlpha > 0.0)) return;
+        if (_fxFlashAlpha > 0) if (!Force)
+            return;
 
 		_fxFlashColor = Color;
         __flashShape.setColor(Color);
@@ -176,13 +179,14 @@ class FunkCamera extends FlxCamera {
 
     override function updateInternalSpritePositions() {
         if (canvas != null) {
-			canvas.x = -0.5 * width * (scaleX - initialZoom) * FlxG.scaleMode.scale.x;
-			canvas.y = -0.5 * height * (scaleY - initialZoom) * FlxG.scaleMode.scale.y;
+            final scaleMode = FlxG.scaleMode.scale;
+			canvas.x = -0.5 * width * (scaleX - initialZoom) * scaleMode.x;
+			canvas.y = -0.5 * height * (scaleY - initialZoom) * scaleMode.y;
 
 			canvas.scaleX = totalScaleX;
 			canvas.scaleY = totalScaleY;
 
-            if (__fadeShape != null && __flashShape != null) {
+            if (__fadeShape != null) if (__flashShape != null) {
                 __fadeShape.scaleX = __flashShape.scaleX = totalScaleX * width / zoom;
                 __fadeShape.scaleY = __flashShape.scaleY = totalScaleY * height / zoom;
             }
@@ -233,8 +237,8 @@ class FunkCamera extends FlxCamera {
             matrix.ty = Std.int(matrix.ty / pixelMult) * pixelMult;
         }
         
-        if (transform != null) {
-            final drawItem = startQuadBatch(frame.parent, inline transform.hasRGBMultipliers(), inline transform.hasRGBAOffsets(), blend, smoothing, shader);
+        if (transform != null) {  
+            final drawItem = startQuadBatch(frame.parent, transform.hasRGBMultipliers(), transform.hasRGBAOffsets(), blend, smoothing, shader);
             drawItem.addQuad(frame, matrix, transform);
         }
         else {

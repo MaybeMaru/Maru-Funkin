@@ -69,6 +69,7 @@ class FlxFunkSound extends FlxBasic
     }
 
     public var onComplete:()->Void;
+    public var autoDestroy:Bool = false;
     
     private function __soundFinish() {        
         if (onComplete != null)
@@ -81,6 +82,9 @@ class FlxFunkSound extends FlxBasic
         else
         {
             stop();
+
+            if (autoDestroy)
+                destroy();
         }
     }
 
