@@ -168,10 +168,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	@:noCompletion
 	private inline function __superDraw():Void {
-		checkEmptyFrame();
-
 		if (!visible) return;
 		if (alpha == 0) return;
+		
+		checkEmptyFrame();
 		if (_frame.type == EMPTY) return;
 		
 		if (dirty)

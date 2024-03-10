@@ -373,11 +373,14 @@ class CoolUtil {
     public static final returnJudgements:Array<String> = ['shit', 'bad', 'good'];
 
     public static function getNoteJudgement(noteDiff:Float):String {
-        for (i in 0...judgeOffsets.length) {
-            if (checkDiff(noteDiff, judgeOffsets[i]))
+		var i = 0;
+		var l = judgeOffsets.length;
+		while (i < l) {
+			if (checkDiff(noteDiff, judgeOffsets[i]))
                 return returnJudgements[i];
-        }
-        return 'sick';
+			i++;
+		}
+		return "sick";
     }
 
     inline public static function checkDiff(noteDiff:Float, safeOffset:Int):Bool {

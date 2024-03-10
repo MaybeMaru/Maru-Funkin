@@ -85,14 +85,19 @@ class Sustain extends BasicNote {
         return setSusLength(susLength);
     }
 
-    public inline function setSusLength(mills:Float = 0.0):Float {
+    public inline function setSusLength(mills:Float = 0.0):Float
+    {
         repeatHeight = getMillPos(mills) + ((NoteUtil.swagHeight * 0.5) * (noteSpeed < 1.0 ? noteSpeed : 1.0));
-        clipRect.height = repeatHeight;
+        
+        if (clipRect != null)
+            clipRect.height = repeatHeight;
 
         // Kill too short sustains
-        if (Std.int(repeatHeight) <= Std.int(NoteUtil.swagHeight * 0.501))
+        if (Std.int(repeatHeight) <= Std.int(NoteUtil.swagHeight * 0.501)) {
             removeNote();
-        
+            return 0.0;
+        }
+
         return repeatHeight;
     }
 
