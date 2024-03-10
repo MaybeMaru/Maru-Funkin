@@ -226,10 +226,11 @@ class FunkCamera extends FlxCamera {
         return pixelMult = (value < 1 ? 1 : value);
     }
     
-    override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void {        
+    override public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader):Void
+    {
         if (_fxShakeDuration > 0) {
-            matrix.tx += _shakeX;
-            matrix.ty += _shakeY;
+            matrix.tx = (matrix.tx + _shakeX);
+            matrix.ty = (matrix.ty + _shakeY);
         }
         
         if (pixelPerfect) {
@@ -323,21 +324,22 @@ class AngledCamera extends FunkCamera {
         return angle = value;
     }
 
-    override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader) {
+    override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false, ?shader:FlxShader)
+    {
         if (_fxShakeDuration > 0) {
-            matrix.tx += _shakeX;
-            matrix.ty += _shakeY;
+            matrix.tx = (matrix.tx + _shakeX);
+            matrix.ty = (matrix.ty + _shakeY);
         }
         
         if (angle != 0) {
             final midX = width * .5;
             final midY = height * .5;
-            
-            matrix.tx -= midX;
-            matrix.ty -= midY;
+
+            matrix.tx = (matrix.tx - midX);
+            matrix.ty = (matrix.ty - midY);
             matrix.rotateWithTrig(_cos, _sin);
-            matrix.tx += midX;
-            matrix.ty += midY;
+            matrix.tx = (matrix.tx + midX);
+            matrix.ty = (matrix.ty + midY);
         }
 
         if (pixelPerfect) {

@@ -7,7 +7,8 @@ import funkin.substates.PromptSubstate;
 
 //	TODO: Clean this shit up!!!
 
-class ControlsState extends MusicBeatState {
+class ControlsState extends MusicBeatState
+{
 	var controlItems:TypedGroup<ControlItem>;
 	var curSelected:Int = 0;
 	var curBind:Int = 0;
@@ -16,7 +17,6 @@ class ControlsState extends MusicBeatState {
 		FlxG.resetState();
 	}
 
-	var menuCam:FlxCamera;
 	var camFollow:FlxObject;
 	var selectRect:FlxSpriteExt;
 
@@ -24,9 +24,6 @@ class ControlsState extends MusicBeatState {
 		FlxG.gamepads.deviceConnected.add(resetGamepad);
 		FlxG.gamepads.deviceDisconnected.add(resetGamepad);
 
-		menuCam = new FlxCamera();
-		FlxG.cameras.add(menuCam);
-		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
 		camFollow = new FlxObject(FlxG.width * .5, 0);
 		add(camFollow);
 		
@@ -55,7 +52,7 @@ class ControlsState extends MusicBeatState {
 		}
 
 		reloadValues();
-		menuCam.follow(camFollow, null, 0.16);
+		FlxG.camera.follow(camFollow, null, 0.16);
 		
 		super.create();
 	}
@@ -93,7 +90,7 @@ class ControlsState extends MusicBeatState {
 		}
 
 		changeSelection();
-		menuCam.focusOn(camFollow.getPosition());
+		FlxG.camera.focusOn(camFollow.getPosition());
 	}
 
 	override function closeSubState():Void {
