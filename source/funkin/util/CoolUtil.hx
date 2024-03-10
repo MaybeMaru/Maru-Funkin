@@ -50,14 +50,29 @@ class CoolUtil {
 	public static var rectangle:Rectangle = new Rectangle();
 
 	public inline static function resetMatrix():FlxMatrix {
-		final matrix = matrix;
-		matrix.a = 1;
-		matrix.b = 0;
-		matrix.c = 0;
-		matrix.d = 1;
-		matrix.tx = 0;
-		matrix.ty = 0;
-		return matrix;
+		final mat = matrix;
+		mat.a = 1;
+		mat.b = 0;
+		mat.c = 0;
+		mat.d = 1;
+		mat.tx = 0;
+		mat.ty = 0;
+		return mat;
+	}
+
+	public static inline function matrixScale(mat:FlxMatrix, sx:Float, sy:Float):Void
+	{
+		if (sx != 1) {
+			mat.a = (mat.a * sx);
+			mat.c = (mat.c * sx);
+			mat.tx = (mat.tx * sx);
+		}
+
+		if (sy != 1) {
+			mat.b = (mat.b * sy);
+			mat.d = (mat.d * sy);
+			mat.ty = (mat.ty * sy);
+		}
 	}
 
 	inline public static function openUrl(url:String) {

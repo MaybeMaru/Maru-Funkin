@@ -37,11 +37,11 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating> {
         final numSplit:Array<String> = Std.string(combo).split('');
         numSplit.reverse();
 
-        for (i in 0...numSplit.length) {
+        numSplit.fastForEach((str, i) -> {
             final num:NumRating = cast(recycle(NumRating), NumRating);
-            num.init(numSplit[i], i);
+            num.init(str, i);
             addTop(num);
-        }
+        });
     }
 
     public function drawJudgement(judgement:String):Void {

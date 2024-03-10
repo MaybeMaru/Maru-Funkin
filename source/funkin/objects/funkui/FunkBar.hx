@@ -64,44 +64,20 @@ class FunkBar extends FlxSpriteExt {
 		if (alpha == 0 || !visible || _frame.type == EMPTY) return;
 		if (dirty) calcFrame(useFramePixels);  // rarely
 
-		for (i in 0...cameras.length) {
-			final camera = cameras[i];
-			if (!camera.visible || !camera.exists || !isOnScreen(camera)) {
-                barPoint.set(-9999,-9999);
-                continue;
-            }
-			drawComplex(camera);
-			#if FLX_DEBUG flixel.FlxBasic.visibleCount++; #end
-		}
+        cameras.fastForEach((camera, i) -> {
+			barPoint.set(-9999,-9999);
+            if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
+				drawComplex(camera);
+				#if FLX_DEBUG FlxBasic.visibleCount++; #end
+			}
+		});
 
 		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
     }
 
-    override function drawComplex(camera:FlxCamera) {
-		prepareFrameMatrix(_frame, _matrix);
-		
-		inline _matrix.translate(-origin.x, -origin.y);
-		inline _matrix.scale(scale.x, scale.y);
-
-		if (angle != 0) {
-			__updateTrig();
-			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
-		}
-
-		if (skew.x != 0 || skew.y != 0) {
-			inline _skewMatrix.identity();
-			_skewMatrix.b = Math.tan(skew.y * CoolUtil.TO_RADS);
-			_skewMatrix.c = Math.tan(skew.x * CoolUtil.TO_RADS);
-			inline _matrix.concat(_skewMatrix);
-		}
-
-		getScreenPosition(_point, camera).subtractPoint(offset);
-		_point.add(origin.x, origin.y);
-		_matrix.translate(_point.x, _point.y);
-
-        /*
-         * This isn't pretty too look at but shhhhhh it works
-        **/
+    override function drawComplex(camera:FlxCamera)
+    {
+		__prepareDraw();
         
         var percentWidth = width * percent * 0.01;
         var percentCut = width - percentWidth;

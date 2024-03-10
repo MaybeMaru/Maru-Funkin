@@ -169,9 +169,10 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	@:noCompletion
 	private inline function __superDraw():Void {
 		checkEmptyFrame();
-		
-		if (alpha == 0 || !visible || _frame.type == FlxFrameType.EMPTY)
-			return;
+
+		if (!visible) return;
+		if (alpha == 0) return;
+		if (_frame.type == EMPTY) return;
 		
 		if (dirty)
 			calcFrame(useFramePixels);  // rarely
@@ -221,7 +222,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return lodScale = value;
 	}
 
-	override function set_graphic(value:FlxGraphic):FlxGraphic {
+	override function set_graphic(value:FlxGraphic):FlxGraphic
+	{
 		if (graphic != value) {
 			lodScale = (value is LodGraphic) ? cast(value, LodGraphic).lodScale : 1.0;			
 			graphic = value;
@@ -230,7 +232,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return value;
 	}
 
-	public function makeRect(width:Float, height:Float, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String, ?useTexture:Bool):FlxSpriteExt {
+	public function makeRect(width:Float, height:Float, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String, ?useTexture:Bool):FlxSpriteExt
+	{
 		makeGraphic(1, 1, color, unique, key);
 		antialiasing = false;
 		scale.set(width, height);
@@ -242,7 +245,8 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	override function makeGraphic(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String):FlxSprite {
+	override function makeGraphic(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String):FlxSprite
+	{
 		if (key == null)
 			key = '::g::w$width::h$height::c$color::';
 		
@@ -271,9 +275,11 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix):Void {
+	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix):Void
+	{
 		var flipX = (flipX != _frame.flipX);
 		var flipY = (flipY != _frame.flipY);
+		
 		if (animation.curAnim != null)
 		{
 			flipX != animation.curAnim.flipX;
@@ -281,58 +287,70 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		}
 		
 		@:privateAccess {
-			mat.a = frame.tileMatrix[0];
-			mat.b = frame.tileMatrix[1];
-			mat.c = frame.tileMatrix[2];
-			mat.d = frame.tileMatrix[3];
-			mat.tx = frame.tileMatrix[4];
-			mat.ty = frame.tileMatrix[5];
+			final tileMat = frame.tileMatrix;
+			mat.a = tileMat[0];
+			mat.b = tileMat[1];
+			mat.c = tileMat[2];
+			mat.d = tileMat[3];
+			mat.tx = tileMat[4];
+			mat.ty = tileMat[5];
 		}
 
 		if (frame.angle == 180) {
 			mat.rotateBy180();
-			mat.tx += frame.sourceSize.y;
-			mat.ty += frame.sourceSize.x;
+			mat.tx = (mat.tx + frame.sourceSize.y);
+			mat.ty = (mat.ty + frame.sourceSize.x);
 		}
 
 		if (lodScale != 1.0)
-			inline mat.scale(lodScale, lodScale);
+			CoolUtil.matrixScale(mat, lodScale, lodScale);
 
 		if (flipX != frame.flipX) {
-			inline mat.scale(-1, 1);
-			mat.tx += frame.sourceSize.x;
+			CoolUtil.matrixScale(mat, -1, 1);
+			mat.tx = (mat.tx + frame.sourceSize.x);
 		}
 
 		if (flipY != frame.flipY) {
-			inline mat.scale(1, -1);
-			mat.ty += frame.sourceSize.y;
+			CoolUtil.matrixScale(mat, 1, -1);
+			mat.tx = (mat.tx + frame.sourceSize.y);
 		}
 	}
 
 	@:noCompletion
 	private inline function __superDrawComplex(camera:FlxCamera):Void {
-		prepareFrameMatrix(_frame, _matrix);
+		__prepareDraw();
+		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+	}
+
+	@:noCompletion
+	private inline function __prepareDraw():Void
+	{
+		final mat:FlxMatrix = _matrix;
 		
-		inline _matrix.translate(-origin.x, -origin.y);
-		inline _matrix.scale(scale.x, scale.y);
+		prepareFrameMatrix(_frame, mat);
+
+		mat.tx = (mat.tx - origin.x);
+		mat.ty = (mat.ty - origin.y);
+		
+		CoolUtil.matrixScale(mat, scale.x, scale.y);
 
 		if (angle != 0) {
 			__updateTrig();
-			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
+			mat.rotateWithTrig(_cosAngle, _sinAngle);
 		}
 
 		if (skew.x != 0 || skew.y != 0) {
-			inline _skewMatrix.identity();
+			_skewMatrix.identity();
 			_skewMatrix.b = Math.tan(skew.y * CoolUtil.TO_RADS);
 			_skewMatrix.c = Math.tan(skew.x * CoolUtil.TO_RADS);
-			inline _matrix.concat(_skewMatrix);
+			mat.concat(_skewMatrix);
 		}
 
 		getScreenPosition(_point, camera).subtractPoint(offset);
 		_point.add(origin.x, origin.y);
-		inline _matrix.translate(_point.x, _point.y);
 
-		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
+		mat.tx = (mat.tx + _point.x);
+		mat.ty = (mat.ty + _point.y);
 	}
 
     public override function getScreenBounds(?rect:FlxRect, ?cam:FlxCamera):FlxRect {
@@ -360,7 +378,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
     public function switchAnim(anim1:String, anim2:String):Void {
-		if (animation.getByName(anim1) != null && animation.getByName(anim2) != null) {
+		if (animation.getByName(anim1) != null) if (animation.getByName(anim2) != null) {
 			final oldAnim1 = animation.getByName(anim1).frames;
 			final oldOffset1 = animOffsets[anim1];
 	
