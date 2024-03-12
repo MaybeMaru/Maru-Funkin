@@ -6,7 +6,7 @@ import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.FunkCamera.AngledCamera;
 
-@:build(macros.GetSetBuilder.build(["notes", "unspawnNotes", "controlArray", "playerStrums", "opponentStrums", "grpNoteSplashes", "curSong", "generatedMusic", "skipStrumIntro", "inBotplay"], "notesGroup"))
+@:build(macros.GetSetBuilder.build(["notes", "unspawnNotes", "controlArray", "playerStrums", "opponentStrums", "grpNoteSplashes", "curSong", "generatedMusic", "skipStrumIntro", "inBotplay", "dadBotplay"], "notesGroup"))
 @:build(macros.GetSetBuilder.buildGet(["strumLineNotes", "strumLineInitPos", "playerStrumsInitPos", "opponentStrumsInitPos"], "notesGroup"))
 class PlayState extends MusicBeatState
 {	

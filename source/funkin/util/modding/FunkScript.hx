@@ -223,8 +223,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		// DONT USE THIS, ITS A WIP
 		set('makeModchartManager', function () {
 			final manager = funkin.util.frontend.ModchartManager.makeManager();
-			manager.setStrumLine(0, PlayState?.instance?.opponentStrums);
-			manager.setStrumLine(1, PlayState?.instance?.playerStrums);
+			final instance = PlayState.instance;
+			if (instance != null) {
+				manager.setStrumLine(0, instance.notesGroup.opponentStrums);
+				manager.setStrumLine(1, instance.notesGroup.playerStrums);
+			}
 			return manager;
 		});
 
@@ -489,18 +492,18 @@ class CustomState extends MusicBeatState {
 
     override public function create() {
 		ModdingUtil.addPrint(key + " / Custom State");
-		checkSuper("create");
+		checkSuper(CREATE);
     }
     
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new MainMenuState()); // emergency exit
 		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(key, false, false);
-		checkSuper("update", [elapsed]);
+		checkSuper(UPDATE, [elapsed]);
     }
 
-	override public function stepHit(curStep) 		checkSuper("stepHit", [curStep]);
-	override public function beatHit(curBeat) 		checkSuper("beatHit", [curBeat]);
-	override public function sectionHit(curSection) checkSuper("sectionHit", [curSection]);
+	override public function stepHit(curStep) 		checkSuper(STEP, [curStep]);
+	override public function beatHit(curBeat) 		checkSuper(BEAT, [curBeat]);
+	override public function sectionHit(curSection) checkSuper(SECTION, [curSection]);
 	override public function destroy() {
 		script.callback("destroy");
 		super.destroy();

@@ -117,8 +117,8 @@ class NotesGroup extends Group
 		goodNoteHit = new FlxTypedSignal<(Note)->Void>();
 		goodSustainPress = new FlxTypedSignal<(Sustain)->Void>();
 		
-		noteMiss = new FlxTypedSignal<(Int, BasicNote)->Void>();
-		badNoteHit = new FlxSignal();
+		noteMiss = new FlxTypedSignal<(BasicNote)->Void>();
+		badNoteHit = new FlxTypedSignal<(Int)->Void>();
 		
 		opponentNoteHit = new FlxTypedSignal<(Note)->Void>();
 		opponentSustainPress = new FlxTypedSignal<(Sustain)->Void>();
@@ -154,46 +154,47 @@ class NotesGroup extends Group
 
 		if (!isPlayState) return;
 
-		noteMiss.add(function(direction:Int = 1, ?note:BasicNote):Void {
-			if (note == null) {
-				game.health -= 0.04;
-				game.songScore -= 10;
-				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-				ModdingUtil.addCall('badNoteHit', [direction]);
-			}
-			else {
-				if (game.combo >= 5) game.gf.playAnim('sad');
-				game.combo = 0;
+		noteMiss.add(function(note:BasicNote):Void 
+		{
+			if (game.combo > 4) game.gf.playAnim('sad');
+			game.combo = 0;
 				
-				Conductor.vocals.volume = 0;
-				final healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
+			Conductor.vocals.volume = 0;
+			final healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
 
-				var healthMult = 1.0;
-				if (note.isSustainNote) {
-					final sus:Sustain = note.toSustain();
-					healthMult = (sus.startedPress ? sus.percentLeft : 1) * (sus.susLength / Conductor.stepCrochet) * 4;
-				}
-
-				game.health -= healthLoss * healthMult;
-				game.songScore -= Std.int(10 * healthMult);
-
-				game.noteCount++;
-				game.songMisses++;
-					
-				ModdingUtil.addCall('noteMiss', [note]);
+			var healthMult = 1.0;
+			if (note.isSustainNote) {
+				final sus:Sustain = note.toSustain();
+				healthMult = (sus.startedPress ? sus.percentLeft : 1) * (sus.susLength / Conductor.stepCrochet) * 4;
 			}
 
-			final missChar = note == null ? game.boyfriend : note.mustPress ? game.boyfriend : game.dad;
-			missChar.sing(direction, 'miss');
+			game.health -= healthLoss * healthMult;
+			game.songScore -= Std.int(10 * healthMult);
+
+			game.noteCount++;
+			game.songMisses++;
+					
+			ModdingUtil.addCall('noteMiss', [note]);
+
+			var char:Character = note.mustPress ? game.boyfriend : game.dad;
+			char.sing(note.noteData, 'miss');
 			
 			game.updateScore();
 		});
 
-		badNoteHit.add(function () {
-			controlArray.fastForEach((control, i) -> {
-				if (control)
-					noteMiss.dispatch(i, null);
-			});
+		badNoteHit.add(function (data:Int) {
+			game.health -= 0.04;
+			game.songScore -= 10;
+			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			ModdingUtil.addCall('badNoteHit', [data]);
+
+			if (!inBotplay)
+				game.boyfriend.sing(data, 'miss');
+
+			if (!dadBotplay)
+				game.dad.sing(data, 'miss');
+
+			game.updateScore();
 		});
     }
 
@@ -332,8 +333,8 @@ class NotesGroup extends Group
     public var goodNoteHit:FlxTypedSignal<(Note)->Void>;
     public var goodSustainPress:FlxTypedSignal<(Sustain)->Void>;
     
-	public var noteMiss:FlxTypedSignal<(Int, BasicNote)->Void>;
-    public var badNoteHit:FlxSignal;
+	public var noteMiss:FlxTypedSignal<(BasicNote)->Void>;
+    public var badNoteHit:FlxTypedSignal<(Int)->Void>;
     
     public var opponentNoteHit:FlxTypedSignal<(Note)->Void>;
     public var opponentSustainPress:FlxTypedSignal<(Sustain)->Void>;
@@ -435,7 +436,7 @@ class NotesGroup extends Group
 	public inline function checkMissNote(note:BasicNote):Void {
 		if (!note.activeNote) if (!note.isSustainNote) {
 			if (!isCpuNote(note)) if (note.mustHit)
-				noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
+				noteMiss.dispatch(note);
 	
 			note.removeNote();
 		}
@@ -444,7 +445,7 @@ class NotesGroup extends Group
 	public function sustainMiss(note:Sustain):Void {
 		note.missedPress = true;
 		if (note.mustHit)
-			noteMiss.dispatch(note.noteData % Conductor.NOTE_DATA_LENGTH, note);
+			noteMiss.dispatch(note);
 	}
 
     override function update(elapsed:Float):Void
@@ -482,16 +483,23 @@ class NotesGroup extends Group
 		});
 	}
 
+	// Calculate input bullshit
+	private var possibleNotes:Array<Note> = new Array<Note>();
+	private var removeList:Array<Note> = new Array<Note>();
+	private var ignoreList:Array<Int> = new Array<Int>();
+
     private function controls():Void
 	{
 		controlArray.splice(0, controlArray.length);
 		pushControls(playerStrums, inBotplay);
 		pushControls(opponentStrums, dadBotplay);
 
-		if (generatedMusic) {
-			final possibleNotes:Array<Note> = [];
-			final ignoreList:Array<Int> = [];
-			final removeList:Array<Note> = [];
+		if (generatedMusic)
+		{
+			final hasControl:Bool = controlArray.contains(true);
+			possibleNotes.splice(0, possibleNotes.length);
+			removeList.splice(0, removeList.length);
+			ignoreList.splice(0, ignoreList.length);
 
 			notes.forEachAlive(function (note:BasicNote) {
 				if (isCpuNote(note))
@@ -519,18 +527,20 @@ class NotesGroup extends Group
 						}
 					}
 				}
-				else { // Handle normal notes
-					if (controlArray.contains(true)) {
+				else // Handle normal notes
+				{
+					if (hasControl)
+					{
 						final note:Note = note.toNote();
-						if (note.canBeHit) if (!note.wasGoodHit) {
-							if (ignoreList.contains(note.noteData)) {
-								possibleNotes.fastForEach((possibleNote, i) -> {
-									if (possibleNote.noteData == note.noteData) if (Math.abs(note.strumTime - possibleNote.strumTime) < 10) {
-										removeList.push(note);
-									}
-									else if (possibleNote.noteData == note.noteData) if (note.strumTime < possibleNote.strumTime) {
-										possibleNotes.remove(possibleNote);
-										possibleNotes.push(note);
+						if (note.canBeHit) if (!note.wasGoodHit)
+						{
+							if (ignoreList.contains(note.noteData))
+							{
+								possibleNotes.fastForEach((posNote, i) -> {
+									if (posNote.noteData == note.noteData)
+									{
+										if (Math.abs(note.strumTime - posNote.strumTime) < 10) 	removeList.push(note);
+										else if (note.strumTime < posNote.strumTime) 			possibleNotes[i] = note;
 									}
 								});
 							}
@@ -543,18 +553,23 @@ class NotesGroup extends Group
 				}
 			});
 
-			if (controlArray.contains(true)) {
+			if (hasControl)
+			{
 				removeList.fastForEach((note, i) -> {
 					note.removeNote();
 				});
 				
-				final onGhost = isPlayState ? game.ghostTapEnabled : true;
+				final ghostOff = isPlayState ? !game.ghostTapEnabled : false;
 
-				if (possibleNotes.length > 0) {
-					if (!onGhost) {
+				if (possibleNotes.length > 0)
+				{
+					if (ghostOff) {
 						controlArray.fastForEach((control, i) -> {
-							if (control) if (!ignoreList.contains(i))
-								badNoteHit.dispatch();
+							if (control) {
+								final data = i % Conductor.NOTE_DATA_LENGTH;
+								if (!ignoreList.contains(data))
+									badNoteHit.dispatch(data);
+							}
 						});
 					}
 
@@ -563,13 +578,17 @@ class NotesGroup extends Group
 							note.mustPress ? goodNoteHit.dispatch(note) : opponentNoteHit.dispatch(note);
 					});
 				}
-				else if (!onGhost)
-					badNoteHit.dispatch();
+				else if (ghostOff) {
+					controlArray.fastForEach((control, i) -> {
+						if (control)
+							badNoteHit.dispatch(i % Conductor.NOTE_DATA_LENGTH);
+					});
+				}
 			}
 		}
 	}
 
-	inline function checkStrums(array:Array<NoteStrum>) {
+	inline function checkStrums(array:Array<NoteStrum>):Void {
 		array.fastForEach((strum, i) -> {
 			final anim = strum.animation.curAnim;
 			if (anim == null) continue; // Lil null check
@@ -593,7 +612,7 @@ class NotesGroup extends Group
 		}
 	}
 
-	function checkOverSinging(char:Character, strums:StrumLineGroup) {
+	function checkOverSinging(char:Character, strums:StrumLineGroup):Void {
 		var anim = char.animation.curAnim;
 		if (anim == null) return;
 		var name:String = anim.name;
@@ -617,7 +636,7 @@ class NotesGroup extends Group
 		}
 	}
 
-	public function playStrumAnim(note:BasicNote, anim:String = 'confirm', forced:Bool = true) {
+	public function playStrumAnim(note:BasicNote, anim:String = 'confirm', forced:Bool = true):Void {
 		var strum = note.targetStrum;
 		if (strum != null) {
 			strum.playStrumAnim(anim, forced);
@@ -625,12 +644,16 @@ class NotesGroup extends Group
 		}
 	}
 
-	override function destroy() {
+	override function destroy():Void {
 		super.destroy();
 		curSpawnNote = null;
 		curCheckEvent = null;
-		controlArray = null;
 		unspawnNotes = FlxDestroyUtil.destroyArray(unspawnNotes);
+
+		controlArray = null;
+		possibleNotes = null;
+		removeList = null;
+		ignoreList = null;
 
 		goodNoteHit = cast FlxDestroyUtil.destroy(goodNoteHit);
 		goodSustainPress = cast FlxDestroyUtil.destroy(goodSustainPress);
