@@ -497,9 +497,9 @@ class NotesGroup extends Group
 		if (generatedMusic)
 		{
 			final hasControl:Bool = controlArray.contains(true);
-			possibleNotes.splice(0, possibleNotes.length);
-			removeList.splice(0, removeList.length);
-			ignoreList.splice(0, ignoreList.length);
+			if (possibleNotes.length > 0) possibleNotes.splice(0, possibleNotes.length);
+			if (removeList.length > 0) removeList.splice(0, removeList.length);
+			if (ignoreList.length > 0) ignoreList.splice(0, ignoreList.length);
 
 			notes.forEachAlive(function (note:BasicNote) {
 				if (isCpuNote(note))

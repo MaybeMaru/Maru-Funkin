@@ -113,11 +113,11 @@ class HealthIcon extends FlxSpriteExt {
 			var healthBar = play.healthBar;
 			
 			if (isPlayer) {
-				isDying = healthBar.percent < 20;
+				isDying = healthBar.flipped ? healthBar.percent > 80 : healthBar.percent < 20;
 				setPosition(healthBar.barPoint.x - (_width * 0.25) + (_width * _lodOffset) + coolOffset, healthBar.barPoint.y - _height);
 			}
 			else {
-				isDying = healthBar.percent > 80;
+				isDying = healthBar.flipped ? healthBar.percent < 20 : healthBar.percent > 80;
 				setPosition(healthBar.barPoint.x - (width * __getScale()) + _width - coolOffset, healthBar.barPoint.y - _height);
 			}
 

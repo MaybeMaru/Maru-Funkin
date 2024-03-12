@@ -11,6 +11,9 @@ class FunkBar extends FlxSpriteExt {
     public var percent:Float = 50.0;
     var max:Float;
 
+    // If to flip the display of the bar (for opponent play)
+    public var flipped:Bool = false;
+
     // Adds a rectangle on top of the graphic instead of coloring the graphic
     public var legacyMode:{active:Bool, outline:Float, inFront:Bool, sprite:FlxSprite} = null;
     
@@ -78,6 +81,10 @@ class FunkBar extends FlxSpriteExt {
     override function drawComplex(camera:FlxCamera)
     {
 		__prepareDraw();
+
+        var percent:Float = percent;
+        if (flipped)
+            percent = 100 - percent;
         
         var percentWidth = width * percent * 0.01;
         var percentCut = width - percentWidth;
