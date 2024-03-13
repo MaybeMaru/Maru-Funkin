@@ -191,10 +191,10 @@ class FreeplayState extends MusicBeatState {
 		#end
 
 		if(FlxG.keys.justPressed.SEVEN)
-			loadSong(true);
+			selectSong(true);
 
 		if (getKey('ACCEPT', JUST_PRESSED))
-			loadSong(false);
+			selectSong(false);
 	}
 
 	var startTmr:Float = 0;
@@ -221,6 +221,11 @@ class FreeplayState extends MusicBeatState {
 			startTmr = 0;
 			tmr = 0;
 		}
+	}
+
+	// For hscript
+	dynamic function selectSong(toChart:Bool):Void {
+		loadSong(toChart);
 	}
 
 	function loadSong(toChart:Bool):Void {

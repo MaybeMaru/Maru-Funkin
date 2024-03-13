@@ -43,7 +43,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 			final globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
 			final curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
 			for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script);
-			ModdingUtil.addCall('stateCreate', []);
+			ModdingUtil.addCall('stateCreate');
 		}
 
 		Main.transition.exitTrans();
@@ -143,6 +143,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	override function destroy() {
 		instance = null;
+		ModdingUtil.addCall('stateDestroy');
 		super.destroy();
 		CoolUtil.gc(true);
 	}

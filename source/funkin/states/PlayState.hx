@@ -406,20 +406,22 @@ class PlayState extends MusicBeatState
 
 		ModdingUtil.addCall('startCountdown');
 
-		var swagCounter:Int = 0;
-		final countdownSounds:Array<FlxSoundAsset> = []; // Cache countdown assets
+		// Cache countdown assets
+		final countdownSounds:Array<FlxSoundAsset> = [];
 		final countdownImages:Array<FlxGraphicAsset> = [];
 
-		['intro3','intro2','intro1','introGo'].fastForEach((key, i) -> {
+		"intro3,intro2,intro1,introGo".split(",").fastForEach((key, i) -> {
 			final key = SkinUtil.getAssetKey(key, SOUND);
 			countdownSounds.push(Paths.sound(key));
 		});
 
-		['ready','set','go'].fastForEach((key, i) -> {
+		"ready,set,go".split(",").fastForEach((key, i) -> {
 			final key:String = SkinUtil.getAssetKey(key, IMAGE);
 			final lodLevel:Null<LodLevel> = SkinUtil.curSkinData.allowLod ? null : HIGH;
 			countdownImages.push(Paths.image(key, null, null, null, lodLevel));
 		});
+
+		var swagCounter:Int = 0;
 
 		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
 			beatCharacters();
@@ -464,7 +466,7 @@ class PlayState extends MusicBeatState
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
 		if (!paused) {
-			if (ModdingUtil.addCall("openPauseSubState", [])) return;
+			if (ModdingUtil.addCall("openPauseSubState")) return;
 			paused = true;
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -601,7 +603,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function openGameOverSubstate() {
-		if (ModdingUtil.addCall("openGameOverSubstate", [])) return;
+		if (ModdingUtil.addCall("openGameOverSubstate")) return;
 		camGame.clearFX(); camHUD.clearFX(); camOther.clearFX();
 		persistentUpdate = persistentDraw = false;
 		paused = true;
