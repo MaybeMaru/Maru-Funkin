@@ -1,10 +1,13 @@
 package funkin.graphics;
 
+import openfl.geom.ColorTransform;
 import flixel.system.FlxAssets;
 import flixel.math.FlxMatrix;
 import flixel.graphics.frames.FlxFrame;
 import openfl.text.TextFormat;
 import openfl.text.TextField;
+
+using flixel.util.FlxColorTransformUtil;
 
 // rappergf >:3
 
@@ -143,6 +146,7 @@ class FlxFunkText extends FlxSpriteExt {
         super.destroy();
         textField = null;
         textFormat = null;
+        styleColor = null;
 
         switch (style) {
             case SHADOW(offset, color): offset.put();
@@ -155,6 +159,7 @@ class FlxFunkText extends FlxSpriteExt {
     public function new(X:Float = 0, Y:Float = 0, Text:String = "", ?canvasRes:FlxPoint, ?size:Int) {
         super(X,Y);
         textField = new TextField();
+        styleColor = new ColorTransform();
 
         if (canvasRes == null) {
             setCanvasSize(FlxG.width, FlxG.height);
@@ -181,7 +186,7 @@ class FlxFunkText extends FlxSpriteExt {
         }
     }
 
-    // Helper function from scripts
+    // For hscript since enums are fucky wucky
     public function setStyle(type:String, ?values:Array<Dynamic>):TextStyle {
         if (values == null) values = [];
         return style = switch(type.toLowerCase().trim()) {
@@ -191,13 +196,27 @@ class FlxFunkText extends FlxSpriteExt {
         }
     }
 
+    var styleColor:ColorTransform;
+    inline function setStyleColor(color:FlxColor) {
+        styleColor.setMultipliers(color.redFloat, color.greenFloat, color.blueFloat, alpha);
+    }
+
     public var style(default, set):TextStyle = NONE;
-    inline function set_style(?value:TextStyle):TextStyle {
-        return style = (value != null) ? switch (value) {
-            case OUTLINE(size, quality, color): OUTLINE(size ?? 16, quality ?? 8, color ?? FlxColor.BLACK);
-            case SHADOW(offset, color):         SHADOW(offset ?? FlxPoint.get(8, 8), color ?? FlxColor.BLACK);
+    private function set_style(?value:TextStyle):TextStyle {
+        return style = (value == null) ? NONE :
+        switch (value) {
+            case OUTLINE(size, quality, color):
+                var color:FlxColor = color ?? FlxColor.BLACK;
+                setStyleColor(color);
+                OUTLINE(size ?? 16, quality ?? 8, color);
+            
+            case SHADOW(offset, color):  
+                var color:FlxColor = color ?? FlxColor.BLACK;
+                setStyleColor(color);      
+                SHADOW(offset ?? FlxPoint.get(8, 8), color);
+            
             default: value;
-        } : null;
+        }
     }
     
     inline function sizeMult() {
@@ -206,14 +225,14 @@ class FlxFunkText extends FlxSpriteExt {
 
     override function drawComplex(camera:FlxCamera) {
         switch (style) {
-            case OUTLINE(size, quality, col):
+            case OUTLINE(size, quality, _):
                 var point = CoolUtil.point;
+                var transform = this.colorTransform;
+                this.colorTransform = styleColor;
 
-                point.set(offset.x, offset.y);
-                final initColor = color;
+                point.copyFrom(offset);
                 size *= sizeMult();
 
-                color = col;
                 final qualityDiv = CoolUtil.DOUBLE_PI / quality;
                 for (i in 0...quality) {
                     final rads = i * qualityDiv;
@@ -222,20 +241,20 @@ class FlxFunkText extends FlxSpriteExt {
                     __superDrawComplex(camera);
                 }
                 
-                offset.set(point.x, point.y);
-                color = initColor;
+                offset.copyFrom(point);
+                this.colorTransform = transform;
 
-            case SHADOW(off, col):
+            case SHADOW(offset, _):
                 var point = CoolUtil.point;
+                var transform = this.colorTransform;
+                this.colorTransform = styleColor;
 
-                point.set(offset.x, offset.y);
-                final initColor = color;
-                offset.add(off.x * sizeMult(), off.y * sizeMult());
-                color = col;
+                point.copyFrom(this.offset);
+                this.offset.add(offset.x * sizeMult(), offset.y * sizeMult());
                 __superDrawComplex(camera);
 
-                offset.set(point.x, point.y);
-                color = initColor;
+                this.offset.copyFrom(point);
+                this.colorTransform = transform;
 
             default:
         }

@@ -5,7 +5,10 @@ enum abstract RenderMode(Int) from Int to Int {
     var REPEAT = 1;
 }
 
-class SmartSprite extends FlxSkewRepeatSprite {
+// Internal class to switch between render modes in BasicNote
+
+abstract class SmartSprite extends FlxSkewRepeatSprite
+{
     public var renderMode:RenderMode = QUAD;
     public function setRenderMode(value:String) {
         renderMode = switch (value.toLowerCase().trim()) {
@@ -22,8 +25,7 @@ class SmartSprite extends FlxSkewRepeatSprite {
     override function draw() {
         switch (renderMode) {
             case REPEAT: super.draw();
-            case QUAD:
-                __superDraw();
+            case QUAD:  __superDraw();
         }
     }
 
