@@ -2,6 +2,7 @@
 //Main shit
 import funkin.Controls;
 import funkin.Controls.getKey;
+import flixel.input.FlxInput.FlxInputState as InputType;
 import funkin.Preferences;
 import funkin.Preferences.getPref;
 

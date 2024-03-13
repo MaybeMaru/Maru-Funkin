@@ -3,13 +3,6 @@ import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 
-enum abstract InputType(Int) from Int to Int {
-    var RELEASED = -1;
-    var PRESSED = 0;
-    var JUST_PRESSED = 1;
-    var JUST_RELEASED = 2;
-}
-
 class Controls
 {
     public static var controlBindings:Map<String, Array<String>>;
@@ -76,7 +69,8 @@ class Controls
         final isGamepad = inGamepad();
         key = key.toUpperCase();
 
-        if (keys.length != 0)
+        final keys:Array<Int> = keys;
+        if (keys.length > 0)
             keys.splice(0, keys.length);
 
         if (isGamepad) {
@@ -91,11 +85,34 @@ class Controls
         }
 
         return switch (inputType) {
-            case RELEASED: isGamepad ? !gamepad.anyPressed(keys) : !FlxG.keys.anyPressed(keys);
-            case PRESSED: isGamepad ? gamepad.anyPressed(keys) : FlxG.keys.anyPressed(keys);
-            case JUST_PRESSED: isGamepad ? gamepad.anyJustPressed(keys) : FlxG.keys.anyJustPressed(keys);
-            case JUST_RELEASED: isGamepad ? gamepad.anyJustReleased(keys) : FlxG.keys.anyJustReleased(keys);
+            case RELEASED: isGamepad ? !gamepad.anyPressed(keys) : !checkPressed(keys);
+            case PRESSED: isGamepad ? gamepad.anyPressed(keys) : checkPressed(keys);
+            case JUST_PRESSED: isGamepad ? gamepad.anyJustPressed(keys) : checkJustPressed(keys);
+            case JUST_RELEASED: isGamepad ? gamepad.anyJustReleased(keys) : checkJustReleased(keys);
         }
+    }
+
+    inline static function checkJustReleased(keys:Array<Int>)   return checkKeys(keys, -1);
+    inline static function checkPressed(keys:Array<Int>)        return checkKeys(keys, 1);
+    inline static function checkJustPressed(keys:Array<Int>)    return checkKeys(keys, 2);
+
+    // NONE and ANY arent available keys, so we can make this unsafe
+    static function checkKeys(keys:Array<Int>, status:Int):Bool {
+        var keyboard = FlxG.keys;
+        
+        var i:Int = 0;
+        var l:Int = keys.length;
+        while (i < l) {
+            final key:Int = keys[i];
+
+            @:privateAccess
+            if (keyboard.checkStatusUnsafe(key, status))
+                return true;
+            
+            i++;
+        }
+
+        return false;
     }
 
     //@:deprecated("Use getKey with the inputType argument instead")

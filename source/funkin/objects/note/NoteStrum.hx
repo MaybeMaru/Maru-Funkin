@@ -82,7 +82,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	}
 
 	public inline function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
-		playAnim('$anim${CoolUtil.directionArray[data ?? noteData]}', forced);
+		playAnim(anim + CoolUtil.directionArray[data ?? noteData], forced);
 		applyOffsets();
 	}
 
