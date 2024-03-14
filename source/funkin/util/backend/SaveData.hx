@@ -6,6 +6,8 @@ import flixel.util.FlxSave;
 	CLASS TAKEN FROM BEANBAGGER DX DEMO
 */
 
+typedef BindsSave = Map<String, Array<Int>>;
+
 class SaveData
 {
 	public static var saves:Map<String, Dynamic> = [];
@@ -24,9 +26,10 @@ class SaveData
 		initSave = true;
 
 		// Setup save bases
-		final controlSave:Map<String, Map<String, Array<String>>> = new Map<String, Map<String, Array<String>>>();
-		controlSave['keyboardBinds'] = new Map<String, Array<String>>();
-		controlSave['gamepadBinds'] = new Map<String, Array<String>>();
+		final controlSave:Map<String, BindsSave> = new Map<String, BindsSave>();
+		controlSave['keyboardBinds'] = new BindsSave();
+		controlSave['gamepadBinds'] = new BindsSave();
+		
 		final prefsSave:Map<String, Dynamic> = new Map<String, Dynamic>();
 		final scoresSave:Map<String, Int> = new Map<String, Int>();
 		final weekUnlockSave:Map<String, Bool> = new Map<String, Bool>();

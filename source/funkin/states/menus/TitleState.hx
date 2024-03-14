@@ -21,7 +21,7 @@ class TitleState extends MusicBeatState {
 	var skippedIntro:Bool = false;
 
 	var blackScreen:FlxSprite;
-	var titleGroup:FlxGroup;
+	var titleGroup:Group;
 	var textSprite:Alphabet;
 	var spriteGroup:FlxTypedSpriteGroup<FunkinSprite>;
 
@@ -40,7 +40,7 @@ class TitleState extends MusicBeatState {
         persistentUpdate = true;
 		persistentDraw = true;
 
-		titleGroup = new FlxGroup();
+		titleGroup = new Group();
 		add(titleGroup);
 		titleGroup.add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
 

@@ -74,7 +74,7 @@ class ControlsState extends MusicBeatState
 			y += 40;
 
             for (control in Controls.headerContents.get(header)) {
-				var binds = Controls.getBinding(control);
+				var binds = Controls.getBindNames(control);
 				var item = new ControlItem(control, formatKey(binds[0]), formatKey(binds[1]));
 				item.ID = id;
 				item.y = y + 75;
@@ -131,7 +131,7 @@ class ControlsState extends MusicBeatState
 				var keyPress:String = gamepad ? FlxGamepadInputID.toStringMap.get(code) : FlxKey.toStringMap.get(code);
 				
 				if (keyPress != 'ESCAPE') {
-					Controls.setBinding(curItem.key, keyPress, curBind);
+					Controls.setBind(curItem.key, keyPress, curBind);
 					CoolUtil.playSound('confirmMenu');
 				}
 			},
