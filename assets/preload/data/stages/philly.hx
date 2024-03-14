@@ -3,6 +3,10 @@ var color = 0;
 var start;
 var sound;
 
+function create() {
+	setGlobalVar("colorLights", [lights, blur]);
+}
+
 function createPost() {
 	lights.blend = getBlendMode("add");
 	blur.blend = getBlendMode("add");
@@ -25,8 +29,8 @@ function sectionHit(section) {
 	color = FlxMath.wrap(color + 1, 0, 4);
 
 	var lightsColor = colors[color];
-	lights.color = lightsColor;
-	blur.color = lightsColor;
+	for (i in getGlobalVar("colorLights"))
+		i.color = lightsColor;
 
 	lights.alpha = 1;
 	blur.alpha = 1;
