@@ -24,6 +24,11 @@ function createPost() {
 }
 
 function sectionHit(section) {
+	if (State.curSong == "Blammed") {
+		if (section > 26)
+			trainEnabled = false;
+	}
+	
 	if (section < start) return;
 	
 	color = FlxMath.wrap(color + 1, 0, 4);
@@ -56,14 +61,17 @@ var trainMoving = false;
 var trainFinished = false;
 var trainCooldown = 0;
 var finishedMove = false;
+var trainEnabled = true;
 
 function beatHit(beat) {
-	if (!trainMoving)
-        trainCooldown++;
-
-	var moveTrain = (!trainMoving && trainCooldown > 8) && (beat % 8 == 4 && FlxG.random.bool(30));
-	if (moveTrain)
-		startTrain();
+	if (trainEnabled) {
+		if (!trainMoving)
+			trainCooldown++;
+	
+		var moveTrain = (!trainMoving && trainCooldown > 8) && (beat % 8 == 4 && FlxG.random.bool(30));
+		if (moveTrain)
+			startTrain();
+	}
 }
 
 function startTrain() {
