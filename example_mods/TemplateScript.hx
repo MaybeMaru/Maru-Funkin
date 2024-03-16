@@ -312,13 +312,11 @@ switchCustomState(stateName:String);
 closeScript();
 
 /*
-    Adds a new script
+    Adds and returns a new script from a path
     @param scriptPath       --> Path of the script
-    @param scriptTag        --> Custom tag for the script           (OPTIONAL)
-    @param scriptVarKeys    --> List of names of custom variables   (OPTIONAL)
-    @param scriptVars       --> List of custom variables            (OPTIONAL)
+    @param scriptTag        --> Custom tag for the script (OPTIONAL)
 */
-addScript(scriptPath:String, ?scriptTag:String, ?scriptKeys:Array<String>, ?scriptVars:Array<Dynamic>);
+addScript(scriptPath:String, ?scriptTag:String);
 
 /*
     Removes a loaded script

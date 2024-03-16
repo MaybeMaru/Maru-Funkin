@@ -328,8 +328,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 
 		// Script functions
 
-		set('addScript', function(path:String, ?tag:String):Void {
-			ModdingUtil.addScript(path, tag);
+		set('addScript', function(path:String, ?tag:String):Null<FunkScript> {
+			return ModdingUtil.addScript(path, tag);
 		});
 
 		set('removeScript', function(tag:String):Void {
@@ -353,10 +353,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
-			for (i in ModdingUtil.scripts) {
-				if (forced || !i.exists(key))
-					i.set(key, _var);
-			}
+			ModdingUtil.scripts.fastForEach((script, i) -> {
+				if (forced || !script.exists(key))
+					script.set(key, _var);
+			});
 		});
 
 		set('setGlobalVar', function (key:String, _var:Dynamic) {
@@ -370,7 +370,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('getGlobalVar', function (key:String) {
 			if (globalVariables.exists(key)) return globalVariables.get(key);
 			else {
-				errorPrint('Variable not found: $key');
+				warningPrint('Variable not found: $key');
 				return null;
 			}
 		});

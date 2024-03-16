@@ -76,7 +76,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		for (i in 0...VERTICES_PER_QUAD)
 			alphas.push(alphaMultiplier);
 
-		if (colored || hasColorOffsets)
+		if (colored)
 		{
 			if (colorMultipliers == null)
 			{
@@ -136,8 +136,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		//else if (camera.antialiasing) 	shader.bitmap.filter = LINEAR; not used in funkin lol
 		else 				shader.bitmap.filter = NEAREST;
 
-		final hasColors = colored || hasColorOffsets;
-		if (hasColors)
+		if (colored)
 		{
 			shader.colorMultiplier.value = colorMultipliers;
 			shader.colorOffset.value = colorOffsets;
@@ -147,7 +146,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			blend = NORMAL;
 
 		setParameterValue(shader.hasTransform, true);
-		setParameterValue(shader.hasColorTransform, hasColors);
+		setParameterValue(shader.hasColorTransform, colored);
 		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects, transforms);
 		
 		#if FLX_DEBUG

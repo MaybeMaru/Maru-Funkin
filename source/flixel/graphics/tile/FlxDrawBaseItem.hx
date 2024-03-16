@@ -74,7 +74,7 @@ abstract class FlxDrawBaseItem<T>
 	}
 }
 
-enum abstract FlxDrawItemType(Int) from Int to Int
+enum abstract FlxDrawItemType(Int)
 {
 	var TILES = 0;
 	var TRIANGLES = 1;

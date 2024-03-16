@@ -238,8 +238,9 @@ class FunkCamera extends FlxCamera {
             matrix.ty = Std.int(matrix.ty / pixelMult) * pixelMult;
         }
         
-        if (transform != null) {  
-            final drawItem = startQuadBatch(frame.parent, transform.hasRGBMultipliers(), transform.hasRGBAOffsets(), blend, smoothing, shader);
+        if (transform != null) {
+            final hasColors = transform.hasRGBMultipliers() || transform.hasRGBAOffsets();
+            final drawItem = startQuadBatch(frame.parent, hasColors, hasColors, blend, smoothing, shader);
             drawItem.addQuad(frame, matrix, transform);
         }
         else {
@@ -262,7 +263,6 @@ class FunkCamera extends FlxCamera {
             var _headTiles = _headTiles;
             if (_headTiles.graphics == graphic)
             if (_headTiles.colored == colored)
-            if (_headTiles.hasColorOffsets == hasColorOffsets)
             if (_headTiles.blend == blend)
             if (_headTiles.antialiasing == smooth)
             if (_headTiles.shader == shader)
@@ -285,7 +285,6 @@ class FunkCamera extends FlxCamera {
 		itemToReturn.graphics = graphic;
 		itemToReturn.antialiasing = smooth;
 		itemToReturn.colored = colored;
-		itemToReturn.hasColorOffsets = hasColorOffsets;
 		itemToReturn.blend = blend;
 		itemToReturn.shader = shader;
 
