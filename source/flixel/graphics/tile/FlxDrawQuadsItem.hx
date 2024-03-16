@@ -138,9 +138,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			shader.colorOffset.value = colorOffsets;
 		}
 
+		if (blend == null)
+			blend = NORMAL;
+
 		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, hasColors);
-		drawFlxQuad(camera.canvas.graphics, blend, shader, rects, transforms);
+		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects, transforms);
 		
 		#if FLX_DEBUG
 		FlxDrawBaseItem.drawCalls++;
@@ -156,12 +159,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	// Copy pasted from openfl Graphics, just inlines some stuff and removes indices since flixel quads dont need those
 	
-	function drawFlxQuad(graphics:Graphics, blendMode:BlendMode, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
+	function drawFlxQuad(graphics:Graphics, blendMode:Int, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		final commands = graphics.__commands;
 
 		// Override blend mode
-		commands.overrideBlendMode(blendMode ?? NORMAL);
+		commands.overrideBlendMode(cast blendMode);
 
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();

@@ -341,12 +341,28 @@ class AssetManager
 			var texture = FlxG.stage.context3D.createTexture(bitmap.width, bitmap.height, BGR_PACKED, true);
 			texture.uploadFromBitmapData(bitmap);
 
-			if (bitmap.image != null && bitmap.image.data != null)
-				bitmap.image.data = null;
-			
-			bitmap.dispose();
+			@:privateAccess
+			{
+				// Dispose the previous bitmap data
+				if (bitmap.image != null) if (bitmap.image.data != null)
+					bitmap.image.data = null;
 
-			graphic.bitmap = BitmapData.fromTexture(texture);
+				bitmap.__vertexBuffer = null;
+				bitmap.__framebuffer = null;
+				bitmap.__framebufferContext = null;
+
+				bitmap.__renderTransform = null;
+				bitmap.__worldTransform = null;
+				bitmap.__worldColorTransform = null;
+
+				// Load the texture
+				bitmap.readable = false;
+				bitmap.__texture = texture;
+				bitmap.__textureContext = texture.__textureContext;
+				bitmap.image = null;
+			}
+
+			graphic.bitmap = bitmap;
 		}
 
 		return graphic;

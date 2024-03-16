@@ -255,7 +255,6 @@ class FunkCamera extends FlxCamera {
 		return startTrianglesBatch(graphic, smooth, colored, blend);
 		#else
 		var itemToReturn = null;
-		var blendInt:Int = FlxDrawBaseItem.blendToInt(blend);
 
         if (_currentDrawItem != null)
         if (_currentDrawItem.type == FlxDrawItemType.TILES)
@@ -264,7 +263,6 @@ class FunkCamera extends FlxCamera {
             if (_headTiles.graphics == graphic)
             if (_headTiles.colored == colored)
             if (_headTiles.hasColorOffsets == hasColorOffsets)
-            if (_headTiles.blending == blendInt)
             if (_headTiles.blend == blend)
             if (_headTiles.antialiasing == smooth)
             if (_headTiles.shader == shader)
@@ -288,7 +286,6 @@ class FunkCamera extends FlxCamera {
 		itemToReturn.antialiasing = smooth;
 		itemToReturn.colored = colored;
 		itemToReturn.hasColorOffsets = hasColorOffsets;
-		itemToReturn.blending = blendInt;
 		itemToReturn.blend = blend;
 		itemToReturn.shader = shader;
 
