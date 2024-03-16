@@ -123,13 +123,18 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (rects.length == 0)
 			return;
 
-		final shader = shader != null ? shader : graphics.shader;
+		if (shader == null)
+			shader = graphics.shader;
+
 		if (shader == null)
 			return;
 
 		shader.bitmap.input = graphics.bitmap;
-		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
+
+		if (antialiasing) 		shader.bitmap.filter = LINEAR;
+		//else if (camera.antialiasing) 	shader.bitmap.filter = LINEAR; not used in funkin lol
+		else 				shader.bitmap.filter = NEAREST;
 
 		final hasColors = colored || hasColorOffsets;
 		if (hasColors)

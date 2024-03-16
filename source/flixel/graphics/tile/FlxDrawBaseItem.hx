@@ -9,14 +9,14 @@ import openfl.geom.ColorTransform;
 /**
  * @author Zaphod
  */
-class FlxDrawBaseItem<T>
+abstract class FlxDrawBaseItem<T>
 {
 	/**
 	 * Tracks the total number of draw calls made each frame.
 	 */
 	public static var drawCalls:Int = 0;
 
-	public static function blendToInt(blend:BlendMode):Int
+	public static inline function blendToInt(blend:BlendMode):Int
 	{
 		return 0; // no blend mode support in drawQuads()
 	}
