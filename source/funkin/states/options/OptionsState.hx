@@ -13,12 +13,17 @@ class OptionsState extends MusicBeatState {
 	var curSelected:Int = 0;
 	var selectedSomethin:Bool = false;
 
-	override function create():Void {
-		#if web
-		if (fromPlayState && FlxG.sound.music == null)	FlxG.sound.playMusic(Paths.music('freakyMenu'));
-		#else
-		if (!fromPlayState) 				optionItems.push('Mod Folders');
-		else if (FlxG.sound.music == null)	FlxG.sound.playMusic(Paths.music('freakyMenu'));
+	override function create():Void
+	{
+		if (fromPlayState) {
+			if (FlxG.sound.music == null)
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		}
+		#if MODS_ALLOWED
+		else
+		{
+			optionItems.push('Mod Folders');
+		}
 		#end
 
 		optionItems.push('Exit');

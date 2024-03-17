@@ -5,7 +5,7 @@ import haxe.io.Path;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
-#if desktop
+#if sys
 import sys.FileSystem;
 #end
 
@@ -20,7 +20,7 @@ class Paths
 	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
 		final hasLevel = currentLevel.length > 0;
 		
-		#if desktop
+		#if MODS_ALLOWED
 		if (mods) {
 			final modFile:String = ((library?.length ?? 0) != 0 ? '$library/' : '') + file;
 			final modFolder:String = ModdingUtil.curModFolder != null ? ModdingUtil.curModFolder + "/" : "";
@@ -36,11 +36,12 @@ class Paths
 			}
 			
 			if (allMods) {
-				for (i in ModdingUtil.activeMods.keys()) {
-					final modPath:String = getModPath(i + "/" + modFile);
-					if (ModdingUtil.activeMods.get(i) && exists(modPath, type))
+				ModdingUtil.modsList.fastForEach((mod, i) -> {
+					final folder:String = mod.folder;
+					final modPath:String = getModPath('$folder/$modFile');
+					if (ModdingUtil.activeMods.get(folder) && exists(modPath, type))
 						return modPath;
-				}
+				});
 			}
 
 			for (i in ModdingUtil.globalMods) {
@@ -219,7 +220,7 @@ class Paths
 	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
-		#if desktop
+		#if sys
 		return FileSystem.exists(removeAssetLib(file));
 		#else
 		return OpenFlAssets.exists(file, type);
@@ -227,7 +228,7 @@ class Paths
 	}
 
 	inline static public function removeAssetLib(path:String):String {
-		return #if desktop path.contains(':') ? path.split(':')[1] : #end path;
+		return #if sys path.contains(':') ? path.split(':')[1] : #end path;
 	}
 
 	//	Returns [file Mod, file Name]
@@ -302,8 +303,7 @@ class Paths
 	}
 
 	static public function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
-		#if !desktop return [];
-		#else
+		#if MODS_ALLOWED
 		var fileList:Array<String> = [];
 		var pushFile = function(folderPath:String) {
 			if (FileSystem.exists(folderPath)) {
@@ -335,6 +335,8 @@ class Paths
 		}
 		
 		return fileList;
+		#else
+		return [];
 		#end
 	}
 

@@ -1,6 +1,6 @@
 package funkin.util.backend;
 
-#if cpp
+#if DISCORD_ALLOWED
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
 #end
@@ -76,12 +76,10 @@ class DiscordClient
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
 	{
 		#if DISCORD_ALLOWED
-		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
+		var startTimestamp:Float = hasStartTimestamp ? Date.now().getTime() : 0;
 
 		if (endTimestamp > 0)
-		{
 			endTimestamp = startTimestamp + endTimestamp;
-		}
 
 		DiscordRpc.presence({
 			details: details,

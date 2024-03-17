@@ -33,6 +33,9 @@
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
 	<!-- ______________________________ Funkdefines _____________________________ -->
+	
+	<!--If to have mod folders allowed to load on the game-->
+	<define name="MODS_ALLOWED" if="desktop"/>
 
 	<!--If you want hxcodec videos to be used-->
 	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>

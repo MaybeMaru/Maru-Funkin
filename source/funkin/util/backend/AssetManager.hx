@@ -48,10 +48,34 @@ class Asset
 		}
 	}
 
+	public static inline function __disposeImage(bitmap:BitmapData) @:privateAccess {
+		if (bitmap.image != null)
+		{
+			if (bitmap.image.data != null)
+				bitmap.image.data = null;
+				
+			if (bitmap.image.buffer != null) {
+				bitmap.image.buffer.data = null;
+				bitmap.image.buffer = null;							
+			}
+
+			bitmap.image = null;
+		}
+
+		bitmap.__vertexBuffer = null;
+		bitmap.__framebuffer = null;
+		bitmap.__framebufferContext = null;
+
+		bitmap.__renderTransform = null;
+		bitmap.__worldTransform = null;
+		bitmap.__worldColorTransform = null;
+	}
+
 	inline function __disposeBitmap(bitmap:BitmapData, disposeTexture:Bool = true):BitmapData @:privateAccess {
 		if (disposeTexture)
 			__disposeTexture(bitmap.__texture);
 		
+		__disposeImage(bitmap);
 		bitmap.dispose();
 		OpenFlAssets.cache.removeBitmapData(key);
 
@@ -344,22 +368,12 @@ class AssetManager
 			@:privateAccess
 			{
 				// Dispose the previous bitmap data
-				if (bitmap.image != null) if (bitmap.image.data != null)
-					bitmap.image.data = null;
-
-				bitmap.__vertexBuffer = null;
-				bitmap.__framebuffer = null;
-				bitmap.__framebufferContext = null;
-
-				bitmap.__renderTransform = null;
-				bitmap.__worldTransform = null;
-				bitmap.__worldColorTransform = null;
+				Asset.__disposeImage(bitmap);
 
 				// Load the texture
 				bitmap.readable = false;
 				bitmap.__texture = texture;
 				bitmap.__textureContext = texture.__textureContext;
-				bitmap.image = null;
 			}
 
 			graphic.bitmap = bitmap;
