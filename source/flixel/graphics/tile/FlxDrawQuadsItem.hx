@@ -38,7 +38,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		rects.length = 0;
 		transforms.length = 0;
 		alphas.splice(0, alphas.length);
-		if (colorMultipliers != null)
+		if (colored)
 		{
 			colorMultipliers.splice(0, colorMultipliers.length);
 			colorOffsets.splice(0, colorOffsets.length);
@@ -130,7 +130,6 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (blend == null)
 			blend = NORMAL;
 
-		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, colored);
 		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects, transforms);
 		
