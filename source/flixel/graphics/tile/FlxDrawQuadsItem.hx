@@ -19,9 +19,9 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	var rects:Vector<Float>;
 	var transforms:Vector<Float>;
-	var alphas:Array<Float>;
-	var colorMultipliers:Array<Float>;
-	var colorOffsets:Array<Float>;
+	var alphas:FlxQuadVector;
+	var colorMultipliers:FlxQuadVector;
+	var colorOffsets:FlxQuadVector;
 
 	public function new()
 	{
@@ -29,7 +29,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		type = FlxDrawItemType.TILES;
 		rects = new Vector<Float>();
 		transforms = new Vector<Float>();
-		alphas = [];
+		alphas = new FlxQuadVector();
 	}
 
 	override public function reset():Void
@@ -37,11 +37,11 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		super.reset();
 		rects.length = 0;
 		transforms.length = 0;
-		alphas.splice(0, alphas.length);
+		alphas.reset();
 		if (colored)
 		{
-			colorMultipliers.splice(0, colorMultipliers.length);
-			colorOffsets.splice(0, colorOffsets.length);
+			colorMultipliers.reset();
+			colorOffsets.reset();
 		}
 	}
 
@@ -50,21 +50,25 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		super.dispose();
 		rects = null;
 		transforms = null;
+
+		alphas.dispose();
 		alphas = null;
+
+		colorMultipliers.dispose();
 		colorMultipliers = null;
+
+		colorOffsets.dispose();
 		colorOffsets = null;
 	}
 
 	override public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void
 	{
 		final rect = frame.frame;
-		final rects = this.rects;
 		rects.push(rect.x);
 		rects.push(rect.y);
 		rects.push(rect.width);
 		rects.push(rect.height);
 
-		final transforms = this.transforms;
 		transforms.push(matrix.a);
 		transforms.push(matrix.b);
 		transforms.push(matrix.c);
@@ -72,32 +76,31 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		transforms.push(matrix.tx);
 		transforms.push(matrix.ty);
 
-		final alphaMultiplier = transform != null ? transform.alphaMultiplier : 1.0;
-		for (i in 0...VERTICES_PER_QUAD)
-			alphas.push(alphaMultiplier);
+		alphas.push(transform == null ? 1.0 : transform.alphaMultiplier);
 
 		if (colored)
 		{
 			if (colorMultipliers == null)
 			{
-				colorMultipliers = [];
-				colorOffsets = [];
+				colorMultipliers = new FlxQuadVector();
+				colorOffsets = new FlxQuadVector();
 			}
-
-			final colorMultipliers = this.colorMultipliers;
-			final colorOffsets = this.colorOffsets;
 
 			for (i in 0...VERTICES_PER_QUAD)
 			{
-				colorMultipliers.push(transform.redMultiplier);
-				colorMultipliers.push(transform.greenMultiplier);
-				colorMultipliers.push(transform.blueMultiplier);
-				colorMultipliers.push(1);
-
-				colorOffsets.push(transform.redOffset);
-				colorOffsets.push(transform.greenOffset);
-				colorOffsets.push(transform.blueOffset);
-				colorOffsets.push(transform.alphaOffset);
+				colorMultipliers.pushData(
+					transform.redMultiplier,
+					transform.greenMultiplier,
+					transform.blueMultiplier,
+					1.0
+				);
+				
+				colorOffsets.pushData(
+					transform.redOffset,
+					transform.greenOffset,
+					transform.blueOffset,
+					transform.alphaOffset
+				);
 			}
 		}
 	}
@@ -115,7 +118,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			return;
 
 		shader.bitmap.input = graphics.bitmap;
-		shader.alpha.value = alphas;
+		shader.alpha.value = alphas.toArray();
 
 		if (antialiasing) 		shader.bitmap.filter = LINEAR;
 		//else if (camera.antialiasing) 	shader.bitmap.filter = LINEAR; not used in funkin lol
@@ -123,8 +126,8 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 		if (colored)
 		{
-			shader.colorMultiplier.value = colorMultipliers;
-			shader.colorOffset.value = colorOffsets;
+			shader.colorMultiplier.value = colorMultipliers.toArray();
+			shader.colorOffset.value = colorOffsets.toArray();
 		}
 
 		if (blend == null)

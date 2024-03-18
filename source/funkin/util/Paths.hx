@@ -22,8 +22,11 @@ class Paths
 		
 		#if MODS_ALLOWED
 		if (mods) {
-			final modFile:String = ((library?.length ?? 0) != 0 ? '$library/' : '') + file;
-			final modFolder:String = ModdingUtil.curModFolder != null ? ModdingUtil.curModFolder + "/" : "";
+			var modFolder:String = ModdingUtil.curModFolder != null ? ModdingUtil.curModFolder + "/" : "";
+
+			var modFile:String = file;
+			if (library != null) if (library.length > 0)
+				modFile = '$library/$modFile';
 			
 			final modFolderPath:String = getModPath(modFolder + modFile);
 			if (exists(modFolderPath, type))
@@ -39,16 +42,16 @@ class Paths
 				ModdingUtil.modsList.fastForEach((mod, i) -> {
 					final folder:String = mod.folder;
 					final modPath:String = getModPath('$folder/$modFile');
-					if (ModdingUtil.activeMods.get(folder) && exists(modPath, type))
+					if (ModdingUtil.activeMods.get(folder)) if (exists(modPath, type))
 						return modPath;
 				});
 			}
-
-			for (i in ModdingUtil.globalMods) {
-				final modPath:String = getModPath(i.folder + "/" + modFile);
+			
+			ModdingUtil.globalMods.fastForEach((mod, i) -> {
+				final modPath:String = getModPath(mod.folder + "/" + modFile);
 				if (exists(modPath, type))
 					return modPath;
-			}
+			});
 			
 			final modPath = getModPath(modFile);
 			if (exists(modPath, type))
@@ -78,12 +81,12 @@ class Paths
 		if (exists(sharedPath, type))
 			return sharedPath;
 
-		return getPreloadPath(file);
+		return getAssetsPath(file);
 	}
 
 	static public function getLibraryPath(file:String, library = "preload", ?level:String, root:String = "assets"):String
 	{
-		return (library == "preload" || library == "default") ? getPreloadPath(file) : getLibraryPathForce(file, library, level, root);
+		return (library == "preload" || library == "default") ? getAssetsPath(file) : getLibraryPathForce(file, library, level, root);
 	}
 
 	inline static function getLibraryPathForce(file:String, library:String, ?level:String, root:String = "assets"):String
@@ -96,7 +99,7 @@ class Paths
 		return 'mods/$file';
 	}
 
-	inline static function getPreloadPath(file:String):String
+	inline static function getAssetsPath(file:String):String
 	{
 		return 'assets/$file';
 	}
