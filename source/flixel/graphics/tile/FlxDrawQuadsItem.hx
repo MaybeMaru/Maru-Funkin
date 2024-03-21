@@ -1,5 +1,6 @@
 package flixel.graphics.tile;
 
+import flixel.graphics.tile.FlxQuadVector.FlxRectVector;
 import openfl.display.Graphics;
 #if FLX_DRAW_QUADS
 import flixel.FlxCamera;
@@ -17,8 +18,8 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	public var shader:FlxShader;
 
-	var rects:Vector<Float>;
 	var transforms:Vector<Float>;
+	var rects:FlxRectVector;
 	var alphas:FlxQuadVector;
 	var colorMultipliers:FlxQuadVector;
 	var colorOffsets:FlxQuadVector;
@@ -27,7 +28,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	{
 		super();
 		type = FlxDrawItemType.TILES;
-		rects = new Vector<Float>();
+		rects = new FlxRectVector();
 		transforms = new Vector<Float>();
 		alphas = new FlxQuadVector();
 	}
@@ -35,8 +36,12 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	override public function reset():Void
 	{
 		super.reset();
-		rects.length = 0;
+
+		//@:privateAccess
+		//trace(rects.index, rects.length);
+
 		transforms.length = 0;
+		rects.reset();
 		alphas.reset();
 		if (colored)
 		{
@@ -48,26 +53,34 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	override public function dispose():Void
 	{
 		super.dispose();
-		rects = null;
+
 		transforms = null;
+
+		rects.dispose();
+		rects = null;
 
 		alphas.dispose();
 		alphas = null;
 
-		colorMultipliers.dispose();
-		colorMultipliers = null;
-
-		colorOffsets.dispose();
-		colorOffsets = null;
+		if (colored)
+		{
+			colorMultipliers.dispose();
+			colorMultipliers = null;
+	
+			colorOffsets.dispose();
+			colorOffsets = null;
+		}
 	}
 
 	override public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void
 	{
 		final rect = frame.frame;
-		rects.push(rect.x);
-		rects.push(rect.y);
-		rects.push(rect.width);
-		rects.push(rect.height);
+		rects.pushData(
+			rect.x,
+			rect.y,
+			rect.width,
+			rect.height
+		);
 
 		transforms.push(matrix.a);
 		transforms.push(matrix.b);
@@ -134,7 +147,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			blend = NORMAL;
 
 		setParameterValue(shader.hasColorTransform, colored);
-		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects, transforms);
+		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects.toVector(), transforms);
 		
 		#if FLX_DEBUG
 		FlxDrawBaseItem.drawCalls++;
