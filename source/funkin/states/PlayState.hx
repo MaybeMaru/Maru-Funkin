@@ -314,7 +314,9 @@ class PlayState extends MusicBeatState
 	#if VIDEOS_ALLOWED public var video:FlxVideo; #end
 
 	public function startVideo(path:String, ?completeFunc:()->Void):Void {
-		completeFunc = completeFunc ?? startCountdown;
+		if (completeFunc == null)
+			completeFunc = this.startCountdown;
+		
 		#if VIDEOS_ALLOWED
 		video = new FlxVideo();
 		final vidFunc = function () {
@@ -344,7 +346,8 @@ class PlayState extends MusicBeatState
 		ModdingUtil.addCall('createDialogue'); // Setup dialogue box
 		ModdingUtil.addCall('postCreateDialogue'); // Setup transitions
 
-		openDialogueFunc = openDialogueFunc ?? function () { // Default transition
+		// Default transition
+		if (openDialogueFunc == null) {
 			var black = new FlxSpriteExt(-100, -100).makeRect(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 			black.scrollFactor.set();
 			add(black);
@@ -356,7 +359,7 @@ class PlayState extends MusicBeatState
 					black.destroy();
 			}});
 		}
-		openDialogueFunc();
+		else openDialogueFunc();
 	}
 
 	public function quickDialogueBox():Void {

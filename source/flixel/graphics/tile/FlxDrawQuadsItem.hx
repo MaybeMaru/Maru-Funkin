@@ -57,14 +57,11 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	override public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void
 	{
-		final rect = frame.frame;
-		final rects = this.rects;
-		rects.push(rect.x);
-		rects.push(rect.y);
-		rects.push(rect.width);
-		rects.push(rect.height);
+		rects.push(frame.frame.x);
+		rects.push(frame.frame.y);
+		rects.push(frame.frame.width);
+		rects.push(frame.frame.height);
 
-		final transforms = this.transforms;
 		transforms.push(matrix.a);
 		transforms.push(matrix.b);
 		transforms.push(matrix.c);
@@ -83,9 +80,6 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 				colorMultipliers = [];
 				colorOffsets = [];
 			}
-
-			final colorMultipliers = this.colorMultipliers;
-			final colorOffsets = this.colorOffsets;
 
 			for (i in 0...VERTICES_PER_QUAD)
 			{
@@ -151,16 +145,14 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	function drawFlxQuad(graphics:Graphics, blendMode:Int, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
-		final commands = graphics.__commands;
-
 		// Override blend mode
-		commands.overrideBlendMode(cast blendMode);
+		graphics.__commands.overrideBlendMode(cast blendMode);
 
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();
 		graphics.__usedShaderBuffers.add(shaderBuffer);
 		shaderBuffer.update(cast shader);
-		commands.beginShaderFill(shaderBuffer);
+		graphics.__commands.beginShaderFill(shaderBuffer);
 
 		// Draw the quad
 		if (graphics.__bounds == null)
@@ -169,7 +161,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			graphics.__transformDirty = true;
 		}
 
-		commands.drawQuads(rects, null, transforms);
+		graphics.__commands.drawQuads(rects, null, transforms);
 
 		graphics.__dirty = true;
 		graphics.__visible = true;

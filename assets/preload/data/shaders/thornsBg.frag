@@ -3,8 +3,7 @@ uniform float uFrequency;
 
 void mainImage()
 {
-    vec2 uv = fragCoord / iResolution.xy;
-    vec2 pt = uv;
+    vec2 pt = fragCoord / iResolution.xy;
 
     float w = 1.0 / iResolution.x;
     float h = 1.0 / iResolution.y;
@@ -17,15 +16,23 @@ void mainImage()
     {
         pt.y = floor(pt.y / h) * h;
         float offsetX = sin(pt.y * uFrequency + iTime * uSpeed) * uWaveAmplitude;
-        pt.x += floor(offsetX / w) * w; // * (pt.y - 1.0); // <- Uncomment to stop bottom part of the screen from moving
+        pt.x += floor(offsetX / w) * w;
     }
     else if (effectType == 1)
     {
         pt.x = floor(pt.x / w) * w;
         float offsetY = sin(pt.x * uFrequency + iTime * uSpeed) * uWaveAmplitude;
-        pt.y += floor(offsetY / h) * h; // * (pt.y - 1.0); // <- Uncomment to stop bottom part of the screen from moving
+        pt.y += floor(offsetY / h) * h;
     }
 
-    uv = pt;
-    fragColor = texture(iChannel0, uv);
+    vec4 c = texture(bitmap, pt);
+    
+    if (openfl_Alphav != 1)
+    {
+        fragColor = vec4(c.rgb * c.a * openfl_Alphav, c.a * openfl_Alphav);
+    }
+    else
+    {
+        fragColor = c;
+    }
 }

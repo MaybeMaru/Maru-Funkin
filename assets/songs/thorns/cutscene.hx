@@ -1,17 +1,16 @@
 function createPost() {
-    if (PlayState.isStoryMode && !PlayState.seenCutscene) {
-        State.inCutscene = true;
-    } else {
-        closeScript();
-    }
-
+    if (PlayState.isStoryMode && !PlayState.seenCutscene)   State.inCutscene = true;
+    else                                                    closeScript();
 }
 
-function startCutscene() {
-    var red:FlxSprite = new FlxSprite(-400, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
+var whiteFade = null;
+
+function startCutscene()
+{
+    var red = new FlxSprite(-400, -100).makeRect(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
     add(red);
 
-    var senpaiEvil:FunkinSprite = new FunkinSprite('weeb/senpaiCrazy', [0,0], [0,0]);
+    var senpaiEvil = new FunkinSprite('weeb/senpaiCrazy', [0,0], [0,0]);
     senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion instance 1', 24, false, [0]);
     senpaiEvil.addAnim('cutscene', 'Senpai Pre Explosion instance 1');
     senpaiEvil.playAnim('preCutscene');
@@ -22,6 +21,11 @@ function startCutscene() {
     add(senpaiEvil);
 
     State.camHUD.visible = false;
+
+    whiteFade = new FlxSprite().makeRect(FlxG.width, FlxG.height, FlxColor.WHITE);
+    whiteFade.camera = State.camOther;
+    whiteFade.alpha = 0;
+    add(whiteFade);
 
     var manager = makeCutsceneManager(); 
 
@@ -34,27 +38,32 @@ function startCutscene() {
         FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
             senpaiEvil.destroy();
             red.destroy();
-            State.camGame.fade(FlxColor.WHITE, 0.01, true, function() {
-                State.camHUD.visible = true;
-                State.createDialogue();
-            }, true);
+
+            State.camHUD.visible = true;
+            State.createDialogue();
+            FlxTween.tween(whiteFade, {alpha: 0}, 0.6);
         });
     });
 
     manager.pushEvent(5.3, function () {
-        State.camGame.fade(FlxColor.WHITE, 1.6, false);
+        FlxTween.tween(whiteFade, {alpha: 1}, 1.6);
     });
 
     manager.start();
 }
 
-var bgFade:FlxSprite;
-var dialogueBox:PixelDialogueBox;
-var face:FunkinSprite;
-var inDialogue:Bool = false;
+var bgFade;
+var dialogueBox;
+var face;
+var inDialogue = false;
 
-function createDialogue() {
-    bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.fromRGB(25,0,5));
+function createDialogue()
+{
+    State.openDialogueFunc = function () {
+        State.quickDialogueBox();
+    }
+
+    bgFade = new FlxSprite().makeRect(FlxG.width, FlxG.height, 0xff190005);
     bgFade.scrollFactor.set();
     bgFade.alpha = 0;
     add(bgFade);
@@ -74,12 +83,14 @@ function createDialogue() {
 
     var handPos = dialogueBox.handSelect.getPosition();
     dialogueBox.handSelect = new FunkinSprite('skins/pixel/evil_hand', [handPos.x,handPos.y], [0,0]);
-    dialogueBox.handSelect.addAnim('enter', 'nextLine', 12);
-    dialogueBox.handSelect.addAnim('load', 'waitLine', 12, true);
-    dialogueBox.handSelect.addAnim('click', 'clickLine', 12);
-    dialogueBox.handSelect.setScale(6 * 0.9);
-    dialogueBox.handSelect.playAnim('load');
-    dialogueBox.add(dialogueBox.handSelect);
+    
+    var hand = dialogueBox.handSelect;
+    hand.addAnim('enter', 'nextLine', 12);
+    hand.addAnim('load', 'waitLine', 12, true);
+    hand.addAnim('click', 'clickLine', 12);
+    hand.setScale(6 * 0.9);
+    hand.playAnim('load');
+    dialogueBox.add(hand);
 
     dialogueBox.bgFade.visible = false;
     dialogueBox.portraitLeft.alpha = 0;
@@ -91,20 +102,25 @@ function createDialogue() {
     inDialogue = true;
 }
 
-var timeElapsed:Float = 0.0;
-function updatePost(elapsed) {
+var timeElapsed = 0.0;
+function updatePost(elapsed)
+{
     if (dialogueBox != null && inDialogue) {
-        face.alpha = dialogueBox.box.alpha;
         bgFade.alpha = dialogueBox.bgFade.alpha;
-        face.offset.y = FlxMath.roundDecimal(FlxMath.fastSin(timeElapsed += elapsed), 1) * 10;
+        face.alpha = dialogueBox.box.alpha;
+        face.offset.y = FlxMath.roundDecimal(CoolUtil.sin(timeElapsed += elapsed), 1) * 10;
     }
+
+    if (whiteFade != null)
+        whiteFade.alpha = FlxMath.roundDecimal(whiteFade.alpha / 8, 2) * 8;
 }
 
 function startCountdown() {
-    if (PlayState.isStoryMode && inDialogue) {
+    if (inDialogue) {
         inDialogue = false;
         face.destroy();
         bgFade.destroy();
+        whiteFade.destroy();
         closeScript();
     }
 }

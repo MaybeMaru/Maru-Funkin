@@ -178,10 +178,10 @@ class FunkCamera extends FlxCamera {
 	}
 
     override function updateInternalSpritePositions() {
-        if (canvas != null) {
-            final scaleMode = FlxG.scaleMode.scale;
-			canvas.x = -0.5 * width * (scaleX - initialZoom) * scaleMode.x;
-			canvas.y = -0.5 * height * (scaleY - initialZoom) * scaleMode.y;
+        if (canvas != null)
+        {
+			canvas.x = -.5 * width * (scaleX - initialZoom) * FlxG.scaleMode.scale.x;
+			canvas.y = -.5 * height * (scaleY - initialZoom) * FlxG.scaleMode.scale.y;
 
 			canvas.scaleX = totalScaleX;
 			canvas.scaleY = totalScaleY;
@@ -260,7 +260,6 @@ class FunkCamera extends FlxCamera {
         if (_currentDrawItem != null)
         if (_currentDrawItem.type == FlxDrawItemType.TILES)
         {
-            var _headTiles = _headTiles;
             if (_headTiles.graphics == graphic)
             if (_headTiles.colored == colored)
             if (_headTiles.blend == blend)
@@ -269,11 +268,10 @@ class FunkCamera extends FlxCamera {
                 return _headTiles;
         }
 
-        var storage = FlxCamera._storageTilesHead;
-        if (storage != null)
+        if (FlxCamera._storageTilesHead != null)
 		{
-			itemToReturn = storage;
-			var newHead = storage.nextTyped;
+			itemToReturn = FlxCamera._storageTilesHead;
+			var newHead = itemToReturn.nextTyped;
 			itemToReturn.reset();
 			FlxCamera._storageTilesHead = newHead;
 		}

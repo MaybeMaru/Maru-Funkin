@@ -54,10 +54,12 @@ class ModdingUtil {
     public static var scripts:Array<FunkScript> = [];
     public static var scriptsMap:Map<String, FunkScript> = [];
 
-    inline public static function clearScripts():Void {
+    inline public static function clearScripts():Void
+    {
         FunkScript.globalVariables.clear();
         Main.console.clear();
-        for (i in scripts.copy()) removeScript(i);
+        
+        scripts.copy().fastForEach((script, i) -> removeScript(script));
         scripts.splice(0, scripts.length);
 
         // Warn if the mod folder is outdated

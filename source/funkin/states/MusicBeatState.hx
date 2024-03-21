@@ -38,11 +38,15 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		add(musicBeat = new MusicBeat(this));
 
 		//State Scripts
-		if (!curState.endsWith("PlayState")) {
+		if (!curState.endsWith("PlayState"))
+		{
 			ModdingUtil.clearScripts();
 			final globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
 			final curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
-			for (script in globalStateScripts.concat(curStateScripts)) ModdingUtil.addScript(script);
+			
+			globalStateScripts.fastForEach((script, i) -> ModdingUtil.addScript(script));
+			curStateScripts.fastForEach((script, i) -> ModdingUtil.addScript(script));
+			
 			ModdingUtil.addCall('stateCreate');
 		}
 
@@ -51,11 +55,11 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	// Only for backwards compatibility
 	public var targetLayer:Layer;
-	override function add(basic:OneOfTwo<FlxBasic, FlxObject>):FlxBasic {
+	override function add(basic:FlxBasic):FlxBasic {
 		if (targetLayer == null)
 			return super.add(basic);
 
-		return targetLayer.add(basic);
+		return targetLayer.add(cast(basic, FlxObject));
 	}
 
 	override function draw() {
@@ -76,7 +80,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 					FlxCamera._defaultCameras = cameras;
 		
 				members.fastForEach((basic, i) -> {
-					final basic:FlxBasic = basic;
 					if (basic != null) if (basic.exists) if (basic.visible)
 						basic.draw();
 				});
@@ -107,7 +110,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function stepHit(curStep:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				final basic:FlxBasic = basic;
 				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).stepHit(curStep);
 			}
@@ -120,7 +122,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function beatHit(curBeat:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				final basic:FlxBasic = basic;
 				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).beatHit(curBeat);
 			}
@@ -132,7 +133,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	public function sectionHit(curSection:Int):Void {
 		members.fastForEach((basic, i) -> {
 			if (basic is IMusicHit) {
-				final basic:FlxBasic = basic;
 				if (basic != null) if (basic.exists) if (basic.active)
 					cast(basic, IMusicHit).sectionHit(curSection);
 			}

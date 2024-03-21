@@ -113,14 +113,11 @@ class Controls
     // Bindings will always be 2 keys that arent ANY, so we can make this unsafe
     static function checkKeys(keys:Array<Int>, status:Int):Bool @:privateAccess
     {
-        var keyboard = FlxG.keys;
-
         for (i in 0...2) {
             final key = keys[i];
-            if (key != NONE) if (keyboard.checkStatusUnsafe(key, status))
+            if (key != NONE) if (FlxG.keys.checkStatusUnsafe(key, status))
                 return true;
         }
-
         return false;
     }
 
