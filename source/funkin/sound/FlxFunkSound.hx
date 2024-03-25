@@ -1,5 +1,7 @@
 package funkin.sound;
 
+import openfl.events.Event;
+import openfl.net.URLRequest;
 import openfl.Lib;
 import openfl.media.SoundMixer;
 import lime.media.AudioSource;
@@ -53,16 +55,34 @@ class FlxFunkSound extends FlxBasic
         source.dispose();
     }
 
-    function set_sound(value:Sound) {
+    function set_sound(value:Sound):Sound {
         if (value != null)
         {
-            length = value.length;
-            source.buffer = value.__buffer;
-            source.init();
-            __initMixer();
+            var init:()->Void = function () {
+                length = value.length;
+                source.buffer = value.__buffer;
+                source.init();
+                __initMixer();
 
-            source.currentTime = 0;
-            _lastStopTime = 0;
+                source.currentTime = 0;
+                _lastStopTime = 0;
+
+                if (this.onLoad != null)
+                    this.onLoad();
+            }
+
+            if (value.__urlLoading)
+            {
+                var onLoad:Event->Void = function (e:Event) {
+                    if (value == e.target)
+                        init();
+                }
+                value.addEventListener(Event.COMPLETE, onLoad, false, 0, true);
+            }
+            else
+            {
+                init();
+            }
         }
         
         return sound = value;
@@ -71,7 +91,7 @@ class FlxFunkSound extends FlxBasic
     public var onComplete:()->Void;
     public var autoDestroy:Bool = false;
     
-    private function __soundFinish() {        
+    private function __soundFinish():Void {        
         if (onComplete != null)
             onComplete();
         
@@ -88,14 +108,31 @@ class FlxFunkSound extends FlxBasic
         }
     }
 
-    public function loadSound(sound:Sound):FlxFunkSound {
+    public var onLoad:()->Void;
+
+    public function loadSound(sound:Sound, ?onLoad:()->Void):FlxFunkSound
+    {
+        this.onLoad = onLoad;
+        this.sound = sound;
+        return this;
+    }
+
+    public function loadStream(path:String, ?onLoad:()->Void):FlxFunkSound
+    {
+        this.onLoad = onLoad;
+        
+        if (!path.startsWith("./"))
+            path = './$path';
+        
+        final sound = new Sound();
+        sound.load(new URLRequest(path));
         this.sound = sound;
         return this;
     }
 
     public var playing(default, null):Bool = false;
     public var paused(get, never):Bool;
-    inline function get_paused() return !playing;
+    inline function get_paused():Bool return !playing;
 
     public var length:Float = 0.0;
     public var time(get, set):Float;
@@ -103,20 +140,20 @@ class FlxFunkSound extends FlxBasic
     inline function set_time(value:Float) return source.currentTime = Std.int(value);
 
     public var pitch(default, set):Float = 1.0;
-    inline function set_pitch(value:Float) {
+    inline function set_pitch(value:Float):Float {
         source.pitch = value;
         return pitch = value;
     }
 
     public var loops(default, set):Int = 0;
-    inline function set_loops(value:Int) {
+    inline function set_loops(value:Int):Int {
         if (value < 1) loops = 1;
         return loops = source.loops = value - 1;
     }
 
     public var looped:Bool = false;
     public var offset(default, set):Float = 0.0;
-    inline function set_offset(value:Float) {
+    inline function set_offset(value:Float):Float {
         source.offset = Std.int(-value);
         return offset = value;
     }
@@ -124,22 +161,22 @@ class FlxFunkSound extends FlxBasic
     private var _gain:Float = 1.0;
     public var volume:Float = 1.0;
 
-    inline function updateVolume() {
+    inline function updateVolume():Void {
         source.gain = FlxG.sound.muted ? 0 : _gain * volume * FlxG.sound.volume;
     }
 
-    public function fadeIn(duration:Float = 1.0, startVolume:Float = 0, ?endVolume:Float) {
+    public function fadeIn(duration:Float = 1.0, startVolume:Float = 0, ?endVolume:Float):Void {
         endVolume ??= volume;
         volume = startVolume;
         updateVolume();
         fadeOut(duration, endVolume);
     }
 
-    public function fadeOut(duration:Float = 1.0, endVolume:Float = 0) {
+    public function fadeOut(duration:Float = 1.0, endVolume:Float = 0):Void {
         FlxTween.tween(this, {volume: endVolume}, duration);
     }
 
-    override function update(elapsed:Float) {
+    override function update(elapsed:Float):Void {
         updateVolume();
     }
 
@@ -161,7 +198,7 @@ class FlxFunkSound extends FlxBasic
         }
     }
 
-    public function play(forced:Bool = false) {
+    public function play(forced:Bool = false):Void {
         if (forced || !playing) {
             if (forced)
                 _lastStopTime = 0;
@@ -175,13 +212,13 @@ class FlxFunkSound extends FlxBasic
             __play();
     }
 
-    inline function __play() {
+    inline function __play():Void {
         source.play();
         source.currentTime = _lastStopTime;
         playing = true;
     }
 
-    private function __initMixer()
+    private function __initMixer():Void
     {
         var pan = SoundMixer.__soundTransform.pan + transform.pan;
         if (pan > 1) pan = 1;

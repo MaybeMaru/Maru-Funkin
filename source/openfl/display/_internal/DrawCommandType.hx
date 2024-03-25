@@ -1,6 +1,6 @@
 package openfl.display._internal;
 
-enum abstract DrawCommandType(Int) from Int to Int
+enum abstract DrawCommandType(Int)
 {
 	var BEGIN_BITMAP_FILL = 0;
 	var BEGIN_FILL = 1;

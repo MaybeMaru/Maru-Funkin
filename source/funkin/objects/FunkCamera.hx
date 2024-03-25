@@ -269,16 +269,15 @@ class FunkCamera extends FlxCamera {
         }
 
         if (FlxCamera._storageTilesHead != null)
-		{
-			itemToReturn = FlxCamera._storageTilesHead;
-			var newHead = itemToReturn.nextTyped;
-			itemToReturn.reset();
-			FlxCamera._storageTilesHead = newHead;
-		}
-		else
-		{
-			itemToReturn = new FlxDrawItem();
-		}
+        {
+            itemToReturn = FlxCamera._storageTilesHead;
+            FlxCamera._storageTilesHead = itemToReturn.nextTyped;
+            itemToReturn.reset();
+        }
+        else
+        {
+            itemToReturn = new FlxDrawItem();
+        }
 
 		itemToReturn.graphics = graphic;
 		itemToReturn.antialiasing = smooth;
