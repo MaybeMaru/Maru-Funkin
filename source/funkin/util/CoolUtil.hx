@@ -98,19 +98,25 @@ class CoolUtil {
 		return "";
 	}
 
-	inline public static function numberArray(max:Int, ?min:Int = 0):Array<Int> {
+	inline public static function numberArray(max:Int, min:Int = 0):Array<Int> {
 		return [for (i in min...max) i];
 	}
 
-	static final DEFAULT_CACHE_CLEARING:CacheClearing = {
-		tempCache: true,
-		staticCache: false,
-		shaders: true,
-		skins: true
+	inline public static function arraySet<T>(array:Array<T>, index:Int, value:T):Void {
+		#if cpp
+		cpp.NativeArray.unsafeSet(array, index, value);
+		#else 
+		array[index] = value;
+		#end
 	}
 
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
-		cacheClear = JsonUtil.checkJsonDefaults(DEFAULT_CACHE_CLEARING, cacheClear);
+		cacheClear = JsonUtil.checkJsonDefaults({
+			tempCache: true,
+			staticCache: false,
+			shaders: true,
+			skins: true
+		}, cacheClear);
 
 		if (cacheClear.shaders) Shader.clearShaders();
 		if (cacheClear.skins) NoteUtil.clearSkinsData();

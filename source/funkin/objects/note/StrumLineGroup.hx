@@ -19,7 +19,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
 		}
     }
 
-    public static final DEFAULT_CONTROL_CHECKS:Array<(InputType)->Bool> = [
+    public static final DEFAULT_CONTROL_CHECKS:Array<InputType->Bool> = [
         function (t:InputType) return Controls.getKey('NOTE_LEFT', t),
         function (t:InputType) return Controls.getKey('NOTE_DOWN', t),
         function (t:InputType) return Controls.getKey('NOTE_UP', t),

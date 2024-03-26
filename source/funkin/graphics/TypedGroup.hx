@@ -17,7 +17,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 	@:noCompletion
     override inline function set_camera(Value:FlxCamera):FlxCamera {
 		if (_cameras == null) _cameras = [Value];
-		else _cameras[0] = Value;
+		else CoolUtil.arraySet(_cameras, 0 , Value);
 		return Value;
 	}
 
@@ -35,7 +35,11 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 	public inline function setNull(object:T) {
 		var index:Int = members.indexOf(object);
 		if (index != -1) {
+			#if cpp // skip hxcpp creating a dynamic for null
+			untyped __cpp__("{0}->__unsafe_set({1}, null())", members, index);
+			#else
 			members[index] = null;
+			#end
 		}
 	}
 
@@ -44,7 +48,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		while (index > 0) {
 			index--;
 			if (members[index] == null) {
-				members[index] = object;
+				CoolUtil.arraySet(members, index, object);
 				return;
 			}
 		}
@@ -54,20 +58,17 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 
 	public function insertBelow(object:T) {
 		var index:Int = 0;
-		while (index < members.length) {
+		final l:Int = members.length;
+		while (index < l) {
 			index++;
 			if (members[index] == null) {
-				members[index] = object;
+				CoolUtil.arraySet(members, index, object);
 				return;
 			}
 		}
 
 		members.insert(0, object);
 	}
-
-    override inline function getFirstNull():Int {
-        return members.indexOf(null);
-    }
 
 	override function forEachAlive(func:T -> Void, recurse:Bool = false) {
 		members.fastForEach((basic, i) -> {
@@ -83,7 +84,6 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 			FlxCamera._defaultCameras = cameras;
 
 		members.fastForEach((basic, i) -> {
-			final basic:FlxBasic = basic;
 			if (basic != null) if (basic.exists) if (basic.visible)
 				basic.draw();
 		});
@@ -94,7 +94,6 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 	override public function update(elapsed:Float):Void
 	{
 		members.fastForEach((basic, i) -> {
-			final basic:FlxBasic = basic;
 			if (basic != null) if (basic.exists) if (basic.active)
 				basic.update(elapsed);
 		});

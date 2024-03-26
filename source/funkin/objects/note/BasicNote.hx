@@ -176,9 +176,9 @@ class BasicNote extends SmartSprite implements INoteData {
 
     // Casts the basic note as a Note
     inline public function toNote():Note
-        return cast(this, Note);
+        return cast this;
     
     // Casts the basic note as a Sustain
     inline public function toSustain():Sustain
-        return cast(this, Sustain);
+        return cast this;
 }

@@ -540,7 +540,7 @@ class NotesGroup extends Group
 									if (posNote.noteData == note.noteData)
 									{
 										if (Math.abs(note.strumTime - posNote.strumTime) < 10) 	removeList.push(note);
-										else if (note.strumTime < posNote.strumTime) 			possibleNotes[i] = note;
+										else if (note.strumTime < posNote.strumTime) 			CoolUtil.arraySet(possibleNotes, i, note);
 									}
 								});
 							}
