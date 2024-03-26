@@ -1,6 +1,7 @@
 package macros;
 
 import haxe.macro.Expr;
+//import haxe.macro.Context;
 
 macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
   // Extract variable names and expression from `callbackExpr`
@@ -26,13 +27,16 @@ macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
     case _: throw "`callbackExpr` must be a function with two arguments!";
   }
 
+  // Make sure the array doesnt compile into dynamic
+  //final type = Context.toComplexType(Context.typeof(iterableExpr));
+
   // Build the expression this macro call changes into:
   return macro {
     final iterable = $iterableExpr;
     final len = iterable.length;
     var $indexName = 0;
     while($i{indexName} < len) {
-      final $objectName = iterable[$i{indexName}];
+      final $objectName = iterable.unsafeGet($i{indexName});
       $loopExpr;
       $i{indexName}++;
     }

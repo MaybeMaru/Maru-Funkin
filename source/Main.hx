@@ -8,13 +8,16 @@ import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
+#if !mac
 import haxe.ui.Toolkit;
+#end
 
 class InitState extends FlxState {
     override function create() {
         super.create();
 
 		//Load Settings / Mods
+		FlxG.stage.quality = LOW;
         Conductor.init();
 		CoolUtil.init();
 		Highscore.load();
@@ -34,9 +37,9 @@ class InitState extends FlxState {
         final txt = new FlxFunkText();
         txt.text =
         "Hey there big boy, do you want to turn on preloading?" + "\n" +
-        "It is recommended on most PCs " + "\n" +
-		"and will make loading silky smooth."  + "\n" +
-        "Turn off if you have a toaster tho." + "\n\n" +
+        "Itll make memory go bye bye but " + "\n" +
+		"also will make loading go vroom vroom"  + "\n" +
+        "Turn off if u have a toaster pc" + "\n\n" +
         "Press ACCEPT to turn ON or BACK to turn OFF!!";
         
         txt.alignment = "center";
@@ -111,13 +114,15 @@ class Main extends Sprite
 
 	private function init(?E:Event):Void
 	{
-		#if (mac || web || android) throw("no."); #end
+		#if (web || android) throw("no."); #end
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 
+		#if !mac
 		// Init haxeui
 		Toolkit.theme = "dark";
 		Toolkit.init();
+		#end
 		
 		// TODO: Only spanish and portuguese exist
 		//LocaleManager.instance.language;

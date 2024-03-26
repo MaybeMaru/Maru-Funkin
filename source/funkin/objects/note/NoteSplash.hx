@@ -10,7 +10,7 @@ class SplashGroup extends TypedGroup<NoteSplash> {
     }
 
     public function clearGroup() {
-        for (i in this) i.kill();
+        this.members.fastForEach((splash, i) -> splash.kill());
     }
 
 	public function spawnSplash(?note:Note) {

@@ -17,7 +17,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 	@:noCompletion
     override inline function set_camera(Value:FlxCamera):FlxCamera {
 		if (_cameras == null) _cameras = [Value];
-		else CoolUtil.arraySet(_cameras, 0 , Value);
+		else _cameras.unsafeSet(0, Value);
 		return Value;
 	}
 
@@ -48,7 +48,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		while (index > 0) {
 			index--;
 			if (members[index] == null) {
-				CoolUtil.arraySet(members, index, object);
+				members.unsafeSet(index, object);
 				return;
 			}
 		}
@@ -62,7 +62,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 		while (index < l) {
 			index++;
 			if (members[index] == null) {
-				CoolUtil.arraySet(members, index, object);
+				members.unsafeSet(index, object);
 				return;
 			}
 		}

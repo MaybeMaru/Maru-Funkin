@@ -102,14 +102,6 @@ class CoolUtil {
 		return [for (i in min...max) i];
 	}
 
-	inline public static function arraySet<T>(array:Array<T>, index:Int, value:T):Void {
-		#if cpp
-		cpp.NativeArray.unsafeSet(array, index, value);
-		#else 
-		array[index] = value;
-		#end
-	}
-
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
 		cacheClear = JsonUtil.checkJsonDefaults({
 			tempCache: true,

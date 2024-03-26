@@ -128,5 +128,6 @@ import flixel.util.FlxArrayUtil;
 import haxe.Json;
 
 using StringTools;
+using macros.UnsafeArray;
 using macros.FastIterate;
 #end
