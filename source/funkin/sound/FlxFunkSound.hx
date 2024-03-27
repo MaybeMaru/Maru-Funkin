@@ -19,7 +19,8 @@ import openfl.media.Sound;
 @:access(openfl.media.Sound)
 class FlxFunkSound extends FlxBasic
 {
-    var sound(default, set):Sound;
+    @:noCompletion
+    public var sound(default, set):Sound;
     var transform:SoundTransform;
     var source:AudioSource;
 

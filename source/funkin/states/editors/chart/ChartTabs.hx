@@ -509,15 +509,15 @@ class ChartTabs extends FlxUITabMenu {
 		var check_waveform_inst = new FlxUICheckBox(check_mute_inst.x + 125, check_mute_inst.y, null, null, "Instrumental Waveform", 100);
 		check_waveform_inst.checked = false;
 		check_waveform_inst.callback = function() {
-			ChartingState.instance.mainGrid.waveformInst.visible = check_waveform_inst.checked;
-			ChartingState.instance.mainGrid.waveformInst.updateWaveform();
+			ChartingState.instance.mainGrid.instWaveform.visible = check_waveform_inst.checked;
+			ChartingState.instance.mainGrid.instWaveform.redrawWaveform();
 		};
 
 		var check_waveform_voices = new FlxUICheckBox(check_waveform_inst.x, check_waveform_inst.y + 30, null, null, "Voices Waveform", 100);
 		check_waveform_voices.checked = false;
 		check_waveform_voices.callback = function() {
-			ChartingState.instance.mainGrid.waveformVocals.visible = check_waveform_voices.checked;
-			ChartingState.instance.mainGrid.waveformVocals.updateWaveform();
+			ChartingState.instance.mainGrid.voicesWaveform.visible = check_waveform_voices.checked;
+			ChartingState.instance.mainGrid.voicesWaveform.redrawWaveform();
 		};
 
 		check_hitsound = new FlxUICheckBox(check_mute_inst.x, check_mute_voices.y + 30, null, null, "Use Hitsounds", 100);

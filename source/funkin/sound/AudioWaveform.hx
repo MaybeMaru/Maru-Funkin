@@ -1,7 +1,6 @@
 package funkin.sound;
 
 import openfl.display.Sprite;
-import flixel.util.FlxSpriteUtil;
 import openfl.media.Sound;
 import haxe.io.Bytes;
 
@@ -10,70 +9,87 @@ import haxe.io.Bytes;
 class AudioWaveform extends FlxSpriteExt
 {
     var canvas:Sprite;
+    var bounds:Rectangle;
 
-    public function new(X:Float = 0, Y:Float = 0) {
+    public function new(X:Float = 0.0, Y:Float = 0.0, Width:Float = 250.0, Height:Float = 500.0, ?sound:Sound):Void
+    {
         super(X, Y);
-        makeGraphic(250, 500, FlxColor.TRANSPARENT, true);
-
+        makeGraphic(Std.int(Width), Std.int(Height), FlxColor.TRANSPARENT, true);
+        
+        bounds = new Rectangle(0, 0, width, height);
         canvas = new Sprite();
+
+        if (sound != null)
+            setSound(sound);
     }
     
-    public inline function getIndex(time:Float):Int {
+    public inline function getIndex(time:Float):Int
+    {
         return Std.int(Math.max(time * sampleRate * 0.004, 0));
     }
 
-    static inline var QUALITY:Int = 50;
+    static inline var QUALITY:Int = 250;
 
-    var sampleRate:Int;
-    var bytes:Bytes;
+    var sampleRate:Float = 0.0;
     var avgBytes:Array<Int>;
 
-    public function setSound(sound:Sound)
+    override function destroy():Void {
+        super.destroy();
+        avgBytes = null;
+        canvas = null;
+        bounds = null;
+    }
+
+    public function setSound(sound:Sound):Void
     {
-        sampleRate = Std.int(sound.__buffer.sampleRate / QUALITY);
-        bytes = sound.__buffer.data.toBytes();
+        sampleRate = sound.__buffer.sampleRate / QUALITY;
+        var bytes:Bytes = sound.__buffer.data.toBytes();
         avgBytes = new Array<Int>();
 
         var i:Int = 0;
         var l:Int = bytes.length;
-
         var bigByte:Int = 0;
 
         while(i < l)
         {
             var byte = bytes.getUInt16(i);
-            if (byte > bigByte)
+            if (byte > (65535 / 2))
+                byte -= 65535;
+            
+            if (Math.abs(byte) > Math.abs(bigByte))
                 bigByte = byte;
-
-            i++;
 
             if (i % QUALITY == 0) {
                 avgBytes.push(bigByte);
                 bigByte = 0;
             }
+
+            i++;
         }
     }
+
+    public var audioOffset:Float;
 
     var start:Int = 0;
     var end:Int = 0;
 
     // In milliseconds
-    public function setSegment(start:Float, end:Float) {
-        this.start = getIndex(start);
-        this.end = getIndex(end);
+    public function setSegment(start:Float, end:Float):Void {
+        this.start = getIndex(start - audioOffset);
+        this.end = getIndex(end - audioOffset);
         redrawWaveform();
     }
 
-    var bounds = new Rectangle(0, 0, 0, 0);
-
-    function redrawWaveform()
+    public function redrawWaveform():Void
     {
-        canvas.graphics.clear();
         canvas.graphics.__bounds = bounds;
-        bounds.setTo(0, 0, width, height);
+
+        if (!visible || avgBytes == null || avgBytes.length <= 0 || end <= 0) {
+            return;
+        }
         
         canvas.graphics.beginFill();
-        canvas.graphics.lineStyle(.5, FlxColor.WHITE);
+        canvas.graphics.lineStyle(0.7, FlxColor.WHITE);
         canvas.graphics.moveTo(width * .5, 0);
 
         var i:Int = start;
@@ -82,15 +98,11 @@ class AudioWaveform extends FlxSpriteExt
 
         while (i < l)
         {
-            var byte:Int = avgBytes[i];//bytes.getUInt16(i);
+            var byte:Int = avgBytes.unsafeGet(i);
 
-            //if (byte == 0 || byte > 100) if (byte != lastByte)
             if (byte != lastByte)
             {
                 lastByte = byte;
-
-                if (byte > (65535 / 2))
-                    byte -= 65535;
 
                 lineTo(
                     width * .5 + ((byte / 65535) * 50),
@@ -98,7 +110,6 @@ class AudioWaveform extends FlxSpriteExt
                 );
             }
 
-            //i += 25;
             i++;
         }
 
@@ -106,61 +117,28 @@ class AudioWaveform extends FlxSpriteExt
         canvas.graphics.endFill();
         canvas.graphics.__dirty = true;
 
-        CoolUtil.rectangle.setTo(0, 0, width, height);
-        pixels.fillRect(CoolUtil.rectangle, 16777216);
+        // Draw the waveform onto the sprite
+        pixels.fillRect(bounds, 16777216);
         pixels.draw(canvas);
+
+        // Wont need the graphics data anymore
+        clearGraphics();
     }
 
-    inline function lineTo(x:Float, y:Float) {
+    inline function clearGraphics() {
+        canvas.graphics.clear();
+    }
+
+    override function set_visible(value:Bool) {
+        if (!value) {
+            clearGraphics();
+        }
+        return super.set_visible(value);
+    }
+
+    inline function lineTo(x:Float, y:Float):Void {
         canvas.graphics.__positionX = x;
 		canvas.graphics.__positionY = y;
         canvas.graphics.__commands.lineTo(x, y);
     }
-
-    //var points:Array<FlxPoint> = [];
-
-    /*
-    function updateDisplay()
-    {
-        //CoolUtil.rectangle.setTo(0, 0, width, height);
-        //pixels.fillRect(CoolUtil.rectangle, 16777216);
-        canvas.graphics.clear();
-        canvas.graphics.beginFill();
-        canvas.graphics.lineStyle(.5, FlxColor.WHITE);
-        canvas.graphics.moveTo(width * .5, 0);
-        
-        var i:Int = start;
-        var l:Int = FlxMath.minInt(end, bytes.length);
-
-        var yIndex:Int = 0;
-        //points.splice(0, points.length);
-
-        //points.push(FlxPoint.weak(width * .5, 0));
-        var lastByte:Int = 0;
-
-        while (i < l)
-        {
-            var byte:Int = bytes.getUInt16(i);
-            if (byte != lastByte)
-            {
-                lastByte = byte;
-
-                if (byte > (65535 / 2))
-                    byte -= 65535;
-    
-                var sample:Float = (byte / 65535);
-
-                canvas.graphics.lineTo(
-                    width * .5 + sample * 50,
-                    FlxMath.remapToRange(yIndex, 0, end - start, 0, height)
-                );
-            }
-
-            i = (i + 5);
-            yIndex = (yIndex + 5);
-        }
-
-        canvas.graphics.lineTo(width * .5, height);
-        canvas.graphics.endFill();
-    }*/
 }

@@ -1,5 +1,6 @@
 package funkin.states.editors.chart;
 
+import funkin.sound.AudioWaveform;
 import flixel.util.FlxArrayUtil;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxBackdrop;
@@ -134,9 +135,10 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
     TODO: make bitmaps sustain system for charting state
 */
 
-class ChartNoteGrid extends ChartGridBase {
-    public var waveformVocals:ChartWaveform;
-    public var waveformInst:ChartWaveform;
+class ChartNoteGrid extends ChartGridBase
+{
+    public var instWaveform:AudioWaveform;
+    public var voicesWaveform:AudioWaveform;
 
     public var sustainsGroup:FlxTypedGroup<ChartSustain>;
     public var textGroup:FlxTypedGroup<FunkinText>;
@@ -187,14 +189,20 @@ class ChartNoteGrid extends ChartGridBase {
         super(true);
 
         // Waveforms
-        waveformInst = new ChartWaveform(Conductor.inst, 0x923c70);
-        insert(this.members.indexOf(objectsGroup), waveformInst);
-        waveformVocals = new ChartWaveform(Conductor.vocals);
-        insert(this.members.indexOf(objectsGroup), waveformVocals);
-        waveformInst.visible = waveformVocals.visible = false;
+        instWaveform = new AudioWaveform(grid.x, grid.y, grid.width, grid.height, Conductor.inst.sound);
+        voicesWaveform = new AudioWaveform(grid.x, grid.y, grid.width, grid.height, Conductor.vocals.sound);
+        
+        instWaveform.visible = false;
+        voicesWaveform.visible = false;
+
+        insert(members.indexOf(objectsGroup), instWaveform);
+        insert(members.indexOf(objectsGroup), voicesWaveform);
+
+        instWaveform.color = 0x923c70;
+        voicesWaveform.color = 0x5e3c92;
 
         sustainsGroup = new FlxTypedGroup<ChartSustain>();
-        insert(this.members.indexOf(objectsGroup), sustainsGroup);
+        insert(members.indexOf(objectsGroup), sustainsGroup);
         
         textGroup = new FlxTypedGroup<FunkinText>();
         add(textGroup);
@@ -202,13 +210,17 @@ class ChartNoteGrid extends ChartGridBase {
         updateWaveform();
     }
 
-    public function updateWaveform() {
-        waveformInst.soundOffset = Conductor.songOffset[0];
-        waveformVocals.soundOffset = Conductor.songOffset[1];
-        for (i in [waveformInst, waveformVocals]) {
-            i.updateWaveform();
-            i.setPosition(grid.x, grid.y);
-        }
+    public function updateWaveform():Void
+    {
+        instWaveform.audioOffset = Conductor.songOffset.unsafeGet(0);
+        voicesWaveform.audioOffset = Conductor.songOffset.unsafeGet(1);
+
+        var index = ChartingState.instance.sectionIndex;
+        var start = ChartingState.getSecTime(index);
+        var end = ChartingState.getSecTime(index + 1);
+
+        instWaveform.setSegment(start, end);
+        voicesWaveform.setSegment(start, end);
     }
 }
 
