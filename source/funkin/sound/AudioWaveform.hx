@@ -87,10 +87,12 @@ class AudioWaveform extends FlxSpriteExt
         if (!visible || avgBytes == null || avgBytes.length <= 0 || end <= 0) {
             return;
         }
+
+        final mid = width * .5;
         
         canvas.graphics.beginFill();
         canvas.graphics.lineStyle(0.7, FlxColor.WHITE);
-        canvas.graphics.moveTo(width * .5, 0);
+        canvas.graphics.moveTo(mid, 0);
 
         var i:Int = start;
         var l:Int = FlxMath.minInt(end, avgBytes.length);
@@ -103,17 +105,20 @@ class AudioWaveform extends FlxSpriteExt
             if (byte != lastByte)
             {
                 lastByte = byte;
+                final y =  FlxMath.remapToRange((i - start), 0, (l - start), 0, height);
 
                 lineTo(
-                    width * .5 + ((byte / 65535) * 50),
-                    FlxMath.remapToRange((i - start), 0, (l - start), 0, height)
+                    mid + ((byte / 65535) * 50),
+                    y
                 );
+
+                lineTo(mid, y);
             }
 
             i++;
         }
 
-        lineTo(width * .5, height);
+        lineTo(mid, height);
         canvas.graphics.endFill();
         canvas.graphics.__dirty = true;
 

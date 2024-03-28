@@ -128,7 +128,7 @@
 
         <vbox  text= "Song">
             <hbox>
-                <frame text="Song"><vbox>
+                <frame text="Song"><vbox width = "240px">
                     <textfield id="song-title" width="250" placeholder="Enter song title" />
                     <hbox>
                         <button id="save-song" text="Save Song" />
@@ -140,14 +140,14 @@
                     </hbox>
 
                 </vbox></frame>
-                <frame text="Load"><vbox>
+                <frame text="Load"><vbox width = "125px">
                     <dropdown id="select-song" text="Select Song" ></dropdown>
                     <button id="load-song" text="Load Song" />
                     <button id="load-autosave" text="Load Autosave" />
                 </vbox></frame>
             </hbox>
             <hbox>
-                <frame text="Song Settings"><vbox>
+                <frame text="Song Settings"><vbox width = "240px">
                     <grid>
                         <vbox>
                             <label text = "Init BPM:"/>
@@ -165,7 +165,7 @@
                     </grid>
                 </vbox></frame>
 
-                <frame text="Song Data"><vbox>
+                <frame text="Song Data"><vbox width = "125px">
                     <label text = "Stage:"/>
                     <dropdown id="stage-dropdown" text="Select Stage" ></dropdown>
                     <label text = "Difficulty:"/>
