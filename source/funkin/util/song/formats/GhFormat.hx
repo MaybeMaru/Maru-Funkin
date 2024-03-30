@@ -6,9 +6,11 @@ class GhFormat {
         map = CoolUtil.getFileContent(path).split('\n');
     }
     
-    public static function convertSong(path:String, ?input:GhFormat):SwagSong {
-        var ghMap:GhFormat = input ?? new GhFormat(path);
-        var fnfMap:SwagSong = Song.getDefaultSong();
+    public static function convertSong(path:String, ?input:GhFormat):SongJSON {
+        return Song.getDefaultSong();
+        
+        /*var ghMap:GhFormat = input ?? new GhFormat(path);
+        var fnfMap:SongJSON = Song.getDefaultSong();
 
         final title = ghMap.getVar("Name");
         final bpmMap = ghMap.getBpmChanges();
@@ -23,19 +25,19 @@ class GhFormat {
         _sortedChanges.sort(function (a,b) return FlxSort.byValues(FlxSort.ASCENDING,  a, b));
         
         for (i in _sortedChanges) {
-            var _sec:Int = Song.getTimeSection(fnfMap, i)+1;
-            Song.checkAddSections(fnfMap, _sec);
-            fnfMap.notes[_sec].changeBPM = true;
-            fnfMap.notes[_sec].bpm = bpmMap.get(i);
+            var _sec:Int = fnfMap.getTimeSection(i) + 1;
+            fnfMap.getSection(_sec);
+            fnfMap.sections[_sec].changeBPM = true;
+            fnfMap.sections[_sec].bpm = bpmMap.get(i);
         }
 
         for (i in ghMap.getNotes()) {
-            fnfMap.notes[Song.getTimeSection(fnfMap, i[0])].sectionNotes.push(i);
+            fnfMap.sections[fnfMap.getSection(i[0])].sectionNotes.push(i);
         }
 
         fnfMap.song = title;
         
-        return fnfMap;
+        return fnfMap;*/
     }
 
     public function getVar(varName:String) {

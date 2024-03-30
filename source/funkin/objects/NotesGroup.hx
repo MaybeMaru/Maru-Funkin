@@ -8,7 +8,7 @@ import funkin.objects.note.StrumLineGroup;
 class NotesGroup extends Group
 {	
 	public static var instance:NotesGroup = null;
-    public var SONG:SwagSong;
+    public var SONG:Song;
 	var game:PlayState = null;
 
     public static var songSpeed:Float = 1.0;
@@ -97,7 +97,7 @@ class NotesGroup extends Group
 
 	public var vanillaUI:Bool = false;
     
-    public function new(_SONG:SwagSong, isPlayState:Bool = true) {
+    public function new(_SONG:Song, isPlayState:Bool = true) {
         super();
 		instance = this;
 		game = isPlayState ? PlayState.instance : null;
@@ -227,8 +227,8 @@ class NotesGroup extends Group
 		for (i in 0...15)
 			notes.members.push(null);
 	
-		for (section in SONG.notes) {
-			for (songNotes in section.sectionNotes) {
+		for (section in SONG.section) {
+			for (songNotes in section.notes) {
 				final strumTime:Float = songNotes[0];
 				final susLength:Null<Float> = songNotes[2];
 				if ((susLength != null ? strumTime + susLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
@@ -267,7 +267,7 @@ class NotesGroup extends Group
 				}
 			}
 
-			for (e in section.sectionEvents) {
+			for (e in section.events) {
 				final strumTime:Float = e[0];
 				final eventName:String = e[1];
 				final eventValues:Array<Dynamic> = e[2];

@@ -14,7 +14,7 @@ class PlayState extends MusicBeatState
 	public static var clearCache:Bool = true;
 	public static var clearCacheData:Null<CacheClearing> = null;
 
-	public static var SONG:SwagSong;
+	public static var SONG:Song;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:String = 'tutorial';
 	public static var storyPlaylist:Array<String> = [];
@@ -38,7 +38,7 @@ class PlayState extends MusicBeatState
 	private var targetCamPos:FlxPoint;
 	private static var prevCamFollow:FlxObject;
 
-	private var curSectionData:SwagSection;
+	private var curSectionData:Section;
 
 	public var notesGroup:NotesGroup;
 	private var ratingGroup:RatingGroup;
@@ -113,8 +113,8 @@ class PlayState extends MusicBeatState
 		inPractice = getPref('practice');
 		validScore = !(getPref('botplay') || inPractice);
 		ghostTapEnabled = getPref('ghost-tap-style') == "on";
-		if (getPref('ghost-tap-style') == "dad turn" && SONG.notes[0] != null)
-			ghostTapEnabled = !SONG.notes[0].mustHitSection;
+		if (getPref('ghost-tap-style') == "dad turn") if (SONG.sections[0] != null)
+			ghostTapEnabled = !SONG.sections[0].mustHitSection;
 
 		SkinUtil.initSkinData();
 		NoteUtil.initTypes();
@@ -136,9 +136,9 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		persistentUpdate = persistentDraw = true;
 
-		SONG = Song.checkSong(SONG, null, false);
+		//SONG = Song.checkSong(SONG, null, false);
 
-		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
+		detailsText = isStoryMode ? 'Story Mode: ' + storyWeek.toUpperCase() : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
 		if (Character.getCharData(SONG.players[1]) != null) {
 			iconRPC = Character.getCharData(SONG.players[1]).icon;
@@ -206,7 +206,7 @@ class PlayState extends MusicBeatState
 		for (char in [boyfriend, dad, gf]) addCharScript(char);
 
 		//Song Scripts
-		ModdingUtil.addScriptFolder('songs/${Song.formatSongFolder(SONG.song)}');
+		ModdingUtil.addScriptFolder('songs/${SongUtil.formatSongFolder(SONG.title)}');
 
 		//Skin Script
 		ModdingUtil.addScript(Paths.script('skins/${SkinUtil.curSkin}'));
@@ -389,7 +389,8 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -Conductor.crochet * 5;
 		Conductor.setPitch(Conductor.songPitch);
-		curSectionData = Song.checkSection(SONG.notes[0]);
+
+		curSectionData = SONG.sections[0] ?? Section.make();
 		cameraMovement();
 
 		if (skipCountdown) {
@@ -454,7 +455,7 @@ class PlayState extends MusicBeatState
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength);
+		DiscordClient.changePresence(detailsText, '${SONG.title} (${formatDiff()})', iconRPC, true, songLength);
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -496,7 +497,7 @@ class PlayState extends MusicBeatState
 				Conductor.play();
 			}
 
-			var presenceDetails = '${SONG.song} (${formatDiff()})';
+			var presenceDetails = '${SONG.title} (${formatDiff()})';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
 		}
@@ -545,7 +546,7 @@ class PlayState extends MusicBeatState
 			if (canPause) {
 				if (startedCountdown) if (getKey('PAUSE', JUST_PRESSED)) {
 					openPauseSubState(true);
-					DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+					DiscordClient.changePresence(detailsPausedText, '${SONG.title} (${formatDiff()})', iconRPC);
 				}
 			}
 
@@ -606,7 +607,7 @@ class PlayState extends MusicBeatState
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 
 		// Game Over doesn't get his own variable because it's only used here
-		DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC);
+		DiscordClient.changePresence('Game Over - $detailsText', SONG.title + ' (${formatDiff()})', iconRPC);
 	}
 
 	inline public function snapCamera() {
@@ -671,13 +672,13 @@ class PlayState extends MusicBeatState
 	}
 
 	function switchSong():Void {
-		final nextSong:String = PlayState.storyPlaylist[0];
+		final nextSong:String = storyPlaylist[0];
 		trace('LOADING NEXT SONG [$nextSong-$curDifficulty]');
 
 		prevCamFollow = camFollow;
 		seenCutscene = false;
 
-		PlayState.SONG = Song.loadFromFile(curDifficulty, nextSong);
+		SONG = SongUtil.loadFromFile(curDifficulty, nextSong);
 		Conductor.stop();
 
 		clearCache = true;
@@ -742,7 +743,7 @@ class PlayState extends MusicBeatState
 	override public function sectionHit(curSection:Int):Void {
 		super.sectionHit(curSection);
 		if (Conductor.songPosition <= 0) curSection = 0;
-		curSectionData = SONG.notes[curSection];
+		curSectionData = SONG.sections[curSection];
 		cameraMovement();
 
 		if (camZooming) if (getPref('camera-zoom')) {
@@ -755,7 +756,7 @@ class PlayState extends MusicBeatState
 				Conductor.bpm = curSectionData.bpm;
 
 			if (getPref('ghost-tap-style') == "dad turn")
-				ghostTapEnabled = !curSectionData.mustHitSection;
+				ghostTapEnabled = !curSectionData.mustHit;
 		}
 
 		ModdingUtil.addCall('sectionHit', [curSection]);

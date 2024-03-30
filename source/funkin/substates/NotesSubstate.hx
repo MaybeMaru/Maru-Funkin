@@ -3,11 +3,11 @@ package funkin.substates;
 import funkin.objects.NotesGroup;
 
 class NotesSubstate extends MusicBeatSubstate {
-    public var SONG:SwagSong;
+    public var SONG:Song;
     public var notesGroup:NotesGroup;
     public var position:Float = 0;
 
-    public function new(_SONG:SwagSong, position:Float) {
+    public function new(_SONG:Song, position:Float) {
         super();
         this.position = position;
 

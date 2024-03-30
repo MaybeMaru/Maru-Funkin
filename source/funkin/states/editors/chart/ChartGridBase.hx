@@ -41,22 +41,22 @@ class ChartGridBase extends FlxTypedGroup<Dynamic> {
 
         gridShadow = new FlxSprite(grid.x,grid.y-grid.height);
         gridShadow.makeGraphic(cast grid.width, cast grid.height*3, FlxColor.BLACK);
-        gridShadow.pixels.fillRect(new Rectangle(0, gridShadow.height / 3, grid.width, grid.height), FlxColor.fromRGB(0,0,0,1));
+        gridShadow.pixels.fillRect(new Rectangle(0, gridShadow.height / 3, grid.width, grid.height), 16777216);
         gridShadow.alpha = 0.6;
         add(gridShadow);
     }
 
-    public var sectionData(default, set):SwagSection;
+    public var sectionData(default, set):Section;
     public var sectionIndex:Int = 0;
     public var sectionTime:Float = 0;
 
-    public function set_sectionData(value:SwagSection):SwagSection {
+    public function set_sectionData(value:Section):Section {
         clearSection();
         drawSectionData(value, false, true);
         return sectionData = value;
     }
 
-    public function drawSectionData(?value:SwagSection, cutHalf:Bool = false, pushList:Bool = false) {
+    public function drawSectionData(?value:Section, cutHalf:Bool = false, pushList:Bool = false) {
         if (value != null) {
             final secMidTime = ChartingState.getSecTime(sectionIndex-1) + Conductor.sectionCrochet * 0.625; // lol
             for (i in (isNote ? value.sectionNotes : value.sectionEvents)) {
@@ -314,7 +314,7 @@ class ChartEventGrid extends ChartGridBase {
         this.group = cast this.objectsGroup;
     }
 
-    override function drawSectionData(?value:SwagSection, cutHalf:Bool = false, pushList:Bool = false) {
+    override function drawSectionData(?value:Section, cutHalf:Bool = false, pushList:Bool = false) {
         if (value == null)
             return;
 

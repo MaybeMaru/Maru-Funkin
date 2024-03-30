@@ -25,17 +25,20 @@ class EventUtil {
         }
 	}
 
-    public static var DEFAULT_EVENT(default, never):EventData = {
+    public static final DEFAULT_EVENT:EventData = {
 		description: "This event has no description",
         values: [],
         image: "blankEvent"
 	}
 
     public static function getEventData(event:String):EventData {
-        if (eventsMap.exists(event)) return eventsMap.get(event);
-		var eventJson:EventData = JsonUtil.getJson(event, 'events');
-		eventJson = JsonUtil.checkJsonDefaults(DEFAULT_EVENT, eventJson);
-        if (eventJson.values.length > 24) eventJson.values = eventJson.values.slice(0, 24); // 24 values cap
+        if (eventsMap.exists(event))
+            return eventsMap.get(event);
+        
+        var eventJson:EventData = JsonUtil.checkJson(DEFAULT_EVENT, JsonUtil.getJson(event, 'events'));
+        if (eventJson.values.length > 24) // 24 values cap
+            eventJson.values.resize(24);
+
 		eventsMap.set(event, eventJson);
 		return eventJson;
     }

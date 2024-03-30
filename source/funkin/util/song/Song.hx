@@ -1,25 +1,271 @@
 package funkin.util.song;
 
-import haxe.Json;
-import flixel.util.FlxSort;
+import haxe.ds.Vector;
 
-import funkin.util.song.formats.OsuFormat;
-import funkin.util.song.formats.SmFormat;
-import funkin.util.song.formats.QuaFormat;
-import funkin.util.song.formats.GhFormat;
-import funkin.util.song.formats.FunkinFormat;
+/*
+ * Making these classes because working with all typedefs is a bit of a mess
+ * Also it compiles and depends a lot on Dynamic objects which sucks for safe code
+**/
 
-typedef SwagSection = {
-	var ?sectionNotes:Array<Array<Dynamic>>;
-	var ?sectionEvents:Array<Array<Dynamic>>;
-	var ?mustHitSection:Bool;
-	var ?bpm:Float;
-	var ?changeBPM:Bool;
+abstract class Meta extends Song
+{
+    public var diffs:Array<String> = new Array<String>();
+
+    public function fromMetaJson(input:MetaJSON):Song {
+        diffs.splice(0, diffs.length);
+        input.diffs.fastForEach((diff, i) -> diffs.push(diff));
+        return fromJson(input);
+    }
+
+    /**Embed the meta variables into the song**/
+    public function embed(song:Song)
+    {
+        if (!diffs.contains(song.diff))
+            return;
+
+        song.meta = this;
+
+        for (i in 0...2)
+            song.offsets.set(i, offsets.get(i));
+
+        sections.fastForEach((section, i) -> {
+            while (song.sections[i] == null)
+                song.sections.push(Section.make());
+            
+            //section.notes.fastForEach((note, i) -> song.sections.unsafeGet(i).notes.push(note));
+            section.events.fastForEach((event, i) -> song.sections.unsafeGet(i).events.push(event));
+        });
+    }
 }
 
-typedef SwagSong = {
+class Song implements IFlxDestroyable
+{
+	public var sections:Array<Section>;
+    public var meta:Meta;
+
+	public var bpm:Float;
+	public var speed:Float;
+	public var offsets:Vector<Int>;
+
+    public var title:String;
+    public var diff:String;
+	public var stage:String;
+	public var players:Vector<String>;
+
+    public function new() {}
+
+    public function destroy():Void {
+        sections.fastForEach((section, i) -> sections.unsafeSet(i, FlxDestroyUtil.destroy(section)));
+        sections = null;
+        meta = null;
+        offsets = null;
+        players = null;
+    }
+
+    /**Map containing pre-calculated section times for the chart editor**/
+    public var sectionTimes:Map<Int, Float> = new Map<Int, Float>();
+
+    /**Returns the time the section index starts at**/
+    public inline function getSectionTime(section:Int):Float {
+        return sectionTimes.get(section);
+    }
+
+    /**Returns the index the section time starts at**/
+    public inline function getTimeSection(time:Float):Int {
+        for (i in 0...Lambda.count(sectionTimes)) {
+            if (time >= sectionTimes.get(i))
+                return i;
+        }
+        return 0;
+    }
+    
+    /**Use this to reload the values of ``sectionTimes``**/
+    public function reloadSectionTimes():Map<Int, Float>
+    {
+        sectionTimes.clear();
+
+        var bpm = this.bpm;
+        var time = 0.0;
+        sections.fastForEach((section, i) -> {
+            if (section.changeBPM)
+                bpm = section.bpm;
+
+            sectionTimes.set(i, time);
+            time += Conductor.BEATS_PER_MEASURE * (60000 / bpm);
+        });
+
+        return sectionTimes;
+    }
+
+    /**Gets a section from an index and makes sure the sections length is big enough for the index**/
+    public function getSection(index:Int):Section
+    {
+        while ((sections.length - 1) < index) {
+            sections.push(Section.make());
+        }
+        return sections.unsafeGet(index);
+    }
+
+    /**Returns a song's notes as a sorted array**/
+    public static function getSongNotes(diff:String, song:String):Array<SongNote> {
+        return SongUtil.loadFromFile(diff, song).getNotes();
+    }
+
+    /**Returns the song's notes as a sorted array**/
+    public function getNotes():Array<SongNote>
+    {
+        var notes:Array<SongNote> = [];
+        sections.fastForEach((section, i) -> {
+            section.notes.fastForEach((note, i) -> notes.push(note));
+        });
+
+        notes.sort(SongUtil.sortNotes);
+        return notes;
+    }
+
+    inline static var CHART_VERSION:Int =  0;
+
+    /**Outputs the song into the engine's chart JSON format**/
+    public function toJson():SongJSON
+    {
+        var output:SongJSON = {
+            version: CHART_VERSION,
+
+            song: title,
+	        notes: [],
+	        bpm: bpm,
+            speed: speed,
+            stage: stage,
+	        offsets: offsets.toArray(),
+	        players: players.toArray()
+        }
+
+        sections.fastForEach((section, i) -> output.notes.push(section.toJson()));
+
+        return output;
+    }
+
+    /**Creates a default song instance**/
+    public static function getDefaultSong():Song
+    {
+        return new Song().fromJson(SongUtil.getDefaultSong());
+    }
+
+    /**Loads up a song instance from a json chart input**/
+    public function fromJson(input:SongJSON):Song
+    {
+        title = input.song;
+        stage = input.stage;
+        bpm = input.bpm;
+        speed = input.speed;
+
+        sections = new Array<Section>();
+        input.notes.fastForEach((section, i) -> {
+            sections.push(Section.fromJson(section));
+        });
+
+        offsets = new Vector<Int>(2, 0);
+        for (i in 0...2) offsets.set(i, input.offsets.unsafeGet(i));
+
+        players = new Vector<String>(3, "bf");
+        for (i in 0...3) players.set(i, input.players.unsafeGet(i));
+
+        return this;
+    }
+
+    // FOR BACKWARDS COMPATIBILITY
+
+    public var song(get, never):String;
+    function get_song() return this.title;
+}
+
+class Section implements IFlxDestroyable
+{
+	public var notes:Array<SongNote>;
+	public var events:Array<SongEvent>;
+
+	public var mustHit:Bool;
+	public var changeBPM:Bool;
+	public var bpm:Float;
+
+    public function new() {}
+
+    public function destroy():Void {
+        notes = null;
+        events = null;
+    }
+
+    public static function make():Section {
+        var section = new Section();
+        
+        section.mustHit = true;
+        section.changeBPM = false;
+        section.bpm = 0;
+
+        section.notes = new Array<SongNote>();
+        section.events = new Array<SongEvent>();
+
+        return section;
+    }
+
+    public static function getDefaultSection():Section {
+        return fromJson(SongUtil.getDefaultSection());
+    }
+
+    public function toJson():SectionJSON {
+        return {
+            sectionNotes: notes,
+            sectionEvents: events,
+            mustHitSection: mustHit,
+            changeBPM: changeBPM,
+            bpm: bpm
+        }
+    }
+
+    public static function fromJson(input:SectionJSON):Section {
+        var section = new Section();
+
+        section.mustHit = input.mustHitSection;
+        section.changeBPM = input.changeBPM;
+        section.bpm = input.bpm;
+
+        section.notes = new Array<SongNote>();
+        input.sectionNotes.fastForEach((note, i) -> {
+            section.notes.push(SongNote.fromArray(note));
+        });
+
+        section.events = new Array<SongEvent>();
+        input.sectionEvents.fastForEach((event, i) -> {
+            section.events.push(SongEvent.fromArray(event));
+        });
+
+        return section;
+    }
+}
+
+abstract SongNote(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
+	public static inline function fromArray(array:Array<Dynamic>):SongNote {
+        return array;
+    }
+}
+
+abstract SongEvent(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
+	public static inline function fromArray(array:Array<Dynamic>):SongEvent {
+        return array;
+    }
+}
+
+/**-- JSON FORMAT SHIT --**/
+
+typedef MetaJSON = {
+	var diffs:Array<String>;
+} & SongJSON
+
+typedef SongJSON = {
+    var version:Int;
+
 	var song:String;
-	var notes:Array<SwagSection>;
+	var notes:Array<SectionJSON>;
 	var bpm:Float;
 	var speed:Float;
 	var offsets:Array<Int>;
@@ -27,272 +273,10 @@ typedef SwagSong = {
 	var players:Array<String>;
 }
 
-typedef SongMeta = {
-	var events:Array<SwagSection>;
-	var offsets:Array<Int>;
-	var diffs:Array<String>;
-	//var bpm:Float;
-}
-
-class Song
-{
-	private static final CHART_FORMATS:Array<String> = [
-		'json', 					// Vanilla FNF
-		'osu', 						// Osu! Mania
-		'sm', 'ssc', 				// Stepmania
-		'qua', 						// Quaver
-		'chart'						// Guitar Hero
-	];
-
-	public static function loadFromFile(diff:String, folder:String):SwagSong
-	{
-		folder = formatSongFolder(folder);
-		
-		CHART_FORMATS.fastForEach((format, i) -> {
-			final chartPath:String = Paths.chart(folder, diff, format);
-			var meta = getSongMeta(folder);
-			if (meta != null) meta = meta.diffs.contains(diff) ? meta : null; // Only use if diff is included
-
-			if (Paths.exists(chartPath, TEXT)) {
-				switch (format) {
-					case 'json':		return checkSong(parseJson(chartPath), meta);				// Funkin chart
-					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);	// Osu chart
-					case 'sm' | 'ssc': 	return checkSong(SmFormat.convert(chartPath, diff), meta);	// Stepmania chart
-					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);	// Quaver chart
-					case 'chart':		return checkSong(GhFormat.convertSong(chartPath), meta);	// Guitar hero chart
-				}
-			}
-		});
-
-		trace('$folder-$diff CHART NOT FOUND');
-		
-		if (folder == "tutorial") if (diff == "hard") // Couldnt even find tutorial safe fail
-		{
-			throw 'Failed to load chart';
-			return null;
-		}
-		
-		return loadFromFile('hard', 'tutorial');
-	}
-
-	inline public static function getSongMeta(song:String):Null<SongMeta> {
-		var meta = CoolUtil.getFileContent(Paths.songMeta(song));
-		return meta.length > 0 ? cast Json.parse(meta) : null;
-	}
-
-	//Check null values and remove unused format variables
-	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = true):SwagSong {
-		song = JsonUtil.checkJsonDefaults(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
-		
-		if (song.notes.length != 0) {
-			song.notes.fastForEach((section, i) -> {
-				checkSection(section);
-				if (section.sectionNotes.length > 100 && !CoolUtil.debugMode) // Fuck off
-					return getDefaultSong();
-			});
-		}
-		else
-			song.notes.push(getDefaultSection());
-
-		if (meta != null) { // Apply song metaData
-			song.offsets = meta.offsets.copy();
-			
-			meta.events.fastForEach((section, s) -> {
-				if (Reflect.hasField(section, "sectionEvents")) {
-					section.sectionEvents.copy().fastForEach((event, e) -> {
-						song.notes[s].sectionEvents.push(event);
-					});
-				}
-			});
-		}
-
-		return song;
-	}
-
-	public static function checkSection(section:Null<SwagSection> = null):SwagSection
-	{
-		section = JsonUtil.checkJsonDefaults(getDefaultSection(), section);
-		final foundNotes:Map<String, Int> = [];
-		final uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
-
-		section.sectionNotes.fastForEach((n, i) -> {
-			var key = Math.floor(n[0]) + "-" + n[1] + "-" + n[3];
-			if (!foundNotes.exists(key))
-			{
-				if (n[1] > Conductor.STRUMS_LENGTH - 1) // Convert extra key charts to 4 key
-				{
-					if (n[3] == null) n.push("default-extra");
-					else if (n[3] == 0) n.unsafeSet(3, "default-extra");
-					n.unsafeSet(1, n[1] % Conductor.STRUMS_LENGTH);
-				}
-
-				foundNotes.set(key, 0);
-				uniqueNotes.push(n);
-			}
-		});
-
-		foundNotes.clear();
-		section.sectionNotes = uniqueNotes;
-
-		return section;
-	}
-
-	public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
-		var BPM:Float = song.bpm;
-        var time:Float = 0;
-        for (i in 0...section) {
-			checkAddSections(song, i);
-			if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
-			time += Conductor.BEATS_PER_MEASURE * (60000 / BPM);
-        }
-        return time;
-	}
-
-	public static function checkAddSections(song:SwagSong, index:Int, i:Int = 0):Void
-	{
-		final notes:Array<SwagSection> = song.notes;
-		
-		while (notes.length < index + 1)
-			notes.push(getDefaultSection());
-
-		while (i < index) {
-			if (notes[i] == null)  notes.unsafeSet(i, getDefaultSection());
-			i++;
-		}
-	}
-
-	public static function getTimeSection(song:SwagSong, time:Float):Int
-	{
-		var section:Int = 0;
-		var startTime:Float = 0;
-		var endTime:Float = getSectionTime(song, 1);
-
-		while (!(time >= startTime && time < endTime))
-		{
-			section++;
-			startTime = endTime;
-			endTime = getSectionTime(song, section+1);
-		}
-
-		return section;
-	}
-
-	//Removes unused variables for smaller size
-	public static function optimizeJson(input:SwagSong, metaClear:Bool = false):SwagSong
-	{
-		var song:SwagSong = JsonUtil.copyJson(input);
-		song.notes.fastForEach((sec, i) -> {
-			if (!sec.changeBPM) {
-				Reflect.deleteField(sec, 'changeBPM');
-				Reflect.deleteField(sec, 'bpm');
-			}
-
-			if (sec.sectionNotes.length <= 0) {
-				Reflect.deleteField(sec, 'sectionNotes');
-			}
-			else
-			{
-				sec.sectionNotes.fastForEach((note, i) -> {
-					final type:String = note[3];
-					if (type != null) {
-						if (type == "default")
-							note.pop(); 
-					}
-				});
-				sec.sectionNotes.sort(sortNotes);
-			}
-
-			if (sec.sectionEvents.length <= 0 || metaClear)
-				Reflect.deleteField(sec, 'sectionEvents');
-
-			if (sec.mustHitSection)
-				Reflect.deleteField(sec, 'mustHitSection');
-		});
-
-		if (song.notes.length > 1)
-		{
-			while (true) {
-				final lastSec = song.notes[song.notes.length - 1];
-				if (lastSec == null) break;
-				if (Reflect.fields(lastSec).length <= 0) 	song.notes.pop();
-				else 										break;
-			}
-		}
-
-		if (metaClear) {
-			Reflect.deleteField(song, 'offsets');
-			//Reflect.deleteField(song, 'bpm');
-		}
-		
-		return song;
-	}
-
-	public static function parseJson(chartPath:String, rawJson:String = ""):SwagSong
-	{
-		if (rawJson.length <= 0) {
-			rawJson = CoolUtil.getFileContent(chartPath).trim();
-			while (!rawJson.endsWith("}"))
-				rawJson = rawJson.substr(0, rawJson.length - 1);
-		}
-
-		return cast Json.parse(rawJson).song;
-	}
-
-	/*
-		Use this function to get the sorted notes from a song as an array
-		Used for pico in Stress, but you can use it on other cool stuff
-	*/
-	public static function getSongNotes(diff:String, song:String):Array<Array<Dynamic>>
-	{
-		final notes:Array<Array<Dynamic>> = [];
-		
-		loadFromFile(diff, song).notes.fastForEach((s, i) -> {
-			if (s.sectionNotes != null) {
-				s.sectionNotes.fastForEach((n, i) -> {
-					notes.push(n);
-				});
-			}
-		});
-
-		notes.sort(sortNotes);
-		return notes;
-	}
-
-	private static function sortNotes(note1:Array<Dynamic>, note2:Array<Dynamic>):Int {
-		return FlxSort.byValues(FlxSort.ASCENDING, note1[0], note2[0]);
-	}
-
-	public static function formatSongFolder(songName:String):String {
-		var folder:String = "";
-		songName.split("").fastForEach((char, i) -> {
-			switch (char) {
-				case "." | "?" | "*" | '"':
-				case " " | ":":				folder = (folder + "-");
-				default:					folder = (folder + char.toLowerCase());
-			}
-		});
-		return folder;
-	}
-
-	inline public static function getDefaultSong():SwagSong {
-		return {
-			song: 'Test',
-			notes: [],
-			bpm: 150,
-			stage: 'stage',
-			players: ['bf','dad','gf'],
-			offsets: [0,0],
-			speed: 1,
-		};
-	}
-
-	inline public static function getDefaultSection():SwagSection {
-		return {
-			sectionNotes: [],
-			sectionEvents: [],
-			mustHitSection: true,
-			bpm: 0,
-			changeBPM: false
-		};
-	}
+typedef SectionJSON = {
+    var ?sectionNotes:Array<Array<Dynamic>>;
+	var ?sectionEvents:Array<Array<Dynamic>>;
+	var ?mustHitSection:Bool;
+	var ?bpm:Float;
+	var ?changeBPM:Bool;
 }

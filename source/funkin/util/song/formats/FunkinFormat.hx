@@ -6,7 +6,7 @@ package funkin.util.song.formats;
 
 class FunkinFormat {
     //Fixes charts from other engines
-	public static function engineCheck(?song:SwagSong):SwagSong {
+	public static function engineCheck(?song:SongJSON):SongJSON {
 		if (song == null) return null;
 
 		//Get special engine variables ready if missing
@@ -41,7 +41,7 @@ class FunkinFormat {
 	}
 
 	// Converts FPS+ engine events
-	public static function convertFpsChart(song:SwagSong) {
+	public static function convertFpsChart(song:SongJSON) {
 		final fpsEvents:Array<Dynamic> = Reflect.field(Reflect.field(song, "events"), "events");
 		if (fpsEvents == null || fpsEvents.length <= 0) return song;
 
@@ -62,7 +62,7 @@ class FunkinFormat {
 	}
 	
 	// Converts psych and forever engine events
-	public static function convertPsychChart(song:SwagSong):SwagSong {
+	public static function convertPsychChart(song:SongJSON):SongJSON {
 		final psychEvents:Array<Dynamic> = Reflect.field(song, 'events');
 		if (psychEvents == null || psychEvents.length <= 0) return song;
 

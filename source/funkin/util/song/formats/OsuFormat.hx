@@ -11,9 +11,9 @@ class OsuFormat {
         map = CoolUtil.getFileContent(path).split('\n');
     }
     
-    inline public static function convertSong(path:String, ?input:OsuFormat):SwagSong {
+    inline public static function convertSong(path:String, ?input:OsuFormat):SongJSON {
         var osuMap:OsuFormat = input ?? new OsuFormat(path);
-        var fnfMap:SwagSong = Song.getDefaultSong();
+        var fnfMap:SongJSON = Song.getDefaultSong();
 
         //  Check if its not an osu!mania map
         final mode = Std.parseInt(osuMap.getVar('Mode'));

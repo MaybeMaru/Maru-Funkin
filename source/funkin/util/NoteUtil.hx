@@ -19,7 +19,7 @@ class NoteUtil {
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var swagHeight:Float = 150 * 0.7;
 
-    public static var DEFAULT_NOTE_TYPE(default, never):NoteTypeJson = {
+    public static final DEFAULT_NOTE_TYPE:NoteTypeJson = {
 		mustHit: true,
 		hitHealth: [0.0237, 0.029],
 		missHealth: [0.0475, 0.0118],
@@ -29,7 +29,7 @@ class NoteUtil {
         hitMult: 1 // I recommend making this value smaller for fire-like notes
 	}
 
-    public static var DEFAULT_NOTE_SKIN(default, never):NoteSkinData = {
+    public static final DEFAULT_NOTE_SKIN:NoteSkinData = {
 		anims: [],
 		imagePath: "noteAssets",
         allowLod: true,
@@ -64,7 +64,7 @@ class NoteUtil {
     public static function getTypeJson(type:String = 'default'):NoteTypeJson {
 		if (noteTypesMap.exists(type)) return noteTypesMap.get(type);
 		var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
-		typeJson = JsonUtil.checkJsonDefaults(DEFAULT_NOTE_TYPE, typeJson);
+		typeJson = JsonUtil.checkJson(DEFAULT_NOTE_TYPE, typeJson);
 		noteTypesMap.set(type, typeJson);
 		return typeJson;
 	}
@@ -88,7 +88,7 @@ class NoteUtil {
             skinJson = SkinUtil.getSkinData(skin).noteData;
         }
 
-        skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+        skinJson = JsonUtil.checkJson(DEFAULT_NOTE_SKIN, skinJson);
 
         final key:String = 'skins/$skin/${skinJson.imagePath}';
         final lodLevel:Null<LodLevel> = skinJson.allowLod ? null : HIGH;

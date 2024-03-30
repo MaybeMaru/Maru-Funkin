@@ -11,9 +11,9 @@ class QuaFormat {
         map = CoolUtil.getFileContent(path).split('\n');
     }
     
-    public static function convertSong(path:String, ?input:QuaFormat):SwagSong {
+    public static function convertSong(path:String, ?input:QuaFormat):SongJSON {
         var quaMap:QuaFormat = input ?? new QuaFormat(path);
-        var fnfMap:SwagSong = Song.getDefaultSong();
+        var fnfMap:SongJSON = Song.getDefaultSong();
 
         // Check if map is above 4 keys
         if (quaMap.getVar('Mode') != 'Keys4') {
