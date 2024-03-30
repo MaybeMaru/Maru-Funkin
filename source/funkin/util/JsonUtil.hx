@@ -90,44 +90,36 @@ class JsonUtil {
 		return frames;
 	}
 
-	public static function checkJson<T>(defaultsInput:T, input:Null<T>, copy:Bool = true):T
-	{
-		final defaults:T = copy ? copyJson(defaultsInput) : defaultsInput;
-		if (input == null)
-			return defaults;
+	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
+		final defaults = copyJson(defaultsInput);
+		if (input == null) return defaults;
 
-		Reflect.fields(defaults).fastForEach((field, i) ->
-		{
-			if (Reflect.hasField(input, field))
-			{
-				if (Reflect.field(input, field) == null)
-				{
-					Reflect.setField(input, field, Reflect.field(defaults, field));
-				}
+		final props = Reflect.fields(defaults);
+		for (prop in props) {
+			if (Reflect.hasField(input, prop)) {
+				var val = Reflect.field(input, prop);
+				if (val == null)
+					Reflect.setField(input, prop, Reflect.field(defaults, prop));
 			}
 			else
-			{
-				Reflect.setField(input, field, Reflect.field(defaults, field));
-			}
-		});
-
+				Reflect.setField(input, prop, Reflect.field(defaults, prop));
+		}
 		return removeUnusedVars(defaults, input);
 	}
 
-	public static function removeUnusedVars<T>(defaults:T, input:T):T
-	{
-		var defaultFields = Reflect.fields(defaults);
-
-		Reflect.fields(input).fastForEach((field, i) -> {
-			if (!defaultFields.contains(field))
-				Reflect.deleteField(input, field);
-		});
-
+	public static function removeUnusedVars(defaults:Dynamic, input:Dynamic):Dynamic {
+		final defProps = Reflect.fields(defaults);
+		final inputProps = Reflect.fields(input);
+		for (prop in inputProps) {
+			if (!defProps.contains(prop))
+				Reflect.deleteField(input, prop);
+		}
 		return input;
 	}
 
 	public static inline function copyJson<T>(c:T):T {
-        return haxe.Unserializer.run(haxe.Serializer.run(c));
+		final serializedData = haxe.Serializer.run(c);
+        return haxe.Unserializer.run(serializedData);
 	}
 }
 

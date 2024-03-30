@@ -10,7 +10,6 @@ import funkin.Preferences.getPref;
 import funkin.util.song.Conductor;
 import funkin.util.song.Highscore;
 import funkin.util.song.Song;
-import funkin.util.song.SongUtil;
 import funkin.util.song.WeekSetup;
 
 //Util

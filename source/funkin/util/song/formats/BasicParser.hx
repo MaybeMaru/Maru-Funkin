@@ -20,11 +20,11 @@ class BasicParser {
     var bpmChanges:Array<BasicBpmChange> = [];
     
     var map:Array<String> = [];
-    var fnfMap:SongJSON;
+    var fnfMap:SwagSong;
 
     public function new() {}
     
-    public function convertSong(path:String, diff:String):SongJSON {
+    public function convertSong(path:String, diff:String):SwagSong {
         map = CoolUtil.getFileContent(path).split('\n');
         fnfMap = Song.getDefaultSong();
 
@@ -53,7 +53,7 @@ class BasicParser {
 
     function parseBpmChanges(map:Array<String>, bpmChanges:Array<BasicBpmChange>):Void {}
 
-    function applyVars(variables:Map<String, String>, fnfMap:SongJSON):Void {}
+    function applyVars(variables:Map<String, String>, fnfMap:SwagSong):Void {}
     
     function parseNotes(diff:String):Array<BasicSection> {
         return null;

@@ -5,9 +5,9 @@ import openfl.geom.Rectangle;
 
 class ChartPreview extends FlxSpriteExt {
     inline static var NOTE_SIZE:Int = 1;
-    public var SONG:Song = null;
+    public var SONG:SwagSong = null;
 
-    public function new(SONG:Song):Void {
+    public function new(SONG:SwagSong):Void {
         super(50,100);
         makeGraphic(NOTE_SIZE * Conductor.STRUMS_LENGTH, NOTE_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.GRAY, true, '_CHART_PREVIEW_');
         antialiasing = false;
@@ -36,9 +36,9 @@ class ChartPreview extends FlxSpriteExt {
     public function drawPreview(?section:Int) {
         if (SONG == null) return;
         if (section != null) {
-            var secNotes = SONG.sections[section].notes;
-            var startTime = SONG.getSectionTime(section);
-            var endTime = SONG.getSectionTime(section + 1);
+            var secNotes = SONG.notes[section].sectionNotes;
+            var startTime = Song.getSectionTime(SONG, section);
+            var endTime = Song.getSectionTime(SONG, section + 1);
             drawSection(secNotes, startTime, endTime);
         }/* else {
             for (i in 0...16) {//SONG.notes.length) {

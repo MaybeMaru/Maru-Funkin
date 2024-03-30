@@ -2,11 +2,10 @@ package funkin.util.song;
 
 import funkin.sound.FlxFunkSound;
 
-class BPMChangeEvent {
-	public var bpm:Float;
-	public var time:Float;
-	public var step:Int;
-	public function new(bpm, time, step) {this.bpm = bpm; this.time = time; this.step = step;}
+typedef BPMChangeEvent = {
+	var stepTime:Int;
+	var songTime:Float;
+	var bpm:Float;
 }
 
 class Conductor {
@@ -93,46 +92,54 @@ class Conductor {
 		settingOffset = SaveData.getSave('offset');
 	}
 
-	public static var BPMChanges:Array<BPMChangeEvent>;
+	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
-	public static function mapBPMChanges(song:Song):Array<BPMChangeEvent> {
-		BPMChanges = new Array<BPMChangeEvent>();
+	public static function mapBPMChanges(song:SwagSong):Void {
+		bpmChangeMap = [];
 
-		var BPM = song.BPM;
-		var time = 0.0;
-		var step = 0;
+		var curBPM:Float = song.bpm;
+		var totalSteps:Int = 0;
+		var totalPos:Float = 0;
 
-		song.sections.fastForEach((section, i) ->
-		{
-			if (section.changeBPM) if (section.bpm != BPM) {
-				BPM = section.bpm;
-				BPMChanges.push(new BPMChangeEvent(BPM, time, step));
+		for (i in 0...song.notes.length) {
+			if(song.notes[i].changeBPM && song.notes[i].bpm != curBPM) {
+				curBPM = song.notes[i].bpm;
+				final event:BPMChangeEvent = {
+					stepTime: totalSteps,
+					songTime: totalPos,
+					bpm: curBPM
+				};
+				bpmChangeMap.push(event);
 			}
 
-			step += STEPS_PER_MEASURE;
-			time += ((60 / BPM) * 250) * STEPS_PER_MEASURE;
-		});
-
-		// If the song contains BPM changes, add an init BPM change for good measure
-		if (BPMChanges.length > 0)
-		{
-			BPMChanges.push(new BPMChangeEvent(song.bpm, 0, 0));
-			trace("new BPM map BUDDY " + BPMChanges);
+			totalSteps += STEPS_PER_MEASURE;
+			totalPos += ((60 / curBPM) * 250) * STEPS_PER_MEASURE;
 		}
 
-		return BPMChanges;
+		if (bpmChangeMap.length > 0) {
+			bpmChangeMap.insert(0, {
+				stepTime: 0,
+				songTime: 0,
+				bpm: song.bpm
+			});
+
+			trace('new BPM map BUDDY $bpmChangeMap');
+		}
 	}
 
-	public static function getLastBPMChange(?songTime:Float, ?autoBPM:Float):BPMChangeEvent
-	{
-		if (BPMChanges.length > 0) {
-			BPMChanges.fastForEach((change, i) -> {
-				if (songTime >= change.time)
-					return change;
-			});
+	public static function getLastBpmChange(?time:Float, ?autoBPM:Float):BPMChangeEvent {
+		var lastChange:BPMChangeEvent = {
+			stepTime: 0,
+			songTime: 0,
+			bpm: autoBPM ?? bpm
 		}
 
-		return new BPMChangeEvent(autoBPM ?? bpm, 0, 0);
+		time = (time ?? songPosition);
+		for (i in bpmChangeMap) {
+			if (time >= i.songTime) lastChange = i;
+		}
+
+		return lastChange;
 	}
 
 	public static var volume(default, set):Float = 1.0;
