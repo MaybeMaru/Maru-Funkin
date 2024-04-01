@@ -30,7 +30,8 @@ typedef JsonSpritesheet = {
 	var meta:{frameTags:Array<JsonTag>};
 }
 
-class JsonUtil {
+class JsonUtil
+{
 	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
         subFolders = subFolders == null ? [] : subFolders;
         var subFolderList:Array<String> = [];
@@ -48,10 +49,11 @@ class JsonUtil {
         return assetsList.concat(modList);
 	}
 
-	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic {
-		if (!getJsonList(folder,true,true,true,false,false,library).contains(path))
+	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic
+	{
+		if (!getJsonList(folder, true, true, true, false, false, library).contains(path))
 			return null;
-		//trace(Paths.file('$library/$folder/$path.json', TEXT));
+
 		var getJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
 		var returnJson:Dynamic = Json.parse(getJson);
 		return returnJson;
@@ -90,45 +92,50 @@ class JsonUtil {
 		return frames;
 	}
 
-	public static function checkJsonDefaults(defaultsInput:Dynamic, ?input:Dynamic):Dynamic {
-		final defaults = copyJson(defaultsInput);
-		if (input == null) return defaults;
+	public static function checkJson<T>(defaults:T, ?input:T):T {
+		var defaults:T = copyJson(defaults);
+		if (input == null)
+			return defaults;
 
-		final props = Reflect.fields(defaults);
-		for (prop in props) {
-			if (Reflect.hasField(input, prop)) {
-				var val = Reflect.field(input, prop);
-				if (val == null)
-					Reflect.setField(input, prop, Reflect.field(defaults, prop));
+		Reflect.fields(defaults).fastForEach((field, i) -> {
+			if (Reflect.hasField(input, field))
+			{
+				if (Reflect.field(input, field) == null)
+					Reflect.setField(input, field, Reflect.field(defaults, field));
 			}
 			else
-				Reflect.setField(input, prop, Reflect.field(defaults, prop));
-		}
+			{
+				Reflect.setField(input, field, Reflect.field(defaults, field));
+			}
+		});
+
 		return removeUnusedVars(defaults, input);
 	}
 
-	public static function removeUnusedVars(defaults:Dynamic, input:Dynamic):Dynamic {
-		final defProps = Reflect.fields(defaults);
-		final inputProps = Reflect.fields(input);
-		for (prop in inputProps) {
-			if (!defProps.contains(prop))
-				Reflect.deleteField(input, prop);
-		}
+	public static function removeUnusedVars<T>(defaults:T, input:T):T
+	{
+		var defaultFields = Reflect.fields(defaults);
+		
+		Reflect.fields(input).fastForEach((field, i) -> {
+			if (!defaultFields.contains(field))
+				Reflect.deleteField(input, field);
+		});
+
 		return input;
 	}
 
 	public static inline function copyJson<T>(c:T):T {
-		final serializedData = haxe.Serializer.run(c);
-        return haxe.Unserializer.run(serializedData);
+        return haxe.Unserializer.run(haxe.Serializer.run(c));
 	}
 }
 
-class FunkyJson extends haxe.format.JsonPrinter {
+class FunkyJson extends haxe.format.JsonPrinter
+{
 	public static inline function stringify(value:Dynamic, ?replacer:(key:Dynamic, value:Dynamic) -> Dynamic, ?space:String):String {
 		return print(value, replacer, space);
 	}
 
-	static public function print(o:Dynamic, ?replacer:(key:Dynamic, value:Dynamic) -> Dynamic, ?space:String):String {
+	public static function print(o:Dynamic, ?replacer:(key:Dynamic, value:Dynamic) -> Dynamic, ?space:String):String {
 		var printer = new FunkyJson(replacer, space);
 		printer.write("", o);
 		return printer.buf.toString();

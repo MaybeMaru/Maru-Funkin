@@ -42,6 +42,7 @@ class FlxFunkGame extends FlxGame {
         #end
 
         FlxG.mouse.useSystemCursor = true;
+        FlxG.stage.quality = LOW;
         
         Preferences.effectPrefs();
     }

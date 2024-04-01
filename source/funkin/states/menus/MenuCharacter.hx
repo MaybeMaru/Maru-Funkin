@@ -40,7 +40,7 @@ class MenuCharacter extends FlxSpriteExt {
 				var charJson:MenuCharJson = cachedChars.get(char);
 				if (charJson == null) {
 					final _json = JsonUtil.getJson(char, charsFolder, "images");
-					charJson = JsonUtil.checkJsonDefaults(DEFAULT_MENU_CHAR, _json);
+					charJson = JsonUtil.checkJson(DEFAULT_MENU_CHAR, _json);
 					cachedChars.set(char, charJson);
 				}
 

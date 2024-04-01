@@ -110,7 +110,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String):FlxSpriteExt
 	{
-		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
+		spriteJson = JsonUtil.checkJson(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
 		
@@ -120,7 +120,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		loadImage(path, global, null, null, lod);
 
 		spriteJson.anims.fastForEach((anim, i) -> {
-			final anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);
+			final anim = JsonUtil.checkJson(DEFAULT_ANIM, anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 		});
 		
@@ -448,18 +448,21 @@ class FlxSpriteExt extends FlxSkewedSprite {
 	}
 
 	inline public function getAnimData(anim:String):SpriteAnimation {
-		return animDatas.get(anim) ?? JsonUtil.copyJson(DEFAULT_ANIM);
+		if (animDatas.exists(anim))
+			return animDatas.get(anim);
+		
+		return JsonUtil.copyJson(DEFAULT_ANIM);
 	}
 
 	public function setAnimData(anim:String, newData:SpriteAnimation):Void {
 		animDatas[anim] = newData;
 		addOffset(anim, newData.offsets[0], newData.offsets[1]);
 
-		final n = newData.animName;
-		final f = newData.animFile;
-		final i = newData.indices;
-		final fps = newData.framerate;
-		final l = newData.loop;
+		final n:String = newData.animName;
+		final f:String = newData.animFile;
+		final i:Array<Int> = newData.indices;
+		final fps:Float = newData.framerate;
+		final l:Bool = newData.loop;
 
 		i.length > 0 ? animation.addByIndices(n, f, i, "", fps, l) : animation.addByPrefix(n, f, fps, l);
 	}

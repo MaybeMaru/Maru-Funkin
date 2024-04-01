@@ -7,7 +7,8 @@ typedef LetterData = {
     ?b:Float // bold
 }
 
-class AlphabetCharacter extends FlxSpriteExt {
+class AlphabetCharacter extends FlxSpriteExt
+{
     public var letter:String = "A";
     public var lowerLetter:String = "a";
     public var prefix:String = "";
@@ -122,40 +123,52 @@ class AlphabetCharacter extends FlxSpriteExt {
         this.letter = letter;
         this.letterSize = letterSize;
         lowerLetter = letter.toLowerCase();
-        if (lowerLetter.length <= 0) return;
+        if (lowerLetter.length <= 0)
+            return;
         
         if (!mappedData.exists(lowerLetter)) {
-            mappedData.set(lowerLetter, JsonUtil.checkJsonDefaults(DEFAULT_LETTER, characters.get(lowerLetter)));
+            mappedData.set(lowerLetter, JsonUtil.checkJson(DEFAULT_LETTER, characters.get(lowerLetter)));
         }
         letterData = mappedData.get(lowerLetter);
 
-        if (bold) {
+        if (bold)
+        {
             offsetY = letterData.b;
             prefix = "bold";
         }
-        else {
-            if (alphabet.contains(lowerLetter)) {
-                if (lowerLetter == letter) {
+        else
+        {
+            if (alphabet.contains(lowerLetter))
+            {
+                if (lowerLetter == letter)
+                {
                     prefix = "lowercase";
                     offsetY = letterData.l;
                 }
-                else {
+                else
+                {
                     prefix = "uppercase";
                     offsetY = letterData.u;
                 }
             }
-            else {
+            else
+            {
                 offsetY = letterData.l;
                 prefix = "normal";
             }
         }
 
-        if (characters.exists(lowerLetter)) makeChar();
+        if (characters.exists(lowerLetter))
+            makeChar();
     }
 
-    public function makeChar():Void {
+    public function makeChar():Void
+    {
         animPrefix = letterData.p ?? lowerLetter;
-        if (!animDatas.exists(letter)) addAnim(letter, '$animPrefix $prefix', 24, true);
+        
+        if (!animDatas.exists(letter))
+            addAnim(letter, '$animPrefix $prefix', 24, true);
+        
         playAnim(letter, true);
         y += offsetY * letterSize;
         setScale(letterSize);

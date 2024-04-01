@@ -410,7 +410,7 @@ class AnimationDebug extends MusicBeatState {
 
 	function loadCharacter(newChar:String = 'bf'):Void {
 		character = JsonUtil.getJson(newChar, 'characters');
-		character = JsonUtil.checkJsonDefaults(Character.DEFAULT_CHARACTER, character);
+		character = JsonUtil.checkJson(Character.DEFAULT_CHARACTER, character);
 
 		clearCharGroup();
 		displayChar = new Character(bf_offset.x,bf_offset.y,newChar,false,true,character);

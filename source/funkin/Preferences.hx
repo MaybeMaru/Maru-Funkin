@@ -1,7 +1,5 @@
 package funkin;
 
-//import funkin.input.GlobalKey;
-
 typedef ArrayPref = {array:Array<String>, value:String};
 
 class Preferences {
@@ -50,18 +48,18 @@ class Preferences {
         /****/addHeader("PERFORMANCE");/****/
 
         #if desktop
-        addPref('resolution',   'resolution',    {array:resolutions, value:default_resolution});
+        addPref('resolution', 'resolution', {array:resolutions, value:default_resolution});
         #end
-        addPref('antialiasing',   'antialiasing',    true);
+        addPref('antialiasing', 'antialiasing', true);
         addPref('quality', 'quality', {array:["high", "medium", "low", "rudy"], value:"high"});
         #if !hl
-        addPref('gpu-textures',   'gpu textures', true);
+        addPref('gpu-textures', 'gpu textures', true);
         #end
-        addPref('preload',      'preload at start', true);
+        addPref('preload', 'preload at start', false);
 
         /****/addHeader("MISCELLANEOUS");/****/
 
-        addPref('naughty',        'naughtyness',     true);
+        addPref('naughty', 'naughtyness', true);
 
         SaveData.flushData();
         fixOldPrefs();
@@ -96,21 +94,17 @@ class Preferences {
     public static inline function updateFpsCounter():Void
         Main.fpsCounter.visible = getPref('fps-counter');
 
-    public static inline function updateResolution():Void {
-        #if desktop Main.resizeGame(getPref('resolution')); #end
-    }
+    public static inline function updateResolution():Void
+        #if desktop Main.resizeGame(getPref('resolution')); #else {} #end
 
-    public static inline function updateGpuTextures():Void {
-        #if !hl AssetManager.gpuTextures = getPref('gpu-textures'); #end
-    }
-
+    public static inline function updateGpuTextures():Void
+        #if !hl AssetManager.gpuTextures = getPref('gpu-textures'); #else {} #end
 
     public static function effectPrefs():Void {
         updateFramerate();
         updateFpsCounter();
         FlxSprite.defaultAntialiasing = getPref('antialiasing');
         AssetManager.setLodQuality(getPref('quality'));
-        //GlobalKey.system = US;
         updateGpuTextures();
     }
 

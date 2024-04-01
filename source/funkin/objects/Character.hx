@@ -64,7 +64,7 @@ class Character extends FlxSpriteExt {
 
 	inline public static function getCharData(char:String = 'bf'):CharacterJson {
 		var charJson:CharacterJson = JsonUtil.getJson(char, 'characters');
-		charJson = JsonUtil.checkJsonDefaults(DEFAULT_CHARACTER, charJson);
+		charJson = JsonUtil.checkJson(DEFAULT_CHARACTER, charJson);
 		return charJson;
 	}
 
@@ -102,7 +102,7 @@ class Character extends FlxSpriteExt {
 		loadImage(path, false, null, null, lod);
 		
 		inputJson.anims.fastForEach((anim, i) -> {
-			final anim = JsonUtil.checkJsonDefaults(JsonUtil.copyJson(FlxSpriteExt.DEFAULT_ANIM), anim);
+			final anim = JsonUtil.checkJson(FlxSpriteExt.DEFAULT_ANIM, anim);
 			addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
 		});
 	}

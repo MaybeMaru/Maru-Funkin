@@ -94,14 +94,18 @@ class ModdingUtil {
                     final _folder = "mods/" + folder + "/";
                     final _jsonPath = _folder + "mod.json";
 
-                    if (Paths.exists(_jsonPath, TEXT)) {
-                        data = JsonUtil.checkJsonDefaults(DEFAULT_MOD, Json.parse(CoolUtil.getFileContent(_jsonPath)));
-                    } else {
+                    if (Paths.exists(_jsonPath, TEXT))
+                    {
+                        data = JsonUtil.checkJson(DEFAULT_MOD, Json.parse(CoolUtil.getFileContent(_jsonPath)));
+                    }
+                    else
+                    {
                         data = JsonUtil.copyJson(DEFAULT_MOD);
                         data.title = folder;
                         data.description = CoolUtil.getFileContent(_folder + "info.txt");
                         data.apiVersion = -1; // PRE-BETA 2 MOD FOLDER
                     }
+                    
                     data.folder = folder;
 
                     if (!activeMods.exists(data.folder)) activeMods.set(data.folder, true); // Set new mod active

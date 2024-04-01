@@ -12,57 +12,23 @@ import openfl.events.Event;
 import haxe.ui.Toolkit;
 #end
 
-class InitState extends FlxState {
-    override function create() {
+class InitState extends FlxState
+{
+    override function create():Void
+	{
         super.create();
 
 		//Load Settings / Mods
-		FlxG.stage.quality = LOW;
         Conductor.init();
 		CoolUtil.init();
 		Highscore.load();
 		#if DISCORD_ALLOWED
 		DiscordClient.initialize();
-		lime.app.Application.current.onExit.add (function (exitCode) DiscordClient.shutdown());
+		lime.app.Application.current.onExit.add((code:Int) -> DiscordClient.shutdown());
         #end
 
-        if (FlxG.save.data.askedPreload) {
-            FlxG.switchState(new funkin.Preloader());
-			return;
-        }
-
-		FlxG.save.data.askedPreload = true;
-		FlxG.save.flush();
-
-        final txt = new FlxFunkText();
-        txt.text =
-        "Hey there big boy, do you want to turn on preloading?" + "\n" +
-        "Itll make memory go bye bye but " + "\n" +
-		"also will make loading go vroom vroom"  + "\n" +
-        "Turn off if u have a toaster pc" + "\n\n" +
-        "Press ACCEPT to turn ON or BACK to turn OFF!!";
-        
-        txt.alignment = "center";
-		txt.size = 32;
-		txt.y = FlxG.height * 0.5 - 32 * 3;
-        add(txt);
+		FlxG.switchState(new funkin.Preloader());
     }
-
-	var selected:Bool = false;
-
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-		var accept = Controls.getKey('ACCEPT', JUST_PRESSED);
-
-		if (accept || Controls.getKey('BACK', JUST_PRESSED) && !selected) {
-			selected = true;
-			CoolUtil.playSound("confirmMenu");
-			FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
-				Preferences.setPref("preload", accept);
-				FlxG.switchState(new funkin.Preloader());
-			});
-		}
-	}
 }
 
 class Main extends Sprite

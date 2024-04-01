@@ -55,7 +55,7 @@ class DialogueBoxBase extends Group {
 			gf: 'gf-pixel'
 		}
 
-		jsonParsed = JsonUtil.checkJsonDefaults(defaultDialogue, jsonParsed);
+		jsonParsed = JsonUtil.checkJson(defaultDialogue, jsonParsed);
 		dialogueChars = [jsonParsed.dad,jsonParsed.bf,jsonParsed.gf];
 		
 		var musicPath = Paths.musicFolder(jsonParsed.music);

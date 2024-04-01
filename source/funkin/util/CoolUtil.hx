@@ -103,7 +103,7 @@ class CoolUtil {
 	}
 
 	inline public static function clearCache(?cacheClear:CacheClearing, softClear:Bool = false) {
-		cacheClear = JsonUtil.checkJsonDefaults({
+		cacheClear = JsonUtil.checkJson({
 			tempCache: true,
 			staticCache: false,
 			shaders: true,

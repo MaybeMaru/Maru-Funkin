@@ -82,7 +82,7 @@ class Song
 
 	//Check null values and remove unused format variables
 	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = true):SwagSong {
-		song = JsonUtil.checkJsonDefaults(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
+		song = JsonUtil.checkJson(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
 		
 		if (song.notes.length != 0) {
 			song.notes.fastForEach((section, i) -> {
@@ -111,7 +111,7 @@ class Song
 
 	public static function checkSection(section:Null<SwagSection> = null):SwagSection
 	{
-		section = JsonUtil.checkJsonDefaults(getDefaultSection(), section);
+		section = JsonUtil.checkJson(getDefaultSection(), section);
 		final foundNotes:Map<String, Int> = [];
 		final uniqueNotes:Array<Array<Dynamic>> = []; // Skip duplicate notes
 

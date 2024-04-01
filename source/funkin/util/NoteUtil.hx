@@ -46,25 +46,31 @@ class NoteUtil {
 		return (Std.isOfType(type, String)) ? type : noteTypesArray[type];
 	}
 
-    static function getList() {
+    static function getList():Array<String>
+    {
+        var song = PlayState.SONG != null ? PlayState.SONG.song : "";
+        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [Song.formatSongFolder(song)]);
         var typesSort = CoolUtil.getFileContent(Paths.txt("notetypes/types-sort", null)).split(",");
-        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [Song.formatSongFolder(PlayState?.SONG?.song ?? "")]);
         return CoolUtil.customSort(typesList, typesSort);
     }
 
-    public static function initTypes():Void {
-		noteTypesMap = new Map<String, NoteTypeJson>();
-		noteTypesArray = [];
-		for (type in getList()) {
-			noteTypesArray.push(type);
+    public static function initTypes():Void
+    {
+		noteTypesMap.clear();
+		noteTypesArray.splice(0, noteTypesArray.length);
+        getList().fastForEach((type, i) -> {
+            noteTypesArray.push(type);
             getTypeJson(type);
-        }
+        });
 	}
 
-    public static function getTypeJson(type:String = 'default'):NoteTypeJson {
-		if (noteTypesMap.exists(type)) return noteTypesMap.get(type);
-		var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
-		typeJson = JsonUtil.checkJsonDefaults(DEFAULT_NOTE_TYPE, typeJson);
+    public static function getTypeJson(type:String = 'default'):NoteTypeJson
+    {
+		if (noteTypesMap.exists(type))
+            return noteTypesMap.get(type);
+		
+        var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
+		typeJson = JsonUtil.checkJson(DEFAULT_NOTE_TYPE, typeJson);
 		noteTypesMap.set(type, typeJson);
 		return typeJson;
 	}
@@ -88,7 +94,7 @@ class NoteUtil {
             skinJson = SkinUtil.getSkinData(skin).noteData;
         }
 
-        skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
+        skinJson = JsonUtil.checkJson(DEFAULT_NOTE_SKIN, skinJson);
 
         final key:String = 'skins/$skin/${skinJson.imagePath}';
         final lod:Int = LodLevel.resolve(skinJson.allowLod);

@@ -118,7 +118,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         if (Paths.exists(path, TEXT))
         {
             var data:StageJson = JsonUtil.getJson(stage, 'stages');
-            data = JsonUtil.checkJsonDefaults(DEFAULT_STAGE, data);
+            data = JsonUtil.checkJson(DEFAULT_STAGE, data);
             return data;
         }
 
@@ -220,8 +220,9 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
 
     // Creating the stage
 
-    inline static function quickSprite(input:StageObject) {
-        input = JsonUtil.checkJsonDefaults(DEFAULT_OBJECT, input);
+    inline static function quickSprite(input:StageObject):FunkinSprite
+    {
+        input = JsonUtil.checkJson(DEFAULT_OBJECT, input);
 
         var sprite = new FunkinSprite(null, input.position, input.scrolls);
         sprite.loadJsonInput(JsonUtil.copyJson(input)); // Deal with it

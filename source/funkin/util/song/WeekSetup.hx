@@ -153,7 +153,7 @@ class WeekSetup {
         if (Reflect.hasField(week.songList, "songIcon"))
             week.songList.songIcons = Reflect.field(week.songList, "songIcon");
 
-        return JsonUtil.checkJsonDefaults(DEFAULT_WEEK, week);
+        return JsonUtil.checkJson(DEFAULT_WEEK, week);
     }
 
     public static inline function getWeekDiffs(week:String) {
