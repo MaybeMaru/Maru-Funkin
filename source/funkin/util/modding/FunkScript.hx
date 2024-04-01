@@ -18,20 +18,14 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			dispose();
 	}
 
-	public inline function callback(method:String, ?args:Array<Dynamic>):HscriptFunctionCallback {
-		var value:HscriptFunctionCallback = CONTINUE_FUNCTION;
-
+	public inline function safeCall(method:String, args:Array<Dynamic>):Dynamic {
 		try {
-			final ret = call(method, args);
-			if (ret != null)
-				value = ret;
+			return call(method, args);
 		}
 		catch(e) {
 			errorPrint(e);
-			value = CONTINUE_FUNCTION;
+			return CONTINUE_FUNCTION;
 		}
-
-		return value;
 	}
 
 	public function new(hscriptCode:String, scriptID:String):Void {
@@ -321,9 +315,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		});
 
 		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {
-			if (name == "runCode") return false; // why would you-
+			if (name == "runCode") // why would you-
+				return false;
 
-			return ModdingUtil.addCall('eventHit', [tempEvent.set(-1, name, values)]);
+			return ModdingUtil.getCall('eventHit', [tempEvent.set(-1, name, values)]);
 		});
 
 		// Script functions
@@ -348,8 +343,12 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			ModdingUtil.addCall(func, args);
 		});
 
-		set('callScriptFunction', function(script:String, func:String, ?args:Array<Dynamic>):Dynamic {
-			return ModdingUtil.scriptsMap.get(script)?.callback(func, args) ?? null;
+		set('callScriptFunction', function(script:String, method:String, ?args:Array<Dynamic>):Dynamic {
+			var script = ModdingUtil.scriptsMap.get(script);
+			if (script != null)
+				return script.safeCall(method, args);
+
+			return CONTINUE_FUNCTION;
 		});
 
 		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
@@ -484,7 +483,7 @@ class CustomState extends MusicBeatState {
 
 	function checkSuper(f:String, ?v:Array<Dynamic>) {
 		if (script.exists(f)) {
-			script.callback(f, v);
+			script.safeCall(f, v);
 		} else {
 			callDynamicSuper(f, v[0]); // Gets called if function doesnt have an override
 		}
@@ -504,8 +503,9 @@ class CustomState extends MusicBeatState {
 	override public function stepHit(curStep) 		checkSuper(STEP, [curStep]);
 	override public function beatHit(curBeat) 		checkSuper(BEAT, [curBeat]);
 	override public function sectionHit(curSection) checkSuper(SECTION, [curSection]);
+	
 	override public function destroy() {
-		script.callback("destroy");
+		script.safeCall("destroy", null);
 		super.destroy();
 	}
 }

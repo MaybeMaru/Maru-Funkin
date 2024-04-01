@@ -205,16 +205,26 @@ class ModdingUtil {
         Main.console.print(text, type);
     }
 
-    public static function addCall(name:String, ?args:Array<Dynamic>):Bool {
-        var calledStop:Bool = false;
+    /**Calls a method in all the scripts**/
+    public static function addCall(name:String, args:Array<Dynamic> = null):Void
+    {
         scripts.fastForEach((script, i) -> {
-            if (script != null) {
-                if (script.active) {
-                    if (script.callback(name, args) == STOP_FUNCTION)
-                        calledStop = true;
-                }
-            }
+            if (script != null) if (script.active)
+                script.safeCall(name, args);
         });
+    }
+
+    /**Calls a method in all the scripts and returns if they called ``STOP_FUNCTION`` or not**/
+    public static function getCall(name:String, args:Array<Dynamic> = null):Bool
+    {
+        var calledStop:Bool = false;
+        
+        scripts.fastForEach((script, i) -> {
+            if (script != null) if (script.active)
+                if (script.safeCall(name, args) == STOP_FUNCTION)
+                    calledStop = true;
+        });
+
         return calledStop;
     }
 

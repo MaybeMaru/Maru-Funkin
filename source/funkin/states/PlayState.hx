@@ -459,7 +459,7 @@ class PlayState extends MusicBeatState
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
 		if (!paused) {
-			if (ModdingUtil.addCall("openPauseSubState")) return;
+			if (ModdingUtil.getCall("openPauseSubState")) return;
 			paused = true;
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -596,7 +596,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function openGameOverSubstate() {
-		if (ModdingUtil.addCall("openGameOverSubstate")) return;
+		if (ModdingUtil.getCall("openGameOverSubstate")) return;
 		camGame.clearFX(); camHUD.clearFX(); camOther.clearFX();
 		persistentUpdate = persistentDraw = false;
 		paused = true;
@@ -786,7 +786,7 @@ class PlayState extends MusicBeatState
 		if (script != null) {
 			char.script = script;
 			script.set('ScriptChar', char);
-			script.call('createChar', [char]);
+			script.safeCall('createChar', [char]);
 		}
 	}
 

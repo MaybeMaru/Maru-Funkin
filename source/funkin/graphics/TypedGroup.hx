@@ -38,7 +38,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 			#if cpp // skip hxcpp creating a dynamic for null
 			untyped __cpp__("{0}->__unsafe_set({1}, null())", members, index);
 			#else
-			members[index] = null;
+			members.unsafeSet(index, null);
 			#end
 		}
 	}
@@ -67,7 +67,7 @@ class TypedGroup<T:FlxBasic> extends FlxTypedGroup<T>
 			}
 		}
 
-		members.insert(0, object);
+		members.unshift(object);
 	}
 
 	override function forEachAlive(func:T -> Void, recurse:Bool = false) {
