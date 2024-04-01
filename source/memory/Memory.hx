@@ -1,6 +1,6 @@
 package memory;
 
-#if cpp
+#if (cpp && !mobile)
 /**
  * Memory class to properly get accurate memory counts
  * for the program.

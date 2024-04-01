@@ -91,10 +91,10 @@ class NoteUtil {
         skinJson = JsonUtil.checkJsonDefaults(NoteUtil.DEFAULT_NOTE_SKIN, skinJson);
 
         final key:String = 'skins/$skin/${skinJson.imagePath}';
-        final lodLevel:Null<LodLevel> = skinJson.allowLod ? null : HIGH;
+        final lod:Int = LodLevel.resolve(skinJson.allowLod);
         final antialiasing:Bool = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
         
-        final sprite = new FlxSpriteExt().loadImage(key, false, null, null, lodLevel);
+        final sprite = new FlxSpriteExt().loadImage(key, false, null, null, lod);
         sprite.setScale(skinJson.scale);
         sprite.antialiasing = antialiasing;
 

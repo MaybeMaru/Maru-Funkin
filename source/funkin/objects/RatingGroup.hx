@@ -1,6 +1,7 @@
 package funkin.objects;
 
-class RatingGroup extends TypedSpriteGroup<RemoveRating> {
+class RatingGroup extends TypedSpriteGroup<RemoveRating>
+{
     public var targetSpr:FlxObject = null;
     public var _offset:FlxPoint;
 
@@ -10,6 +11,16 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating> {
         _offset = FlxPoint.get();
         if (targetSpr is FlxSprite)
             _offset.set(targetSpr.frameWidth * targetSpr.scale.x, targetSpr.frameHeight * targetSpr.scale.y);
+
+        // Cache default ratings
+        add(new JudgeRating());
+        add(new ComboRating());
+        for (i in 0...3) add(new NumRating());
+        clearGroup();
+    }
+
+    public function clearGroup() {
+        members.fastForEach((rating, i) -> rating.kill());
     }
 
     override function destroy() {
@@ -24,24 +35,27 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating> {
         }
     }
 
-    public function drawCombo(combo:Int):Void {
-        if (combo < 10) return;
+    public function drawCombo(combo:Int):Void
+    {
+        if (combo < 10)
+            return;
 
-        final isVanilla = Preferences.getPref('vanilla-ui');
-        if (!isVanilla) {
+        if (!cast(Preferences.getPref('vanilla-ui'), Bool)) {
             final comboSpr:ComboRating = cast(recycle(ComboRating), ComboRating);
             comboSpr.init();
             addTop(comboSpr);
         }
 
-        final numSplit:Array<String> = Std.string(combo).split('');
-        numSplit.reverse();
+        var nums:String = Std.string(combo);
+        var l:Int = nums.length;
+        var i:Int = l;
 
-        numSplit.fastForEach((str, i) -> {
-            final num:NumRating = cast(recycle(NumRating), NumRating);
-            num.init(str, i);
+        while (i > 0) {
+            i--;
+            final num:NumRating = cast(recycle(NumRating, null), NumRating);
+            num.init(nums.charAt(i), l - i - 1);
             addTop(num);
-        });
+        }
     }
 
     public function drawJudgement(judgement:String):Void {
@@ -139,13 +153,13 @@ class RemoveRating extends FlxSpriteExt
 {
     public var lifeTime:Float = 1;
     public var alphaSpeed:Float = 1;
-    var lodLevel:Null<LodLevel>;
+    var lodLevel:LodLevel;
 
     public function new() {
         super();
         var skinData = SkinUtil.getSkinData(SkinUtil.curSkin);
         setScale(skinData.scale);
-        lodLevel = skinData.allowLod ? null : HIGH;
+        lodLevel = LodLevel.resolve(skinData.allowLod ?? true);
         antialiasing = skinData.antialiasing ? Preferences.getPref('antialiasing') : false;
     }
 
@@ -158,10 +172,10 @@ class RemoveRating extends FlxSpriteExt
         }
     }
 
-    public function start(lifeTime:Float = 1, alphaSpeed:Float = 1) {
-        this.lifeTime = lifeTime;
-        this.alphaSpeed = alphaSpeed;
-        alpha = 1;
+    public function start(time:Float = 1, speed:Float = 1) {
+        lifeTime = time;
+        alphaSpeed = speed;
+        alpha = 1.0;
     }
 
     public function jump(randomness:Float = 1) {

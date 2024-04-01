@@ -409,9 +409,9 @@ class PlayState extends MusicBeatState
 		});
 
 		"ready,set,go".split(",").fastForEach((key, i) -> {
-			final key:String = SkinUtil.getAssetKey(key, IMAGE);
-			final lodLevel:Null<LodLevel> = SkinUtil.curSkinData.allowLod ? null : HIGH;
-			countdownImages.push(Paths.image(key, null, null, null, lodLevel));
+			var key:String = SkinUtil.getAssetKey(key, IMAGE);
+			var lod:Int = LodLevel.resolve(SkinUtil.curSkinData.allowLod ?? true);
+			countdownImages.push(Paths.image(key, null, null, null, lod));
 		});
 
 		var swagCounter:Int = 0;
@@ -709,11 +709,8 @@ class PlayState extends MusicBeatState
 		noteTotal += ratingData.note;
 		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
 
-		if (!getPref('stack-rating')) {
-			ratingGroup.members.fastForEach((rating, i) -> {
-				rating.kill();
-			});
-		}
+		if (!getPref('stack-rating'))
+			ratingGroup.clearGroup();
 		
 		ratingGroup.drawComplete(noteRating, combo);
 		updateScore();

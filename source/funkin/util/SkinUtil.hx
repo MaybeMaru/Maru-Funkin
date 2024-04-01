@@ -16,11 +16,10 @@ class SkinUtil {
     public static var curSkinData:SkinJson = null;
     public static var dataMap:Map<String, SkinJson>;
 
-    inline public static function initSkinData():Void { //  Cache skin data
+    public static function initSkinData():Void //  Cache skin data
+    {
         dataMap = new Map<String, SkinJson>();
-        for (skin in JsonUtil.getJsonList('skins')) {
-            dataMap.set(skin, getSkinJsonData(skin));
-        }
+        JsonUtil.getJsonList('skins').fastForEach((skin, i) -> dataMap.set(skin, getSkinJsonData(skin)));
         setCurSkin();
     }
 
@@ -30,24 +29,26 @@ class SkinUtil {
     }
 
     inline public static function getSkinJsonData(skin:String = 'default'):SkinJson {
-		final skinJson:SkinJson = JsonUtil.getJson(skin, 'skins');
-		return skinJson;
+		return JsonUtil.getJson(skin, 'skins');
 	}
 
-    public static function getSkinData(?skin:String):SkinJson {
-        skin = skin ?? curSkin;
-        if (dataMap == null)
-            initSkinData();
-        else if (!dataMap.exists(skin))
-            dataMap.set(skin, getSkinJsonData(skin));
+    public static function getSkinData(skin:String = ""):SkinJson {
+        if (skin.length <= 0)
+            skin = curSkin;
+        
+        if (dataMap == null)                initSkinData();
+        else if (!dataMap.exists(skin))     dataMap.set(skin, getSkinJsonData(skin));
 
         return dataMap.get(skin);
     }
 
-    public static function getAssetKey(key:String, type:AssetType = IMAGE, ?skin:String) {
-        skin = skin == null ? SkinUtil.curSkin : skin;
-        final skinKey = 'skins/$skin/$key';
-        final defaultSkinKey = 'skins/default/$key';
+    public static function getAssetKey(key:String, type:AssetType = IMAGE, skin:String = ""):String
+    {
+        if (skin.length <= 0)
+            skin = curSkin;
+        
+        var skinKey:String = 'skins/$skin/$key';
+        var defaultSkinKey:String = 'skins/default/$key';
 
         final skinPath = Paths.getAssetPath(skinKey, type);
         return Paths.exists(skinPath, type) ? skinKey :  defaultSkinKey;

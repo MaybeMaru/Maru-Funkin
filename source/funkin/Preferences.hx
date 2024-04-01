@@ -126,10 +126,13 @@ class Preferences {
         }
     }
 
-    inline public static function getPref(pref:String):Dynamic {
-        final pref:Dynamic = preferences.get(pref.toLowerCase().trim());
-        #if !hl return pref?.value ?? pref;
-        #else   return Reflect.hasField(pref, "value") ? pref.value : pref; #end
+    public static function getPref(pref:String):Dynamic {
+        final value:Dynamic = preferences.get(pref);
+        
+        if (arrayPrefs.exists(pref))
+            return value.value;
+
+        return value;
     }
 
     inline public static function setPref(pref:String, value:Dynamic):Void {

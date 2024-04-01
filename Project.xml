@@ -38,10 +38,10 @@
 	<define name="MODS_ALLOWED" if="desktop"/>
 
 	<!--If you want hxcodec videos to be used-->
-	<define name="VIDEOS_ALLOWED" unless="linux" if="cpp"/>
+	<define name="VIDEOS_ALLOWED" unless="linux || mobile" if="cpp"/>
 
 	<!--If you want the discord rcp to be used-->
-	<define name="DISCORD_ALLOWED" if="cpp"/>
+	<define name="DISCORD_ALLOWED" if="cpp" unless="mobile"/>
 	
 	<!--If you want to have ffmpeg used for osu and quaver pack zip support-->
 	<define name="ZIPS_ALLOWED" if="desktop"/>
@@ -115,6 +115,10 @@
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+
+	<!-- ______________________________ Android ______________________________ -->
+	<config:android gradle-version="7.5.1" if="android" />
+    <config:android gradle-plugin="7.3.1" if="android" />
 
 	<!-- _________________________________ Icons _______________________________ -->
 	

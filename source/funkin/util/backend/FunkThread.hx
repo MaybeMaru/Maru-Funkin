@@ -1,8 +1,7 @@
 package funkin.util.backend;
 
-#if sys
+#if (sys && !mobile)
 import sys.thread.FixedThreadPool;
-import sys.thread.Thread;
 #end
 
 /*
@@ -11,7 +10,7 @@ import sys.thread.Thread;
 */
 
 class FunkThread { 
-    #if sys
+    #if (sys && !mobile)
     static var threadPool:FixedThreadPool = new FixedThreadPool(4);
     
     public static function run(task:()->Void) {

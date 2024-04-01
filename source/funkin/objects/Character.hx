@@ -96,11 +96,8 @@ class Character extends FlxSpriteExt {
 
 	public function loadCharJson(inputJson:CharacterJson):Void
 	{
-		var path = inputJson.imagePath;
-		if (!path.startsWith('characters/'))
-			path = 'characters/$path';
-
-		var lod:Null<LodLevel> = inputJson.allowLod ? null : HIGH;
+		var path:String = inputJson.imagePath.startsWith("characters/") ? inputJson.imagePath : "characters/" + inputJson.imagePath;
+		var lod:Int = LodLevel.resolve(inputJson.allowLod);
 
 		loadImage(path, false, null, null, lod);
 		

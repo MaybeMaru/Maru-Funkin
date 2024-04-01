@@ -144,7 +144,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
             if (!addedAssets.contains(png)) {
                 assets.push({
                     path: png,
-                    lod: null // Uses settings lod
+                    lod: DEFAULT
                 });
                 addedAssets.push(png);
             }
@@ -161,7 +161,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
                         if (!addedAssets.contains(png)) {
                             assets.push({
                                 path: png,
-                                lod: object.allowLod ? null : HIGH
+                                lod: object.allowLod ? DEFAULT : HIGH
                             });
                             addedAssets.push(png);
                         }

@@ -87,7 +87,7 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	public function loadImage(path:String, globalAsset:Bool = false, ?useTexture:Bool, ?library:String, ?lodLevel:LodLevel):FlxSpriteExt {
+	public function loadImage(path:String, globalAsset:Bool = false, ?useTexture:Bool, ?library:String, lodLevel:LodLevel = DEFAULT):FlxSpriteExt {
 		packer = Paths.getPackerType(path);
 		imageKey = path;
 		switch (packer) {
@@ -108,15 +108,16 @@ class FlxSpriteExt extends FlxSkewedSprite {
 		return this;
 	}
 
-	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String):FlxSpriteExt {
+	public function loadJsonInput(?input:SpriteJson, folder:String = '', global:Bool = false, ?specialImage:String):FlxSpriteExt
+	{
 		spriteJson = JsonUtil.checkJsonDefaults(DEFAULT_SPRITE, input);
 
 		folder = folder.length > 0 ? '$folder/' : '';
 		
-		final path:String = specialImage ?? '$folder${spriteJson.imagePath}';
-		final lodLevel:Null<LodLevel> = spriteJson.allowLod ? null : HIGH;
+		var path:String = specialImage ?? folder + spriteJson.imagePath;
+		var lod:Int = LodLevel.resolve(spriteJson.allowLod);
 
-		loadImage(path, global, null, null, lodLevel);
+		loadImage(path, global, null, null, lod);
 
 		spriteJson.anims.fastForEach((anim, i) -> {
 			final anim = JsonUtil.checkJsonDefaults(DEFAULT_ANIM, anim);

@@ -20,15 +20,15 @@ class FPS_Mem extends TextField
 {
 	private var times:Array<Float>;
 
-	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000) 
+	public function new(X:Float = 10.0, Y:Float = 10.0, Color:Int = 0x000000) 
 	{
 		super();
 
-		x = inX;
-		y = inY;
+		x = X;
+		y = Y;
 
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 12, inCol);
+		defaultTextFormat = new TextFormat("_sans", 12, Color);
 
 		text = "FPS: ";
 		times = [];
@@ -55,12 +55,12 @@ class FPS_Mem extends TextField
 		return Math.round(bytes * memDiv) * 0.01;
 	}
 
-	#if desktop
 	var memPeak:Float = 0;
-	#end
 
-	private function onEnter(_) {
-		if (!visible) return;
+	private function onEnter(_):Void
+	{
+		if (!visible)
+			return;
 
 		final now = Timer.stamp();
 		times.push(now);
@@ -70,17 +70,14 @@ class FPS_Mem extends TextField
 
 		final fps:Int = times.length;
 
-		#if desktop
-			final bytes = #if cpp Memory.getCurrentUsage(); #else System.totalMemory; #end
-			final memCur = formatBytes(bytes);
+		final bytes = #if (cpp && !mobile) Memory.getCurrentUsage(); #else System.totalMemory; #end
+		final memCur = formatBytes(bytes);
 
-			if (memCur > memPeak)
-				memPeak = memCur;
-		#end
+		if (memCur > memPeak)
+			memPeak = memCur;
 
 		text =
-		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' #if desktop +=
+		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
 		'RAM: $memCur mb/$memPeak mb';
-		#end
 	}
 }

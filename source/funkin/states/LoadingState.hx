@@ -23,11 +23,10 @@ class LoadingState extends MusicBeatState
                 
                 var path:String = json.imagePath;
                 if (!path.startsWith('characters/')) path = 'characters/$path';
-                var lod:Null<LodLevel> = json.allowLod ? null : HIGH;
 
                 charAssets.push({
                     path: Paths.png(path),
-                    lod: lod
+                    lod: LodLevel.resolve(json.allowLod)
                 });
 
                 addedAssets.push(char);

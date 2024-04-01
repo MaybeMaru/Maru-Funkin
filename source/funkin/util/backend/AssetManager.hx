@@ -155,10 +155,17 @@ class LodGraphic extends FlxGraphic
 }
 
 enum abstract LodLevel(Int) from Int to Int {
+	var DEFAULT = -1;
 	var HIGH = 0;
 	var MEDIUM = 1;
 	var LOW = 2;
 	var RUDY = 3;
+
+	public static inline function resolve(useLod:Bool):Int {
+		if (useLod)
+			return DEFAULT;
+		return HIGH;
+	}
 
 	public static function fromString(value:String):LodLevel {
 		return (switch(value) {
@@ -176,13 +183,14 @@ enum abstract LodLevel(Int) from Int to Int {
 			case MEDIUM: "medium";
 			case LOW: "low";
 			case RUDY: "rudy";
+			default: "high";
 		});
 	}
 }
 
 typedef LoadImage = {
     var path:String;
-    var lod:Null<LodLevel>;
+    var lod:LodLevel;
 }
 
 typedef LoadData = {
@@ -313,12 +321,12 @@ class AssetManager
 		return lodQuality = LodLevel.fromString(level);
 	}
 
-	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, ?useTexture:Bool, ?lodLevel:LodLevel, ?key:String):LodGraphic
+	public static function cacheGraphicPath(path:String, staticAsset:Bool = false, ?useTexture:Bool, lodLevel:LodLevel = DEFAULT, ?key:String):LodGraphic
 	{
 		if (key == null)
 			key = path;
 
-		if (lodLevel == null)
+		if (lodLevel == DEFAULT)
 			lodLevel = lodQuality;
 		
 		var asset = getAsset(key); // Check if asset is already cached
@@ -334,11 +342,11 @@ class AssetManager
 	}
 
 	@:noCompletion
-	private static inline function __cacheFromBitmap(key:String, bitmap:BitmapData, staticAsset:Bool, ?lodLevel:LodLevel, ?useTexture:Bool) {
+	private static inline function __cacheFromBitmap(key:String, bitmap:BitmapData, staticAsset:Bool, lodLevel:LodLevel = DEFAULT, ?useTexture:Bool) {
 		@:privateAccess
 		var graphic = new LodGraphic(null, bitmap);
 
-		if (lodLevel == null)
+		if (lodLevel == DEFAULT)
 			lodLevel = lodQuality;
 		
 		if (lodLevel != HIGH)
