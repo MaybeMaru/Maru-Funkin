@@ -208,7 +208,7 @@ class ModdingUtil {
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
     inline public static function print(text:String, type:PrintType):Void {
-        #if (mobile && FLX_DEBUG)
+        #if mobile
         trace(text);
         #else
         Main.console.print(text, type);

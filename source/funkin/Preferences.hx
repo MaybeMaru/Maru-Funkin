@@ -57,7 +57,9 @@ class Preferences {
         #if !hl
         addPref('gpu-textures', 'gpu textures', true);
         #end
+        #if desktop
         addPref('preload', 'preload at start', false);
+        #end
 
         /****/addHeader("MISCELLANEOUS");/****/
 

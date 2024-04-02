@@ -148,21 +148,25 @@ class TitleState extends MusicBeatState {
 	var transitioning:Bool = false;
 	var titleSine:Float = 0;
 
-	override function update(elapsed:Float):Void {
+	override function update(elapsed:Float):Void
+	{
 		if (FlxG.sound.music != null) {
-			this.musicBeat.targetSound = FlxG.sound.music;
-			if (FlxG.sound.music.volume < 0.6) FlxG.sound.music.volume += elapsed * 0.1;
+			musicBeat.targetSound = FlxG.sound.music;
+			if (FlxG.sound.music.volume < 0.6)
+				FlxG.sound.music.volume += elapsed * 0.1;
 		}
 
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
-			final lerp = FlxMath.fastSin(titleSine %= CoolUtil.DOUBLE_PI);
-			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, FlxMath.remapToRange(lerp, -1, 1, 0, 1));
-			checkCode();
+			var lerp:Float = FlxMath.remapToRange(FlxMath.fastSin(titleSine %= CoolUtil.DOUBLE_PI), -1, 1, 0, 1);
+			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, lerp);
+			#if !mobile checkCode(); #end
 		}
 
-		if (getKey('ACCEPT', JUST_PRESSED)) {
-			if (!transitioning && (skippedIntro || openedGame) ) {
+		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
+		{
+			if (!transitioning && (skippedIntro || openedGame) )
+			{
 				transitioning = true;
 				titleText.playAnim('press');
 				titleText.color = FlxColor.WHITE;
@@ -174,11 +178,10 @@ class TitleState extends MusicBeatState {
 				CoolUtil.playSound('confirmMenu', 0.7);
 				FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
 
-				new FlxTimer().start(2, function(tmr:FlxTimer) {
-					switchState(new MainMenuState());
-				});
+				new FlxTimer().start(2, (tmr:FlxTimer) -> switchState(new MainMenuState()));
 			}
-			else if (!skippedIntro) {
+			else if (!skippedIntro)
+			{
 				skipIntro();
 			}
 		}

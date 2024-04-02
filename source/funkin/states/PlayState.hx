@@ -1,6 +1,5 @@
 package funkin.states;
 
-import funkin.states.editors.StageDebug;
 import funkin.objects.*;
 import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
@@ -555,6 +554,7 @@ class PlayState extends MusicBeatState
 			if (justPressed.ONE) if (CoolUtil.debugMode)
 					endSong();
 
+			#if DEV_TOOLS
 			if (justPressed.SIX) {
 				clearCacheData = {tempCache: false};
 				DiscordClient.changePresence("Stage Editor", null, null, true);
@@ -577,6 +577,7 @@ class PlayState extends MusicBeatState
 				}
 				else switchState(new AnimationDebug(SONG.players[1]));
 			}
+			#end
 		}
 
 		//End the song if the conductor time is the same as the length
@@ -635,11 +636,12 @@ class PlayState extends MusicBeatState
 		ModdingUtil.addCall('endSong');
 		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
 
+		#if DEV_TOOLS
 		if (inChartEditor) {
 			switchState(new ChartingState());
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 		}
-		else inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
+		else #end inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 	}
 
 	public function exitSong() {

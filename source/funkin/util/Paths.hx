@@ -223,7 +223,7 @@ class Paths
 	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
-		#if sys
+		#if desktop
 		return FileSystem.exists(removeAssetLib(file));
 		#else
 		return OpenFlAssets.exists(file, type);
@@ -231,7 +231,7 @@ class Paths
 	}
 
 	inline static public function removeAssetLib(path:String):String {
-		return #if sys path.contains(':') ? path.split(':')[1] : #end path;
+		return #if desktop path.contains(':') ? path.split(':')[1] : #end path;
 	}
 
 	//	Returns [file Mod, file Name]

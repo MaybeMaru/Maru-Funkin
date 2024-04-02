@@ -5,6 +5,9 @@ import funkin.Controls.getKey;
 import flixel.input.FlxInput.FlxInputState as InputType;
 import funkin.Preferences;
 import funkin.Preferences.getPref;
+#if mobile
+import funkin.MobileTouch;
+#end
 
 //Song
 import funkin.util.song.Conductor;
@@ -91,8 +94,11 @@ import funkin.states.menus.StoryMenuState;
 import funkin.states.menus.TitleState;
 import funkin.states.options.OptionsState;
 
+#if DEV_TOOLS
+import funkin.states.editors.StageDebug;
 import funkin.states.editors.AnimationDebug;
 import funkin.states.editors.ChartingState;
+#end
 
 //Haxeflixel shit
 import flixel.FlxG;

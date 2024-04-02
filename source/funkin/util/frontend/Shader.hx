@@ -5,7 +5,8 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.display.BitmapData;
 import openfl.filters.ShaderFilter;
 
-class RuntimeShader extends FlxRuntimeShader implements IUpdateable implements IFlxDestroyable {
+class RuntimeShader extends FlxRuntimeShader implements IUpdateable implements IFlxDestroyable
+{
 	/**
 	 * Modify a vector parameter of the shader.
 	 * @param name The name of the parameter to modify.
@@ -81,7 +82,9 @@ class Shader
 
 	public static function initShader(shader:String, ?tag:String, force:Bool = false):Null<RuntimeShader>
 	{
-		#if web return null; #end
+		#if (mobile || web)
+		return null;
+		#else
 		if (shaderMap.exists(shader) && !force)
 			return shaderMap.get(shader);
 
@@ -96,12 +99,15 @@ class Shader
 		final shaderObject = new RuntimeShader(txt);
 		shaderMap.set(tag ?? shader, shaderObject);
 		return shaderObject;
+		#end
 	}
 
-	public static inline function clearShaders() {
-		for (i in shaderMap.keys()) {
-			shaderMap.get(i).destroy();
-			shaderMap.remove(i);
+	public static inline function clearShaders():Void
+	{
+		for (key => shader in shaderMap)
+		{
+			shader.destroy();
+			shaderMap.remove(key);
 		}
 	}
 

@@ -92,9 +92,11 @@ class CoolUtil {
 		path = Paths.removeAssetLib(path);
 		if (FileSystem.exists(path))
 			return File.getContent(path);
-		#end
+		#else
 		if (OpenFlAssets.exists(path, TEXT))
 			return Assets.getText(path);
+		#end
+
 		return "";
 	}
 

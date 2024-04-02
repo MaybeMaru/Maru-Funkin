@@ -190,8 +190,10 @@ class FreeplayState extends MusicBeatState {
 		}
 		#end
 
+		#if DEV_TOOLS
 		if(FlxG.keys.justPressed.SEVEN)
 			selectSong(true);
+		#end
 
 		if (getKey('ACCEPT', JUST_PRESSED))
 			selectSong(false);
@@ -231,7 +233,7 @@ class FreeplayState extends MusicBeatState {
 	function loadSong(toChart:Bool):Void {
 		var songData = songs[curSelected];
 		var diff = curWeekDiffs[curDifficulty];
-		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, toChart ? ChartingState : null);
+		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, #if DEV_TOOLS toChart ? ChartingState : #end null);
 	}
 
 	function changeDiff(change:Int = 0):Void {

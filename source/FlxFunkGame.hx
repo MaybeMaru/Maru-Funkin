@@ -6,6 +6,10 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import flixel.FlxGame;
 
+#if mobile
+import funkin.MobileTouch;
+#end
+
 interface IUpdateable {
 	public function update(elapsed:Float):Void;
 }
@@ -52,6 +56,10 @@ class FlxFunkGame extends FlxGame
         }
         #end
 
+        #if mobile
+        addChild(MobileTouch.instance = new MobileTouch());
+        #end
+
         #if DEV_TOOLS
         addChild(Main.console = console = new ScriptConsole());
         #end
@@ -87,6 +95,10 @@ class FlxFunkGame extends FlxGame
 		FlxG.signals.preUpdate.dispatch();
 
 		updateInput();
+        
+        #if mobile
+        MobileTouch.instance.update(elapsed);
+        #end
 
 		#if FLX_SOUND_SYSTEM
 		FlxG.sound.update(elapsed);
