@@ -267,7 +267,7 @@ class NotesGroup extends Group
 				}
 			}
 
-			for (e in section.sectionEvents) {
+			section.sectionEvents.fastForEach((e, i) -> {
 				final strumTime:Float = e[0];
 				final eventName:String = e[1];
 				final eventValues:Array<Dynamic> = e[2];
@@ -279,7 +279,7 @@ class NotesGroup extends Group
 				if (!songEvents.contains(eventName)) {
 					songEvents.push(eventName);
 				}
-			}
+			});
 		}
 
 		scrollSpeed = songSpeed;
@@ -290,22 +290,22 @@ class NotesGroup extends Group
 		curSpawnNote = unspawnNotes[0];
 		curCheckEvent = events[0];
 		
-		if (isPlayState) {
-			final notetypeScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]);
-			for (script in notetypeScripts) { //Notetype Scripts
+		if (isPlayState)
+		{
+			//Notetype Scripts
+			ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]).fastForEach((script, i) -> {
 				if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
 					ModdingUtil.addScript(script);
 				}
-			}
+			});
 			
-			final eventScripts:Array<String> = ModdingUtil.getSubFolderScriptList('data/events', [curSong]);
-			for (script in eventScripts) { //Event Scripts
+			//Event Scripts
+			ModdingUtil.getSubFolderScriptList('data/events', [curSong]).fastForEach((script, i) -> {
 				if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
 					ModdingUtil.addScript(script);
 				}
-			}
+			});
 		}
-
 
 		FlxG.bitmap.clearUnused();
 		generatedMusic = true;
@@ -342,28 +342,25 @@ class NotesGroup extends Group
     //Makes the conductor song go vroom vroom
     inline function updateConductor(elapsed:Float)
 	{
-		final inst = Conductor.inst;
-
 		if (isPlayState)
 		{
 			// Prevent repeating vocals
-			if (inst.playing) {
-				final vocals = Conductor.vocals;
-				if (Conductor.songPosition - SONG.offsets[1] >= vocals.length)
-					vocals.volume = 0;
+			if (Conductor.inst.playing) {
+				if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length)
+					Conductor.vocals.volume = 0;
 			}
 
-			final starting = game.startingSong;
-			if (!game.inCutscene) if ((Conductor.playing || starting || Conductor.songPosition < game.songLength))
+			final inStart:Bool = game.startingSong;
+			if (!game.inCutscene) if ((Conductor.playing || inStart || Conductor.songPosition < game.songLength))
 			{
 				Conductor.songPosition += elapsed * 1000;
-				if (game.startedCountdown) if (starting) {
+				if (game.startedCountdown) if (inStart) {
 					if (Conductor.songPosition >= 0)
 						game.startSong();
 				}
 				else
 				{
-					if (!game.paused) if (!inst.playing)
+					if (!game.paused) if (!Conductor.inst.playing)
 						Conductor.play();
 				}
 			}
@@ -386,15 +383,13 @@ class NotesGroup extends Group
 			while (unspawnNotes.length > 0 &&
 				((curSpawnNote.strumTime - Conductor.songPosition) < (((1500 / curSpawnNote.noteSpeed) / zoom) * curSpawnNote.spawnMult)))
 			{
-				final spawnNote:BasicNote = curSpawnNote;
-				spawnNote.update(0.0);
-				ModdingUtil.addCall('noteSpawn', [spawnNote]);
-				unspawnNotes.splice(0, 1);
+				curSpawnNote.update(0.0);
+				ModdingUtil.addCall('noteSpawn', [curSpawnNote]);
 
 				// Skip sorting
-				if (spawnNote.isSustainNote)	notes.insertBelow(spawnNote);
-				else				notes.insertTop(spawnNote);
+				curSpawnNote.isSustainNote ? notes.insertBelow(curSpawnNote) : notes.insertTop(curSpawnNote);
 				
+				unspawnNotes.splice(0, 1);
 				curSpawnNote = unspawnNotes[0];
 			}
 		}
@@ -405,8 +400,7 @@ class NotesGroup extends Group
 	inline function checkEvents():Void {
 		if (curCheckEvent != null) {
 			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
-				final runEvent:Event = curCheckEvent;
-				ModdingUtil.addCall('eventHit', [runEvent]);
+				ModdingUtil.addCall('eventHit', [curCheckEvent]);
 				events.splice(0, 1);
 				curCheckEvent = events[0];
 			}
@@ -559,14 +553,14 @@ class NotesGroup extends Group
 					note.removeNote();
 				});
 				
-				final ghostOff = isPlayState ? !game.ghostTapEnabled : false;
+				final ghostOff:Bool = isPlayState ? !game.ghostTapEnabled : false;
 
 				if (possibleNotes.length > 0)
 				{
 					if (ghostOff) {
 						controlArray.fastForEach((control, i) -> {
 							if (control) {
-								final data = i % Conductor.NOTE_DATA_LENGTH;
+								final data:Int = i % Conductor.NOTE_DATA_LENGTH;
 								if (!ignoreList.contains(data))
 									badNoteHit.dispatch(data);
 							}

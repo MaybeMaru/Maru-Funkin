@@ -114,7 +114,7 @@ class OptionsState extends MusicBeatState {
 			case 'Preferences':	switchState(new funkin.states.options.PreferencesState());
 			case 'Controls':	switchState(new funkin.states.options.ControlsState());
 			case 'Latency':		switchState(new funkin.states.options.LatencyState());
-			#if desktop
+			#if MODS_ALLOWED
 			case 'Mod Folders':	switchState(new funkin.states.options.ModFoldersState());
 			#end
 			default:			exitOptions();

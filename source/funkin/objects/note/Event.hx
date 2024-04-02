@@ -6,30 +6,36 @@ typedef EventData = {
     var image:String;
 }
 
-class EventUtil {
+class EventUtil
+{
     public static var eventsMap:Map<String, EventData> = [];
 	public static var eventsArray:Array<String> = [];
 
-    static function getList() {
-        final eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
-        final eventList = JsonUtil.getSubFolderJsonList('events', [PlayState?.SONG?.song ?? ""]);
+    static function getList():Array<String>
+    {
+        var song = PlayState.SONG != null ? PlayState.SONG.song : "";
+        var eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
+        var eventList = JsonUtil.getSubFolderJsonList('events', [song]);
         return CoolUtil.customSort(eventList, eventSort);
     }
 
-    public static function initEvents():Void {
-		eventsMap = new Map<String, EventData>();
-		eventsArray = [];
-		for (e in getList()) {
+    public static function initEvents():Void
+    {
+        eventsMap.clear();
+		eventsArray.splice(0, eventsArray.length);
+		getList().fastForEach((e, i) -> {
 			eventsArray.push(e);
             getEventData(e);
-        }
+        });
 	}
 
-    public static var DEFAULT_EVENT(default, never):EventData = {
-		description: "This event has no description",
-        values: [],
-        image: "blankEvent"
-	}
+    inline static public function getDefaultEvent():EventData {
+        return {
+            description: "This event has no description",
+            values: [],
+            image: "blankEvent"
+        }
+    }
 
     public static function getEventData(event:String):EventData
     {
@@ -37,7 +43,7 @@ class EventUtil {
             return eventsMap.get(event);
 		
         var eventJson:EventData = JsonUtil.getJson(event, 'events');
-		eventJson = JsonUtil.checkJson(DEFAULT_EVENT, eventJson);
+		eventJson = JsonUtil.checkJson(getDefaultEvent(), eventJson);
         if (eventJson.values.length > 24) // 24 values cap
             eventJson.values.resize(24);
 		
@@ -46,7 +52,8 @@ class EventUtil {
     }
 }
 
-class Event {
+class Event
+{
     public var strumTime:Float = 0.0;
     public var name:String = "";
     public var values:Array<Dynamic> = [];

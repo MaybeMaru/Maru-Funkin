@@ -38,8 +38,10 @@ class Preferences {
 
         /****/addHeader("UI");/****/
 
+        #if !mobile
         addPref('framerate',      'framerate',       60);
         addPref('fps-counter',    'fps counter',     true);
+        #end
         addPref('vanilla-ui',     'vanilla ui',      false);
         addPref('stack-rating',   'stack ratings',   false);
         addPref('flashing-light', 'flashing lights', true);
@@ -89,10 +91,10 @@ class Preferences {
     }
 
     public static inline function updateFramerate():Void
-        FlxG.drawFramerate = FlxG.updateFramerate = getPref('framerate');
+        FlxG.drawFramerate = FlxG.updateFramerate = #if mobile 60; #else getPref('framerate'); #end
 
     public static inline function updateFpsCounter():Void
-        Main.fpsCounter.visible = getPref('fps-counter');
+        #if !mobile Main.fpsCounter.visible = getPref('fps-counter'); #else {} #end
 
     public static inline function updateResolution():Void
         #if desktop Main.resizeGame(getPref('resolution')); #else {} #end

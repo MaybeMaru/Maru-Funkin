@@ -92,7 +92,7 @@ class BasicNote extends SmartSprite implements INoteData {
         super.update(elapsed);
         if (targetStrum != null) {
             if (moving) moveToStrum();
-            activeNote = Conductor.songPosition < (strumTime + susLength + getPosMill(NoteUtil.swagHeight * 2));
+            activeNote = Conductor.songPosition < (strumTime + susLength + getPosMill(NoteUtil.noteHeight * 2));
         }
     }
 
@@ -133,14 +133,14 @@ class BasicNote extends SmartSprite implements INoteData {
     public var hitMult:Float = 1.0;
 
     public var noteType(default, set):String = "default";
-    inline function set_noteType(value:String):String {
+    function set_noteType(value:String):String {
         final typeJson:NoteTypeJson = NoteUtil.getTypeJson(value);
         mustHit = typeJson.mustHit;
         altAnim = typeJson.altAnim;
 
         for (i in 0...2) {
-            hitHealth[i] = typeJson.hitHealth[i];
-            missHealth[i] = typeJson.missHealth[i];
+            hitHealth.unsafeSet(i, cast typeJson.hitHealth[i]);
+            missHealth.unsafeSet(i, cast typeJson.missHealth[i]);
         }
 
         hitMult = FlxMath.bound(typeJson.hitMult, 0.01, 1);

@@ -15,11 +15,12 @@ typedef NoteTypeJson = {
     var hitMult:Float;
 }
 
-class NoteUtil {
-	public static var swagWidth:Float = 160 * 0.7;
-	public static var swagHeight:Float = 150 * 0.7;
+class NoteUtil
+{
+	public static inline var noteWidth:Int = 108;
+	public static inline var noteHeight:Int = 108;
 
-    public static var DEFAULT_NOTE_TYPE(default, never):NoteTypeJson = {
+    public static final DEFAULT_NOTE_TYPE:NoteTypeJson = {
 		mustHit: true,
 		hitHealth: [0.0237, 0.029],
 		missHealth: [0.0475, 0.0118],
@@ -29,7 +30,7 @@ class NoteUtil {
         hitMult: 1 // I recommend making this value smaller for fire-like notes
 	}
 
-    public static var DEFAULT_NOTE_SKIN(default, never):NoteSkinData = {
+    public static final DEFAULT_NOTE_SKIN:NoteSkinData = {
 		anims: [],
 		imagePath: "noteAssets",
         allowLod: true,

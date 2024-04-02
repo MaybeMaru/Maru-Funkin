@@ -1,7 +1,5 @@
 package;
 
-import haxe.ui.locale.LocaleManager;
-import openfl.display.BitmapData;
 import flixel.system.FlxAssets;
 import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
@@ -10,6 +8,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 #if !mac
 import haxe.ui.Toolkit;
+import haxe.ui.locale.LocaleManager;
 #end
 
 class InitState extends FlxState
@@ -45,8 +44,12 @@ class Main extends Sprite
 
 	public static var sprite:Main;
 	public static var game:FlxFunkGame;
+	#if !mobile
 	public static var fpsCounter:FPS_Mem; //The FPS display child
+	#end
+	#if DEV_TOOLS
 	public static var console:ScriptConsole;
+	#end
 	public static var transition:Transition;
 	public static var engineVersion(default, never):String = "1.0.0-b.2"; //The engine version, if its not the same as the github one itll open OutdatedSubState
 

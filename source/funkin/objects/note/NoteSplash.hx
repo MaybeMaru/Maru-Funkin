@@ -40,8 +40,8 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
                 loadSkin(note.skin);
             }
             updateHitbox();
-            X = note.x + NoteUtil.swagWidth * 0.5;
-            Y = note.y + NoteUtil.swagHeight * 0.5;
+            X = note.x + NoteUtil.noteWidth * 0.5;
+            Y = note.y + NoteUtil.noteHeight * 0.5;
             noteData = note.noteData;
         }
         this.noteData = noteData;

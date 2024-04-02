@@ -4,21 +4,30 @@ import funkin.sound.*;
 import flixel.system.FlxAssets;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-import flixel.system.ui.FlxSoundTray;
 import flixel.FlxGame;
 
 interface IUpdateable {
 	public function update(elapsed:Float):Void;
 }
 
-class FlxFunkGame extends FlxGame {
+class FlxFunkGame extends FlxGame
+{
     public var transition:Transition;
+
+    #if DEV_TOOLS
     public var console:ScriptConsole;
+    #end
+
+    #if !mobile
     public var fpsCounter:FPS_Mem;
+    #end
     
-    public function new(gameWidth:Int = 0, gameHeight:Int = 0, ?initialState:Class<FlxState>, updateFramerate:Int = 60, drawFramerate:Int = 60, skipSplash:Bool = false, startFullscreen:Bool = false) {
+    public function new(gameWidth:Int = 0, gameHeight:Int = 0, ?initialState:Class<FlxState>, updateFramerate:Int = 60, drawFramerate:Int = 60, skipSplash:Bool = false, startFullscreen:Bool = false)
+    {
         super(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen);
+        #if FLX_SOUND_TRAY
         _customSoundTray = FlxFunkSoundTray;
+        #end
     }
 
     override function create(_:openfl.events.Event)
@@ -34,8 +43,18 @@ class FlxFunkGame extends FlxGame {
         super.create(_);
 
         addChild(Main.transition = transition = new Transition());
-        removeChild(soundTray); addChild(soundTray); // Correct layering
+
+        #if FLX_SOUND_TRAY
+        if (soundTray != null) // Correct layering 
+        {
+            removeChild(soundTray);
+            addChild(soundTray);
+        }
+        #end
+
+        #if DEV_TOOLS
         addChild(Main.console = console = new ScriptConsole());
+        #end
 
         #if !mobile
         addChild(Main.fpsCounter = fpsCounter = new FPS_Mem(10,10,0xffffff));
@@ -72,16 +91,18 @@ class FlxFunkGame extends FlxGame {
 		#if FLX_SOUND_SYSTEM
 		FlxG.sound.update(elapsed);
 		#end
-		FlxG.plugins.update(elapsed);
+		
+        FlxG.plugins.update(elapsed);
         transition.update(elapsed);
+        
+        #if DEV_TOOLS
         console.update(elapsed);
+        #end
 
 		_state.tryUpdate(elapsed);
 
-        if (_state.persistentUpdate && updateObjects.length != 0) {
-            updateObjects.fastForEach((object, i) -> {
-                object.update(elapsed);
-            });
+        if (_state.persistentUpdate) if (updateObjects.length > 0) {
+            updateObjects.fastForEach((object, i) -> object.update(elapsed));
         }
 
 		FlxG.cameras.update(elapsed);
@@ -118,7 +139,9 @@ class FlxFunkGame extends FlxGame {
     }
 }
 
-class FlxFunkSoundTray extends FlxSoundTray {
+#if FLX_SOUND_TRAY
+class FlxFunkSoundTray extends flixel.system.ui.FlxSoundTray
+{
     var _bar:Bitmap;
     
     public function new() {
@@ -171,3 +194,4 @@ class FlxFunkSoundTray extends FlxSoundTray {
         super.screenCenter();
     }
 }
+#end

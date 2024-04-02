@@ -2,7 +2,8 @@ package funkin.objects.note;
 
 import flixel.graphics.frames.FlxFrame;
 
-class Sustain extends BasicNote {
+class Sustain extends BasicNote
+{
     public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void {
         clipRect = FlxRect.get();
         super(noteData, strumTime, skin); // Load skin
@@ -12,7 +13,7 @@ class Sustain extends BasicNote {
         drawStyle = BOTTOM_TOP;
         alpha = 0.6;
         
-        yDisplace = NoteUtil.swagHeight * 0.5;
+        yDisplace = NoteUtil.noteHeight * 0.5;
         this.susLength = susLength;
         setSusLength(susLength);
     }
@@ -87,13 +88,13 @@ class Sustain extends BasicNote {
 
     public inline function setSusLength(mills:Float = 0.0):Float
     {
-        repeatHeight = getMillPos(mills) + ((NoteUtil.swagHeight * 0.5) * (noteSpeed < 1.0 ? noteSpeed : 1.0));
+        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * (noteSpeed < 1.0 ? noteSpeed : 1.0));
         
         if (clipRect != null)
             clipRect.height = repeatHeight;
 
         // Kill too short sustains
-        if (Std.int(repeatHeight) <= Std.int(NoteUtil.swagHeight * 0.501)) {
+        if (Std.int(repeatHeight) <= Std.int(NoteUtil.noteHeight * 0.501)) {
             removeNote();
             return 0.0;
         }

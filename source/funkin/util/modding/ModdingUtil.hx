@@ -57,7 +57,9 @@ class ModdingUtil {
     inline public static function clearScripts():Void
     {
         FunkScript.globalVariables.clear();
+        #if !mobile
         Main.console.clear();
+        #end
         
         scripts.copy().fastForEach((script, i) -> removeScript(script));
         scripts.splice(0, scripts.length);
@@ -206,7 +208,11 @@ class ModdingUtil {
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
     inline public static function print(text:String, type:PrintType):Void {
+        #if (mobile && FLX_DEBUG)
+        trace(text);
+        #else
         Main.console.print(text, type);
+        #end
     }
 
     /**Calls a method in all the scripts**/
@@ -232,11 +238,17 @@ class ModdingUtil {
         return calledStop;
     }
 
-    public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
-        subFolders = subFolders ?? [];
-        var subFolderList:Array<String> = [];
-        for (i in subFolders) subFolderList = subFolderList.concat(getScriptList(folder + "/" + i));
-        return getScriptList(folder).concat(subFolderList);
+    public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>)
+    {
+        if (subFolders == null)
+            subFolders = new Array<String>();
+        
+        var subFolderList:Array<String> = getScriptList(folder);
+        subFolders.fastForEach((subfolder, i) -> {
+            getScriptList(folder + "/" + subfolder).fastForEach((item, i) -> subFolderList.push(item));
+        });
+        
+        return subFolderList;
     }
 
     public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {

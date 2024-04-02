@@ -9,7 +9,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
 
     public function new(p:Int = 0, skipIntro:Bool = false, lanes:Int = Conductor.NOTE_DATA_LENGTH) {
         super(9);
-        startX = NoteUtil.swagWidth * 0.666 + (FlxG.width * 0.5) * p;
+        startX = NoteUtil.noteWidth * 0.666 + (FlxG.width * 0.5) * p;
         offsetY = Preferences.getPref('downscroll') ? 10 : -10;
         
         final isPlayer:Bool = p == 1;
@@ -26,7 +26,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
         function (t:InputType) return Controls.getKey('NOTE_RIGHT', t),
     ];
 
-    static var seperateWidth(default, never) = NoteUtil.swagWidth + 5;
+    static inline var seperateWidth:Int = NoteUtil.noteWidth + 5;
 
     public function insertStrum(position:Int = 0, skipIntro:Bool = true) {
         if (members.length >= 9) return null; // STOP

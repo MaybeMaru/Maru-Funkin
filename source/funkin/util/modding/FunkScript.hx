@@ -140,7 +140,9 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set("BUILD_TARGET",
 			#if windows "windows"
 			#elseif linux "linux"
-			#else null // Mac, mobile and html5 dont exist and will never do
+			#elseif mac "mac"
+			#elseif android "android"
+			#else null // ios and html5 dont exist and will never do
 			#end
 		);
 
@@ -154,7 +156,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
 			if(packageStr != '') packageStr += '.';
 			if (customName != null && !exists(customName)) {
-				warningPrint('importLib() is deprecated, use ``import as`` instead');
+				warningPrint('importLib() is deprecated, use ``import ... as`` instead');
 				set(customName, Type.resolveClass(packageStr + classStr));
 				return;
 			}

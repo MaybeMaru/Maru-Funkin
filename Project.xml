@@ -27,15 +27,15 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" vsync="false"/>
 
-	<!--Switch-specific-->
-	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
-
-	<!-- ______________________________ Funkdefines _____________________________ -->
+	<!-- ______________________________ Funkin Settings _____________________________ -->
 	
 	<!--If to have mod folders allowed to load on the game-->
 	<define name="MODS_ALLOWED" if="desktop"/>
+
+	<!--Enables tools for modding (like the console, editors, etc)-->
+	<define name="DEV_TOOLS" if="MODS_ALLOWED"/>
 
 	<!--If you want hxcodec videos to be used-->
 	<define name="VIDEOS_ALLOWED" unless="linux || mobile" if="cpp"/>
@@ -115,10 +115,6 @@
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
-
-	<!-- ______________________________ Android ______________________________ -->
-	<config:android gradle-version="7.5.1" if="android" />
-    <config:android gradle-plugin="7.3.1" if="android" />
 
 	<!-- _________________________________ Icons _______________________________ -->
 	
