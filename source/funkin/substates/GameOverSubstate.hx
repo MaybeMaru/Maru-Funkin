@@ -27,6 +27,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 			PlayState.instance.startTimer.cancel();
 		}
 
+		#if mobile MobileTouch.setMode(NONE); #end
+
 		final charName = PlayState?.instance?.boyfriend?.gameOverChar ?? "bf-dead";
 		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
 		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
@@ -71,12 +73,16 @@ class GameOverSubstate extends MusicBeatSubstate {
 			}
 		}
 
-		if (getKey('ACCEPT', JUST_PRESSED)) {
+		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
+		{
 			restartSong();
 		}
  
-		if (getKey('BACK', JUST_PRESSED)) {
-			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (getKey('BACK', JUST_PRESSED))
+		{
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+			
 			PlayState.deathCounter = 0;
 			PlayState.clearCache = true;
 			ModdingUtil.addCall('exitGameOver');

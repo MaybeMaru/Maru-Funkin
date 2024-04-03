@@ -46,6 +46,10 @@ class FlxFunkGame extends FlxGame
         
         super.create(_);
 
+        #if mobile
+        addChild(MobileTouch.touch = new MobileTouch());
+        #end
+
         addChild(Main.transition = transition = new Transition());
 
         #if FLX_SOUND_TRAY
@@ -54,10 +58,6 @@ class FlxFunkGame extends FlxGame
             removeChild(soundTray);
             addChild(soundTray);
         }
-        #end
-
-        #if mobile
-        addChild(MobileTouch.instance = new MobileTouch());
         #end
 
         #if DEV_TOOLS
@@ -78,8 +78,8 @@ class FlxFunkGame extends FlxGame
 
     override function update():Void
     {
-        if (!_state.active || !_state.exists)
-			return;
+        if (!_state.active) return;
+        else if (!_state.exists) return;
 
 		if (_nextState != null)
 			switchState();
@@ -97,7 +97,7 @@ class FlxFunkGame extends FlxGame
 		updateInput();
         
         #if mobile
-        MobileTouch.instance.update(elapsed);
+        MobileTouch.touch.update(elapsed);
         #end
 
 		#if FLX_SOUND_SYSTEM

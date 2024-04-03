@@ -86,9 +86,11 @@ class PlayState extends MusicBeatState
 	public var dialogueBox:DialogueBoxBase = null;
 
 	// Discord RPC variables
+	#if DISCORD_ALLOWED
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
+	#end
 	inline function formatDiff() return CoolUtil.formatStringUpper(curDifficulty); // For discord rpc
 
 	public var ghostTapEnabled:Bool = false;
@@ -99,6 +101,8 @@ class PlayState extends MusicBeatState
 
 	override public function create():Void {
 		instance = this;
+
+		#if mobile MobileTouch.setMode(NOTES); #end
 
 		if (clearCache) CoolUtil.clearCache(clearCacheData)
 		else {
@@ -137,12 +141,14 @@ class PlayState extends MusicBeatState
 
 		SONG = Song.checkSong(SONG, null, false);
 
+		#if DISCORD_ALLOWED
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
-		if (Character.getCharData(SONG.players[1]) != null) {
+		if (Character.getCharData(SONG.players[1]) != null)
 			iconRPC = Character.getCharData(SONG.players[1]).icon;
-		}
+
 		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC);
+		#end
 
 		// MAKE CHARACTERS
 		gfGroup = new SpriteGroup();
@@ -267,8 +273,8 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 
 		add(iconGroup);
-		iconGroup.add(iconP1);
-		iconGroup.add(iconP2);
+		iconGroup.add(iconP1); iconGroup.add(iconP2);
+		iconGroup.update(0.0); // Move the icons to the healthbar
 
 		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.weak(FlxG.width, 20));
 		add(scoreTxt);
@@ -453,7 +459,8 @@ class PlayState extends MusicBeatState
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
-		DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength);
+
+		#if DISCORD_ALLOWED DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength); #end
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -495,9 +502,11 @@ class PlayState extends MusicBeatState
 				Conductor.play();
 			}
 
+			#if DISCORD_ALLOWED
 			var presenceDetails = '${SONG.song} (${formatDiff()})';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
+			#end
 		}
 		super.closeSubState();
 	}
@@ -544,7 +553,7 @@ class PlayState extends MusicBeatState
 			if (canPause) {
 				if (startedCountdown) if (getKey('PAUSE', JUST_PRESSED)) {
 					openPauseSubState(true);
-					DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC);
+					#if DISCORD_ALLOWED DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC); #end
 				}
 			}
 
@@ -557,19 +566,19 @@ class PlayState extends MusicBeatState
 			#if DEV_TOOLS
 			if (justPressed.SIX) {
 				clearCacheData = {tempCache: false};
-				DiscordClient.changePresence("Stage Editor", null, null, true);
+				#if DISCORD_ALLOWED DiscordClient.changePresence("Stage Editor", null, null, true); #end
 				switchState(new StageDebug(stageData));
 			}
 
 			if (justPressed.SEVEN) {
 				clearCacheData = {tempCache: false};
 				switchState(new ChartingState());
-				DiscordClient.changePresence("Chart Editor", null, null, true);
+				#if DISCORD_ALLOWED DiscordClient.changePresence("Chart Editor", null, null, true); #end
 			}
 
 			if (justPressed.EIGHT) {
 				clearCacheData = {tempCache: false};
-				DiscordClient.changePresence("Character Editor", null, null, true);
+				#if DISCORD_ALLOWED DiscordClient.changePresence("Character Editor", null, null, true); #end
 	
 				if (FlxG.keys.pressed.SHIFT) {
 					if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
@@ -596,8 +605,11 @@ class PlayState extends MusicBeatState
 		ModdingUtil.addCall('updatePost', [elapsed]);
 	}
 
-	public function openGameOverSubstate() {
-		if (ModdingUtil.getCall("openGameOverSubstate")) return;
+	public function openGameOverSubstate():Void
+	{
+		if (ModdingUtil.getCall("openGameOverSubstate"))
+			return;
+		
 		camGame.clearFX(); camHUD.clearFX(); camOther.clearFX();
 		persistentUpdate = persistentDraw = false;
 		paused = true;
@@ -607,12 +619,11 @@ class PlayState extends MusicBeatState
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 
 		// Game Over doesn't get his own variable because it's only used here
-		DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC);
+		#if DISCORD_ALLOWED DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC); #end
 	}
 
-	inline public function snapCamera() {
+	inline public function snapCamera():Void
 		camGame.focusOn(camFollow.getPosition());
-	}
 
 	public var camMove:Bool = true;
 	
@@ -639,12 +650,12 @@ class PlayState extends MusicBeatState
 		#if DEV_TOOLS
 		if (inChartEditor) {
 			switchState(new ChartingState());
-			DiscordClient.changePresence("Chart Editor", null, null, true);
+			#if DISCORD_ALLOWED DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		}
 		else #end inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 	}
 
-	public function exitSong() {
+	public function exitSong():Void {
 		if (isStoryMode) {
 			campaignScore += songScore;
 			storyPlaylist.remove(storyPlaylist[0]);
@@ -658,7 +669,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function endWeek() {
+	public function endWeek():Void {
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
 			final weekData = WeekSetup.weekMap.get(storyWeek)?.data ?? null;
@@ -706,7 +717,7 @@ class PlayState extends MusicBeatState
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
 		final noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
-		final ratingData = ratingMap[noteRating];
+		final ratingData = ratingMap.get(noteRating);
 		songScore += ratingData.score;
 		noteTotal += ratingData.note;
 		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
@@ -732,13 +743,15 @@ class PlayState extends MusicBeatState
 		if (curBeat % gfSpeed == 0) gf.danceInBeat();
 	}
 
-	override public function beatHit(curBeat:Int):Void {
+	override public function beatHit(curBeat:Int):Void
+	{
 		super.beatHit(curBeat);
 		beatCharacters();
 		ModdingUtil.addCall('beatHit', [curBeat]);
 	}
 
-	override public function sectionHit(curSection:Int):Void {
+	override public function sectionHit(curSection:Int):Void
+	{
 		super.sectionHit(curSection);
 		if (Conductor.songPosition <= 0) curSection = 0;
 		curSectionData = SONG.notes[curSection];
@@ -760,7 +773,8 @@ class PlayState extends MusicBeatState
 		ModdingUtil.addCall('sectionHit', [curSection]);
 	}
 
-	override function destroy():Void {
+	override function destroy():Void
+	{
 		Conductor.setPitch(1, false);
 		Conductor.stop();
 		CoolUtil.destroyMusic();
@@ -825,6 +839,8 @@ class PlayState extends MusicBeatState
 	}
 
 	public function showUI(bool:Bool):Void {
+		#if mobile MobileTouch.setMode(bool ? NOTES : NONE); #end
+		
 		final displayObjects:Array<FlxBasic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
 		displayObjects.fastForEach((object, i) -> {
 			object.visible = bool;

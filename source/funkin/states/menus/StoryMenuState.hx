@@ -30,7 +30,8 @@ class StoryMenuState extends MusicBeatState {
 	inline function getCurData() 	return storyWeeks[curWeek].data;
 	inline function getWeekChars() 	return getCurData().storyCharacters;
 
-	override function create():Void {
+	override function create():Void
+	{
 		if (FlxG.sound.music == null)
 			CoolUtil.playMusic('freakyMenu');
 
@@ -48,9 +49,9 @@ class StoryMenuState extends MusicBeatState {
 
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 		
-		#if cpp // Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+		// Updating Discord Rich Presence
+		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
+		#if mobile MobileTouch.setMode(MENU); #end
 
 		var weekID:Int = 0;
 		for (i in WeekSetup.getWeekList()) {

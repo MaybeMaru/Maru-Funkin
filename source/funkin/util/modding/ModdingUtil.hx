@@ -134,8 +134,7 @@ class ModdingUtil {
     }
 
     inline public static function addScriptFolder(folder:String) {
-        final list = getScriptList(folder);
-        addScriptList(list);
+        addScriptList(getScriptList(folder));
     }
 
     inline public static function addScriptList(list:Array<String>, ?tags:Array<String>) {
@@ -209,7 +208,7 @@ class ModdingUtil {
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
     inline public static function print(text:String, type:PrintType):Void {
         #if mobile
-        trace(text);
+        trace("[" + type + "] " + text);
         #else
         Main.console.print(text, type);
         #end
@@ -251,12 +250,25 @@ class ModdingUtil {
         return subFolderList;
     }
 
-    public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String> {
-        final assetScripts = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
-        final modScripts = Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods);
-        
-        final scripts = modScripts.concat(assetScripts); // mods go firts cuz reasons
-        return overrideScripts(scripts); 
+    public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String>
+    {
+        final scripts = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
+
+        #if !desktop
+        var library = folder.split("/")[0];
+        switch (library) {
+            case "images" | "data" | "sounds" | "fonts":
+            case _: scripts.fastForEach((script, i) -> scripts.unsafeSet(i, library + ":" + script));
+        }
+        #end
+
+        #if MODS_ALLOWED
+        var modScripts = Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods);
+        scripts.fastForEach((script, i) -> modScripts.push(script));
+        return overrideScripts(modScripts);
+        #else
+        return scripts;
+        #end
     }
 
     static function overrideScripts(scripts:Array<String>) {
@@ -266,7 +278,8 @@ class ModdingUtil {
         for (i in scripts) {
             final parts = i.split("/");
             final base = parts[parts.length - 2] + "/" + parts[parts.length - 1];
-            if (_overrides.contains(base)) continue; // File has override already
+            if (_overrides.contains(base)) // File has override already
+                continue;
 
             _overrides.push(base);
             list.push(i);

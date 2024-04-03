@@ -31,11 +31,15 @@ class FreeplayState extends MusicBeatState {
 
 	//var inputText:SongSearch;
 
-	override function create():Void {
-		if (FlxG.sound.music == null) CoolUtil.playMusic('freakyMenu');
-		FlxG.mouse.visible = true;
+	override function create():Void
+	{
+		if (FlxG.sound.music == null)
+			CoolUtil.playMusic('freakyMenu');
+		
+		FlxG.mouse.visible = #if mobile false; #else true; #end
+		#if mobile MobileTouch.setMode(MENU); #end
 
-		#if cpp		// Updating Discord Rich Presence
+		#if DISCORD_ALLOWED // Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -63,6 +67,7 @@ class FreeplayState extends MusicBeatState {
 		});
 
 		bg = new FunkinSprite('menuDesat');
+		bg.screenCenter();
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<MenuAlphabet>();

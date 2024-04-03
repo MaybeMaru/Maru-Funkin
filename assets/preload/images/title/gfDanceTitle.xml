@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="gfDanceTitle.png" width="3630" height="2649">
   <SubTexture name="gfDance0002" x="4" y="4"  width="721" height="646" frameX="-0" frameY="-16" frameWidth="721" frameHeight="662"/>
   <SubTexture name="gfDance0003" x="733" y="4"  width="716" height="646" frameX="-2" frameY="-16" frameWidth="721" frameHeight="662"/>

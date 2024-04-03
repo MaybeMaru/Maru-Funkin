@@ -40,11 +40,9 @@ class Sustain extends BasicNote
     public var missedPress(default, set):Bool = false;
     inline function set_missedPress(value:Bool):Bool {
         pressed = false;
-        FlxG.signals.postUpdate.addOnce(function () {
-            moving = true;        
-            color = (value && mustHit) ? MISS_COLOR : 0xFFFFFFFF;
-            offset.y = cutHeight * _approachCos;
-        });
+        moving = true;        
+        color = (value && mustHit) ? MISS_COLOR : 0xFFFFFFFF;
+        offset.y = cutHeight * _approachCos;
         return missedPress = value;
     }
 

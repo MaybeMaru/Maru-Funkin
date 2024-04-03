@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="titleEnter.png" width="1011" height="260">
   <SubTexture name="ENTER PRESSED0000" x="4" y="4"  width="1002" height="79" frameX="-0" frameY="-0" frameWidth="1029" frameHeight="79"/>
   <SubTexture name="ENTER PRESSED0001" x="4" y="91"  width="1002" height="79" frameX="-0" frameY="-0" frameWidth="1029" frameHeight="79"/>

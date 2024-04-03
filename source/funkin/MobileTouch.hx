@@ -9,9 +9,27 @@ import flixel.input.FlxInput;
 
 class MobileTouch extends Sprite
 {
-    public static var instance:MobileTouch;
+    public static var touch:MobileTouch;
 
-    var buttons:Array<MobileButton> = [];
+    public var mode(default, set):TouchMode = NONE;
+    function set_mode(value:TouchMode):TouchMode
+    {
+        noteButtons.fastForEach((button, i) -> button.visible = value == NOTES);
+        uiButtons.fastForEach((button, i) -> button.visible = value == MENU);
+        
+        return mode = value;
+    }
+
+    public static function setMode(mode:TouchMode) {
+        touch.mode = mode;
+    }
+
+    final noteButtons:Array<MobileButton> = [];
+    final uiButtons:Array<MobileButton> = [];
+
+    public function getButton(id:MobileButtonID):MobileButton {
+        return uiButtons.unsafeGet(cast id);
+    }
 
     public function new() @:privateAccess {
         super();
@@ -24,6 +42,7 @@ class MobileTouch extends Sprite
             var length:Int = 4;
             var outline:Int = 5;
             
+            // Note buttons
             for (i in 0...length) {
                 var button = new MobileButton();
                 button.alpha = 0;
@@ -35,25 +54,58 @@ class MobileTouch extends Sprite
                 button.addChild(new Bitmap(bmp));
                 button.x = bmp.width * i;
     
-                buttons.push(button);
+                noteButtons.push(button);
                 addChild(button);
 
                 button.input = FlxG.keys.getKey(switch(i) {
-                    case 0: LEFT;
-                    case 1: DOWN;
-                    case 2: UP;
-                    case _: RIGHT;
+                    case 0: D;
+                    case 1: F;
+                    case 2: J;
+                    case _: K;
                 });
             }
+
+            final images:Array<String> = ["left", "right", "up", "down", "accept", "back", "pause"];
+            final inputs:Array<FlxKey> = [LEFT, RIGHT, UP, DOWN, ENTER, ESCAPE, BACKSPACE];
+
+            // UI buttons
+            for (i in 0...7)
+            {
+                var button = new MobileButton();
+                button.alpha = 0.2;
+                
+                var bitmap = OpenFlAssets.getBitmapData('assets/images/ui/ui-mobile-' + images[i] + '.png', false);
+                button.addChild(new Bitmap(bitmap));
+                button.input = FlxG.keys.getKey(inputs[i]);
+
+                button.scaleX = button.scaleY = (Math.min(w, h) / Math.min(bitmap.width, bitmap.height)) * 0.23;
+                button.x = button.scaleX * bitmap.width * i;
+                
+                uiButtons.push(button);
+                addChild(button);
+            }
+
+            mode = MENU;
         });
     }
 
-    public function update(elapsed:Float) {
-        buttons.fastForEach((button, i) -> {
-            button.update(elapsed);
-            if (!button.pressed)
-                button.alpha -= elapsed * 2;
-        });
+    public function update(elapsed:Float)
+    {
+        switch(mode) {
+            case NONE:
+            case NOTES:
+                noteButtons.fastForEach((button, i) -> {
+                    button.update(elapsed);
+                    if (button.pressed) button.alpha = 0.6;
+                    else                button.alpha -= elapsed * 2;
+                });
+            case MENU:
+                uiButtons.fastForEach((button, i) -> {
+                    button.update(elapsed);
+                    if (button.pressed) button.alpha = 0.4;
+                    else                button.alpha = FlxMath.lerp(button.alpha, 0.2, elapsed);
+                });
+        }
     }
 
     public static function released():Bool {
@@ -77,6 +129,7 @@ class MobileTouch extends Sprite
     }
 }
 
+// Simple openfl sprite that can make virtual key inputs from mobile touch inputs
 class MobileButton extends Sprite
 {
     public var pressed(default, null):Bool = false;
@@ -89,8 +142,6 @@ class MobileButton extends Sprite
         super();
 
         addEventListener(TouchEvent.TOUCH_BEGIN, function (e) {
-            alpha = 0.6;
-
             _begin = true;
             justPressed = true;
             pressed = true;
@@ -101,16 +152,16 @@ class MobileButton extends Sprite
             pressed = false;
         }
 
-        //addEventListener(TouchEvent.TOUCH_END, endTouch);
-        //addEventListener(TouchEvent.TOUCH_OUT, endTouch);
-        addEventListener(TouchEvent.TOUCH_OVER, endTouch);
+        addEventListener(TouchEvent.TOUCH_END, endTouch);
+        addEventListener(TouchEvent.TOUCH_OUT, endTouch);
     }
 
     public function update(elapsed:Float) {
         if (justPressed) if (!_begin) justPressed = false;
         if (_begin) _begin = false;
         
-        input.current = justPressed ? FlxInputState.JUST_PRESSED : pressed ? FlxInputState.PRESSED : FlxInputState.RELEASED;
+        if (input != null)
+            input.current = justPressed ? FlxInputState.JUST_PRESSED : pressed ? FlxInputState.PRESSED : FlxInputState.RELEASED;
     }
 }
 
@@ -119,4 +170,15 @@ enum abstract TouchMode(Int) from Int to Int
     var NONE:Int = 0;
     var NOTES:Int = 1;
     var MENU:Int = 2;
+}
+
+enum abstract MobileButtonID(Int) from Int to Int
+{
+    var LEFT:Int = 0;
+    var RIGHT:Int = 1;
+    var UP:Int = 2;
+    var DOWN:Int = 3;
+    var ACCEPT:Int = 4;
+    var BACK:Int = 5;
+    var PAUSE:Int = 6;
 }

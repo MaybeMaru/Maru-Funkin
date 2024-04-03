@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="logoBumpin.png" width="1421" height="897">
   <SubTexture name="logo bumpin0001" x="4" y="4"  width="722" height="447" frameX="-120" frameY="-109" frameWidth="939" frameHeight="703"/>
   <SubTexture name="logo bumpin0003" x="4" y="459"  width="697" height="434" frameX="-130" frameY="-116" frameWidth="939" frameHeight="703"/>

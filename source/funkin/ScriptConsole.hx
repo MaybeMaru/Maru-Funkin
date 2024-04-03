@@ -14,11 +14,11 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.Lib;
 
-enum abstract PrintType(Int) from Int to Int {
-    var NONE = 0;
-    var ADD = 1;
-    var ERROR = 2;
-    var WARNING = 3;
+enum abstract PrintType(String) to String {
+    var NONE = "";
+    var ADD = "ADD";
+    var ERROR = "ERROR";
+    var WARNING = "WARNING";
 }
 
 class Print extends Sprite {

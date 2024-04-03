@@ -15,14 +15,14 @@ class MainMenuState extends MusicBeatState {
 	var curSelected:Int = 0;
 	var menuItems:FlxTypedGroup<FunkinSprite>;
 
-	override function create():Void {
-		#if cpp 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+	override function create():Void
+	{
+		// Updating Discord Rich Presence
+		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
 
-		if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 			CoolUtil.playMusic('freakyMenu');
-		}
+
 		persistentUpdate = persistentDraw = true;
 		FlxG.mouse.visible = false;
 
@@ -94,7 +94,7 @@ class MainMenuState extends MusicBeatState {
 				switchState(new TitleState());
 			}
 
-			#if desktop
+			#if DEV_TOOLS
 			if (FlxG.keys.justPressed.SEVEN) {
 				selectedSomethin = true;
 				switchState(new funkin.states.editors.ModSetupState());

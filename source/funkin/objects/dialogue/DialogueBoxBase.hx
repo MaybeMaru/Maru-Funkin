@@ -77,7 +77,7 @@ class DialogueBoxBase extends Group {
 			ModdingUtil.addCall('startDialogue');
 		}
 
-		if (Controls.getKey('ACCEPT', JUST_PRESSED) && dialogueStarted && !isEnding) {
+		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end && dialogueStarted && !isEnding) {
 			if (!textFinished) {
 				skipCallback();
 				ModdingUtil.addCall('skipDialogueLine', [jsonParsed.lines[0]]);

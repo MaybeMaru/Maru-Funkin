@@ -5,7 +5,9 @@ class OptionsState extends MusicBeatState {
 	public static var fromPlayState:Bool = false;
 	var optionItems:Array<String> = [
 		'Preferences', 
+		#if !mobile
 		'Controls',
+		#end
 		'Latency'
 	];
 	var grpOptionsItems:TypedGroup<Alphabet>;
@@ -34,7 +36,7 @@ class OptionsState extends MusicBeatState {
         add(bg);
 
 		var optionsTitle:FunkinSprite = new FunkinSprite('options/titleOptions', [0,FlxG.height*0.08], [0,0]);
-		optionsTitle.addAnim('loop', 'Options! instancia 1', 24, true);
+		optionsTitle.addAnim('loop', 'Options!', 24, true);
 		optionsTitle.playAnim('loop');
 		optionsTitle.screenCenter(X);
 		add(optionsTitle);
@@ -112,7 +114,9 @@ class OptionsState extends MusicBeatState {
 	function openOptions():Void {
 		switch (optionItems[curSelected]) {
 			case 'Preferences':	switchState(new funkin.states.options.PreferencesState());
+			#if !mobile
 			case 'Controls':	switchState(new funkin.states.options.ControlsState());
+			#end
 			case 'Latency':		switchState(new funkin.states.options.LatencyState());
 			#if MODS_ALLOWED
 			case 'Mod Folders':	switchState(new funkin.states.options.ModFoldersState());
