@@ -65,7 +65,7 @@ class TitleState extends MusicBeatState {
 		updateColor(0.0);
 		updatePitch(0.0);
 
-		titleText = new FunkinSprite('title/titleEnter', [100,FlxG.height*0.8]);
+		titleText = new FunkinSprite(#if mobile 'mobile/' + #end 'title/titleEnter', [100,FlxG.height*0.8]);
 		titleText.addAnim('idle', 'Press Enter to Begin');
 		titleText.addAnim('press', 'ENTER PRESSED', 24, true);
 		titleText.playAnim('idle');

@@ -13,12 +13,13 @@ class MainMenuState extends MusicBeatState {
 		'donate'
 	];
 	var curSelected:Int = 0;
-	var menuItems:FlxTypedGroup<FunkinSprite>;
+	var menuItems:TypedGroup<FunkinSprite>;
 
 	override function create():Void
 	{
 		// Updating Discord Rich Presence
 		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
+		#if mobile MobileTouch.setMode(NONE); #end
 
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 			CoolUtil.playMusic('freakyMenu');
@@ -41,9 +42,10 @@ class MainMenuState extends MusicBeatState {
 		magenta.setGraphicSize(Std.int(magenta.width * 1.15));
 		magenta.updateHitbox();
 		magenta.screenCenter();
-		if (getPref('flashing-light'))	add(magenta);
+		if (getPref('flashing-light'))
+			add(magenta);
 
-		menuItems = new FlxTypedGroup<FunkinSprite>();
+		menuItems = new TypedGroup<FunkinSprite>();
 		add(menuItems);
 		
 		for (i in 0...optionShit.length) {
@@ -76,23 +78,38 @@ class MainMenuState extends MusicBeatState {
 
 	var selectedSomethin:Bool = false;
 
-	override function update(elapsed:Float):Void {
-		if (FlxG.sound.music.volume < 0.8) {
+	override function update(elapsed:Float):Void
+	{
+		if (FlxG.sound.music.volume < 0.8)
 			FlxG.sound.music.volume += 0.5 * elapsed;
-		}
 
 		if (!selectedSomethin) {
-			if (getKey('UI_UP', JUST_PRESSED)) {
+			#if mobile
+			if (MobileTouch.justPressed())
+			{
+				menuItems.members.fastForEach((item, i) -> {
+					if (FlxG.mouse.overlaps(item)) {
+						if (item.ID == curSelected) clickOption();
+						else						changeItem((menuItems.length - curSelected) + item.ID);
+						break;
+					}
+				});
+			}
+			#else
+			if (getKey('UI_UP', JUST_PRESSED))
 				changeItem(-1);
-			}
-			if (getKey('UI_DOWN', JUST_PRESSED)) {
+
+			if (getKey('UI_DOWN', JUST_PRESSED))
 				changeItem(1);
-			}
+
+			if (getKey('ACCEPT', JUST_PRESSED))
+				clickOption();
 
 			if (getKey('BACK', JUST_PRESSED)) {
 				selectedSomethin = true;
 				switchState(new TitleState());
 			}
+			#end
 
 			#if DEV_TOOLS
 			if (FlxG.keys.justPressed.SEVEN) {
@@ -100,41 +117,39 @@ class MainMenuState extends MusicBeatState {
 				switchState(new funkin.states.editors.ModSetupState());
 			}
 			#end
-
-			if (getKey('ACCEPT', JUST_PRESSED)) {
-				if (optionShit[curSelected] == 'donate') {
-					CoolUtil.openUrl("https://ninja-muffin24.itch.io/funkin");
-				}
-				else {
-					selectedSomethin = true;
-					CoolUtil.playSound('confirmMenu');
-					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
-
-					menuItems.forEach(function(spr:FunkinSprite) {
-						if (curSelected != spr.ID) {
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween) {
-									spr.destroy();
-								}
-							});
-						}
-						else {
-							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker) {
-								var item:String = optionShit[curSelected];
-								trace('${item.toUpperCase()} Menu Selected');
-								selectItem(item);
-							});
-						}
-					});
-				}
-			}
 		}
 
 		super.update(elapsed);
 	}
 
-	dynamic function selectItem(item:String) {
+	#if MODS_ALLOWED dynamic #end function clickOption() {
+		if (optionShit[curSelected] != 'donate') {
+			selectedSomethin = true;
+			CoolUtil.playSound('confirmMenu');
+			FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+
+			menuItems.forEach((spr:FunkinSprite) -> {
+				if (curSelected != spr.ID) {
+					FlxTween.tween(spr, {alpha: 0}, 0.4, {
+						ease: FlxEase.quadOut,
+						onComplete: function(twn:FlxTween) {
+							spr.destroy();
+						}
+					});
+				}
+				else {
+					FlxFlicker.flicker(spr, 1, 0.06, false, false, (f) -> {
+						var item:String = optionShit[curSelected];
+						trace('${item.toUpperCase()} Menu Selected');
+						selectItem(item);
+					});
+				}
+			});
+		}
+		else CoolUtil.openUrl("https://ninja-muffin24.itch.io/funkin");
+	}
+
+	#if MODS_ALLOWED dynamic #end function selectItem(item:String) {
 		switch (item) {
 			case 'story mode':
 				switchState(new StoryMenuState());
@@ -148,11 +163,11 @@ class MainMenuState extends MusicBeatState {
 		}
 	}
 
-	dynamic function changeItem(add:Int = 0):Void {
+	#if MODS_ALLOWED dynamic #end function changeItem(add:Int = 0):Void {
 		curSelected = FlxMath.wrap(curSelected + add, 0, menuItems.length - 1);
 		if (add != 0) CoolUtil.playSound('scrollMenu');
 
-		menuItems.forEach(function(spr:FunkinSprite) {
+		menuItems.forEach((spr:FunkinSprite) -> {
 			spr.playAnim('idle');
 			if (spr.ID == curSelected) {
 				spr.playAnim('selected');
@@ -162,7 +177,7 @@ class MainMenuState extends MusicBeatState {
 			spr.screenCenter(X);
 		});
 
-		menuItems.sort(function(int:Int, obj1:FunkinSprite, obj2:FunkinSprite) {
+		menuItems.sort((int:Int, obj1:FunkinSprite, obj2:FunkinSprite) -> {
 			return FlxSort.byValues(FlxSort.DESCENDING, obj1.ID-curSelected, obj2.ID-curSelected);
 		});
 	}

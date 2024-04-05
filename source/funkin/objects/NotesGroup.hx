@@ -355,7 +355,7 @@ class NotesGroup extends Group
 			final inStart:Bool = game.startingSong;
 			if (!game.inCutscene) if ((Conductor.playing || inStart || Conductor.songPosition < game.songLength))
 			{
-				Conductor.songPosition += elapsed * 1000;
+				Conductor.songPosition = Conductor.songPosition + (elapsed * 1000);
 				if (game.startedCountdown) if (inStart) {
 					if (Conductor.songPosition >= 0)
 						game.startSong();
@@ -369,7 +369,7 @@ class NotesGroup extends Group
 		}
 		else
 		{
-			Conductor.songPosition += elapsed * 1000;
+			Conductor.songPosition = Conductor.songPosition + (elapsed * 1000);
 			if (!Conductor.inst.playing) Conductor.play();
 			if (Conductor.songPosition % Conductor.stepCrochet <= 5)
 				Conductor.autoSync();

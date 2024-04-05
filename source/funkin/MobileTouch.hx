@@ -74,7 +74,7 @@ class MobileTouch extends Sprite
                 var button = new MobileButton();
                 button.alpha = 0.2;
                 
-                var bitmap = OpenFlAssets.getBitmapData('assets/images/ui/ui-mobile-' + images[i] + '.png', false);
+                var bitmap = OpenFlAssets.getBitmapData('assets/images/mobile/buttons/' + images[i] + '.png', false);
                 button.addChild(new Bitmap(bitmap));
                 button.input = FlxG.keys.getKey(inputs[i]);
 
@@ -85,7 +85,7 @@ class MobileTouch extends Sprite
                 addChild(button);
             }
 
-            mode = MENU;
+            mode = NONE;
         });
     }
 

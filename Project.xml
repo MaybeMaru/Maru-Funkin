@@ -118,16 +118,7 @@
 
 	<!-- _________________________________ Mobile _______________________________ -->
 	<section if="mobile">
-		<assets path='art/mobile/titleEnter.png' rename='assets/images/title/titleEnter.png'/>
-		<assets path='art/mobile/titleEnter.xml' rename='assets/images/title/titleEnter.xml'/>
-
-		<assets path='art/mobile/ui-mobile-left.png' rename='assets/images/ui/ui-mobile-left.png'/>
-		<assets path='art/mobile/ui-mobile-right.png' rename='assets/images/ui/ui-mobile-right.png'/>
-		<assets path='art/mobile/ui-mobile-up.png' rename='assets/images/ui/ui-mobile-up.png'/>
-		<assets path='art/mobile/ui-mobile-down.png' rename='assets/images/ui/ui-mobile-down.png'/>
-		<assets path='art/mobile/ui-mobile-accept.png' rename='assets/images/ui/ui-mobile-accept.png'/>
-		<assets path='art/mobile/ui-mobile-back.png' rename='assets/images/ui/ui-mobile-back.png'/>
-		<assets path='art/mobile/ui-mobile-pause.png' rename='assets/images/ui/ui-mobile-pause.png'/>
+		<assets path="art/mobile" rename="assets/images/mobile"/>
 	</section>
 
 	<!-- _________________________________ Icons _______________________________ -->

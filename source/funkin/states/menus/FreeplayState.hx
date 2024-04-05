@@ -228,7 +228,7 @@ class FreeplayState extends MusicBeatState {
 	}
 
 	// For hscript
-	dynamic function selectSong(toChart:Bool):Void {
+	#if MODS_ALLOWED dynamic #end function selectSong(toChart:Bool):Void {
 		loadSong(toChart);
 	}
 
