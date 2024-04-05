@@ -75,20 +75,17 @@ class FreeplayState extends MusicBeatState {
 
 		songs.fastForEach((song, i) -> {
 			var icon:HealthIcon = null;
-			ModdingUtil.runFunctionMod(song.mod, function () {
-				icon = new HealthIcon(song.char);
-			});
+			ModdingUtil.runFunctionMod(song.mod, () -> icon = new HealthIcon(song.char));
 
 			final _width = Alphabet.spaceWidth * song.song.length;
 			final _icoWidth = icon.width * 1.1 + 10;		
 			final _scale:Float = _icoWidth + _width > FlxG.width ? (FlxG.width - _icoWidth) / _width : 1;
 
 			var songText:MenuAlphabet = new MenuAlphabet(0, (70 * i) + 30, song.song, true, 0, _scale);
+			songText.letterArray.fastForEach((char, i) -> char.scale.y = 1.0);
 			songText.targetY = i;
 			songText.setTargetPos();
 			grpSongs.add(songText);
-			for (char in songText.letterArray)
-				char.scale.y = 1;
 
 			// using a FlxGroup is too much fuss!
 			icon.sprTracker = songText;
@@ -114,8 +111,8 @@ class FreeplayState extends MusicBeatState {
 		//inputText = new SongSearch();
 		//add(inputText);
 		
-		for (song in grpSongs)  song.setTargetPos();
-		for (icon in iconArray) icon.setSprTrackerPos();
+		grpSongs.members.fastForEach((song, i) -> song.setTargetPos());
+		iconArray.fastForEach((icon, i) -> icon.setSprTrackerPos());
 
 		super.create();
 	}
@@ -133,14 +130,13 @@ class FreeplayState extends MusicBeatState {
 	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String, mod:String):Void {
 		songCharacters = songCharacters ?? ['bf'];
 		for (i in 0...songs.length) {
-			var songIcon:String = songCharacters[cast FlxMath.bound(i, 0, songCharacters.length-1)];
+			var songIcon:String = songCharacters[Std.int(FlxMath.bound(i, 0, songCharacters.length-1))];
 			addSong(songs[i], songIcon, week, i, mod);
 		}
 	}
 
-	inline function formatColor(weekName:String, id:Int) {
-		return '${weekName}_songID_$id';
-	}
+	inline function formatColor(weekName:String, id:Int):String
+		return weekName + '_songID_$id';
 
 	var lerpColor:FlxColorFix;
 	var targetColor:FlxColor;
@@ -150,14 +146,14 @@ class FreeplayState extends MusicBeatState {
 		return coolColors.get(formatColor(curSongMeta.week, curSongMeta.ID));
 	}
 
-	var _lastMusic:String = "";
+	var loadedSong:String = "";
 	var lerpPosition:Float = 0.0;
 
-	override function update(elapsed:Float):Void {
+	override function update(elapsed:Float):Void
+	{
 		super.update(elapsed);
-		if (FlxG.sound.music.volume < 0.7) {
+		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
 
 		lerpScore = Math.floor(CoolUtil.coolLerp(lerpScore, intendedScore, 0.4));
 		lerpColor.lerp(targetColor ?? FlxColor.WHITE, 0.045, true);
@@ -178,20 +174,21 @@ class FreeplayState extends MusicBeatState {
 			switchState(new MainMenuState());
 		}
 
-		#if PRELOAD_ALL
+		#if desktop
 		if(FlxG.keys.justPressed.ONE) {
-			final targetMusic = songs[curSelected].song;
-			if (targetMusic != _lastMusic) {
+			
+			final curSong = cast songs[curSelected];
+			if (curSong.song != loadedSong)
+			{
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
-				FunkThread.run(function () { // Make a new thread to load the music
-					FlxG.sound.playMusic(Paths.inst(targetMusic, true), 0);
-				});
-				_lastMusic = targetMusic;
 
-			} else if (FlxG.sound.music != null) {
-				FlxG.sound.music.time = FlxG.sound.music.volume = 0;
+				// Make a new thread to load the music
+				FunkThread.run(() -> ModdingUtil.runFunctionMod(songs[curSelected].mod, () -> FlxG.sound.playMusic(Paths.inst(curSong.song), 0)));
+				loadedSong = curSong.song;
 			}
+			else if (FlxG.sound.music != null)
+				FlxG.sound.music.time = FlxG.sound.music.volume = 0;
 		}
 		#end
 
@@ -276,9 +273,7 @@ class FreeplayState extends MusicBeatState {
 			item.alpha = (item.targetY == 0) ? 1 : 0.6;
 		});
 
-		for (i in iconArray)
-			i.alpha = 0.6;
-		
+		iconArray.fastForEach((icon, i) -> icon.alpha = 0.6);
 		iconArray[curSelected].alpha = 1;
 		targetColor = getBgColor();
 	}

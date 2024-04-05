@@ -227,19 +227,24 @@ class NotesGroup extends Group
 		for (i in 0...15)
 			notes.members.push(null);
 	
-		for (section in SONG.notes) {
-			for (songNotes in section.sectionNotes) {
-				final strumTime:Float = songNotes[0];
-				final susLength:Null<Float> = songNotes[2];
-				if ((susLength != null ? strumTime + susLength : strumTime) < Conductor.songPosition) continue; // Save on creating missed notes
+		SONG.notes.fastForEach((section, i) ->
+		{
+			for (songNotes in section.sectionNotes)
+			{
+				var strumTime:Float = songNotes[0];
+				var initNoteData:Int = songNotes[1];
+				var susLength:Float = songNotes[2] ?? 0;
 				
-				final noteData:Int = Std.int(songNotes[1] % Conductor.NOTE_DATA_LENGTH);
-				final noteType:String = NoteUtil.getTypeName(songNotes[3]);
-				final mustPress:Bool = section.mustHitSection ? songNotes[1] < Conductor.NOTE_DATA_LENGTH : songNotes[1] >= Conductor.NOTE_DATA_LENGTH;
-				final targetStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
-				final skin = NoteUtil.getTypeJson(noteType)?.skin ?? SkinUtil.curSkin;
+				if ((strumTime + susLength) < Conductor.songPosition) continue; // Save on creating missed notes
+				if (initNoteData < 0) continue; // Negative notes arent supported
 
-				final note:Note = new Note(noteData, strumTime, skin);
+				var noteData:Int = initNoteData % Conductor.NOTE_DATA_LENGTH;
+				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
+				var mustPress:Bool = section.mustHitSection ? initNoteData < Conductor.NOTE_DATA_LENGTH : initNoteData >= Conductor.NOTE_DATA_LENGTH;
+				var targetStrum:NoteStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
+				var skin:String = NoteUtil.getTypeJson(noteType)?.skin ?? SkinUtil.curSkin;
+
+				var note:Note = new Note(noteData, strumTime, skin);
 				note.targetStrum = targetStrum;
 				note.mustPress = mustPress;
 				note.noteType = noteType;
@@ -247,7 +252,7 @@ class NotesGroup extends Group
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
-					final sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
+					var sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
 					sustain.noteSpeed = songSpeed;
 					
 					// Too short sustains shouldnt be added
@@ -268,19 +273,18 @@ class NotesGroup extends Group
 			}
 
 			section.sectionEvents.fastForEach((e, i) -> {
-				final strumTime:Float = e[0];
-				final eventName:String = e[1];
-				final eventValues:Array<Dynamic> = e[2];
-
-				final event:Event = new Event(strumTime, eventName, eventValues);
-				events.push(event);
+				var strumTime:Float = e[0];
+				var eventName:String = e[1];
+				var eventValues:Array<Dynamic> = e[2];
+				
+				events.push(new Event(strumTime, eventName, eventValues));
 
 				//	Add event for scripts
 				if (!songEvents.contains(eventName)) {
 					songEvents.push(eventName);
 				}
 			});
-		}
+		});
 
 		scrollSpeed = songSpeed;
 
@@ -294,16 +298,14 @@ class NotesGroup extends Group
 		{
 			//Notetype Scripts
 			ModdingUtil.getSubFolderScriptList('data/notetypes', [curSong]).fastForEach((script, i) -> {
-				if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1])) {
+				if (songNotetypes.contains(script.split('.hx')[0].split('notetypes/')[1]))
 					ModdingUtil.addScript(script);
-				}
 			});
 			
 			//Event Scripts
 			ModdingUtil.getSubFolderScriptList('data/events', [curSong]).fastForEach((script, i) -> {
-				if (songEvents.contains(script.split('.hx')[0].split('events/')[1])) {
+				if (songEvents.contains(script.split('.hx')[0].split('events/')[1]))
 					ModdingUtil.addScript(script);
-				}
 			});
 		}
 

@@ -274,7 +274,7 @@ class PlayState extends MusicBeatState
 
 		add(iconGroup);
 		iconGroup.add(iconP1); iconGroup.add(iconP2);
-		iconGroup.update(0.0); // Move the icons to the healthbar
+		healthBar.drawComplex(camGame); iconGroup.update(0.0); // Move the icons to the healthbar
 
 		scoreTxt = new FlxFunkText(0, healthBar.y + 30, "", FlxPoint.weak(FlxG.width, 20));
 		add(scoreTxt);
@@ -806,24 +806,23 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function switchChar(type:String, newCharName:String) {
+	public function switchChar(type:String, newCharName:String):Void {
 		final targetChar:Character = switch(type = type.toLowerCase().trim()) {
 			case 'dad': dad;
 			case 'gf' | 'girlfriend': gf;
 			default: boyfriend;
 		}
 
-		if (targetChar.curCharacter == newCharName) return; // Is already that character
+		if (targetChar.curCharacter == newCharName) // Is already that character
+			return;
 
 		final newChar:Character = new Character(0, 0, newCharName,targetChar.isPlayer).copyStatusFrom(targetChar);
 		if (targetChar.iconSpr != null) targetChar.iconSpr.makeIcon(newChar.icon);
 		
 		// Clear character group
-		targetChar.callScript("destroyChar", [targetChar, newChar, newCharName]);
 		final group = targetChar.group;
-		group.members.fastForEach((object, i) -> {
-			object.destroy();
-		});
+		targetChar.callScript("destroyChar", [targetChar, newChar, newCharName]);
+		group.members.fastForEach((object, i) -> object.destroy());
 
 		// Character script
 		group.clear();

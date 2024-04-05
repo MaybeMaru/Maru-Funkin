@@ -1,22 +1,22 @@
-var cutsceneTankman_Body:FunkinSprite;
-var cutsceneTankman_Head:FunkinSprite;
-var gfFaceplant:Bool = false;
+var cutsceneTankman_Body;
+var cutsceneTankman_Head;
+var gfFaceplant = false;
 
 // Cutscene stuff
-var demonGf:FunkinSprite;
-var john:FunkinSprite;
-var steve:FunkinSprite;
-var demonBg:FlxSprite;
-var beef:FlxSpriteExt;
-var geef:FunkinSprite;
+var demonGf;
+var john;
+var steve;
+var demonBg;
+var beef;
+var geef;
 
-var loadedCutsceneAssets:Bool = false;
-
-function create() {
-    if (PlayState.isStoryMode && !PlayState.seenCutscene) {
+function create()
+{
+    if (PlayState.isStoryMode && !PlayState.seenCutscene)
+    {
         State.inCutscene = true;
-        var censored:Bool = !getPref('naughty');
-        var censorStr:String = censored ? '-censor' : '';
+        var censored = !getPref('naughty');
+        var censorStr = censored ? '-censor' : '';
 
         cutsceneTankman_Body = new FunkinSprite('tankmanCutscene_body', [State.dad.x, State.dad.y + 155], [1,1]);
         cutsceneTankman_Body.addAnim('godEffingDamnIt', 'body/BODY_3_10');
@@ -53,34 +53,36 @@ function create() {
         john.visible = steve.visible = false;
         demonGf.playAnim('dancing');
 
-        loadedCutsceneAssets = true;
-
-        initShader('demon_blur', 'demon_blur');
-        setShaderFloat('demon_blur', 'u_size', 0);
-        setShaderFloat('demon_blur', 'u_alpha', 0);
-        setCameraShader(State.camGame, 'demon_blur');
+        if (BUILD_TARGET != "android")
+        {
+            initShader('demon_blur', 'demon_blur');
+            setShaderFloat('demon_blur', 'u_size', 0);
+            setShaderFloat('demon_blur', 'u_alpha', 0);
+            setCameraShader(State.camGame, 'demon_blur');
+        }
 
         gfFaceplant = FlxG.random.bool(10);
-        if (gfFaceplant) {
+        if (gfFaceplant)
+        {
             geef = new FunkinSprite("cutscenes/faceplantGf", [600,500], [1.1,1.1]);
             geef.addAnim('faceplant', 'girlfriend face plant');
             geef.visible = false;
             addSpr(geef, 'gfFaceplant', true);
-        } else {
+        }
+        else
+        {
             State.boyfriend.visible = false;
             beef = new FlxSpriteExt(State.boyfriend.x, State.boyfriend.y).loadImage('cutscenes/beef');
             State.boyfriendGroup.add(beef);
         }
-    } else {
-        closeScript();
     }
+    else closeScript();
 }
 
-var _demonShader:Bool = false;
+var demonShader = false;
 
 function createPost() {
     if (gfFaceplant) {
-        removeScript('_charScript_bf');
         State.switchChar('bf', 'bf'); // make sure its not bf holding gf
         State.boyfriend.iconSpr.staticSize = 1;
         State.objMap.get('gfIcon').alpha = 0;
@@ -89,7 +91,7 @@ function createPost() {
 
 function startCutscene() {
     State.showUI(false);
-    var stressCutscene:FlxSound = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
+    var stressCutscene = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
     FlxG.sound.list.add(stressCutscene);
 
     demonBg = new FlxSprite(-FlxG.width*0.5, -FlxG.height*0.5).makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
@@ -111,7 +113,7 @@ function startCutscene() {
 
     manager.pushEvent(15.2, function () { // Zoom to gf
         demonGf.playAnim('demonGf');
-        _demonShader = true;
+        demonShader = BUILD_TARGET != "android";
         FlxTween.tween(State.camFollow, {x: 700, y: 300}, 1, {ease: FlxEase.sineOut});
         FlxTween.tween(State.camGame, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
         FlxTween.tween(demonBg, {alpha: 0.9}, 2.25, {ease: FlxEase.quadOut});
@@ -170,22 +172,24 @@ function startCutscene() {
 
     manager.start();
 
-    if (!getPref('naughty')) {
-        var censorBar:FunkinSprite = new FunkinSprite('censor', [300,450], [1,1]);
+    if (!getPref('naughty'))
+    {
+        var censorBar = new FunkinSprite('censor', [300,450], [1,1]);
         censorBar.addAnim('mouth censor', 'mouth censor', 24, true);
         censorBar.addOffset('mouth censor', 75, 0);
         censorBar.playAnim('mouth censor', true);
         censorBar.visible = false;
         add(censorBar);
 
-        var censorTimes:Array<Dynamic> = [
+        var censorManager = makeCutsceneManager();
+        var censorTimes = [
             [4.63,true,[300,450]],      [4.77,false],   //Shit
             [25,true,[275,435]],        [25.27,false],  //School
             [25.38,true],               [25.86,false],
             [30.68,true,[375,475]],     [31.06,false],  //Cunt
             [33.79,true,[300,450]],     [34.28,false],
         ];
-        var censorManager = makeCutsceneManager();
+
         for (i in censorTimes) {
             censorManager.pushEvent(i[0], function () {
                 censorBar.visible = i[1];
@@ -195,6 +199,7 @@ function startCutscene() {
                 }
             });
         }
+
         censorManager.start();
     }
 }
@@ -206,62 +211,71 @@ function zoomBack() {
     State.snapCamera();
 }
 
-var addedPico:Bool = false;
-var killedDudes:Bool = false;
-var catchedGF:Bool = false;
+var addedPico = false;
+var killedDudes = false;
+var catchedGF = false;
 
-function updatePost() {
-    if (loadedCutsceneAssets) {
-        if (demonGf.animation.curAnim != null) {
-            if (demonGf.animation.curAnim.name == 'demonGf') {
-                demonGf.visible = !demonGf.animation.curAnim.finished;
-                State.gf.visible = !demonGf.visible;
-                if (State.gf.visible && !addedPico) {
-                    State.gf.dance();
-                    addedPico = true;
-                }
+function updatePost()
+{
+    if (demonGf.animation.curAnim != null)
+    {
+        if (demonGf.animation.curAnim.name == 'demonGf')
+        {
+            demonGf.visible = !demonGf.animation.curAnim.finished;
+            State.gf.visible = !demonGf.visible;
+            if (State.gf.visible && !addedPico)
+            {
+                State.gf.dance();
+                addedPico = true;
+            }
         
-                if (demonGf.animation.curAnim.curFrame >= 55 && !killedDudes) { // Pico kills
-                    killedDudes = true;
-                    john.playAnim('john');
-                    steve.playAnim('steve');
-                    john.visible = true;
-                    steve.visible = true;
-                }
+            if (demonGf.animation.curAnim.curFrame >= 55 && !killedDudes) // Pico kills
+            {
+                killedDudes = true;
+                john.playAnim('john');
+                steve.playAnim('steve');
+                john.visible = true;
+                steve.visible = true;
+            }
         
-                if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) { // Catch Geef
-                    catchedGF = true;
-                    if (gfFaceplant) {
-                        geef.visible = true;
-                        geef.playAnim('faceplant', true);
-                    } else {
-                        beef.visible = false;
-                        State.boyfriend.visible = true;
-                        State.boyfriend.playAnim('catch');
-                        new FlxTimer().start(1, function(tmr) {
-                            State.boyfriend.dance();
-                            State.boyfriend.animation.curAnim.finish();
-                        });
-                    }
+            if (demonGf.animation.curAnim.curFrame >= 57 && !catchedGF) // Catch Geef
+            {
+                catchedGF = true;
+                if (gfFaceplant)
+                {
+                    geef.visible = true;
+                    geef.playAnim('faceplant', true);
+                }
+                else
+                {
+                    beef.visible = false;
+                    State.boyfriend.visible = true;
+                    State.boyfriend.playAnim('catch');
+                    new FlxTimer().start(1, function(tmr) {
+                        State.boyfriend.dance();
+                        State.boyfriend.animation.curAnim.finish();
+                    });
                 }
             }
         }
+    }
 
-        var headAnim = cutsceneTankman_Head.animation.curAnim;
-        if (headAnim != null) {
-            if (headAnim.name == 'godEffingDamnIt')
-                cutsceneTankman_Head.visible = !headAnim.finished;
-        }
-
+    var headAnim = cutsceneTankman_Head.animation.curAnim;
+    if (headAnim != null)
+    {
+        if (headAnim.name == 'godEffingDamnIt')
+            cutsceneTankman_Head.visible = !headAnim.finished;
+    }
         
-        if (killedDudes) {
-            john.visible = !john.animation.curAnim.finished;
-            steve.visible = !steve.animation.curAnim.finished;
-        }
+    if (killedDudes)
+    {
+        john.visible = !john.animation.curAnim.finished;
+        steve.visible = !steve.animation.curAnim.finished;
+    }
 
-        if (demonBg != null && _demonShader) {
-            setShaderFloat('demon_blur', 'u_size', demonBg.alpha*2);
-            setShaderFloat('demon_blur', 'u_alpha', demonBg.alpha*0.6);
-        }
+    if (demonShader && demonBg != null)
+    {
+        setShaderFloat('demon_blur', 'u_size', demonBg.alpha*2);
+        setShaderFloat('demon_blur', 'u_alpha', demonBg.alpha*0.6);
     }
 }

@@ -22,16 +22,17 @@ class GameOverSubstate extends MusicBeatSubstate {
 		instance = this;
 
 		FlxG.camera.bgColor = FlxColor.BLACK;
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
-		if (PlayState.instance.startTimer != null) {
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+		
+		if (PlayState.instance.startTimer != null)
 			PlayState.instance.startTimer.cancel();
-		}
 
 		#if mobile MobileTouch.setMode(NONE); #end
 
 		final charName = PlayState?.instance?.boyfriend?.gameOverChar ?? "bf-dead";
 		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
-		skinFolder = (skinFolder != "") ? 'skins/$skinFolder/' : 'skins/default/';
+		skinFolder = (skinFolder != "") ? 'skins/$skinFolder' : 'skins/default';
 
 		char = new Character(x, y, charName, true);
 		PlayState.instance.boyfriend.stageOffsets.copyTo(char.stageOffsets);
@@ -44,7 +45,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;
 
-		deathSound = CoolUtil.playSound('${skinFolder}fnf_loss_sfx');
+		deathSound = CoolUtil.playSound('$skinFolder/fnf_loss_sfx');
 		char.playAnim('firstDeath');
 
 		ModdingUtil.addCall('startGameOver');
@@ -65,7 +66,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 				}
 		
 				if (char.animation.curAnim.finished) {
-					CoolUtil.playMusic('${skinFolder}gameOver');
+					CoolUtil.playMusic('$skinFolder/gameOver');
 					musicBeat.targetSound = FlxG.sound.music;
 					gameOverDance();
 					ModdingUtil.addCall('musicGameOver');
@@ -122,13 +123,17 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var exitTimer:Float = 0;
 
 	function restartSong():Void {
-		if (!isEnding) {
+		if (!isEnding)
+		{
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
-			if (FlxG.sound.music != null) FlxG.sound.music.stop();
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
 
-			final endSound = new FlxSound().loadEmbedded(Paths.music('${skinFolder}gameOverEnd'));
+			var endSound = new FlxSound().loadEmbedded(Paths.music('$skinFolder/gameOverEnd'));
+			endSound.autoDestroy = true;
 			endSound.play();
+			
 			deathSound.stop();
 
 			if (!lockedOn) lockCamToChar();
