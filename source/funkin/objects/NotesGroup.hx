@@ -474,15 +474,13 @@ class NotesGroup extends Group
 	public var controlArray:Array<Bool> = [];
 
 	private inline function pushControls(strums:StrumLineGroup, value:Bool) {
-		strums.members.fastForEach((strum, i) -> {
-			controlArray.push(value ? false : strum.getControl(JUST_PRESSED));
-		});
+		strums.members.fastForEach((strum, i) -> controlArray.push(value ? false : strum.getControl(JUST_PRESSED)));
 	}
 
 	// Calculate input bullshit
-	private var possibleNotes:Array<Note> = new Array<Note>();
-	private var removeList:Array<Note> = new Array<Note>();
-	private var ignoreList:Array<Int> = new Array<Int>();
+	private var possibleNotes:Array<Note> = [];
+	private var removeList:Array<Note> = [];
+	private var ignoreList:Array<Int> = [];
 
     private function controls():Void
 	{
@@ -501,24 +499,29 @@ class NotesGroup extends Group
 				if (isCpuNote(note))
 					return;
 
-				if (note.isSustainNote) { // Handle sustain notes
+				if (note.isSustainNote) // Handle sustain notes
+				{
 					final sus:Sustain = note.toSustain();
 					sus.pressed = false;
-					if (!sus.missedPress) {
-						if ((Conductor.songPosition > sus.strumTime + Conductor.safeZoneOffset * sus.hitMult)) if (!sus.startedPress) {
-							sustainMiss(sus);
-							return;
-						}
-						if (sus.startedPress) {
-							final holding = sus.targetStrum.getControl(PRESSED);
-							if (!holding) { // Sustain stopped being pressed
-								sustainMiss(sus); 
-								return;
+					if (!sus.missedPress)
+					{
+						if (sus.startedPress)
+						{
+							if (sus.targetStrum.getControl(PRESSED)) {
+								sus.pressSustain();
+								if (sus.pressed) // Sustain isnt finished
+									sus.mustPress ? goodSustainPress.dispatch(sus) : opponentSustainPress.dispatch(sus);
 							}
 							else {
-								if (holding) sus.pressSustain(); // Pressed sustain
-								if (sus.pressed)
-									sus.mustPress ? goodSustainPress.dispatch(sus) : opponentSustainPress.dispatch(sus);
+								sustainMiss(sus);
+								return;
+							}
+						}
+						else
+						{
+							if (Conductor.songPosition > sus.strumTime + Conductor.safeZoneOffset * sus.hitMult) {
+								sustainMiss(sus);
+								return;
 							}
 						}
 					}

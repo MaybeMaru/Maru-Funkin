@@ -43,6 +43,7 @@ class Sustain extends BasicNote
         moving = true;        
         color = (value && mustHit) ? MISS_COLOR : 0xFFFFFFFF;
         offset.y = cutHeight * _approachCos;
+        update(0.0);
         return missedPress = value;
     }
 
