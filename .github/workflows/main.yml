@@ -1,4 +1,5 @@
 # "Borrowed" the Windows part of the workflow from: https://github.com/CrowPlexus/Forever-Engine-Legacy/blob/master/.github/workflows/main.yml
+# Android workflow stuff also "borrowed" from: https://github.com/MAJigsaw77/UTF/blob/main/.github/workflows/main.yml
 
 name: Action build
 
@@ -113,5 +114,5 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: Maru-Funkin-Android
-          path: export/android/bin/app/build/outputs/apk/debug
+          path: export/release/android/bin/app/build/outputs/apk/debug
           if-no-files-found: error
