@@ -27,8 +27,10 @@ jobs:
 
       - name: Install Libraries
         run: |
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet && haxelib run lime rebuild hxcpp
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
+          haxelib run lime rebuild hxcpp
+          haxelib set hxcpp git
 
       - name: Build
         run: haxelib run lime build windows -D analyzer-optimize
@@ -56,8 +58,10 @@ jobs:
 
       - name: Install Libraries
         run: |
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet && haxelib run lime rebuild hxcpp
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
+          haxelib run lime rebuild hxcpp
+          haxelib set hxcpp git
 
       - name: Build
         run: haxelib run lime build linux -D analyzer-optimize
@@ -97,8 +101,10 @@ jobs:
 
       - name: Install Libraries
         run: |
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet && haxelib run lime rebuild hxcpp
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
+          haxelib run lime rebuild hxcpp
+          haxelib set hxcpp git
       
       - name: Configure Android
         run: |
