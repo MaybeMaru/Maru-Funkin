@@ -62,7 +62,6 @@ class MenuItem extends SpriteGroup
 		super.update(elapsed);
 		y = CoolUtil.coolLerp(y, (targetY * 120) + 480, 0.17);
 		weekSpr.alpha = (targetY == 0 && !locked) ? 1 : 0.6;
-		//lockSpr.visible = locked;
 
 		if (lockShake != 0) {
 			lockSpr.offset.set(
