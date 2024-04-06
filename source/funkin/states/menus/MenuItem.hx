@@ -1,19 +1,20 @@
 package funkin.states.menus;
 
-class MenuItem extends FlxSpriteGroup {
+class MenuItem extends SpriteGroup
+{
 	public var lockSpr:FunkinSprite;
 	public var weekSpr:FlxSprite;
 
 	public var locked:Bool = false;
 	public var targetY:Float = 0;
 
-	public function new(targetY:Int = 0, weekName:String = 'week1'):Void {
+	public function new(targetY:Int = 0, weekName:String = 'week1', locked:Bool = false):Void {
 		super();
 		
-		var png = Paths.png('storymenu/weeks/$weekName', null, true);
+		var png = Paths.png('storymenu/weeks/$weekName');
 		
 		weekSpr = Paths.exists(png, IMAGE) ?
-		new FlxSpriteExt().loadImage('storymenu/weeks/$weekName', true) :
+		new FlxSpriteExt().loadImage('storymenu/weeks/$weekName') :
 		new FlxText(0, 0, 0, weekName).setFormat(Paths.font("phantommuff"), 80);
 
 		add(weekSpr);
@@ -26,6 +27,9 @@ class MenuItem extends FlxSpriteGroup {
 		lockSpr.x -= lockSpr.width + 10;
 		lockSpr.y = weekSpr.height * 0.5 - lockSpr.height * 0.5;
 		add(lockSpr);
+
+		this.locked = locked;
+		lockSpr.visible = locked;
 	}
 
 	// if it runs at 60fps, fake framerate will be 6
@@ -52,11 +56,20 @@ class MenuItem extends FlxSpriteGroup {
 		}
 	}
 
+	public var lockShake:Float = 0;
+
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 		y = CoolUtil.coolLerp(y, (targetY * 120) + 480, 0.17);
 		weekSpr.alpha = (targetY == 0 && !locked) ? 1 : 0.6;
-		lockSpr.visible = locked;
+		//lockSpr.visible = locked;
+
+		if (lockShake != 0) {
+			lockSpr.offset.set(
+				FlxG.random.float(-1, 1) * lockShake,
+				FlxG.random.float(-1, 1) * lockShake
+			);
+		}
 
 		if (isShaking || isFlashing) {
 			flashingInt++;

@@ -26,7 +26,7 @@ class FreeplayState extends MusicBeatState {
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
-	var grpSongs:FlxTypedGroup<MenuAlphabet>;
+	var grpSongs:TypedGroup<MenuAlphabet>;
 	var iconArray:Array<HealthIcon> = [];
 
 	//var inputText:SongSearch;
@@ -70,7 +70,7 @@ class FreeplayState extends MusicBeatState {
 		bg.screenCenter();
 		add(bg);
 
-		grpSongs = new FlxTypedGroup<MenuAlphabet>();
+		grpSongs = new TypedGroup<MenuAlphabet>();
 		add(grpSongs);
 
 		songs.fastForEach((song, i) -> {

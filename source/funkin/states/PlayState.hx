@@ -380,7 +380,7 @@ class PlayState extends MusicBeatState
 		add(dialogueBox);
 	}
 
-	public var startTimer:FlxTimer = null;
+	public var startTimer:FlxTimer;
 
 	function startCountdown():Void {
 		showUI(true);
@@ -388,8 +388,8 @@ class PlayState extends MusicBeatState
 		startedCountdown = seenCutscene = true;
 
 		if (!notesGroup.skipStrumIntro) {
-			for (strum in notesGroup.strumLineNotes)
-				FlxTween.tween(strum, {y: StrumLineGroup.strumLineY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
+			notesGroup.strumLineNotes.fastForEach((strum, i) ->
+			FlxTween.tween(strum, {y: StrumLineGroup.strumLineY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)}));
 		}
 
 		Conductor.songPosition = -Conductor.crochet * 5;
@@ -421,7 +421,7 @@ class PlayState extends MusicBeatState
 
 		var swagCounter:Int = 0;
 
-		startTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
+		startTimer = new FlxTimer().start(Conductor.crochetMills, (tmr) -> {
 			beatCharacters();
 			ModdingUtil.addCall('startTimer', [swagCounter]);
 
@@ -446,6 +446,7 @@ class PlayState extends MusicBeatState
 		camZooming = true;
 		startingSong = false;
 		CoolUtil.stopMusic();
+		startTimer = FlxDestroyUtil.destroy(startTimer);
 
 		ModdingUtil.addCall('startSong');
 
@@ -645,7 +646,8 @@ class PlayState extends MusicBeatState
 		deathCounter = 0;
 		Conductor.volume = 0;
 		ModdingUtil.addCall('endSong');
-		if (validScore) Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
+		if (validScore)
+			Highscore.saveSongScore(SONG.song, curDifficulty, songScore);
 
 		#if DEV_TOOLS
 		if (inChartEditor) {
@@ -669,12 +671,16 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function endWeek():Void {
+	public function endWeek():Void
+	{
 		if (validScore) {
 			Highscore.saveWeekScore(storyWeek, curDifficulty, campaignScore);
 			final weekData = WeekSetup.weekMap.get(storyWeek)?.data ?? null;
-			if (weekData != null && WeekSetup.weekMap.exists(weekData.unlockWeek))
+			if (weekData != null) if (WeekSetup.weekMap.exists(weekData.unlockWeek)) if (!Highscore.getWeekUnlock(weekData.unlockWeek))
+			{
 				Highscore.setWeekUnlock(weekData.unlockWeek, true);
+				StoryMenuState.unlockWeek = WeekSetup.weekMap.get(weekData.unlockWeek); // Setup the unlock week animation
+			}
 		}
 
 		ModdingUtil.addCall('endWeek');

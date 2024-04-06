@@ -16,8 +16,8 @@ class StoryMenuState extends MusicBeatState {
 		'hard'
 	];
 
-	var grpWeekText:FlxTypedGroup<MenuItem>;
-	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
+	var grpWeekText:TypedGroup<MenuItem>;
+	var grpWeekCharacters:TypedGroup<MenuCharacter>;
 
 	var difficultySelectors:FlxGroup;
 	var storyBG:FlxSprite;
@@ -41,28 +41,28 @@ class StoryMenuState extends MusicBeatState {
 		txtWeekTitle.alignment = "right";
 		txtWeekTitle.color = 0xffB2B2B2;
 
-		grpWeekText = new FlxTypedGroup<MenuItem>();
+		grpWeekText = new TypedGroup<MenuItem>();
 		add(grpWeekText);
 
 		var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
 		add(blackBarThingie);
 
-		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
+		grpWeekCharacters = new TypedGroup<MenuCharacter>();
 		
 		// Updating Discord Rich Presence
 		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
 		#if mobile MobileTouch.setMode(MENU); #end
 
-		var weekID:Int = 0;
-		for (i in WeekSetup.getWeekList()) {
-			if (!i.data.hideStory) {
-				var weekThing:MenuItem = new MenuItem(weekID, i.data.weekImage);
-				weekThing.locked = !Highscore.getWeekUnlock(i.name);
-				grpWeekText.add(weekThing);
-				weekID++;
-				storyWeeks.push(i);
+		WeekSetup.getWeekList().fastForEach((week, i) -> {
+			if (!week.data.hideStory) {
+				storyWeeks.push(week);
+
+				ModdingUtil.runFunctionMod(week.modFolder, () -> {
+					var item = new MenuItem(i, week.data.weekImage, !Highscore.getWeekUnlock(week.name));
+					grpWeekText.add(item);
+				});
 			}
-		}
+		});
 
 		MenuCharacter.cachedChars.clear();
 		for (i in 0...3) {
@@ -122,6 +122,57 @@ class StoryMenuState extends MusicBeatState {
 
 		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
 		super.create();
+
+		if (unlockWeek != null)
+			unlockWeekAnim();
+	}
+	
+	public static var unlockWeek:WeekData = null;
+
+	function unlockWeekAnim() {
+		var moveIndex = -1;
+		storyWeeks.fastForEach((week, i) -> {
+			if (week.name == unlockWeek.name) if (week.modFolder == unlockWeek.modFolder)
+				moveIndex = i;
+		});
+
+		unlockWeek = null;
+		if (moveIndex == -1) // Couldnt find unlock week
+			return;
+
+		movedBack = true;
+		var item = grpWeekText.members.unsafeGet(moveIndex);
+		item.locked = true;
+		item.lockSpr.visible = true;
+
+		// Move to the week
+		for (i in 0...moveIndex) {
+			new FlxTimer().start((i + 1) * (0.3 / moveIndex), (tmr) -> changeWeek(1));
+		}
+		
+		// Play unlock sound n start animation
+		FlxTween.tween(FlxG.sound.music, {volume: 0.1}, 0.5, {onComplete: (twn) -> {
+			CoolUtil.playSound("unlockWeek");
+			
+			FlxTween.tween(item, {lockShake: 10}, 1.37, {onComplete: (twn) -> {
+				FlxG.camera.flash();
+				item.locked = false;
+				item.color = FlxColor.WHITE;
+
+				FlxTween.tween(item.lockSpr, {alpha: 0}, 1.0);
+				item.lockShake = 0;
+				item.lockSpr.offset.set();
+
+				item.lockSpr.acceleration.y = FlxG.random.float(200, 300);
+				item.lockSpr.velocity.y = FlxG.random.float(-20, -40);
+				item.lockSpr.velocity.x = FlxG.random.float(-20, -10);
+
+				new FlxTimer().start(0.3, (tmr) -> {
+					movedBack = false;
+					FlxTween.tween(FlxG.sound.music, {volume: 1}, 0.5);
+				});
+			}});
+		}});
 	}
 
 	var cachedChars:Array<String> = [];

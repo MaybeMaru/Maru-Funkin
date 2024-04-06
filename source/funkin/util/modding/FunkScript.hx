@@ -116,7 +116,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
         set('FlxSpriteExt', funkin.graphics.FlxSpriteExt); // Both r the same lol, just for backwards compatibility
 		set('FlxSprite', funkin.graphics.FlxSpriteExt);
 		set('FlxText', flixel.text.FlxText);
-		set('FlxTypedGroup', flixel.group.FlxGroup.FlxTypedGroup);
+		set('FlxTypedGroup', TypedGroup);
 		set('FlxSpriteGroup', flixel.group.FlxSpriteGroup);
 		set('FlxGroup', flixel.group.FlxGroup);
 		set('FlxSound', flixel.sound.FlxSound);

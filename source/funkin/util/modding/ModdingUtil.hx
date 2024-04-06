@@ -289,7 +289,10 @@ class ModdingUtil {
     }
 
     public static inline function runFunctionMod(mod:String, func:()->Void) {
-        runFunctionMods([mod], func);
+        final lastMod = curModFolder;
+        curModFolder = mod;
+        func();
+        curModFolder = lastMod;
     }
 
     public static inline function runFunctionMods(mods:Array<String>, func:()->Void) {
