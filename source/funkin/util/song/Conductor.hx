@@ -43,7 +43,7 @@ class Conductor {
 		return bpm = value;
 	}
 
-	public static var songPosition:Float;
+	public static var songPosition:Float = 0.0;
 	public static var latency:Float = 0.0;
 	public static var offset:Vector<Int> = Vector.fromArrayCopy([0, 0]);
 

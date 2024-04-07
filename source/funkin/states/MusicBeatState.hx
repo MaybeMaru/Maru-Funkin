@@ -50,7 +50,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 			ModdingUtil.addCall('stateCreate');
 		}
 
-		Main.transition.exitTrans();
+		if (Main.transition != null)
+			Main.transition.exitTrans();
 	}
 
 	// Only for backwards compatibility

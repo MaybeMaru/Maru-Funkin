@@ -43,7 +43,7 @@ class FlxFunkText extends FlxSpriteExt {
     }
 
     static inline function getFont(value:String) {
-        final _font = (value.startsWith("assets/") || value.startsWith("mods/")) ? value : Paths.font(value);
+        final _font = (value.startsWith("assets/") #if MODS_ALLOWED || value.startsWith("mods/") #end) ? value : Paths.font(value);
         return Paths.exists(_font, FONT) ? (_font.startsWith("assets/") ? OpenFlAssets.getFont(_font).fontName : _font) : FlxAssets.FONT_DEFAULT;
     }
 

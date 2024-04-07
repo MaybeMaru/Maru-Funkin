@@ -94,8 +94,8 @@ class FlxRepeatSprite extends FlxSpriteExt
 		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
     }
 
-    static final __tempPoint:FlxPoint = FlxPoint.get();
-    static final __lastMatrix = FlxPoint.get(); // Nasty hack
+    static final tempPoint:FlxPoint = FlxPoint.get();
+    static final lastMatrix = FlxPoint.get(); // Nasty hack
 
     override function drawComplex(camera:FlxCamera) {
         prepareFrameMatrix(_frame, _matrix);
@@ -119,21 +119,22 @@ class FlxRepeatSprite extends FlxSpriteExt
         // Holds the og matrix position for each tile
         var point = CoolUtil.point.set(_matrix.tx, _matrix.ty);
 
-        // Temp point for calculations
-        var tempPoint = __tempPoint;
-
         // Fix bug of tiles duplicating
-        __lastMatrix.set(-1, -1);
+        lastMatrix.set(-1, -1);
 
         var scaleX = scaleX();
+        var scaleY = scaleY();
         var fw:Float = frameWidth * scaleX; // TODO: replace this shit same way as Height
 
-        switch (drawStyle) {
+        switch (drawStyle)
+        {
             // Draw from left top to right bottom style
             case TOP_BOTTOM:
-                for (xi in 0...tilesX) {
+                for (xi in 0...tilesX)
+                {
                     var heightPos:Float = 0;
-                    for (yi in 0...tilesY) {
+                    for (yi in 0...tilesY)
+                    {
                         setupTile(xi, yi, frame);
                         
                         var addW = fw * (xi + 1);
@@ -142,7 +143,7 @@ class FlxRepeatSprite extends FlxSpriteExt
                         
                         heightPos += tempPoint.y;
                         if (heightPos > repeatHeight) // Cut frame height
-                            _frame.frame.height = (tempPoint.y + (repeatHeight - heightPos)) / scaleY();
+                            _frame.frame.height = (tempPoint.y + (repeatHeight - heightPos)) / scaleY;
         
                         // Position and draw
                         var addX = addW - fw;
@@ -157,9 +158,11 @@ class FlxRepeatSprite extends FlxSpriteExt
                 }
             // Draw from bottom to top style
             case BOTTOM_TOP:
-                for (xi in 0...tilesX) {
+                for (xi in 0...tilesX)
+                {
                     var heightPos:Float = repeatHeight;
-                    for (yi in 0...tilesY) {
+                    for (yi in 0...tilesY)
+                    {
                         setupTile(xi, yi, frame);
 
                         var addW = fw * (xi + 1);
@@ -167,10 +170,12 @@ class FlxRepeatSprite extends FlxSpriteExt
                             _frame.frame.width = (fw + (repeatWidth - addW)) / scaleX;
 
                         heightPos -= tempPoint.y;
-                        if (heightPos < 0) {
-                            var scaleY = scaleY();
-                            _frame.frame.height += heightPos / scaleY;
-                            _frame.frame.y -= heightPos / scaleY;
+                        if (heightPos < 0)
+                        {
+                            var moveH = heightPos / scaleY;
+                            _frame.frame.height = _frame.frame.height + moveH;
+                            _frame.frame.y = _frame.frame.y - moveH;
+                            
                             heightPos = 0;
                         }
 
@@ -188,14 +193,14 @@ class FlxRepeatSprite extends FlxSpriteExt
     }
 
     private inline function translateWithTrig(tx:Float, ty:Float) {
-        _matrix.tx += (tx * _cosAngle) + (ty * -_sinAngle);
-        _matrix.ty += (tx * _sinAngle) + (ty * _cosAngle);
+        _matrix.tx = _matrix.tx + ((tx * _cosAngle) + (ty * -_sinAngle));
+        _matrix.ty = _matrix.ty + ((tx * _sinAngle) + (ty * _cosAngle));
     }
 
     // Prepare tile dimensions
     function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame) {
         var frame = baseFrame.frame;
-        var point = __tempPoint.set(frame.width * scaleX(), frame.height * scaleY());
+        var point = tempPoint.set(frame.width * scaleX(), frame.height * scaleY());
         _frame.frame.copyFrom(frame);
         _frame.angle = baseFrame.angle;
         return point;
@@ -203,21 +208,21 @@ class FlxRepeatSprite extends FlxSpriteExt
 
     var tileOffset:FlxPoint = FlxPoint.get();
 
-    function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint, camera:FlxCamera) {
+    function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint, camera:FlxCamera):Void
+    {
         // Do cliprect stuff
         var doDraw:Bool = clipRect != null ? handleClipRect(tileFrame, baseFrame, tilePos) : true;
         if (tileRect != null) tileFrame = tileFrame.clipTo(tileRect);
 
-        var lastMatrix = __lastMatrix;
         var mTx = _matrix.tx;
         var mTy = _matrix.ty;
         
-        if (doDraw) if ((lastMatrix.x != mTx || lastMatrix.y != mTy)) {
+        if (doDraw) if ((lastMatrix.x != mTx) || (lastMatrix.y != mTy))
+        {
             lastMatrix.set(mTx, mTy);
             translateWithTrig(-tileOffset.x, -tileOffset.y);
             
-            var frame = tileFrame.frame;
-            if (rectInBounds(mTx, mTy, frame.width, frame.height, camera)) // dont draw stuff out of bounds
+            if (rectInBounds(mTx, mTy, tileFrame.frame.width, tileFrame.frame.height, camera)) // dont draw stuff out of bounds
                 drawTileToCamera(tileFrame, bitmap, _matrix, camera);
             
             translateWithTrig(tileOffset.x, tileOffset.y);
@@ -245,7 +250,8 @@ class FlxRepeatSprite extends FlxSpriteExt
         return cam.containsRect(rect.getRotatedBounds(angle, null, rect));
     }
 
-    function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint) {
+    function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool
+    {
         translateWithTrig(clipRect.x, clipRect.y);
         tilePos.add(clipRect.x, clipRect.y);
 

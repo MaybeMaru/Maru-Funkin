@@ -54,20 +54,20 @@ class ModdingUtil {
     public static var scripts:Array<FunkScript> = [];
     public static var scriptsMap:Map<String, FunkScript> = [];
 
-    inline public static function clearScripts():Void
+    public static function clearScripts():Void
     {
         FunkScript.globalVariables.clear();
         #if !mobile
-        Main.console.clear();
+        if (Main.console != null)
+            Main.console.clear();
         #end
         
         scripts.copy().fastForEach((script, i) -> removeScript(script));
         scripts.splice(0, scripts.length);
 
         // Warn if the mod folder is outdated
-        if (curModData != null && curModData.apiVersion != API_VERSION) {
+        if (curModData != null) if (curModData.apiVersion != API_VERSION)
             warningPrint('$curModFolder / Uses API version ${curModData.apiVersion} (Cur $API_VERSION)');
-        }
     }
 
     public static function reloadMods():Void {
