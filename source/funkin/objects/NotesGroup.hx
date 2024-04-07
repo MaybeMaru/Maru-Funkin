@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import haxe.ds.Vector;
 import flixel.util.FlxSignal;
 import funkin.objects.note.Sustain;
 import funkin.objects.note.BasicNote;
@@ -107,24 +108,24 @@ class NotesGroup extends Group
         
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
-		Conductor.songOffset = SONG.offsets;
-		Conductor.loadMusic(curSong);
+		Conductor.offset = Vector.fromArrayCopy(SONG.offsets);
+		Conductor.loadSong(curSong);
 		
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;
         inBotplay = getPref('botplay') && isPlayState;
 		vanillaUI = getPref('vanilla-ui');
 
-		goodNoteHit = new FlxTypedSignal<(Note)->Void>();
-		goodSustainPress = new FlxTypedSignal<(Sustain)->Void>();
+		goodNoteHit = new FlxTypedSignal<Note->Void>();
+		goodSustainPress = new FlxTypedSignal<Sustain->Void>();
 		
-		noteMiss = new FlxTypedSignal<(BasicNote)->Void>();
-		badNoteHit = new FlxTypedSignal<(Int)->Void>();
+		noteMiss = new FlxTypedSignal<BasicNote->Void>();
+		badNoteHit = new FlxTypedSignal<Int->Void>();
 		
-		opponentNoteHit = new FlxTypedSignal<(Note)->Void>();
-		opponentSustainPress = new FlxTypedSignal<(Sustain)->Void>();
+		opponentNoteHit = new FlxTypedSignal<Note->Void>();
+		opponentSustainPress = new FlxTypedSignal<Sustain->Void>();
 		
 		// Setup functions
-		goodNoteHit.add(function (note:Note) {
+		goodNoteHit.add((note:Note) -> {
 			if (note.wasGoodHit) return;
 			hitNote(note, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodNoteHit', [note]);
@@ -132,13 +133,13 @@ class NotesGroup extends Group
 			note.removeNote();
 		});
 
-		goodSustainPress.add(function (sustain:Sustain) {
+		goodSustainPress.add((sustain:Sustain) -> {
 			pressSustain(sustain, isPlayState ? game.boyfriend : null, inBotplay, getPref("botplay"));
 			ModdingUtil.addCall('goodSustainPress', [sustain]);
 			ModdingUtil.addCall('sustainPress', [sustain, true]);
 		});
 
-		opponentNoteHit.add(function (note:Note) {
+		opponentNoteHit.add((note:Note) -> {
 			if (note.wasGoodHit) return;
 			hitNote(note, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentNoteHit', [note]);
@@ -146,7 +147,7 @@ class NotesGroup extends Group
 			note.removeNote();
 		});
 
-		opponentSustainPress.add(function (sustain:Sustain) {
+		opponentSustainPress.add((sustain:Sustain) -> {
 			pressSustain(sustain, isPlayState ? game.dad : null, dadBotplay);
 			ModdingUtil.addCall('opponentSustainPress', [sustain]);
 			ModdingUtil.addCall('sustainPress', [sustain, false]);
@@ -154,8 +155,7 @@ class NotesGroup extends Group
 
 		if (!isPlayState) return;
 
-		noteMiss.add(function(note:BasicNote):Void 
-		{
+		noteMiss.add((note:BasicNote) -> {
 			if (game.combo > 4) game.gf.playAnim('sad');
 			game.combo = 0;
 				
@@ -182,7 +182,7 @@ class NotesGroup extends Group
 			game.updateScore();
 		});
 
-		badNoteHit.add(function (data:Int) {
+		badNoteHit.add((data:Int) -> {
 			game.health -= 0.04;
 			game.songScore -= 10;
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -332,14 +332,14 @@ class NotesGroup extends Group
 		return scrollSpeed = value;
 	}
 
-    public var goodNoteHit:FlxTypedSignal<(Note)->Void>;
-    public var goodSustainPress:FlxTypedSignal<(Sustain)->Void>;
+    public var goodNoteHit:FlxTypedSignal<Note->Void>;
+    public var goodSustainPress:FlxTypedSignal<Sustain->Void>;
     
-	public var noteMiss:FlxTypedSignal<(BasicNote)->Void>;
-    public var badNoteHit:FlxTypedSignal<(Int)->Void>;
+	public var noteMiss:FlxTypedSignal<BasicNote->Void>;
+    public var badNoteHit:FlxTypedSignal<Int->Void>;
     
-    public var opponentNoteHit:FlxTypedSignal<(Note)->Void>;
-    public var opponentSustainPress:FlxTypedSignal<(Sustain)->Void>;
+    public var opponentNoteHit:FlxTypedSignal<Note->Void>;
+    public var opponentSustainPress:FlxTypedSignal<Sustain->Void>;
 
     //Makes the conductor song go vroom vroom
     inline function updateConductor(elapsed:Float)

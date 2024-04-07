@@ -234,7 +234,7 @@ class AssetManager
 		var bitmaps:Map<String, Dynamic> = [];
 		var sounds:Map<String, Sound> = [];
 
-        final cacheImages = function (arr:Array<LoadImage>) {
+        final cacheImages = (arr:Array<LoadImage>) -> {
 			while (arr[0] != null) {
 				var asset:LoadImage = arr[0];
 				
@@ -250,7 +250,7 @@ class AssetManager
 			}
         }
 
-		final cacheSound = function (arr:Array<String>, asset:String) {
+		final cacheSound = (arr:Array<String>, asset:String) -> {
 			if (!existsAsset(asset)) if (!sounds.exists(asset)) {
 				var sound = __getFileSound(asset);
 				sounds.set(asset, sound);
@@ -258,7 +258,7 @@ class AssetManager
 			arr.remove(asset);
 		}
 
-		final cacheSounds = function (arr:Array<String>) {
+		final cacheSounds = (arr:Array<String>) -> {
 			while (arr[0] != null) {
 				var asset:String = arr[0];
 				cacheSound(arr, asset);
@@ -266,23 +266,23 @@ class AssetManager
 		}
 
 		if (stageImages.length > 0)
-			FunkThread.run(function () cacheImages(stageImages));
+			FunkThread.run(() -> cacheImages(stageImages));
 		
 		if (charImages.length > 0)
-			FunkThread.run(function () cacheImages(charImages));
+			FunkThread.run(() -> cacheImages(charImages));
 
 		if (songSounds.length > 0)
 		{
 			// Extra thread is available
 			if (charImages.length == 0 || stageImages.length == 0)
 			{
-				FunkThread.run(function () cacheSound(songSounds, songSounds[0]));
+				FunkThread.run(() -> cacheSound(songSounds, songSounds[0]));
 				if (songSounds[1] != null)
-					FunkThread.run(function () cacheSound(songSounds, songSounds[1]));
+					FunkThread.run(() -> cacheSound(songSounds, songSounds[1]));
 			}
 			else
 			{
-				FunkThread.run(function () cacheSounds(songSounds));
+				FunkThread.run(() -> cacheSounds(songSounds));
 			}
 		}
 

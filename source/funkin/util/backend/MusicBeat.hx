@@ -28,9 +28,8 @@ class MusicBeat extends FlxBasic {
 	var lastStep(default, null):Int = -1;
 
     override function update(elapsed:Float):Void {
-        if (targetSound != null && targetSound.playing) {
-			Conductor.songPosition = targetSound.time - Conductor.settingOffset;
-		}
+        if (targetSound != null) if (targetSound.playing)
+			Conductor.songPosition = targetSound.time - Conductor.latency;
 		
 		lastStep = curStep;
 		

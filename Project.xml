@@ -118,6 +118,7 @@
 
 	<!-- _________________________________ Mobile _______________________________ -->
 	<section if="mobile">
+		<architecture exclude="armv7" if="android" />
 		<assets path="art/mobile" rename="assets/images/mobile"/>
 	</section>
 

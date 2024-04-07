@@ -35,7 +35,7 @@ class LatencyState extends MusicBeatState
 		FlxG.sound.playMusic(Paths.music('maruOffsets'), 1, true);
 		Conductor.bpm = 100;
 		Conductor.songPosition = 0;
-		offset = Conductor.settingOffset;
+		offset = Conductor.latency;
 		updateTxt();
 
 		super.create();
@@ -49,8 +49,8 @@ class LatencyState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.ENTER) {
-			Conductor.settingOffset = offset;
-			SaveData.setSave('offset', Conductor.settingOffset);
+			Conductor.latency = offset;
+			SaveData.setSave('offset', Conductor.latency);
 			SaveData.flushData();
 			exit();
 		} else if (FlxG.keys.justPressed.ESCAPE) {

@@ -66,7 +66,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		if (ScriptUtil.stateQueue != null) {
 			CoolUtil.switchState(ScriptUtil.stateQueue.state, ScriptUtil.stateQueue.skipTransOpen, ScriptUtil.stateQueue.skipTransClose);
 			ScriptUtil.stateQueue = null;
-			if (!Transition.skipTransOpen) __superDraw();
+			if (!Transition.skipTransOpen)
+				__superDraw();
 		}
 		else __superDraw();
 	}
@@ -101,7 +102,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		
 		members.fastForEach((basic, i) -> {
-			final basic:FlxBasic = basic;
 			if (basic != null) if (basic.exists) if (basic.active)
 				basic.update(elapsed);
 		});

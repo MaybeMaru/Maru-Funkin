@@ -94,11 +94,11 @@ class ChartTabs extends FlxUITabMenu {
 
 		//SONG OFFSETS
 		var stepperOffsetInst:FlxUINumericStepper = new FlxUINumericStepper(stepperBPM.x + 100, stepperBPM.y, 1, 0, -999, 999, 0);
-		stepperOffsetInst.value = Conductor.songOffset[0];
+		stepperOffsetInst.value = Conductor.offset[0];
 		stepperOffsetInst.name = 'song_inst_offset';
 
 		var stepperOffsetVocals:FlxUINumericStepper = new FlxUINumericStepper(stepperOffsetInst.x, stepperSpeed.y, 1, 0, -999, 999, 0);
-		stepperOffsetVocals.value = Conductor.songOffset[1];
+		stepperOffsetVocals.value = Conductor.offset[1];
 		stepperOffsetVocals.name = 'song_vocals_offset';
 
 		p1Button = new FlxUIButton(10, 155, "Boyfriend", function() {

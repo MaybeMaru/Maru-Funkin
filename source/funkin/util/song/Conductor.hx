@@ -1,5 +1,6 @@
 package funkin.util.song;
 
+import haxe.ds.Vector;
 import funkin.sound.FlxFunkSound;
 
 typedef BPMChangeEvent = {
@@ -43,17 +44,16 @@ class Conductor {
 	}
 
 	public static var songPosition:Float;
-	public static var lastSongPos:Float;
-	public static var settingOffset:Float = 0;
-	public static var songOffset:Array<Int> = [0,0];
+	public static var latency:Float = 0.0;
+	public static var offset:Vector<Int> = Vector.fromArrayCopy([0, 0]);
 
 	public static var hasVocals:Bool = true;
 	public static var inst:FlxFunkSound;
 	public static var vocals:FlxFunkSound;
 	
-	public static var _loadedSong:String = "";
+	public static var loadedSong(default, null):String = "";
 
-	public static inline function loadMusic(song:String)
+	public static function loadSong(song:String)
 	{
 		if (inst == null) {
 			inst = new FlxFunkSound(true);
@@ -64,7 +64,7 @@ class Conductor {
 		}
 		
 		song = Song.formatSongFolder(song);
-		if (_loadedSong != song)
+		if (loadedSong != song)
 		{
 			inst.loadSound(Paths.inst(song));
 			
@@ -76,10 +76,10 @@ class Conductor {
 			AssetManager.getAsset(Paths.instPath(song)).onDispose = () -> {
 				inst.dispose();
 				vocals.dispose();
-				_loadedSong = "";
+				loadedSong = "";
 			}
 		}
-		_loadedSong = song;
+		loadedSong = song;
 		inst.onComplete = null;
 		vocals.onComplete = null;
 	}
@@ -89,7 +89,7 @@ class Conductor {
 	public static inline var safeZoneOffsetMult:Float = 1 / safeZoneOffset;
 
 	public static function init():Void {
-		settingOffset = SaveData.getSave('offset');
+		latency = SaveData.getSave('offset');
 	}
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
@@ -117,7 +117,7 @@ class Conductor {
 		}
 
 		if (bpmChangeMap.length > 0) {
-			bpmChangeMap.insert(0, {
+			bpmChangeMap.unshift({
 				stepTime: 0,
 				songTime: 0,
 				bpm: song.bpm
@@ -134,10 +134,13 @@ class Conductor {
 			bpm: autoBPM ?? bpm
 		}
 
-		time = (time ?? songPosition);
-		for (i in bpmChangeMap) {
-			if (time >= i.songTime) lastChange = i;
-		}
+		if (time == null)
+			time = songPosition;
+
+		bpmChangeMap.fastForEach((change, i) -> {
+			if (time >= change.songTime)
+				lastChange = change;
+		});
 
 		return lastChange;
 	}
@@ -150,59 +153,58 @@ class Conductor {
 		return volume = value;
 	}
 
-	public static var playing(default, null):Bool = false;
+	public static var playing(get, never):Bool;
+	inline static function get_playing() return inst != null ? inst.playing : false;
 
-	inline public static function play():Void {
-		playing = true;
-		if (inst != null)
-		{
+	public static function play():Void {
+		if (inst != null) {
 			inst.play();
 			if (hasVocals) vocals.play();
 		}
 	}
 
-	inline public static function pause():Void {
-		playing = false;
-		if (inst != null)
-		{
-			inst.pause();
-			if (hasVocals) vocals.pause();
-		}
-	}
-
-	inline public static function stop():Void {
-		playing = false;
-		if (inst != null)
-		{
+	public static function stop():Void {
+		if (inst != null) {
 			inst.stop();
 			if (hasVocals) vocals.stop();
 		}
 	}
 
+	public static function resume():Void {
+		if (inst != null) {
+			inst.resume();
+			if (hasVocals) vocals.resume();
+		}
+	}
+
+	public static function pause():Void {
+		if (inst != null) {
+			inst.pause();
+			if (hasVocals) vocals.pause();
+		}
+	}
+
 	public static function sync():Void {
-		soundSync(inst, songOffset[0]);
-		if (hasVocals) soundSync(vocals, songOffset[1]);
+		soundSync(inst, offset[0]);
+		if (hasVocals) soundSync(vocals, offset[1]);
 	}
 
-	public static function soundSync(?sound:FlxFunkSound, offset:Float = 0) {
+	public static function soundSync(sound:FlxFunkSound, offset:Float = 0) {
 		if (sound != null)
-			sound.time = songPosition - offset - settingOffset;
+			sound.time = songPosition - offset - latency;
 	}
 
-	public static function autoSync(maxOff:Int = 40):Void {
-		var maxOff = maxOff * songPitch;
+	public static function autoSync(maxOff:Float = 40):Void
+	{
+		maxOff = (maxOff * songPitch);
 		
-		var offInst = songOffset[0];
-		var syncInst = Math.abs(songPosition - (inst.time + offInst + settingOffset)) > maxOff;
-		if (syncInst)
-			soundSync(inst, offInst);
+		if (Math.abs(songPosition - (inst.time + offset[0] + latency)) > maxOff)
+			soundSync(inst, offset[0]);
 
 		if (hasVocals)
 		{
-			var offVocs = songOffset[1];
-			var syncVocs = Math.abs(songPosition - (vocals.time + offVocs + settingOffset)) > maxOff;
-			if (syncInst)
-				soundSync(vocals, offVocs);
+			if (Math.abs(songPosition - (vocals.time + offset[1] + latency)) > maxOff)
+				soundSync(vocals, offset[1]);
 		}
 	}
 

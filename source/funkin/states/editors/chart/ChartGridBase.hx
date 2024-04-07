@@ -212,8 +212,8 @@ class ChartNoteGrid extends ChartGridBase
 
     public function updateWaveform():Void
     {
-        instWaveform.audioOffset = Conductor.songOffset.unsafeGet(0);
-        voicesWaveform.audioOffset = Conductor.songOffset.unsafeGet(1);
+        instWaveform.audioOffset = Conductor.offset[0];
+        voicesWaveform.audioOffset = Conductor.offset[1];
 
         var index = ChartingState.instance.sectionIndex;
         var start = ChartingState.getSecTime(index);

@@ -58,7 +58,7 @@ class LoadingState extends MusicBeatState
             charImages: charAssets,
             songSounds: songAssets
         },
-        function () {
+        () -> {
             trace("finished loading!", (openfl.Lib.getTimer() - start) / 1000);
 
             if (onComplete != null)
