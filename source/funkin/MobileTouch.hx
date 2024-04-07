@@ -35,7 +35,6 @@ class MobileTouch extends Sprite
         super();
 
         addEventListener(Event.ADDED_TO_STAGE, (e) -> {
-            
             var w = FlxG.stage.fullScreenWidth;
             var h = FlxG.stage.fullScreenHeight;
             

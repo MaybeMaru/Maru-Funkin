@@ -235,6 +235,7 @@ class FreeplayState extends MusicBeatState {
 	function loadSong(toChart:Bool):Void {
 		var songData = songs[curSelected];
 		var diff = curWeekDiffs[curDifficulty];
+		#if mobile MobileTouch.setMode(NONE); #end
 		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, #if DEV_TOOLS toChart ? ChartingState : #end null);
 	}
 

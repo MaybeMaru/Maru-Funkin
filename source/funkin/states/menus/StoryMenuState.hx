@@ -257,6 +257,7 @@ class StoryMenuState extends MusicBeatState {
 			CoolUtil.playSound('confirmMenu');
 			grpWeekText.members[curWeek].startFlashing();
 			grpWeekCharacters.members[1].playAnim('confirm', true);
+			#if mobile MobileTouch.setMode(NONE); #end
 
 			var playlist = getCurData().songList.songs;
 			var diff = curWeekDiffs[curDifficulty];

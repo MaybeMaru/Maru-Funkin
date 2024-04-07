@@ -2,7 +2,6 @@ package funkin.sound;
 
 import openfl.events.Event;
 import openfl.net.URLRequest;
-import openfl.Lib;
 import openfl.media.SoundMixer;
 import lime.media.AudioSource;
 import openfl.media.SoundTransform;
@@ -17,6 +16,7 @@ import openfl.media.Sound;
 @:access(lime.media.AudioSource)
 @:access(openfl.media.SoundMixer)
 @:access(openfl.media.Sound)
+@:access(flixel.FlxGame)
 class FlxFunkSound extends FlxBasic
 {
     @:noCompletion
@@ -59,7 +59,7 @@ class FlxFunkSound extends FlxBasic
     function set_sound(value:Sound):Sound {
         if (value != null)
         {
-            var init:()->Void = function () {
+            var init:()->Void = () -> {
                 length = value.length;
                 source.buffer = value.__buffer;
                 source.init();
@@ -74,7 +74,7 @@ class FlxFunkSound extends FlxBasic
 
             if (value.__urlLoading)
             {
-                var onLoad:Event->Void = function (e:Event) {
+                var onLoad:Event->Void = (e:Event) -> {
                     if (value == e.target)
                         init();
                 }
@@ -122,7 +122,7 @@ class FlxFunkSound extends FlxBasic
     {
         this.onLoad = onLoad;
         
-        if (!path.startsWith("./"))
+        if(!path.startsWith("https://")) if (!path.startsWith("./"))
             path = './$path';
         
         final sound = new Sound();
@@ -235,20 +235,20 @@ class FlxFunkSound extends FlxBasic
         source.position = position;
     }
 
-    var __lastLibTime:Float = 0;
+    var __lastTick:Float = 0;
     var __lastTime:Float = 0;
 
     // Quick interpolate fix until the ninjamuffin lime pr gets merged
     public function getTime():Float
     {
-        final time = source.currentTime;
+        final time:Int = source.currentTime;
 
         if (time != __lastTime) {
             __lastTime = time;
-            __lastLibTime = Lib.getTimer();
+            __lastTick = Main.game._total;
             return time;
         }
 
-        return time + Lib.getTimer() - __lastLibTime;
+        return time + Main.game._total - __lastTick;
     }
 }
