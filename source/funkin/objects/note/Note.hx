@@ -10,8 +10,12 @@ class Note extends BasicNote
 
     override function updateSprites() {
         super.updateSprites();
-        playAnim('scroll' + CoolUtil.directionArray[noteData]);
+        updateAnim();
     }
+
+	public function updateAnim() {
+		playAnim('scroll' + CoolUtil.directionArray[noteData]);
+	}
 
     override function applyCurOffset(forced:Bool = false) {
         if (animation.curAnim != null) {

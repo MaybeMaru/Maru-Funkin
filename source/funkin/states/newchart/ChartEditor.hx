@@ -25,6 +25,7 @@ class ChartEditor extends MusicBeatState
     public static function setupSong(song:String, diff:String, ?input:SwagSong):SwagSong
     {
         SONG = input ?? Song.loadFromFile(diff, song);
+        Conductor.loadSong(SONG.song);
         Conductor.bpm = SONG.bpm;
         Conductor.songPosition = 0.0;
         return SONG;

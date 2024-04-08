@@ -12,7 +12,8 @@ typedef CharacterJson = {
 	var isGF:Bool;
 } & SpriteJson;
 
-class Character extends FlxSpriteExt {
+class Character extends FlxSpriteExt
+{
 	public static final DEFAULT_CHARACTER:CharacterJson = {
 		anims: [],
 		imagePath: "week1/BOYFRIEND",

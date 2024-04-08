@@ -4,8 +4,11 @@ import flixel.graphics.frames.FlxFrame;
 
 class Sustain extends BasicNote
 {
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void {
-        clipRect = FlxRect.get();
+    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void
+    {
+        var initSus:Bool = (susLength > 0);
+        if (initSus) clipRect = FlxRect.get();
+        
         super(noteData, strumTime, skin); // Load skin
 
         this.parent = parent;
@@ -13,9 +16,11 @@ class Sustain extends BasicNote
         drawStyle = BOTTOM_TOP;
         alpha = 0.6;
         
-        yDisplace = NoteUtil.noteHeight * 0.5;
-        this.susLength = susLength;
-        setSusLength(susLength);
+        if (initSus) {
+            yDisplace = NoteUtil.noteHeight * 0.5;
+            this.susLength = susLength;
+            setSusLength(susLength);
+        }
     }
 
     override function set_noteSpeed(value:Float):Float {
@@ -126,7 +131,9 @@ class Sustain extends BasicNote
         setTiles(1, 1);
         calcHeight = frameHeight;
         repeatHeight = lastHeight;
-        clipRect.width = repeatWidth;
+        
+        if (clipRect != null)
+            clipRect.width = repeatWidth;
     }
 
     override function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame):FlxPoint {

@@ -13,6 +13,7 @@ class ChartGrid extends Group
 
     var notesGrid:FlxBackdrop;
     var eventsGrid:FlxBackdrop;
+    var content:ChartGridContent;
 
     var beats:FlxBackdrop;
 
@@ -60,6 +61,9 @@ class ChartGrid extends Group
         strumline = new ChartStrumLine(notesGrid.x);
         add(strumline);
 
+        content = new ChartGridContent();
+        add(content);
+
         prepareBpmChanges();
         prepareObjects();
 
@@ -87,14 +91,17 @@ class ChartGrid extends Group
         }
     }
 
-    function move(elapsed:Float):Void {
-        Conductor.songPosition += elapsed * 1000;
+    function move(elapsed:Float):Void
+    {
+        Conductor.songPosition = boundTime(Conductor.songPosition + elapsed * 1000);
 
-        if (Conductor.songPosition < 0)
-            Conductor.songPosition = 0;
-
-        if (Conductor.songPosition >= sectionTimes[curSection + 1]) curSection++;
-        if (Conductor.songPosition < sectionTimes[curSection]) {
+        if (Conductor.songPosition >= sectionTimes[curSection + 1])
+        {
+            if ((curSection + 1) != (sectionTimes.length - 1))
+                curSection++;
+        }
+        else if (Conductor.songPosition < sectionTimes[curSection])
+        {
             curSection--;
             Conductor.songPosition = sectionTimes[curSection + 1] - 1; // Adjust time
         }
@@ -131,7 +138,12 @@ class ChartGrid extends Group
 
     // Get the conductor songPosition time Y
     inline function getCurrentTimeY():Float {
-        return getTimeY(Math.max(0, getTime()));
+        return getTimeY(boundTime(getTime()));
+    }
+
+    // Bound a time value to the inst length
+    inline function boundTime(time:Float) {
+        return FlxMath.bound(time, 0, Conductor.inst.length - Conductor.offset[0] - Conductor.latency);
     }
 
     // TODO:
@@ -139,19 +151,17 @@ class ChartGrid extends Group
     // Maybe generate notes first and make another function to position them at runtime?
     // Make a beats seperator class to accomodate for that too
 
-    public var sectionObjects:Array<Array<FlxObject>> = [];
-
     function prepareObjects() {
         ChartEditor.SONG.notes.fastForEach((section, i) ->
         {
-            var array:Array<FlxObject> = [];
+            var array:Array<FlxBasic> = [];
 
             section.sectionNotes.fastForEach((note, i) -> {
-                var note = makeNote(note[0], note[1]);
+                var note = makeNote(note[0], note[1], note[2]);
                 array.push(note);
             });
 
-            sectionObjects.push(array);
+            content.sectionNotes.push(array);
         });
     }
 
@@ -171,14 +181,16 @@ class ChartGrid extends Group
             
             time += 4 * (60000 / bpm);
         });
+
+        sectionTimes.push(time);
     }
 
-    function makeNote(strumTime:Float, noteData:Int) {
-        var note = new Note(noteData, strumTime);
-        note.x = notesGrid.x + (TILE * noteData);
-        note.y = getTimeY(strumTime);
-        note.setGraphicSize(TILE, TILE);
-        note.updateHitbox();
+    function makeNote(strumTime:Float, noteData:Int, ?susLength:Float) {
+        var note = new ChartNote(noteData, susLength ?? 0, downscroll);
+        note.setPos(
+            notesGrid.x + (TILE * noteData), 
+            getTimeY(strumTime)
+        );
         return note;
     }
 
@@ -190,24 +202,7 @@ class ChartGrid extends Group
         Conductor.songPosition = sectionTimes[value] ?? sectionTimes[sectionTimes.length - 1];
         updatePosition();
 
-        return curSection = value;
-    }
-
-    override function draw() {
-        super.draw();
-
-        // Render the 3 current visible sections, maybe make this higher depending on the snap?
-        // TODO: replace with ChartGridContent
-        for (i in 0...3)
-        {
-            if (sectionObjects[curSection - 1 + i] != null)
-            {
-                sectionObjects[curSection - 1 + i].fastForEach((object, i) -> {
-                    if (object != null) if (object.exists) if (object.visible)
-                        object.draw();
-                });
-            }
-        }
+        return content.renderSection = curSection = value;
     }
 
     override function destroy() {

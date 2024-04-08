@@ -2,10 +2,9 @@ package funkin.states.newchart;
 
 class ChartGridContent extends FlxBasic
 {
-    public var sectionSustains:Array<Array<FlxObject>> = [];
-    public var sectionNotes:Array<Array<FlxObject>> = [];
-    public var sectionEvents:Array<Array<FlxObject>> = [];
-    public var sectionTexts:Array<Array<FlxObject>> = [];
+    public var sectionNotes:Array<Array<FlxBasic>> = [];
+    public var sectionEvents:Array<Array<FlxBasic>> = [];
+    public var sectionTexts:Array<Array<FlxBasic>> = [];
 
     public var renderSection:Int = 0;
     public var renderRange:Int = 3;

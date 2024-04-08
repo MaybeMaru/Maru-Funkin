@@ -286,7 +286,6 @@ class ChartSustain extends Sustain {
         }
 
         repeatHeight = FlxMath.remapToRange(chartData[2], 0, Conductor.stepCrochet, 0, GRID_SIZE) + GRID_SIZE * .5;
-        clipRect.height = repeatHeight;
     }
 }
 
