@@ -29,8 +29,8 @@ typedef SpriteJson = {
 /*
     Just FlxSprite but with helper functions
 */
-class FlxSpriteExt extends FlxSkewedSprite {
-
+class FlxSpriteExt extends FlxSkewedSprite
+{
 	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
@@ -406,11 +406,17 @@ class FlxSpriteExt extends FlxSkewedSprite {
 
 	public var scaleOffset:Bool = false;
 
-	public function applyCurOffset(forced:Bool = false):Void {
-		if (animation.curAnim != null) {
-			if(existsOffsets(animation.curAnim.name)) {
+	public function applyCurOffset(forced:Bool = false):Void
+	{
+		if (animation.curAnim != null)
+		{
+			if(existsOffsets(animation.curAnim.name))
+			{
+				var animPoint = animOffsets.get(animation.curAnim.name);
 				var point = CoolUtil.point;
-				point.copyFrom(animOffsets.get(animation.curAnim.name));
+				point.x = animPoint.x;
+				point.y = animPoint.y;
+				
 				if (!point.isZero() || forced) {
 					
 					if (flippedOffsets) point.x = -point.x; // Flip X

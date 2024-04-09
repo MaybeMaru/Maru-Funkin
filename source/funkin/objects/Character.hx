@@ -242,8 +242,9 @@ class Character extends FlxSpriteExt
 	public var _singHoldTimer:Float = 0;
 	public var holdFrame:Int = 2;
 
-	public function sing(noteData:Int = 0, altAnim:String = '', hit:Bool = true):Void {
-		final singAnim = 'sing${CoolUtil.directionArray[noteData%Conductor.NOTE_DATA_LENGTH]}$altAnim';
+	public function sing(noteData:Int = 0, altAnim:String = '', hit:Bool = true):Void
+	{
+		final singAnim:String = 'sing${CoolUtil.directionArray[noteData % Conductor.NOTE_DATA_LENGTH]}$altAnim';
 		if (!existsOffsets(singAnim)) return;
 		
 		holdTimer = 0;

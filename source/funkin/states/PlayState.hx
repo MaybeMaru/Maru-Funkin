@@ -836,10 +836,11 @@ class PlayState extends MusicBeatState
 		addCharScript(newChar);
 
 		switch (type) {
-			case 'dad': dad = newChar;
+			case 'dad': dad = newChar; notesGroup.dad = newChar;
 			case 'girlfriend' | 'gf': gf = newChar;
-			default: boyfriend = newChar;
+			default: boyfriend = newChar; notesGroup.boyfriend = newChar;
 		}
+		
 		cameraMovement();
 	}
 

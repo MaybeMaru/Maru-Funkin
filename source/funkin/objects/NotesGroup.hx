@@ -10,9 +10,9 @@ class NotesGroup extends Group
 {	
 	public static var instance:NotesGroup;
     public var SONG:SwagSong;
-	var game:PlayState;
-	var boyfriend:Character;
-	var dad:Character;
+	public var game:PlayState;
+	public var boyfriend:Character;
+	public var dad:Character;
 
     public static var songSpeed:Float = 1.0;
     public var curSong:String = 'test';
@@ -61,7 +61,8 @@ class NotesGroup extends Group
 
 	inline function hitNote(note:Note, character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		note.wasGoodHit = true;
-		if (note.child != null) note.child.startedPress = true;
+		if (note.child != null)
+			note.child.startedPress = true;
 
 		if (character != null) {
 			character.sing(note.noteData, note.altAnim);
@@ -501,7 +502,7 @@ class NotesGroup extends Group
 			if (removeList.length > 0) removeList.splice(0, removeList.length);
 			if (ignoreList.length > 0) ignoreList.splice(0, ignoreList.length);
 
-			notes.forEachAlive(function (note:BasicNote) {
+			notes.forEachAlive((note:BasicNote) -> {
 				if (isCpuNote(note))
 					return;
 
@@ -595,14 +596,14 @@ class NotesGroup extends Group
 
 	inline function checkStrums(array:Array<NoteStrum>):Void {
 		array.fastForEach((strum, i) -> {
-			final anim = strum.animation.curAnim;
-			if (anim == null) continue; // Lil null check
-			
-			if (strum.getControl(JUST_PRESSED)) if (!anim.name.startsWith('confirm'))
-				strum.playStrumAnim('pressed');
-			
-			if (!strum.getControl())
-				strum.playStrumAnim('static');
+			if (strum.animation.curAnim != null) // Lil null check
+			{
+				if (strum.getControl(JUST_PRESSED)) if (!strum.animation.curAnim.name.startsWith('confirm'))
+					strum.playStrumAnim('pressed');
+				
+				if (!strum.getControl())
+					strum.playStrumAnim('static');
+			}
 		});
 	}
 
@@ -620,9 +621,7 @@ class NotesGroup extends Group
 		if (char == null) return;
 		if (char.animation.curAnim == null) return;
 		
-		var anim = char.animation.curAnim;
-		var name:String = anim.name;
-		
+		var name:String = char.animation.curAnim.name;
 		var overSinging:Bool =
 		(char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
 		&& name.startsWith('sing')
