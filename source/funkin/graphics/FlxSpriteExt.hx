@@ -401,7 +401,8 @@ class FlxSpriteExt extends FlxSkewedSprite
 	@:noCompletion
 	static final __scaleDiff:FlxPoint = FlxPoint.get();
 	inline public function getScaleDiff():FlxPoint {
-		return __scaleDiff.set(scale.x / spriteJson.scale, scale.y / spriteJson.scale);
+		var jsonScale:Float = spriteJson.scale;
+		return __scaleDiff.set(scale.x / jsonScale, scale.y / jsonScale);
 	}
 
 	public var scaleOffset:Bool = false;
@@ -420,9 +421,16 @@ class FlxSpriteExt extends FlxSkewedSprite
 				if (!point.isZero() || forced) {
 					
 					if (flippedOffsets) point.x = -point.x; // Flip X
-					if (scaleOffset)	point.scalePoint(getScaleDiff()); // Scale offset
 					
-					if (angle != 0) { // Angled offset
+					if (scaleOffset) // Scale offset
+					{
+						var diff = getScaleDiff();
+						point.x = point.x * diff.x;
+						point.y = point.y * diff.y;
+					}
+					
+					if (angle != 0) // Angled offset
+					{
 						offset.set(
 							(point.x * _cosAngle) + (point.y * -_sinAngle),
 							(point.x * _sinAngle) + (point.y * _cosAngle)

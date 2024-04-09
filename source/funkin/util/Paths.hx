@@ -289,23 +289,30 @@ class Paths
 		return frames;
 	}
 
-	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, ?extension:String, ?folder:String):Array<String>
+	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, extension:String = "", folder:String = ""):Array<String>
 	{
-		var fileList:Array<String> = [];
+		if (folder.length > 0) if (!folder.endsWith("/"))
+			folder = '$folder/';
+
+		var list:Array<String> = [];
 		OpenFlAssets.list(type).fastForEach((file, i) ->
 		{
 			if (file.startsWith('assets/'))
 			{
-				if (extension == null || file.endsWith(extension))
+				if (extension.length == 0 || file.endsWith(extension))
 				{
-					if (folder == null || file.contains(folder))
-						fileList.push(fullPath ? file : file.split('/')[file.split('/').length-1].split('.')[0]);
+					if (folder.length == 0 || file.contains(folder))
+					{
+						list.push(fullPath ? file
+							: file.split('/')[file.split('/').length-1].split('.')[0]
+						);
+					}
 				}
 			}
 		});
 
-		fileList.sort(CoolUtil.sortAlphabetically);
-		return fileList;
+		list.sort(CoolUtil.sortAlphabetically);
+		return list;
 	}
 
 	static public function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
