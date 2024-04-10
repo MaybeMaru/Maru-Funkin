@@ -50,8 +50,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 			ModdingUtil.addCall('stateCreate');
 		}
 
-		if (Main.transition != null)
-			Main.transition.exitTrans();
+		if (Main.transition != null) // Make sure it runs after all of create is loaded in
+			FlxG.signals.postUpdate.addOnce(() -> Main.transition.exitTrans());
 	}
 
 	// Only for backwards compatibility

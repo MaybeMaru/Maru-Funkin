@@ -120,6 +120,13 @@ class CoolUtil {
 
 		gc(true);
 	}
+
+	inline public static function enableGc(enable:Bool = true)
+	{
+		#if (cpp || hl)
+		Gc.enable(enable);
+		#end
+	}
 	
 	inline public static function gc(major:Bool = false) {
 		#if (cpp || hl || neko)

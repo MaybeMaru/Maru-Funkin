@@ -265,6 +265,8 @@ class AssetManager
 			}
 		}
 
+		CoolUtil.enableGc(false);
+
 		if (stageImages.length > 0)
 			FunkThread.run(() -> cacheImages(stageImages));
 		
@@ -305,6 +307,7 @@ class AssetManager
 		sounds.clear();
 		sounds = null;
 
+		CoolUtil.enableGc(true);
 		CoolUtil.gc(true);
 
 		if (onComplete != null)
