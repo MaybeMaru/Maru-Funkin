@@ -279,18 +279,15 @@ class CoolUtil {
 		FlxG.sound.music = null;
 	}
 
-	public static inline var baseLerp = 1 / 60;
 	inline public static function getLerp(ratio:Float):Float {
-		return FlxG.elapsed / baseLerp * ratio;
+		return FlxG.elapsed / (1 / 60) * ratio;
 	}
 
-	inline public static function coolLerp(a:Float, b:Float, ratio:Float):Float {
+	inline public static function lerp(a:Float, b:Float, ratio:Float):Float {
 		return FlxMath.lerp(a, b, getLerp(ratio));
 	}
 
-	public static inline function sortByStrumTime(a:Dynamic, b:Dynamic) {
-		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
-	}
+	inline public static function coolLerp(a:Float, b:Float, r:Float):Float return lerp(a, b, r);
 
 	public static function sortAlphabetically(a:String, b:String):Int {
         a = a.toUpperCase();
@@ -332,11 +329,17 @@ class CoolUtil {
 		return classFolders.join(formatDir ? '/' : '.');
 	}
 
-	inline public static function formatInt(text:Dynamic, zeroLength:Int = 5):String {
-		var result:String = Std.string(text);
+	inline public static function formatInt(value:Dynamic, zeroLength:Int = 5):String
+	{
+		var result:String = Std.string(value);
 		var lengthDiff:Int = zeroLength - result.length;
-		if (lengthDiff <= 0)		return result;
-		for (i in 0...lengthDiff)	result = '0$result';
+
+		if (lengthDiff <= 0)
+			return result;
+
+		for (i in 0...lengthDiff)
+			result = '0$result';
+		
 		return result;
 	}
 
@@ -357,14 +360,14 @@ class CoolUtil {
 	}
 
 	inline public static function cacheImage(image:FlxGraphicAsset, ?library:String, ?camera:FlxCamera):FlxGraphicAsset {
-		if (image == null) return null;
-		
-		if (image is String)
-			image = Paths.image(image, library);
-
-		if ((camera != null) && (image is FlxGraphic))
-			camera.startQuadBatch(image, false, false, null, false, null);
-
+		if (image != null)
+		{
+			if (image is String)
+				image = Paths.image(image, library);
+	
+			if (camera != null) if (image is FlxGraphic)
+				camera.startQuadBatch(image, false, false, null, false, null);
+		}
 		return image;
 	}
 
@@ -387,24 +390,26 @@ class CoolUtil {
 		var i = 0;
 		var l = judgeOffsets.length;
 		while (i < l) {
-			if (checkDiff(noteDiff, judgeOffsets[i]))
-                return returnJudgements[i];
+			if (checkDiff(noteDiff, judgeOffsets.unsafeGet(i)))
+                return returnJudgements.unsafeGet(i);
 			i++;
 		}
 		return "sick";
     }
 
     inline public static function checkDiff(noteDiff:Float, safeOffset:Int):Bool {
-        var safeZoneOffset = Conductor.safeZoneOffset;
         var millisecondDiff = getMillisecondDiff(safeOffset);
-        return (noteDiff > safeZoneOffset * millisecondDiff || noteDiff < safeZoneOffset * -millisecondDiff);
+        return (
+			(noteDiff > (Conductor.safeZoneOffset * millisecondDiff)) ||
+			(noteDiff < (Conductor.safeZoneOffset * -millisecondDiff))
+			);
     }
 
     inline public static function getMillisecondDiff(milliseconds:Int):Float {
         return (milliseconds * Conductor.safeZoneOffsetMult);
     }
 
-    inline public static function getNoteDiff(daNote:Note):Float {
-        return Math.abs(daNote.strumTime - Conductor.songPosition);
+    inline public static function getNoteDiff(note:Note):Float {
+        return Math.abs(note.strumTime - Conductor.songPosition);
     }
 }

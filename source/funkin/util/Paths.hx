@@ -17,7 +17,8 @@ class Paths
 	public static function set_currentLevel(value:String)
 		return currentLevel = value.toLowerCase();
 
-	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String {
+	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String
+	{
 		final hasLevel = currentLevel.length > 0;
 		
 		#if MODS_ALLOWED
@@ -272,17 +273,17 @@ class Paths
 			return frames;
 
 		var lodScale = parent.lodScale;
-		for (frame in frames.frames) {
+		frames.frames.fastForEach((frame, i) -> {
 			var rect = frame.frame;
-			rect.x /= lodScale;
-            rect.y /= lodScale;
-            rect.width /= lodScale;
-            rect.height /= lodScale;
-
+			rect.x = rect.x / lodScale;
+			rect.y = rect.y / lodScale;
+			rect.width = rect.width / lodScale;
+			rect.height = rect.height / lodScale;
+			
 			var offset = frame.offset;
 			offset.x /= lodScale;
 			offset.y /= lodScale;
-		}
+		});
 
 		parent.parsedChildren = true;
 

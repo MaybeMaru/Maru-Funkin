@@ -103,10 +103,11 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			return;
 
 		if (shader == null)
+		{
 			shader = graphics.shader;
-
-		if (shader == null)
-			return;
+			if (shader == null)
+				return;
+		}
 
 		shader.bitmap.input = graphics.bitmap;
 		shader.alpha.value = alphas;

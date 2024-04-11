@@ -295,8 +295,8 @@ class NotesGroup extends Group
 
 		scrollSpeed = songSpeed;
 
-		unspawnNotes.sort(CoolUtil.sortByStrumTime);
-		events.sort(CoolUtil.sortByStrumTime);
+		unspawnNotes.sort((a:BasicNote, b:BasicNote) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
+		events.sort((a:Event, b:Event) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 
 		curSpawnNote = unspawnNotes[0];
 		curCheckEvent = events[0];
