@@ -300,17 +300,21 @@ class CoolUtil {
         return 0;
     }
 
-	public static function customSort(input:Array<String>, customOrder:Array<String>):Array<String> {
+	public static function customSort(input:Array<String>, sort:Array<String>):Array<String>
+	{
 		var result:Array<String> = [];
-		for (i in customOrder) {
-			if (input.contains(i)) {
-				result.push(i);
-				input.remove(i);
+		
+		sort.fastForEach((file, i) -> {
+			if (input.contains(file))
+			{
+				result.push(file);
+				input.remove(file);
 			}
-		}
+		});
 
 		input.sort(sortAlphabetically);
-		return result.concat(input);
+		input.fastForEach((file, i) -> result.push(file));
+		return result;
 	}
 
 	public static function removeDuplicates(input:Array<String>):Array<String> {

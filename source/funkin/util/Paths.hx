@@ -315,38 +315,47 @@ class Paths
 		return list;
 	}
 
-	static public function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
+	public static function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
 		#if MODS_ALLOWED
 		var fileList:Array<String> = [];
-		var pushFile = function(folderPath:String) {
-			if (FileSystem.exists(folderPath)) {
-				var fileSort = CoolUtil.getFileContent('$folderPath/listSort.txt').split(",");
-				for (i in 0...fileSort.length) {
-					var sortPrefix = fullPath ? '$folderPath/' : '';
-					var sortSuffix = extension == null || !fullPath ? "" : '.$extension';
-					fileSort[i] = '$sortPrefix${fileSort[i]}$sortSuffix';
-				}
+		var pushFile = (folder:String) ->
+		{
+			if (FileSystem.exists(folder))
+			{
+				var sort:Array<String> = CoolUtil.getFileContent('$folder/listSort.txt').split(",");
+				sort.fastForEach((file, i) -> {
+					var prefix = fullPath ? '$folder/' : '';
+					var suffix = ((extension == null) || !fullPath) ? "" : '.$extension';
+					sort.unsafeSet(i, prefix + file + suffix);
+				});
 
-				var curFolderList = [];
-				var dirRead = FileSystem.readDirectory(folderPath);
-				dirRead.sort(CoolUtil.sortAlphabetically);
-				for (i in dirRead) {
-					if (i.endsWith(extension) || extension == null)
-						curFolderList.push(fullPath ? '$folderPath/$i' : Path.withoutExtension(i));
-				}
+				var folderList:Array<String> = [];
+				FileSystem.readDirectory(folder).fastForEach((path, i) -> {
+					if (extension == null || path.endsWith(extension))
+					{
+						var path = fullPath ? '$folder/$path' : Path.withoutExtension(path);
+						folderList.push(path);
+					}
+				});
 
-				fileList = fileList.concat(CoolUtil.customSort(curFolderList, fileSort));
+				var sortedList = CoolUtil.customSort(folderList, sort);
+				sortedList.fastForEach((file, i) -> fileList.push(file));
 			}
 		};
-		if (global) pushFile(getModPath(folder));
-		if (curFolder) pushFile(getModPath('${ModdingUtil.curModFolder}/$folder'));
+
+		if (global)
+			pushFile(getModPath(folder));
+
+		if (curFolder)
+			pushFile(getModPath(ModdingUtil.curModFolder + '/$folder'));
+
 		if (allFolders) {
-			for (i in ModdingUtil.activeMods.keys()) {
-				if (ModdingUtil.activeMods.get(i))
-					pushFile(getModPath('$i/$folder'));
+			for (mod => active in ModdingUtil.activeMods) {
+				if (active)
+					pushFile(getModPath('$mod/$folder'));
 			}
 		}
-		
+
 		return fileList;
 		#else
 		return [];

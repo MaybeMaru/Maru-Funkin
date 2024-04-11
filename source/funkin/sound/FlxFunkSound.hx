@@ -123,7 +123,7 @@ class FlxFunkSound extends FlxBasic
         this.onLoad = onLoad;
         
         if(!path.startsWith("https://")) if (!path.startsWith("./"))
-            path = './$path';
+            path = './' + (path.contains(':') ? path.split(':').unsafeGet(1) : path);
         
         final sound = new Sound();
         sound.load(new URLRequest(path));
@@ -148,7 +148,7 @@ class FlxFunkSound extends FlxBasic
 
     public var loops(default, set):Int = 0;
     inline function set_loops(value:Int):Int {
-        if (value < 1) loops = 1;
+        if (value < 1) value = 1;
         return loops = source.loops = value - 1;
     }
 
@@ -180,6 +180,8 @@ class FlxFunkSound extends FlxBasic
     override function update(elapsed:Float):Void {
         updateVolume();
     }
+
+    override function draw() {}
 
     var _lastStopTime:Int;
 

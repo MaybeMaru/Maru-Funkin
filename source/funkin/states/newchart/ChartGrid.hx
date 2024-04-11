@@ -75,6 +75,22 @@ class ChartGrid extends Group
 
     override function update(elapsed:Float)
     {
+        /*if (FlxG.keys.justPressed.SPACE)
+        {
+            if (Conductor.playing)
+            {
+                Conductor.songPosition = getTime();
+                Conductor.pause();
+                Conductor.sync();
+            }
+            else
+            {
+                Conductor.inst.time = Conductor.songPosition + Conductor.offset[0] + Conductor.latency;
+                Conductor.resume();
+                Conductor.sync();
+            }
+        }*/
+
         if (Conductor.playing)
         {
             updatePosition();
@@ -127,7 +143,7 @@ class ChartGrid extends Group
 
     // Use inst time when possible to avoid needing to sync all the time lol
     inline function getTime():Float {
-        return Conductor.playing ? Conductor.inst.time + Conductor.offset[0] + Conductor.latency : Conductor.songPosition;
+        return Conductor.playing ? Conductor.inst.time - Conductor.offset[0] - Conductor.latency : Conductor.songPosition;
     }
 
     // TODO: Change the 16 with the snap later

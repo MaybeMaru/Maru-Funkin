@@ -61,7 +61,8 @@ class WeekSetup {
         hideFreeplay: false,
 	}
 
-    public static function getWeekList() {//:Array<WeekJson> {
+    public static function getWeekList():Array<WeekData>
+    {
         var weeks:Array<String> = [];
 
         // Get week json lists
@@ -102,6 +103,8 @@ class WeekSetup {
 
         for (i in weeks) {
             final getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$i.json', TEXT, null, true));
+            if (getJson.length <= 0) continue; // dont add empty weeks
+            
             final parsedJson:WeekJson = checkWeek(Json.parse(getJson));
 
             final _data:WeekData = {
