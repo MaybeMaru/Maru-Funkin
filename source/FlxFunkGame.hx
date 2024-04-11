@@ -14,9 +14,33 @@ interface IUpdateable {
 	public function update(elapsed:Float):Void;
 }
 
+// Update shit with a plugin instead of overriding FlxGame update
+class FunkGamePlugin extends FlxBasic
+{
+    public var updateObjects:Array<IUpdateable> = [];
+
+    override function update(elapsed:Float)
+    {
+        #if mobile
+        MobileTouch.touch.update(elapsed);
+        #end
+        
+        #if DEV_TOOLS
+        Main.console.update(elapsed);
+        #end
+
+        Main.transition.update(elapsed);
+
+        if (FlxG.state.persistentUpdate) if (updateObjects.length > 0) {
+            updateObjects.fastForEach((object, i) -> object.update(elapsed));
+        }
+    }
+}
+
 class FlxFunkGame extends FlxGame
 {
     public var transition:Transition;
+    public var plugin:FunkGamePlugin;
 
     #if DEV_TOOLS
     public var console:ScriptConsole;
@@ -43,6 +67,7 @@ class FlxFunkGame extends FlxGame
 
         // Plugins
         FlxG.plugins.addPlugin(FlxFunkSoundGroup.group = new FlxFunkSoundGroup<FlxFunkSound>());
+        FlxG.plugins.addPlugin(plugin = new FunkGamePlugin());
         
         super.create(_);
 
@@ -72,63 +97,6 @@ class FlxFunkGame extends FlxGame
         FlxG.stage.quality = LOW;
         
         Preferences.effectPrefs();
-    }
-
-    public var updateObjects:Array<IUpdateable> = [];
-
-    override function update():Void
-    {
-        if (!_state.active) return;
-        else if (!_state.exists) return;
-
-		if (_nextState != null)
-			switchState();
-
-		#if FLX_DEBUG
-		if (FlxG.debugger.visible)
-			ticks = getTicks();
-		#end
-
-		updateElapsed();
-        var elapsed = FlxG.elapsed;
-
-		FlxG.signals.preUpdate.dispatch();
-
-		updateInput();
-        
-        #if mobile
-        MobileTouch.touch.update(elapsed);
-        #end
-
-		#if FLX_SOUND_SYSTEM
-		FlxG.sound.update(elapsed);
-		#end
-		
-        FlxG.plugins.update(elapsed);
-        transition.update(elapsed);
-        
-        #if DEV_TOOLS
-        console.update(elapsed);
-        #end
-
-		_state.tryUpdate(elapsed);
-
-        if (_state.persistentUpdate) if (updateObjects.length > 0) {
-            updateObjects.fastForEach((object, i) -> object.update(elapsed));
-        }
-
-		FlxG.cameras.update(elapsed);
-		FlxG.signals.postUpdate.dispatch();
-
-		#if FLX_DEBUG
-		debugger.stats.flixelUpdate(getTicks() - ticks);
-		#end
-
-		#if FLX_POINTER_INPUT
-		FlxArrayUtil.clearArray(FlxG.swipes);
-		#end
-
-		filters = filtersEnabled ? _filters : null;
     }
     
     public var enabledSoundTray(default, set):Bool = true;

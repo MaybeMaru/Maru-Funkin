@@ -181,8 +181,6 @@ class FlxFunkSound extends FlxBasic
         updateVolume();
     }
 
-    override function draw() {}
-
     var _lastStopTime:Int;
 
     public function stop():Void {

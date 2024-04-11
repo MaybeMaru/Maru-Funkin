@@ -62,30 +62,35 @@ class FunkBar extends FlxSpriteExt {
 
     public var barPoint:FlxPoint = FlxPoint.get();
 
-    public override function draw():Void
-    {
+    public override function draw():Void {
         if (!visible) return;
 		if (alpha == 0) return;
 		
 		checkEmptyFrame();
 		if (_frame.type == EMPTY) return;
-		if (dirty)
+		
+        if (dirty)
             calcFrame(useFramePixels);  // rarely
 
         cameras.fastForEach((camera, i) -> {
 			barPoint.set(-9999,-9999);
             if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
 				drawComplex(camera);
-				#if FLX_DEBUG FlxBasic.visibleCount++; #end
+				#if FLX_DEBUG
+                FlxBasic.visibleCount++;
+                #end
 			}
 		});
 
-		#if FLX_DEBUG if (FlxG.debugger.drawDebug) drawDebug(); #end
+		#if FLX_DEBUG
+        if (FlxG.debugger.drawDebug)
+            drawDebug();
+        #end
     }
 
     public override function drawComplex(camera:FlxCamera)
     {
-		__prepareDraw();
+		__prepareDraw(camera);
 
         var percent:Float = percent;
         if (flipped)
