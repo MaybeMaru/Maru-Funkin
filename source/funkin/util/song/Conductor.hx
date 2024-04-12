@@ -9,7 +9,8 @@ typedef BPMChangeEvent = {
 	var bpm:Float;
 }
 
-class Conductor {
+class Conductor
+{
 	inline public static var NOTE_DATA_LENGTH:Int = 4;
 	inline public static var STRUMS_LENGTH:Int = NOTE_DATA_LENGTH * 2;
 

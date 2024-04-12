@@ -59,10 +59,7 @@ class MainMenuState extends MusicBeatState {
 			menuItem.ID = i;
 		}
 
-		var menuCam:FlxCamera = new FlxCamera();
-		FlxG.cameras.add(menuCam);
-		FlxG.cameras.setDefaultDrawTarget(menuCam, true);
-		menuCam.follow(camFollow, null, 0.06);
+		FlxG.camera.follow(camFollow, null, 0.06);
 
 		var versionText:String = 'Mau Engin v${Main.engineVersion}\nFriday Night Funkin v${Application.current.meta.get('version')}';
 

@@ -40,9 +40,13 @@ class ModItem extends FlxSpriteGroup {
         enableButton = new FlxSpriteExt(modBox.width,modBox.height).loadImageTiled('options/modButton', 60, 58);
         enableButton.animation.add('on', [0]);
         enableButton.animation.add('off', [1]);
+        add(enableButton);
+        
+        enableButton.width *= enableButton.lodScale;
+        enableButton.height *= enableButton.lodScale;
+        
         enableButton.x -= enableButton.width + 5;
         enableButton.y -= enableButton.height + 5;
-        add(enableButton);
 
         enabled = ModdingUtil.activeMods.get(mod.folder);
         updateUI();

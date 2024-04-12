@@ -1,4 +1,3 @@
-import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxGradient;
 
 var cars = [];
