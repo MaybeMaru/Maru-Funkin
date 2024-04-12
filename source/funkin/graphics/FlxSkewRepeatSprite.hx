@@ -1,5 +1,6 @@
 package funkin.graphics;
 
+import flixel.graphics.tile.FlxDrawQuadsItem;
 import flixel.math.FlxMatrix;
 import flixel.graphics.frames.FlxFrame;
 import openfl.display.BitmapData;
@@ -20,9 +21,9 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite
 
     static var scaledWiggleX:Float = 1.0;
 
-    override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, bitmap:BitmapData, tilePos:FlxPoint, camera:FlxCamera) {
+    override function drawTile(tileX:Int, tileY:Int, tileFrame:FlxFrame, baseFrame:FlxFrame, quad:FlxDrawQuadsItem, tilePos:FlxPoint, camera:FlxCamera) {
         if (wigglePower == 0) {
-            super.drawTile(tileX, tileY, tileFrame, baseFrame, bitmap, tilePos, camera);
+            super.drawTile(tileX, tileY, tileFrame, baseFrame, quad, tilePos, camera);
             return;
         }
 
@@ -40,7 +41,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite
         if (clipRect == null)
             offsetSkew(tileFrame, baseFrame);
         
-        super.drawTile(tileX, idY, tileFrame, baseFrame, bitmap, tilePos, camera);
+        super.drawTile(tileX, idY, tileFrame, baseFrame, quad, tilePos, camera);
     }
 
     inline function isLeftSkew():Bool {

@@ -7,7 +7,8 @@ import flixel.addons.util.FlxAsyncLoop;
 	Credits to Rozebud
 */
 
-class Preloader extends FlxState {
+class Preloader extends FlxState
+{
     inline public static function cacheImage(key:String) {
         AssetManager.cacheGraphicPath(key, true);
     }
@@ -61,8 +62,10 @@ class Preloader extends FlxState {
     var _index:Int = 0;
     var _length:Int = 0;
 
-    public function loadBitmap():Void {
-        if (imageCache.length <= 0) return;
+    public function loadBitmap():Void
+    {
+        if (imageCache.length <= 0)
+            return;
 
         final cacheStr = imageCache[0];
         if (cacheStr != null) {

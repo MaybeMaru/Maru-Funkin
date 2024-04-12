@@ -176,9 +176,6 @@ class FlxSpriteExt extends FlxSkewedSprite
 		
 		checkEmptyFrame();
 		if (_frame.type == EMPTY) return;
-		
-		if (dirty)
-			calcFrame(useFramePixels);  // rarely
 
 		cameras.fastForEach((camera, i) -> {
 			if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {

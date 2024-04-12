@@ -261,7 +261,7 @@ class Character extends FlxSpriteExt
 		}
 	}
 
-	var heyTimer:FlxTimer = null;
+	var heyTimer:FlxTimer;
 
 	public function hey():Void {
 		final heyAnim = isGF ? 'cheer' : 'hey';
@@ -269,15 +269,16 @@ class Character extends FlxSpriteExt
 
 		playAnim(heyAnim, true);
 		specialAnim = true;
-		if (heyTimer != null)
-			heyTimer.cancel();
 
-		heyTimer = new FlxTimer().start(Conductor.crochetMills, function(tmr:FlxTimer) {
+		(heyTimer == null) ? heyTimer = new FlxTimer() : heyTimer.cancel();
+		heyTimer.start(Conductor.crochetMills, (tmr:FlxTimer) -> {
 			specialAnim = false;
-			final curAnim = animation.curAnim;
-			if (curAnim == null) return;
-			if (curAnim.name == 'hey' || curAnim.name == 'cheer')
-				restartDance();
+			if (animation.curAnim != null)
+			{
+				var name = animation.curAnim.name;
+				if (name == 'hey' || name == 'cheer')
+					restartDance();
+			}
 		});
 	}
 
@@ -292,21 +293,27 @@ class Character extends FlxSpriteExt
 	public var danced:Bool = false;
 	public var curDanceBeat:Int = 0;
 
-	public function inIdle() {
-		final curAnim = animation.curAnim;
-		if (curAnim == null) return false;
-		return curAnim.name.startsWith('dance') || curAnim.name.startsWith('idle');
+	public function inIdle():Bool
+	{
+		if (animation.curAnim == null)
+			return false;
+
+		var name = animation.curAnim.name;
+		return name.startsWith("dance") || name.startsWith("idle");
 	}
 
-	public function dance() {
+	public function dance():Void {
 		if (!debugMode) if (forceDance) if (!specialAnim)
 			getDanceAnim();
 	}
 
-	public function danceInBeat() {
-		final curAnim = animation.curAnim;
-		if (curAnim == null) return;
-		if (!animation.curAnim.name.startsWith("sing")) {
+	public function danceInBeat():Void
+	{
+		if (animation.curAnim == null)
+			return;
+
+		if (!animation.curAnim.name.startsWith("sing"))
+		{
 			curDanceBeat--;
 			if (curDanceBeat < 0) {
 				curDanceBeat = danceBeat;
@@ -319,7 +326,7 @@ class Character extends FlxSpriteExt
 	public inline function danceCheck() // Backwards compatibility lol
 		danceInBeat();
 
-	function isDoubleDancer() {
+	function isDoubleDancer():Bool {
 		for(i in animOffsets.keys()) {
 			if (i.startsWith("danceRight"))
 				return true;

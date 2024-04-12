@@ -1,19 +1,18 @@
 package;
 
-class SplashState extends FlxState {
-    override function create() {
+class SplashState extends FlxState
+{
+    override function create():Void {
         super.create();
 
         final iconz:FunkinSprite = new FunkinSprite('title/healthHeads');
         iconz.screenCenter();
 
-        new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+        new FlxTimer().start(0.5, (tmr) -> {
             add(iconz);
-            FlxG.sound.play(Paths.sound('intro/introSound'), 1, false, null, true, function() {
-                new FlxTimer().start(0.1, function(tmr:FlxTimer) iconz.destroy() );
-                new FlxTimer().start(0.5, function(tmr:FlxTimer) {
-                    switchStuff();
-                });
+            FlxG.sound.play(Paths.sound('intro/introSound'), 1, false, null, true, () -> {
+                new FlxTimer().start(0.1, (tmr) -> iconz.destroy() );
+                new FlxTimer().start(0.5, (tmr) -> switchStuff());
             });
         });
 
@@ -24,12 +23,12 @@ class SplashState extends FlxState {
         trace('Checking if version is outdated');	
 		var gitFile = new haxe.Http("https://raw.githubusercontent.com/MaybeMaru/FNF-Engine-Backend/main/gameVersion.json");
 
-		gitFile.onError = function (error) {
+		gitFile.onError = (error) -> {
 			trace('Error: $error');
 		}
 
 		var openOutdated:Bool = false;
-		gitFile.onData = function (data:String) {
+		gitFile.onData = (data:String) -> {
 		    var newVersionData:EngineVersion = Json.parse(data);
 		    trace('curVer [${Main.engineVersion}] // newVer [${newVersionData.version}]');
 
@@ -40,11 +39,13 @@ class SplashState extends FlxState {
 		}
 
 		gitFile.request();
-        openOutdated ? CoolUtil.switchState(new funkin.states.OutdatedState()) : #end startGame();
+        openOutdated ? CoolUtil.switchState(new funkin.states.OutdatedState()) :
+        #end
+        startGame();
     }
 
     public static function startGame() {
         CoolUtil.playMusic('freakyMenu', 0);
-        CoolUtil.switchState(new TitleState());
+        CoolUtil.switchState(new TitleState(), true, true);
     }
 }
