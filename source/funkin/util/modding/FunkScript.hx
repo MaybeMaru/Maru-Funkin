@@ -1,5 +1,7 @@
 package funkin.util.modding;
 
+import funkin.objects.NotesGroup;
+import funkin.objects.NotesGroup;
 import hscript.Script;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
@@ -8,7 +10,8 @@ enum abstract HscriptFunctionCallback(Int) from Int to Int {
 	var STOP_FUNCTION = 1;
 }
 
-class FunkScript extends hscript.Script implements IFlxDestroyable {
+class FunkScript extends hscript.Script implements IFlxDestroyable
+{
 	public static var globalVariables:Map<String, Dynamic> = [];
 	public var active:Bool = true;
 	public var scriptID:String = '';
@@ -321,7 +324,18 @@ class FunkScript extends hscript.Script implements IFlxDestroyable {
 			if (name == "runCode") // why would you-
 				return false;
 
-			return ModdingUtil.getCall('eventHit', [tempEvent.set(-1, name, values)]);
+			if (NotesGroup.instance != null)
+			{
+				var	curEvents = NotesGroup.instance.songEvents;
+				if (!curEvents.contains(name)) {
+					var script = ModdingUtil.addScript(Paths.script('events/$name'));
+					curEvents.push(name);
+				}
+			}
+
+			tempEvent.name = name;
+			tempEvent.values = values ?? [];
+			return ModdingUtil.getCall('eventHit', [tempEvent]);
 		});
 
 		// Script functions
