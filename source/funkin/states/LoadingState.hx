@@ -10,7 +10,7 @@ class LoadingState extends MusicBeatState
 
     public function init(stage:StageJson, characters:Array<String>, song:String)
     {
-        #if !mobile
+        #if desktop
         var addedAssets:Array<String> = []; // Prevent repeating assets
 
         stageAssets = Stage.getStageAssets(stage);
@@ -47,7 +47,7 @@ class LoadingState extends MusicBeatState
 
     public function start()
     {
-        #if !mobile
+        #if desktop
         var start = openfl.Lib.getTimer();
 
         if (onStart != null)

@@ -96,13 +96,15 @@ class Asset
 		return null;
 	}
 
-	function __disposeSound(sound:Sound):Sound @:privateAccess {
+	function __disposeSound(sound:Sound):Sound @:privateAccess
+	{
+		#if !web
 		var buffer = sound.__buffer;
-
 		if (buffer != null) {
 			buffer.data.buffer = null;
 			buffer.data = null;
 		}
+		#end
 
 		sound.close();
 
@@ -288,9 +290,11 @@ class AssetManager
 			}
 		}
 
+		#if sys
 		while ((stageImages.length + charImages.length + songSounds.length) > 0) {
 			Sys.sleep(0.01);
 		}
+		#end
 		
 		for (key => bitmap in bitmaps) {
 			__cacheFromBitmap(key, bitmap.bitmap, false, bitmap.lod);

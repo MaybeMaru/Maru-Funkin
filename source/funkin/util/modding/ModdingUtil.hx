@@ -57,7 +57,7 @@ class ModdingUtil {
     public static function clearScripts():Void
     {
         FunkScript.globalVariables.clear();
-        #if !mobile
+        #if DEV_TOOLS
         if (Main.console != null)
             Main.console.clear();
         #end
@@ -207,10 +207,10 @@ class ModdingUtil {
     inline public static function errorPrint(txt:String)    print(txt, ERROR);
     inline public static function warningPrint(txt:String)  print(txt, WARNING);
     inline public static function print(text:String, type:PrintType):Void {
-        #if mobile
-        trace("[" + type + "] " + text);
-        #else
+        #if DEV_TOOLS
         Main.console.print(text, type);
+        #else
+        trace("[" + type + "] " + text);
         #end
     }
 

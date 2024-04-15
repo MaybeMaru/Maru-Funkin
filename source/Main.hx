@@ -83,7 +83,6 @@ class Main extends Sprite
 
 	private function init(?E:Event):Void
 	{
-		#if web throw("no."); #end
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 

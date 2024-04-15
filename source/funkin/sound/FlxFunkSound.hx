@@ -16,7 +16,6 @@ import openfl.media.Sound;
 @:access(lime.media.AudioSource)
 @:access(openfl.media.SoundMixer)
 @:access(openfl.media.Sound)
-@:access(flixel.FlxGame)
 class FlxFunkSound extends FlxBasic
 {
     @:noCompletion
@@ -245,10 +244,10 @@ class FlxFunkSound extends FlxBasic
 
         if (time != __lastTime) {
             __lastTime = time;
-            __lastTick = Main.game._total;
+            __lastTick = FlxG.game.ticks;
             return time;
         }
 
-        return time + Main.game._total - __lastTick;
+        return time + FlxG.game.ticks - __lastTick;
     }
 }

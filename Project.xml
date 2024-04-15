@@ -67,8 +67,7 @@
 
 	<classpath name="source" />
 
-	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets/preload" rename="assets"/>
 	
 	<section if="PRELOAD_ALL">
 		<library name="songs"    preload="true" />
@@ -81,20 +80,20 @@
 		<library name="shared"   preload="false" />
 		<library name="weeks"    preload="false" />
 	</section>
-	
-	<assets path="assets/songs"    library="songs"    exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"    library="songs"    exclude="*.mp3" unless="web"/>
-	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
-	<assets path="assets/weeks"    library="weeks"    exclude="*.ogg" if="web"/>
-	<assets path="assets/weeks"    library="weeks"    exclude="*.mp3" unless="web"/>
 
+	<assets path="assets/songs"/>
+	<assets path="assets/shared"/>
+	<assets path="assets/weeks"/>
 	<assets path="assets/fonts"/>
 	<assets path="assets/videos"/>
+
+	<!--<assets path="assets/songs"    library="songs"/>
+	<assets path="assets/shared"   library="shared"/>
+	<assets path="assets/weeks"    library="weeks"/>-->
 	
-	<assets path='example_mods' rename='mods' embed='false' unless="web"/>
-	<assets path='art/readme.txt' rename='do NOT readme.txt' />
-	<assets path='art/preloaderArt.png' rename='assets/images/preloaderArt.png' unless="web"/>
+	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
+	<assets path='art/readme.txt' rename='do NOT readme.txt' if="desktop" />
+	<assets path='art/preloaderArt.png' rename='assets/images/preloaderArt.png' if="desktop"/>
 	<assets path='art/ffmpeg.exe' rename='assets/data/ffmpeg.exe' if="ZIPS_ALLOWED"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->

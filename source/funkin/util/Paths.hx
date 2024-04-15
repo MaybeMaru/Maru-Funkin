@@ -11,7 +11,7 @@ import sys.FileSystem;
 
 class Paths
 {
-	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+	inline public static var SOUND_EXT = "ogg";
 	public static var currentLevel(default, set):String = "";
 
 	public static function set_currentLevel(value:String)
@@ -60,12 +60,16 @@ class Paths
 		}
 		#end
 
-		if (library != null) {
-			if (level != null) {
+		if (library != null)
+		{
+			if (level != null)
+			{
 				final levelPath = getLibraryPathForce(file, library, level);
 				if (exists(levelPath, type))
 					return levelPath;
-			} else {
+			}
+			else
+			{
 				final libraryPath = getLibraryPath(file, library);
 				if (exists(libraryPath, type))
 					return libraryPath;
@@ -92,7 +96,10 @@ class Paths
 
 	inline static function getLibraryPathForce(file:String, library:String, ?level:String, root:String = "assets"):String
 	{
-		return (level != null) ? '$library:$root/$library/$level/$file' : '$library:$root/$library/$file';
+		if (level != null)
+			return '$root/$library/$level/$file';
+
+		return '$root/$library/$file';
 	}
 
 	inline static public function getModPath(file:String):String

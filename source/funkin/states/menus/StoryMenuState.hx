@@ -214,8 +214,10 @@ class StoryMenuState extends MusicBeatState {
 				rightArrow.playAnim(getKey('UI_RIGHT', PRESSED) ? 'press' : 'idle');
 				leftArrow.playAnim(getKey('UI_LEFT', PRESSED) ? 'press' : 'idle');
 
-				if (getKey('UI_RIGHT', JUST_PRESSED))	changeDifficulty(1);
-				if (getKey('UI_LEFT', JUST_PRESSED))	changeDifficulty(-1);
+				if (difficultySelectors.visible) {
+					if (getKey('UI_RIGHT', JUST_PRESSED))	changeDifficulty(1);
+					if (getKey('UI_LEFT', JUST_PRESSED))	changeDifficulty(-1);
+				}
 			}
 
 			if (getKey('ACCEPT', JUST_PRESSED)) {

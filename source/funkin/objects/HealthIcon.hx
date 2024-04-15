@@ -26,7 +26,7 @@ class HealthIcon extends FlxSpriteExt {
 		else antialiasing = Preferences.getPref('antialiasing');
 
 		var icon = "face";
-		if (Paths.exists(Paths.png('icons/$char', null), IMAGE)) // Check if icon exists
+		if (Paths.exists(Paths.png('icons/$char'), IMAGE)) // Check if icon exists
 			icon = char;
 
 		loadImage('icons/$icon'); // Load first to get the resolution
