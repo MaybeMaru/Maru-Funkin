@@ -74,8 +74,7 @@ abstract class FlxDrawBaseItem<T>
 	}
 }
 
-enum abstract FlxDrawItemType(Int)
-{
-	var TILES = 0;
-	var TRIANGLES = 1;
+enum abstract FlxDrawItemType(Bool)  {
+	var TILES = false;
+	var TRIANGLES = true;
 }

@@ -187,7 +187,7 @@ function startGore()
 function updatePost()
 {
 	if (!carCanDrive) {
-		if (FlxG.mouse.overlaps(car) && FlxG.mouse.justPressed)
+		if (BUILD_TARGET != "android" && FlxG.mouse.overlaps(car) && FlxG.mouse.justPressed)
 			WeekSetup.loadSong("", "ridge", "normal");
 	}
 	

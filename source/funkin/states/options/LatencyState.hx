@@ -8,7 +8,8 @@ class LatencyState extends MusicBeatState
 
 	override function create()
 	{
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 
 		var bg:FunkinSprite = new FunkinSprite('options/latencyDesat');
 		bg.color = 0xff2b2b2b;
