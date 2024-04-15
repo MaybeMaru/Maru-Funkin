@@ -212,10 +212,12 @@ class Conductor
 	public static var songPitch:Float = 1;
 
 	public static function setPitch(pitch:Float = 1, forceVar:Bool = true, forceTime:Bool = true):Void {
+		#if !web // idk im workin on it
 		pitch = FlxMath.bound(pitch, 0.25, 2);
 		songPitch = (forceVar) ? pitch : songPitch;
 		FlxG.timeScale = (forceTime) ? pitch : FlxG.timeScale;
 		inst.pitch = pitch;
 		if (hasVocals) vocals.pitch = pitch;
+		#end
 	}
 }

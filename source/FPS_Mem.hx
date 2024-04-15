@@ -52,10 +52,11 @@ class FPS_Mem extends TextField
 
 	static inline var memDiv:Float = 1 / 1024 / 1024 * 100;
 	static inline function formatBytes(bytes:Float):Float {
-		return
-		#if web FlxMath.roundDecimal( #end
-			Math.round(bytes * memDiv) * 0.01
-		#if web , 2 ) #end ;
+		#if web
+		return FlxMath.roundDecimal(Math.round(bytes * memDiv) * 0.01, 2 );
+		#else
+		return Math.round(bytes * memDiv) * 0.01;
+		#end
 	}
 
 	var memPeak:Float = 0;

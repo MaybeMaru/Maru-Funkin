@@ -40,6 +40,10 @@ class LoadingState extends MusicBeatState
         songAssets.push(inst);
         if (Paths.exists(voices, MUSIC))
             songAssets.push(voices);
+        #else
+        #if web
+        //TODO: may need to make a custom loading screen for web
+        #end
         #end
     }
 

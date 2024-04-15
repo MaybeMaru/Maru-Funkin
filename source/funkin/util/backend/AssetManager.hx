@@ -144,7 +144,8 @@ class LodGraphic extends FlxGraphic
 		imageFrame.frame.sourceSize *= lodScale;
 	}
 
-	override function set_bitmap(value:BitmapData):BitmapData {
+	override function set_bitmap(value:BitmapData):BitmapData
+	{
 		if (value != null)
 		{
 			bitmap = value;
@@ -344,6 +345,11 @@ class AssetManager
 		}
 
 		var bitmap = __getFileBitmap(path);
+
+		#if web
+		if (bitmap == null) // Testing fail safe while i figure this shit out
+			bitmap = new BitmapData(5,5,false,FlxColor.MAGENTA);
+		#end
 		
 		return __cacheFromBitmap(key, bitmap, staticAsset, lodLevel, useTexture);
 	}
@@ -410,9 +416,8 @@ class AssetManager
 	@:noCompletion
 	static inline function __getFileBitmap(path:String):BitmapData {
 		#if desktop
-		var desktopPath = Paths.removeAssetLib(path);
-		if (!desktopPath.startsWith('assets'))
-			return BitmapData.fromFile(desktopPath);
+		if (!path.startsWith('assets'))
+			return BitmapData.fromFile(path);
 		#end
 
 		return OpenFlAssets.getBitmapData(path, true);
@@ -452,9 +457,8 @@ class AssetManager
 	@:noCompletion
 	static inline function __getFileSound(path:String):Sound {
 		#if desktop
-		var desktopPath = Paths.removeAssetLib(path);
-		if (!desktopPath.startsWith('assets'))
-			return Sound.fromFile(desktopPath);
+		if (!path.startsWith('assets'))
+			return Sound.fromFile(path);
 		#end
 
 		return getLimeAssetsSound(path);

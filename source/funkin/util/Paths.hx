@@ -232,14 +232,10 @@ class Paths
 
 	inline static public function exists(file:String, type:AssetType):Bool {
 		#if desktop
-		return FileSystem.exists(removeAssetLib(file));
+		return FileSystem.exists(file);
 		#else
 		return OpenFlAssets.exists(file, type);
 		#end
-	}
-
-	inline static public function removeAssetLib(path:String):String {
-		return #if desktop path.contains(':') ? path.split(':')[1] : #end path;
 	}
 
 	//	Returns [file Mod, file Name]

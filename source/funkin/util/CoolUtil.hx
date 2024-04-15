@@ -89,7 +89,6 @@ class CoolUtil {
 
 	inline public static function getFileContent(path:String):String {
 		#if desktop
-		path = Paths.removeAssetLib(path);
 		if (FileSystem.exists(path))
 			return File.getContent(path);
 		#else

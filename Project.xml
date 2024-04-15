@@ -55,10 +55,6 @@
 	<!--If to enable custom classes support in Hscript-->
 	<define name="CUSTOM_CLASSES" />
 
-	<!--Web stuff, ill remove later probably-->
-	<define name="PRELOAD_ALL" unless="web" />
-	<define name="NO_PRELOAD_ALL" if="web"/>
-
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
@@ -68,28 +64,12 @@
 	<classpath name="source" />
 
 	<assets path="assets/preload" rename="assets"/>
-	
-	<section if="PRELOAD_ALL">
-		<library name="songs"    preload="true" />
-		<library name="shared"   preload="true" />
-		<library name="weeks"    preload="true" />
-	</section>
-	
-	<section if="NO_PRELOAD_ALL">
-		<library name="songs"    preload="false" />
-		<library name="shared"   preload="false" />
-		<library name="weeks"    preload="false" />
-	</section>
 
 	<assets path="assets/songs"/>
 	<assets path="assets/shared"/>
 	<assets path="assets/weeks"/>
 	<assets path="assets/fonts"/>
 	<assets path="assets/videos"/>
-
-	<!--<assets path="assets/songs"    library="songs"/>
-	<assets path="assets/shared"   library="shared"/>
-	<assets path="assets/weeks"    library="weeks"/>-->
 	
 	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' if="desktop" />
