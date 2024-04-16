@@ -23,7 +23,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.3
+          haxe-version: 4.3.4
 
       - name: Install Libraries
         run: |
@@ -33,7 +33,7 @@ jobs:
           haxelib set hxcpp git
 
       - name: Build
-        run: haxelib run lime build windows -D analyzer-optimize no-deprecation-warnings
+        run: haxelib run lime build windows -D analyzer-optimize
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
@@ -54,7 +54,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.3
+          haxe-version: 4.3.4
 
       - name: Install Libraries
         run: |
@@ -64,7 +64,7 @@ jobs:
           haxelib set hxcpp git
 
       - name: Build
-        run: haxelib run lime build linux -D analyzer-optimize no-deprecation-warnings
+        run: haxelib run lime build linux -D analyzer-optimize
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
@@ -85,7 +85,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.3
+          haxe-version: 4.3.4
 
       - name: Setup Android NDK
         id: setup-ndk
@@ -117,7 +117,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Build
-        run: haxelib run lime build android -D analyzer-optimize no-deprecation-warnings
+        run: haxelib run lime build android -D analyzer-optimize
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
