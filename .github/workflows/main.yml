@@ -23,7 +23,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.4
+          haxe-version: 4.3.3
 
       - name: Install Libraries
         run: |
@@ -54,7 +54,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.4
+          haxe-version: 4.3.3
 
       - name: Install Libraries
         run: |
@@ -85,7 +85,7 @@ jobs:
       - name: Install & Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.4
+          haxe-version: 4.3.3
 
       - name: Setup Android NDK
         id: setup-ndk
