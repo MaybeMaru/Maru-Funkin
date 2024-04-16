@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- _________________________ Application Settings _________________________ -->
+
+	<app title="Friday Night Funkin'" file="Funkin" packageName="com.maru.funkin" package="com.maru.funkin" main="Main" version="0.2.8" company="MaybeMaru" />
+
+	<!--Switch Export with Unique ApplicationID and Icon-->
+	<set name="APP_ID" value="0x0100f6c013bbc000" />
+
+	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
+		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
+	<!-- <app preloader="Preloader" resizable="true" /> -->
+	<app preloader="flixel.system.FlxPreloader" />
+
+	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
+	<set name="SWF_VERSION" value="11.8" />
+
+	<!-- ____________________________ Window Settings ___________________________ -->
+
+	<!--These window settings apply to all targets-->
+	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
+
+	<!--HTML5-specific-->
+	<window if="html5" resizable="true" />
+
+	<!--Desktop-specific-->
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+
+	<!--Mobile-specific-->
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" vsync="false"/>
+
+	<!-- ______________________________ Funkin Settings _____________________________ -->
+	
+	<!--If to have mod folders allowed to load on the game-->
+	<define name="MODS_ALLOWED" if="desktop"/>
+
+	<!--Enables tools for modding (like the console, editors, etc)-->
+	<define name="DEV_TOOLS" if="MODS_ALLOWED"/>
+
+	<!--If you want hxcodec videos to be used-->
+	<define name="VIDEOS_ALLOWED" unless="linux || mobile" if="cpp"/>
+
+	<!--If you want the discord rcp to be used-->
+	<define name="DISCORD_ALLOWED" if="cpp" unless="mobile"/>
+	
+	<!--If you want to have ffmpeg used for osu and quaver pack zip support-->
+	<define name="ZIPS_ALLOWED" if="desktop"/>
+
+	<!--If to check on startup for newer versions of the game-->
+	<define name="CHECK_UPDATES" if="desktop"/>
+	
+	<!--If you want more accurate sprite angles, at cost of performance-->
+	<define name="FAST_MATH"/>
+
+	<!--If to enable custom classes support in Hscript-->
+	<define name="CUSTOM_CLASSES" />
+
+	<!-- _____________________________ Path Settings ____________________________ -->
+
+	<classpath name="source" />
+	<set name="BUILD_DIR" value="export/debug" if="debug" />
+	<set name="BUILD_DIR" value="export/release" unless="debug" />
+	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
+
+	<assets path="assets/preload" rename="assets"/>
+	<assets path="assets/songs"/>
+	<assets path="assets/shared"/>
+	<assets path="assets/weeks"/>
+	<assets path="assets/fonts"/>
+	<assets path="assets/videos"/>
+	
+	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
+	<assets path='art/readme.txt' rename='do NOT readme.txt' if="desktop" />
+	<assets path='art/preloaderArt.png' rename='assets/images/preloaderArt.png' if="desktop"/>
+	<assets path='art/ffmpeg.exe' rename='assets/data/ffmpeg.exe' if="ZIPS_ALLOWED"/>
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<haxelib name="flixel" />
+	<haxedev set='webgl' />
+	<haxelib name="flixel-ui" />
+	<haxelib name="flixel-addons" />
+	<haxelib name="haxeui-core" unless="mac"/>
+	<haxelib name="haxeui-openfl" unless="mac"/>
+	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
+	<haxelib name="maru-hscript" />
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
+	<haxedef name="hscriptPos"/>
+
+	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+
+	<!-- _________________________________ Mobile _______________________________ -->
+	<section if="mobile">
+		<architecture exclude="armv7" if="android" />
+		<assets path="art/mobile" rename="assets/images/mobile"/>
+	</section>
+
+	<!-- _________________________________ Icons _______________________________ -->
+	
+	<icon path="art/icon16.png" size='16'/>
+	<icon path="art/icon32.png" size='32'/>
+	<icon path="art/icon64.png" size='64'/>
+	<icon path="art/iconOG.png" />
+	
+</project>
