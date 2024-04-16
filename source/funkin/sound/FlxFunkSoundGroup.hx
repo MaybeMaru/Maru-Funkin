@@ -2,6 +2,7 @@ package funkin.sound;
 
 import openfl.events.Event;
 
+@:access(funkin.sound.FlxFunkSound)
 class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
 {
     public static var group:FlxFunkSoundGroup<FlxFunkSound>;
@@ -11,7 +12,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
     public function new() {
         super();
 
-        @:privateAccess // Window lose focus, pause sounds
+        // Window lose focus, pause sounds
         FlxG.stage.addEventListener(Event.DEACTIVATE, (e) -> {
             sounds.fastForEach((sound, i) -> {
                 if (sound != null) if (sound.playing) {
@@ -21,7 +22,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
             });
         });
 
-        @:privateAccess // Window gain focus, resume sounds
+        // Window gain focus, resume sounds
         FlxG.stage.addEventListener(Event.ACTIVATE, (e) -> {
             sounds.fastForEach((sound, i) -> {
                 if (sound != null) if (sound.__gainFocus) {
@@ -41,7 +42,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
     }
 
     // Resumes all sounds set with pausable 
-    public function resume():Void @:privateAccess
+    public function resume():Void
     {
         sounds.fastForEach((sound, i) -> {
             if (sound != null) if (sound.__resume) {
@@ -52,7 +53,7 @@ class FlxFunkSoundGroup<T:FlxFunkSound> extends FlxBasic
     }
 
     // Pauses all sounds set with pausable 
-    public function pause():Void @:privateAccess
+    public function pause():Void
     {
         sounds.fastForEach((sound, i) -> {
             if (sound != null) if (sound.pausable) if (sound.playing) {

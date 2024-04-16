@@ -323,7 +323,7 @@ class AssetManager
 	 * GRAPHIC CACHE
 	 */
 
-	public static var gpuTextures:Bool = #if hl false; #else true; #end
+	public static var gpuTextures:Bool = #if (hl || web) false; #else true; #end
 	public static var lodQuality:LodLevel = HIGH;
 	public static function setLodQuality(level:String):LodLevel {
 		return lodQuality = LodLevel.fromString(level);
@@ -345,11 +345,6 @@ class AssetManager
 		}
 
 		var bitmap = __getFileBitmap(path);
-
-		#if web
-		if (bitmap == null) // Testing fail safe while i figure this shit out
-			bitmap = new BitmapData(5,5,false,FlxColor.MAGENTA);
-		#end
 		
 		return __cacheFromBitmap(key, bitmap, staticAsset, lodLevel, useTexture);
 	}
@@ -509,7 +504,9 @@ class AssetManager
 	}
 
 	@:noCompletion
-	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Array<String> {
+	inline static function __clearCacheFromKeys(keys:Array<String>, clearGraphics:Bool, clearSounds:Bool):Array<String>
+	{
+		#if !web // Temp slap-on fix till i figure out the problem with web disposing
 		var removeKeys:Array<String> = [];
 		
 		keys.fastForEach((key, i) -> {
@@ -527,6 +524,7 @@ class AssetManager
 		removeKeys.fastForEach((key, i) -> {
 			keys.remove(key);
 		});
+		#end
 
 		return keys;
 	}
