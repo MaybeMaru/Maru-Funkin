@@ -56,6 +56,9 @@ jobs:
         with:
           haxe-version: 4.3.4
 
+      - name: Installing Dependencies
+        run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install libvlc-dev libvlccore-dev vlc-bin vlc
+
       - name: Install Libraries
         run: |
           haxe -cp ./actions -D analyzer-optimize -main Main --interp

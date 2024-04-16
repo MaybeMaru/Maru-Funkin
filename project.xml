@@ -37,8 +37,8 @@
 	<!--Enables tools for modding (like the console, editors, etc)-->
 	<define name="DEV_TOOLS" if="MODS_ALLOWED"/>
 
-	<!--If you want hxcodec videos to be used-->
-	<define name="VIDEOS_ALLOWED" unless="linux || mobile" if="cpp"/>
+	<!--If you want hxvlc videos to be used-->
+	<define name="VIDEOS_ALLOWED" if="cpp"/>
 
 	<!--If you want the discord rcp to be used-->
 	<define name="DISCORD_ALLOWED" if="cpp" unless="mobile"/>
@@ -84,7 +84,7 @@
 	<haxelib name="haxeui-openfl" unless="mac"/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="maru-hscript" />
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
+	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->

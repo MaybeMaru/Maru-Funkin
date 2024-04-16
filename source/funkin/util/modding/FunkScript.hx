@@ -133,8 +133,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
 		#if VIDEOS_ALLOWED
-		set('FlxVideo', hxcodec.flixel.FlxVideo);
-		set('FlxVideoSprite', hxcodec.flixel.FlxVideoSprite);
+		set('FlxVideo', hxvlc.flixel.FlxVideo);
+		set('FlxVideoSprite', hxvlc.flixel.FlxVideoSprite);
 		#end
 
 		#if DISCORD_ALLOWED

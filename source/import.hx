@@ -22,14 +22,9 @@ import funkin.util.CoolUtil;
 import funkin.util.SkinUtil;
 import funkin.util.frontend.Shader;
 import funkin.util.backend.DiscordClient;
-#if desktop
-#if VIDEOS_ALLOWED
-import hxcodec.flixel.FlxVideo;
-#end
-#if sys
+#if (desktop && sys)
 import sys.io.File;
 import sys.FileSystem;
-#end
 #end
 import funkin.util.modding.FunkScript;
 import funkin.util.modding.ModdingUtil;

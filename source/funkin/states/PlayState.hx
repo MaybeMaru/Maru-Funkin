@@ -4,6 +4,9 @@ import funkin.objects.*;
 import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.FunkCamera.AngledCamera;
+#if VIDEOS_ALLOWED
+import hxvlc.flixel.FlxVideo;
+#end
 
 @:build(macros.GetSetBuilder.build(["notes", "unspawnNotes", "controlArray", "playerStrums", "opponentStrums", "grpNoteSplashes", "curSong", "generatedMusic", "skipStrumIntro", "inBotplay", "dadBotplay"], "notesGroup"))
 @:build(macros.GetSetBuilder.buildGet(["strumLineNotes", "strumLineInitPos", "playerStrumsInitPos", "opponentStrumsInitPos"], "notesGroup"))
@@ -318,19 +321,19 @@ class PlayState extends MusicBeatState
 
 	#if VIDEOS_ALLOWED public var video:FlxVideo; #end
 
-	public function startVideo(path:String, ?completeFunc:()->Void):Void {
-		if (completeFunc == null)
-			completeFunc = this.startCountdown;
+	public function startVideo(file:String, ?completeFunc:()->Void):Void
+	{
+		completeFunc ??= () -> startCountdown();
 		
 		#if VIDEOS_ALLOWED
 		video = new FlxVideo();
-		final vidFunc = function () {
+		video.load(Paths.video(file));
+		video.onEndReached.add(() -> {
 			video.dispose();
 			video = null;
 			completeFunc();
-		}
-		video.onEndReached.add(vidFunc);
-		video.play(Paths.video(path));
+		});
+		video.play();
 		#else
 		ModdingUtil.warningPrint("Videos are not allowed on this build.");
 		completeFunc();
