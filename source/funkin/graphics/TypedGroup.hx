@@ -109,7 +109,9 @@ class TypedSpriteGroup<T:FlxSprite> extends FlxTypedSpriteGroup<T>
 		group.destroy();
 
 		group = new TypedGroup<T>(maxSize);
+		#if (flixel < "5.7.0")
 		_sprites = cast group.members;
+		#end
 	}
 }
 

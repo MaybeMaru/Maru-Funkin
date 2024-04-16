@@ -6,6 +6,7 @@ enum abstract AlphabetAlign(String) {
     var RIGHT = 'right';
 }
 
+// TODO: rewrite Alphabet to extend FlxBitmapText
 class Alphabet extends TypedSpriteGroup<AlphabetCharacter> {
     public static var spaceWidth:Float = 50;
     public static var spaceHeight:Float = 70;
@@ -133,10 +134,10 @@ class Alphabet extends TypedSpriteGroup<AlphabetCharacter> {
         return text.split("");
     }
 
-        override function findMaxXHelper()
+    override function findMaxXHelper()
 	{
 		var value = Math.NEGATIVE_INFINITY;
-		for (member in _sprites)
+		for (member in group.members)
 		{
 			if (member == null || !member.alive)
 				continue;
@@ -156,7 +157,7 @@ class Alphabet extends TypedSpriteGroup<AlphabetCharacter> {
     override function findMinXHelper()
 	{
 		var value = Math.POSITIVE_INFINITY;
-		for (member in _sprites)
+		for (member in group.members)
 		{
 			if (member == null || !member.alive)
 				continue;
