@@ -132,12 +132,12 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
-		#if VIDEOS_ALLOWED
+		#if hxvlc
 		set('FlxVideo', hxvlc.flixel.FlxVideo);
 		set('FlxVideoSprite', hxvlc.flixel.FlxVideoSprite);
 		#end
 
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		set("changeDiscordPresence", DiscordClient.changePresence);
 		#end
 
@@ -150,8 +150,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			#end
 		);
 
-		set("VIDEOS_ALLOWED", #if VIDEOS_ALLOWED true #else false #end);
-		set("DISCORD_ALLOWED", #if DISCORD_ALLOWED true #else false #end);
+		set("VIDEOS_ALLOWED", #if hxvlc true #else false #end);
+		set("DISCORD_ALLOWED", #if discord_rpc true #else false #end);
 		set("ZIPS_ALLOWED", #if ZIPS_ALLOWED true #else false #end);
 
 		//HScript Functions

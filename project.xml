@@ -35,13 +35,13 @@
 	<define name="MODS_ALLOWED" if="desktop"/>
 
 	<!--Enables tools for modding (like the console, editors, etc)-->
-	<define name="DEV_TOOLS" if="MODS_ALLOWED"/>
+	<define name="DEV_TOOLS" if="desktop"/>
 
 	<!--If you want hxvlc videos to be used-->
-	<define name="VIDEOS_ALLOWED" if="cpp"/>
+	<define name="VIDEOS_ALLOWED"/>
 
 	<!--If you want the discord rcp to be used-->
-	<define name="DISCORD_ALLOWED" if="cpp" unless="mobile"/>
+	<define name="DISCORD_ALLOWED" if="desktop"/>
 	
 	<!--If you want to have ffmpeg used for osu and quaver pack zip support-->
 	<define name="ZIPS_ALLOWED" if="desktop"/>
@@ -76,16 +76,20 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
+	<haxedev set='webgl' if="web" />
+
 	<haxelib name="flixel" />
-	<haxedev set='webgl' />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="haxeui-core" unless="mac"/>
 	<haxelib name="haxeui-openfl" unless="mac"/>
-	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="maru-hscript" />
-	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 	<haxedef name="hscriptPos"/>
+
+	<section if="cpp">
+		<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
+		<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
+	</section>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

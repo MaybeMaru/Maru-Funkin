@@ -204,7 +204,7 @@ class ScriptConsole extends ResizableSprite {
 	var tmr:Float = 0;
 	public function update(elapsed:Float) {
         if (tmr <= 0) { // Show / hide console
-			if (FlxG.keys.justPressed.F1) {
+			if (#if web FlxG.keys.justPressed.F2 #else FlxG.keys.justPressed.F1 #end) {
 				tmr = 0.1; // Fix spam issue
 				show = !show;
                 visible = true;

@@ -4,7 +4,7 @@ import funkin.objects.*;
 import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.FunkCamera.AngledCamera;
-#if VIDEOS_ALLOWED
+#if hxvlc
 import hxvlc.flixel.FlxVideo;
 #end
 
@@ -89,7 +89,7 @@ class PlayState extends MusicBeatState
 	public var dialogueBox:DialogueBoxBase = null;
 
 	// Discord RPC variables
-	#if DISCORD_ALLOWED
+	#if discord_rpc
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
@@ -144,7 +144,7 @@ class PlayState extends MusicBeatState
 
 		SONG = Song.checkSong(SONG, null, false);
 
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';
 		if (Character.getCharData(SONG.players[1]) != null)
@@ -211,7 +211,7 @@ class PlayState extends MusicBeatState
 
 		//Character Scripts
 		boyfriend.type = "bf"; dad.type = "dad"; gf.type = "gf";
-		for (char in [boyfriend, dad, gf]) addCharScript(char);
+		addCharScript(boyfriend); addCharScript(dad); addCharScript(gf);
 
 		//Song Scripts
 		ModdingUtil.addScriptFolder('songs/${Song.formatSongFolder(SONG.song)}');
@@ -319,13 +319,13 @@ class PlayState extends MusicBeatState
 		CoolUtil.gc(true);
 	}
 
-	#if VIDEOS_ALLOWED public var video:FlxVideo; #end
+	#if hxvlc public var video:FlxVideo; #end
 
 	public function startVideo(file:String, ?completeFunc:()->Void):Void
 	{
 		completeFunc ??= () -> startCountdown();
 		
-		#if VIDEOS_ALLOWED
+		#if hxvlc
 		video = new FlxVideo();
 		video.load(Paths.video(file));
 		video.onEndReached.add(() -> {
@@ -341,7 +341,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function endVideo() {
-		#if VIDEOS_ALLOWED
+		#if hxvlc
 		if (video != null)
 			video.onEndReached.dispatch();
 		#end
@@ -464,7 +464,7 @@ class PlayState extends MusicBeatState
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
 
-		#if DISCORD_ALLOWED DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength); #end
+		#if discord_rpc DiscordClient.changePresence(detailsText, '${SONG.song} (${formatDiff()})', iconRPC, true, songLength); #end
 	}
 
 	private function openPauseSubState(easterEgg:Bool = false):Void {
@@ -506,7 +506,7 @@ class PlayState extends MusicBeatState
 				Conductor.play();
 			}
 
-			#if DISCORD_ALLOWED
+			#if discord_rpc
 			var presenceDetails = '${SONG.song} (${formatDiff()})';
 			var presenceTime = songLength - Conductor.songPosition;
 			DiscordClient.changePresence(detailsText, presenceDetails, iconRPC, Conductor.songPosition >= 0, presenceTime);
@@ -557,7 +557,7 @@ class PlayState extends MusicBeatState
 			if (canPause) {
 				if (startedCountdown) if (getKey('PAUSE', JUST_PRESSED)) {
 					openPauseSubState(true);
-					#if DISCORD_ALLOWED DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC); #end
+					#if discord_rpc DiscordClient.changePresence(detailsPausedText, '${SONG.song} (${formatDiff()})', iconRPC); #end
 				}
 			}
 
@@ -570,19 +570,19 @@ class PlayState extends MusicBeatState
 			#if DEV_TOOLS
 			if (justPressed.SIX) {
 				clearCacheData = {tempCache: false};
-				#if DISCORD_ALLOWED DiscordClient.changePresence("Stage Editor", null, null, true); #end
+				#if discord_rpc DiscordClient.changePresence("Stage Editor", null, null, true); #end
 				switchState(new StageDebug(stageData));
 			}
 
 			if (justPressed.SEVEN) {
 				clearCacheData = {tempCache: false};
 				switchState(new ChartingState());
-				#if DISCORD_ALLOWED DiscordClient.changePresence("Chart Editor", null, null, true); #end
+				#if discord_rpc DiscordClient.changePresence("Chart Editor", null, null, true); #end
 			}
 
 			if (justPressed.EIGHT) {
 				clearCacheData = {tempCache: false};
-				#if DISCORD_ALLOWED DiscordClient.changePresence("Character Editor", null, null, true); #end
+				#if discord_rpc DiscordClient.changePresence("Character Editor", null, null, true); #end
 	
 				if (FlxG.keys.pressed.SHIFT) {
 					if (FlxG.keys.pressed.CONTROL) switchState(new AnimationDebug(SONG.players[2]));
@@ -623,7 +623,7 @@ class PlayState extends MusicBeatState
 		openSubState(new GameOverSubstate(boyfriend.OG_X, boyfriend.OG_Y));
 
 		// Game Over doesn't get his own variable because it's only used here
-		#if DISCORD_ALLOWED DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC); #end
+		#if discord_rpc DiscordClient.changePresence('Game Over - $detailsText', SONG.song + ' (${formatDiff()})', iconRPC); #end
 	}
 
 	inline public function snapCamera():Void
@@ -655,7 +655,7 @@ class PlayState extends MusicBeatState
 		#if DEV_TOOLS
 		if (inChartEditor) {
 			switchState(new ChartingState());
-			#if DISCORD_ALLOWED DiscordClient.changePresence("Chart Editor", null, null, true); #end
+			#if discord_rpc DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		}
 		else #end inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
 	}
@@ -789,7 +789,7 @@ class PlayState extends MusicBeatState
 		CoolUtil.destroyMusic();
 		SkinUtil.setCurSkin('default');
 		
-		#if VIDEOS_ALLOWED
+		#if hxvlc
 		if (video != null) {
 			video.dispose();
 			video = null;

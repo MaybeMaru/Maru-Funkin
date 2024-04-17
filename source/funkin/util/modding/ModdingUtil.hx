@@ -19,7 +19,8 @@ typedef ModFolder = {
  * 0 => Beta 2
  */
 
-class ModdingUtil {
+class ModdingUtil
+{
     public static var folderExceptions(default, never):Array<String> = ['data', 'fonts', 'images', 'music', 'songs', 'videos', 'sounds'];
     public static inline var API_VERSION:Int = 0;
     public static final DEFAULT_MOD:ModFolder = {
@@ -252,15 +253,7 @@ class ModdingUtil {
 
     public static function getScriptList(folder:String = 'data/scripts/global', assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false):Array<String>
     {
-        final scripts = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
-
-        #if !desktop
-        var library = folder.split("/")[0];
-        switch (library) {
-            case "images" | "data" | "sounds" | "fonts":
-            case _: scripts.fastForEach((script, i) -> scripts.unsafeSet(i, library + ":" + script));
-        }
-        #end
+        var scripts = assets ? Paths.getFileList(TEXT, true, 'hx', 'assets/$folder') : [];
 
         #if MODS_ALLOWED
         var modScripts = Paths.getModFileList(folder, 'hx', true, globalMod, curMod, allMods);

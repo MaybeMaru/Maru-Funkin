@@ -18,7 +18,7 @@ class MainMenuState extends MusicBeatState {
 	override function create():Void
 	{
 		// Updating Discord Rich Presence
-		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
+		#if discord_rpc DiscordClient.changePresence("In the Menus", null); #end
 		#if mobile MobileTouch.setMode(NONE); #end
 
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
@@ -108,7 +108,7 @@ class MainMenuState extends MusicBeatState {
 			}
 			#end
 
-			#if DEV_TOOLS
+			#if (DEV_TOOLS && sys)
 			if (FlxG.keys.justPressed.SEVEN) {
 				selectedSomethin = true;
 				switchState(new funkin.states.editors.ModSetupState());

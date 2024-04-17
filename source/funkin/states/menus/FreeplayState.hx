@@ -40,7 +40,7 @@ class FreeplayState extends MusicBeatState
 		FlxG.mouse.visible = #if mobile false; #else true; #end
 		#if mobile MobileTouch.setMode(MENU); #end
 
-		#if DISCORD_ALLOWED // Updating Discord Rich Presence
+		#if discord_rpc // Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 

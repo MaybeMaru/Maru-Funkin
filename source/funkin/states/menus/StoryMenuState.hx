@@ -50,7 +50,7 @@ class StoryMenuState extends MusicBeatState {
 		grpWeekCharacters = new TypedGroup<MenuCharacter>();
 		
 		// Updating Discord Rich Presence
-		#if DISCORD_ALLOWED DiscordClient.changePresence("In the Menus", null); #end
+		#if discord_rpc DiscordClient.changePresence("In the Menus", null); #end
 		#if mobile MobileTouch.setMode(MENU); #end
 
 		WeekSetup.getWeekList().fastForEach((week, i) -> {

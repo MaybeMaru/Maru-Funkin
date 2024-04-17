@@ -1,6 +1,6 @@
 package funkin.util.backend;
 
-#if DISCORD_ALLOWED
+#if discord_rpc
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
 #end
@@ -12,7 +12,7 @@ class DiscordClient
 
 	public function new()
 	{
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "1168666530788163705", // 814588678700924999
@@ -35,14 +35,14 @@ class DiscordClient
 
 	public static function shutdown()
 	{
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		DiscordRpc.shutdown();
 		#end
 	}
 	
 	static function onReady()
 	{
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
@@ -64,7 +64,7 @@ class DiscordClient
 
 	public static function initialize()
 	{
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		var DiscordDaemon = sys.thread.Thread.create(() ->
 		{
 			new DiscordClient();
@@ -75,7 +75,7 @@ class DiscordClient
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
 	{
-		#if DISCORD_ALLOWED
+		#if discord_rpc
 		var startTimestamp:Float = hasStartTimestamp ? Date.now().getTime() : 0;
 
 		if (endTimestamp > 0)
