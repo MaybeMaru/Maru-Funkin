@@ -2,7 +2,8 @@ package funkin.util.backend;
 
 import flixel.FlxBasic;
 
-class MusicBeat extends FlxBasic {
+class MusicBeat extends FlxBasic
+{
     public var curStep(default, null):Int = 0;
 	public var curBeat(default, null):Int = 0;
 	public var curSection(default, null):Int = 0;
@@ -11,14 +12,8 @@ class MusicBeat extends FlxBasic {
 	public var curBeatDecimal(default, null):Float = 0;
 	public var curSectionDecimal(default, null):Float = 0;
 
-	public var targetSound:FlxSound = null;
-    
-	public var hasParent(default, null):Bool = false;
-	public var parent(default, set):IMusicGetter = null;
-	inline function set_parent(value:IMusicGetter):IMusicGetter {
-		hasParent = value != null;
-		return parent = value;
-	}
+	public var targetSound:FlxSound;
+	public var parent:IMusicGetter;
 	
 	public function new(?parent:IMusicGetter) {
         this.parent = parent;
@@ -27,7 +22,8 @@ class MusicBeat extends FlxBasic {
 
 	var lastStep(default, null):Int = -1;
 
-    override function update(elapsed:Float):Void {
+    override function update(elapsed:Float):Void
+	{
         if (targetSound != null) if (targetSound.playing)
 			Conductor.songPosition = targetSound.time - Conductor.latency;
 		
@@ -37,9 +33,8 @@ class MusicBeat extends FlxBasic {
 		updateBeat();
 		updateSection();
 
-		if (lastStep != curStep && curStep >= 0) {
+		if (lastStep != curStep) if (curStep > -1)
 			stepHit();
-		}
 
 		#if FLX_DEBUG
 		FlxG.watch.addQuick("curSection", 	curSection);
@@ -58,38 +53,41 @@ class MusicBeat extends FlxBasic {
 		curBeat = Math.floor(curBeatDecimal);
 	}
 
-	private inline function updateStep():Void {
-		var lastChange:BPMChangeEvent = {
-			stepTime: 0,
-			songTime: 0,
-			bpm: 0
+	private inline function updateStep():Void
+	{
+		var lastStep:Int = 0;
+		var lastTime:Float = 0;
+
+		if (Conductor.bpmChangeMap.length > 0)
+		{
+			Conductor.bpmChangeMap.fastForEach((event, i) -> {
+				if (Conductor.songPosition >= event.songTime) {
+					lastTime = event.songTime;
+					lastStep = event.stepTime;
+				}
+				else break; // No need to loop through the rest
+			});
 		}
 
-		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime) {
-				lastChange = Conductor.bpmChangeMap[i];
-			}
-		}
-
-		curStepDecimal = lastChange.stepTime + (Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet;
+		curStepDecimal = lastStep + (Conductor.songPosition - lastTime) / Conductor.stepCrochet;
 		curStep = Math.floor(curStepDecimal);
 	}
 
 	public inline function stepHit():Void {
-		if (hasParent) parent.stepHit(curStep);
+		if (parent != null) parent.stepHit(curStep);
         if (curStep % Conductor.STEPS_PER_BEAT == 0) {
 			beatHit();
 		}
 	}
 
 	public inline function beatHit():Void {
-		if (hasParent) parent.beatHit(curBeat);
+		if (parent != null) parent.beatHit(curBeat);
 		if (curBeat % Conductor.BEATS_PER_MEASURE == 0) {
 			sectionHit();
 		}
 	}
 
 	public inline function sectionHit():Void {
-		if (hasParent) parent.sectionHit(curSection);
+		if (parent != null) parent.sectionHit(curSection);
 	}
 }
