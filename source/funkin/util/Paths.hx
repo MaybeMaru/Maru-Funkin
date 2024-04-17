@@ -244,30 +244,36 @@ class Paths
 		return [dirParts[1], dirParts[dirParts.length-1].split('.')[0]];
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
-		var image = image(key, library, false, useTexture, lodLevel);
-		var xml = CoolUtil.getFileContent(file('images/$key.xml', library));
-		
-		return __checkLodFrames(FlxAtlasFrames.fromSparrow(image, xml));
+	// Gotta do this to make sure FlxAtlasFrames doesnt lose his shit when the graphic is smaller than the data
+	private static function getFrames(image:LodGraphic, getter:()->FlxAtlasFrames) {
+		image.setSize(image.lodWidth, image.lodHeight);
+		var frames = getter();
+		image.setSize(image.bitmap.width, image.bitmap.height);
+		return frames;
 	}
 
-	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
+	inline static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	{
+		var image = image(key, library, false, useTexture, lodLevel);
+		var xml = CoolUtil.getFileContent(file('images/$key.xml', library));
+
+		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSparrow(image, xml)));
+	}
+
+	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	{
 		var image = image(key, library, false, useTexture, lodLevel);
 		var txt = CoolUtil.getFileContent(file('images/$key.txt', library));
 
-		return __checkLodFrames(FlxAtlasFrames.fromSpriteSheetPacker(image, txt));
+		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSpriteSheetPacker(image, txt)));
 	}
 
 	inline static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
 		var image = image(key, library, false, useTexture, lodLevel);
 		var json = CoolUtil.getFileContent(file('images/$key.json', library));
 		
-		return __checkLodFrames(JsonUtil.getAsepritePacker(image, json));
+		return __checkLodFrames(getFrames(image, () -> return JsonUtil.getAsepritePacker(image, json)));
 	}
-
-	//inline static public function getAnimateAtlas(key:String, ?library:String):FlxAtlasFrames {
-	//	return null;
-	//}
 
 	@:noCompletion
 	inline private static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {

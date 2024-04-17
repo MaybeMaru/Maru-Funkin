@@ -10,7 +10,8 @@ typedef SongMetaData = {
 	var mod:String;
 }
 
-class FreeplayState extends MusicBeatState {
+class FreeplayState extends MusicBeatState
+{
 	var bg:FunkinSprite;
 
 	var songs:Array<SongMetaData> = [];

@@ -144,13 +144,22 @@ class LodGraphic extends FlxGraphic
 		imageFrame.frame.sourceSize *= lodScale;
 	}
 
+	public var lodWidth(default, null):Int;
+	public var lodHeight(default, null):Int;
+
+	public inline function setSize(width:Int, height:Int):Void {
+		this.width = width;
+		this.height = height;
+	}
+
 	override function set_bitmap(value:BitmapData):BitmapData
 	{
 		if (value != null)
 		{
 			bitmap = value;
-			width = bitmap.width << lodLevel;
-			height = bitmap.height << lodLevel;
+			setSize(bitmap.width, bitmap.height);
+			lodWidth = bitmap.width << lodLevel;
+			lodHeight = bitmap.height << lodLevel;
 		}
 
 		return value;
