@@ -8,9 +8,9 @@ import flixel.graphics.tile.FlxDrawBaseItem.FlxDrawItemType;
 import flixel.system.FlxAssets.FlxShader;
 import flixel.math.FlxMatrix;
 import openfl.geom.ColorTransform;
-import openfl.display.ShaderParameter;
 import openfl.Vector;
 
+@:unreflective
 class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 {
 	static inline var VERTICES_PER_QUAD = #if (openfl >= "8.5.0") 4 #else 6 #end;
@@ -126,28 +126,21 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			blend = NORMAL;
 
 		setParameterValue(shader.hasColorTransform, colored);
-		drawFlxQuad(camera.canvas.graphics, cast blend, shader, rects, transforms);
+		drawFlxQuad(camera.canvas.graphics, shader, rects, transforms);
 		
 		#if FLX_DEBUG
 		FlxDrawBaseItem.drawCalls++;
 		#end
 	}
 
-	inline function setParameterValue(parameter:ShaderParameter<Bool>, value:Bool):Void
-	{
-		if (parameter.value == null)
-			parameter.value = [];
-		parameter.value[0] = value;
-	}
-
 	// Copy pasted from openfl Graphics, made SPECIFICALLY to work with funkin draw quads
 
 	private static final bounds:Rectangle = new Rectangle(0, 0, 1280, 720);
 
-	function drawFlxQuad(graphics:Graphics, blendMode:Int, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
+	function drawFlxQuad(graphics:Graphics, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		// Override blend mode
-		graphics.__commands.overrideBlendMode(cast blendMode);
+		graphics.__commands.overrideBlendMode(blend);
 
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();
@@ -168,5 +161,15 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		graphics.__visible = true;
 	}
 	#end
+
+	override inline function get_numVertices():Int
+	{
+		return VERTICES_PER_QUAD;
+	}
+
+	override inline function get_numTriangles():Int
+	{
+		return 2;
+	}
 }
 #end

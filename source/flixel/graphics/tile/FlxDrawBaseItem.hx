@@ -1,5 +1,6 @@
 package flixel.graphics.tile;
 
+import openfl.display.ShaderParameter;
 import flixel.FlxCamera;
 import flixel.graphics.frames.FlxFrame;
 import flixel.math.FlxMatrix;
@@ -9,6 +10,7 @@ import openfl.geom.ColorTransform;
 /**
  * @author Zaphod
  */
+@:unreflective
 abstract class FlxDrawBaseItem<T>
 {
 	/**
@@ -71,6 +73,13 @@ abstract class FlxDrawBaseItem<T>
 	function get_numTriangles():Int
 	{
 		return 0;
+	}
+
+	inline function setParameterValue(parameter:ShaderParameter<Bool>, value:Bool):Void
+	{
+		if (parameter.value == null)
+			parameter.value = [];
+		parameter.value[0] = value;
 	}
 }
 
