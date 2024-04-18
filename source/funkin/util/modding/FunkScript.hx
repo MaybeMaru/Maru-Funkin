@@ -74,6 +74,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 	public function implement():Void { //Preloaded Variables
 		implementNonStatic();
 
+		set("trace", Reflect.makeVarArgs(function(el) {
+			var v = el.shift();
+			ModdingUtil.print(Std.string(v), NONE);
+		}));
+
 		// Wip
 
 		set('STOP_FUNCTION', STOP_FUNCTION);
@@ -194,11 +199,6 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return Controls.getKeyOld(key);
 		});
 		
-		set("trace", Reflect.makeVarArgs(function(el) {
-			var v = el.shift();
-			ModdingUtil.print(Std.string(v), NONE);
-		}));
-
 		set('getSound', function (key:String):FlxSound {
 			return CoolUtil.getSound(key);
 		});

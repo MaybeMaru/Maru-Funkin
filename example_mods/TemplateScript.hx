@@ -50,6 +50,7 @@ StringTools
 FlxG
 FlxSpriteExt
 FlxSprite // Same as FlxSpriteExt, duplicate for backwards compatibility and shortcuts
+FlxBackdrop
 FlxText
 FlxTypedGroup
 FlxSpriteGroup
@@ -62,13 +63,13 @@ FlxTween
 FlxEase
 FlxTrail
 
-// HxCodec
+// hxVlc
 FlxVideo
 FlxVideoSprite
 
 // Compilation Defines
 BUILD_TARGET // Target the build was compiled to (windows or linux)
-VIDEOS_ALLOWED // If hxcodec is enabled
+VIDEOS_ALLOWED // If hxvlc is enabled
 DISCORD_ALLOWED // If discord presence is enabled
 ZIPS_ALLOWED // If osu and quaver zips are enabled
 
@@ -185,7 +186,7 @@ cacheCharacter(charName:String);
 cacheImage(imagePath:String, ?imageLibrary:String, ?quadCamera:FlxCamera);
 
 /*
-    Runs a PlayState song event
+    Runs a PlayState song event and adds a event script if neccesary
     @param eventName    --> Name of the event to call
     @param eventValues  --> Values of the event to call (OPTIONAL)
 */
@@ -196,6 +197,19 @@ runEvent(eventName:String, ?eventValues:Array<Dynamic>);
     @param blendModeName --> Name of the blend mode EX: 'multiply'
 */
 getBlendMode(blendModeName:String);
+
+/*
+    Returns a parsed json
+    @param jsonString --> Contents of the json file
+*/
+parseJson(jsonString:String);
+
+/*
+    Returns a json as a string
+    @param jsonValues --> Values of the json
+    @param beautyJson --> If to compact the json or make it readable (OPTIONAL)
+*/
+stringifyJson(jsonValues:Dynamic, ?beautyJson:Bool);
 
 /*
     Returns the preference variable
@@ -288,6 +302,17 @@ pauseSounds();
     Resumes all sounds created using getSound() or playSound()
 */
 resumeSounds();
+
+/*
+    Returns a new cutscene manager instance
+    @param targetSound -> Sound for the cutscene to be synced to (OPTION)
+*/
+makeCutsceneManager(?targetSound:FlxSound);
+
+/*
+    Returns a new modchart manager instance
+*/
+makeModchartManager();
 
 /*
     Changes the current Discord client presence
