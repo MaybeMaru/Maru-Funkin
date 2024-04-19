@@ -64,7 +64,7 @@ class ModdingUtil
         #end
         
         scripts.copy().fastForEach((script, i) -> removeScript(script));
-        scripts.splice(0, scripts.length);
+        scripts.clear();
 
         // Warn if the mod folder is outdated
         if (curModData != null) if (curModData.apiVersion != API_VERSION)

@@ -1,7 +1,6 @@
 package macros;
 
 import haxe.macro.Expr;
-//import haxe.macro.Context;
 
 macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
   // Extract variable names and expression from `callbackExpr`
@@ -27,10 +26,6 @@ macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
     case _: throw "`callbackExpr` must be a function with two arguments!";
   }
 
-  // Make sure the array doesnt compile into dynamic
-  //final type = Context.toComplexType(Context.typeof(iterableExpr));
-
-  // Build the expression this macro call changes into:
   return macro {
     final iterable = $iterableExpr;
     final len = iterable.length;
@@ -41,4 +36,31 @@ macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
       $i{indexName}++;
     }
   }
+}
+
+class FastArray<T>
+{
+    inline public static function unsafeGet<T>(array:Array<T>, index:Int):T {
+        #if cpp
+        return cpp.NativeArray.unsafeGet(array, index);
+        #else
+        return array[index];
+        #end
+    }
+
+    inline public static function unsafeSet<T>(array:Array<T>, index:Int, value:T):Void {
+        #if cpp
+        untyped array.__unsafe_set(index, value);
+        #else
+        array[index] = value;
+        #end
+    }
+
+    inline public static function clear<T>(array:Array<T>) {
+        #if cpp
+        cpp.NativeArray.setSize(array, 0);
+        #else
+        array.splice(0, array.length);
+        #end
+    }
 }

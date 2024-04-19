@@ -97,7 +97,7 @@ class Conductor
 
 	public static function mapBPMChanges(song:SwagSong):Void
 	{
-		bpmChangeMap.splice(0, bpmChangeMap.length);
+		bpmChangeMap.clear();
 
 		var curBPM:Float = song.bpm;
 		var totalSteps:Int = 0;

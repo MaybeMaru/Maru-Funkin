@@ -77,9 +77,6 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			shader.colorOffset.value = colorOffsets;
 		}
 
-        if (blend == null)
-			blend = NORMAL;
-
         setParameterValue(shader.hasColorTransform, colored);
         drawFlxTriangle(camera.canvas.graphics);
         #else
@@ -102,7 +99,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
     function drawFlxTriangle(graphics:Graphics):Void @:privateAccess
     {
 		#if (openfl > "8.7.0")
-        graphics.__commands.overrideBlendMode(blend);
+        graphics.__commands.overrideBlendMode(blend ?? NORMAL);
 		#end
 
 		graphics.beginShaderFill(shader);
@@ -115,19 +112,27 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 	override public function reset():Void
 	{
 		super.reset();
+		#if (flash || openfl >= "4.0.0")
+		vertices.length = 0;
+		indices.length = 0;
+		uvtData.length = 0;
+		colors.length = 0;
+		#else
 		vertices.splice(0, vertices.length);
 		indices.splice(0, indices.length);
 		uvtData.splice(0, uvtData.length);
 		colors.splice(0, colors.length);
+		#end
 
 		verticesPosition = 0;
 		indicesPosition = 0;
 		colorsPosition = 0;
+		
 		#if !flash
-		alphas.splice(0, alphas.length);
+		alphas.clear();
         if (colored) {
-            colorMultipliers.splice(0, colorMultipliers.length);
-            colorOffsets.splice(0, colorOffsets.length);
+            colorMultipliers.clear();
+            colorOffsets.clear();
         }
 		#end
 	}

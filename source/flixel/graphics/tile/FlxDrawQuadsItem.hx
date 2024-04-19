@@ -37,11 +37,11 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		super.reset();
 		rects.length = 0;
 		transforms.length = 0;
-		alphas.splice(0, alphas.length);
+		alphas.clear();
 		if (colored)
 		{
-			colorMultipliers.splice(0, colorMultipliers.length);
-			colorOffsets.splice(0, colorOffsets.length);
+			colorMultipliers.clear();
+			colorOffsets.clear();
 		}
 	}
 
@@ -122,9 +122,6 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			shader.colorOffset.value = colorOffsets;
 		}
 
-		if (blend == null)
-			blend = NORMAL;
-
 		setParameterValue(shader.hasColorTransform, colored);
 		drawFlxQuad(camera.canvas.graphics, shader, rects, transforms);
 		
@@ -140,7 +137,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	function drawFlxQuad(graphics:Graphics, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		// Override blend mode
-		graphics.__commands.overrideBlendMode(blend);
+		graphics.__commands.overrideBlendMode(blend ?? NORMAL);
 
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();
