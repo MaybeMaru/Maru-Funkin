@@ -55,7 +55,7 @@ class Preferences {
         addPref('resolution', 'resolution', {array:resolutions, value:default_resolution});
         #end
         addPref('antialiasing', 'antialiasing', true);
-        addPref('quality', 'quality', {array:["high", "medium", "low", "rudy"], value:"high"});
+        addPref('quality', 'quality', {array:["rudy", "low", "medium", "high"], value:"high"});
         #if !(hl || web)
         addPref('gpu-textures', 'gpu textures', true);
         #end

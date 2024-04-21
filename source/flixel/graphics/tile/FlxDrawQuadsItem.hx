@@ -38,7 +38,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		rects.length = 0;
 		transforms.length = 0;
 		alphas.clear();
-		if (colored)
+		if (colorMultipliers != null)
 		{
 			colorMultipliers.clear();
 			colorOffsets.clear();

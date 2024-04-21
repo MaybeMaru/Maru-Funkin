@@ -44,8 +44,8 @@ class ControlsState extends MusicBeatState
             back.alpha = 0.4;
             add(back);
 
-			var title = new Alphabet(FlxG.width * .5, y, header);
-            title.alignment = CENTER;
+			var title = new Alphabet(0, y, header);
+            title.screenCenter(X);
             add(title);
 
 			y += 130 + (Controls.headerContents.get(header).length * 100);

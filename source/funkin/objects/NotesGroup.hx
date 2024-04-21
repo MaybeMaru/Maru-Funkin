@@ -421,7 +421,7 @@ class NotesGroup extends Group
 	}
 
 	public inline function checkCpuNote(note:BasicNote):Void {
-		if (isCpuNote(note)) if (note.mustHit) if (Conductor.songPosition >= note.strumTime) {
+		if (note.mustHit) if (isCpuNote(note)) if (Conductor.songPosition >= note.strumTime) {
 			if (note.isSustainNote) {
 				final sus:Sustain = note.toSustain();
 				sus.pressSustain();
@@ -438,7 +438,7 @@ class NotesGroup extends Group
 
 	public inline function checkMissNote(note:BasicNote):Void {
 		if (!note.activeNote) if (!note.isSustainNote) {
-			if (!isCpuNote(note)) if (note.mustHit)
+			if (note.mustHit) if (!isCpuNote(note))
 				noteMiss.dispatch(note);
 	
 			note.removeNote();
@@ -491,16 +491,16 @@ class NotesGroup extends Group
 
     private function controls():Void
 	{
-		controlArray.splice(0, controlArray.length);
+		controlArray.clear();
 		pushControls(playerStrums, inBotplay);
 		pushControls(opponentStrums, dadBotplay);
 
 		if (generatedMusic)
 		{
 			final hasControl:Bool = controlArray.contains(true);
-			if (possibleNotes.length > 0) possibleNotes.splice(0, possibleNotes.length);
-			if (removeList.length > 0) removeList.splice(0, removeList.length);
-			if (ignoreList.length > 0) ignoreList.splice(0, ignoreList.length);
+			if (possibleNotes.length > 0) possibleNotes.clear();
+			if (removeList.length > 0) removeList.clear();
+			if (ignoreList.length > 0) ignoreList.clear();
 
 			notes.forEachAlive((note:BasicNote) -> {
 				if (isCpuNote(note))

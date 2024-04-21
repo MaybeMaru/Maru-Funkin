@@ -1,6 +1,8 @@
 package funkin.objects.dialogue;
 
-class NormalDialogueBox extends DialogueBoxBase {
+// TODO: rewrite dialogue shit
+class NormalDialogueBox extends DialogueBoxBase
+{
     public var speechBubble:FunkinSprite;
     public var swagDialogue:TypedAlphabet;
     public var blackBG:FlxSpriteExt;
@@ -41,14 +43,15 @@ class NormalDialogueBox extends DialogueBoxBase {
         speechBubble.x += 25;
         add(speechBubble);
 
-        swagDialogue = new TypedAlphabet(speechBubble.x + 75, speechBubble.y + 125, "", false, Std.int(FlxG.width/2.25), 0.8);
+        swagDialogue = new TypedAlphabet(speechBubble.x + 75, speechBubble.y + 125, "", false, 1220);
+        swagDialogue.scale.scale(0.8, 0.8);
         swagDialogue.sounds = ['pixelText'];
         add(swagDialogue);
 
         skipCallback = skipDialogue;
-        endCallback = function playShit() {FlxG.sound.play(Paths.sound('clickText'), 0.8);};
-        nextCallback = function playShit() {FlxG.sound.play(Paths.sound('clickText'), 0.8);};
-		startCallback = function nothing() {};
+        endCallback = () -> FlxG.sound.play(Paths.sound('clickText'), 0.8);
+        nextCallback = () -> FlxG.sound.play(Paths.sound('clickText'), 0.8);
+		startCallback = () -> {};
     }
 
     override public function update(elapsed:Float):Void {

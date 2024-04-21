@@ -30,11 +30,11 @@ class PreferencesState extends MusicBeatState {
             back.alpha = 0.4;
             add(back);
             
-            var title = new Alphabet(FlxG.width * .5, y, switch (header) {
+            var title = new Alphabet(0, y, switch (header) {
                 case "GAMEPLAY": FlxG.random.bool(5) ? "GAYPLAY" : header;
                 default: header;
             });
-            title.alignment = CENTER;
+            title.screenCenter(X);
             add(title);
 
             y += 40;
@@ -116,8 +116,8 @@ class PreferencesState extends MusicBeatState {
 
     function handleArray(item:PrefItem, accepted:Bool, leftP:Bool, rightP:Bool) {
         if (leftP || rightP) {
-            if (leftP)  item.setValue(item.array[FlxMath.wrap(item.getArrIndex()-1, 0, item.array.length - 1)]);
-            if (rightP) item.setValue(item.array[FlxMath.wrap(item.getArrIndex()+1, 0, item.array.length - 1)]);
+            if (leftP)  item.setValue(item.array[FlxMath.wrap(item.getArrIndex() - 1, 0, item.array.length - 1)]);
+            if (rightP) item.setValue(item.array[FlxMath.wrap(item.getArrIndex() + 1, 0, item.array.length - 1)]);
         }
     }
 

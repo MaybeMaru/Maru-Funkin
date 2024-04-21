@@ -245,7 +245,8 @@ class Paths
 	}
 
 	// Gotta do this to make sure FlxAtlasFrames doesnt lose his shit when the graphic is smaller than the data
-	private static function getFrames(image:LodGraphic, getter:()->FlxAtlasFrames) {
+	@:noCompletion
+	public static function getFrames(image:LodGraphic, getter:()->FlxAtlasFrames) {
 		image.setSize(image.lodWidth, image.lodHeight);
 		var frames = getter();
 		image.setSize(image.bitmap.width, image.bitmap.height);
@@ -276,7 +277,7 @@ class Paths
 	}
 
 	@:noCompletion
-	inline private static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {
+	inline public static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {
 		var parent:LodGraphic = cast(frames.parent, LodGraphic);
 		if (parent.lodLevel == 0 || parent.parsedChildren)
 			return frames;

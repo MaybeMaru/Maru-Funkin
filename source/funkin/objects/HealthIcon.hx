@@ -1,7 +1,14 @@
 package funkin.objects;
 
-class HealthIcon extends FlxSpriteExt {
-	public var sprTracker:FlxObject;
+class HealthIcon extends FlxSpriteExt
+{
+	public var sprTracker(default, set):FlxObject;
+	inline function set_sprTracker(value:FlxObject) {
+		sprTracker = value;
+		setSprTrackerPos();
+		return value;
+	}
+
 	public var isPlayer:Bool = false;
 	public var playIcon:Bool = false;
 	public var isDying:Bool = false;

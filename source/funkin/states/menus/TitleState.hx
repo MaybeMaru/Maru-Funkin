@@ -15,15 +15,16 @@ typedef IntroJson = {
 	var bpm:Float;
 }
 
-class TitleState extends MusicBeatState {
+class TitleState extends MusicBeatState
+{
 	static var initialized:Bool = false;
 	static var openedGame:Bool = false;
 	var skippedIntro:Bool = false;
 
 	var blackScreen:FlxSprite;
 	var titleGroup:Group;
-	var textSprite:Alphabet;
-	var spriteGroup:FlxTypedSpriteGroup<FunkinSprite>;
+	var text:Alphabet;
+	var spriteGroup:SpriteGroup;
 
 	var curWacky:Array<String> = [];
 	var introJson:IntroJson = null;
@@ -81,10 +82,11 @@ class TitleState extends MusicBeatState {
 		blackScreen.visible = !initialized;
 		add(blackScreen);
 
-		textSprite = new Alphabet(FlxG.width * 0.5, FlxG.height * 0.25,'');
-		textSprite.alignment = CENTER;
-		add(textSprite);
-		spriteGroup = new FlxTypedSpriteGroup<FunkinSprite>();
+		text = new Alphabet(0, FlxG.height * 0.25);
+		text.alignment = CENTER;
+		add(text);
+
+		spriteGroup = new SpriteGroup();
 		add(spriteGroup);
 
 		initialized = true;
@@ -96,53 +98,51 @@ class TitleState extends MusicBeatState {
 	var titleText:FunkinSprite;
 	var logoBump:FunkinSprite;
 
-	function makeIntroShit(index:Int):Void {
-		final nuggets:IntroPart = introJson.beats[cast Math.max(index, 0)];
-		if (nuggets != null) {
-			if (nuggets.sprite != null) {
-				final introSpr:FunkinSprite = cast(spriteGroup.recycle(FunkinSprite), FunkinSprite);
-				introSpr.loadImage(nuggets.sprite);
-				introSpr.y = textSprite.y + textSprite.height * 0.5 + 50;
-				introSpr.setScale(0.7);
-				introSpr.screenCenter(X);
-				spriteGroup.add(introSpr);
-			}
-			if (nuggets.create != null)			makeText(nuggets.create);
-			if (nuggets.add != null)			addText(nuggets.add);
-			if (nuggets.makeRandom != null)		makeText([curWacky[nuggets.makeRandom]]);
-			if (nuggets.addRandom != null)		addText(curWacky[nuggets.addRandom]);
-			if (nuggets.clear)					clearText();
-			if (nuggets.skip)					skipIntro();
+	function checkBeat(index:Int):Void
+	{
+		index = Std.int(FlxMath.bound(index, 0, introJson.beats.length));
+		var beat = introJson.beats[index];
+		if (beat == null) return;
+
+		if (beat.create != null) 		makeText(beat.create);
+		if (beat.add != null) 			addText(beat.add);
+		if (beat.makeRandom != null) 	makeText([curWacky[beat.makeRandom]]);
+		if (beat.addRandom != null) 	addText(curWacky[beat.addRandom]);
+		if (beat.clear)					clearText();
+		if (beat.skip)					skipIntro();
+
+		text.screenCenter(X);
+
+		if (beat.sprite != null) {
+			var sprite = new FlxSpriteExt(0, text.y + text.height + 10);
+			sprite.loadImage(beat.sprite);
+			sprite.setScale(0.7);
+			sprite.screenCenter(X);
+			spriteGroup.add(sprite);
 		}
 	}
 
 	function makeText(text:Array<String>):Void {
-		var newText:String = '';
-		for (i in 0...text.length) {
-			newText += '${text[i]}${(i == text.length-1 ? '' : '\n')}';
-		}
-		textSprite.text = newText.trim();
+		this.text.text = text.join('\n');
 	}
 
 	function addText(text:String):Void {
-		var newText:String = '${textSprite.text}\n$text'.trim();
-		textSprite.text = newText;
+		this.text.text += '\n$text';
 	}
 
 	function clearText():Void {
-		textSprite.text = '';
-		for (spr in spriteGroup) {
-			spr.kill();
-		}
+		text.text = '';
+		spriteGroup.members.fastForEach((basic, i) -> basic.kill());
 	}
 
 	function getIntroTextShit():Array<Array<String>> {
-		final convIntroLines:Array<Array<String>> = [];
-		final introLines:Array<String> = CoolUtil.coolTextFile(Paths.txt('introText'));
-		for (line in introLines) {
-			convIntroLines.push(line.trim().split('--'));
-		}
-		return convIntroLines;
+		var lines:Array<Array<String>> = [];
+
+		CoolUtil.coolTextFile(Paths.txt('introText')).fastForEach((line, i) -> {
+			lines.push(line.trim().split('--'));
+		});
+
+		return lines;
 	}
 
 	var transitioning:Bool = false;
@@ -220,13 +220,13 @@ class TitleState extends MusicBeatState {
 	override function beatHit(curBeat:Int):Void {
 		super.beatHit(curBeat);
 
-		if (initialized && gfDance.exists) {
+		if (initialized) if (gfDance.exists) {
 			logoBump.playAnim('idle', true);
 			gfDance.dance();
 		}
 
-		if (curBeat <= introJson.beats.length && !skippedIntro && !openedGame) {
-			makeIntroShit(curBeat-1);
+		if (!openedGame) if (!skippedIntro) if (curBeat <= introJson.beats.length) {
+			checkBeat(curBeat - 1);
 		}
 	}
 
@@ -235,7 +235,7 @@ class TitleState extends MusicBeatState {
 			skippedIntro = true;
 			clearText();
 			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
-			spriteGroup.alpha = textSprite.alpha = blackScreen.alpha = 0;
+			spriteGroup.alpha = text.alpha = blackScreen.alpha = 0;
 		}
 	}
 

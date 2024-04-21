@@ -21,7 +21,7 @@ class LatencyState extends MusicBeatState
 		hitSpr.playAnim('idle');
 		add(hitSpr);
 
-		offsetText = new Alphabet(hitSpr.x + hitSpr.width / 2 + 75, hitSpr.y - hitSpr.height / 2);
+		offsetText = new Alphabet(hitSpr.x + hitSpr.width / 2 - 75, hitSpr.y - hitSpr.height / 2);
 		offsetText.alignment = CENTER;
 		add(offsetText);
 

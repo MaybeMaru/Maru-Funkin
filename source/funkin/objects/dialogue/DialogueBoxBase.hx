@@ -110,7 +110,7 @@ class DialogueBoxBase extends Group {
 				FlxG.sound.music.fadeOut(2.2, 0);
 			}
 
-			new FlxTimer().start(1.2, function(tmr:FlxTimer) {
+			new FlxTimer().start(1.2, (tmr) -> {
 				closeCallback();
 				destroy();
 			});

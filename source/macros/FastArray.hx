@@ -38,6 +38,7 @@ macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
   }
 }
 
+@:unreflective
 class FastArray<T>
 {
     inline public static function unsafeGet<T>(array:Array<T>, index:Int):T {
@@ -57,10 +58,10 @@ class FastArray<T>
     }
 
     inline public static function clear<T>(array:Array<T>) {
-        #if cpp
-        cpp.NativeArray.setSize(array, 0);
+        #if (cpp || hl)
+        array.resize(0);
         #else
-        array.splice(0, array.length);
+        array.splice(0, array.length); // Splice is faster on html5 for whatever reason
         #end
     }
 }

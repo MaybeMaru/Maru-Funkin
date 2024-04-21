@@ -72,18 +72,20 @@ class ModdingUtil
     }
 
     public static function reloadMods():Void {
-        FlxArrayUtil.clearArray(modsList);
-        FlxArrayUtil.clearArray(globalMods);
+        modsList.clear();
+        globalMods.clear();
         modsMap.clear();
         
         activeMods = SaveData.getSave('activeMods');
+        
         modsList = getModsList();
-        for (i in modsList) {
-            modsMap.set(i.folder, i);
-            if (i.global && activeMods.get(i.folder)) globalMods.push(i);
-        }
-        getDefaultMod();
+        modsList.fastForEach((mod, i) -> {
+            modsMap.set(mod.folder, mod);
+            if (mod.global) if (activeMods.get(mod.folder))
+                globalMods.push(mod);
+        });
 
+        getDefaultMod();
         SaveData.flushData();
     }
 
