@@ -55,6 +55,7 @@ import funkin.objects.Character;
 import funkin.objects.HealthIcon;
 
 //Alphabet
+import funkin.objects.alphabet.AlphabetFont;
 import funkin.objects.alphabet.Alphabet;
 import funkin.objects.alphabet.MenuAlphabet;
 import funkin.objects.alphabet.TypedAlphabet;

@@ -9,7 +9,7 @@ enum PrefType {
 class PrefItem extends FlxSpriteGroup {
     private var usePrefs:Bool = true;
     private var settingTxt:Alphabet;
-    public var type:PrefType = null;
+    public var type:PrefType;
 
     private var checkboxSpr:FunkinSprite;   //Bool
     public var  numSetSpr:Alphabet;         //Number
@@ -59,19 +59,25 @@ class PrefItem extends FlxSpriteGroup {
         }
     }
 
-    inline public function getArrIndex() {
+    inline public function getArrIndex():Int {
         return array.indexOf(prefValue);
     }
 
-    function applyAntiGroup(members:Array<Dynamic>, anti:Bool = true) {
-        for (i in members) {
-            switch(Type.typeof(i)) {
-                case TClass(FunkinSprite):
-                    i.antialiasing = anti;
-                case TClass(FlxTypedGroup) | TClass(PrefItem):
-                    applyAntiGroup(i.members ?? i.group.members, anti);
-                default:
-            } 
+    function applyAntiGroup(basic:Dynamic, anti:Bool):Void
+    {
+        if (basic.flixelType == GROUP) {
+            for (member in cast(basic.members, Array<Dynamic>))
+                applyAntiGroup(member, anti);
+
+            return;
+        }
+
+        if (basic is FlxSprite) {
+            basic.antialiasing = anti;
+            if (basic.flixelType == SPRITEGROUP) {
+                for (member in cast(basic.group.members, Array<Dynamic>))
+                    applyAntiGroup(member, anti);
+            }
         }
     }
 
@@ -95,7 +101,9 @@ class PrefItem extends FlxSpriteGroup {
                 case "fps-counter": Preferences.updateFpsCounter();
                 case "resolution": Preferences.updateResolution();
                 case "gpu-textures": Preferences.updateGpuTextures();
-                case "antialiasing": applyAntiGroup(FlxG.state.members, cast prefValue);
+                case "antialiasing":
+                    Preferences.updateAntialiasing();
+                    applyAntiGroup(FlxG.state, cast prefValue);
             }
         }
 

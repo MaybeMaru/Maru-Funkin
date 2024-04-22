@@ -217,7 +217,13 @@ class AssetManager
 	public static var staticAssets:Array<String> = [];
 	public static var tempAssets:Array<String> = [];
 
-	public static inline function clearAllCache(?clearGraphics:Bool, ?clearSounds:Bool):Void {
+	public static inline function clearAllCache(?clearGraphics:Bool, ?clearSounds:Bool):Void
+	{
+		#if web
+		AlphabetFont.cachedAlphabets.clear();
+		NoteUtil.skinSpriteMap.clear();
+		#end
+		
 		clearStaticCache(false, clearGraphics, clearSounds);
 		clearTempCache(false, clearGraphics, clearSounds);
 		CoolUtil.gc(true);

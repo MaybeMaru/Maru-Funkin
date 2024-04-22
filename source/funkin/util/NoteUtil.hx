@@ -99,11 +99,10 @@ class NoteUtil
 
         final key:String = 'skins/$skin/${skinJson.imagePath}';
         final lod:Int = LodLevel.resolve(skinJson.allowLod);
-        final antialiasing:Bool = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
         
         final sprite = new FlxSpriteExt().loadImage(key, false, null, null, lod);
         sprite.setScale(skinJson.scale);
-        sprite.antialiasing = antialiasing;
+        sprite.antialiasing = skinJson.antialiasing ? Preferences.getPref("antialiasing") : false;
 
         skinJson.anims.fastForEach((anim, i) -> {
             sprite.addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);

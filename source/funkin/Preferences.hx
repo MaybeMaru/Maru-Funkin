@@ -2,7 +2,8 @@ package funkin;
 
 typedef ArrayPref = {array:Array<String>, value:String};
 
-class Preferences {
+class Preferences
+{
     public static var prefsArray:Array<String>;
     public static var preferences:Map<String, Dynamic>;
     public static var prefsLabels:Map<String, String>;
@@ -106,10 +107,17 @@ class Preferences {
     public static inline function updateGpuTextures():Void
         #if !(hl || web) AssetManager.gpuTextures = getPref('gpu-textures'); #else {} #end
 
+    public static inline function updateAntialiasing():Void {
+        var anti:Bool = FlxSprite.defaultAntialiasing = getPref('antialiasing');
+        for (key => data in NoteUtil.skinSpriteMap) {
+            data.baseSprite.antialiasing = data.skinJson.antialiasing ? anti : false;
+        }
+    }
+
     public static function effectPrefs():Void {
         updateFramerate();
         updateFpsCounter();
-        FlxSprite.defaultAntialiasing = getPref('antialiasing');
+        updateAntialiasing();
         AssetManager.setLodQuality(getPref('quality'));
         updateGpuTextures();
     }
