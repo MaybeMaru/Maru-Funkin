@@ -174,9 +174,7 @@ enum abstract LodLevel(Int) from Int to Int {
 	var RUDY = 3;
 
 	public static inline function resolve(useLod:Bool):Int {
-		if (useLod)
-			return DEFAULT;
-		return HIGH;
+		return useLod ? DEFAULT : HIGH;
 	}
 
 	public static function fromString(value:String):LodLevel {

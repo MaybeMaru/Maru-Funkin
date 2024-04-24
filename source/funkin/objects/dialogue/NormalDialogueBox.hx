@@ -30,8 +30,7 @@ class NormalDialogueBox extends DialogueBoxBase
         portraitGf = new NormalPortrait(dialogueChars[2]);
         portraitGroup.add(portraitGf);
 
-        for (portrait in portraitGroup)
-            portrait.visible = false;
+        portraitGroup.members.fastForEach((member, i) -> member.visible = false);
 
         speechBubble = new FunkinSprite('speechBubble', [0, FlxG.height*0.5], [0,0]);
         speechBubble.addAnim('open-normal', 'normal-open');
@@ -48,10 +47,9 @@ class NormalDialogueBox extends DialogueBoxBase
         swagDialogue.sounds = ['pixelText'];
         add(swagDialogue);
 
-        skipCallback = skipDialogue;
+        skipCallback = () -> swagDialogue.skip();
         endCallback = () -> FlxG.sound.play(Paths.sound('clickText'), 0.8);
         nextCallback = () -> FlxG.sound.play(Paths.sound('clickText'), 0.8);
-		startCallback = () -> {};
     }
 
     override public function update(elapsed:Float):Void {
@@ -60,19 +58,14 @@ class NormalDialogueBox extends DialogueBoxBase
         if (!isEnding)
             portraitGf.screenCenter(X);
 
-        if (speechBubble.animation.curAnim != null) {
-            if (speechBubble.animation.curAnim.name.startsWith('open') && speechBubble.animation.curAnim.finished) {
-                FlxTween.tween(blackBG, {alpha: 0.4}, 0.5, {ease: FlxEase.circIn,});
-                speechBubble.playAnim('idle-normal');
-                dialogueOpened = true;
-            }
+        var curAnim = speechBubble.animation.curAnim;
+        if (curAnim != null) if (curAnim.finished) if (curAnim.name.startsWith("open")) {
+            FlxTween.tween(blackBG, {alpha: 0.4}, 0.5, {ease: FlxEase.circIn,});
+            speechBubble.playAnim('idle-normal');
+            dialogueOpened = true;
         }
 
 		super.update(elapsed);
-    }
-
-    function skipDialogue():Void {
-        swagDialogue.skip();
     }
 
     override public function startDialogue():Void  {
@@ -120,21 +113,29 @@ typedef PortraitJson = {
     var smallScale:Float;
 } & SpriteJson;
 
-class NormalPortrait extends FunkinSprite {
-
+class NormalPortrait extends FlxSpriteExt {
     public var talkAnim:String = 'talk';
     public var talking:Bool = false;
     public var faceJsonData:PortraitJson;
 
     public function new(path:String, isPlayer:Bool = false):Void {
-        super('portraits/$path', [0,0], [0,0]);
-		faceJsonData = Json.parse(CoolUtil.getFileContent(Paths.getPath('images/portraits/$path.json', TEXT, null)));
-        faceJsonData.offset[0] -= isPlayer ? FlxG.width*0.7: 0;
+		super(0, 0);
+
+        scrollFactor.set();
+        loadImage('portraits/$path');
+        
+        var path = 'images/portraits/$path.json';
+        faceJsonData = Json.parse(CoolUtil.getFileContent(Paths.getPath(path, TEXT, null)));
 
         x = -faceJsonData.offset[0];
         y = -faceJsonData.offset[1];
-        for (anim in faceJsonData.anims)
-            addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets);
+
+        if (isPlayer)
+            x += FlxG.width * 0.7;
+
+        faceJsonData.anims.fastForEach((anim, i) ->
+            addAnim(anim.animName, anim.animFile, anim.framerate, anim.loop, anim.indices, anim.offsets)
+        );
 
         setScale(faceJsonData.smallScale, false);
         color = FlxColor.GRAY;

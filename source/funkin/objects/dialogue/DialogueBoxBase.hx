@@ -23,7 +23,8 @@ typedef DialogueJson = {
 	var ?gf:String;
 }
 
-class DialogueBoxBase extends Group {
+class DialogueBoxBase extends Group
+{
 	public var skipIntro:Bool = false;
 	public var dialogueChars:Array<String> = ['senpai-pixel', 'bf-pixel', 'gf-pixel'];
 	public var jsonParsed:DialogueJson;
@@ -44,8 +45,8 @@ class DialogueBoxBase extends Group {
 	public function new():Void {
 		super();
 
-		final jsonContent:String = CoolUtil.getFileContent(Paths.getPath(Song.formatSongFolder(PlayState.SONG.song) + '/dialogue.json', TEXT, 'songs'));
-		jsonParsed = Json.parse(jsonContent);
+		var path = Song.formatSongFolder(PlayState.SONG.song) + '/dialogue.json';
+		jsonParsed = Json.parse(CoolUtil.getFileContent(Paths.getPath(path, TEXT, 'songs')));
 
 		final defaultDialogue:DialogueJson = {
 			lines: [],
@@ -69,15 +70,16 @@ class DialogueBoxBase extends Group {
 	public var dialogueStarted:Bool = false;
 	public var textFinished:Bool = false;
 
-	override function update(elapsed:Float):Void {
-		if (dialogueOpened && !dialogueStarted) {
+	override function update(elapsed:Float):Void
+	{
+		if (dialogueOpened) if (!dialogueStarted) {
 			dialogueStarted = true;
 			startDialogue();
-			startCallback();
+			if (startCallback != null) startCallback();
 			ModdingUtil.addCall('startDialogue');
 		}
 
-		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end && dialogueStarted && !isEnding) {
+		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end) if (dialogueStarted) if (!isEnding) {
 			if (!textFinished) {
 				skipCallback();
 				ModdingUtil.addCall('skipDialogueLine', [jsonParsed.lines[0]]);

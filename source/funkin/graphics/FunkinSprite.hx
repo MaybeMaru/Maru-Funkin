@@ -1,6 +1,8 @@
 package funkin.graphics;
 
-class FunkinSprite extends FlxSpriteExt {
+// Simple FlxSpriteExt wrapper class mainly for use in hscript
+class FunkinSprite extends FlxSpriteExt
+{
     public var jsonData:SpriteJson;
     public var tag:String = "";
     public var animated:Bool = true;
@@ -8,33 +10,39 @@ class FunkinSprite extends FlxSpriteExt {
 
     public function new(?image:FlxGraphicAsset, ?coords:Array<Float>, ?scrolls:Array<Float>, useJson:Bool = false):Void {
         super();
-        coords = coords ?? [0,0];
-        scrolls = scrolls ?? [1,1];
-        x = coords[0]; y = coords[1];
-        scrollFactor.set(scrolls[0], scrolls[1]);
 
-        coords = null;
-        scrolls = null;
+        if (coords == null) setPosition(0,0);
+        else setPosition(coords[0], coords[1]);
+        
+        if (scrolls == null) scrollFactor.set(1,1);
+        else scrollFactor.set(scrolls[0], scrolls[1]);
 
-        if (image != null) {
-            if (image is String) {
+        if (image != null)
+        {
+            if (image is String)
+            {
                 final path:String = cast(image, String);
-                if (path.length > 0) {
+                if (path.length > 0)
+                {
                     loadImage(path);
                     animated = packer != IMAGE;
             
-                    final jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
-                    if (useJson && Paths.exists(jsonPath, TEXT)) loadSpriteJson(jsonPath, '');
-                    else {
-                        antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
+                    if (useJson) {
+                        var jsonPath:String = Paths.getPath('images/$path-data.json', TEXT, null);
+                        if (Paths.exists(jsonPath, TEXT)) {
+                            loadSpriteJson(jsonPath, "");
+                            return;
+                        }
                     }
                 }
             }
-            else {
+            else
+            {
                 loadGraphic(image);
-                antialiasing = SkinUtil.curSkinData.antialiasing ? Preferences.getPref('antialiasing') : false;
             }
         }
+
+        antialiasing = SkinUtil.curSkinData.antialiasing ? FlxSprite.defaultAntialiasing : false;
     }
     
     public function dance(forced:Bool = false):Void {

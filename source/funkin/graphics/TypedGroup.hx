@@ -13,13 +13,8 @@ class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T
 {
 	public inline function setNull(object:T) {
 		var index:Int = members.indexOf(object);
-		if (index != -1) {
-			#if cpp // skip hxcpp creating a dynamic for null
-			untyped __cpp__("{0}->__unsafe_set({1}, null())", members, index);
-			#else
+		if (index != -1)
 			members.unsafeSet(index, null);
-			#end
-		}
 	}
 
 	public function insertTop(object:T) {

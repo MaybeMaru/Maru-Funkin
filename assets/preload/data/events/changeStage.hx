@@ -20,7 +20,7 @@ function changeStage(stageName)
     State.stage.active = false;
 
     if (State.stage.script != null)
-        State.stage.script.callback("hideStage");
+        State.stage.script.safeCall("hideStage");
     
     stage.visible = true;
     stage.active = true;
@@ -31,7 +31,7 @@ function changeStage(stageName)
     repositionChar(State.gf, 400, 360);
 
     if (stage.script != null)
-        stage.script.callback("changeStage");
+        stage.script.safeCall("changeStage");
 
     State.defaultCamZoom = stage.data.zoom;
     State.stageData = stage.data;
@@ -85,8 +85,8 @@ function createPost() {
 
             if (stageScript != null) {
                 stageScript.set("ScriptStage", stageObject);
-                stageScript.callback("create");
-                stageScript.callback("createPost");
+                stageScript.safeCall("create");
+                stageScript.safeCall("createPost");
             }
 
             cachedStages.set(stage, stageObject);

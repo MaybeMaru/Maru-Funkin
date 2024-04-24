@@ -29,9 +29,9 @@ class PixelDialogueBox extends DialogueBoxBase
 	public var portraitLeft:PixelPortrait;
 	public var portraitRight:PixelPortrait;
 
-	public var box:FunkinSprite;
+	public var box:FlxSpriteExt;
 	public var swagDialogue:FlxTypeText;
-	public var handSelect:FunkinSprite;
+	public var handSelect:FlxSpriteExt;
 	public var bgFade:FlxSpriteExt;
 
 	public var clickSound:FlxSound = null;
@@ -44,7 +44,7 @@ class PixelDialogueBox extends DialogueBoxBase
 		bgFade.blend = OVERLAY;
 		add(bgFade);
 
-		new FlxTimer().start(0.4, function(tmr:FlxTimer) {
+		new FlxTimer().start(0.4, (tmr) -> {
 			bgFade.alpha = FlxMath.bound(bgFade.alpha + (1 / 5) * 0.7, 0, 0.7);
 		}, 5);
 
@@ -59,7 +59,8 @@ class PixelDialogueBox extends DialogueBoxBase
 		boxType = boxTypes.exists(skin) ? skin : 'pixel';
 		var data:PixelBox = boxTypes.get(boxType);
 
-		box = new FunkinSprite('skins/${data.box}', [0,0], [0,0]);
+		box = new FlxSpriteExt().loadImage('skins/${data.box}', false, null, null, HIGH);
+		box.scrollFactor.set();
 		box.addAnim('normalOpen', data.openAnim);
 		box.playAnim('normalOpen');
 		box.setScale(PIXEL_ZOOM * 0.9);
@@ -67,7 +68,8 @@ class PixelDialogueBox extends DialogueBoxBase
 		box.y += 69; // nice
 		add(box);
 
-		handSelect = new FunkinSprite('skins/pixel/hand_textbox', [FlxG.width * 0.82, FlxG.height * 0.81], [0,0]);
+		handSelect = new FlxSpriteExt(FlxG.width * 0.82, FlxG.height * 0.81).loadImage('skins/pixel/hand_textbox', false, null, null, HIGH);
+		handSelect.scrollFactor.set();
 		handSelect.addAnim('enter', 'nextLine', 12);
 		handSelect.addAnim('load', 'waitLine', 12, true);
 		handSelect.addAnim('click', 'clickLine', 12);
@@ -85,10 +87,9 @@ class PixelDialogueBox extends DialogueBoxBase
 		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
 		add(swagDialogue);
 
-        skipCallback = skipDialogue;
+        skipCallback = () -> swagDialogue.skip();
         endCallback = clickDialogue;
         nextCallback = clickDialogue;
-		startCallback = function nothing() {};
 
 		clickSound = CoolUtil.getSound("clickText");
 		clickSound.volume = 0.8;
@@ -108,7 +109,7 @@ class PixelDialogueBox extends DialogueBoxBase
 		final boxAnim = box.animation.curAnim;
 		if (boxAnim != null)
 		{
-			if (boxAnim.name == "normalOpen" && boxAnim.finished) {
+			if (boxAnim.finished) if (boxAnim.name == "normalOpen") {
 				box.playAnim("normal");
 				dialogueOpened = true;
 			}
@@ -117,14 +118,10 @@ class PixelDialogueBox extends DialogueBoxBase
 		super.update(elapsed);
     }
 
-    function skipDialogue():Void {
-        swagDialogue.skip();
-    }
-
     override public function endDialogue():Void {
         super.endDialogue();
         if (isEnding) {
-            new FlxTimer().start(0.2, function(tmr:FlxTimer) {
+            new FlxTimer().start(0.2, (tmr) -> {
 				box.alpha -= 0.2;
 				bgFade.alpha -= 0.14;
 
@@ -164,7 +161,7 @@ class PixelPortrait extends FlxSpriteExt
 	public function new (char:String, isPlayer:Bool = false) {
 		super(isPlayer ? 0 : -20, 40);
 
-		loadImage('portraits/$char');
+		loadImage('portraits/$char', false, null, null, HIGH);
 		addAnim("enter", "Portrait Enter");
 
 		antialiasing = false;

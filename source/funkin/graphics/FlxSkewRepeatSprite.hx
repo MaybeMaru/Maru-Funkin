@@ -1,9 +1,7 @@
 package funkin.graphics;
 
 import flixel.graphics.tile.FlxDrawQuadsItem;
-import flixel.math.FlxMatrix;
 import flixel.graphics.frames.FlxFrame;
-import openfl.display.BitmapData;
 
 /*
     TODO:

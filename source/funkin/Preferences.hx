@@ -108,7 +108,8 @@ class Preferences
         #if !(hl || web) AssetManager.gpuTextures = getPref('gpu-textures'); #else {} #end
 
     public static inline function updateAntialiasing():Void {
-        var anti:Bool = FlxSprite.defaultAntialiasing = getPref('antialiasing');
+        var anti:Bool = getPref('antialiasing');
+        FlxSprite.defaultAntialiasing = anti;
         for (key => data in NoteUtil.skinSpriteMap) {
             data.baseSprite.antialiasing = data.skinJson.antialiasing ? anti : false;
         }

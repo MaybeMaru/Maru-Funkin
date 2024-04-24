@@ -5,9 +5,9 @@ import flixel.graphics.frames.FlxFrame;
 
 using flixel.util.FlxColorTransformUtil;
 
-enum abstract RepeatDrawStyle(Int) from Int to Int {
-    var TOP_BOTTOM = 0;
-    var BOTTOM_TOP = 1;
+enum abstract RepeatDrawStyle(Bool) from Bool {
+    var TOP_BOTTOM = true;
+    var BOTTOM_TOP = false;
 }
 
 /**

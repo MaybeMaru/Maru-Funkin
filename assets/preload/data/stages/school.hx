@@ -21,13 +21,19 @@ function createPost()
 	setSpriteShader(trees, 'senpaiTrees');
 
 	for (i in 0...4) {
-		var freak = new FunkinSprite(freaksPath, [i * 500, 425 + switch (i) {
-			case 0: 25;
-			case 3: 25;
-		}], [0.95, 0.95]);
+		var freak = new FunkinSprite("", [i * 500, 425], [0.95, 0.95]);
+
+		switch (i) {
+			case 0: freak.y += 25;
+			case 3: freak.y += 25;
+		}
+
+		freak.loadImage(freaksPath, false, null, null, 0);
+		freak.setScale(6, false);
+
 		freak.addAnim('danceLeft', freaksAnim, 24, false, CoolUtil.numberArray(14));
 		freak.addAnim('danceRight', freaksAnim, 24, false, CoolUtil.numberArray(30,15));
-		freak.setScale(6, false);
+		
 		addSpr(freak, "freak-" + i, "freaks");
 		freaks.push(freak);
 	}

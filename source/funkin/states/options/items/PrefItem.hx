@@ -68,11 +68,8 @@ class PrefItem extends FlxSpriteGroup {
         if (basic.flixelType == GROUP) {
             for (member in cast(basic.members, Array<Dynamic>))
                 applyAntiGroup(member, anti);
-
-            return;
         }
-
-        if (basic is FlxSprite) {
+        else if (basic is FlxSprite) {
             basic.antialiasing = anti;
             if (basic.flixelType == SPRITEGROUP) {
                 for (member in cast(basic.group.members, Array<Dynamic>))
