@@ -1,10 +1,18 @@
 package funkin.states;
-class OutdatedState extends MusicBeatState {
+
+class OutdatedState extends MusicBeatState
+{
 	public static var leftState:Bool = false;
-	public static var newVer:EngineVersion = null;
+	public static var newVer:EngineVersion;
 
 	override function create():Void {
 		super.create();
+
+		if (newVer == null) {
+			leftState = true;
+			SplashState.startGame();
+			return;
+		}
 
 		CoolUtil.playMusic('breakfast', 0.6);
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);

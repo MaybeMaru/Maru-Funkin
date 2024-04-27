@@ -41,9 +41,10 @@ macro function fastForEach(iterableExpr: Expr, callbackExpr: Expr) {
 @:unreflective
 class FastArray<T>
 {
+    // Keeping this if i find a better method later down the line
     inline public static function unsafeGet<T>(array:Array<T>, index:Int):T {
         #if cpp
-        return cpp.NativeArray.unsafeGet(array, index);
+        return untyped array.__unsafe_get(index);
         #else
         return array[index];
         #end
@@ -63,5 +64,13 @@ class FastArray<T>
         #else
         array.splice(0, array.length); // Splice is faster on html5 for whatever reason
         #end
+    }
+
+    inline public static function removeAt<T>(array:Array<T>, index:Int) {
+      #if cpp
+      cpp.NativeArray.removeAt(array, index);
+      #else
+      array.splice(index, 1);
+      #end
     }
 }

@@ -298,8 +298,8 @@ class NotesGroup extends Group
 		unspawnNotes.sort((a:BasicNote, b:BasicNote) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 		events.sort((a:Event, b:Event) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 
-		curSpawnNote = unspawnNotes[0];
-		curCheckEvent = events[0];
+		curSpawnNote = unspawnNotes.shift();
+		curCheckEvent = events.shift();
 		
 		if (isPlayState)
 		{
@@ -383,7 +383,7 @@ class NotesGroup extends Group
 		}
     }
 
-	public var curSpawnNote(default, null):BasicNote = null;
+	public var curSpawnNote(default, null):BasicNote;
 
 	inline function spawnNotes():Void { // Generate notes
 		if (curSpawnNote != null) {
@@ -397,21 +397,18 @@ class NotesGroup extends Group
 
 				// Skip sorting
 				curSpawnNote.isSustainNote ? notes.insertBelow(curSpawnNote) : notes.insertTop(curSpawnNote);
-				
-				unspawnNotes.splice(0, 1);
-				curSpawnNote = unspawnNotes[0];
+				curSpawnNote = unspawnNotes.shift();
 			}
 		}
 	}
 
-	public var curCheckEvent(default, null):Event = null;
+	public var curCheckEvent(default, null):Event;
 
 	inline function checkEvents():Void {
 		if (curCheckEvent != null) {
 			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
 				ModdingUtil.addCall('eventHit', [curCheckEvent]);
-				events.splice(0, 1);
-				curCheckEvent = events[0];
+				curCheckEvent = events.shift();
 			}
 		}
 	}

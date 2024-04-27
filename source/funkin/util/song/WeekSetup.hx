@@ -92,8 +92,8 @@ class WeekSetup
         weeks = weeks.concat(modWeeks.map(week -> Paths.getFileMod(week)[1]));
         weeks = CoolUtil.removeDuplicates(weeks);
 
-        weekList.splice(0, weekList.length);
-        vanillaWeekList.splice(0, vanillaWeekList.length);
+        weekList.clear();
+        vanillaWeekList.clear();
         weekMap.clear();
 
         final modMap:Map<String, String> = [];

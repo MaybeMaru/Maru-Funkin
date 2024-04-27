@@ -6,10 +6,12 @@ class CharSelectSubstate extends MusicBeatSubstate
     var selectFunction:Void->Void = null;
 
     var curFolder:Int = 0;
-    var curSelected:Array<Int> = [0,0];
-    var iconArray:Array<Array<HealthIcon>> = [[],[]];
-    var charArray:Array<Array<MenuAlphabet>> = [[],[]];
+    var curSelected:Array<Int> = [];
+    var iconArray:Array<Array<HealthIcon>> = [];
+    var charArray:Array<Array<MenuAlphabet>> = [];
     var folderTxt:Alphabet;
+
+    var textGroup:TypedGroup<MenuAlphabet>;
 
 	public function new(?selectFunction:Void->Void):Void {
 		super();
@@ -32,25 +34,33 @@ class CharSelectSubstate extends MusicBeatSubstate
 
         var listsToAdd:Array<Array<String>> = [vanillaChars, modChars];
 
-        for (f in 0...listsToAdd.length) {
-            for (i in 0...listsToAdd[f].length) {
-                var list = listsToAdd[f];
-                var charText:MenuAlphabet = new MenuAlphabet(5, (70 * i) + 30, list[i], true, i);
+        textGroup = new TypedGroup<MenuAlphabet>();
+        add(textGroup);
+
+        listsToAdd.fastForEach((folder, f) ->
+        {
+            iconArray.push([]);
+            charArray.push([]);
+            curSelected.push(0);
+
+            folder.fastForEach((item, i) -> {
+                var charText:MenuAlphabet = new MenuAlphabet(5, (70 * i) + 30, item, true, i);
                 charText.scrollFactor.set();
                 charText.forceX = false;
                 charText.snapPosition();
-                add(charText);
+                textGroup.add(charText);
                     
-                var iconName:String = Character.getCharData(list[i]).icon;
+                var iconName:String = Character.getCharData(item).icon;
                 var charIcon:HealthIcon = new HealthIcon(iconName);
                 charIcon.scrollFactor.set();
                 charIcon.sprTracker = charText;
                 add(charIcon);
 
-                iconArray[f].push(charIcon);
-                charArray[f].push(charText);
-            }
-        }
+                iconArray.unsafeGet(f).push(charIcon);
+                charArray.unsafeGet(f).push(charText);
+            });
+        });
+
         changeFolder();
         add(folderTxt);
         cameras = [CoolUtil.getTopCam()];
@@ -84,27 +94,30 @@ class CharSelectSubstate extends MusicBeatSubstate
         }
 
         folderTxt.x = FlxG.width - folderTxt.width - 10;
-    
-        for (f in 0...charArray.length) {
-            var showBool:Bool = (f == curFolder);
-            for (i in 0...charArray[f].length) {
-                charArray[f][i].visible = showBool;
-                iconArray[f][i].visible = showBool;
+
+        charArray.fastForEach((folder, f) -> {
+            var show = (f == curFolder);
+            for (i in 0...folder.length) {
+                folder[i].visible = show;
+                iconArray[f][i].visible = show;
             }
-        }
+        });
+        
         changeSelection();
     }
 
-    function changeSelection(change:Int = 0):Void {
-        if (charArray[curFolder].length <= 0) return;
+    function changeSelection(change:Int = 0):Void
+    {
+        if (charArray[curFolder].length <= 0)
+            return;
 
         curSelected[curFolder] = FlxMath.wrap(curSelected[curFolder] + change, 0, charArray[curFolder].length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-        for (i in 0...charArray[curFolder].length) {
-            charArray[curFolder][i].targetY = i - curSelected[curFolder];
-            charArray[curFolder][i].alpha = (charArray[curFolder][i].targetY == 0) ? 1 : 0.6;
-            iconArray[curFolder][i].alpha = charArray[curFolder][i].alpha;
-        }
+        charArray[curFolder].fastForEach((item, i) -> {
+            item.targetY = i - curSelected[curFolder];
+            item.alpha = (item.targetY == 0) ? 1 : 0.6;
+            iconArray[curFolder][i].alpha = item.alpha;
+        });
 	}
 }
