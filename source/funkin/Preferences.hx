@@ -57,7 +57,7 @@ class Preferences
         #end
         addPref('antialiasing', 'antialiasing', true);
         addPref('quality', 'quality', {array:["rudy", "low", "medium", "high"], value:"high"});
-        #if !(hl || web)
+        #if !TEXTURES_OFF
         addPref('gpu-textures', 'gpu textures', true);
         #end
         #if desktop
@@ -105,7 +105,7 @@ class Preferences
         #if desktop Main.resizeGame(getPref('resolution')); #else {} #end
 
     public static inline function updateGpuTextures():Void
-        #if !(hl || web) AssetManager.gpuTextures = getPref('gpu-textures'); #else {} #end
+        #if TEXTURES_OFF {} #else AssetManager.gpuTextures = getPref('gpu-textures'); #end
 
     public static inline function updateAntialiasing():Void {
         var anti:Bool = getPref('antialiasing');

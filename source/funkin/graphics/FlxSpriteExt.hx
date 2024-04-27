@@ -500,6 +500,6 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	inline public function uploadGpu():FlxGraphic {
-		return AssetManager.uploadGraphicTexture(graphic);
+		return #if TEXTURES_OFF graphic; #else AssetManager.uploadGraphicTexture(graphic); #end
 	}
 }

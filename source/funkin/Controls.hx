@@ -8,24 +8,16 @@ class Controls
     public static var keyboardBinds:Map<String, Array<FlxKey>>;
     public static var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
     public static var controlArray:Array<String> = [];
-    public static var gamepad:FlxGamepad = null;
+    public static var gamepad:FlxGamepad;
 
     // Returns if the controler is being used
 	inline public static function inGamepad():Bool {
         return gamepad != null ? gamepad.connected : false;
     }
 
-    public static function connectGamepad(deviceConnected:FlxGamepad):Void {
-        gamepad = deviceConnected;
-    }
-
-    public static function disconnectGamepad(deviceDisconnected:FlxGamepad):Void {
-        gamepad = null;
-    }
-
     inline public static function initGamepad():Void {
-        FlxG.gamepads.deviceConnected.add(connectGamepad);
-        FlxG.gamepads.deviceDisconnected.add(disconnectGamepad);
+        FlxG.gamepads.deviceConnected.add((device) -> gamepad = device);
+        FlxG.gamepads.deviceDisconnected.add((device) -> gamepad = null);
         if (FlxG.gamepads.lastActive != null)
             gamepad = FlxG.gamepads.lastActive;
     }
@@ -46,8 +38,8 @@ class Controls
                 var keyboard:Array<Int> = [-1, -1];
                 var gamepad:Array<Int> = [-1, -1];
 
-                binds.fastForEach((bind, i) -> {keyboard[i] = fromString(bind, false);});
-                gamepadSave.get(key).fastForEach((bind, i) -> {gamepad[i] = fromString(bind, true);});
+                binds.fastForEach((bind, i) -> keyboard.unsafeSet(i, fromString(bind, false)));
+                gamepadSave.get(key).fastForEach((bind, i) -> gamepad.unsafeSet(i, fromString(bind, true)));
 
                 keyboardBinds.set(key, keyboard);
                 gamepadBinds.set(key, gamepad);
@@ -136,31 +128,28 @@ class Controls
     public static function getBindNames(bind:String):Array<String>
     {
         bind = bind.toUpperCase().trim();
-        var names:Array<String> = ["", ""];
+        var names:Array<String> = [];
         
         if (inGamepad()) {
             var gamepadKeys = gamepadBinds.get(bind);
-            gamepadKeys.fastForEach((key, i) -> {
-                names[i] = FlxGamepadInputID.toStringMap.get(key);
-            });
+            gamepadKeys.fastForEach((key, i) -> names.push(FlxGamepadInputID.toStringMap.get(key)));
         }
         else {
             var keyboardKeys = keyboardBinds.get(bind);
-            keyboardKeys.fastForEach((key, i) -> {
-                names[i] = FlxKey.toStringMap.get(key);
-            });
+            keyboardKeys.fastForEach((key, i) -> names.push(FlxKey.toStringMap.get(key)));
         }
 
         return names;
     }
 
-    public static function setBind(bind:String, key:String, index:Int):Void {
+    public static function setBind(bind:String, key:String, index:Int):Void
+    {
         bind = bind.toUpperCase().trim();
         key = key.toUpperCase().trim();
-
         final gamepad:Bool = inGamepad();
+
         var binds:Array<Int> = gamepad ? gamepadBinds.get(bind) : keyboardBinds.get(bind);
-        binds[index] = fromString(key, gamepad);
+        binds.unsafeSet(index, fromString(key, gamepad));
 
         gamepad ? gamepadBinds.set(bind, binds) : keyboardBinds.set(bind, binds);
         SaveData.flushData();

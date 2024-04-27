@@ -147,6 +147,10 @@ class Conductor
 		return lastChange;
 	}
 
+	public static inline function update(elapsed:Float) {
+		songPosition = songPosition + (elapsed * 1000);
+	}
+
 	public static var volume(default, set):Float = 1.0;
 	static inline function set_volume(value:Float) {
 		if (inst != null)

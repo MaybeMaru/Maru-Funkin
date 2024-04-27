@@ -9,6 +9,7 @@ import flixel.group.FlxContainer.FlxTypedContainer;
 
 typedef Group = TypedGroup<FlxBasic>;
 
+@:access(flixel.FlxCamera)
 class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T>  #else FlxTypedGroup<T> #end
 {
 	public inline function setNull(object:T) {
@@ -51,7 +52,7 @@ class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T
 		});
 	}
 
-	override public function draw():Void @:privateAccess
+	override public function draw():Void
 	{
 		final oldDefaultCameras = FlxCamera._defaultCameras;
 		if (cameras != null)

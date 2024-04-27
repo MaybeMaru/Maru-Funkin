@@ -324,9 +324,7 @@ class NotesGroup extends Group
 	public function set_scrollSpeed(value:Float = 1.0) {
 		if (value != scrollSpeed)
 		{
-			unspawnNotes.fastForEach((note, i) -> {
-				note.noteSpeed = value;
-			});
+			unspawnNotes.fastForEach((note, i) -> note.noteSpeed = value);
 
 			notes.members.fastForEach((note, i) -> {
 				if (note != null)
@@ -362,7 +360,7 @@ class NotesGroup extends Group
 			final inStart:Bool = game.startingSong;
 			if (!game.inCutscene) if ((Conductor.playing || inStart || Conductor.songPosition < game.songLength))
 			{
-				Conductor.songPosition = Conductor.songPosition + (elapsed * 1000);
+				Conductor.update(elapsed);
 				if (game.startedCountdown) if (inStart) {
 					if (Conductor.songPosition >= 0)
 						game.startSong();
@@ -376,7 +374,7 @@ class NotesGroup extends Group
 		}
 		else
 		{
-			Conductor.songPosition = Conductor.songPosition + (elapsed * 1000);
+			Conductor.update(elapsed);
 			if (!Conductor.inst.playing) Conductor.play();
 			if (Conductor.songPosition % Conductor.stepCrochet <= 5)
 				Conductor.autoSync();

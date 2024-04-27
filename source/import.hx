@@ -48,17 +48,12 @@ import funkin.objects.note.Event;
 
 //PlayState Others
 import funkin.objects.RatingGroup;
-import funkin.objects.dialogue.DialogueBoxBase;
-import funkin.objects.dialogue.PixelDialogueBox;
-import funkin.objects.dialogue.NormalDialogueBox;
+import funkin.objects.dialogue.*;
 import funkin.objects.Character;
 import funkin.objects.HealthIcon;
 
 //Alphabet
-import funkin.objects.alphabet.AlphabetFont;
-import funkin.objects.alphabet.Alphabet;
-import funkin.objects.alphabet.MenuAlphabet;
-import funkin.objects.alphabet.TypedAlphabet;
+import funkin.objects.alphabet.*;
 
 // Sound
 import funkin.sound.FlxFunkSound;

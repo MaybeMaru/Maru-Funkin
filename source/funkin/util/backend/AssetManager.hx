@@ -336,7 +336,7 @@ class AssetManager
 	 * GRAPHIC CACHE
 	 */
 
-	public static var gpuTextures:Bool = #if (hl || web) false; #else true; #end
+	public static var gpuTextures:Bool = #if TEXTURES_OFF false; #else true; #end
 	public static var lodQuality:LodLevel = HIGH;
 	public static function setLodQuality(level:String):LodLevel {
 		return lodQuality = LodLevel.fromString(level);

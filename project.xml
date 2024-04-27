@@ -91,6 +91,8 @@
 		<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	</section>
 
+	<define name="TEXTURES_OFF" if="hl || web"/>
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
