@@ -252,7 +252,7 @@ class AssetManager
 
         final cacheImages = (arr:Array<LoadImage>) -> {
 			while (arr[0] != null) {
-				var asset:LoadImage = arr[0];
+				var asset:LoadImage = arr.shift();
 				
 				if (!existsAsset(asset.path)) if (!bitmaps.exists(asset.path)) {
 					var bitmap = __getFileBitmap(asset.path);
@@ -261,8 +261,6 @@ class AssetManager
 						lod: asset.lod
 					});
 				}
-				
-				arr.splice(0, 1);
 			}
         }
 
@@ -422,13 +420,13 @@ class AssetManager
 	}
 
 	@:noCompletion
-	static inline function __getFileBitmap(path:String):BitmapData {
+	static inline function __getFileBitmap(path:String, cache:Bool = true):BitmapData {
 		#if desktop
 		if (!path.startsWith('assets'))
 			return BitmapData.fromFile(path);
 		#end
 
-		return OpenFlAssets.getBitmapData(path, true);
+		return OpenFlAssets.getBitmapData(path, cache);
 	}
 	
 	/*
@@ -504,8 +502,8 @@ class AssetManager
 		asset.dispose();
 		assetsMap.remove(key);
 
-		if (tempAssets.contains(key)) tempAssets.splice(tempAssets.indexOf(key), 1);
-		else if (staticAssets.contains(key)) staticAssets.splice(staticAssets.indexOf(key), 1);
+		if (tempAssets.contains(key)) tempAssets.removeAt(tempAssets.indexOf(key));
+		else if (staticAssets.contains(key)) staticAssets.removeAt(staticAssets.indexOf(key));
 
 		return true;
 	}

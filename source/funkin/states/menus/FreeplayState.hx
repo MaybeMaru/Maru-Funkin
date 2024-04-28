@@ -106,6 +106,7 @@ class FreeplayState extends MusicBeatState
 		add(diffText);
 
 		changeSelection();
+		grpSongs.members.fastForEach((item, i) -> item.snapPosition());
 		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
 		//inputText = new SongSearch();
 		//add(inputText);
@@ -227,7 +228,7 @@ class FreeplayState extends MusicBeatState
 	}
 
 	// For hscript
-	#if MODS_ALLOWED dynamic #end function selectSong(toChart:Bool):Void {
+	#if MODS_ALLOWED dynamic #else inline #end function selectSong(toChart:Bool):Void {
 		loadSong(toChart);
 	}
 

@@ -5,7 +5,7 @@ typedef SimpleEvent = {
     var callback:()->Void;
 }
 
-class EventHandler extends flixel.FlxBasic {
+abstract class EventHandler extends flixel.FlxBasic {
     public var events:Array<SimpleEvent> = [];
     public var position:Float = 0;
     
@@ -57,9 +57,7 @@ class EventHandler extends flixel.FlxBasic {
     function callEvents() {
         if (events[0] != null) {
 			while (events.length > 0 && events[0].time <= position) {
-                var event = events[0];
-                event.callback();
-                events.splice(0, 1);
+                events.shift().callback();
 			}
 		}/* else {
             destroy();

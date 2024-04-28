@@ -298,8 +298,8 @@ class NotesGroup extends Group
 		unspawnNotes.sort((a:BasicNote, b:BasicNote) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 		events.sort((a:Event, b:Event) -> return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 
-		curSpawnNote = unspawnNotes.shift();
-		curCheckEvent = events.shift();
+		curSpawnNote = unspawnNotes[0];
+		curCheckEvent = events[0];
 		
 		if (isPlayState)
 		{
@@ -395,7 +395,9 @@ class NotesGroup extends Group
 
 				// Skip sorting
 				curSpawnNote.isSustainNote ? notes.insertBelow(curSpawnNote) : notes.insertTop(curSpawnNote);
-				curSpawnNote = unspawnNotes.shift();
+				
+				unspawnNotes.removeAt(0);
+				curSpawnNote = unspawnNotes[0];
 			}
 		}
 	}
@@ -406,7 +408,8 @@ class NotesGroup extends Group
 		if (curCheckEvent != null) {
 			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
 				ModdingUtil.addCall('eventHit', [curCheckEvent]);
-				curCheckEvent = events.shift();
+				events.removeAt(0);
+				curCheckEvent = events[0];
 			}
 		}
 	}
