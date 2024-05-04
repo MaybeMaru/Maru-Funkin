@@ -61,6 +61,9 @@ class Preferences
         addPref('gpu-textures', 'gpu textures', true);
         #end
         #if desktop
+        #if lime_vorbis
+        addPref('song-stream', 'stream songs', false);
+        #end
         addPref('preload', 'preload at start', false);
         #end
 

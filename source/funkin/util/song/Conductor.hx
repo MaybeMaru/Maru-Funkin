@@ -74,10 +74,13 @@ class Conductor
 				vocals.loadSound(Paths.voices(song));
 
 			// Reload song file on dispose
-			AssetManager.getAsset(Paths.instPath(song)).onDispose = () -> {
-				inst.dispose();
-				vocals.dispose();
-				loadedSong = "";
+			var asset = AssetManager.getAsset(Paths.instPath(song));
+			if (asset != null) {
+				asset.onDispose = () -> {
+					inst.dispose();
+					vocals.dispose();
+					loadedSong = "";
+				}
 			}
 		}
 		loadedSong = song;
@@ -190,7 +193,7 @@ class Conductor
 		}
 	}
 
-	public static function sync():Void {
+	public static function sync():Void {		
 		soundSync(inst, offset[0]);
 		if (hasVocals) soundSync(vocals, offset[1]);
 	}

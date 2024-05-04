@@ -1,5 +1,6 @@
 package funkin.util.backend;
 
+import lime.media.AudioBuffer;
 import openfl.media.Sound;
 import openfl.display3D.textures.TextureBase;
 import flixel.util.typeLimit.OneOfTwo;
@@ -100,9 +101,13 @@ class Asset
 	{
 		#if !web
 		var buffer = sound.__buffer;
-		if (buffer != null) {
-			buffer.data.buffer = null;
-			buffer.data = null;
+		if (buffer != null)
+		{
+			if (buffer.data != null)
+			{
+				buffer.data.buffer = null;
+				buffer.data = null;
+			}
 		}
 		#end
 
@@ -252,7 +257,7 @@ class AssetManager
 
         final cacheImages = (arr:Array<LoadImage>) -> {
 			while (arr[0] != null) {
-				var asset:LoadImage = arr.shift();
+				var asset:LoadImage = arr[0];
 				
 				if (!existsAsset(asset.path)) if (!bitmaps.exists(asset.path)) {
 					var bitmap = __getFileBitmap(asset.path);
@@ -261,12 +266,16 @@ class AssetManager
 						lod: asset.lod
 					});
 				}
+
+				arr.removeAt(0);
 			}
         }
 
+		var stream = Preferences.getPref('song-stream') ?? false;
+
 		final cacheSound = (arr:Array<String>, asset:String) -> {
 			if (!existsAsset(asset)) if (!sounds.exists(asset)) {
-				var sound = __getFileSound(asset);
+				var sound = stream ? __streamSound(asset) : __getFileSound(asset);
 				sounds.set(asset, sound);
 			}
 			arr.remove(asset);
@@ -409,7 +418,7 @@ class AssetManager
 		return graphic;
 	}
 
-	public static function getAssetGraphic(key:String):LodGraphic
+	public static inline function getAssetGraphic(key:String):LodGraphic
 	{
 		return __nullAssetGet(key);
 	}
@@ -450,7 +459,7 @@ class AssetManager
 		return sound;
 	}
 
-	public static function getAssetSound(key:String):Sound
+	public static inline function getAssetSound(key:String):Sound
 	{
 		return __nullAssetGet(key);
 	}
@@ -458,6 +467,23 @@ class AssetManager
 	public static function getFileSound(path:String, ?staticAsset:Bool):Sound 
 	{
 		return cacheSoundPath(path, staticAsset);
+	}
+
+	@:noCompletion
+	static inline function __streamSound(path:String):Sound {
+		var sound:Sound = null;
+
+        #if (desktop && lime_vorbis)
+        var vorbis = lime.media.vorbis.VorbisFile.fromFile(path);
+        var buffer = AudioBuffer.fromVorbisFile(vorbis);
+        if (buffer != null)
+            sound = Sound.fromAudioBuffer(buffer);
+        #end
+
+		if (sound == null)
+			sound = __getFileSound(path);
+
+		return sound;
 	}
 
 	@:noCompletion
@@ -481,24 +507,27 @@ class AssetManager
 	
 	// Anal Sex
 
-	public static inline function setAsset(key:String, asset:Asset, staticAsset:Bool):Void {
+	public static inline function setAsset(key:String, asset:Asset, staticAsset:Bool):Void
+	{
 		assetsMap.set(key, asset);
 		staticAsset ? staticAssets.push(key) : tempAssets.push(key);
 	}
 
-	public static inline function getAsset(key:String):Asset {
+	public static inline function getAsset(key:String):Asset
+	{
 		return assetsMap.get(key);
 	}
 
-	public static inline function existsAsset(key:String):Bool {
-		return getAsset(key) != null;
+	public static inline function existsAsset(key:String):Bool
+	{
+		return assetsMap.exists(key);
 	}
 
-	public static inline function disposeAsset(key:String):Bool {
-		var asset = getAsset(key);
-		if (asset == null)
+	public static function disposeAsset(key:String):Bool {
+		if (!existsAsset(key))
 			return false;
 
+		var asset = getAsset(key);
 		asset.dispose();
 		assetsMap.remove(key);
 
@@ -509,9 +538,9 @@ class AssetManager
 	}
 
 	@:noCompletion
-	inline static function __nullAssetGet(key:String):AssetClass {
-		var asset = getAsset(key);
-		return asset != null ? asset.asset : null;
+	inline static function __nullAssetGet(key:String):AssetClass
+	{
+		return existsAsset(key) ? getAsset(key).asset : null;
 	}
 
 	@:noCompletion

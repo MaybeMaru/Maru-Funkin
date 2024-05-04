@@ -177,7 +177,7 @@ class Paths
 	**/
 
 	inline static public function songAudioAssetPath(song:String, asset:String, ?globalAsset:Bool):String {
-		return getPath('${Song.formatSongFolder(song)}/audio/$asset.$SOUND_EXT', MUSIC, 'songs', globalAsset);
+		return getPath(Song.formatSongFolder(song) + '/audio/$asset.$SOUND_EXT', MUSIC, 'songs', globalAsset);
 	}
 
 	inline static public function voicesPath(song:String, ?globalAsset:Bool):String {
@@ -202,11 +202,11 @@ class Paths
 		if (!ext.startsWith('/'))
 			ext = '.$ext';
 
-		return getPath('${Song.formatSongFolder(song)}/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
+		return getPath(Song.formatSongFolder(song) + '/charts/${diff.toLowerCase()}$ext', TEXT, 'songs');
 	}
 
 	inline static public function songMeta(song:String) {
-		return getPath('${Song.formatSongFolder(song)}/charts/songMeta.json', TEXT, 'songs');
+		return getPath(Song.formatSongFolder(song) + '/charts/songMeta.json', TEXT, 'songs');
 	}
 
 	/*

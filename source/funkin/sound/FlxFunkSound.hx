@@ -1,7 +1,6 @@
 package funkin.sound;
 
 import openfl.events.Event;
-import openfl.net.URLRequest;
 import openfl.media.SoundMixer;
 import lime.media.AudioSource;
 import openfl.media.SoundTransform;
@@ -51,20 +50,29 @@ class FlxFunkSound extends FlxBasic
         super.destroy();
     }
 
-    public function dispose() {
+    public function dispose() {       
         source.dispose();
+        sound = null; 
     }
 
     function set_sound(value:Sound):Sound {
+        sound = value;
         if (value != null)
         {
             var init:()->Void = () -> {
                 length = value.length;
-                source.buffer = value.__buffer;
-                source.init();
+                
+                if (stream) {
+                    source = new AudioSource(value.__buffer);
+                    source.onComplete.add(__soundFinish);
+                }
+                else {
+                    source.buffer = value.__buffer;
+                    source.init();
+                }
+
                 __initMixer();
 
-                source.currentTime = 0;
                 _lastStopTime = 0;
 
                 if (this.onLoad != null)
@@ -85,7 +93,7 @@ class FlxFunkSound extends FlxBasic
             }
         }
         
-        return sound = value;
+        return value;
     }
 
     public var onComplete:()->Void;
@@ -117,18 +125,8 @@ class FlxFunkSound extends FlxBasic
         return this;
     }
 
-    public function loadStream(path:String, ?onLoad:()->Void):FlxFunkSound
-    {
-        this.onLoad = onLoad;
-        
-        if(!path.startsWith("https://")) if (!path.startsWith("./"))
-            path = './' + (path.contains(':') ? path.split(':').unsafeGet(1) : path);
-        
-        final sound = new Sound();
-        sound.load(new URLRequest(path));
-        this.sound = sound;
-        return this;
-    }
+    public var stream(get, never):Bool;
+    inline function get_stream() @:privateAccess return #if (desktop && lime_vorbis) source.__backend.stream; #else false; #end
 
     public var playing(default, null):Bool = false;
     public var paused(get, never):Bool;
@@ -137,7 +135,7 @@ class FlxFunkSound extends FlxBasic
     public var length:Float = 0.0;
     public var time(get, set):Float;
     inline function get_time() return getTime();
-    inline function set_time(value:Float) return source.currentTime = Std.int(value);
+    inline function set_time(value:Float) return setTime(value);
 
     public var pitch(default, set):Float = 1.0;
     inline function set_pitch(value:Float):Float {
@@ -230,7 +228,7 @@ class FlxFunkSound extends FlxBasic
 
         var position = source.position;
         position.x = pan;
-        position.z = -1 * Math.sqrt(1 - Math.pow(pan, 2));
+        position.z = -Math.sqrt(1 - Math.pow(pan, 2));
         source.position = position;
     }
 
@@ -249,5 +247,13 @@ class FlxFunkSound extends FlxBasic
         }
 
         return time + FlxG.game.ticks - __lastTick;
+    }
+
+    public function setTime(time:Float):Float {
+        if (time <= 0) if (stream)
+            time = 1.0; // hacky fix
+        
+        source.currentTime = Std.int(time);
+        return time;
     }
 }
