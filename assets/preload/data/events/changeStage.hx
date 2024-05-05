@@ -24,6 +24,11 @@ function changeStage(stageName)
     
     stage.visible = true;
     stage.active = true;
+
+    // Setup the layers crap
+    stage.__existsAddToLayer("bf", State.boyfriendGroup);
+    stage.__existsAddToLayer("dad", State.dadGroup);
+    stage.__existsAddToLayer("gf", State.gfGroup);
     
     stage.applyData(State.boyfriend, State.dad, State.gf);
     repositionChar(State.boyfriend, 770, 450);
@@ -66,10 +71,15 @@ function createPost() {
     var initLevel = Paths.currentLevel; // Get the stage assets folder
     var initStage = State.stage; // Needed so the script functions work correctly
     
-    for (event in State.notesGroup.events) {
-        if (event.name == "changeStage") {
+    for (event in State.notesGroup.events)
+    {
+        if (event.name == "changeStage")
+        {
             var stage = event.values[0];
-            if (cachedStages.exists(stage)) continue; // Stage is already cached
+
+            // Check if stage is already cached
+            if (cachedStages.exists(stage))
+                continue;
 
             var stageData = Stage.getJson(stage);
             Paths.currentLevel = stageData.library;
@@ -77,11 +87,6 @@ function createPost() {
             var stageScript = ModdingUtil.addScript(Paths.script('stages/' + stage), "::switchStage::" + stage);
             var stageObject = Stage.fromJson(stageData, stageScript);
             State.stage = stageObject;
-
-            // Setup the layers crap
-            stageObject.__existsAddToLayer("bf", State.boyfriendGroup);
-            stageObject.__existsAddToLayer("dad", State.dadGroup);
-            stageObject.__existsAddToLayer("gf", State.gfGroup);
 
             if (stageScript != null) {
                 stageScript.set("ScriptStage", stageObject);

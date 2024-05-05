@@ -23,12 +23,11 @@ function createPost()
 	for (i in 0...4) {
 		var freak = new FunkinSprite("", [i * 500, 425], [0.95, 0.95]);
 
-		switch (i) {
-			case 0: freak.y += 25;
-			case 3: freak.y += 25;
-		}
+		if ((i == 0) || (i == 3))
+			freak.y += 25;
 
 		freak.loadImage(freaksPath, false, null, null, 0);
+		freak.antialiasing = false;
 		freak.setScale(6, false);
 
 		freak.addAnim('danceLeft', freaksAnim, 24, false, CoolUtil.numberArray(14));
