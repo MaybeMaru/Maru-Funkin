@@ -20,7 +20,7 @@ class FlxGraphicsShader extends GraphicsShader
 			
 			if (hasColorTransform)
 			{
-				openfl_ColorOffsetv = colorOffset / 255.0;
+				openfl_ColorOffsetv = colorOffset * 0.00392;
 				openfl_ColorMultiplierv = colorMultiplier;
 			}
 		}")
@@ -43,14 +43,7 @@ class FlxGraphicsShader extends GraphicsShader
 			}
 
 			color = vec4(color.rgb / color.a, color.a);
-
-			mat4 colorMultiplier = mat4(0);
-			colorMultiplier[0][0] = openfl_ColorMultiplierv.x;
-			colorMultiplier[1][1] = openfl_ColorMultiplierv.y;
-			colorMultiplier[2][2] = openfl_ColorMultiplierv.z;
-			colorMultiplier[3][3] = openfl_ColorMultiplierv.w;
-
-			color = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);
+			color = clamp(openfl_ColorOffsetv + (color * openfl_ColorMultiplierv), 0.0, 1.0);
 			return vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
 		}
 	")

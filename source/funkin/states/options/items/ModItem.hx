@@ -32,6 +32,11 @@ class ModItem extends FlxSpriteGroup {
         modTitle.scale.scale(0.666, 0.666); // Satan entered the chat
         add(modTitle);
 
+        @:privateAccess
+        modTitle.fieldWidth = Std.int((modBox.width * 1.2) / modTitle.alphabetFont.lodScale);
+        modTitle.autoSize = false;
+        modTitle.wrap = WORD(NEVER);
+
         var modDesc:FlxFunkText = new FlxFunkText(modTitle.x, modTitle.y + modTitle.height + 5, mod.description, FlxPoint.weak(modBox.width*0.6, modBox.height), 20);
         modDesc.font = "phantommuff_";
         modDesc.style = SHADOW(FlxPoint.weak(-2, -2), FlxColor.BLACK);

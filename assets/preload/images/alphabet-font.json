@@ -1,0 +1,356 @@
+{
+	"letters": [
+		{
+			"lowerOffset": 5,
+			"boldOffset": -24,
+			"upperOffset": -18,
+			"id": "ã"
+		},
+		{
+			"id": "@"
+		},
+		{
+			"lowerOffset": 26,
+			"boldOffset": 2,
+			"upperOffset": 2,
+			"id": "ç"
+		},
+		{
+			"lowerOffset": -4,
+			"boldOffset": -31,
+			"upperOffset": -20,
+			"id": "é"
+		},
+		{
+			"boldOffset": -30,
+			"upperOffset": -19,
+			"id": "ê"
+		},
+		{
+			"lowerOffset": 5,
+			"boldOffset": -32,
+			"upperOffset": -19,
+			"id": "í"
+		},
+		{
+			"lowerOffset": 17,
+			"boldOffset": -18,
+			"upperOffset": -10,
+			"id": "ï"
+		},
+		{
+			"lowerOffset": 10,
+			"boldOffset": -22,
+			"upperOffset": -10,
+			"id": "ñ"
+		},
+		{
+			"lowerOffset": 2,
+			"boldOffset": -33,
+			"upperOffset": -22,
+			"id": "ó"
+		},
+		{
+			"lowerOffset": 5,
+			"boldOffset": -31,
+			"upperOffset": -18,
+			"id": "ô"
+		},
+		{
+			"lowerOffset": 9,
+			"boldOffset": -25,
+			"upperOffset": -15,
+			"id": "õ"
+		},
+		{
+			"lowerOffset": 1,
+			"boldOffset": -27,
+			"upperOffset": -15,
+			"id": "ú"
+		},
+		{
+			"lowerOffset": 11,
+			"boldOffset": -13,
+			"upperOffset": -4,
+			"id": "ü"
+		},
+		{
+			"id": "["
+		},
+		{
+			"id": "]"
+		},
+		{
+			"id": "^"
+		},
+		{
+			"id": "_"
+		},
+		{
+			"lowerOffset": 22,
+			"id": "a"
+		},
+		{
+			"boldOffset": -10,
+			"name": "exclamation",
+			"id": "!"
+		},
+		{
+			"lowerOffset": 8,
+			"boldOffset": -3,
+			"id": "b"
+		},
+		{
+			"lowerOffset": 25,
+			"boldOffset": 1,
+			"upperOffset": 1,
+			"id": "c"
+		},
+		{
+			"id": "#"
+		},
+		{
+			"lowerOffset": 5,
+			"upperOffset": 2,
+			"id": "d"
+		},
+		{
+			"id": "$"
+		},
+		{
+			"lowerOffset": 21,
+			"boldOffset": 1,
+			"upperOffset": 5,
+			"id": "e"
+		},
+		{
+			"id": "%"
+		},
+		{
+			"lowerOffset": 10,
+			"upperOffset": 6,
+			"id": "f"
+		},
+		{
+			"lowerOffset": 32,
+			"boldOffset": -3,
+			"upperOffset": 2,
+			"id": "g"
+		},
+		{
+			"name": "apostrophe",
+			"id": "'"
+		},
+		{
+			"lowerOffset": 12,
+			"upperOffset": 5,
+			"id": "h"
+		},
+		{
+			"id": "("
+		},
+		{
+			"lowerOffset": 15,
+			"boldOffset": 1,
+			"upperOffset": 6,
+			"id": "i"
+		},
+		{
+			"id": ")"
+		},
+		{
+			"lowerOffset": 15,
+			"boldOffset": -3,
+			"upperOffset": 4,
+			"id": "j"
+		},
+		{
+			"id": "*"
+		},
+		{
+			"lowerOffset": 10,
+			"boldOffset": -3,
+			"upperOffset": 6,
+			"id": "k"
+		},
+		{
+			"id": "+"
+		},
+		{
+			"lowerOffset": 10,
+			"upperOffset": 5,
+			"id": "l"
+		},
+		{
+			"lowerOffset": 40,
+			"name": "comma",
+			"id": ","
+		},
+		{
+			"lowerOffset": 31,
+			"boldOffset": 3,
+			"upperOffset": 8,
+			"id": "m"
+		},
+		{
+			"boldOffset": 25,
+			"id": "-"
+		},
+		{
+			"lowerOffset": 31,
+			"upperOffset": 8,
+			"id": "n"
+		},
+		{
+			"lowerOffset": 40,
+			"boldOffset": 50,
+			"name": "period",
+			"id": "."
+		},
+		{
+			"lowerOffset": 27,
+			"boldOffset": -3,
+			"upperOffset": 3,
+			"id": "o"
+		},
+		{
+			"lowerOffset": 3,
+			"id": "0"
+		},
+		{
+			"lowerOffset": 30,
+			"boldOffset": -3,
+			"upperOffset": 7,
+			"id": "p"
+		},
+		{
+			"lowerOffset": 4,
+			"id": "1"
+		},
+		{
+			"lowerOffset": 34,
+			"upperOffset": 6,
+			"id": "q"
+		},
+		{
+			"lowerOffset": 5,
+			"boldOffset": 2,
+			"id": "2"
+		},
+		{
+			"lowerOffset": 29,
+			"upperOffset": 3,
+			"id": "r"
+		},
+		{
+			"lowerOffset": 2,
+			"boldOffset": 1,
+			"id": "3"
+		},
+		{
+			"lowerOffset": 23,
+			"upperOffset": 3,
+			"id": "s"
+		},
+		{
+			"lowerOffset": 3,
+			"boldOffset": 2,
+			"id": "4"
+		},
+		{
+			"lowerOffset": 10,
+			"boldOffset": 1,
+			"upperOffset": 7,
+			"id": "t"
+		},
+		{
+			"lowerOffset": 4,
+			"id": "5"
+		},
+		{
+			"lowerOffset": 25,
+			"boldOffset": 7,
+			"upperOffset": 8,
+			"id": "u"
+		},
+		{
+			"lowerOffset": 26,
+			"upperOffset": 9,
+			"id": "v"
+		},
+		{
+			"lowerOffset": 4,
+			"id": "6"
+		},
+		{
+			"lowerOffset": 27,
+			"boldOffset": 3,
+			"upperOffset": 7,
+			"id": "w"
+		},
+		{
+			"lowerOffset": 8,
+			"boldOffset": 3,
+			"id": "7"
+		},
+		{
+			"lowerOffset": 25,
+			"upperOffset": 5,
+			"id": "x"
+		},
+		{
+			"lowerOffset": 1,
+			"id": "8"
+		},
+		{
+			"lowerOffset": 25,
+			"boldOffset": -3,
+			"upperOffset": 5,
+			"id": "y"
+		},
+		{
+			"lowerOffset": 1,
+			"id": "9"
+		},
+		{
+			"lowerOffset": 27,
+			"upperOffset": 10,
+			"id": "z"
+		},
+		{
+			"boldOffset": 10,
+			"id": ":"
+		},
+		{
+			"id": ";"
+		},
+		{
+			"id": "|"
+		},
+		{
+			"id": "<"
+		},
+		{
+			"id": "~"
+		},
+		{
+			"id": ">"
+		},
+		{
+			"lowerOffset": -5,
+			"boldOffset": -33,
+			"upperOffset": -24,
+			"id": "á"
+		},
+		{
+			"boldOffset": -27,
+			"upperOffset": -20,
+			"id": "â"
+		},
+		{
+			"boldOffset": -5,
+			"name": "question",
+			"id": "?"
+		}
+	]
+}
