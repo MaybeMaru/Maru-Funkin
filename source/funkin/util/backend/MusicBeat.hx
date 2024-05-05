@@ -33,8 +33,12 @@ class MusicBeat extends FlxBasic
 		updateBeat();
 		updateSection();
 
-		if (lastStep != curStep) if (curStep > -1)
-			stepHit();
+		if (curStep > lastStep) if (curStep > -1) {
+			for (i in 0...(curStep - lastStep)) {
+				curStep = lastStep + i + 1;
+				stepHit();
+			}
+		}
 
 		#if FLX_DEBUG
 		FlxG.watch.addQuick("curSection", 	curSection);
