@@ -1,7 +1,5 @@
 package funkin.util.modding;
 
-import flixel.util.FlxArrayUtil;
-
 typedef ModFolder = {
     var title:String;
     var description:String;
@@ -39,8 +37,7 @@ class ModdingUtil
     public static var modsMap:Map<String, ModFolder> = [];
 
     static function set_curModFolder(?value:String) {
-        if (value == null)
-            value = "";
+        value ??= "";
 
         curModFolder = value;
         curModData = value.length > 0 ? modsMap.get(value) : null;
@@ -119,7 +116,7 @@ class ModdingUtil
 			}
 		}
 		#end
-        list.sort(function (a,b) return CoolUtil.sortAlphabetically(a.folder, b.folder));
+        list.sort((a, b) -> return CoolUtil.sortAlphabetically(a.folder, b.folder));
 		return list;
     }
 
@@ -141,25 +138,27 @@ class ModdingUtil
     }
 
     inline public static function addScriptList(list:Array<String>, ?tags:Array<String>) {
-        tags = tags ?? [];
-        for (i in 0...list.length)
-            addScript(list[i], tags[i]);
+        tags ??= [];
+        list.fastForEach((script, i) -> addScript(script, tags[i]));
     }
 
-    public static function addScript(path:String, ?tag:String):Null<FunkScript> {
+    public static function addScript(path:String, ?tag:String):Null<FunkScript>
+    {
         var scriptCode:String = CoolUtil.getFileContent(path);
-        if (path.contains('//') || scriptCode.length <= 0) return null; // Dont load empty scripts
+        if (path.contains('//') || scriptCode.length <= 0)
+            return null; // Dont load empty scripts
+        
         addPrint(path);
-        final scriptID = tag ?? path;
+        tag ??= path;
         
         if (path.startsWith("mods/")) {
             final _mod = ModdingUtil.modsMap.get(Paths.getFileMod(path)[0]);
-            if (_mod != null && _mod.apiVersion != API_VERSION)
+            if (_mod != null) if (_mod.apiVersion != API_VERSION)
                 scriptCode = updateScript(scriptCode, _mod.apiVersion);
         }
 
-        final script:FunkScript = new FunkScript(scriptCode, scriptID);
-        scriptsMap.set(scriptID, script);
+        final script:FunkScript = new FunkScript(scriptCode, tag);
+        scriptsMap.set(tag, script);
         scripts.push(script);
         return script;
     }
@@ -173,7 +172,7 @@ class ModdingUtil
         return code;
     }
 
-    public static function removeScript(?script:FunkScript) {
+    public static function removeScript(?script:FunkScript):Null<FunkScript> {
         if (script != null) {
             if (scriptsMap.exists(script.scriptID))
                 scriptsMap.remove(script.scriptID);
@@ -242,8 +241,7 @@ class ModdingUtil
 
     public static function getSubFolderScriptList(folder:String= 'data/scripts/global', ?subFolders:Array<String>)
     {
-        if (subFolders == null)
-            subFolders = new Array<String>();
+        subFolders ??= [];
         
         var subFolderList:Array<String> = getScriptList(folder);
         subFolders.fastForEach((subfolder, i) -> {

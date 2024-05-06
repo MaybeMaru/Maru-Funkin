@@ -34,8 +34,11 @@ class MusicBeat extends FlxBasic
 		updateSection();
 
 		if (curStep > lastStep) if (curStep > -1) {
-			for (i in 0...(curStep - lastStep)) {
-				curStep = lastStep + i + 1;
+			var i:Int = 0;
+			var l:Int = curStep - lastStep;
+			while(i < l) {
+				i++;
+				curStep = lastStep + i;
 				stepHit();
 			}
 		}

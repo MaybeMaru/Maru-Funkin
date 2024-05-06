@@ -55,11 +55,11 @@ class Song
 
 			if (Paths.exists(chartPath, TEXT)) {
 				switch (format) {
-					case 'json':		return checkSong(parseJson(chartPath), meta);				// Funkin chart
-					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta);	// Osu chart
-					case 'sm' | 'ssc': 	return checkSong(SmFormat.convert(chartPath, diff), meta);	// Stepmania chart
-					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta);	// Quaver chart
-					case 'chart':		return checkSong(GhFormat.convertSong(chartPath), meta);	// Guitar hero chart
+					case 'json':		return checkSong(parseJson(chartPath), meta, true, diff);		 		// Funkin chart
+					case 'osu':			return checkSong(OsuFormat.convertSong(chartPath), meta, false, diff);	// Osu chart
+					case 'sm' | 'ssc': 	return checkSong(SmFormat.convert(chartPath, diff), meta, false, diff); // Stepmania chart
+					case 'qua': 		return checkSong(QuaFormat.convertSong(chartPath), meta, false, diff);	// Quaver chart
+					case 'chart':		return checkSong(GhFormat.convertSong(chartPath), meta, false, diff);	// Guitar hero chart
 				}
 			}
 		});
@@ -81,8 +81,14 @@ class Song
 	}
 
 	//Check null values and remove unused format variables
-	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = true):SwagSong {
-		song = JsonUtil.checkJson(getDefaultSong(), checkEngine ? FunkinFormat.engineCheck(song) : song);
+	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = false, diff:String = ""):SwagSong
+	{
+		if (checkEngine) {
+			meta = FunkinFormat.metaCheck(meta, diff);
+			song = FunkinFormat.songCheck(song, meta, diff);
+		}
+
+		song = JsonUtil.checkJson(getDefaultSong(), song);
 		
 		if (song.notes.length != 0) {
 			song.notes.fastForEach((section, i) -> {
@@ -91,10 +97,12 @@ class Song
 					return getDefaultSong();
 			});
 		}
-		else
+		else {
 			song.notes.push(getDefaultSection());
+		}
 
-		if (meta != null) { // Apply song metaData
+		// Apply song metaData
+		if (meta != null) {
 			song.offsets = meta.offsets.copy();
 			
 			meta.events.fastForEach((section, s) -> {

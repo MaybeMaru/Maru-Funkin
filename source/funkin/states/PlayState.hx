@@ -762,7 +762,9 @@ class PlayState extends MusicBeatState
 	override public function sectionHit(curSection:Int):Void
 	{
 		super.sectionHit(curSection);
-		if (Conductor.songPosition <= 0) curSection = 0;
+		if (Conductor.songPosition <= 0)
+			curSection = 0;
+		
 		curSectionData = SONG.notes[curSection];
 		cameraMovement();
 

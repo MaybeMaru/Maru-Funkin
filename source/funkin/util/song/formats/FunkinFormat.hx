@@ -4,15 +4,19 @@ package funkin.util.song.formats;
     Kinda made only to not have all engine converter stuff in Song.hx
 */
 
-class FunkinFormat {
+class FunkinFormat
+{
     //Fixes charts from other engines
-	public static function engineCheck(?song:SwagSong):SwagSong {
-		if (song == null) return null;
+	public static function songCheck(?song:SwagSong, meta:SongMeta, diff:String):SwagSong
+	{
+		if (song == null)
+			return song;
 
 		//Get special engine variables ready if missing
 		var specialFields:Array<Array<Dynamic>> = [
 			['players', ['bf','dad','gf']]
 		];
+		
 		for (field in specialFields) {
 			if (!Reflect.hasField(song, field[0])) {
 				Reflect.setField(song, field[0], field[1]);
@@ -38,6 +42,13 @@ class FunkinFormat {
 			}
 		}
 		return song;
+	}
+
+	public static function metaCheck(?meta:SongMeta, diff:String):SongMeta {
+		if (meta == null)
+			return meta;
+
+		return meta;
 	}
 
 	// Converts FPS+ engine events
@@ -81,5 +92,21 @@ class FunkinFormat {
 		}
 
 		return song;
+	}
+
+	// Converts base game v-slice charts
+	public static function convertVSliceSong(song:Dynamic, diff:String):SwagSong
+	{
+		for (note in cast(Reflect.field(song.notes, diff), Array<Dynamic>)) {
+		
+		}
+
+
+		return song;
+	}
+
+	public static function convertVSliceMeta(meta:Dynamic, diff:String):SongMeta
+	{
+		return meta;
 	}
 }

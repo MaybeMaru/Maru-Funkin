@@ -174,9 +174,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		});
 
 		set('closeScript', function () {
-			FlxG.signals.preUpdate.addOnce(function () {
-				ModdingUtil.removeScript(this);
-			});
+			FlxG.signals.preUpdate.addOnce(() -> ModdingUtil.removeScript(this));
 		});
 
 		set('getBlendMode', function(blendType:String):openfl.display.BlendMode {
