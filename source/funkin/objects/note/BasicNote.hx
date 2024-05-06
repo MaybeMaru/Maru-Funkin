@@ -59,9 +59,9 @@ class BasicNote extends SmartSprite implements INoteData
     var _approachSin(default, null):Float = 0.0;
 
     inline function calcApproachTrig(value:Float):Void {
-        final rads = value * CoolUtil.TO_RADS;
-        _approachCos = CoolUtil.cos(rads);
-        _approachSin = CoolUtil.sin(rads);
+        final rads = value * FunkMath.TO_RADS;
+        _approachCos = FunkMath.cos(rads);
+        _approachSin = FunkMath.sin(rads);
     }
     
     public var spawnMult:Float = 1.0;

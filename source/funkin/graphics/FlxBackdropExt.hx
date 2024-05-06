@@ -53,15 +53,15 @@ class FlxBackdropExt extends FlxBackdrop
 		}
 
 		if (lodScale != 1.0)
-			CoolUtil.matrixScale(mat, lodScale, lodScale);
+			FunkMath.scaleMatrix(mat, lodScale, lodScale);
 
 		if (flipX != frame.flipX) {
-			CoolUtil.matrixScale(mat, -1, 1);
+			FunkMath.scaleMatrix(mat, -1, 1);
 			mat.tx = (mat.tx + frame.sourceSize.x);
 		}
 
 		if (flipY != frame.flipY) {
-			CoolUtil.matrixScale(mat, 1, -1);
+			FunkMath.scaleMatrix(mat, 1, -1);
 			mat.tx = (mat.tx + frame.sourceSize.y);
 		}
 	}
@@ -82,13 +82,13 @@ class FlxBackdropExt extends FlxBackdrop
             (_frame.frame.height + spacing.y) * scale.y * lodScale,
         );
         
-        CoolUtil.matrixScale(_matrix, scale.x, scale.y);
+        FunkMath.scaleMatrix(_matrix, scale.x, scale.y);
 
         if (angle != 0) {
 			if (_angleChanged) {
-                final rads:Float = angle * CoolUtil.TO_RADS;
-                _cosAngle = CoolUtil.cos(rads);
-                _sinAngle = CoolUtil.sin(rads);
+                final rads:Float = angle * FunkMath.TO_RADS;
+                _cosAngle = FunkMath.cos(rads);
+                _sinAngle = FunkMath.sin(rads);
                 _angleChanged = false;
             }
 			_matrix.rotateWithTrig(_cosAngle, _sinAngle);

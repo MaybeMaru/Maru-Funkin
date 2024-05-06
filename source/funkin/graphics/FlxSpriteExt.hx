@@ -195,9 +195,9 @@ class FlxSpriteExt extends FlxSkewedSprite
 	@:noCompletion
 	private inline function __updateTrig():Void {
 		if (_angleChanged) {
-			final rads:Float = angle * CoolUtil.TO_RADS;
-			_cosAngle = CoolUtil.cos(rads);
-			_sinAngle = CoolUtil.sin(rads);
+			final rads:Float = angle * FunkMath.TO_RADS;
+			_cosAngle = FunkMath.cos(rads);
+			_sinAngle = FunkMath.sin(rads);
 			_angleChanged = false;
 
 			applyCurOffset(false); // Update display angle offset
@@ -282,13 +282,13 @@ class FlxSpriteExt extends FlxSkewedSprite
 
 	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix):Void
 	{
-		var flipX = (flipX != _frame.flipX);
-		var flipY = (flipY != _frame.flipY);
+		var flipX = (flipX != frame.flipX);
+		var flipY = (flipY != frame.flipY);
 		
 		if (animation.curAnim != null)
 		{
-			flipX != animation.curAnim.flipX;
-			flipY != animation.curAnim.flipY;
+			flipX = (flipX != animation.curAnim.flipX);
+			flipY = (flipY != animation.curAnim.flipY);
 		}
 		
 		@:privateAccess {
@@ -308,15 +308,15 @@ class FlxSpriteExt extends FlxSkewedSprite
 		}
 
 		if (lodScale != 1.0)
-			CoolUtil.matrixScale(mat, lodScale, lodScale);
+			FunkMath.scaleMatrix(mat, lodScale, lodScale);
 
 		if (flipX != frame.flipX) {
-			CoolUtil.matrixScale(mat, -1, 1);
+			FunkMath.scaleMatrix(mat, -1, 1);
 			mat.tx = (mat.tx + frame.sourceSize.x);
 		}
 
 		if (flipY != frame.flipY) {
-			CoolUtil.matrixScale(mat, 1, -1);
+			FunkMath.scaleMatrix(mat, 1, -1);
 			mat.tx = (mat.tx + frame.sourceSize.y);
 		}
 	}
@@ -335,7 +335,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 		_matrix.tx = (_matrix.tx - origin.x);
 		_matrix.ty = (_matrix.ty - origin.y);
 		
-		CoolUtil.matrixScale(_matrix, scale.x, scale.y);
+		FunkMath.scaleMatrix(_matrix, scale.x, scale.y);
 
 		if (angle != 0) {
 			__updateTrig();
@@ -344,13 +344,12 @@ class FlxSpriteExt extends FlxSkewedSprite
 
 		if (skew.x != 0 || skew.y != 0) {
 			_skewMatrix.identity();
-			_skewMatrix.b = Math.tan(skew.y * CoolUtil.TO_RADS);
-			_skewMatrix.c = Math.tan(skew.x * CoolUtil.TO_RADS);
+			_skewMatrix.b = Math.tan(skew.y * FunkMath.TO_RADS);
+			_skewMatrix.c = Math.tan(skew.x * FunkMath.TO_RADS);
 			_matrix.concat(_skewMatrix);
 		}
 
-		final point = _point;
-		getScreenPosition(point, camera);
+		final point = getScreenPosition(_point, camera);
 		_matrix.tx = (_matrix.tx + point.x + origin.x - offset.x);
 		_matrix.ty = (_matrix.ty + point.y + origin.y - offset.y);
 	}
@@ -367,16 +366,21 @@ class FlxSpriteExt extends FlxSkewedSprite
 
 	@:noCompletion
 	private inline function __superGetScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
-		if (newRect == null) newRect = CoolUtil.rect;
-		if (camera == null) camera = FlxG.camera;
+		newRect ??= CoolUtil.rect;
+		camera ??= FlxG.camera;
 		
-		newRect.setPosition(x, y);
-		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
-		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
-		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
-		newRect.setSize(frameWidth * Math.abs(scale.x * lodScale), frameHeight * Math.abs(scale.y * lodScale));
+		_scaledOrigin.x = origin.x * scale.x;
+		_scaledOrigin.y = origin.y * scale.y;
 		
-		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
+		newRect.setPosition(
+			x + (-Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x),
+			y + (-Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y)
+		);
+		
+		newRect.width = frameWidth * Math.abs(scale.x * lodScale);
+		newRect.height = frameHeight * Math.abs(scale.y * lodScale);
+		
+		return FunkMath.fastRotatedRect(newRect, _scaledOrigin, angle);
 	}
 
     public function switchAnim(anim1:String, anim2:String):Void {

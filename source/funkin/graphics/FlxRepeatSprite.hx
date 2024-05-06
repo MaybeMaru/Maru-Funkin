@@ -223,14 +223,16 @@ class FlxRepeatSprite extends FlxSpriteExt
     inline private function scaleX() return scale.x * lodScale;
     inline private function scaleY() return scale.y * lodScale;
 
-    inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool {
-        var rect = CoolUtil.rect.set(
-            x,
-            y,
-            w * Math.abs(scaleX()),
-            h * Math.abs(scaleY())
-        );
-        return cam.containsRect(rect.getRotatedBounds(angle, null, rect));
+    inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool
+    {
+        var rect = _rect;
+        rect.x = x;
+        rect.y = y;
+        rect.width = w * Math.abs(scaleX());
+        rect.height = h * Math.abs(scaleY());
+
+        FunkMath.fastRotatedTrigRect(rect, _cosAngle, _sinAngle, angle);
+        return cam.containsRect(rect);
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool

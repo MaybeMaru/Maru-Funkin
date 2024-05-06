@@ -60,21 +60,6 @@ class CoolUtil {
 		return mat;
 	}
 
-	public static inline function matrixScale(mat:FlxMatrix, sx:Float, sy:Float):Void
-	{
-		if (sx != 1) {
-			mat.a = (mat.a * sx);
-			mat.c = (mat.c * sx);
-			mat.tx = (mat.tx * sx);
-		}
-
-		if (sy != 1) {
-			mat.b = (mat.b * sy);
-			mat.d = (mat.d * sy);
-			mat.ty = (mat.ty * sy);
-		}
-	}
-
 	inline public static function openUrl(url:String) {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url, "&"]);
@@ -199,27 +184,6 @@ class CoolUtil {
 		resumeSoundsList.splice(0, resumeSoundsList.length);
 	}
 
-	public static inline var PI:Float = 3.14159265358979323846;
-	public static inline var DOUBLE_PI:Float = PI * 2;
-	public static inline var TO_RADS:Float = PI / 180;
-	public static inline var TO_DEGREES:Float = 180 / PI;
-
-	public static inline function sin(radians:Float) {
-		return #if FAST_MATH FlxMath.fastSin(radians); #else Math.sin(radians); #end
-	}
-
-	public static inline function cos(radians:Float) {
-		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
-	}
-
-	public static inline function sinAngle(angle:Float) {
-		return sin(angle * TO_RADS);
-	}
-
-	public static inline function cosAngle(angle:Float) {
-		return cos(angle * TO_RADS);
-	}
-
 	public static inline function positionInCenter(object:FlxObject, object2:FlxObject, setToPosition:Bool = false) {
 		object.x = (object2.width - object.width) * .5;
 		object.y = (object2.height - object.height) * .5;
@@ -244,8 +208,8 @@ class CoolUtil {
 	}
 
 	public static inline function translateWithAngle(object:FlxObject, x:Float = 0.0, y:Float = 0.0, angle:Float = 0.0) {
-		var rads:Float = angle * TO_RADS;
-		translateWithTrig(object, x, y, sin(rads), cos(rads));
+		final rads:Float = angle * FunkMath.TO_RADS;
+		translateWithTrig(object, x, y, FunkMath.sin(rads), FunkMath.cos(rads));
 	}
 
 	public static inline function offsetWithAngle(object:FlxObject, x:Float = 0.0, y:Float = 0.0, angle:Float = 0.0) {

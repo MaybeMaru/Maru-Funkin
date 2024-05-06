@@ -158,7 +158,7 @@ class TitleState extends MusicBeatState
 
 		if (initialized && !transitioning && titleText != null) {
 			titleSine += elapsed * 3;
-			var lerp:Float = FlxMath.remapToRange(FlxMath.fastSin(titleSine %= CoolUtil.DOUBLE_PI), -1, 1, 0, 1);
+			var lerp:Float = FlxMath.remapToRange(FlxMath.fastSin(titleSine %= FunkMath.DOUBLE_PI), -1, 1, 0, 1);
 			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, lerp);
 			#if !mobile checkCode(); #end
 		}
@@ -205,13 +205,13 @@ class TitleState extends MusicBeatState
 		Shader.setFloat('colorSwap', 'iTime', shaderColor);
 	}
 
-	var musicPitch:Float = CoolUtil.PI + 0.148; // Shhhh
+	var musicPitch:Float = FunkMath.PI + 0.148; // Shhhh
 
 	function updatePitch(elapsed:Float) {
 		musicPitch += elapsed / FlxG.timeScale;
 		
 		if (FlxG.sound.music != null) {
-			var pitch = FlxMath.remapToRange(CoolUtil.sin(musicPitch), -1, 1, 0.25, 2);
+			var pitch = FlxMath.remapToRange(FunkMath.sin(musicPitch), -1, 1, 0.25, 2);
 			FlxG.sound.music.pitch = pitch;
 			FlxG.timeScale = pitch;
 		}

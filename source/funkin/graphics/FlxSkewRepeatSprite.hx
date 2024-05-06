@@ -34,7 +34,7 @@ class FlxSkewRepeatSprite extends FlxRepeatSprite
         var lerpWiggle = FlxMath.lerp(0, scaledWiggleX, lerpValue);
 
         var skewX = isLeftSkew() ? -lerpWiggle : lerpWiggle;
-        _matrix.c = Math.tan(skewX * CoolUtil.TO_RADS); // Set skew X
+        _matrix.c = Math.tan(skewX * FunkMath.TO_RADS); // Set skew X
 
         if (clipRect == null)
             offsetSkew(tileFrame, baseFrame);

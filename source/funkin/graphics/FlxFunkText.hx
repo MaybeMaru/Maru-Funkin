@@ -233,11 +233,11 @@ class FlxFunkText extends FlxSpriteExt {
                 point.copyFrom(offset);
                 size *= sizeMult();
 
-                final qualityDiv = CoolUtil.DOUBLE_PI / quality;
+                final qualityDiv = FunkMath.DOUBLE_PI / quality;
                 for (i in 0...quality) {
                     final rads = i * qualityDiv;
                     offset.set(point.x, point.y);
-                    offset.add(CoolUtil.cos(rads) * size, CoolUtil.sin(rads) * size);
+                    offset.add(FunkMath.cos(rads) * size, FunkMath.sin(rads) * size);
                     __superDrawComplex(camera);
                 }
                 

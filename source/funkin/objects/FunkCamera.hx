@@ -301,7 +301,8 @@ class FunkCamera extends FlxCamera {
 	}
 }
 
-class AngledCamera extends FunkCamera {
+class AngledCamera extends FunkCamera
+{
     @:noCompletion
     private var _sin(default, null):Float = 0.0;
 
@@ -310,9 +311,9 @@ class AngledCamera extends FunkCamera {
 
     override function set_angle(value:Float):Float {
         if (value != angle) {
-            final rads:Float = value * CoolUtil.TO_RADS;
-            _sin = CoolUtil.sin(rads);
-            _cos = CoolUtil.cos(rads);
+            final rads:Float = value * FunkMath.TO_RADS;
+            _sin = FunkMath.sin(rads);
+            _cos = FunkMath.cos(rads);
         }
         return angle = value;
     }

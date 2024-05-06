@@ -84,15 +84,19 @@ class ModchartManager extends EventHandler {
     override function update(elapsed:Float)
     {
         super.update(elapsed);
-        timeElapsed += elapsed * speed;
-        timeElapsed %= CoolUtil.DOUBLE_PI;
+        timeElapsed = timeElapsed + (elapsed * speed);
+        timeElapsed = timeElapsed % FunkMath.DOUBLE_PI;
 
-        if (sinStrums.length > 0 || cosStrums.length > 0) {
-            for (i in sinStrums)
-                i.y = (i.modchart.startY) + (CoolUtil.sin(timeElapsed + (i.modchart.sinOff)) * (i.modchart.sinSize));
+        if (cosStrums.length > 0) {
+            cosStrums.fastForEach((strum, i) -> {
+                strum.x = (strum.modchart.startX) + (FunkMath.cos(timeElapsed + (strum.modchart.cosOff)) * (strum.modchart.cosSize));
+            });
+        }
 
-            for (i in cosStrums)
-                i.x = (i.modchart.startX) + (CoolUtil.cos(timeElapsed + (i.modchart.cosOff)) * (i.modchart.cosSize));
+        if (sinStrums.length > 0) {
+            sinStrums.fastForEach((strum, i) -> {
+                strum.y = (strum.modchart.startY) + (FunkMath.sin(timeElapsed + (strum.modchart.sinOff)) * (strum.modchart.sinSize));
+            });
         }
     }
 }

@@ -19,6 +19,7 @@ import funkin.util.song.WeekSetup;
 import funkin.util.Paths;
 import funkin.util.backend.AssetManager;
 import funkin.util.CoolUtil;
+import funkin.util.FunkMath;
 import funkin.util.SkinUtil;
 import funkin.util.frontend.Shader;
 import funkin.util.backend.DiscordClient;
