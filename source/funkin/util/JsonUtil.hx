@@ -92,7 +92,8 @@ class JsonUtil
 		return frames;
 	}
 
-	public static function checkJson<T>(defaults:T, ?input:T):T {
+	public static function checkJson<T>(defaults:T, ?input:T):T
+	{
 		var defaults:T = copyJson(defaults);
 		if (input == null)
 			return defaults;

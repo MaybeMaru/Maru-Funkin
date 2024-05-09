@@ -1,7 +1,7 @@
 package funkin.states.menus;
 
-import funkin.states.menus.MenuCharacter;
-import funkin.states.menus.MenuItem;
+import funkin.states.menus.items.MenuCharacter;
+import funkin.states.menus.items.MenuItem;
 
 class StoryMenuState extends MusicBeatState {
 	var scoreText:FlxFunkText;

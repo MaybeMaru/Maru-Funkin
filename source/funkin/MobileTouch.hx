@@ -17,40 +17,61 @@ enum abstract MobileLayoutID(Int) from Int to Int {
     var BASIC_MENU = 4;
 }
 
+enum abstract MobileButtonID(Int) from Int to Int
+{
+    var LEFT:Int = 0;
+    var RIGHT:Int = 1;
+    var UP:Int = 2;
+    var DOWN:Int = 3;
+    var ACCEPT:Int = 4;
+    var BACK:Int = 5;
+    var PAUSE:Int = 6;
+}
+
 class MobileTouch extends Sprite
 {
     public static var touch:MobileTouch;
+
+    // TODO: finish layouts shit
 
     static final layouts:Map<MobileLayoutID, MobileLayout> =
     [
         STORY_MODE => [
             UP => FlxPoint.get(20, 100),
             DOWN => FlxPoint.get(20, 400),
+            LEFT => FlxPoint.get(0, 0),
+            RIGHT => FlxPoint.get(0, 0),
+            ACCEPT => FlxPoint.get(0, 0),
+            BACK => FlxPoint.get(0, 0)
         ],
 
         FREEPLAY => [
-
+            UP => FlxPoint.get(20, 100),
+            DOWN => FlxPoint.get(20, 400),
+            LEFT => FlxPoint.get(0, 0),
+            RIGHT => FlxPoint.get(0, 0),
+            ACCEPT => FlxPoint.get(0, 0),
+            BACK => FlxPoint.get(0, 0)
         ],
 
         BASIC_MENU => [
-
+            UP => FlxPoint.get(20, 100),
+            DOWN => FlxPoint.get(20, 400),
+            ACCEPT => FlxPoint.get(0, 0)
         ]
     ];
 
     public var layout(default, set):MobileLayoutID;
     function set_layout(value:MobileLayoutID)
     {
-        switch (value)
-        {
-            case NOTES:
-                noteButtons.fastForEach((button, i) -> button.visible = true);
-                uiButtons.fastForEach((button, i) -> button.visible = false);
-                return this.layout = value;
-
-            default:
-                noteButtons.fastForEach((button, i) -> button.visible = false);
-                uiButtons.fastForEach((button, i) -> button.visible = false);
+        if (value == NOTES) {
+            noteButtons.fastForEach((button, i) -> button.visible = true);
+            uiButtons.fastForEach((button, i) -> button.visible = false);
+            return this.layout = value;
         }
+        
+        noteButtons.fastForEach((button, i) -> button.visible = false);
+        uiButtons.fastForEach((button, i) -> button.visible = false);
 
         if (value == NONE)
             return this.layout = value;
@@ -60,7 +81,7 @@ class MobileTouch extends Sprite
         for (i in 0...7) {
             var point:Null<FlxPoint> = layout.get(i);
             if (point != null) {
-                var button:MobileButton = uiButtons[i];
+                var button:MobileButton = getButton(i);
                 button.visible = true;
                 button.x = point.x;
                 button.y = point.y;
@@ -163,6 +184,14 @@ class MobileTouch extends Sprite
         }
     }
 
+    public static function swiped(angle:Float, minDistance:Float):Bool {
+        FlxG.swipes.fastForEach((swipe, i) -> {
+            if (swipe.degrees == angle) if (swipe.distance >= minDistance)
+                return true;
+        });
+        return false;
+    }
+
     public static function released():Bool {
         return !pressed();
     }
@@ -218,15 +247,4 @@ class MobileButton extends Sprite
         if (input != null)
             input.current = justPressed ? FlxInputState.JUST_PRESSED : pressed ? FlxInputState.PRESSED : FlxInputState.RELEASED;
     }
-}
-
-enum abstract MobileButtonID(Int) from Int to Int
-{
-    var LEFT:Int = 0;
-    var RIGHT:Int = 1;
-    var UP:Int = 2;
-    var DOWN:Int = 3;
-    var ACCEPT:Int = 4;
-    var BACK:Int = 5;
-    var PAUSE:Int = 6;
 }

@@ -138,6 +138,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 	public var _dynamic:Dynamic = {}; // Had to stop overriding flixel sooner or later
 
 	@:noCompletion
+	@:unreflective
 	private inline function __superUpdate(elapsed:Float):Void {		
 		if (moves)
 			updateMotion(elapsed);
@@ -170,6 +171,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	@:noCompletion
+	@:unreflective
 	private inline function __superDraw():Void {
 		if (!visible) return;
 		if (alpha == 0) return;
@@ -193,6 +195,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	@:noCompletion
+	@:unreflective
 	private inline function __updateTrig():Void {
 		if (_angleChanged) {
 			final rads:Float = angle * FunkMath.TO_RADS;
@@ -280,6 +283,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 		return this;
 	}
 
+	@:unreflective
 	private inline function prepareFrameMatrix(frame:FlxFrame, mat:FlxMatrix):Void
 	{
 		var flipX = (flipX != frame.flipX);
@@ -322,12 +326,14 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	@:noCompletion
+	@:unreflective
 	private inline function __superDrawComplex(camera:FlxCamera):Void {
 		__prepareDraw(camera);
 		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
 	}
 
 	@:noCompletion
+	@:unreflective
 	private inline function __prepareDraw(camera:FlxCamera):Void
 	{	
 		prepareFrameMatrix(_frame, _matrix);
@@ -365,6 +371,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	@:noCompletion
+	@:unreflective
 	private inline function __superGetScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
 		newRect ??= CoolUtil.rect;
 		camera ??= FlxG.camera;

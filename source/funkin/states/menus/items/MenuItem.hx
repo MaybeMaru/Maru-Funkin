@@ -1,4 +1,4 @@
-package funkin.states.menus;
+package funkin.states.menus.items;
 
 class MenuItem extends SpriteGroup
 {

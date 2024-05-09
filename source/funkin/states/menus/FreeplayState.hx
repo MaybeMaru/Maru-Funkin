@@ -30,8 +30,6 @@ class FreeplayState extends MusicBeatState
 	var grpSongs:TypedGroup<MenuAlphabet>;
 	var iconArray:Array<HealthIcon> = [];
 
-	//var inputText:SongSearch;
-
 	override function create():Void
 	{
 		if (FlxG.sound.music == null)
@@ -108,8 +106,6 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		grpSongs.members.fastForEach((item, i) -> item.snapPosition());
 		lerpColor = FlxColorFix.fromFlxColor(getBgColor());
-		//inputText = new SongSearch();
-		//add(inputText);
 
 		super.create();
 	}
@@ -158,7 +154,7 @@ class FreeplayState extends MusicBeatState
 
 		lerpScore = Math.floor(CoolUtil.coolLerp(lerpScore, intendedScore, 0.4));
 		lerpColor.lerp(targetColor ?? FlxColor.WHITE, 0.045, true);
-		bg.color = lerpColor.get();
+		lerpColor.colorSprite(bg);
 
 		if (Math.abs(lerpScore - intendedScore) <= 10) lerpScore = intendedScore;
 		scoreText.text = "PERSONAL BEST: " + lerpScore;
@@ -279,12 +275,3 @@ class FreeplayState extends MusicBeatState
 		targetColor = getBgColor();
 	}
 }
-/*
-class SongSearch extends FlxInputText {
-	public function new() {
-		var _width = Math.round(FlxG.width * 0.4);
-		var _size = 16;
-
-		super(FlxG.width - _width - 8, FlxG.height - _size - 16, _width, "", _size);
-	}
-}*/

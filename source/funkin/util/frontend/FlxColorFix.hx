@@ -1,5 +1,7 @@
 package funkin.util.frontend;
 
+using flixel.util.FlxColorTransformUtil;
+
 /*
  	Normal FlxColor doesnt work in Hscript sooooooo yeah
 */
@@ -61,6 +63,15 @@ class FlxColorFix {
 		this.G = G;
 		this.B = B;
 		this.A = A;
+	}
+
+	public inline function colorSprite(sprite:FlxSprite):Void {
+		sprite.colorTransform.setMultipliers(
+			R * COLOR_DIV,
+			G * COLOR_DIV,
+			B * COLOR_DIV,
+			A * COLOR_DIV
+		);
 	}
 	
 	public inline function get():FlxColor {
