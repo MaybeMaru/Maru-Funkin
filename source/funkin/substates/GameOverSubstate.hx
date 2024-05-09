@@ -28,7 +28,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		if (PlayState.instance.startTimer != null)
 			PlayState.instance.startTimer.cancel();
 
-		#if mobile MobileTouch.setMode(NONE); #end
+		#if mobile MobileTouch.setLayout(NONE); #end
 
 		final charName = PlayState?.instance?.boyfriend?.gameOverChar ?? "bf-dead";
 		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;

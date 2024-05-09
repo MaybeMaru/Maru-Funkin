@@ -188,6 +188,13 @@ class ChartNoteGrid extends ChartGridBase
     public function new() {        
         super(true);
 
+        if (Conductor.inst.stream) {
+            var song = Conductor.loadedSong;
+            @:privateAccess
+            Conductor.loadedSong = "";
+            Conductor.loadSong(song);
+        }
+
         // Waveforms
         instWaveform = new AudioWaveform(grid.x, grid.y, grid.width, grid.height, Conductor.inst.sound);
         voicesWaveform = new AudioWaveform(grid.x, grid.y, grid.width, grid.height, Conductor.vocals.sound);

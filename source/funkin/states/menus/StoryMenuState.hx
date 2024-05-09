@@ -51,7 +51,7 @@ class StoryMenuState extends MusicBeatState {
 		
 		// Updating Discord Rich Presence
 		#if discord_rpc DiscordClient.changePresence("In the Menus", null); #end
-		#if mobile MobileTouch.setMode(MENU); #end
+		#if mobile MobileTouch.setLayout(STORY_MODE); #end
 
 		WeekSetup.getWeekList().fastForEach((week, i) -> {
 			if (!week.data.hideStory) {
@@ -259,7 +259,7 @@ class StoryMenuState extends MusicBeatState {
 			CoolUtil.playSound('confirmMenu');
 			grpWeekText.members[curWeek].startFlashing();
 			grpWeekCharacters.members[1].playAnim('confirm', true);
-			#if mobile MobileTouch.setMode(NONE); #end
+			#if mobile MobileTouch.setLayout(NONE); #end
 
 			var playlist = getCurData().songList.songs;
 			var diff = curWeekDiffs[curDifficulty];

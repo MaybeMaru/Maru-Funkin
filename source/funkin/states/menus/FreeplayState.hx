@@ -38,7 +38,7 @@ class FreeplayState extends MusicBeatState
 			CoolUtil.playMusic('freakyMenu');
 		
 		FlxG.mouse.visible = #if mobile false; #else true; #end
-		#if mobile MobileTouch.setMode(MENU); #end
+		#if mobile MobileTouch.setLayout(FREEPLAY); #end
 
 		#if discord_rpc // Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -177,7 +177,7 @@ class FreeplayState extends MusicBeatState
 
 		#if desktop
 		if(FlxG.keys.justPressed.ONE) {
-			final curSong = cast songs[curSelected];
+			final curSong = songs[curSelected];
 			if (curSong.song != loadedSong)
 			{
 				if (FlxG.sound.music != null)
@@ -235,7 +235,7 @@ class FreeplayState extends MusicBeatState
 	function loadSong(toChart:Bool):Void {
 		var songData = songs[curSelected];
 		var diff = curWeekDiffs[curDifficulty];
-		#if mobile MobileTouch.setMode(NONE); #end
+		#if mobile MobileTouch.setLayout(NONE); #end
 		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, #if DEV_TOOLS toChart ? ChartingState : #end null);
 	}
 

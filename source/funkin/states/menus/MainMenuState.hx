@@ -19,7 +19,7 @@ class MainMenuState extends MusicBeatState {
 	{
 		// Updating Discord Rich Presence
 		#if discord_rpc DiscordClient.changePresence("In the Menus", null); #end
-		#if mobile MobileTouch.setMode(NONE); #end
+		#if mobile MobileTouch.setLayout(NONE); #end
 
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 			CoolUtil.playMusic('freakyMenu');

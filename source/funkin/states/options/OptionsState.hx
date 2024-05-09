@@ -30,7 +30,7 @@ class OptionsState extends MusicBeatState {
 
 		optionItems.push('Exit');
 
-		#if mobile MobileTouch.setMode(MENU); #end
+		#if mobile MobileTouch.setLayout(BASIC_MENU); #end
 
 		var bg:FunkinSprite = new FunkinSprite('menuBGMagenta');
 		bg.setScale(1.1);

@@ -105,7 +105,7 @@ class PlayState extends MusicBeatState
 	override public function create():Void {
 		instance = this;
 
-		#if mobile MobileTouch.setMode(NOTES); #end
+		#if mobile MobileTouch.setLayout(NOTES); #end
 
 		if (clearCache) CoolUtil.clearCache(clearCacheData)
 		else {
@@ -850,7 +850,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function showUI(bool:Bool):Void {
-		#if mobile MobileTouch.setMode(bool ? NOTES : NONE); #end
+		#if mobile MobileTouch.setLayout(bool ? NOTES : NONE); #end
 		
 		final displayObjects:Array<FlxBasic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
 		displayObjects.fastForEach((object, i) -> {

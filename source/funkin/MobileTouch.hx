@@ -7,21 +7,71 @@ import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import flixel.input.FlxInput;
 
+typedef MobileLayout = Map<MobileButtonID, FlxPoint>;
+
+enum abstract MobileLayoutID(Int) from Int to Int {
+    var NONE = 0;
+    var NOTES = 1;
+    var STORY_MODE = 2;
+    var FREEPLAY = 3;
+    var BASIC_MENU = 4;
+}
+
 class MobileTouch extends Sprite
 {
     public static var touch:MobileTouch;
 
-    public var mode(default, set):TouchMode = NONE;
-    function set_mode(value:TouchMode):TouchMode
+    static final layouts:Map<MobileLayoutID, MobileLayout> =
+    [
+        STORY_MODE => [
+            UP => FlxPoint.get(20, 100),
+            DOWN => FlxPoint.get(20, 400),
+        ],
+
+        FREEPLAY => [
+
+        ],
+
+        BASIC_MENU => [
+
+        ]
+    ];
+
+    public var layout(default, set):MobileLayoutID;
+    function set_layout(value:MobileLayoutID)
     {
-        noteButtons.fastForEach((button, i) -> button.visible = value == NOTES);
-        uiButtons.fastForEach((button, i) -> button.visible = value == MENU);
+        switch (value)
+        {
+            case NOTES:
+                noteButtons.fastForEach((button, i) -> button.visible = true);
+                uiButtons.fastForEach((button, i) -> button.visible = false);
+                return this.layout = value;
+
+            default:
+                noteButtons.fastForEach((button, i) -> button.visible = false);
+                uiButtons.fastForEach((button, i) -> button.visible = false);
+        }
+
+        if (value == NONE)
+            return this.layout = value;
+
+        var layout = layouts.get(value);
+
+        for (i in 0...7) {
+            var point:Null<FlxPoint> = layout.get(i);
+            if (point != null) {
+                var button:MobileButton = uiButtons[i];
+                button.visible = true;
+                button.x = point.x;
+                button.y = point.y;
+            }
+        }
         
-        return mode = value;
+        return this.layout = value;
     }
 
-    public static function setMode(mode:TouchMode) {
-        touch.mode = mode;
+    public static function setLayout(id:MobileLayoutID) {
+        touch.layout = id;
     }
 
     final noteButtons:Array<MobileButton> = [];
@@ -78,31 +128,37 @@ class MobileTouch extends Sprite
                 button.input = FlxG.keys.getKey(inputs[i]);
 
                 button.scaleX = button.scaleY = (Math.min(w, h) / Math.min(bitmap.width, bitmap.height)) * 0.23;
-                button.x = button.scaleX * bitmap.width * i;
+                //button.x = button.scaleX * bitmap.width * i;
                 
                 uiButtons.push(button);
                 addChild(button);
             }
 
-            mode = NONE;
+            layout = NONE;
         });
     }
 
-    public function update(elapsed:Float)
+    public function update(elapsed:Float):Void
     {
-        switch(mode) {
+        switch (layout)
+        {
             case NONE:
+                return;
+
             case NOTES:
                 noteButtons.fastForEach((button, i) -> {
                     button.update(elapsed);
                     if (button.pressed) button.alpha = 0.6;
                     else                button.alpha -= elapsed * 2;
                 });
-            case MENU:
+
+            default:
                 uiButtons.fastForEach((button, i) -> {
-                    button.update(elapsed);
-                    if (button.pressed) button.alpha = 0.4;
-                    else                button.alpha = FlxMath.lerp(button.alpha, 0.2, elapsed);
+                    if (button.visible) {
+                        button.update(elapsed);
+                        if (button.pressed) button.alpha = 0.4;
+                        else                button.alpha = FlxMath.lerp(button.alpha, 0.2, elapsed);
+                    }
                 });
         }
     }
@@ -162,13 +218,6 @@ class MobileButton extends Sprite
         if (input != null)
             input.current = justPressed ? FlxInputState.JUST_PRESSED : pressed ? FlxInputState.PRESSED : FlxInputState.RELEASED;
     }
-}
-
-enum abstract TouchMode(Int) from Int to Int
-{
-    var NONE:Int = 0;
-    var NOTES:Int = 1;
-    var MENU:Int = 2;
 }
 
 enum abstract MobileButtonID(Int) from Int to Int
