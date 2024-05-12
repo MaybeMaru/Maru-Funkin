@@ -5,30 +5,45 @@ import haxe.macro.Expr;
 
 class GetSetBuilder
 {
-    public static macro function build(fields:Array<String>, field:String):Array<Field> {
+    public static macro function build(buildFields:Array<String>, fieldName:String):Array<Field>
+    {
         var classFields:Array<Field> = Context.getBuildFields();
+        //var field:Field = findField(classFields, fieldName);
 
-        for (fieldName in fields) {
-            classFields.push(makeField(fieldName, "get", "set"));
-            classFields.push(makeGetter('get_$fieldName', field, fieldName));
-            classFields.push(makeSetter('set_$fieldName', field, fieldName));
+        for (f in buildFields) {
+            classFields.push(makeField(f, "get", "set"));
+            classFields.push(makeGetter('get_$f', fieldName, f));
+            classFields.push(makeSetter('set_$f', fieldName, f));
         }
 
         return classFields;
     }
 
-    public static macro function buildGet(fields:Array<String>, field:String):Array<Field> {
+    public static macro function buildGet(getFields:Array<String>, fieldName:String):Array<Field>
+    {
         var classFields:Array<Field> = Context.getBuildFields();
+        //var field:Field = findField(classFields, fieldName);
 
-        for (fieldName in fields) {
-            classFields.push(makeField(fieldName, "get", "never"));
-            classFields.push(makeGetter('get_$fieldName', field, fieldName));
+        for (f in getFields) {
+            classFields.push(makeField(f, "get", "never"));
+            classFields.push(makeGetter('get_$f', fieldName, f));
         }
 
         return classFields;
     }
 
-    static function makeField(fieldName:String, get:String, set:String):Field {
+    /*
+    static function findField(fields:Array<Field>, name:String):Field {
+        for (field in fields) {
+            if (field.name == name)
+                return field;
+        }
+        return null;
+    }
+    */
+
+    static function makeField(fieldName:String, get:String, set:String):Field
+    {   
         return {
             name: fieldName,
             access: [APublic],
@@ -37,7 +52,8 @@ class GetSetBuilder
         }
     }
 
-    static function makeGetter(getterName:String, field:String, fieldName:String):Field {
+    static function makeGetter(getterName:String, field:String, fieldName:String):Field
+    {
         return {
             name: getterName,
             access: [APublic, AInline],
@@ -51,7 +67,8 @@ class GetSetBuilder
         }
     }
 
-    static function makeSetter(setterName:String, field:String, fieldName:String):Field {
+    static function makeSetter(setterName:String, field:String, fieldName:String):Field
+    {
         return {
             name: setterName,
             access: [APublic, AInline],

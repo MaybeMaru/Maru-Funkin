@@ -1,6 +1,5 @@
 package funkin.states;
 
-import flixel.util.typeLimit.OneOfTwo;
 import funkin.util.modding.ScriptUtil;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
@@ -74,6 +73,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}
 
 	@:noCompletion
+	@:unreflective
 	inline private function __superDraw():Void {
 		if (persistentDraw) {
 			@:privateAccess {
@@ -99,6 +99,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}
 
 	@:noCompletion
+	@:unreflective
 	inline private function __superUpdate(elapsed:Float) {
 		ModdingUtil.addCall('stateUpdate', [elapsed]);
 		

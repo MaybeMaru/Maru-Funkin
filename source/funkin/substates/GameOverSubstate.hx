@@ -1,20 +1,30 @@
 package funkin.substates;
 
-class GameOverSubstate extends MusicBeatSubstate {
+class GameOverSubstate extends MusicBeatSubstate
+{
 	static var instance:GameOverSubstate;
 	var char:Character;
 	var camFollow:FlxObject;
 
-	var skinFolder:String = 'default';
+	var skinFolder:String;
 	var deathSound:FlxSound = null;
 	var lockedOn:Bool = false;
 
-	public static function cacheSounds() {
-		var _skin = PlayState.instance.boyfriend.gameOverSuffix;
-		_skin = (_skin != "") ? 'skins/$_skin/' : 'skins/default/';
-		Paths.sound(_skin + "fnf_loss_sfx");
-		Paths.music(_skin + "gameOverEnd");
-		Paths.music(_skin + "gameOver");
+	public static function cacheSounds():Void {
+		var char = resolveChar();
+		var folder = resolveFolder(char);
+		Paths.sound(folder + "fnf_loss_sfx");
+		Paths.music(folder + "gameOverEnd");
+		Paths.music(folder + "gameOver");
+	}
+
+	inline static function resolveChar() {
+		return  PlayState.instance?.boyfriend ?? null;
+	}
+
+	inline static function resolveFolder(?char:Character) {
+		var suffix = (char == null || char.gameOverSuffix == "") ? "default" : char.gameOverSuffix;
+		return "skins/" + (suffix.endsWith("/") ? suffix.substr(0, suffix.length - 1) : suffix) + "/";
 	}
 
 	public function new(x:Float, y:Float):Void {
@@ -30,23 +40,28 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 		#if mobile MobileTouch.setLayout(NONE); #end
 
-		final charName = PlayState?.instance?.boyfriend?.gameOverChar ?? "bf-dead";
-		skinFolder = PlayState.instance.boyfriend.gameOverSuffix;
-		skinFolder = (skinFolder != "") ? 'skins/$skinFolder' : 'skins/default';
+		var bf = resolveChar();
+		skinFolder = resolveFolder(bf);
 
-		char = new Character(x, y, charName, true);
+		char = new Character(x, y, bf != null ? bf.gameOverChar : "bf-dead", true);
 		PlayState.instance.boyfriend.stageOffsets.copyTo(char.stageOffsets);
 		char.setXY(x,y);
 		add(char);
 		
-		camFollow = new FlxObject(char.getGraphicMidpoint().x - char.camOffsets.x, char.getGraphicMidpoint().y - char.camOffsets.y, 1, 1);
-		add(camFollow);
+		//camFollow = new FlxObject(char.getGraphicMidpoint().x - char.camOffsets.x, char.getGraphicMidpoint().y - char.camOffsets.y, 1, 1)
 
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;
 
-		deathSound = CoolUtil.playSound('$skinFolder/fnf_loss_sfx');
+		deathSound = CoolUtil.playSound(skinFolder + 'fnf_loss_sfx');
 		char.playAnim('firstDeath');
+
+		camFollow = new FlxObject();
+		add(camFollow);
+
+		var midPoint = char.getGraphicMidpoint();
+		camFollow.x = midPoint.x - char.camOffsets.x;
+		camFollow.y = midPoint.y - char.camOffsets.y;
 
 		ModdingUtil.addCall('startGameOver');
 	}
@@ -56,17 +71,20 @@ class GameOverSubstate extends MusicBeatSubstate {
 		lockedOn = true;
 	}
 
+	public var lockFrame:Int = 12;
+
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (char.animation.curAnim != null) {
-			if (char.animation.curAnim.name == 'firstDeath') {
-				if (char.animation.curAnim.curFrame == 12) {
+		if (char.animation.curAnim != null)
+		{
+			if (char.animation.curAnim.name == 'firstDeath')
+			{
+				if (char.animation.curAnim.curFrame >= lockFrame) if (!lockedOn)
 					lockCamToChar();
-				}
 		
 				if (char.animation.curAnim.finished) {
-					CoolUtil.playMusic('$skinFolder/gameOver');
+					CoolUtil.playMusic(skinFolder + 'gameOver');
 					musicBeat.targetSound = FlxG.sound.music;
 					gameOverDance();
 					ModdingUtil.addCall('musicGameOver');
@@ -130,7 +148,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 
-			var endSound = new FlxSound().loadEmbedded(Paths.music('$skinFolder/gameOverEnd'));
+			var endSound = new FlxSound().loadEmbedded(Paths.music(skinFolder + 'gameOverEnd'));
 			endSound.autoDestroy = true;
 			endSound.play();
 			
@@ -138,7 +156,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 
 			if (!lockedOn) lockCamToChar();
 
-			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
+			new FlxTimer().start(0.7, (tmr:FlxTimer) -> {
 				exitTimer = 2;
 				PlayState.instance.camGame.fade(FlxColor.BLACK, 2);
 			});

@@ -3,7 +3,8 @@ package funkin.substates;
 import funkin.util.backend.MusicBeat;
 import flixel.FlxSubState;
 
-class MusicBeatSubstate extends FlxSubState implements IMusicGetter {
+class MusicBeatSubstate extends FlxSubState implements IMusicGetter
+{
 	public var musicBeat(default, null):MusicBeat;
 	public function new(createMusic:Bool = true) {
 		super();

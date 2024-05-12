@@ -229,11 +229,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return manager;
 		});
 
-		set('addSpr', function(spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
+		set('addSpr', function(spr:FlxObject, ?key:String, onTop:Bool = false):Dynamic {
 			return ScriptUtil.addObject(spr, key, onTop);
 		});
 
-		set('insertSpr', function(position:Int = 0, spr:Dynamic, ?key:String, onTop:Bool = false):Dynamic {
+		set('insertSpr', function(position:Int = 0, spr:FlxObject, ?key:String, onTop:Bool = false):Dynamic {
 			return ScriptUtil.insertObject(position, spr, key, onTop);
 		});
 
@@ -249,7 +249,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			ScriptUtil.insertSprite(spr, key, layer.indexOf(aSpr), layer);
 		});*/
 
-		set('setObjMap', function(object:Dynamic, key:String):Void {
+		set('setObjMap', function(object:FlxObject, key:String):Void {
 			ScriptUtil.objects.set(key, object);
 		});
 

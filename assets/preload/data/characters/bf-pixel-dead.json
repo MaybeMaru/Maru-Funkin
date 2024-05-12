@@ -1,7 +1,7 @@
 {
 	"imagePath": "week6/deadBfPixel",
 	"icon": "bf-pixel",
-	"camOffsets": [0,0],
+	"camOffsets": [250,200],
 	"isGF": false,
 	"charOffsets": [-180,-190],
 	"anims": [
