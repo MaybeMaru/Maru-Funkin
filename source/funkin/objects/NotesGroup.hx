@@ -590,7 +590,21 @@ class NotesGroup extends Group
 		}
 	}
 
-	inline function checkStrums(array:Array<NoteStrum>):Void {
+	inline function checkStrumAnims():Void
+	{
+		if (!inBotplay) {
+			checkStrums(playerStrums.members);
+			checkOverSinging(boyfriend, playerStrums);
+		}
+
+		if (!dadBotplay) {
+			checkStrums(opponentStrums.members);
+			checkOverSinging(dad, opponentStrums);
+		}
+	}
+
+	function checkStrums(array:Array<NoteStrum>):Void
+	{
 		array.fastForEach((strum, i) -> {
 			if (strum.animation.curAnim != null) // Lil null check
 			{
@@ -601,15 +615,6 @@ class NotesGroup extends Group
 					strum.playStrumAnim('static');
 			}
 		});
-	}
-
-	inline function checkStrumAnims():Void {
-		if (!inBotplay) checkStrums(playerStrums.members);
-		if (!dadBotplay) checkStrums(opponentStrums.members);
-
-		// Check for sing animations in characters
-		if (!inBotplay) checkOverSinging(boyfriend, playerStrums);
-		if (!dadBotplay) checkOverSinging(dad, opponentStrums);
 	}
 
 	function checkOverSinging(char:Character, strums:StrumLineGroup):Void
@@ -637,11 +642,11 @@ class NotesGroup extends Group
 		}
 	}
 
-	public function playStrumAnim(note:BasicNote, anim:String = 'confirm', forced:Bool = true):Void {
-		var strum = note.targetStrum;
-		if (strum != null) {
-			strum.playStrumAnim(anim, forced);
-			strum.staticTime = Conductor.stepCrochetMills;
+	public function playStrumAnim(note:BasicNote, anim:String = 'confirm', forced:Bool = true):Void
+	{
+		if (note.targetStrum != null) {
+			note.targetStrum.playStrumAnim(anim, forced);
+			note.targetStrum.staticTime = Conductor.stepCrochetMills;
 		}
 	}
 

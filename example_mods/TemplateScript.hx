@@ -536,7 +536,7 @@ function endDialogue()
 
 function startCountdown()
 {
-   //   Called when the countdown is about to start
+   //  Called when the countdown is about to start
 }
 
 function startTimer(swagCounter:Int)
@@ -548,7 +548,7 @@ function startTimer(swagCounter:Int)
 
 function startSong()
 {
-   //   Called when the countdown ends and the song starts
+   //  Called when the countdown ends and the song starts
 }
 
 function endSong()
@@ -568,15 +568,16 @@ function exitFreeplay()
 
 function switchSong(nextSongName:String, nextSongDifficulty:String)
 {
-    // Called when the next song on the story mode playlist is loaded
-    //   nextSongName --> The next song's name
-    //   nextSongDifficulty --> The song's difficulty
+    //  Called when the next song on the story mode playlist is loaded
+    //  nextSongName --> The next song's name
+    //  nextSongDifficulty --> The song's difficulty
 }
 
-function generateStaticArrow(babyArrow:NoteStrum)
+function generateStrum(strumNote:NoteStrum, isPlayer:Bool)
 {
-   //   Called when a strumline note is created
-   //   babyArrow --> The created strumline note
+   //  Called when a strumline note is created
+   //  strumNote --> The created strumline note
+   //  isPlayer  --> If the current strum note is part of the player's strumline
 }
 
 function generateSong(songData:SwagSong)
