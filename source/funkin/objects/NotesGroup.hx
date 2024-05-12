@@ -559,9 +559,7 @@ class NotesGroup extends Group
 
 			if (hasControl)
 			{
-				removeList.fastForEach((note, i) -> {
-					note.removeNote();
-				});
+				removeList.fastForEach((note, i) -> note.removeNote());
 				
 				final ghostOff:Bool = isPlayState ? !game.ghostTapEnabled : false;
 
