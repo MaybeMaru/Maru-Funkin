@@ -47,8 +47,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		PlayState.instance.boyfriend.stageOffsets.copyTo(char.stageOffsets);
 		char.setXY(x,y);
 		add(char);
-		
-		//camFollow = new FlxObject(char.getGraphicMidpoint().x - char.camOffsets.x, char.getGraphicMidpoint().y - char.camOffsets.y, 1, 1)
 
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;

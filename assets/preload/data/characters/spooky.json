@@ -1,65 +1,66 @@
 {
 	"imagePath": "week2/spookyKids",
-	"camOffsets": [-150,75],
+	"allowLod": true,
+	"camOffsets": [-170,75],
 	"icon": "spooky",
 	"isGF": false,
 	"scale": 1,
-	"charOffsets": [-80,140],
+	"charOffsets": [40,140],
 	"anims": [
 		{
-			"offsets": [62,27],
+			"offsets": [50,28],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "note hey",
+			"animFile": "Cheer",
 			"animName": "hey"
 		},
 		{
 			"offsets": [0,0],
-			"indices": [8,10,12,14],
+			"indices": [10,12,14,16],
 			"loop": false,
 			"framerate": 12,
-			"animFile": "spooky dance idle",
+			"animFile": "Idle",
 			"animName": "danceRight"
 		},
 		{
-			"offsets": [-20,-142],
+			"offsets": [-20,-145],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "spooky DOWN note",
+			"animFile": "SingDOWN",
 			"animName": "singDOWN"
 		},
 		{
-			"offsets": [-129,-16],
+			"offsets": [-131,-14],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "spooky sing right",
+			"animFile": "SingRIGHT",
 			"animName": "singRIGHT"
 		},
 		{
 			"offsets": [0,0],
-			"indices": [0,2,6],
+			"indices": [0,2,4,6,8],
 			"loop": false,
 			"framerate": 12,
-			"animFile": "spooky dance idle",
+			"animFile": "Idle",
 			"animName": "danceLeft"
 		},
 		{
-			"offsets": [140,-17],
+			"offsets": [137,-14],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "note sing left",
+			"animFile": "SingLEFT",
 			"animName": "singLEFT"
 		},
 		{
-			"offsets": [-14,25],
+			"offsets": [-15,27],
 			"indices": [],
 			"loop": false,
 			"framerate": 24,
-			"animFile": "spooky UP NOTE",
+			"animFile": "SingUP",
 			"animName": "singUP"
 		}
 	],
