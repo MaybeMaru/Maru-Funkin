@@ -6,10 +6,14 @@ import flixel.FlxSubState;
 class MusicBeatSubstate extends FlxSubState implements IMusicGetter
 {
 	public var musicBeat(default, null):MusicBeat;
-	public function new(createMusic:Bool = true) {
-		super();
-		if (createMusic)
-			add(musicBeat = new MusicBeat(this));
+	
+	public function new(createMusic:Bool = true, ?bgColor:FlxColor)
+	{
+		super(bgColor);
+		_bgSprite.active = false;
+		_bgSprite.scrollFactor.set();
+		if (bgColor == null) 	_bgSprite.visible = false; // Wont need to render this guy
+		if (createMusic) 		add(musicBeat = new MusicBeat(this));
 	}
 
 	public var _update:Dynamic = null;

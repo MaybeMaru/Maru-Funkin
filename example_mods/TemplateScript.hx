@@ -241,6 +241,7 @@ getPref(prefName:String);
     'antialiasing'      => Antialiasing
     'quality'           => Image LOD Quality ("high", "medium", "low", "rudy")
     'gpu-textures'      => Use GPU Textures Caching
+    'song-stream'       => Use OGG Songs Streaming
     'preload'           => Preload Assets At Start
 
     // Miscellaneous

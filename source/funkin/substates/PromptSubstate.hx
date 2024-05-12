@@ -1,30 +1,29 @@
 package funkin.substates;
 
-class PromptSubstate extends MusicBeatSubstate {
+class PromptSubstate extends MusicBeatSubstate
+{
     var acceptFunction:()->Void;
     var acceptRequirement:()->Bool;
     
-    public function new(text:String, ?acceptFunction:()->Void, ?acceptRequirement:()->Bool, textScale:Float = 0.75) {
-        super();
+    public function new(text:String, ?acceptFunction:()->Void, ?acceptRequirement:()->Bool, textScale:Float = 0.75)
+    {
+        super(false, 0x98000000);
         this.acceptFunction = acceptFunction;
         this.acceptRequirement = acceptRequirement;
 
-        var bg = new FlxSpriteExt().makeRect(FlxG.width, FlxG.height, FlxColor.BLACK);
-        bg.alpha = 0.6;
-        add(bg);
-
         var prompBox = new FlxSpriteExt().makeRect(1200, 500, 0xFFFAFD6D);
+        prompBox.scrollFactor.set();
         prompBox.screenCenter();
         add(prompBox);
 
         var prompText:Alphabet = new Alphabet(0, prompBox.y + 75, text);
+        prompText.scrollFactor.set();
         prompText.scale.scale(textScale, textScale);
         prompText.alignment = CENTER;
         prompText.screenCenter(X);
         add(prompText);
 
         camera = CoolUtil.getTopCam();
-        for (i in [bg,prompBox,prompText]) i.scrollFactor.set();
     }
 
     var startTimer:Float = 0.15;

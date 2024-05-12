@@ -9,7 +9,6 @@ class PauseSubState extends MusicBeatSubstate {
 		'Options',
 		'Exit to menu'
 	];
-	var bg:FlxSprite;
 	var timeLeft:FunkinText;
 
 	var pauseMusic:FlxSound;
@@ -22,19 +21,12 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var maxTime:String = "";
 
-	public function new():Void {
-		super(false);
+	public function new():Void
+	{
+		super(false, 0x98000000);
 		pauseMusic = CoolUtil.getSound("breakfast", MUSIC);
 		pauseMusic.looped = true;
 		pauseLength = Std.int(pauseMusic.length * 0.5);
-
-		bg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
-		bg.scrollFactor.set();
-		bg.antialiasing = false;
-		bg.scale.set(FlxG.width, FlxG.height);
-		bg.updateHitbox();
-		bg.active = false;
-		add(bg);
 
 		final levelInfo:FunkinText = new FunkinText(20,15,PlayState.SONG.song,32);
 		final levelDifficulty:FunkinText = new FunkinText(20,15,(PlayState.curDifficulty.toUpperCase()),32);
@@ -72,8 +64,8 @@ class PauseSubState extends MusicBeatSubstate {
 		timeLeft.text = "Time left: " + curTime + " / " + maxTime;
 		timeLeft.x = FlxG.width - (timeLeft.width + 20);
 
-		bg.alpha = 0.00001;
-		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+		_bgSprite.alpha = 0.00001;
+		FlxTween.tween(_bgSprite, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut});
 
 		for (i in 0...items.length) {
 			items[i].setPosition(-100 * i, (70 * i) + 200);
@@ -82,7 +74,9 @@ class PauseSubState extends MusicBeatSubstate {
 		coolDown = 0.1;
 		curSelected = 0;
 		changeSelection();
-		cameras = [CoolUtil.getTopCam()];
+
+		camera = CoolUtil.getTopCam();
+		_bgSprite.camera = camera;
 	}
 
 	var coolDown:Float = 0.1; //Controllers have a lil lag

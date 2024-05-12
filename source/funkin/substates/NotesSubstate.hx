@@ -2,22 +2,18 @@ package funkin.substates;
 
 import funkin.objects.NotesGroup;
 
-class NotesSubstate extends MusicBeatSubstate {
+class NotesSubstate extends MusicBeatSubstate
+{
     public var SONG:SwagSong;
     public var notesGroup:NotesGroup;
     public var position:Float = 0;
 
-    public function new(_SONG:SwagSong, position:Float) {
-        super();
+    public function new(song:SwagSong, position:Float)
+    {
+        super(true, 0x98000000);
         this.position = position;
 
-        final bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0.6;
-		bg.scrollFactor.set();
-		bg.antialiasing = false;
-		add(bg);
-
-        SONG = Song.checkSong(_SONG);
+        SONG = Song.checkSong(song);
         notesGroup = new NotesGroup(SONG, false);
         notesGroup.skipStrumIntro = true;
         notesGroup.init(position - 50);
