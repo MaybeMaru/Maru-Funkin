@@ -16,10 +16,12 @@ class MusicBeatSubstate extends FlxSubState implements IMusicGetter
 		if (createMusic) 		add(musicBeat = new MusicBeat(this));
 	}
 
-	public var _update:Dynamic = null;
-	override function update(elapsed:Float) {
+	public var _update:(Float)->Void;
+
+	override function update(elapsed:Float)
+	{
 		ModdingUtil.addCall('subStateUpdate', [elapsed]);
-		if (_update != null) Reflect.callMethod(null, _update, [elapsed]);
+		if (_update != null) _update(elapsed);
 		super.update(elapsed);
 	}
 

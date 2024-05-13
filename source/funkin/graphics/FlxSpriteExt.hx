@@ -147,7 +147,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 			updateAnimation(elapsed);
 
 		if (_dynamic.update != null)
-			Reflect.callMethod(null, _dynamic.update, [elapsed]);
+			_dynamic.update(elapsed);
 
 		#if FLX_DEBUG
 		FlxBasic.activeCount++;
