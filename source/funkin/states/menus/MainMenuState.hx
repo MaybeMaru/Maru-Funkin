@@ -2,8 +2,10 @@ package funkin.states.menus;
 import flixel.effects.FlxFlicker;
 import lime.app.Application;
 
-class MainMenuState extends MusicBeatState {
+class MainMenuState extends MusicBeatState
+{
 	var magenta:FunkinSprite;
+	var versionText:FlxText;
 	var camFollow:FlxObject;
 
 	var optionShit:Array<String> = [
@@ -12,6 +14,7 @@ class MainMenuState extends MusicBeatState {
 		'options',
 		'donate'
 	];
+
 	var curSelected:Int = 0;
 	var menuItems:TypedGroup<FunkinSprite>;
 
@@ -61,12 +64,12 @@ class MainMenuState extends MusicBeatState {
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionText:String = 'Mau Engin v${Main.engineVersion}\nFriday Night Funkin v${Application.current.meta.get('version')}';
+		var txt:String = 'Mau Engin v${Main.engineVersion}\nFriday Night Funkin v${Application.current.meta.get('version')}';
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18*2, 0, versionText, 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
+		versionText = new FlxText(5, FlxG.height - 18*2, 0, txt, 12);
+		versionText.scrollFactor.set();
+		versionText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionText);
 
 		changeItem();
 		

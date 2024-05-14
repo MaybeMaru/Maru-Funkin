@@ -22,6 +22,7 @@ class Controls
             gamepad = FlxG.gamepads.lastActive;
     }
 
+    @:unreflective
     static function initSave():Void {
         var save:Dynamic = SaveData.getSave("controls");
         var keyboardSave:Map<String, Array<Dynamic>> = save.get("keyboardBinds");
@@ -55,6 +56,7 @@ class Controls
         }
     }
 
+    @:unreflective
     public static function setupBindings():Void {
         controlArray = new Array<String>();
         initGamepad();
@@ -116,9 +118,9 @@ class Controls
     //@:deprecated("Use getKey with the inputType argument instead")
     public static function getKeyOld(key:String):Bool {
         key = key.toUpperCase();
-		var parts:Array<String> = key.split('-');
+        var parts:Array<String> = key.split('-');
 
-        return getKey(parts[0], switch (parts[1]) {
+        return getKey(parts[0], switch (parts[1] ?? "") {
             case "R": JUST_RELEASED;
             case "P": JUST_PRESSED;
             default: PRESSED;
@@ -167,6 +169,7 @@ class Controls
     public static var headers:Array<String> = [];
     public static var headerContents:Map<String, Array<String>> = [];
 
+    @:unreflective
     static function addHeader(name:String) {
         if (name != curHeader) {
             curHeader = name;
@@ -175,6 +178,7 @@ class Controls
         }
     }
 
+    @:unreflective
     private static function addBind(bind:String, keys:Array<FlxKey>, gamepadKeys:Array<FlxGamepadInputID>):Void {
         bind = bind.toUpperCase().trim();       
         controlArray.push(bind);

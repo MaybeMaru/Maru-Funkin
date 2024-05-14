@@ -696,11 +696,12 @@ class PlayState extends MusicBeatState
 		final nextSong:String = PlayState.storyPlaylist[0];
 		trace('LOADING NEXT SONG [$nextSong-$curDifficulty]');
 
-		prevCamFollow = camFollow;
-		seenCutscene = false;
-
 		PlayState.SONG = Song.loadFromFile(curDifficulty, nextSong);
 		Conductor.stop();
+
+		// Reset cam follow if the stage changed
+		prevCamFollow = (SONG.stage == curStage) ? camFollow : null;
+		seenCutscene = false;
 
 		clearCache = true;
 		clearCacheData = {tempCache: false, skins: false}

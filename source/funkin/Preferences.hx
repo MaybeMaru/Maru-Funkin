@@ -23,6 +23,7 @@ class Preferences
     ];
     #end
 
+    @:unreflective
     public static function setupPrefs():Void {        
         prefsArray = [];
         preferences = SaveData.getSave('preferences');
@@ -79,6 +80,7 @@ class Preferences
     public static var headers:Array<String> = [];
     public static var headerContents:Map<String, Array<String>> = [];
 
+    @:unreflective
     static function addHeader(name:String) {
         if (name != curHeader) {
             curHeader = name;
@@ -87,6 +89,7 @@ class Preferences
         }
     }
 
+    @:unreflective
     public static function addPref(id:String, label:String, defaultValue:Dynamic):Void {
         id = id.toLowerCase().trim();
 
@@ -126,6 +129,7 @@ class Preferences
         updateGpuTextures();
     }
 
+    @:unreflective
     private static function fixOldPrefs() {
         if (preferences.exists("ghost-tap")) {
             if (preferences.get("deghost-tap")) {
