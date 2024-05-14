@@ -90,23 +90,19 @@ class GameOverSubstate extends MusicBeatSubstate
 			}
 		}
 
-		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
+		if (!isEnding)
 		{
-			restartSong();
+			if (getKey('BACK', JUST_PRESSED))
+			{
+				exitSong();
+			}
+			else if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
+			{
+				restartSong();
+			}
 		}
- 
-		if (getKey('BACK', JUST_PRESSED))
+		else if (exitTimer > 0)
 		{
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
-			
-			PlayState.deathCounter = 0;
-			PlayState.clearCache = true;
-			ModdingUtil.addCall('exitGameOver');
-			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState());
-		}
-
-		if (exitTimer > 0) {
 			exitTimer -= elapsed;
 			if (exitTimer <= 0) {
 				PlayState.clearCache = false;
@@ -125,7 +121,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		}
 	}
 
-	function gameOverDance():Void {
+	#if MODS_ALLOWED dynamic #end function gameOverDance():Void {
 		if (char.animOffsets.exists('deathLoopRight') && char.animOffsets.exists('deathLoopLeft')) {
 			char.danced = !char.danced;
 			char.playAnim((char.danced) ? 'deathLoopRight' : 'deathLoopLeft');
@@ -138,29 +134,51 @@ class GameOverSubstate extends MusicBeatSubstate
 	var isEnding:Bool = false;
 	var exitTimer:Float = 0;
 
-	function restartSong():Void {
-		if (!isEnding)
-		{
-			isEnding = true;
-			char.playAnim('deathConfirm', true);
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
+	function exitSong():Void
+	{
+		PlayState.deathCounter = 0;
+		PlayState.clearCache = true;
+		isEnding = true;
 
-			var endSound = new FlxSound().loadEmbedded(Paths.music(skinFolder + 'gameOverEnd'));
-			endSound.autoDestroy = true;
-			endSound.play();
+		// Able to stop n override gameover exit
+		if (ModdingUtil.getCall("exitGameOver"))
+			return;
+
+		var fadeTime:Float = 0.15;
+
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.fadeOut(fadeTime);
+
+		if (deathSound != null)
+			deathSound.fadeOut(fadeTime);
+
+		FlxG.camera.fade(FlxColor.BLACK, fadeTime, false, () -> {
+			CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState(): new FreeplayState(), true, false);
+		});
+	}
+
+	function restartSong():Void
+	{
+		isEnding = true;
+		char.playAnim('deathConfirm', true);
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		var endSound = new FlxSound().loadEmbedded(Paths.music(skinFolder + 'gameOverEnd'));
+		endSound.autoDestroy = true;
+		endSound.play();
 			
-			deathSound.stop();
+		deathSound.stop();
 
-			if (!lockedOn) lockCamToChar();
+		if (!lockedOn)
+			lockCamToChar();
 
-			new FlxTimer().start(0.7, (tmr:FlxTimer) -> {
-				exitTimer = 2;
-				PlayState.instance.camGame.fade(FlxColor.BLACK, 2);
-			});
+		new FlxTimer().start(0.7, (tmr:FlxTimer) -> {
+			exitTimer = 2;
+			PlayState.instance.camGame.fade(FlxColor.BLACK, 2);
+		});
 
-			ModdingUtil.addCall('resetGameOver');
-		}
+		ModdingUtil.addCall('resetGameOver');
 	}
 
 	override function destroy() {
