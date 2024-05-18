@@ -108,7 +108,7 @@ function updatePost(elapsed)
     if (dialogueBox != null && inDialogue) {
         bgFade.alpha = dialogueBox.bgFade.alpha;
         face.alpha = dialogueBox.box.alpha;
-        face.offset.y = FlxMath.roundDecimal(CoolUtil.sin(timeElapsed += elapsed), 1) * 10;
+        face.offset.y = FlxMath.roundDecimal(FunkMath.sin(timeElapsed += elapsed), 1) * 10;
     }
 
     if (whiteFade != null)

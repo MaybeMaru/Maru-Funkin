@@ -91,6 +91,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('MusicBeatState', MusicBeatState);
 
 		set('CoolUtil', CoolUtil);
+		set('FunkMath', FunkMath);
 		set('Conductor', Conductor);
 		set('Paths', Paths);
 		set('Preferences', Preferences);

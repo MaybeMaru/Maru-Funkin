@@ -40,6 +40,9 @@ class FunkMath
 
     public static function fastRotatedTrigRect(rect:FlxRect, ?origin:FlxPoint, cos:Float, sin:Float):FlxRect
     {
+		if (cos == 1) if (sin == 0) // Rect is at angle 0, no need to calculate
+			return rect;
+
 		var originX:Float;
         var originY:Float;
 
@@ -60,26 +63,26 @@ class FunkMath
 		final right = -originX + rect.width;
 		final bottom = -originY + rect.height;
 
-		if (cos > 0)
+		if (cos > 0 && sin >= 0)
 		{
-            rect.x = rect.x + originX + cos * left - sin * bottom;
-            rect.y = rect.y + originY + sin * left + cos * top;
-        }
-		else if (cos < 0 && sin > 0)
+			rect.x = rect.x + originX + cos * left - sin * bottom;
+			rect.y = rect.y + originY + sin * left + cos * top;
+		}
+		else if (cos < 0 && sin >= 0)
 		{
-            rect.x = rect.x + originX + cos * right - sin * bottom;
-            rect.y = rect.y + originY + sin * left + cos * bottom;
-        }
+			rect.x = rect.x + originX + cos * right - sin * bottom;
+			rect.y = rect.y + originY + sin * left + cos * bottom;
+		}
 		else if (cos < 0 && sin < 0)
 		{
-            rect.x = rect.x + originX + cos * right - sin * top;
-            rect.y = rect.y + originY + sin * right + cos * bottom;
-        }
+			rect.x = rect.x + originX + cos * right - sin * top;
+			rect.y = rect.y + originY + sin * right + cos * bottom;
+		}
 		else
 		{
-            rect.x = rect.x + originX + cos * left - sin * top;
-            rect.y = rect.y + originY + sin * right + cos * top;
-        }
+			rect.x = rect.x + originX + cos * left - sin * top;
+			rect.y = rect.y + originY + sin * right + cos * top;
+		}
 
 		final newHeight = Math.abs(cos * rect.height) + Math.abs(sin * rect.width);
 		rect.width = Math.abs(cos * rect.width) + Math.abs(sin * rect.height);

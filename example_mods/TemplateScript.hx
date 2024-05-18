@@ -17,6 +17,7 @@ MusicBeatSubstate
 
 // Util
 CoolUtil
+FunkMath
 Conductor
 Paths
 Preferences

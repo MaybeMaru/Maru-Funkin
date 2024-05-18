@@ -53,8 +53,8 @@ function update(elapsed)
 		tank.visible = true;
 		angle += speed * elapsed;
 		tank.angle = (angle - 90 + 15);
-		tank.x = 400 + 1500 * CoolUtil.cos(pi * (angle + 180));
-		tank.y = 1300 + 1100 * CoolUtil.sin(pi * (angle + 180));
+		tank.x = 400 + 1500 * FunkMath.cos(pi * (angle + 180));
+		tank.y = 1300 + 1100 * FunkMath.sin(pi * (angle + 180));
 	}
 	else {
 		tank.visible = false;

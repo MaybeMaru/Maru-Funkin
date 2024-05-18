@@ -224,7 +224,7 @@ class FlxRepeatSprite extends FlxSpriteExt
             h * Math.abs(scaleY())
         );
 
-        return cam.containsRect(FunkMath.fastRotatedTrigRect(_rect, _cosAngle, _sinAngle));
+        return cam.containsRect(FunkMath.fastRotatedTrigRect(_rect, _scaledOrigin, _cosAngle, _sinAngle));
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool

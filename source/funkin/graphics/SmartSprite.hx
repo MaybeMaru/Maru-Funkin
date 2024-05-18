@@ -13,8 +13,8 @@ abstract class SmartSprite extends FlxSkewRepeatSprite
     public var renderMode:RenderMode = QUAD;
 
     // For hscript mainly lmao
-    public function setRenderMode(value:String) {
-        renderMode = switch (value.toLowerCase().trim()) {
+    public function setRenderMode(value:String):RenderMode {
+        return renderMode = switch (value.toLowerCase().trim()) {
             case "quad" | "q" | "1" | "true": QUAD;
             case "repeat" | "r" | "2" | "false": REPEAT;
             default: QUAD; // Ill maybe add more render modes over time idk
