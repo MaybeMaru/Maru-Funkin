@@ -179,6 +179,8 @@ class FlxSpriteExt extends FlxSkewedSprite
 		checkEmptyFrame();
 		if (_frame.type == EMPTY) return;
 
+		__updateTrig();
+
 		cameras.fastForEach((camera, i) -> {
 			if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
 				drawComplex(camera);
@@ -344,7 +346,6 @@ class FlxSpriteExt extends FlxSkewedSprite
 		FunkMath.scaleMatrix(_matrix, scale.x, scale.y);
 
 		if (angle != 0) {
-			__updateTrig();
 			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
 		}
 
@@ -378,16 +379,15 @@ class FlxSpriteExt extends FlxSkewedSprite
 		
 		_scaledOrigin.x = origin.x * scale.x;
 		_scaledOrigin.y = origin.y * scale.y;
-		
-		newRect.setPosition(
+
+		newRect.set(
 			x + (-Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x),
-			y + (-Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y)
+			y + (-Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y),
+			frameWidth * Math.abs(scale.x * lodScale),
+			frameHeight * Math.abs(scale.y * lodScale)
 		);
 		
-		newRect.width = frameWidth * Math.abs(scale.x * lodScale);
-		newRect.height = frameHeight * Math.abs(scale.y * lodScale);
-		
-		return FunkMath.fastRotatedRect(newRect, _scaledOrigin, angle);
+		return FunkMath.fastRotatedTrigRect(newRect, _scaledOrigin, _cosAngle, _sinAngle);
 	}
 
     public function switchAnim(anim1:String, anim2:String):Void {

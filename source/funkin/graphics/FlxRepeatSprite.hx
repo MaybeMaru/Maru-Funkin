@@ -66,33 +66,25 @@ class FlxRepeatSprite extends FlxSpriteExt
     override function draw():Void {
         if (tilesX == 0) return;
         if (tilesY == 0) return;
-        if (!visible) return;
-        if (alpha == 0) return;
-
-		checkEmptyFrame();
-		if (clipRect != null) if (clipRect.isEmpty) return;
-
-        cameras.fastForEach((camera, i) -> {
-            if (camera.visible) if (camera.exists) if (isOnScreen(camera)) {
-                drawComplex(camera);
-                #if FLX_DEBUG
-                FlxBasic.visibleCount++;
-                #end
-            }
-        });
+        if (clipRect != null) if (clipRect.isEmpty) return;
+        __superDraw();
     }
 
     override function getScreenBounds(?newRect:FlxRect, ?camera:FlxCamera):FlxRect {
-        if (newRect == null) newRect = CoolUtil.rect;
-		if (camera == null) camera = FlxG.camera;
+        newRect ??= CoolUtil.rect;
+        camera ??= FlxG.camera;
 		
-		newRect.setPosition(x, y);
-		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
-		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
-		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
-		newRect.setSize(repeatWidth, repeatHeight);
+        _scaledOrigin.x = origin.x * scale.x;
+        _scaledOrigin.y = origin.y * scale.y;
+
+        newRect.set(
+            x + (-Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x),
+            y + (-Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y),
+            repeatWidth,
+            repeatHeight
+        );
 		
-		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
+        return FunkMath.fastRotatedTrigRect(newRect, _scaledOrigin, _cosAngle, _sinAngle);
     }
 
     static final tempPoint:FlxPoint = FlxPoint.get();
@@ -225,14 +217,14 @@ class FlxRepeatSprite extends FlxSpriteExt
 
     inline function rectInBounds(x:Float, y:Float, w:Float, h:Float, cam:FlxCamera):Bool
     {
-        var rect = _rect;
-        rect.x = x;
-        rect.y = y;
-        rect.width = w * Math.abs(scaleX());
-        rect.height = h * Math.abs(scaleY());
+        _rect.set(
+            x,
+            y,
+            w * Math.abs(scaleX()),
+            h * Math.abs(scaleY())
+        );
 
-        FunkMath.fastRotatedTrigRect(rect, _cosAngle, _sinAngle, angle);
-        return cam.containsRect(rect);
+        return cam.containsRect(FunkMath.fastRotatedTrigRect(_rect, _cosAngle, _sinAngle));
     }
 
     function handleClipRect(tileFrame:FlxFrame, baseFrame:FlxFrame, tilePos:FlxPoint):Bool

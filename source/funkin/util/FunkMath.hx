@@ -35,10 +35,10 @@ class FunkMath
 			degrees += 360;
         
         var rads = (degrees * TO_RADS);
-        return fastRotatedTrigRect(rect, origin, cos(rads), sin(rads), degrees);
+        return fastRotatedTrigRect(rect, origin, cos(rads), sin(rads));
     }
 
-    public static function fastRotatedTrigRect(rect:FlxRect, ?origin:FlxPoint, cos:Float, sin:Float, degrees:Float):FlxRect
+    public static function fastRotatedTrigRect(rect:FlxRect, ?origin:FlxPoint, cos:Float, sin:Float):FlxRect
     {
 		var originX:Float;
         var originY:Float;
@@ -55,33 +55,33 @@ class FunkMath
             origin.putWeak();
         }
         
-        var left = -originX;
-		var top = -originY;
-		var right = -originX + rect.width;
-		var bottom = -originY + rect.height;
-		
-        if (degrees < 90)
+        final left = -originX;
+		final top = -originY;
+		final right = -originX + rect.width;
+		final bottom = -originY + rect.height;
+
+		if (cos > 0)
 		{
-			rect.x = rect.x + originX + cos * left - sin * bottom;
-			rect.y = rect.y + originY + sin * left + cos * top;
-		}
-		else if (degrees < 180)
+            rect.x = rect.x + originX + cos * left - sin * bottom;
+            rect.y = rect.y + originY + sin * left + cos * top;
+        }
+		else if (cos < 0 && sin > 0)
 		{
-			rect.x = rect.x + originX + cos * right - sin * bottom;
-			rect.y = rect.y + originY + sin * left  + cos * bottom;
-		}
-		else if (degrees < 270)
+            rect.x = rect.x + originX + cos * right - sin * bottom;
+            rect.y = rect.y + originY + sin * left + cos * bottom;
+        }
+		else if (cos < 0 && sin < 0)
 		{
-			rect.x = rect.x + originX + cos * right - sin * top;
-			rect.y = rect.y + originY + sin * right + cos * bottom;
-		}
+            rect.x = rect.x + originX + cos * right - sin * top;
+            rect.y = rect.y + originY + sin * right + cos * bottom;
+        }
 		else
 		{
-			rect.x = rect.x + originX + cos * left - sin * top;
-			rect.y = rect.y + originY + sin * right + cos * top;
-		}
+            rect.x = rect.x + originX + cos * left - sin * top;
+            rect.y = rect.y + originY + sin * right + cos * top;
+        }
 
-		var newHeight = Math.abs(cos * rect.height) + Math.abs(sin * rect.width);
+		final newHeight = Math.abs(cos * rect.height) + Math.abs(sin * rect.width);
 		rect.width = Math.abs(cos * rect.width) + Math.abs(sin * rect.height);
 		rect.height = newHeight;
         
