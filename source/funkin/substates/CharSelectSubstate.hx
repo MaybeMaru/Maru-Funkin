@@ -3,7 +3,7 @@ package funkin.substates;
 class CharSelectSubstate extends MusicBeatSubstate
 {
     public static var lastChar:String = 'bf';
-    var selectFunction:Void->Void = null;
+    var selectFunction:()->Void;
 
     var curFolder:Int = 0;
     var curSelected:Array<Int> = [];
@@ -13,11 +13,14 @@ class CharSelectSubstate extends MusicBeatSubstate
 
     var textGroup:TypedGroup<MenuAlphabet>;
 
-	public function new(?selectFunction:Void->Void):Void {
+	public function new(?selectFunction:()->Void):Void {
 		super();
         this.selectFunction = selectFunction;
 
-        var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+        var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+        bg.setGraphicSize(FlxG.width, FlxG.height);
+        bg.updateHitbox();
+        bg.antialiasing = false;
 		bg.alpha = 0.6;
 		bg.scrollFactor.set();
 		add(bg);

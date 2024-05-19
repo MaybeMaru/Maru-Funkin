@@ -94,7 +94,7 @@ function startCutscene() {
     var stressCutscene = getSound(getPref('naughty') ? 'stressCutscene' : 'song3censor');
     FlxG.sound.list.add(stressCutscene);
 
-    demonBg = new FlxSprite(-FlxG.width*0.5, -FlxG.height*0.5).makeGraphic(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
+    demonBg = new FlxSprite(-FlxG.width*0.5, -FlxG.height*0.5).makeRect(FlxG.width*2, FlxG.height*2, FlxColor.BLACK);
     demonBg.scrollFactor.set();
     demonBg.alpha = 0.000001;
     addSpr(demonBg, 'demonBg');

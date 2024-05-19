@@ -5,13 +5,14 @@ typedef SimpleEvent = {
     var callback:()->Void;
 }
 
-abstract class EventHandler extends flixel.FlxBasic {
+abstract class EventHandler extends flixel.FlxBasic
+{
     public var events:Array<SimpleEvent> = [];
     public var position:Float = 0;
     
     public function pushEvent(time:Float, callback:()->Void) {
         events.push({
-            time: time*1000,
+            time: time * 1000,
             callback: callback
         });
         events.sort((a, b) -> Std.int(a.time - b.time));
@@ -27,13 +28,22 @@ abstract class EventHandler extends flixel.FlxBasic {
 
     public function pushSection(section:Int = 0, callback:()->Void) {
         pushEvent(section * Conductor.sectionCrochetMills, callback);
-        //Song.getSectionTime(PlayState.SONG, section) TODO maybe??
+        //Song.getSectionTime(PlayState.SONG, section) TODO: maybe??
     }
 
     public function start() {
         FlxG.state.add(this);
         active = true;
-        _check();
+        callEvents();
+    }
+
+    override function destroy() {
+        super.destroy();
+        FlxG.state.remove(this);
+        pause();
+        events.clear();
+        events = null;
+        position = 0;
     }
 
     inline public function pause() {
@@ -47,26 +57,26 @@ abstract class EventHandler extends flixel.FlxBasic {
     override function update(elapsed:Float) {
         super.update(elapsed);
         position += elapsed * 1000;
-        _check();
-    }
-
-    function _check() {
         callEvents();
     }
 
-    function callEvents() {
-        if (events[0] != null) {
+    public var destroyOnComplete:Bool = true;
+
+    function callEvents():Void {
+        if (events.length > 0) {
 			while (events.length > 0 && events[0].time <= position) {
                 events.shift().callback();
 			}
-		}/* else {
+		}
+        else if (destroyOnComplete) {
             destroy();
-        }*/
+        }
     }
 }
 
-class CutsceneManager extends EventHandler {
-    public var targetSound:FlxSound = null;
+class CutsceneManager extends EventHandler
+{
+    public var targetSound:FlxSound;
 
     public static inline function makeManager(?targetSound:FlxSound) {
         return new CutsceneManager(targetSound);
@@ -75,6 +85,14 @@ class CutsceneManager extends EventHandler {
     override public function start() {
         if (targetSound != null) targetSound.play(true);
         super.start();
+    }
+
+    override function destroy() {
+        super.destroy();
+        if (targetSound != null) {
+            targetSound.stop();
+            targetSound = null;
+        }
     }
 
     var startSoundOffset:Float = 0;
@@ -95,9 +113,9 @@ class CutsceneManager extends EventHandler {
         active = false;
     }
 
-    override function _check() {
+    override function callEvents() {
         syncSound();
-        callEvents();
+        super.callEvents();
     }
 
     function syncSound() {

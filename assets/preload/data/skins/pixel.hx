@@ -1,6 +1,6 @@
 function postCreateDialogue() {
     State.openDialogueFunc = function () {
-        var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+        var black:FlxSprite = new FlxSprite(-100, -100).makeRect(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
         black.scrollFactor.set();
         add(black);
     

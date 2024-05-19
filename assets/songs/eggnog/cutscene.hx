@@ -8,7 +8,7 @@ function startCutscene(onEnd)
 {
     if (onEnd)
     {
-        var blackScreen:FlxSprite = new FlxSprite(-900, -450).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.fromRGB(0,0,0));
+        var blackScreen:FlxSprite = new FlxSprite(-900, -450).makeRect(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
         add(blackScreen);
         blackScreen.scrollFactor.set();
         State.camHUD.visible = false;

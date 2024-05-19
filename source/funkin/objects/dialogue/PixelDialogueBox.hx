@@ -60,6 +60,7 @@ class PixelDialogueBox extends DialogueBoxBase
 		var data:PixelBox = boxTypes.get(boxType);
 
 		box = new FlxSpriteExt().loadImage('skins/${data.box}', false, null, null, HIGH);
+		box.antialiasing = false;
 		box.scrollFactor.set();
 		box.addAnim('normalOpen', data.openAnim);
 		box.playAnim('normalOpen');
@@ -69,6 +70,7 @@ class PixelDialogueBox extends DialogueBoxBase
 		add(box);
 
 		handSelect = new FlxSpriteExt(FlxG.width * 0.82, FlxG.height * 0.81).loadImage('skins/pixel/hand_textbox', false, null, null, HIGH);
+		handSelect.antialiasing = false;
 		handSelect.scrollFactor.set();
 		handSelect.addAnim('enter', 'nextLine', 12);
 		handSelect.addAnim('load', 'waitLine', 12, true);

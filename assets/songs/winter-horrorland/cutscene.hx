@@ -6,7 +6,7 @@ function createPost()
 
 function startCutscene()
 {
-    var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+    var blackScreen:FlxSprite = new FlxSprite(0, 0).makeRect(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
     add(blackScreen);
     blackScreen.scrollFactor.set();
     State.camHUD.visible = false;

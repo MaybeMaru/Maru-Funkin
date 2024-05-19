@@ -282,7 +282,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 			}
 		}
 
-		var bitmap = new BitmapData(width, height, true, color);
+		var bitmap = new BitmapData(width, height, color.alpha != 255, color);
 		imageKey = key;
 
 		@:privateAccess

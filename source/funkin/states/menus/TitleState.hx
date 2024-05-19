@@ -43,7 +43,7 @@ class TitleState extends MusicBeatState
 
 		titleGroup = new Group();
 		add(titleGroup);
-		titleGroup.add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
+		titleGroup.add(new FlxSpriteExt().makeRect(FlxG.width, FlxG.height, FlxColor.BLACK));
 
 		logoBump = new FunkinSprite('title/logoBumpin', [-115,-100]);
 		logoBump.addAnim('idle', 'logo bumpin');
