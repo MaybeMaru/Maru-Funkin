@@ -18,15 +18,15 @@ abstract class EventHandler extends flixel.FlxBasic
         events.sort((a, b) -> Std.int(a.time - b.time));
     }
 
-    public function pushStep(step:Int = 0, callback:()->Void) {
+    public function pushStep(step:Float = 0, callback:()->Void) {
         pushEvent(step * Conductor.stepCrochetMills, callback);
     }
 
-    public function pushBeat(beat:Int = 0, callback:()->Void) {
+    public function pushBeat(beat:Float = 0, callback:()->Void) {
         pushEvent(beat * Conductor.crochetMills, callback);
     }
 
-    public function pushSection(section:Int = 0, callback:()->Void) {
+    public function pushSection(section:Float = 0, callback:()->Void) {
         pushEvent(section * Conductor.sectionCrochetMills, callback);
         //Song.getSectionTime(PlayState.SONG, section) TODO: maybe??
     }
@@ -54,10 +54,14 @@ abstract class EventHandler extends flixel.FlxBasic
         active = true;
     }
     
-    override function update(elapsed:Float) {
-        super.update(elapsed);
-        position += elapsed * 1000;
+    override function update(elapsed:Float)
+    {
+        updatePosition();
         callEvents();
+    }
+
+    function updatePosition() {
+        position += (FlxG.elapsed * 1000);
     }
 
     public var destroyOnComplete:Bool = true;

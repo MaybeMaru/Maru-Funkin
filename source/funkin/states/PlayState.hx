@@ -388,8 +388,8 @@ class PlayState extends MusicBeatState
 		startedCountdown = seenCutscene = true;
 
 		if (!notesGroup.skipStrumIntro) {
-			notesGroup.strumLineNotes.fastForEach((strum, i) ->
-			FlxTween.tween(strum, {y: StrumLineGroup.strumLineY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)}));
+			notesGroup.opponentStrums.introStrums();
+			notesGroup.playerStrums.introStrums();
 		}
 
 		Conductor.songPosition = -Conductor.crochet * 5;

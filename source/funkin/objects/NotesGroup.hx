@@ -113,6 +113,8 @@ class NotesGroup extends Group
 			boyfriend = game.boyfriend;
 			dad = game.dad;
 		}
+
+		initStrumline();
         
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
@@ -205,19 +207,21 @@ class NotesGroup extends Group
 		});
     }
 
-    public function init(startPos:Float = -5000) {
+	function initStrumline() {
 		StrumLineGroup.strumLineY = getPref('downscroll') ? FlxG.height - 150 : 50;
 		
-		opponentStrums = new StrumLineGroup(0, skipStrumIntro);
+		opponentStrums = new StrumLineGroup(0);
 		add(opponentStrums);
 		
-		playerStrums = new StrumLineGroup(1, skipStrumIntro);
+		playerStrums = new StrumLineGroup(1);
 		add(playerStrums);
 
 		grpNoteSplashes = new SplashGroup();
 		add(grpNoteSplashes);
+	}
 
-        //Make Song
+	// Make the song
+    public function init(startPos:Float = -5000) {
 		Conductor.songPosition = startPos;
 		generateSong();
     }

@@ -2,7 +2,8 @@ package funkin.util.frontend;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
-class ModchartManager extends EventHandler {
+class ModchartManager extends EventHandler
+{
     private var strumLines:Map<Int, StrumLineGroup> = [];
     
     public function new():Void {
@@ -19,6 +20,10 @@ class ModchartManager extends EventHandler {
         return new ModchartManager();
     }
 
+    /**
+      * GETTING / SETTING STRUMS
+     **/
+
     inline public function setStrumLine(id:Int = 0, strumline:StrumLineGroup):Void {
         strumLines.set(id, strumline);
     }
@@ -31,8 +36,22 @@ class ModchartManager extends EventHandler {
         return getStrumLine(strumlineID)?.members[strumID] ?? null;
     }
 
+    /**
+      * STRUM MOVEMENT
+     **/
+
     inline public function setStrumPos(l:Int = 0, s:Int = 0, ?X:Float, ?Y:Float):Void {
         getStrum(l,s).setPosition(X,Y);
+    }
+
+    inline public function moveStrum(l:Int = 0, s:Int = 0, X:Float = 0, Y:Float = 0):Void {
+        var strum = getStrum(l, s);
+        strum.x += X;
+        strum.y += Y;
+    }
+
+    inline public function offsetStrum(l:Int = 0, s:Int = 0, X:Float = 0, Y:Float = 0):Void {
+        moveStrum(l, s, -X, -Y);
     }
 
     inline public function tweenStrum(l:Int = 0, s:Int = 0, ?values:Dynamic, time:Float = 1.0, ?settings:Dynamic) {
@@ -43,17 +62,21 @@ class ModchartManager extends EventHandler {
         return tweenStrum(l,s, {x: X, y:Y}, time, {ease: ease ?? FlxEase.linear});
     }
 
+    /**
+      * STRUM EFFECTS
+     **/
+
+    // TODO: add the typical modchart effects like drunk, wavy n all that shit
+
     inline public function setStrumLineSin(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startY:Float) {
-        for (i in 0... getStrumLine(l).members.length)
+        for (i in 0...getStrumLine(l).members.length)
             setStrumSin(l, i, offPerNote * i, size, startY);
     }
 
     inline public function setStrumLineCos(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startX:Float) {
-        for (i in 0... getStrumLine(l).members.length)
+        for (i in 0...getStrumLine(l).members.length)
             setStrumCos(l, i, offPerNote * i, size, startX);
     }
-
-    // Requires the manager to be added to the state to work
 
     inline public function setStrumSin(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
         final strum = getStrum(l, s);
@@ -77,15 +100,20 @@ class ModchartManager extends EventHandler {
 
     var sinStrums:Array<NoteStrum> = [];
     var cosStrums:Array<NoteStrum> = [];
-    
-    var timeElapsed:Float = 0.0;
-    var speed:Float = 1.0;
+
+    public var speed:Float = 1.0;
+    var startTick:Float = 0; // Game tick the modchart started at, for cosine stuff
+
+    override function start() {
+        startTick = FlxG.game.ticks;
+        super.start();
+    }
 
     override function update(elapsed:Float)
     {
         super.update(elapsed);
-        timeElapsed = timeElapsed + (elapsed * speed);
-        timeElapsed = timeElapsed % FunkMath.DOUBLE_PI;
+
+        final timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
 
         if (cosStrums.length > 0) {
             cosStrums.fastForEach((strum, i) -> {
@@ -98,5 +126,9 @@ class ModchartManager extends EventHandler {
                 strum.y = (strum.modchart.startY) + (FunkMath.sin(timeElapsed + (strum.modchart.sinOff)) * (strum.modchart.sinSize));
             });
         }
+    }
+
+    override function updatePosition() {
+        position = Conductor.songPosition;
     }
 }

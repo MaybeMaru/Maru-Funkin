@@ -7,28 +7,28 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
     var startX:Float = 0;
     var offsetY:Float = 0;
 
-    public function new(p:Int = 0, skipIntro:Bool = false, lanes:Int = Conductor.NOTE_DATA_LENGTH) {
+    public function new(p:Int = 0, lanes:Int = Conductor.NOTE_DATA_LENGTH) {
         super(9);
         startX = NoteUtil.noteWidth * 0.666 + (FlxG.width * 0.5) * p;
         offsetY = Preferences.getPref('downscroll') ? 10 : -10;
         
         final isPlayer:Bool = p == 1;
         for (i in 0...lanes) {
-			final strumNote = addStrum(i, skipIntro);
+			final strumNote = addStrum(i);
 			ModdingUtil.addCall('generateStrum', [strumNote, isPlayer]);
 		}
     }
 
     public static final DEFAULT_CONTROL_CHECKS:Array<InputType->Bool> = [
-        function (t:InputType) return Controls.getKey('NOTE_LEFT', t),
-        function (t:InputType) return Controls.getKey('NOTE_DOWN', t),
-        function (t:InputType) return Controls.getKey('NOTE_UP', t),
-        function (t:InputType) return Controls.getKey('NOTE_RIGHT', t),
+        (t:InputType) -> return Controls.getKey('NOTE_LEFT', t),
+        (t:InputType) -> return Controls.getKey('NOTE_DOWN', t),
+        (t:InputType) -> return Controls.getKey('NOTE_UP', t),
+        (t:InputType) -> return Controls.getKey('NOTE_RIGHT', t)
     ];
 
     static inline var seperateWidth:Int = NoteUtil.noteWidth + 5;
 
-    public function insertStrum(position:Int = 0, skipIntro:Bool = true) {
+    public function insertStrum(position:Int = 0) {
         if (members.length >= 9) return null; // STOP
         for (i in position...members.length) {
             final strum = members[i];
@@ -36,10 +36,18 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
             strum.x += seperateWidth;
             strum.ID++;
         }
-        return addStrum(position, skipIntro);
+        return addStrum(position);
     }
 
-    public function addStrum(noteData:Int = 0, skipIntro:Bool = true) {
+    public function introStrums() {
+        members.fastForEach((strum, i) -> {
+            strum.alpha = 0;
+			strum.y += offsetY;
+            FlxTween.tween(strum, {y: strum.y - offsetY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
+        });
+    }
+
+    public function addStrum(noteData:Int = 0) {
         if (members.length >= 9) return null; // STOP
         final strumX:Float =  startX + seperateWidth * noteData;
 		final strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
@@ -48,11 +56,6 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
 		strumNote.scrollFactor.set();
         add(strumNote);
         initPos.push(strumNote.getPosition());
-			
-		if (!skipIntro) {
-			strumNote.alpha = 0;
-			strumNote.y += offsetY;
-		}
 
         if (noteData < DEFAULT_CONTROL_CHECKS.length) {
             strumNote.controlFunction = DEFAULT_CONTROL_CHECKS[noteData];
