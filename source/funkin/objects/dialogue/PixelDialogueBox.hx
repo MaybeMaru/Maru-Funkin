@@ -81,6 +81,7 @@ class PixelDialogueBox extends DialogueBoxBase
 		handSelect.alpha = 0;
 
 		swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
+		swagDialogue.antialiasing = false;
 		swagDialogue.font = 'Pixel Arial 11 Bold';
 		swagDialogue.borderStyle = SHADOW;
 		swagDialogue.color = 0xFF3F2021;

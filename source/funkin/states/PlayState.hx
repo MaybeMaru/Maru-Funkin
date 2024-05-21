@@ -268,9 +268,6 @@ class PlayState extends MusicBeatState
 		camGame.zoom = defaultCamZoom;
 		snapCamera();
 
-		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
-		FlxG.fixedTimestep = false;
-
 		healthBar = new FunkBar(0, !getPref('downscroll') ? FlxG.height * 0.9 : FlxG.height * 0.1, SkinUtil.getAssetKey("healthBar"));
 		healthBar.screenCenter(X);
 		add(healthBar);

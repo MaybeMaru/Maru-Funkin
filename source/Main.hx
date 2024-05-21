@@ -26,6 +26,9 @@ class InitState extends FlxState
 		lime.app.Application.current.onExit.add((code:Int) -> DiscordClient.shutdown());
         #end
 
+		FlxG.worldBounds.set(-10, -10, FlxG.width + 20, FlxG.height + 20);
+		FlxG.fixedTimestep = false;
+
 		FlxG.switchState(new funkin.Preloader());
     }
 }
