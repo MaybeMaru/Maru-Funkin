@@ -559,10 +559,10 @@ class PlayState extends MusicBeatState
 			}
 
 			if (allowIconEasterEgg) if (justPressed.NINE)
-					changeOldIcon();
+				changeOldIcon();
 
 			if (justPressed.ONE) if (CoolUtil.debugMode)
-					endSong();
+				endSong();
 
 			#if DEV_TOOLS
 			if (justPressed.SIX) {

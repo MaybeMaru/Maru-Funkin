@@ -256,23 +256,33 @@ class Paths
 	inline static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
 	{
 		var image = image(key, library, false, useTexture, lodLevel);
+		var frames = FlxAtlasFrames.findFrame(image);
+		if (frames != null)
+			return frames;
+		
 		var xml = CoolUtil.getFileContent(file('images/$key.xml', library));
-
 		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSparrow(image, xml)));
 	}
 
 	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
 	{
 		var image = image(key, library, false, useTexture, lodLevel);
-		var txt = CoolUtil.getFileContent(file('images/$key.txt', library));
+		var frames = FlxAtlasFrames.findFrame(image);
+		if (frames != null)
+			return frames;
 
+		var txt = CoolUtil.getFileContent(file('images/$key.txt', library));
 		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSpriteSheetPacker(image, txt)));
 	}
 
-	inline static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames {
+	inline static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	{
 		var image = image(key, library, false, useTexture, lodLevel);
+		var frames = FlxAtlasFrames.findFrame(image);
+		if (frames != null)
+			return frames;
+
 		var json = CoolUtil.getFileContent(file('images/$key.json', library));
-		
 		return __checkLodFrames(getFrames(image, () -> return JsonUtil.getAsepritePacker(image, json)));
 	}
 
