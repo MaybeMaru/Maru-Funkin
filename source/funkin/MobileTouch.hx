@@ -7,7 +7,12 @@ import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import flixel.input.FlxInput;
 
-typedef MobileLayout = Map<MobileButtonID, FlxPoint>;
+typedef MobileLayout = Map<MobileButtonID, MobileButtonData>;
+
+typedef MobileButtonData = {
+    var p:FlxPoint;
+    var ?a:Float;
+}
 
 enum abstract MobileLayoutID(Int) from Int to Int {
     var NONE = 0;
@@ -37,27 +42,28 @@ class MobileTouch extends Sprite
     static final layouts:Map<MobileLayoutID, MobileLayout> =
     [
         STORY_MODE => [
-            UP => FlxPoint.get(20, 100),
-            DOWN => FlxPoint.get(20, 400),
-            LEFT => FlxPoint.get(0, 0),
-            RIGHT => FlxPoint.get(0, 0),
-            ACCEPT => FlxPoint.get(0, 0),
-            BACK => FlxPoint.get(0, 0)
+            UP => {p: FlxPoint.get(0.025, 0.12)},
+            DOWN => {p: FlxPoint.get(0.025, 0.4)},
+            LEFT => {p: FlxPoint.get(0.65, 0.65), a: 0}, // Hide to look like ingame buttons
+            RIGHT => {p: FlxPoint.get(0.9, 0.65), a: 0},
+            ACCEPT => {p: FlxPoint.get(0.45, 0.65), a: 0},
+            BACK => {p: FlxPoint.get(0.85, 0.025)}
         ],
 
         FREEPLAY => [
-            UP => FlxPoint.get(20, 100),
-            DOWN => FlxPoint.get(20, 400),
-            LEFT => FlxPoint.get(0, 0),
-            RIGHT => FlxPoint.get(0, 0),
-            ACCEPT => FlxPoint.get(0, 0),
-            BACK => FlxPoint.get(0, 0)
+            UP => {p: FlxPoint.get(0, 0)},
+            DOWN => {p: FlxPoint.get(0, 0)},
+            LEFT => {p: FlxPoint.get(0, 0)},
+            RIGHT => {p: FlxPoint.get(0, 0)},
+            ACCEPT => {p: FlxPoint.get(0, 0)},
+            BACK => {p: FlxPoint.get(0, 0)}
         ],
 
         BASIC_MENU => [
-            UP => FlxPoint.get(20, 100),
-            DOWN => FlxPoint.get(20, 400),
-            ACCEPT => FlxPoint.get(0, 0)
+            UP => {p: FlxPoint.get(20, 100)},
+            DOWN => {p: FlxPoint.get(20, 400)},
+            ACCEPT => {p: FlxPoint.get(0, 0)},
+            BACK => {p: FlxPoint.get(0, 0)}
         ]
     ];
 
@@ -79,12 +85,14 @@ class MobileTouch extends Sprite
         var layout = layouts.get(value);
 
         for (i in 0...7) {
-            var point:Null<FlxPoint> = layout.get(i);
-            if (point != null) {
+            var data = layout.get(i);
+            if (data != null) {
                 var button:MobileButton = getButton(i);
                 button.visible = true;
-                button.x = point.x;
-                button.y = point.y;
+                button.x = data.p.x * (FlxG.stage.fullScreenWidth - 50);
+                button.y = data.p.y * (FlxG.stage.fullScreenHeight - 50);
+                button.alphaMult = data.a ?? 1.0;
+                button.alpha = 0.2 * button.alphaMult;
             }
         }
         
@@ -177,8 +185,8 @@ class MobileTouch extends Sprite
                 uiButtons.fastForEach((button, i) -> {
                     if (button.visible) {
                         button.update(elapsed);
-                        if (button.pressed) button.alpha = 0.4;
-                        else                button.alpha = FlxMath.lerp(button.alpha, 0.2, elapsed);
+                        if (button.pressed) button.alpha = 0.4 * button.alphaMult;
+                        else                button.alpha = FlxMath.lerp(button.alpha, 0.2 * button.alphaMult, elapsed);
                     }
                 });
         }
@@ -239,6 +247,8 @@ class MobileButton extends Sprite
         addEventListener(TouchEvent.TOUCH_END, endTouch);
         addEventListener(TouchEvent.TOUCH_OUT, endTouch);
     }
+
+    public var alphaMult:Float = 1;
 
     public function update(elapsed:Float) {
         if (justPressed) if (!_begin) justPressed = false;
