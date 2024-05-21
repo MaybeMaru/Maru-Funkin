@@ -450,13 +450,20 @@ class PlayState extends MusicBeatState
 
 		ModdingUtil.addCall('startSong');
 
-		if (!paused) {
-			Conductor.play();
-			Conductor.sync();
-		}
-
-		Conductor.setPitch(Conductor.songPitch);
 		Conductor.volume = 1;
+		Conductor.setPitch(Conductor.songPitch);
+		Conductor.sync();
+		Conductor.play();
+
+		#if html5
+		// Dont know, dont ask
+		FlxG.signals.preUpdate.addOnce(() -> {
+			Conductor.pause();
+			Conductor.setPitch(Conductor.songPitch);
+			Conductor.sync();
+			Conductor.play();
+		});
+		#end
 
 		// Song duration in a float, useful for the time left feature
 		songLength = Conductor.inst.length;
