@@ -48,17 +48,17 @@ class PauseSubState extends MusicBeatSubstate {
 		});
 	}
 
-	public function init() {
+	public function init()
+	{
 		pauseMusic.volume = 0;
 		pauseMusic.play(true);
 		pauseMusic.time = FlxG.random.int(0, pauseLength);
 
-		for (i in 0...pauseItems.length) {
-			final item = pauseItems[i];
+		pauseItems.fastForEach((item, i) -> {
 			item.alpha = 0.00001;
 			item.y = 15 + 32 * i;
 			FlxTween.tween(item, {alpha: 1, y: item.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3 * (i + 1)});
-		}
+		});
 		
 		final curTime = FlxStringUtil.formatTime(Math.max(Conductor.songPosition, 0) / 1000);
 		timeLeft.text = "Time left: " + curTime + " / " + maxTime;
@@ -66,10 +66,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 		_bgSprite.alpha = 0.00001;
 		FlxTween.tween(_bgSprite, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut});
-
-		for (i in 0...items.length) {
-			items[i].setPosition(-100 * i, (70 * i) + 200);
-		}
+		items.fastForEach((item, i) -> item.setPosition(-100 * i, (70 * i) + 200));
 
 		coolDown = 0.1;
 		curSelected = 0;
@@ -81,7 +78,8 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var coolDown:Float = 0.1; //Controllers have a lil lag
 
-	override function update(elapsed:Float):Void {
+	override function update(elapsed:Float):Void
+	{
 		if (pauseMusic.volume < 0.6) {
 			pauseMusic.volume += 0.01 * elapsed;
 			pauseMusic.volume = FlxMath.bound(pauseMusic.volume, 0, 0.6);
@@ -92,45 +90,67 @@ class PauseSubState extends MusicBeatSubstate {
 		if (getKey('UI_UP', JUST_PRESSED)) 		changeSelection(-1);
 		if (getKey('UI_DOWN', JUST_PRESSED)) 	changeSelection(1);
 
-		if (coolDown > 0) coolDown-=elapsed;
-		else {
-			if (getKey('ACCEPT', JUST_PRESSED)) {
-				switch (menuItems[curSelected]) {
-					case "Resume":	
-						CoolUtil.resumeSounds();
-						pauseMusic.stop();	
-						close();
-
-					case "Restart song":
-						PlayState.clearCache = false;
-						CoolUtil.resetState();
-
-					case "Options":			
-						PlayState.clearCache = false;
-						OptionsState.fromPlayState = true;
-						CoolUtil.switchState(new OptionsState());
-
-					case "Exit to menu":
-						PlayState.clearCache = true;
-						PlayState.clearCacheData = null;
-						PlayState.deathCounter = 0;
-						CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
-				}
-			}
+		if (coolDown > 0)
+		{
+			coolDown -= elapsed;
 		}
+		else if (getKey('ACCEPT', JUST_PRESSED))
+		{
+			selectItem(menuItems[curSelected]);
+		}
+	}
+
+	// Easier to customize with hscript
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function selectItem(item:String) {
+		switch (item) {
+			case "Resume":	 		resumeSong();
+			case "Restart song": 	restartSong();
+			case "Options":			openOptions();
+			case "Exit to menu":	exitSong();
+		}
+	}
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function resumeSong() {
+		CoolUtil.resumeSounds();
+		pauseMusic.stop();	
+		close();
+	}
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function restartSong() {
+		PlayState.clearCache = false;
+		CoolUtil.resetState();
+	}
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function openOptions() {
+		PlayState.clearCache = false;
+		OptionsState.fromPlayState = true;
+		CoolUtil.switchState(new OptionsState());
+	}
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function exitSong() {
+		PlayState.clearCache = true;
+		PlayState.clearCacheData = null;
+		PlayState.deathCounter = 0;
+		CoolUtil.switchState((PlayState.isStoryMode) ? new StoryMenuState() : new FreeplayState());
+	}
+
+	#if MODS_ALLOWED dynamic #else @:unreflective inline #end
+	function changeSelection(change:Int = 0):Void {
+		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
+		items.fastForEach((item, i) -> {
+			item.targetY = i - curSelected;
+			item.alpha = (item.targetY == 0) ? 1 : 0.6;
+		});
 	}
 
 	override function destroy():Void {
 		pauseMusic.destroy();
 		super.destroy();
-	}
-
-	inline function changeSelection(change:Int = 0):Void {
-		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
-		for (i in 0...items.length) {
-			final item = items[i];
-			item.targetY = i - curSelected;
-			item.alpha = (item.targetY == 0) ? 1 : 0.6;
-		}
 	}
 }
