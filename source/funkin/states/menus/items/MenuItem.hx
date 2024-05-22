@@ -16,10 +16,12 @@ class MenuItem extends SpriteGroup
 		weekSpr = Paths.exists(png, IMAGE) ?
 		new FlxSpriteExt().loadImage('storymenu/weeks/$weekName') :
 		new FlxText(0, 0, 0, weekName).setFormat(Paths.font("phantommuff"), 80);
-
 		add(weekSpr);
-		screenCenter(X);
 
+		if (weekSpr.height > 100)
+			weekSpr.offset.y += (weekSpr.height - 100) * 0.5;
+
+		screenCenter(X);
 		this.targetY = targetY;
 		y = (targetY * 120) + 480;
 

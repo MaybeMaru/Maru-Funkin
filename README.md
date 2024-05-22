@@ -24,8 +24,8 @@ Documentation on how to make mods is being done on the repo's github wiki!<br>
 Ill add more stuff as time goes on and i add more features.
 
 > [!WARNING]
-> HashLink builds do not work with gpu textures and may crash randomly.<br>
-> Unless you want quick compilation testing, please compile to Windows or Linux.
+> Hashlink builds are ment to be used as quick compilation testing.<br>
+> Neither gpu textures or hscript works with it, please compile to Windows or Linux instead.
 
 ## Stuff you will need to compile
 

@@ -318,7 +318,7 @@ class PlayState extends MusicBeatState
 
 	#if hxvlc public var video:FlxVideo; #end
 
-	public function startVideo(file:String, ?completeFunc:()->Void):Void
+	public function startVideo(file:String, ?completeFunc:()->Void):#if hxvlc FlxVideo #else Dynamic #end
 	{
 		completeFunc ??= () -> startCountdown();
 		
@@ -328,12 +328,16 @@ class PlayState extends MusicBeatState
 		video.onEndReached.add(() -> {
 			video.dispose();
 			video = null;
+			this.visible = true;
 			completeFunc();
 		});
 		video.play();
+		this.visible = false; // Stop rendering the state n overlay the video
+		return video;
 		#else
 		ModdingUtil.warningPrint("Videos are not allowed on this build.");
 		completeFunc();
+		return null;
 		#end
 	}
 
