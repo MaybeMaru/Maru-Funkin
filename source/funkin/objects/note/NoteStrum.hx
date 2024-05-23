@@ -1,20 +1,12 @@
 package funkin.objects.note;
 
+import funkin.util.frontend.ModchartManager.ModchartData;
 import funkin.objects.note.BasicNote.INoteData;
 
-typedef ModchartValues = {
-	var startX:Float;
-	var startY:Float;
-
-	var sinOff:Float;
-	var sinSize:Float;
-	var cosOff:Float;
-	var cosSize:Float;
-}
-
-class NoteStrum extends FlxSpriteExt implements INoteData {
+class NoteStrum extends FlxSpriteExt implements INoteData
+{
     public var noteData:Int = 0;
-	public var modchart:ModchartValues;
+	public var modchart:ModchartData;
 	
 	public var swagWidth:Float = 110;
 	public var swagHeight:Float = 110;
@@ -35,25 +27,16 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 		super(x,y);
 		this.noteData = noteData;
 		loadSkin();
-
-		modchart = {
-			startX: 0.0,
-			startY: 0.0,
-
-			sinOff: 0.0,
-			sinSize: 50.0,
-			cosOff: 0.0,
-			cosSize: 50.0
-		}
 	}
 
 	override function destroy() {
 		super.destroy();
 		modchart = null;
+		controlFunction = null;
 	}
 
 	public function loadSkin(?skin:String):Void {
-		skin = skin ?? SkinUtil.curSkin;
+		skin ??= SkinUtil.curSkin;
 		if (curSkin != skin) {
 			animOffsets = new Map<String, FlxPoint>();
 			curSkin = skin;
@@ -73,12 +56,11 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 		}
 	}
 
-	public dynamic function applyOffsets():Void {
-		var curAnim = animation.curAnim;
-		if (curAnim != null) {
+	dynamic public function applyOffsets():Void {
+		if (animation.curAnim != null) {
 			updateHitbox();
 			centerOffsets();
-			var animOffset = animOffsets.get(curAnim.name);
+			var animOffset = animOffsets.get(animation.curAnim.name);
 			if (animOffset != null) {
 				var scaleDiff = getScaleDiff();
 				offset.add(animOffset.x * scaleDiff.x, animOffset.y * scaleDiff.y);
@@ -89,6 +71,16 @@ class NoteStrum extends FlxSpriteExt implements INoteData {
 	public inline function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
 		playAnim(anim + CoolUtil.directionArray[data ?? noteData], forced);
 		applyOffsets();
+	}
+
+	public var xModchart:Float = 0.0;
+    public var yModchart:Float = 0.0;
+
+	override function getScreenPosition(?result:FlxPoint, ?camera:FlxCamera):FlxPoint
+	{
+		result = super.getScreenPosition(result, camera);
+		result.add(xModchart, yModchart);
+		return result;
 	}
 
 	override public function update(elapsed:Float):Void {

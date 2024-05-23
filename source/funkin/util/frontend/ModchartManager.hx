@@ -2,7 +2,17 @@ package funkin.util.frontend;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
-class ModchartManager extends EventHandler
+enum abstract ModchartModifiers(String) from String to String {
+    var COS = "cos";
+    var SIN = "sin";
+}
+
+typedef ModchartData = {
+    var cos:Array<Float>; // [size, offset]
+	var sin:Array<Float>; // [size, offset]
+}
+
+class ModchartManager extends EventHandler implements IMusicHit
 {
     private var strumLines:Map<Int, StrumLineGroup> = [];
     
@@ -63,72 +73,89 @@ class ModchartManager extends EventHandler
     }
 
     /**
-      * STRUM EFFECTS
+      * STRUM MODIFIERS
      **/
 
     // TODO: add the typical modchart effects like drunk, wavy n all that shit
 
-    inline public function setStrumLineSin(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startY:Float) {
-        for (i in 0...getStrumLine(l).members.length)
-            setStrumSin(l, i, offPerNote * i, size, startY);
+    public function setValue(value:String, data:Dynamic) {
+        for (strumline in strumLines.keys())
+            setStrumLineValue(strumline, value, data);
     }
 
-    inline public function setStrumLineCos(l:Int = 0, offPerNote:Float = 0.0, size:Float = 50.0, ?startX:Float) {
-        for (i in 0...getStrumLine(l).members.length)
-            setStrumCos(l, i, offPerNote * i, size, startX);
+    inline public function setStrumLineValue(strumline:Int, value:String, data:Dynamic) {
+        for (i in 0...getStrumLine(strumline).members.length)
+            setStrumValue(strumline, i, value, data);
     }
 
-    inline public function setStrumSin(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startY:Float) {
-        final strum = getStrum(l, s);
-        sinStrums.remove(strum);
-
-        strum.modchart.startY = startY ?? strum.y;
-        strum.modchart.sinOff = off;
-        strum.modchart.sinSize = size;
-        sinStrums.push(strum);
+    inline public function setStrumValue(strumline:Int, id:Int, value:String, data:Dynamic) {
+        final data = resolveData(getStrum(strumline, id));
+        switch (value.toLowerCase().trim()) {
+            case COS: data.cos = cast data;
+            case SIN: data.sin = cast data;
+        }
     }
-
-    inline public function setStrumCos(l:Int = 0, s:Int = 0, off:Float = 0.0, size:Float = 50.0, ?startX:Float) {
-        final strum = getStrum(l, s);
-        cosStrums.remove(strum);
-
-        strum.modchart.startX = startX ?? strum.x;
-        strum.modchart.cosOff = off;
-        strum.modchart.cosSize = size;
-        cosStrums.push(strum);
-    }
-
-    var sinStrums:Array<NoteStrum> = [];
-    var cosStrums:Array<NoteStrum> = [];
-
+    
     public var speed:Float = 1.0;
     var startTick:Float = 0; // Game tick the modchart started at, for cosine stuff
+    var timeElapsed:Float;
 
     override function start() {
         startTick = FlxG.game.ticks;
         super.start();
     }
 
+    override function updatePosition() {
+        position = Conductor.songPosition;
+    }
+
     override function update(elapsed:Float)
     {
         super.update(elapsed);
 
-        final timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
+        timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
 
-        if (cosStrums.length > 0) {
-            cosStrums.fastForEach((strum, i) -> {
-                strum.x = (strum.modchart.startX) + (FunkMath.cos(timeElapsed + (strum.modchart.cosOff)) * (strum.modchart.cosSize));
-            });
-        }
-
-        if (sinStrums.length > 0) {
-            sinStrums.fastForEach((strum, i) -> {
-                strum.y = (strum.modchart.startY) + (FunkMath.sin(timeElapsed + (strum.modchart.sinOff)) * (strum.modchart.sinSize));
+        for (key => strumline in strumLines) {
+            strumline.members.fastForEach((strum, i) -> {
+                if (strum.modchart != null)
+                    manageStrum(strum, strum.modchart);
             });
         }
     }
+    
+    // TODO: add shit with these
+    
+    public function stepHit(curStep:Int):Void {}
 
-    override function updatePosition() {
-        position = Conductor.songPosition;
+    public function beatHit(curBeat:Int):Void {}
+
+    public function sectionHit(curSection:Int):Void {}
+
+    // Backend crap
+
+    function resolveData(strum:NoteStrum):ModchartData
+    {
+        if (strum.modchart == null) {
+            strum.modchart = {
+                sin: [0.0, 0.0],
+                cos: [0.0, 0.0]
+            }
+        }
+
+        return strum.modchart;
+    }
+
+    function manageStrum(strum:NoteStrum, data:ModchartData)
+    {
+        strum.xModchart = 0;
+        strum.yModchart = 0;
+
+        if (data.cos[0] != 0) {
+            strum.xModchart += (FunkMath.cos(timeElapsed + data.cos[1]) * data.cos[0]);
+        }
+        
+        if (data.sin[0] != 0) {
+            strum.yModchart += (FunkMath.sin(timeElapsed + data.sin[1]) * data.sin[0]);
+        }
     }
 }
