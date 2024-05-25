@@ -24,8 +24,18 @@ class Sustain extends BasicNote
     }
 
     override function set_noteSpeed(value:Float):Float {
-        noteSpeed = value;
-        updateSusLength();
+        if (noteSpeed != value) {
+            noteSpeed = value;
+            updateSusLength();
+        }
+        return value;
+    }
+
+    override function set_speedMult(value:Float):Float {
+        if (speedMult != value) {
+            speedMult = value;
+            updateSusLength();
+        }
         return value;
     }
 
@@ -48,7 +58,7 @@ class Sustain extends BasicNote
         moving = true;        
         color = (value && mustHit) ? MISS_COLOR : 0xFFFFFFFF;
         offset.y = cutHeight * _approachCos;
-        update(0.0);
+        update(0);
         return missedPress = value;
     }
 
@@ -61,8 +71,8 @@ class Sustain extends BasicNote
         }
     }
 
-    public var percentLeft(default, null):Float = 0.0;
-    public var cutHeight(default, null):Float = 0.0;
+    public var percentLeft(default, null):Float = 0;
+    public var cutHeight(default, null):Float = 0;
     public var susEndHeight:Int = 15;
 
     public function pressSustain():Void {
@@ -77,7 +87,7 @@ class Sustain extends BasicNote
             clipRect.y = cutHeight;
             
             // Sustain is finished
-            if (cutHeight <= (-repeatHeight + (susEndHeight * noteSpeed * 0.45)))
+            if (cutHeight <= (-repeatHeight + (susEndHeight * calcSpeed() * 0.45)))
                 removeNote();
         }
     }
@@ -92,7 +102,7 @@ class Sustain extends BasicNote
 
     public inline function setSusLength(mills:Float = 0.0):Float
     {
-        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * (noteSpeed < 1.0 ? noteSpeed : 1.0));
+        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * Math.max(calcSpeed(), 1.0));
         
         if (clipRect != null)
             clipRect.height = repeatHeight;
@@ -100,7 +110,7 @@ class Sustain extends BasicNote
         // Kill too short sustains
         if (Std.int(repeatHeight) <= Std.int(NoteUtil.noteHeight * 0.501)) {
             removeNote();
-            return 0.0;
+            return 0;
         }
 
         return repeatHeight;

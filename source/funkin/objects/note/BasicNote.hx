@@ -24,6 +24,15 @@ class BasicNote extends SmartSprite implements INoteData
     function set_noteSpeed(value:Float):Float {
         return noteSpeed = value;
     }
+
+    public var speedMult(default, set):Float = 0;
+    function set_speedMult(value:Float):Float {
+        return speedMult = value;
+    }
+
+    public inline function calcSpeed() {
+        return noteSpeed + (noteSpeed * speedMult);
+    }
     
     public var isSustainNote(default, set):Bool = false;
     inline function set_isSustainNote(value:Bool):Bool {
@@ -119,12 +128,12 @@ class BasicNote extends SmartSprite implements INoteData
 
     // Converts song milliseconds to a position on screen
     inline public function getMillPos(mills:Float):Float {
-        return mills * (0.45 * noteSpeed);
+        return mills * (0.45 * calcSpeed());
     }
 
     // Converts a position on screen to song milliseconds
     inline public function getPosMill(pos:Float):Float { 
-        return pos / (0.45 * noteSpeed);
+        return pos / (0.45 * calcSpeed());
     }
 
     public var mustHit:Bool = true;

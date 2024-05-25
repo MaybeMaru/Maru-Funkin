@@ -31,6 +31,7 @@ typedef SpriteJson = {
 */
 class FlxSpriteExt extends FlxSkewedSprite
 {
+	@:unreflective
 	public static final DEFAULT_SPRITE:SpriteJson = {
 		anims: [],
 		imagePath: "keoiki",
@@ -40,6 +41,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 		flipX: false,
 	}
 
+	@:unreflective
 	public static final DEFAULT_ANIM:SpriteAnimation = {
 		animName: 'idle',
 		animFile: 'idle',

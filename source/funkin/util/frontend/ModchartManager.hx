@@ -1,24 +1,36 @@
 package funkin.util.frontend;
+import funkin.objects.note.BasicNote;
+import funkin.objects.NotesGroup;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
 enum abstract ModchartModifiers(String) from String to String {
     var COS = "cos";
     var SIN = "sin";
+    var BOOST = "boost";
 }
 
 typedef ModchartData = {
     var cos:Array<Float>; // [size, offset]
 	var sin:Array<Float>; // [size, offset]
+    var boost:Array<Float>; // [acceleration, startTime]
 }
 
 class ModchartManager extends EventHandler implements IMusicHit
 {
+    @:unreflective
+    static final DEFAULT_DATA:ModchartData = {
+        cos: [0, 0],
+        sin: [0, 0],
+        boost: [0, 200]
+    }
+
     private var strumLines:Map<Int, StrumLineGroup> = [];
     
     public function new():Void {
         super();
         strumLines = new Map<Int, StrumLineGroup>();
+        destroyOnComplete = false;
     }
 
     override function destroy():Void {
@@ -88,11 +100,12 @@ class ModchartManager extends EventHandler implements IMusicHit
             setStrumValue(strumline, i, value, data);
     }
 
-    inline public function setStrumValue(strumline:Int, id:Int, value:String, data:Dynamic) {
+    inline public function setStrumValue(strumline:Int, id:Int, value:String, valueData:Dynamic) {
         final data = resolveData(getStrum(strumline, id));
         switch (value.toLowerCase().trim()) {
-            case COS: data.cos = cast data;
-            case SIN: data.sin = cast data;
+            case COS: data.cos = valueData;
+            case SIN: data.sin = valueData;
+            case BOOST: data.boost = valueData;
         }
     }
     
@@ -135,13 +148,9 @@ class ModchartManager extends EventHandler implements IMusicHit
 
     function resolveData(strum:NoteStrum):ModchartData
     {
-        if (strum.modchart == null) {
-            strum.modchart = {
-                sin: [0.0, 0.0],
-                cos: [0.0, 0.0]
-            }
-        }
-
+        if (strum.modchart == null)
+            strum.modchart = Reflect.copy(DEFAULT_DATA);
+           
         return strum.modchart;
     }
 
@@ -150,12 +159,35 @@ class ModchartManager extends EventHandler implements IMusicHit
         strum.xModchart = 0;
         strum.yModchart = 0;
 
+        // COS MODIFIER
         if (data.cos[0] != 0) {
             strum.xModchart += (FunkMath.cos(timeElapsed + data.cos[1]) * data.cos[0]);
         }
         
+        // SIN MODIFIER
         if (data.sin[0] != 0) {
             strum.yModchart += (FunkMath.sin(timeElapsed + data.sin[1]) * data.sin[0]);
+        }
+
+        // BOOST MODIFIER
+        if (data.boost[0] != 0)
+        {
+            NotesGroup.instance.notes.members.fastForEach((note, i) ->
+            {
+                if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
+                {
+                    final diff = note.strumTime - Conductor.songPosition;
+
+                    if (diff <= data.boost[1]) {
+
+                        var gay = (1 - (diff / data.boost[1])) * data.boost[0];
+
+                        note.speedMult = gay;
+                        if (note.child != null)
+                            note.child.speedMult = gay;
+                    }
+                }
+            });
         }
     }
 }

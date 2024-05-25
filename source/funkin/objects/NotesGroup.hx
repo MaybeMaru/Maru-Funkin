@@ -389,10 +389,10 @@ class NotesGroup extends Group
 
 	inline function spawnNotes():Void { // Generate notes
 		if (curSpawnNote != null) {
-			final zoom = camera.zoom;
+			final zoom = 1 / camera.zoom;
 			
 			while (unspawnNotes.length > 0 &&
-				((curSpawnNote.strumTime - Conductor.songPosition) < (((1500 / curSpawnNote.noteSpeed) / zoom) * curSpawnNote.spawnMult)))
+				((curSpawnNote.strumTime - Conductor.songPosition) < (((1500 / curSpawnNote.calcSpeed()) * zoom) * curSpawnNote.spawnMult)))
 			{
 				curSpawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [curSpawnNote]);
