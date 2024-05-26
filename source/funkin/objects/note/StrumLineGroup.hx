@@ -1,6 +1,7 @@
 package funkin.objects.note;
 
-class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
+class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
+{
     public var initPos:Array<FlxPoint> = [];
     public static var strumLineY:Float = 50;
     
@@ -45,6 +46,45 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum> {
 			strum.y += offsetY;
             FlxTween.tween(strum, {y: strum.y - offsetY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
         });
+    }
+
+    public function checkStrums():Void {
+        members.fastForEach((strum, i) -> {
+			if (strum.animation.curAnim != null) // Lil null check
+			{
+				if (strum.getControl(JUST_PRESSED)) if (!strum.animation.curAnim.name.startsWith('confirm'))
+					strum.playStrumAnim('pressed');
+				
+				if (!strum.getControl())
+					strum.playStrumAnim('static');
+			}
+		});
+    }
+
+    public function checkCharSinging(char:Character):Void {
+        if (char == null) return;
+        if (char.animation.curAnim == null) return;
+
+        if (char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT))
+        {
+            final name:String = char.animation.curAnim.name;
+            
+            // Character is over-singing
+            if (name.startsWith('sing')) if (!name.endsWith('miss'))
+            {
+                var isHolding:Bool = false;
+                members.fastForEach((strum, i) ->
+                {
+                    if (strum.animation.curAnim != null) if (strum.animation.curAnim.name.startsWith('confirm')) {
+                        isHolding = true;
+                        break;
+                    }
+                });
+    
+                if (!isHolding)
+                    char.restartDance();
+            }
+        }
     }
 
     public function addStrum(noteData:Int = 0) {

@@ -71,10 +71,13 @@ class CharSelectSubstate extends MusicBeatSubstate
     
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (getKey('UI_UP', JUST_PRESSED))		changeSelection(-1);
-		if (getKey('UI_DOWN', JUST_PRESSED))	changeSelection(1);
-        if (getKey('UI_LEFT', JUST_PRESSED))	changeFolder(-1);
-		if (getKey('UI_RIGHT', JUST_PRESSED))	changeFolder(1);
+
+        if (getKey('UI_UP', JUST_PRESSED))		    changeSelection(-1);
+        else if (getKey('UI_DOWN', JUST_PRESSED))	changeSelection(1);
+        
+        if (getKey('UI_LEFT', JUST_PRESSED))	    changeFolder(-1);
+        else if (getKey('UI_RIGHT', JUST_PRESSED))	changeFolder(1);
+        
         if (getKey('ACCEPT', JUST_PRESSED))     selectChar();
         else if (getKey('BACK', JUST_PRESSED))  close();
     }

@@ -597,52 +597,13 @@ class NotesGroup extends Group
 	inline function checkStrumAnims():Void
 	{
 		if (!inBotplay) {
-			checkStrums(playerStrums.members);
-			checkOverSinging(boyfriend, playerStrums);
+			playerStrums.checkStrums();
+			playerStrums.checkCharSinging(boyfriend);
 		}
 
 		if (!dadBotplay) {
-			checkStrums(opponentStrums.members);
-			checkOverSinging(dad, opponentStrums);
-		}
-	}
-
-	function checkStrums(array:Array<NoteStrum>):Void
-	{
-		array.fastForEach((strum, i) -> {
-			if (strum.animation.curAnim != null) // Lil null check
-			{
-				if (strum.getControl(JUST_PRESSED)) if (!strum.animation.curAnim.name.startsWith('confirm'))
-					strum.playStrumAnim('pressed');
-				
-				if (!strum.getControl())
-					strum.playStrumAnim('static');
-			}
-		});
-	}
-
-	function checkOverSinging(char:Character, strums:StrumLineGroup):Void
-	{
-		if (char == null) return;
-		if (char.animation.curAnim == null) return;
-		
-		var name:String = char.animation.curAnim.name;
-		var overSinging:Bool =
-		(char.holdTimer > (Conductor.stepCrochetMills * Conductor.STEPS_PER_BEAT)
-		&& name.startsWith('sing')
-		&& !name.endsWith('miss'));
-
-		if (overSinging) {
-			var isHolding:Bool = false;
-			strums.members.fastForEach((strum, i) -> {
-				if (strum.animation.curAnim.name.startsWith('confirm')) {
-					isHolding = true;
-					break;
-				}
-			});
-
-			if (!isHolding)
-				char.restartDance();
+			opponentStrums.checkStrums();
+			opponentStrums.checkCharSinging(dad);
 		}
 	}
 
