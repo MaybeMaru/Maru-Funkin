@@ -102,7 +102,7 @@ class Sustain extends BasicNote
 
     public inline function setSusLength(mills:Float = 0.0):Float
     {
-        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * Math.max(calcSpeed(), 1.0));
+        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * (calcSpeed() * 0.45));
         
         if (clipRect != null)
             clipRect.height = repeatHeight;

@@ -116,7 +116,6 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 					cast(basic, IMusicHit).stepHit(curStep);
 			}
 		});
-
 		
 		ModdingUtil.addCall('stateStepHit', [curStep]);
 	}
@@ -144,8 +143,11 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 	}
 
 	override function destroy() {
-		instance = null;
 		ModdingUtil.addCall('stateDestroy');
+
+		if (instance == this)
+			instance = null;
+
 		super.destroy();
 		CoolUtil.gc(true);
 	}

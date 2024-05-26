@@ -13,7 +13,7 @@ enum abstract ModchartModifiers(String) from String to String {
 typedef ModchartData = {
     var cos:Array<Float>; // [size, offset]
 	var sin:Array<Float>; // [size, offset]
-    var boost:Array<Float>; // [acceleration, startTime]
+    var boost:Array<Float>; // [acceleration, startPosition]
 }
 
 class ModchartManager extends EventHandler implements IMusicHit
@@ -177,14 +177,17 @@ class ModchartManager extends EventHandler implements IMusicHit
                 if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
                 {
                     final diff = note.strumTime - Conductor.songPosition;
+                    final pos = diff * (0.45 * note.noteSpeed);
 
-                    if (diff <= data.boost[1]) {
+                    if (pos <= data.boost[1])
+                    {
+                        // Boost acceleration crap
+                        final targetTime = data.boost[1] / (0.45 * note.noteSpeed);
+                        final mult = (1 - (diff / targetTime)) * data.boost[0];
 
-                        var gay = (1 - (diff / data.boost[1])) * data.boost[0];
-
-                        note.speedMult = gay;
+                        note.speedMult = mult;
                         if (note.child != null)
-                            note.child.speedMult = gay;
+                            note.child.speedMult = mult;
                     }
                 }
             });

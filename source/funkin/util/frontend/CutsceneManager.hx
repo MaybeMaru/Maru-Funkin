@@ -31,6 +31,11 @@ abstract class EventHandler extends flixel.FlxBasic
         //Song.getSectionTime(PlayState.SONG, section) TODO: maybe??
     }
 
+    public function new() {
+        super();
+        pause();
+    }
+
     public function start() {
         FlxG.state.add(this);
         active = true;

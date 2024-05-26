@@ -31,7 +31,7 @@ class BasicNote extends SmartSprite implements INoteData
     }
 
     public inline function calcSpeed() {
-        return noteSpeed + (noteSpeed * speedMult);
+        return Math.max(noteSpeed + (noteSpeed * speedMult), 0.1);
     }
     
     public var isSustainNote(default, set):Bool = false;
@@ -70,7 +70,7 @@ class BasicNote extends SmartSprite implements INoteData
     inline function calcApproachTrig(value:Float):Void {
         final rads = value * FunkMath.TO_RADS;
         _approachCos = FunkMath.cos(rads);
-        _approachSin = FunkMath.sin(rads);
+        _approachSin = -FunkMath.sin(rads);
     }
     
     public var spawnMult:Float = 1.0;
@@ -114,7 +114,7 @@ class BasicNote extends SmartSprite implements INoteData
         setPositionToStrum();
         noteMove = distanceToStrum(); // Position with strumtime
         y -= noteMove * _approachCos;
-        x -= noteMove * -_approachSin;
+        x -= noteMove * _approachSin;
     }
 
     inline public function setPositionToStrum():Void {
