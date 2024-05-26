@@ -163,26 +163,30 @@ class ScriptConsole extends ResizableSprite {
         script.__runCode(code.endsWith(";") ? code : code + ";");
     }
 
-    public function print(p:Dynamic, type:PrintType = NONE) {
+    public function print(p:Dynamic, type:PrintType = NONE)
+    {
         // Move last prints down
         for (i in 0...printsLength-1) {
             final id:Int = printsLength-i-1;
-
             final print = prints[id];
             final lastPrint = prints[id-1];
-
-            print.text = lastPrint.text;
-            print.type = lastPrint.type;
-            print.alpha = lastPrint.alpha;
-            print.timer = lastPrint.timer;
+    
+            // Only update visible prints
+            if (print.y <= 620) {
+                print.text = lastPrint.text;
+                print.type = lastPrint.type;
+                print.alpha = lastPrint.alpha;
+                print.timer = lastPrint.timer;
+            } else {
+                print.hide();
+            }
         }
-
+    
         // Display the new print
-        final text:String = Std.string(p);
-        prints[0].text = text;
+        prints[0].text = Std.string(p);
         prints[0].type = type;
         prints[0].resetTimer();
-
+    
         // Move down all the prints
         var Y = 50;
         for (i in 0...printsLength) {

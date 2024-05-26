@@ -1,14 +1,8 @@
 package funkin.util.frontend;
-import funkin.objects.note.BasicNote;
+
 import funkin.objects.NotesGroup;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
-
-enum abstract ModchartModifiers(String) from String to String {
-    var COS = "cos";
-    var SIN = "sin";
-    var BOOST = "boost";
-}
 
 typedef ModchartData = {
     var cos:Array<Float>; // [size, offset]
@@ -90,22 +84,28 @@ class ModchartManager extends EventHandler implements IMusicHit
 
     // TODO: add the typical modchart effects like drunk, wavy n all that shit
 
-    public function setValue(value:String, data:Dynamic) {
+    public function setValue(value:String, ?data:Dynamic) {
         for (strumline in strumLines.keys())
             setStrumLineValue(strumline, value, data);
     }
 
-    inline public function setStrumLineValue(strumline:Int, value:String, data:Dynamic) {
+    inline public function setStrumLineValue(strumline:Int, value:String, ?data:Dynamic) {
         for (i in 0...getStrumLine(strumline).members.length)
             setStrumValue(strumline, i, value, data);
     }
 
-    inline public function setStrumValue(strumline:Int, id:Int, value:String, valueData:Dynamic) {
+    inline public function setStrumValue(strumline:Int, id:Int, value:String, ?valueData:Dynamic) {
         final data = resolveData(getStrum(strumline, id));
-        switch (value.toLowerCase().trim()) {
-            case COS: data.cos = valueData;
-            case SIN: data.sin = valueData;
-            case BOOST: data.boost = valueData;
+        value = value.toLowerCase().trim();
+        
+        if (Reflect.hasField(data, value))
+        {
+            if (valueData != null)
+                Reflect.setProperty(data, value, valueData);
+        }
+        else
+        {
+            ModdingUtil.warningPrint("Couldn't find modchart value for " + '"$value"');
         }
     }
     
