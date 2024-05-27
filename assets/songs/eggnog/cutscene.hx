@@ -2,6 +2,7 @@ function endSong()
 {
     if (PlayState.isStoryMode)
         State.inCutscene = true;
+    else closeScript();
 }
 
 function startCutscene(onEnd)

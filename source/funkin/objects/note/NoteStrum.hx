@@ -26,7 +26,9 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
 		super(x,y);
 		this.noteData = noteData;
+		ID = noteData;
 		loadSkin();
+		updateHitbox();
 	}
 
 	override function destroy() {

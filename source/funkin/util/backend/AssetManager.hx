@@ -389,6 +389,10 @@ class AssetManager
 		var asset = Asset.fromAsset(graphic, key);
 		setAsset(key, asset, staticAsset);
 
+		#if (lime_cffi && lime_cairo && !macro)
+		lime.graphics.cairo.CairoPattern.createForSurface(graphic.bitmap.getSurface());
+		#end
+
 		return graphic;
 	}
 

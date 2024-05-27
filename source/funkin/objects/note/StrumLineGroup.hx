@@ -2,8 +2,9 @@ package funkin.objects.note;
 
 class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
 {
-    public var initPos:Array<FlxPoint> = [];
     public static var strumLineY:Float = 50;
+
+    public var initPos:Array<FlxPoint> = [];
     
     var startX:Float = 0;
     var offsetY:Float = 0;
@@ -30,13 +31,17 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
     static inline var seperateWidth:Int = NoteUtil.noteWidth + 5;
 
     public function insertStrum(position:Int = 0) {
-        if (members.length >= 9) return null; // STOP
+        if (members.length >= 9)
+            return null; // STOP
+        
         for (i in position...members.length) {
-            final strum = members[i];
-            if (strum == null) continue;
-            strum.x += seperateWidth;
-            strum.ID++;
+            if (members[i] == null)
+                continue;
+            
+            members[i].x += seperateWidth;
+            members[i].ID++;
         }
+
         return addStrum(position);
     }
 
@@ -87,21 +92,22 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
         }
     }
 
-    public function addStrum(noteData:Int = 0) {
-        if (members.length >= 9) return null; // STOP
-        final strumX:Float =  startX + seperateWidth * noteData;
-		final strumNote:NoteStrum = new NoteStrum(strumX, strumLineY, noteData);
-		strumNote.ID = noteData;
-		strumNote.updateHitbox();
-		strumNote.scrollFactor.set();
-        add(strumNote);
-        initPos.push(strumNote.getPosition());
+    public function addStrum(noteData:Int = 0)
+    {
+        if (members.length >= 9) // STOP
+            return null;
+        
+        var x:Float = startX + seperateWidth * noteData;
+		var strum:NoteStrum = new NoteStrum(x, strumLineY, noteData);
+        initPos.push(strum.getPosition());
+		strum.scrollFactor.set();
+        add(strum);
 
         if (noteData < DEFAULT_CONTROL_CHECKS.length) {
-            strumNote.controlFunction = DEFAULT_CONTROL_CHECKS[noteData];
+            strum.controlFunction = DEFAULT_CONTROL_CHECKS[noteData];
         }
 
-        return strumNote;
+        return strum;
     }
 
     override function destroy() {

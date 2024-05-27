@@ -2,6 +2,7 @@ function createPost()
 {
     if (PlayState.isStoryMode && !PlayState.seenCutscene)
         State.inCutscene = true;
+    else closeScript();
 }
 
 function startCutscene()
@@ -9,7 +10,6 @@ function startCutscene()
     State.showUI(false);
     State.camGame.visible = false;
     State.camHUD.visible = false;
-    //State.visible = false;
 
     var manager = makeCutsceneManager();
     
@@ -30,6 +30,7 @@ function startCutscene()
             onComplete: function(twn:FlxTween)
             {
                 State.startCountdown();
+                closeScript();
             }
         });
     });
