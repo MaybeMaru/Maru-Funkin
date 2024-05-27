@@ -8,9 +8,7 @@ function startCutscene(onEnd)
 {
     if (onEnd)
     {
-        var blackScreen:FlxSprite = new FlxSprite(-900, -450).makeRect(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-        add(blackScreen);
-        blackScreen.scrollFactor.set();
+        State.camGame.visible = false;
         State.camHUD.visible = false;
         playSound("Lights_Shut_off");
 

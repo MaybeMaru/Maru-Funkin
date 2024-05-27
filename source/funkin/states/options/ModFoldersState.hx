@@ -6,13 +6,21 @@ import haxe.io.Path;
 import funkin.util.backend.SongZip;
 #end
 
-class ModFoldersState extends MusicBeatState {
+class ModFoldersState extends MusicBeatState
+{
     var modFolderButtons:TypedGroup<SpriteButton>;
     var modItemsGrp:TypedGroup<ModItem>;
     var sliderPos:Float = 0;
 
-    override function create():Void {
+    // Find changes for reload
+    var initEnabled:Map<String, Bool>;
+    var initMusic:String;
+
+    override function create():Void
+    {
         FlxG.mouse.visible = true;
+        initEnabled = ModdingUtil.activeMods.copy();
+        initMusic = Paths.musicFolder("freakyMenu");
 
         var bg:FlxSpriteExt = new FlxSpriteExt().loadImage("menuBGBlue");
         bg.setScale(1.1);
@@ -33,11 +41,12 @@ class ModFoldersState extends MusicBeatState {
         modFolderButtons = new TypedGroup<SpriteButton>();
         add(modFolderButtons);
 
-        var folderOptions:Array<String> = ['Reload', 'Enable', 'Disable'];
-        var folderCallbacks:Array<()->Void> = [reloadFolders, enableAll, disableAll];
-        for (i in 0...folderOptions.length) {
-            var daButton:SpriteButton = new SpriteButton(975, (150 * i) + 50, folderOptions[i], folderCallbacks[i]);
-            modFolderButtons.add(daButton);
+        for (i in 0...3) {
+            var button:SpriteButton = new SpriteButton(975, (150 * i) + 50,
+                ["Reload", "Enable", "Disable"][i],
+                [reloadFolders, enableAll, disableAll][i]
+            );
+            modFolderButtons.add(button);
         }
 
         super.create();
@@ -86,12 +95,29 @@ class ModFoldersState extends MusicBeatState {
     override function update(elapsed:Float):Void {
         super.update(elapsed);
         
-        if (getKey('BACK', JUST_PRESSED)) {
+        if (getKey('BACK', JUST_PRESSED))
+        {
+            for (mod => active in initEnabled)
+            {
+                // Changed settings, reload mods shit
+                if (active != ModdingUtil.getModActive(mod)) {
+                    ModdingUtil.reloadMods();
+                    SkinUtil.setCurSkin();
+                    NoteUtil.initTypes();
+                    EventUtil.initEvents();
+
+                    // Mod overrides music
+                    if (Paths.musicFolder("freakyMenu") != initMusic)
+                        CoolUtil.playMusic('freakyMenu');
+
+                    break;
+                }
+            }
+
             switchState(new OptionsState());
         }
-
-        if(FlxG.mouse.wheel != 0 && (modItemsGrp.length > 3)) {
-            final limit:Int = Std.int(modItemsGrp.length-3);
+        else if (modItemsGrp.length > 3) if (FlxG.mouse.wheel != 0) {
+            final limit:Int = modItemsGrp.length - 3;
             sliderPos = FlxMath.bound(sliderPos + FlxG.mouse.wheel, -limit, 0);
 		}
 

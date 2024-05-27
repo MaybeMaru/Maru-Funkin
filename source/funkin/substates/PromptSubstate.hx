@@ -42,11 +42,9 @@ class PromptSubstate extends MusicBeatSubstate
             return;
         }
 
-        if (canClick && (acceptRequirement == null ? getKey('ACCEPT', JUST_PRESSED) : acceptRequirement())) {
-            if (acceptFunction != null) {
-                acceptFunction();
-                close();
-            }
+        if (canClick) if (acceptRequirement != null ? acceptRequirement() : getKey('ACCEPT', JUST_PRESSED)) {
+            if (acceptFunction != null) acceptFunction();
+            close();
         }
     }
 }
