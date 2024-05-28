@@ -108,7 +108,7 @@ class Sustain extends BasicNote
             clipRect.height = repeatHeight;
 
         // Kill too short sustains
-        if (Std.int(repeatHeight) <= Std.int(NoteUtil.noteHeight * 0.501)) {
+        if (repeatHeight < NoteUtil.noteHeight * 0.5) {
             removeNote();
             return 0;
         }

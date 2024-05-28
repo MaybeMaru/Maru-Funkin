@@ -322,14 +322,11 @@ class CoolUtil {
 		__pauseState();
 	}
 
-	inline public static function cacheImage(image:FlxGraphicAsset, ?library:String, ?camera:FlxCamera):FlxGraphicAsset {
+	inline public static function cacheImage(image:FlxGraphicAsset, ?library:String):FlxGraphicAsset {
 		if (image != null)
 		{
 			if (image is String)
 				image = Paths.image(image, library);
-	
-			if (camera != null) if (image is FlxGraphic)
-				camera.startQuadBatch(image, false, false, null, false, null);
 		}
 		return image;
 	}
@@ -361,11 +358,7 @@ class CoolUtil {
     }
 
     inline public static function checkDiff(noteDiff:Float, safeOffset:Int):Bool {
-        var millisecondDiff = getMillisecondDiff(safeOffset);
-        return (
-			(noteDiff > (Conductor.safeZoneOffset * millisecondDiff)) ||
-			(noteDiff < (Conductor.safeZoneOffset * -millisecondDiff))
-			);
+        return (noteDiff > (Conductor.safeZoneOffset * getMillisecondDiff(safeOffset)));
     }
 
     inline public static function getMillisecondDiff(milliseconds:Int):Float {

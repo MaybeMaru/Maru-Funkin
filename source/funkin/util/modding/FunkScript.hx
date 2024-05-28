@@ -309,14 +309,11 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 
 		set('cacheCharacter', function(name:String):Character {
 			final cachedChar = new Character(0, 0, name);
-			if ((PlayState.instance != null) && (cachedChar.frame != null)) {
-				CoolUtil.cacheImage(cachedChar.frame.parent, null, PlayState.instance.camGame);
-			}
 			return cachedChar;
 		});
 
-		set('cacheImage', function(image:FlxGraphicAsset, ?library:String, ?camera:FlxCamera):FlxGraphicAsset {
-			return CoolUtil.cacheImage(image, library, camera);
+		set('cacheImage', function(image:FlxGraphicAsset, ?library:String):FlxGraphicAsset {
+			return CoolUtil.cacheImage(image, library);
 		});
 
 		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {

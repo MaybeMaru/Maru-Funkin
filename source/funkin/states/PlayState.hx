@@ -164,7 +164,6 @@ class PlayState extends MusicBeatState
 
 		// Cache Gameover Character
 		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
-		if (deadChar.frame != null) CoolUtil.cacheImage(deadChar.frame.parent, null, camGame);
 		GameOverSubstate.cacheSounds();
 
 		// GET THE STAGE JSON SHIT
