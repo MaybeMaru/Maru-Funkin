@@ -166,12 +166,12 @@ class ModchartManager extends EventHandler
 
         // COS MODIFIER
         if (data.cos[0] != 0) {
-            strum.xModchart += (FunkMath.cos((timeElapsed + data.cos[2]) * data.cos[1]) * data.cos[0]);
+            strum.xModchart += (FunkMath.cos((timeElapsed + (data.cos[2] * 0.001)) * data.cos[1]) * data.cos[0]);
         }
         
         // SIN MODIFIER
         if (data.sin[0] != 0) {
-            strum.yModchart += (FunkMath.sin((timeElapsed + data.sin[2]) * data.cos[1]) * data.sin[0]);
+            strum.yModchart += (FunkMath.sin((timeElapsed + (data.sin[2] * 0.001)) * data.sin[1]) * data.sin[0]);
         }
 
         // BOOST MODIFIER
