@@ -225,10 +225,11 @@ class AssetManager
 		#if web
 		AlphabetFont.cachedAlphabets.clear();
 		NoteUtil.skinSpriteMap.clear();
-		#end
-		
+		#else
 		clearStaticCache(false, clearGraphics, clearSounds);
 		clearTempCache(false, clearGraphics, clearSounds);
+		#end
+
 		CoolUtil.gc(true);
 	}
 

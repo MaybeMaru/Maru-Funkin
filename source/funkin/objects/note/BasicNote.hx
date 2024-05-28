@@ -118,8 +118,8 @@ class BasicNote extends SmartSprite implements INoteData
     }
 
     inline public function setPositionToStrum():Void {
-        y = targetStrum.y + yDisplace;
-        x = targetStrum.x + xDisplace;
+        y = targetStrum.y + targetStrum.yModchart + yDisplace;
+        x = targetStrum.x + targetStrum.xModchart + xDisplace;
     }
 
     inline public function distanceToStrum():Float {

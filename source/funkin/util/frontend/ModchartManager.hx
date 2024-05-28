@@ -5,12 +5,13 @@ import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
 typedef ModchartData = {
-    var cos:Array<Float>; // [size, offset]
-	var sin:Array<Float>; // [size, offset]
+    var cos:Array<Float>; // [size, speed, offset]
+	var sin:Array<Float>; // [size, speed, offset]
     var boost:Array<Float>; // [acceleration, startPosition]
+    // var beat:Array<Float>; // [size, speed]
 }
 
-class ModchartManager extends EventHandler implements IMusicHit
+class ModchartManager extends EventHandler
 {
     @:unreflective
     static final DEFAULT_DATA:ModchartData = {
@@ -122,6 +123,8 @@ class ModchartManager extends EventHandler implements IMusicHit
         position = Conductor.songPosition;
     }
 
+    override function beatHit(curBeat) {}
+
     override function update(elapsed:Float)
     {
         super.update(elapsed);
@@ -135,14 +138,6 @@ class ModchartManager extends EventHandler implements IMusicHit
             });
         }
     }
-    
-    // TODO: add shit with these
-    
-    public function stepHit(curStep:Int):Void {}
-
-    public function beatHit(curBeat:Int):Void {}
-
-    public function sectionHit(curSection:Int):Void {}
 
     // Backend crap
 
@@ -154,6 +149,16 @@ class ModchartManager extends EventHandler implements IMusicHit
         return strum.modchart;
     }
 
+    function forEachStrumNote(strum:NoteStrum, callback:Note->Void) {
+        NotesGroup.instance.notes.members.fastForEach((note, i) -> {
+            if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
+                callback(cast note);
+        });
+    }
+
+    // TODO: make a new modifiers system
+    // maybe make a basic modifier base and work up from there?
+
     function manageStrum(strum:NoteStrum, data:ModchartData)
     {
         strum.xModchart = 0;
@@ -161,34 +166,30 @@ class ModchartManager extends EventHandler implements IMusicHit
 
         // COS MODIFIER
         if (data.cos[0] != 0) {
-            strum.xModchart += (FunkMath.cos(timeElapsed + data.cos[1]) * data.cos[0]);
+            strum.xModchart += (FunkMath.cos((timeElapsed + data.cos[2]) * data.cos[1]) * data.cos[0]);
         }
         
         // SIN MODIFIER
         if (data.sin[0] != 0) {
-            strum.yModchart += (FunkMath.sin(timeElapsed + data.sin[1]) * data.sin[0]);
+            strum.yModchart += (FunkMath.sin((timeElapsed + data.sin[2]) * data.cos[1]) * data.sin[0]);
         }
 
         // BOOST MODIFIER
         if (data.boost[0] != 0)
         {
-            NotesGroup.instance.notes.members.fastForEach((note, i) ->
-            {
-                if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
+            forEachStrumNote(strum, (note) -> {
+                final diff = note.strumTime - Conductor.songPosition;
+                final pos = diff * (0.45 * note.noteSpeed);
+
+                if (pos <= data.boost[1])
                 {
-                    final diff = note.strumTime - Conductor.songPosition;
-                    final pos = diff * (0.45 * note.noteSpeed);
+                    // Boost acceleration crap
+                    final targetTime = data.boost[1] / (0.45 * note.noteSpeed);
+                    final mult = (1 - (diff / targetTime)) * data.boost[0];
 
-                    if (pos <= data.boost[1])
-                    {
-                        // Boost acceleration crap
-                        final targetTime = data.boost[1] / (0.45 * note.noteSpeed);
-                        final mult = (1 - (diff / targetTime)) * data.boost[0];
-
-                        note.speedMult = mult;
-                        if (note.child != null)
-                            note.child.speedMult = mult;
-                    }
+                    note.speedMult = mult;
+                    if (note.child != null)
+                        note.child.speedMult = mult;
                 }
             });
         }

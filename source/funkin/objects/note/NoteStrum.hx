@@ -28,7 +28,6 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		this.noteData = noteData;
 		ID = noteData;
 		loadSkin();
-		updateHitbox();
 	}
 
 	override function destroy() {
@@ -71,7 +70,8 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 	}
 
 	public inline function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
-		playAnim(anim + CoolUtil.directionArray[data ?? noteData], forced);
+		data ??= noteData;
+		playAnim(anim + CoolUtil.directionArray[data], forced);
 		applyOffsets();
 	}
 

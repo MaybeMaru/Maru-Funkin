@@ -12,8 +12,12 @@ class MusicBeatSubstate extends FlxSubState implements IMusicGetter
 		super(bgColor);
 		_bgSprite.active = false;
 		_bgSprite.scrollFactor.set();
-		if (bgColor == null) 	_bgSprite.visible = false; // Wont need to render this guy
-		if (createMusic) 		add(musicBeat = new MusicBeat(this));
+		
+		if (bgColor == null || bgColor == FlxColor.TRANSPARENT)
+			_bgSprite.visible = false; // Wont need to render this guy
+		
+		if (createMusic)
+			add(musicBeat = new MusicBeat(this));
 	}
 
 	public var _update:(Float)->Void;

@@ -1,11 +1,13 @@
 package funkin.util.frontend;
 
+import flixel.FlxBasic;
+
 typedef SimpleEvent = {
     var time:Float;
     var callback:()->Void;
 }
 
-abstract class EventHandler extends flixel.FlxBasic
+abstract class EventHandler extends FlxBasic implements IMusicHit
 {
     public var events:Array<SimpleEvent> = [];
     public var position:Float = 0;
@@ -18,6 +20,8 @@ abstract class EventHandler extends flixel.FlxBasic
         events.sort((a, b) -> Std.int(a.time - b.time));
     }
 
+    // TODO: call events on beatHit() n all that for more accuracy
+
     public function pushStep(step:Float = 0, callback:()->Void) {
         pushEvent(step * Conductor.stepCrochetMills, callback);
     }
@@ -28,7 +32,6 @@ abstract class EventHandler extends flixel.FlxBasic
 
     public function pushSection(section:Float = 0, callback:()->Void) {
         pushEvent(section * Conductor.sectionCrochetMills, callback);
-        //Song.getSectionTime(PlayState.SONG, section) TODO: maybe??
     }
 
     public function new() {
@@ -37,9 +40,11 @@ abstract class EventHandler extends flixel.FlxBasic
     }
 
     public function start() {
-        FlxG.state.add(this);
         active = true;
         callEvents();
+
+        // Fix shit getting added at the wrong times
+        FlxG.signals.preUpdate.addOnce(() -> FlxG.state.add(this));
     }
 
     override function destroy() {
@@ -58,6 +63,12 @@ abstract class EventHandler extends flixel.FlxBasic
     inline public function resume() {
         active = true;
     }
+
+    public function stepHit(curStep:Int):Void {}
+
+    public function beatHit(curBeat:Int):Void {}
+
+    public function sectionHit(curSection:Int):Void {}
     
     override function update(elapsed:Float)
     {

@@ -22,7 +22,8 @@ interface IMusicGetter extends IMusicHit {
 	public var curSectionDecimal(get, never):Float;
 }
 
-class MusicBeatState extends FlxUIState implements IMusicGetter {
+class MusicBeatState extends FlxUIState implements IMusicGetter
+{
 	public static var instance:MusicBeatState;
 	public static var curState:String;
 
@@ -30,11 +31,18 @@ class MusicBeatState extends FlxUIState implements IMusicGetter {
 
 	public function startTransition():Void {} // Called in CoolUtil
 
-	override function create():Void {
+	public function new(createMusic:Bool = true) {
+		super();
+		if (createMusic)
+			add(musicBeat = new MusicBeat(this));
+	}
+
+	override function create():Void
+	{
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);
+		
 		super.create();
-		add(musicBeat = new MusicBeat(this));
 
 		//State Scripts
 		if (!curState.endsWith("PlayState"))
