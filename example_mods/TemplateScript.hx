@@ -695,9 +695,12 @@ function openGameOverSubstate()
  * GameOverSubstate callbacks
  */
 
-function startGameOver()
+function startGameOver(instance:GameOverSubstate, character:Character, skinFolder:String)
 {
     // Called when the game over substate is created
+    // instance --> Current gameover substate instance
+    // character --> Gameover death animation character
+    // skinFolder --> Current gameover skin music folder
 }
 
 function musicGameOver()

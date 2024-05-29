@@ -10,19 +10,15 @@ enum abstract GameOverSound(Int) {
 
 class GameOverSubstate extends MusicBeatSubstate
 {
-	static var instance:GameOverSubstate;
+	public static var instance(default, null):GameOverSubstate;
+	static var soundsID:Map<GameOverSound, String> = [DEATH => "", MUSIC => "", MUSIC_END => ""];
+	
 	var char:Character;
 	var camFollow:FlxObject;
 
 	var skinFolder:String;
 	var deathSound:FlxSound;
-	var lockedOn:Bool = false;
-
-	static var soundsID:Map<GameOverSound, String> = [
-		DEATH => "",
-		MUSIC => "",
-		MUSIC_END => ""
-	];
+	var lockedOn:Bool = false;	
 
 	public static function cacheSounds():Void {
 		soundsID.set(DEATH, resolveSoundPath("fnf_loss_sfx", true));
@@ -94,7 +90,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollow.x = midPoint.x - char.camOffsets.x;
 		camFollow.y = midPoint.y - char.camOffsets.y;
 
-		ModdingUtil.addCall('startGameOver');
+		ModdingUtil.addCall('startGameOver', [instance, char, skinFolder]);
 	}
 
 	function lockCamToChar() {
