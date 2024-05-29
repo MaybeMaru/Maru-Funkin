@@ -1,5 +1,13 @@
 package funkin.substates;
 
+import openfl.media.Sound;
+
+enum abstract GameOverSound(Int) {
+	var DEATH = 0;
+	var MUSIC = 1;
+	var MUSIC_END = 2;
+}
+
 class GameOverSubstate extends MusicBeatSubstate
 {
 	static var instance:GameOverSubstate;
@@ -7,24 +15,49 @@ class GameOverSubstate extends MusicBeatSubstate
 	var camFollow:FlxObject;
 
 	var skinFolder:String;
-	var deathSound:FlxSound = null;
+	var deathSound:FlxSound;
 	var lockedOn:Bool = false;
 
+	static var soundsID:Map<GameOverSound, String> = [
+		DEATH => "",
+		MUSIC => "",
+		MUSIC_END => ""
+	];
+
 	public static function cacheSounds():Void {
-		var char = resolveChar();
-		var folder = resolveFolder(char);
-		Paths.sound(folder + "fnf_loss_sfx");
-		Paths.music(folder + "gameOverEnd");
-		Paths.music(folder + "gameOver");
+		soundsID.set(DEATH, resolveSoundPath("fnf_loss_sfx", true));
+		soundsID.set(MUSIC, resolveSoundPath("gameOver"));
+		soundsID.set(MUSIC_END, resolveSoundPath("gameOverEnd"));
+
+		Paths.sound(soundsID.get(DEATH));
+		Paths.music(soundsID.get(MUSIC));
+		Paths.music(soundsID.get(MUSIC_END));
 	}
 
 	inline static function resolveChar() {
-		return  PlayState.instance?.boyfriend ?? null;
+		return PlayState.instance?.boyfriend ?? null;
 	}
 
 	inline static function resolveFolder(?char:Character) {
 		var suffix = (char == null || char.gameOverSuffix == "") ? "default" : char.gameOverSuffix;
 		return "skins/" + (suffix.endsWith("/") ? suffix.substr(0, suffix.length - 1) : suffix) + "/";
+	}
+
+	static function resolveSoundPath(id:String, isSound:Bool = false):String {
+		final trySound = (path:String) -> {
+			var id = isSound ? Paths.soundFolder(path) : Paths.musicFolder(path);
+			if (Paths.exists(id, isSound ? SOUND : MUSIC)) {
+				return path;
+			}
+			return "";
+		}
+		
+		var curFolderSound = trySound(resolveFolder(resolveChar()) + id);
+		if (curFolderSound != "")
+			return curFolderSound;
+
+		// Using defaults, if this is also null then sowwy :<
+		return trySound(resolveFolder(null) + id);
 	}
 
 	public function new(x:Float, y:Float):Void {
@@ -51,7 +84,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;
 
-		deathSound = CoolUtil.playSound(skinFolder + 'fnf_loss_sfx');
+		deathSound = CoolUtil.playSound(soundsID.get(DEATH));
 		char.playAnim('firstDeath');
 
 		camFollow = new FlxObject();
@@ -82,7 +115,7 @@ class GameOverSubstate extends MusicBeatSubstate
 					lockCamToChar();
 		
 				if (char.animation.curAnim.finished) {
-					CoolUtil.playMusic(skinFolder + 'gameOver');
+					CoolUtil.playMusic(soundsID.get(MUSIC));
 					musicBeat.targetSound = FlxG.sound.music;
 					gameOverDance();
 					ModdingUtil.addCall('musicGameOver');
@@ -164,7 +197,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		var endSound = new FlxSound().loadEmbedded(Paths.music(skinFolder + 'gameOverEnd'));
+		var endSound = new FlxSound().loadEmbedded(Paths.music(soundsID.get(MUSIC_END)));
 		endSound.autoDestroy = true;
 		endSound.play();
 			
