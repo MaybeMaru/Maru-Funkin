@@ -102,13 +102,13 @@ class Preferences
     }
 
     public static inline function updateFramerate():Void
-        FlxG.drawFramerate = FlxG.updateFramerate = #if (mobile || web) 60; #else getPref('framerate'); #end
+        #if (mobile || web || vsync) {} #else FlxG.updateFramerate = FlxG.drawFramerate = getPref('framerate'); #end
 
     public static inline function updateFpsCounter():Void
-        #if !mobile Main.fpsCounter.visible = getPref('fps-counter'); #else {} #end
+        #if mobile {} #else Main.fpsCounter.visible = getPref('fps-counter'); #end
 
     public static inline function updateResolution():Void
-        #if desktop Main.resizeGame(getPref('resolution')); #else {} #end
+        #if !desktop {} #else Main.resizeGame(getPref('resolution')); #end
 
     public static inline function updateGpuTextures():Void
         #if TEXTURES_OFF {} #else AssetManager.gpuTextures = getPref('gpu-textures'); #end

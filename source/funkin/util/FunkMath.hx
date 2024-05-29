@@ -9,19 +9,23 @@ class FunkMath
 	public static inline var TO_RADS:Float = PI / 180;
 	public static inline var TO_DEGREES:Float = 180 / PI;
 
-    public static inline function sin(radians:Float) {
+	public static inline function isZero(value:Float):Bool {
+		return Math.abs(value) < 0.0001;
+	}
+
+    public static inline function sin(radians:Float):Float {
 		return #if FAST_MATH FlxMath.fastSin(radians); #else Math.sin(radians); #end
 	}
 
-	public static inline function cos(radians:Float) {
+	public static inline function cos(radians:Float):Float {
 		return #if FAST_MATH FlxMath.fastCos(radians); #else Math.cos(radians); #end
 	}
 
-	public static inline function sinAngle(angle:Float) {
+	public static inline function sinAngle(angle:Float):Float {
 		return sin(angle * TO_RADS);
 	}
 
-	public static inline function cosAngle(angle:Float) {
+	public static inline function cosAngle(angle:Float):Float {
 		return cos(angle * TO_RADS);
 	}
 

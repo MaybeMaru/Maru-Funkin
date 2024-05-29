@@ -219,7 +219,7 @@ class FlxSpriteExt extends FlxSkewedSprite
 
 	override function set_angle(value:Float):Float {
 		if (angle != value) {
-			if (value == 0) {
+			if (FunkMath.isZero(value)) {
 				_sinAngle = 0;
 				_cosAngle = 1;
 			}
@@ -353,12 +353,13 @@ class FlxSpriteExt extends FlxSkewedSprite
 		
 		FunkMath.scaleMatrix(_matrix, scale.x, scale.y);
 
-		if (angle != 0) {
+		if (!FunkMath.isZero(angle)) {
 			_matrix.rotateWithTrig(_cosAngle, _sinAngle);
 		}
 
-		if (skew.x != 0 || skew.y != 0) {
-			_skewMatrix.identity();
+		if (!skew.isZero()) {
+			_skewMatrix.a = _skewMatrix.d = 1;
+			_skewMatrix.tx = _skewMatrix.ty = 0;
 			_skewMatrix.b = Math.tan(skew.y * FunkMath.TO_RADS);
 			_skewMatrix.c = Math.tan(skew.x * FunkMath.TO_RADS);
 			_matrix.concat(_skewMatrix);
@@ -433,30 +434,38 @@ class FlxSpriteExt extends FlxSkewedSprite
 		{
 			if(existsOffsets(animation.curAnim.name))
 			{
-				var animPoint = animOffsets.get(animation.curAnim.name);
-				var point = CoolUtil.point;
-				point.x = animPoint.x;
-				point.y = animPoint.y;
+				final animPoint = animOffsets.get(animation.curAnim.name);
 				
-				if (!point.isZero() || forced) {
-					
-					if (flippedOffsets) point.x = -point.x; // Flip X
+				if (!animPoint.isZero() || forced)
+				{
+					var x:Float = animPoint.x;
+					var y:Float = animPoint.y;
+
+					// Flip X
+					if (flippedOffsets)
+						x = -x;
 					
 					if (scaleOffset) // Scale offset
 					{
 						var diff = getScaleDiff();
-						point.x = point.x * diff.x;
-						point.y = point.y * diff.y;
+						x = x * diff.x;
+						y = y * diff.y;
 					}
-					
-					if (angle != 0) // Angled offset
+
+					if (FunkMath.isZero(angle)) // Normal offset
 					{
 						offset.set(
-							(point.x * _cosAngle) + (point.y * -_sinAngle),
-							(point.x * _sinAngle) + (point.y * _cosAngle)
+							x,
+							y
 						);
 					}
-					else offset.set(point.x, point.y); // Normal offset
+					else // Rotated offset
+					{
+						offset.set(
+							(x * _cosAngle) + (y * -_sinAngle),
+							(x * _sinAngle) + (y * _cosAngle)
+						);
+					}
 				}
 			}
 		}
@@ -467,13 +476,16 @@ class FlxSpriteExt extends FlxSkewedSprite
 	}
 
 	public function addAnim(animName:String, animFile:String, animFramerate:Int = 24, animLoop:Bool = false, ?animIndices:Array<Int>, ?animOffsets:Array<Float>):Void {
+		animIndices ??= [];
+		animOffsets ??= [0, 0];
+		
 		setAnimData(animName, {
-			animName:animName,
-			animFile:animFile,
-			framerate:animFramerate,
-			loop:animLoop,
-			indices:animIndices ?? [],
-			offsets:animOffsets ?? [0,0]
+			animName: animName,
+			animFile: animFile,
+			framerate: animFramerate,
+			loop: animLoop,
+			indices: animIndices,
+			offsets: animOffsets
 		});
 	}
 

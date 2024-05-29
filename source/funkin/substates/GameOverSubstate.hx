@@ -84,7 +84,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		Conductor.songPosition = 0;
 		Conductor.bpm = 100;
 
-		deathSound = CoolUtil.playSound(soundsID.get(DEATH));
+		deathSound = soundsID.get(DEATH) != "" ? CoolUtil.playSound(soundsID.get(DEATH)) : new FlxSound();
 		char.playAnim('firstDeath');
 
 		camFollow = new FlxObject();
@@ -115,8 +115,11 @@ class GameOverSubstate extends MusicBeatSubstate
 					lockCamToChar();
 		
 				if (char.animation.curAnim.finished) {
-					CoolUtil.playMusic(soundsID.get(MUSIC));
-					musicBeat.targetSound = FlxG.sound.music;
+					if (soundsID.get(MUSIC) != "") {
+						CoolUtil.playMusic(soundsID.get(MUSIC));
+						musicBeat.targetSound = FlxG.sound.music;
+					}
+
 					gameOverDance();
 					ModdingUtil.addCall('musicGameOver');
 				}
@@ -194,12 +197,15 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		isEnding = true;
 		char.playAnim('deathConfirm', true);
+		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		var endSound = new FlxSound().loadEmbedded(Paths.music(soundsID.get(MUSIC_END)));
-		endSound.autoDestroy = true;
-		endSound.play();
+		if (soundsID.get(MUSIC_END) != "") {
+			var endSound = new FlxSound().loadEmbedded(Paths.music(soundsID.get(MUSIC_END)));
+			endSound.autoDestroy = true;
+			endSound.play();
+		}
 			
 		deathSound.stop();
 
