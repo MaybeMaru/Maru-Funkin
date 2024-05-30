@@ -9,9 +9,13 @@ import sys.thread.FixedThreadPool;
     TODO reuse threads instead of creating and killing threads all the time
 */
 
-class FunkThread { 
+class FunkThread
+{ 
+    public static inline var MAX_THREADS:Int = 6;
+    
     #if (sys && !mobile)
-    static var threadPool:FixedThreadPool = new FixedThreadPool(4);
+    
+    static var threadPool:FixedThreadPool = new FixedThreadPool(MAX_THREADS);
     
     public static function run(task:()->Void) {
         threadPool.run(task);

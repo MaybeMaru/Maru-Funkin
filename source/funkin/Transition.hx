@@ -157,9 +157,12 @@ class Transition extends ResizableSprite
     }
 
     @:noCompletion
-    private function __finishTrans() {
-        if (onComplete != null)
+    private function __finishTrans()
+    {
+        if (onComplete != null) {
             onComplete();
+            onComplete = null;
+        }
 
         if (inExit)
             visible = false;

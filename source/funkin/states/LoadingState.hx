@@ -8,6 +8,10 @@ class LoadingState extends MusicBeatState
 
     public var onComplete:()->Void;
 
+    public function new() {
+        super(false);
+    }
+
     public function init(stage:StageJson, characters:Array<String>, song:String)
     {
         #if desktop
@@ -16,6 +20,8 @@ class LoadingState extends MusicBeatState
         stageAssets = Stage.getStageAssets(stage);
         charAssets = [];
         songAssets = [];
+
+        characters = CoolUtil.removeDuplicates(characters);
 
         characters.fastForEach((char, i) -> {
             if (char != null) if (!addedAssets.contains(char))

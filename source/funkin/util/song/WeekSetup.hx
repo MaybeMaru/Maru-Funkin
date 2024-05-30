@@ -207,7 +207,7 @@ class WeekSetup
         var song = PlayState.SONG;
         
         var loadScreen:LoadingState = new LoadingState();
-        loadScreen.init(Stage.getJson(song.stage), song.players, song.song);
+        loadScreen.init(Stage.getJson(song.stage), song.players.copy(), song.song);
         
         // Pre-clear cache to make sure the loading screen stuff doesnt get disposed
         loadScreen.onStart = () -> {
@@ -221,6 +221,7 @@ class WeekSetup
         }        
 
         Conductor.stop();
+        
         if (FlxG.sound.music != null) {
             FlxG.sound.music.fadeOut(0.333);
         }

@@ -249,75 +249,70 @@ class AssetManager
 
 	public static function loadAsync(data:LoadData, ?onComplete:()->Void)
 	{
-		var stageImages = data.stageImages;
-		var charImages = data.charImages;
-		var songSounds = data.songSounds;
+		var bitmaps:Map<String, {bitmap:BitmapData, lod:LodLevel}> = [];
 
-		var bitmaps:Map<String, Dynamic> = [];
-		var sounds:Map<String, Sound> = [];
-
-        final cacheImages = (arr:Array<LoadImage>) -> {
-			while (arr[0] != null) {
-				var asset:LoadImage = arr[0];
-				
-				if (!existsAsset(asset.path)) if (!bitmaps.exists(asset.path)) {
-					var bitmap = __getFileBitmap(asset.path);
-					bitmaps.set(asset.path, {
-						bitmap: bitmap,
-						lod: asset.lod
-					});
-				}
-
-				arr.removeAt(0);
+		var cacheImage = (image:LoadImage, array:Array<LoadImage>) -> {
+			if (!existsAsset(image.path)) if (!bitmaps.exists(image.path)) {
+				bitmaps.set(image.path, {
+					bitmap: __getFileBitmap(image.path),
+					lod: image.lod
+				});
 			}
-        }
-
-		var stream = Preferences.getPref('song-stream') ?? false;
-
-		final cacheSound = (arr:Array<String>, asset:String) -> {
-			if (!existsAsset(asset)) if (!sounds.exists(asset)) {
-				var sound = stream ? __streamSound(asset) : __getFileSound(asset);
-				sounds.set(asset, sound);
-			}
-			arr.remove(asset);
+			array.remove(image);
 		}
 
-		final cacheSounds = (arr:Array<String>) -> {
-			while (arr[0] != null) {
-				var asset:String = arr[0];
-				cacheSound(arr, asset);
+		var cacheImages = (images:Array<LoadImage>) -> {
+			while(images.length > 0) {
+				cacheImage(images[0], images);
+			}
+		}
+
+		var sounds:Map<String, Sound> = [];
+		var stream = Preferences.getPref('song-stream') ?? false;
+
+		var cacheSound = (sound:String, array:Array<String>) -> {
+			if (!existsAsset(sound)) if (!sounds.exists(sound)) {
+				var soundFile = stream ? __streamSound(sound) : __getFileSound(sound);
+				sounds.set(sound, soundFile);
+			}
+			array.remove(sound);
+		}
+
+		var cacheSounds = (sounds:Array<String>) -> {
+			while(sounds.length > 0) {
+				cacheSound(sounds[0], sounds);
 			}
 		}
 
 		CoolUtil.enableGc(false);
 
-		if (stageImages.length > 0)
-			FunkThread.run(() -> cacheImages(stageImages));
+		//var threads:Int = FunkThread.MAX_THREADS;
 		
-		if (charImages.length > 0)
-			FunkThread.run(() -> cacheImages(charImages));
+		var stage = data.stageImages;
+		var chars = data.charImages;
+		var song = data.songSounds;
 
-		if (songSounds.length > 0)
-		{
-			// Extra thread is available
-			if (charImages.length == 0 || stageImages.length == 0)
-			{
-				FunkThread.run(() -> cacheSound(songSounds, songSounds[0]));
-				if (songSounds[1] != null)
-					FunkThread.run(() -> cacheSound(songSounds, songSounds[1]));
-			}
-			else
-			{
-				FunkThread.run(() -> cacheSounds(songSounds));
-			}
+		if (stage.length > 0) {
+			//threads--;
+			FunkThread.run(() -> cacheImages(stage));
 		}
 
+		chars.fastForEach((char, i) -> {
+			//threads--;
+			FunkThread.run(() -> cacheImage(char, chars));
+		});
+
+		song.fastForEach((sound, i) -> {
+			//threads--;
+			FunkThread.run(() -> cacheSound(sound, song));
+		});
+
 		#if sys
-		while ((stageImages.length + charImages.length + songSounds.length) > 0) {
+		while ((stage.length + chars.length + song.length) > 0) {
 			Sys.sleep(0.01);
 		}
 		#end
-		
+
 		for (key => bitmap in bitmaps) {
 			__cacheFromBitmap(key, bitmap.bitmap, false, bitmap.lod);
 		}
@@ -328,10 +323,7 @@ class AssetManager
 		}
 
 		bitmaps.clear();
-		bitmaps = null;
-
 		sounds.clear();
-		sounds = null;
 
 		CoolUtil.enableGc(true);
 		CoolUtil.gc(true);
@@ -390,9 +382,10 @@ class AssetManager
 		var asset = Asset.fromAsset(graphic, key);
 		setAsset(key, asset, staticAsset);
 
-		#if (lime_cffi && lime_cairo && !macro)
-		lime.graphics.cairo.CairoPattern.createForSurface(graphic.bitmap.getSurface());
-		#end
+		// TODO: Maybe its the shader pool thing?? i have no idea
+		//#if (lime_cffi && lime_cairo && !macro)
+		//lime.graphics.cairo.CairoPattern.createForSurface(graphic.bitmap.getSurface());
+		//#end
 
 		return graphic;
 	}

@@ -118,7 +118,8 @@ class NotesGroup extends Group
         
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
-		Conductor.offset = Vector.fromArrayCopy(SONG.offsets);
+		Conductor.offset[0] = SONG.offsets[0] ?? 0;
+		Conductor.offset[1] = SONG.offsets[1] ?? 0;
 		Conductor.loadSong(curSong);
 		
 		songSpeed = getPref('use-const-speed') && isPlayState ? getPref('const-speed') : SONG.speed;

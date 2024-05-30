@@ -117,15 +117,15 @@ class Conductor
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
 
-		for (i in 0...song.notes.length) {
-			if(song.notes[i].changeBPM && song.notes[i].bpm != curBPM) {
-				curBPM = song.notes[i].bpm;
+		song.notes.fastForEach((section, i) -> {
+			if (section.changeBPM) if (section.bpm != curBPM) {
+				curBPM = section.bpm;
 				bpmChangeMap.push(new BPMChangeEvent(totalSteps, totalPos, curBPM));
 			}
 
 			totalSteps += STEPS_PER_MEASURE;
 			totalPos += ((60 / curBPM) * 250) * STEPS_PER_MEASURE;
-		}
+		});
 
 		if (bpmChangeMap.length > 0) {
 			bpmChangeMap.unshift(new BPMChangeEvent(0, 0, song.bpm));

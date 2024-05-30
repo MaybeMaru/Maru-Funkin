@@ -166,8 +166,9 @@ class CoolUtil {
 	}
 
 	public static var resumeSoundsList:Array<FlxSound> = [];
+	
 	inline public static function pauseSounds() {
-		resumeSoundsList.splice(0, resumeSoundsList.length);
+		resumeSoundsList.clear();
 		FlxG.sound.list.members.fastForEach((sound, i) -> {
 			if (sound.playing)
 				resumeSoundsList.push(sound);
@@ -177,11 +178,8 @@ class CoolUtil {
 	}
 
 	inline public static function resumeSounds() {
-		resumeSoundsList.fastForEach((sound, i) -> {
-			sound.play();
-		});
-
-		resumeSoundsList.splice(0, resumeSoundsList.length);
+		resumeSoundsList.fastForEach((sound, i) -> sound.play());
+		resumeSoundsList.clear();
 	}
 
 	public static inline function positionInCenter(object:FlxObject, object2:FlxObject, setToPosition:Bool = false) {
@@ -260,7 +258,7 @@ class CoolUtil {
         return 0;
     }
 
-	public static function customSort(input:Array<String>, sort:Array<String>):Array<String>
+	public static function customSort(input:Array<String>, sort:Array<String>, alphabetShort:Bool = true):Array<String>
 	{
 		var result:Array<String> = [];
 		
@@ -272,17 +270,19 @@ class CoolUtil {
 			}
 		});
 
-		input.sort(sortAlphabetically);
+		if (alphabetShort)
+			input.sort(sortAlphabetically);
+
 		input.fastForEach((file, i) -> result.push(file));
 		return result;
 	}
 
 	public static function removeDuplicates(input:Array<String>):Array<String> {
         var result:Array<String> = [];
-        for (i in input) {
-            if (!result.contains(i))
-                result.push(i);
-        }
+		input.fastForEach((item, i) -> {
+			if (!result.contains(item))
+				result.push(item);
+		});
         return result;
     }
 	

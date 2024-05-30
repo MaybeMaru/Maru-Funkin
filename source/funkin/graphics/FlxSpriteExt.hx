@@ -201,18 +201,11 @@ class FlxSpriteExt extends FlxSkewedSprite
 	@:unreflective
 	private inline function __updateTrig():Void {
 		if (_angleChanged) {
-			if (angle != 0) {
-				final rads:Float = angle * FunkMath.TO_RADS;
-				_cosAngle = FunkMath.cos(rads);
-				_sinAngle = FunkMath.sin(rads);
-			}
-			else {
-				_cosAngle = 1;
-				_sinAngle = 0;
-			}
+			final rads:Float = angle * FunkMath.TO_RADS;
+			_cosAngle = FunkMath.cos(rads);
+			_sinAngle = FunkMath.sin(rads);
 
 			_angleChanged = false;
-
 			applyCurOffset(false); // Update display angle offset
 		}
 	}
@@ -223,8 +216,9 @@ class FlxSpriteExt extends FlxSkewedSprite
 				_sinAngle = 0;
 				_cosAngle = 1;
 			}
-			else _angleChanged = true;
-			animation.update(0.0);
+			else {
+				_angleChanged = true;
+			}
 		}
 		return angle = value;
 	}
