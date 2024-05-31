@@ -277,10 +277,10 @@ class CoolUtil {
 		return result;
 	}
 
-	public static function removeDuplicates(input:Array<String>):Array<String> {
+	public static function removeDuplicates(input:Array<Null<String>>):Array<String> {
         var result:Array<String> = [];
 		input.fastForEach((item, i) -> {
-			if (!result.contains(item))
+			if(item != null) if (!result.contains(item))
 				result.push(item);
 		});
         return result;

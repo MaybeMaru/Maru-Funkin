@@ -249,21 +249,55 @@ class AssetManager
 
 	public static function loadAsync(data:LoadData, ?onComplete:()->Void)
 	{
-		var bitmaps:Map<String, {bitmap:BitmapData, lod:LodLevel}> = [];
+		var imageQueue:Map<String, Bool> = [];
+		var imageCache:Map<String, {bitmap:BitmapData, lod:LodLevel}> = [];
+
+		// Set up the assets image queue
+		data.stageImages.concat(data.charImages).fastForEach((image, i) -> {
+			if (!imageQueue.exists(image.path))
+				imageQueue.set(image.path, true);
+		});
 
 		var cacheImage = (image:LoadImage, array:Array<LoadImage>) -> {
-			if (!existsAsset(image.path)) if (!bitmaps.exists(image.path)) {
-				bitmaps.set(image.path, {
-					bitmap: __getFileBitmap(image.path),
-					lod: image.lod
-				});
+			var path:String = image.path;
+			if (imageQueue.get(path)) {
+				imageQueue.set(path, false); // Image in queue
+				
+				if (!existsAsset(path)) if (!imageCache.exists(path)) {
+					imageCache.set(path, {
+						bitmap: __getFileBitmap(path),
+						lod: image.lod
+					});
+				}
 			}
-			array.remove(image);
+
+			array.remove(image); // This image was already cached
 		}
 
+		//var curThread:Int = 0;
+
 		var cacheImages = (images:Array<LoadImage>) -> {
-			while(images.length > 0) {
-				cacheImage(images[0], images);
+			
+			//while(images.length > 0)
+			//	cacheImage(images[0], images);
+				
+			var i:Int = 0;
+
+			//curThread++;
+			//var thread = curThread;
+
+			while(i < images.length) {
+				final image = images[i];
+				if (image == null)
+					break;
+				
+				if (imageQueue.get(image.path)) {
+					cacheImage(image, images);
+					//trace("loaded " + image.path + " in thread " + thread);
+					continue;
+				}
+
+				i++; // Find an uncached image index to queue and load
 			}
 		}
 
@@ -272,38 +306,33 @@ class AssetManager
 
 		var cacheSound = (sound:String, array:Array<String>) -> {
 			if (!existsAsset(sound)) if (!sounds.exists(sound)) {
-				var soundFile = stream ? __streamSound(sound) : __getFileSound(sound);
-				sounds.set(sound, soundFile);
+				sounds.set(sound, stream ? __streamSound(sound) : __getFileSound(sound));
 			}
 			array.remove(sound);
 		}
 
-		var cacheSounds = (sounds:Array<String>) -> {
-			while(sounds.length > 0) {
-				cacheSound(sounds[0], sounds);
-			}
-		}
-
 		CoolUtil.enableGc(false);
-
-		//var threads:Int = FunkThread.MAX_THREADS;
 		
 		var stage = data.stageImages;
 		var chars = data.charImages;
 		var song = data.songSounds;
 
 		if (stage.length > 0) {
-			//threads--;
 			FunkThread.run(() -> cacheImages(stage));
 		}
 
 		chars.fastForEach((char, i) -> {
-			//threads--;
-			FunkThread.run(() -> cacheImage(char, chars));
+			FunkThread.run(() -> {
+				cacheImage(char, chars);
+				
+				// Reuse thread for loading the stage if theres still assets to load
+				if (stage.length > 1) {
+					cacheImages(stage);
+				}
+			});
 		});
 
 		song.fastForEach((sound, i) -> {
-			//threads--;
 			FunkThread.run(() -> cacheSound(sound, song));
 		});
 
@@ -313,16 +342,16 @@ class AssetManager
 		}
 		#end
 
-		for (key => bitmap in bitmaps) {
-			__cacheFromBitmap(key, bitmap.bitmap, false, bitmap.lod);
+		for (key => image in imageCache) {
+			__cacheFromBitmap(key, image.bitmap, false, image.lod);
 		}
 
 		for (key => sound in sounds) {
-			var asset = Asset.fromAsset(sound, key);
-			setAsset(key, asset, false);
+			setAsset(key, Asset.fromAsset(sound, key), false);
 		}
 
-		bitmaps.clear();
+		imageQueue.clear();
+		imageCache.clear();
 		sounds.clear();
 
 		CoolUtil.enableGc(true);

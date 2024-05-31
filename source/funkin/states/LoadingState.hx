@@ -12,6 +12,9 @@ class LoadingState extends MusicBeatState
         super(false);
     }
 
+    // TODO: start mulithreaded loading while the transition animation starts
+    // its just kinda dumb to have those wait times without loading anything in lmao
+
     public function init(stage:StageJson, characters:Array<String>, song:String)
     {
         #if desktop
@@ -21,15 +24,14 @@ class LoadingState extends MusicBeatState
         charAssets = [];
         songAssets = [];
 
-        characters = CoolUtil.removeDuplicates(characters);
-
-        characters.fastForEach((char, i) -> {
+        CoolUtil.removeDuplicates(characters).fastForEach((char, i) -> {
             if (char != null) if (!addedAssets.contains(char))
             {
                 var json = Character.getCharData(char);
                 
                 var path:String = json.imagePath;
-                if (!path.startsWith('characters/')) path = 'characters/$path';
+                if (!path.startsWith('characters/'))
+                    path = 'characters/$path';
 
                 charAssets.push({
                     path: Paths.png(path),

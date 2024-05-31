@@ -1,15 +1,15 @@
 package funkin.util;
 import openfl.utils.AssetType;
 
-typedef NoteSkinData = {
+typedef NoteSkinData = SpriteJson & {
     var ?noteColorArray:Array<String>;
-} & SpriteJson
+}
 
-typedef SkinJson = {
+typedef SkinJson = SpriteJson & {
     var noteData:NoteSkinData;
     var strumData:SpriteJson;
     var splashData:SpriteJson;
-} & SpriteJson
+}
 
 class SkinUtil {
     public static var curSkin:String = 'default';
@@ -28,12 +28,26 @@ class SkinUtil {
         curSkin = skin;
     }
 
+    inline public static function getSkinAssets(skin:String = "default"):Array<LoadImage>
+    {
+        var assets:Array<LoadImage> = [];
+        var data = getSkinData(skin);
+
+        assets.push({path: getAssetKey(data.noteData.imagePath, IMAGE, skin), lod: data.noteData.allowLod ? DEFAULT : HIGH});
+        assets.push({path: getAssetKey(data.strumData.imagePath, IMAGE, skin), lod: data.strumData.allowLod ? DEFAULT : HIGH});
+        assets.push({path: getAssetKey(data.splashData.imagePath, IMAGE, skin), lod: data.splashData.allowLod ? DEFAULT : HIGH});
+
+        // TODO: add other skin assets here too
+        
+        return assets;
+    }
+
     inline public static function getSkinJsonData(skin:String = 'default'):SkinJson {
 		return JsonUtil.getJson(skin, 'skins');
 	}
 
-    public static function getSkinData(skin:String = ""):SkinJson {
-        if (skin.length <= 0)
+    public static function getSkinData(?skin:String):SkinJson {
+        if (skin == null || skin.length <= 0)
             skin = curSkin;
         
         if (dataMap == null)                initSkinData();

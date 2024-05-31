@@ -139,17 +139,27 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         var assets:Array<LoadImage> = [];
         Paths.currentLevel = data.library;
 
-        data.cacheImages.fastForEach((path, i) -> {
-            var png = Paths.png(path);
+        final addAsset = (png:String, lod:LodLevel) -> {
             if (!addedAssets.contains(png)) {
                 assets.push({
                     path: png,
-                    lod: DEFAULT
+                    lod: lod
                 });
                 addedAssets.push(png);
             }
+        }
+
+        // Stage skin assets
+        SkinUtil.getSkinAssets(data.skin).fastForEach((image, i) -> {
+            addAsset(Paths.png(image.path), image.lod);
         });
 
+        // Stage precache assets
+        data.cacheImages.fastForEach((path, i) -> {
+            addAsset(Paths.png(path), DEFAULT);
+        });
+
+        // Stage layers assets
         for (key in data.layersOrder)
         {
             var objects:Array<StageObject> = Reflect.field(data.layers, key);
@@ -157,14 +167,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
             {
                 objects.fastForEach((object, i) -> {
                     if (object.imagePath != null) {
-                        var png = Paths.png(object.imagePath);
-                        if (!addedAssets.contains(png)) {
-                            assets.push({
-                                path: png,
-                                lod: object.allowLod ? DEFAULT : HIGH
-                            });
-                            addedAssets.push(png);
-                        }
+                        addAsset(Paths.png(object.imagePath), object.allowLod ? DEFAULT : HIGH);
                     }
                 });
             }

@@ -150,11 +150,12 @@ class FlxFunkSound extends FlxBasic
     }
 
     public var looped:Bool = false;
-    public var offset(default, set):Float = 0.0;
+    
+    /*public var offset(default, set):Float = 0.0;
     inline function set_offset(value:Float):Float {
         source.offset = Std.int(-value);
         return offset = value;
-    }
+    }*/
     
     private var _gain:Float = 1.0;
     public var volume:Float = 1.0;
