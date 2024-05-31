@@ -208,12 +208,6 @@ typedef LoadImage = {
     var lod:LodLevel;
 }
 
-typedef LoadData = {
-	var stageImages:Array<LoadImage>;
-	var charImages:Array<LoadImage>;
-	var songSounds:Array<String>;
-}
-
 class AssetManager
 {
 	public static var assetsMap:Map<String, Asset> = [];
@@ -241,124 +235,6 @@ class AssetManager
 	public static inline function clearTempCache(runGc:Bool = true, clearGraphics:Bool = true, clearSounds:Bool = true):Void {
 		__clearCacheFromKeys(tempAssets, clearGraphics, clearSounds);
 		if (runGc) CoolUtil.gc(true);
-	}
-
-	/*
-	 * LOADING SCREENS CRAP
-	 */
-
-	public static function loadAsync(data:LoadData, ?onComplete:()->Void)
-	{
-		var imageQueue:Map<String, Bool> = [];
-		var imageCache:Map<String, {bitmap:BitmapData, lod:LodLevel}> = [];
-
-		// Set up the assets image queue
-		data.stageImages.concat(data.charImages).fastForEach((image, i) -> {
-			if (!imageQueue.exists(image.path))
-				imageQueue.set(image.path, true);
-		});
-
-		var cacheImage = (image:LoadImage, array:Array<LoadImage>) -> {
-			var path:String = image.path;
-			if (imageQueue.get(path)) {
-				imageQueue.set(path, false); // Image in queue
-				
-				if (!existsAsset(path)) if (!imageCache.exists(path)) {
-					imageCache.set(path, {
-						bitmap: __getFileBitmap(path),
-						lod: image.lod
-					});
-				}
-			}
-
-			array.remove(image); // This image was already cached
-		}
-
-		//var curThread:Int = 0;
-
-		var cacheImages = (images:Array<LoadImage>) -> {
-			
-			//while(images.length > 0)
-			//	cacheImage(images[0], images);
-				
-			var i:Int = 0;
-
-			//curThread++;
-			//var thread = curThread;
-
-			while(i < images.length) {
-				final image = images[i];
-				if (image == null)
-					break;
-				
-				if (imageQueue.get(image.path)) {
-					cacheImage(image, images);
-					//trace("loaded " + image.path + " in thread " + thread);
-					continue;
-				}
-
-				i++; // Find an uncached image index to queue and load
-			}
-		}
-
-		var sounds:Map<String, Sound> = [];
-		var stream = Preferences.getPref('song-stream') ?? false;
-
-		var cacheSound = (sound:String, array:Array<String>) -> {
-			if (!existsAsset(sound)) if (!sounds.exists(sound)) {
-				sounds.set(sound, stream ? __streamSound(sound) : __getFileSound(sound));
-			}
-			array.remove(sound);
-		}
-
-		CoolUtil.enableGc(false);
-		
-		var stage = data.stageImages;
-		var chars = data.charImages;
-		var song = data.songSounds;
-
-		if (stage.length > 0) {
-			FunkThread.run(() -> cacheImages(stage));
-		}
-
-		chars.fastForEach((char, i) -> {
-			FunkThread.run(() -> {
-				cacheImage(char, chars);
-				
-				// Reuse thread for loading the stage if theres still assets to load
-				if (stage.length > 1) {
-					cacheImages(stage);
-				}
-			});
-		});
-
-		song.fastForEach((sound, i) -> {
-			FunkThread.run(() -> cacheSound(sound, song));
-		});
-
-		#if sys
-		while ((stage.length + chars.length + song.length) > 0) {
-			Sys.sleep(0.01);
-		}
-		#end
-
-		for (key => image in imageCache) {
-			__cacheFromBitmap(key, image.bitmap, false, image.lod);
-		}
-
-		for (key => sound in sounds) {
-			setAsset(key, Asset.fromAsset(sound, key), false);
-		}
-
-		imageQueue.clear();
-		imageCache.clear();
-		sounds.clear();
-
-		CoolUtil.enableGc(true);
-		CoolUtil.gc(true);
-
-		if (onComplete != null)
-			onComplete();
 	}
 
 	/*

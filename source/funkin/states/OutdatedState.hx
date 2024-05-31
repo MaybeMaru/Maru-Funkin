@@ -15,13 +15,9 @@ class OutdatedState extends MusicBeatState
 		}
 
 		CoolUtil.playMusic('breakfast', 0.6);
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		add(bg);
 
 		var ver = Main.engineVersion;
-		var patchNotes:String = "";
-		for (i in newVer.patchNotes)
-			patchNotes += '$i\n';
+		var patchNotes:String = newVer.patchNotes.join("\n");		
 
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
 			  "HEY! You're running an outdated version of the game!

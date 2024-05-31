@@ -173,9 +173,6 @@ class PlayState extends MusicBeatState
 		defaultCamZoom = stageData.zoom;
 		Paths.currentLevel = stageData.library;
 		SkinUtil.setCurSkin(stageData.skin);
-
-		//STAGE START CAM OFFSET
-		final camPos:FlxPoint = FlxPoint.weak(-stageData.startCamOffsets[0], -stageData.startCamOffsets[1]);
 		
 		/*
 						LOAD SCRIPTS
@@ -256,7 +253,7 @@ class PlayState extends MusicBeatState
 		}
 		else {
 			camFollow = new FlxObject(0, 0, 1, 1);
-			camFollow.setPosition(camPos.x, camPos.y);
+			camFollow.setPosition(-stageData.startCamOffsets[0], -stageData.startCamOffsets[1]);
 			camFollow.active = false;
 		}
 		add(camFollow);
@@ -340,7 +337,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function endVideo() {
+	public function endVideo():Void {
 		#if hxvlc
 		if (video != null)
 			video.onEndReached.dispatch();

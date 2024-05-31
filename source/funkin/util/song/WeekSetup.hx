@@ -204,24 +204,23 @@ class WeekSetup
 
     public static function loadPlayState(instance:PlayState, skipTrans:Bool = false):Void
     {
-        var song = PlayState.SONG;
-        
         var loadScreen:LoadingState = new LoadingState();
-        loadScreen.init(Stage.getJson(song.stage), song.players.copy(), song.song);
-        
-        // Pre-clear cache to make sure the loading screen stuff doesnt get disposed
+
         loadScreen.onStart = () -> {
             PlayState.clearCache = false;
             CoolUtil.clearCache();
         }
-        
+
         loadScreen.onComplete = () -> {
             Paths.currentLevel = PlayState.storyWeek;
             CoolUtil.switchState(instance, true, skipTrans);
-        }        
+        }
+
+        var song = PlayState.SONG;
+        loadScreen.setupPlay(Stage.getJson(song.stage), song.players.copy(), song.song);
 
         Conductor.stop();
-        
+
         if (FlxG.sound.music != null) {
             FlxG.sound.music.fadeOut(0.333);
         }
