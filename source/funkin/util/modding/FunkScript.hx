@@ -106,6 +106,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		
 		set('Note', Note);
 		set('Sustain', Sustain);
+		set('StrumLineGroup', StrumLineGroup);
 
 		set('Alphabet', Alphabet);
 		set('TypedAlphabet', TypedAlphabet);
@@ -137,6 +138,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('FlxTween', flixel.tweens.FlxTween);
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
+		set('FlxStringUtil', flixel.util.FlxStringUtil);
 
 		#if hxvlc
 		set('FlxVideo', hxvlc.flixel.FlxVideo);

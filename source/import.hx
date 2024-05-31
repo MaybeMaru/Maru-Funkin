@@ -45,6 +45,7 @@ import funkin.objects.note.Sustain;
 import funkin.util.NoteUtil;
 import funkin.objects.note.NoteSplash;
 import funkin.objects.note.NoteStrum;
+import funkin.objects.note.StrumLineGroup;
 import funkin.objects.note.Event;
 
 //PlayState Others
@@ -120,6 +121,7 @@ import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxStringUtil; //for those psych bois out there
 import flixel.util.FlxArrayUtil;
 
 import haxe.Json;
