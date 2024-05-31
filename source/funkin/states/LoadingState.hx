@@ -24,18 +24,18 @@ class LoadingState extends MusicBeatState
         streamSounds = Preferences.getPref('song-stream') ?? false;
     }
 
-    //override function create() {
-    //    super.create();
-    //
-    //      add(new FlxSprite().makeGraphic(600, 600, FlxColor.RED));
-    //}
+    override function create() {
+        super.create();
+        startTime = openfl.Lib.getTimer();
+        checkLoad();
+    }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+        checkLoad();
+    }
 
-        if (startTime <= -1)
-            startTime = openfl.Lib.getTimer();
-        
+    function checkLoad() {        
         if(loading) if (imageAssets.length + soundAssets.length <= 0) {
             completeAsyncLoad();
             loading = false;
@@ -76,7 +76,7 @@ class LoadingState extends MusicBeatState
     public function startAsyncLoad(imageAssets:Array<LoadImage>, soundAssets:Array<String>):Void
     {
         loading = true;
-        
+
         #if desktop
         this.imageAssets = imageAssets;
         this.soundAssets = soundAssets;

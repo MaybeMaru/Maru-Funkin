@@ -66,14 +66,14 @@ class PreferencesState extends MusicBeatState {
         curSelected = FlxMath.wrap(curSelected + change, 0, prefItems.length - 1);
         if (change != 0) CoolUtil.playSound('scrollMenu');
 
-        for (item in prefItems) {
-            item.selected = false;
-            if (curSelected == item.ID) {
+        prefItems.fastForEach((item, i) -> {
+            if (item.ID == curSelected) {
                 item.selected = true;
                 camFollow.y = item.y + FlxG.height * .25;
                 curItem = item;
             }
-        }
+            else item.selected = false;
+        });
     }
 
     function selectPref() {

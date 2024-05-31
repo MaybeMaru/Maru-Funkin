@@ -34,7 +34,7 @@ class Transition extends ResizableSprite
 
     public inline static function setSkip(open:Bool = false, ?close:Bool) {
         skipTransOpen = open;
-		skipTransClose = close ?? open;
+		skipTransClose = close != null ? close : open;
     }
     
     public static var times:TransitionData = {
@@ -125,15 +125,19 @@ class Transition extends ResizableSprite
         y = startPosition = start;
         visible = !skipBool;
         endPosition = end;
-        transDuration = time;
+        transDuration = skipBool ? 0 : Math.max(time, 0);
         timeElapsed = 0;
         onComplete = callback;
-        inTransition = true;
 
-        update(0.0);
-        
-        if (skipBool)
+        if (skipBool || FunkMath.isZero(transDuration)) {
             __finishTrans();
+            inTransition = false;
+        }
+        else
+        {
+            inTransition = true;
+            update(0);
+        }
     }
 
     var timeElapsed:Float = 0;
@@ -148,7 +152,7 @@ class Transition extends ResizableSprite
     public function update(elapsed:Float) {
         if (inTransition) {
             timeElapsed += elapsed;
-            final lerpValue:Float = FlxMath.bound(timeElapsed / transDuration, 0.0, 1.0);
+            final lerpValue:Float = FlxMath.bound(timeElapsed / Math.max(transDuration, 0.00001), 0.0, 1.0);
             y = FlxMath.lerp(startPosition, endPosition, lerpValue);
         
             if (timeElapsed >= transDuration)
