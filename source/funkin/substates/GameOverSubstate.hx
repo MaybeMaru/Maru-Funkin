@@ -111,7 +111,7 @@ class GameOverSubstate extends MusicBeatSubstate
 					lockCamToChar();
 		
 				if (char.animation.curAnim.finished) {
-					if (soundsID.get(MUSIC) != "") {
+					if (!isEnding) if (soundsID.get(MUSIC) != "") {
 						CoolUtil.playMusic(soundsID.get(MUSIC));
 						musicBeat.targetSound = FlxG.sound.music;
 					}
