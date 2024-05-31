@@ -27,6 +27,23 @@ class LoadingState extends MusicBeatState
     override function create() {
         super.create();
         startTime = openfl.Lib.getTimer();
+        
+        #if !desktop // Force loading on targets without threads
+        soundAssets.fastForEach((sound, i) -> {
+            soundCache.set(sound, AssetManager.__getFileSound(sound));
+        });
+        
+        imageAssets.fastForEach((image, i) -> {
+            imageCache.set(image.path, {
+                bitmap: AssetManager.__getFileBitmap(image.path),
+                lod: image.lod
+            });
+        });
+
+        imageAssets.clear();
+        soundAssets.clear();
+        #end
+        
         checkLoad();
     }
 
@@ -44,9 +61,10 @@ class LoadingState extends MusicBeatState
 
     public function setupPlay(stage:StageJson, characters:Array<String>, song:String):Void
     {
-        #if desktop
         var imageAssets:Array<LoadImage> = Stage.getStageAssets(stage);
         var soundAssets:Array<String> = [];
+
+        characters.push(Character.getCharData(characters[0]).gameOverChar);
 
         CoolUtil.removeDuplicates(characters).fastForEach((char, i) -> {
             var json = Character.getCharData(char);
@@ -66,7 +84,6 @@ class LoadingState extends MusicBeatState
         soundAssets.push(instPath);
         if (Paths.exists(voicesPath, MUSIC))
             soundAssets.push(voicesPath);
-        #end
 
         startAsyncLoad(imageAssets, soundAssets);
     }
@@ -76,11 +93,11 @@ class LoadingState extends MusicBeatState
     public function startAsyncLoad(imageAssets:Array<LoadImage>, soundAssets:Array<String>):Void
     {
         loading = true;
-
-        #if desktop
+        
         this.imageAssets = imageAssets;
         this.soundAssets = soundAssets;
 
+        #if desktop
         imageQueue.clear();
         imageAssets.fastForEach((image, i) -> {
 			if (!imageQueue.exists(image.path))
@@ -161,7 +178,6 @@ class LoadingState extends MusicBeatState
         if (onStart != null)
             onStart();
 
-        #if desktop
         for (key => image in imageCache) {
 			AssetManager.__cacheFromBitmap(key, image.bitmap, false, image.lod);
 		}
@@ -169,7 +185,6 @@ class LoadingState extends MusicBeatState
 		for (key => sound in soundCache) {
 			AssetManager.setAsset(key, Asset.fromAsset(sound, key), false);
 		}
-        #end
 
         trace("finished loading!", (openfl.Lib.getTimer() - startTime) / 1000);
 

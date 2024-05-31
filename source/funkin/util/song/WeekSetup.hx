@@ -208,7 +208,9 @@ class WeekSetup
 
         loadScreen.onStart = () -> {
             PlayState.clearCache = false;
-            CoolUtil.clearCache();
+            CoolUtil.clearCache({
+                skins: false
+            });
         }
 
         loadScreen.onComplete = () -> {
@@ -216,7 +218,7 @@ class WeekSetup
             CoolUtil.switchState(instance, true, skipTrans);
         }
 
-        var song = PlayState.SONG;
+        final song = PlayState.SONG;
         loadScreen.setupPlay(Stage.getJson(song.stage), song.players.copy(), song.song);
 
         Conductor.stop();

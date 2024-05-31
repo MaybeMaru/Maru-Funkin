@@ -162,8 +162,7 @@ class PlayState extends MusicBeatState
 		dad = new Character(0, 0, SONG.players[1]);
 		boyfriend = new Character(0, 0, SONG.players[0], true);
 
-		// Cache Gameover Character
-		final deadChar:Character = new Character(0,0,boyfriend.gameOverChar); // cache gameover char
+		// CACHE GAMEOVER STUFF
 		GameOverSubstate.cacheSounds();
 
 		// GET THE STAGE JSON SHIT
