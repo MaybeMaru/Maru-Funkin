@@ -25,7 +25,7 @@ class MainMenuState extends MusicBeatState
 		#if mobile MobileTouch.setLayout(NONE); #end
 
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
-			CoolUtil.playMusic('freakyMenu');
+			CoolUtil.playMusic('freakyMenu', 0);
 
 		persistentUpdate = persistentDraw = true;
 		FlxG.mouse.visible = false;
@@ -80,7 +80,7 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float):Void
 	{
-		if (FlxG.sound.music.volume < 0.8)
+		if (FlxG.sound.music != null) if (FlxG.sound.music.volume < 0.8)
 			FlxG.sound.music.volume += 0.5 * elapsed;
 
 		if (!selectedSomethin) {

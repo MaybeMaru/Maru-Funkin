@@ -29,10 +29,13 @@ class TitleState extends MusicBeatState
 	var curWacky:Array<String> = [];
 	var introJson:IntroJson = null;
 
+	var flashy:Bool = true;
+
 	override public function create():Void {
 		Transition.setSkip(!initialized);
 		
 		FlxG.mouse.visible = false;
+		flashy = getPref('flashing-light');
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		introJson = Json.parse(CoolUtil.getFileContent(Paths.json('introJson')));
@@ -156,13 +159,6 @@ class TitleState extends MusicBeatState
 				FlxG.sound.music.volume += elapsed * 0.1;
 		}
 
-		if (initialized && !transitioning && titleText != null) {
-			titleSine += elapsed * 3;
-			var lerp:Float = FlxMath.remapToRange(FlxMath.fastSin(titleSine %= FunkMath.DOUBLE_PI), -1, 1, 0, 1);
-			titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, lerp);
-			#if !mobile checkCode(); #end
-		}
-
 		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
 		{
 			if (!transitioning && (skippedIntro || openedGame) )
@@ -176,7 +172,7 @@ class TitleState extends MusicBeatState
 				FlxG.timeScale = 1.0;
 
 				CoolUtil.playSound('confirmMenu', 0.7);
-				FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
+				FlxG.camera.flash(flashy ? FlxColor.WHITE : 0x79ffffff, 3);
 
 				new FlxTimer().start(2, (tmr:FlxTimer) -> switchState(new MainMenuState()));
 			}
@@ -186,19 +182,37 @@ class TitleState extends MusicBeatState
 			}
 		}
 
+		if (gay) {
+			updateColor(elapsed * (flashy ? 4 : 1));
+		}
+
 		// Color and pitch easter egg
-		if (!transitioning && (skippedIntro || openedGame)) {
-			if (getKey('UI_LEFT', PRESSED)) updateColor(-elapsed);
-			if (getKey('UI_RIGHT', PRESSED)) updateColor(elapsed);
+		if (!transitioning) if (skippedIntro || openedGame)
+		{
+			if (!lockColor) {
+				if (getKey('UI_LEFT', PRESSED)) updateColor(-elapsed);
+				else if (getKey('UI_RIGHT', PRESSED)) updateColor(elapsed);
+			}
 	
-			if (getKey('UI_UP', PRESSED)) updatePitch(-elapsed);
-			if (getKey('UI_DOWN', PRESSED)) updatePitch(elapsed);
+			if (!lockPitch) {
+				if (getKey('UI_UP', PRESSED)) updatePitch(-elapsed);
+				else if (getKey('UI_DOWN', PRESSED)) updatePitch(elapsed);
+			}
+
+			if (titleText != null) {
+				titleSine += elapsed * 3;
+				var lerp:Float = FlxMath.remapToRange(FlxMath.fastSin(titleSine %= FunkMath.DOUBLE_PI), -1, 1, 0, 1);
+				titleText.color = FlxColor.interpolate(0xFF3333CC, 0xFF33FFFF, lerp);
+			}
+			
+			#if !mobile checkCode(); #end
 		}
 
 		super.update(elapsed);
 	}
 
 	var shaderColor:Float = 0;
+	var lockColor:Bool = false;
 
 	function updateColor(elapsed:Float) {
 		shaderColor += elapsed / FlxG.timeScale;
@@ -206,6 +220,7 @@ class TitleState extends MusicBeatState
 	}
 
 	var musicPitch:Float = FunkMath.PI + 0.148; // Shhhh
+	var lockPitch:Bool = false;
 
 	function updatePitch(elapsed:Float) {
 		musicPitch += elapsed / FlxG.timeScale;
@@ -234,7 +249,7 @@ class TitleState extends MusicBeatState
 		if (!skippedIntro && initialized) {
 			skippedIntro = true;
 			clearText();
-			FlxG.camera.flash(getPref('flashing-light') ? FlxColor.WHITE : 0x79ffffff, 3);
+			FlxG.camera.flash(flashy ? FlxColor.WHITE : 0x79ffffff, 3);
 			spriteGroup.alpha = text.alpha = blackScreen.alpha = 0;
 		}
 	}
@@ -242,6 +257,14 @@ class TitleState extends MusicBeatState
 	var codeIndex:Int = 0;
 	var curCode:String = 'konami';
 	static var keoiki:Bool = false;
+	var gay:Bool = false;
+
+	override function destroy() {
+		super.destroy();
+		if (gay) {
+			FlxG.sound.music.stop();
+		}
+	}
 
 	var codes:Map<String, Array<FlxKey>> = [
 		'konami' => [ // debug code
@@ -255,15 +278,23 @@ class TitleState extends MusicBeatState
 		],
 		'keoiki' => [ // keoiki code
 			K, E, O, I, K, I,
+		],
+		'gay' => [ // gay code
+			M, R, G, A, Y
 		]
 	];
 
 	private function checkCode():Void {
+		var resetCode = () -> {
+			curCode = "konami";
+			codeIndex = 0;
+		}
+		
 		if (FlxG.keys.anyJustPressed([codes.get(curCode)[codeIndex]])) {
 			codeIndex++;
 			if (codeIndex >= codes.get(curCode).length) {
-				codeIndex = 0;
 				CoolUtil.playSound('confirmMenu', 0.7);
+				
 				switch(curCode) {
 					case 'konami':
 						CoolUtil.debugMode = true;
@@ -282,8 +313,18 @@ class TitleState extends MusicBeatState
 					case 'keoiki':
 						keoiki = !keoiki;
 						Main.transition.set(null, 0.6, 0.4, keoiki ? Paths.image('keoiki') : null);
-						
+					case 'gay':
+						if (!gay) {
+							FlxG.camera.flash(flashy ? FlxColor.WHITE : 0x79ffffff, 3);
+							CoolUtil.playMusic("gay", 0);
+							FlxG.sound.music.fadeIn();
+							codes.remove("gay");
+							gay = true;
+							lockColor = true;
+						}
 				}
+
+				resetCode();
 			}
 		} else if (FlxG.keys.justPressed.ANY) {
 			for (i in codes.keys()) {
