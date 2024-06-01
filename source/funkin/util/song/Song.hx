@@ -274,7 +274,7 @@ class Song
 		var folder:String = "";
 		songName.split("").fastForEach((char, i) -> {
 			switch (char) {
-				case "." | "?" | "*" | '"':
+				case "." | "?" | "*" | '"' | "'":
 				case " " | ":":				folder = (folder + "-");
 				default:					folder = (folder + char.toLowerCase());
 			}

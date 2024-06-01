@@ -150,7 +150,7 @@ class LoadingState extends MusicBeatState
 
         // Load the rest of the images with the leftover threads
         for (_ in 0...threads) {
-            FunkThread.run(() -> cacheImages());
+            FunkThread.run(cacheImages);
             Sys.sleep(0.004); // Fire thread with a bit of delay for safety reasons
         }
         #end
