@@ -12,7 +12,7 @@ class LoadingState extends MusicBeatState
     var imageAssets:Array<LoadImage> = [];
     var soundAssets:Array<String> = [];
 
-    var imageQueue:Map<String, Bool> = [];
+    var imagesCached:Array<Bool>;
 	var imageCache:Map<String, {bitmap:BitmapData, lod:LodLevel}> = [];
     var soundCache:Map<String, Sound> = [];
 
@@ -43,17 +43,11 @@ class LoadingState extends MusicBeatState
         imageAssets.clear();
         soundAssets.clear();
         #end
-        
-        checkLoad();
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        checkLoad();
-    }
-
-    function checkLoad() {        
-        if(loading) if (imageAssets.length + soundAssets.length <= 0) {
+        if(loading) if (imagesCached.indexOf(false) == -1) if (soundAssets.length <= 0) {
             completeAsyncLoad();
             loading = false;
         }
@@ -98,12 +92,6 @@ class LoadingState extends MusicBeatState
         this.soundAssets = soundAssets;
 
         #if desktop
-        imageQueue.clear();
-        imageAssets.fastForEach((image, i) -> {
-			if (!imageQueue.exists(image.path))
-				imageQueue.set(image.path, true);
-		});
-
         CoolUtil.enableGc(false);
 
         var threads:Int = FunkThread.MAX_THREADS;
@@ -125,50 +113,45 @@ class LoadingState extends MusicBeatState
             FunkThread.run(() -> cacheSound(sound, this.soundAssets));
         });
 
-        final cacheImage = (image:LoadImage, array:Array<LoadImage>) -> {
-            var path:String = image.path;
-            if (imageQueue.get(path)) {
-                imageQueue.set(path, false); // Image in queue
-                
-                if (imageCache.get(path) == null) {
-                    imageCache.set(path, {
-                        bitmap: AssetManager.__getFileBitmap(path),
-                        lod: image.lod
-                    });
-                }
-
-                array.remove(image);
-            }
-            else array.remove(image);
+        var imagesLength:Int = imageAssets.length;
+        var imagesQueued:Array<Bool> = [];
+        imagesCached = [];
+        
+        for (i in 0...imagesLength) {
+            imagesQueued[i] = false;
+            imagesCached[i] = false;
         }
 
-        var curThread = 0;
+        //var curThread = 0;
 
-        final cacheImages = (array:Array<LoadImage>) -> {
-            var i:Int = 0;
-            // curThread++;
-            // var thread = curThread;
-    
-            while (array.length > 0) {
-                final image = array[i];
-                if (image == null) {
-                    i = 0;
-                    continue;
-                }
+        final cacheImages = () -> {
+            
+            //curThread++;
+            //var thread = curThread;
+
+            while (imagesCached.indexOf(false) != -1) {
+                var index = imagesQueued.indexOf(false);
+                if (index == -1) break;
                 
-                if (imageQueue.get(image.path)) {
-                    cacheImage(image, array);
-                    //trace("loaded " + image.path + " in thread " + thread);
-                    continue;
-                }
+                imagesQueued.unsafeSet(index, true);
+
+                var image = imageAssets[index];
+                var path = image.path;
+                imageCache.set(path, {
+                    bitmap: AssetManager.__getFileBitmap(path),
+                    lod: image.lod
+                });
     
-                i++; // Find an uncached image index to queue and load
+                imagesCached.unsafeSet(index, true);
+
+                //trace(index, path, thread);
             }
         }
 
         // Load the rest of the images with the leftover threads
         for (_ in 0...threads) {
-            FunkThread.run(() -> cacheImages(this.imageAssets));
+            FunkThread.run(() -> cacheImages());
+            Sys.sleep(0.004); // Fire thread with a bit of delay for safety reasons
         }
         #end
     }

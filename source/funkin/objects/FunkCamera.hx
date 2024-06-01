@@ -240,12 +240,10 @@ class FunkCamera extends FlxCamera {
         
         if (transform != null) {
             final hasColors = transform.hasRGBMultipliers() || transform.hasRGBAOffsets();
-            final drawItem = startQuadBatch(frame.parent, hasColors, hasColors, blend, smoothing, shader);
-            drawItem.addQuad(frame, matrix, transform);
+            startQuadBatch(frame.parent, hasColors, hasColors, blend, smoothing, shader).addQuad(frame, matrix, transform);
         }
         else {
-            final drawItem = startQuadBatch(frame.parent, false, false, blend, smoothing, shader);
-            drawItem.addQuad(frame, matrix, transform);
+            startQuadBatch(frame.parent, false, false, blend, smoothing, shader).addQuad(frame, matrix, transform);
         }
 	}
 
@@ -342,12 +340,11 @@ class AngledCamera extends FunkCamera
         }
 
         if (transform != null) {
-            final drawItem = startQuadBatch(frame.parent, inline transform.hasRGBMultipliers(), inline transform.hasRGBAOffsets(), blend, smoothing, shader);
-            drawItem.addQuad(frame, matrix, transform);
+            final hasColors = transform.hasRGBMultipliers() || transform.hasRGBAOffsets();
+            startQuadBatch(frame.parent, hasColors, hasColors, blend, smoothing, shader).addQuad(frame, matrix, transform);
         }
         else {
-            final drawItem = startQuadBatch(frame.parent, false, false, blend, smoothing, shader);
-            drawItem.addQuad(frame, matrix, transform);
+            startQuadBatch(frame.parent, false, false, blend, smoothing, shader).addQuad(frame, matrix, transform);
         }
     }
 }
