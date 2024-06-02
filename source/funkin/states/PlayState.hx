@@ -4,9 +4,6 @@ import funkin.objects.*;
 import funkin.objects.note.*;
 import funkin.objects.funkui.FunkBar;
 import funkin.objects.FunkCamera.AngledCamera;
-#if hxvlc
-import hxvlc.flixel.FlxVideo;
-#end
 
 @:build(macros.GetSetBuilder.build(["notes", "unspawnNotes", "controlArray", "playerStrums", "opponentStrums", "grpNoteSplashes", "curSong", "generatedMusic", "skipStrumIntro", "inBotplay", "dadBotplay"], "notesGroup"))
 @:build(macros.GetSetBuilder.buildGet(["strumLineNotes", "strumLineInitPos", "playerStrumsInitPos", "opponentStrumsInitPos"], "notesGroup"))
@@ -309,36 +306,22 @@ class PlayState extends MusicBeatState
 		CoolUtil.gc(true);
 	}
 
-	#if hxvlc public var video:FlxVideo; #end
+	public var video:FunkVideo;
 
-	public function startVideo(file:String, ?completeFunc:()->Void):#if hxvlc FlxVideo #else Dynamic #end
-	{
-		completeFunc ??= () -> startCountdown();
-		
-		#if hxvlc
-		video = new FlxVideo();
+	public function startVideo(file:String, ?completeFunc:()->Void):FunkVideo {
+		video = new FunkVideo();
 		video.load(Paths.video(file));
-		video.onEndReached.add(() -> {
-			video.dispose();
-			video = null;
-			this.visible = true;
-			completeFunc();
-		});
+		video.onComplete = completeFunc ?? startCountdown;
 		video.play();
-		this.visible = false; // Stop rendering the state n overlay the video
+
 		return video;
-		#else
-		ModdingUtil.warningPrint("Videos are not allowed on this build.");
-		completeFunc();
-		return null;
-		#end
 	}
 
 	public function endVideo():Void {
-		#if hxvlc
-		if (video != null)
-			video.onEndReached.dispatch();
-		#end
+		if (video != null) {
+			video.endVideo();
+			video = null;
+		}
 	}
 
 	public var openDialogueFunc:()->Void;
@@ -793,12 +776,7 @@ class PlayState extends MusicBeatState
 		CoolUtil.destroyMusic();
 		SkinUtil.setCurSkin('default');
 		
-		#if hxvlc
-		if (video != null) {
-			video.dispose();
-			video = null;
-		}
-		#end
+		endVideo();
 
 		ModdingUtil.addCall('destroy');
 

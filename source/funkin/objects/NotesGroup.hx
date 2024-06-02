@@ -358,7 +358,7 @@ class NotesGroup extends Group
 		{
 			// Prevent repeating vocals
 			if (Conductor.inst.playing) {
-				if (Conductor.songPosition - SONG.offsets[1] >= Conductor.vocals.length)
+				if ((Conductor.songPosition - Conductor.offset[1]) >= Conductor.vocals.length)
 					Conductor.vocals.volume = 0;
 			}
 
@@ -391,10 +391,11 @@ class NotesGroup extends Group
 	inline function spawnNotes():Void { // Generate notes
 		if (curSpawnNote != null) {
 			final zoom = 1 / camera.zoom;
-			
-			while (unspawnNotes.length > 0 &&
-				((curSpawnNote.strumTime - Conductor.songPosition) < (((1500 / curSpawnNote.calcSpeed()) * zoom) * curSpawnNote.spawnMult)))
-			{
+
+			while (unspawnNotes.length > 0) {
+				if ((curSpawnNote.strumTime - Conductor.songPosition) > (((1500 / curSpawnNote.calcSpeed()) * zoom) * curSpawnNote.spawnMult))
+					break;
+
 				curSpawnNote.update(0.0);
 				ModdingUtil.addCall('noteSpawn', [curSpawnNote]);
 
@@ -411,7 +412,10 @@ class NotesGroup extends Group
 
 	inline function checkEvents():Void {
 		if (curCheckEvent != null) {
-			while (events.length > 0 && curCheckEvent.strumTime <= Conductor.songPosition) {
+			while (events.length > 0) {
+				if (curCheckEvent.strumTime > Conductor.songPosition)
+					break;
+
 				ModdingUtil.addCall('eventHit', [curCheckEvent]);
 				events.removeAt(0);
 				curCheckEvent = events[0];
