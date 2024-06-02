@@ -33,22 +33,26 @@ class LoadingState extends MusicBeatState
         streamSounds = Preferences.getPref('song-stream') ?? false;
     }
 
+    function cacheAsset(asset:UncachedAsset) {
+        var key = asset.key;
+        if (asset.isImage) {
+            assetCache.set(key, {
+                bitmap: AssetManager.__getFileBitmap(key),
+                lod: asset.lod
+            });
+        }
+        else {
+            var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
+            assetCache.set(key, {sound: sound});
+        }
+    }
+
     override function create() {
         super.create();
         startTime = openfl.Lib.getTimer();
         
         #if !desktop // Force loading on targets without threads
-        uncachedAssets.fastForEach((asset, i) -> {
-            if (asset.isImage) {
-                imageCache.set(asset.key, {
-                    bitmap: AssetManager.__getFileBitmap(asset.key),
-                    lod: asset.lod
-                });
-            }
-            else {
-                soundCache.set(asset.key, AssetManager.__getFileSound(asset.key));
-            }
-        });
+        uncachedAssets.fastForEach((asset, i) -> cacheAsset(asset));
         #end
     }
 

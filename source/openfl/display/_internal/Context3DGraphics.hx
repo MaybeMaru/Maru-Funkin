@@ -93,20 +93,21 @@ class Context3DGraphics
 					if (bitmap != null)
 					{
 						var c = data.readDrawQuads();
+
 						var rects = c.rects;
 						var indices = c.indices;
 						var transforms = c.transforms;
 
 						#if cpp
-						var rects:Array<Float> = rects == null ? null : untyped (rects).__array;
-						var indices:Array<Int> = indices == null ? null : untyped (indices).__array;
-						var transforms:Array<Float> = transforms == null ? null : untyped (transforms).__array;
+						var rects:Array<Float> = rects == null ? null : untyped __cpp__('({0})->_hx___array', rects);
+						var indices:Array<Int> = indices == null ? null : untyped __cpp__('({0})->_hx___array', indices);
+						var transforms:Array<Float> = transforms == null ? null :untyped __cpp__('({0})->_hx___array', transforms);
 						#end
 
 						var hasIndices = (indices != null);
 						var transformABCD = false, transformXY = false;
 
-						var length = hasIndices ? indices.length : Math.floor(rects.length / 4);
+						var length = hasIndices ? indices.length : Math.floor(rects.length * 0.25);
 						if (length == 0) return;
 
 						if (transforms != null)
@@ -165,7 +166,7 @@ class Context3DGraphics
 						bitmapHeight = bitmap.height;
 						#end
 
-						var sourceRect = bitmap.rect;
+						// var sourceRect = bitmap.rect;
 
 						for (i in 0...length)
 						{
@@ -211,8 +212,8 @@ class Context3DGraphics
 							uvWidth = tileRect.right / bitmapWidth;
 							uvHeight = tileRect.bottom / bitmapHeight;
 
-							x = tileTransform.__transformX(0, 0);
-							y = tileTransform.__transformY(0, 0);
+							x = tileTransform.tx; // tileTransform.__transformX(0, 0);
+							y = tileTransform.ty; // tileTransform.__transformY(0, 0);
 							x2 = tileTransform.__transformX(tileWidth, 0);
 							y2 = tileTransform.__transformY(tileWidth, 0);
 							x3 = tileTransform.__transformX(0, tileHeight);
@@ -534,7 +535,7 @@ class Context3DGraphics
 				var data = new DrawCommandReader(graphics.__commands);
 
 				var context = renderer.__context3D;
-				var gl = context.gl;
+				// var gl = context.gl;
 
 				var matrix = Matrix.__pool.get();
 
