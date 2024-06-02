@@ -13,12 +13,12 @@ typedef SkinJson = SpriteJson & {
 
 class SkinUtil {
     public static var curSkin:String = 'default';
-    public static var curSkinData:SkinJson = null;
+    public static var curSkinData:SkinJson;
     public static var dataMap:Map<String, SkinJson>;
 
     public static function initSkinData():Void //  Cache skin data
     {
-        dataMap = new Map<String, SkinJson>();
+        dataMap = [];
         JsonUtil.getJsonList('skins').fastForEach((skin, i) -> dataMap.set(skin, getSkinJsonData(skin)));
         setCurSkin();
     }
@@ -56,15 +56,14 @@ class SkinUtil {
         return dataMap.get(skin);
     }
 
-    public static function getAssetKey(key:String, type:AssetType = IMAGE, skin:String = ""):String
+    public static function getAssetKey(key:String, type:AssetType = IMAGE, ?skin:String):String
     {
-        if (skin.length <= 0)
+        if (skin == null || skin.length <= 0)
             skin = curSkin;
         
         var skinKey:String = 'skins/$skin/$key';
-        var defaultSkinKey:String = 'skins/default/$key';
 
         final skinPath = Paths.getAssetPath(skinKey, type);
-        return Paths.exists(skinPath, type) ? skinKey :  defaultSkinKey;
+        return Paths.exists(skinPath, type) ? skinKey :  'skins/default/$key';
     }
 }

@@ -150,6 +150,9 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         }
 
         // Stage skin assets
+        if (SkinUtil.dataMap != null)
+            SkinUtil.dataMap.remove(data.skin); // Force skin data reload for null safety
+        
         SkinUtil.getSkinAssets(data.skin).fastForEach((image, i) -> {
             addAsset(Paths.png(image.path), image.lod);
         });

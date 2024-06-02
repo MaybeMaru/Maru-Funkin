@@ -208,9 +208,7 @@ class WeekSetup
 
         loadScreen.onStart = () -> {
             PlayState.clearCache = false;
-            CoolUtil.clearCache({
-                skins: false
-            });
+            CoolUtil.clearCache();
         }
 
         loadScreen.onComplete = () -> {
