@@ -11,6 +11,7 @@ Current version is beta 2.0, beta 3.0 soon to come!
 
 ## Credits
 * [LinkMain](https://www.youtube.com/@uppybuppy) - Music
+* [BlueColorsin](https://github.com/BlueColorsin) - Github Wiki
 * [Rudyrue](https://www.youtube.com/@rudyrue3694) - Base game song offsets
 * [Mark-Zer0](https://twitter.com/MarkimusZer0) - Optimized GF export
 * [Doggo](https://twitter.com/_d1ggo) / [Crowplexus](https://twitter.com/crowplexus) - Github workflows
