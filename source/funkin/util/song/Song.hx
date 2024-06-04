@@ -146,14 +146,22 @@ class Song
 	}
 
 	public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
-		var BPM:Float = song.bpm;
+		var crochet:Float = (60000 / song.bpm);
         var time:Float = 0;
-        for (i in 0...section) {
-			checkAddSections(song, i);
-			if (song.notes[i].changeBPM) BPM = song.notes[i].bpm;
-			time += Conductor.BEATS_PER_MEASURE * (60000 / BPM);
-        }
-        return time;
+
+		checkAddSections(song, section);
+
+		var i:Int = 0;
+		while (i < section) {
+			if (song.notes[i].changeBPM) {
+				crochet = (60000 / song.notes[i].bpm);
+			}
+
+			time += Conductor.BEATS_PER_MEASURE * crochet;
+			i++;
+		}
+        
+		return time;
 	}
 
 	public static function checkAddSections(song:SwagSong, index:Int, i:Int = 0):Void

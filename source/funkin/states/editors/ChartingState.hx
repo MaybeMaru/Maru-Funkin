@@ -655,13 +655,12 @@ class ChartingState extends MusicBeatState
 
     public static inline function getSecBpm(index:Int = 0):Float {
         Conductor.mapBPMChanges(SONG);
-        return Conductor.getLastBpmChange(getSecBpm(index), SONG.bpm).bpm;
+        return Conductor.getLastBpmChange(getSecTime(index), SONG.bpm).bpm;
     }
 
     public function loadJson(song:String):Void {
         stop();
-		PlayState.SONG = Song.loadFromFile(PlayState.curDifficulty, song);
-		PlayState.SONG = Song.checkSong(PlayState.SONG);
+		PlayState.SONG = Song.checkSong(Song.loadFromFile(PlayState.curDifficulty, song));
 		FlxG.resetState();
 	}
 

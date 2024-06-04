@@ -124,6 +124,7 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
 
         insert(members.indexOf(group), instWaveform);
         insert(members.indexOf(group), voicesWaveform);
+        updateWaveform();
 
         instWaveform.color = 0x923c70;
         voicesWaveform.color = 0x5e3c92;
@@ -132,9 +133,7 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
         insert(members.indexOf(group), sustainsGroup);
         
         textGroup = new TypedGroup<FlxBitmapText>();
-        add(textGroup);
-
-        updateWaveform();
+        insert(members.indexOf(gridShadow), textGroup);
     }
 
     public function updateWaveform():Void
