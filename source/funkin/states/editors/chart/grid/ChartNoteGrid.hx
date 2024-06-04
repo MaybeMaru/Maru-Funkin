@@ -69,8 +69,10 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
                 var text:FlxBitmapText = textGroup.recycle(FlxBitmapText);
                 text.antialiasing = false;
                 text.text = type;
+                text.scale.set(2, 2);
+                text.updateHitbox();
 
-                text.setPosition(pos.x - (text.width * .5 - note.width * .5), pos.y - (text.height * .5 - note.height * .5));
+                text.setPosition(pos.x - (text.width - note.width) * .5, pos.y - (text.height - note.height) * .5);
                 text.scrollFactor.set(1,1);
 
                 note.typeText = text;

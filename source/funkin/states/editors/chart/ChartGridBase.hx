@@ -82,8 +82,10 @@ class ChartGridBase<T:FlxObject> extends Group
     public function setData(sectionIndex:Int = 0) {
         this.sectionIndex = sectionIndex;
         sectionTime = ChartingState.getSecTime(sectionIndex);
+        
+        clearMembers(false);
+        
         this.sectionData = ChartingState.SONG.notes[sectionIndex];
-
         drawSectionData(ChartingState.SONG.notes[sectionIndex-1], true);
         drawSectionData(ChartingState.SONG.notes[sectionIndex+1]);
     }

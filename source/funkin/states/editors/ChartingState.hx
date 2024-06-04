@@ -80,11 +80,11 @@ class ChartingState extends MusicBeatState
         stop();
 
         mainGrid = new ChartNoteGrid();
-        add(mainGrid);
-
         eventsGrid = new ChartEventGrid();
         eventsGrid.gridShadow.x = (eventsGrid.grid.x -= GRID_SIZE * 5);
+        
         add(eventsGrid);
+        add(mainGrid);
 
         noteTile = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE, FlxColor.WHITE);
         noteTile.alpha = 0.6;
@@ -329,24 +329,33 @@ class ChartingState extends MusicBeatState
         {
             if (overlapNotes)
             {
-                if (FlxG.mouse.overlaps(mainGrid.group)) { // Remove notes
-                    mainGrid.group.forEachAlive(function (note:ChartNote) {
-                        if (note.strumTime < sectionTime) return;
-                        if (FlxG.mouse.overlaps(note)) clickL ? removeNote(note) : selectNote(note);
-                    });
-                } else if (clickL) addNote(); // Add notes
+                var hasOverlap:Bool = false;
+                mainGrid.group.members.fastForEach((note, i) -> {
+                    if (note != null) if (note.alive)
+                    if (note.strumTime >= (sectionTime - 1)) if (FlxG.mouse.overlaps(note)) {
+                        hasOverlap = true;
+                        clickL ? removeNote(note) : selectNote(note); // Remove events
+                        break;
+                    }
+                });
+
+                if (!hasOverlap) if (clickL)
+                    addNote();
             }
             else
             {
-                var _overlap:Bool = false; // It is what it is
-                for (i in eventsGrid.group) {
-                    if (i.alive && i.strumTime >= sectionTime && FlxG.mouse.overlaps(i.sprite)) {
-                        _overlap = true;
-                        clickL ? removeEvent(i) : selectEvent(i); // Remove events
+                var hasOverlap:Bool = false;
+                eventsGrid.group.members.fastForEach((event, i) -> {
+                    if (event != null) if (event.alive)
+                    if (event.strumTime >= (sectionTime - 1)) if (FlxG.mouse.overlaps(event.sprite)) {
+                        hasOverlap = true;
+                        clickL ? removeEvent(event) : selectEvent(event); // Remove events
                         break;
                     }
-                }
-                if (!_overlap && clickL) addEvent(); // Add events
+                });
+
+                if (!hasOverlap) if (clickL)
+                    addEvent();
             }
         }
     }

@@ -60,8 +60,12 @@ class ChartTabs extends FlxUITabMenu
 	}
 
 	public var focusList:Array<FlxUIInputText> = [];
+	
 	public function getFocus():Bool {
-		for (i in focusList) if (i.hasFocus) return true;
+		for (i in 0...focusList.length) {
+			if (focusList[i].hasFocus)
+				return true;
+		}
 		return false;
 	}
 
@@ -372,19 +376,6 @@ class ChartTabs extends FlxUITabMenu
 			setCurEvent(newEvent);
 			ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
 		}
-		
-		
-		/*if (values != null) {
-			eventDescription.text = eventData.description;
-			eventValueTab.setValues(values.copy());
-			//setCurEvent(newEvent);
-		} else {
-			final _defValues = eventData.values.copy();
-			eventDescription.text = eventData.description;
-			eventValueTab.setValues(_defValues);
-			setCurEvent(newEvent);
-			ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
-		}*/
 	}
 
 	public function updateEventTxt() {
