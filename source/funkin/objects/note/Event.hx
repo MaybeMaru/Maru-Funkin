@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import funkin.objects.note.BasicNote.ITimingObject;
+
 typedef EventData = {
     var description:String;
     var values:Array<Dynamic>;
@@ -52,7 +54,7 @@ class EventUtil
     }
 }
 
-class Event
+class Event implements ITimingObject
 {
     public var strumTime:Float = 0.0;
     public var name:String = "";

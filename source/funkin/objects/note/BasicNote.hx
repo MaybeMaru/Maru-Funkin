@@ -7,7 +7,11 @@ interface INoteData {
     public var noteData:Int;
 }
 
-class BasicNote extends SmartSprite implements INoteData
+interface ITimingObject {
+    public var strumTime:Float;
+}
+
+class BasicNote extends SmartSprite implements INoteData implements ITimingObject
 {
     public var strumTime:Float = 0.0;
     public var noteData:Int = 0;

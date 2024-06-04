@@ -21,13 +21,18 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
             add(strum);
         }
 
-        eventBar = new FlxSprite(-GRID_SIZE * 1.5, 0).makeGraphic(GRID_SIZE, 4);
+        eventBar = new FlxSprite(-GRID_SIZE * 1.5, 0).makeGraphic(1,1);
+        eventBar.antialiasing = false;
+        eventBar.scale.set(GRID_SIZE, 4);
+        eventBar.updateHitbox();
         add(eventBar);
 
         iconP1 = new HealthIcon("bf");
-        iconP2= new HealthIcon("dad");
+        iconP2 = new HealthIcon("dad");
+        
         add(iconP1);
         add(iconP2);
+        
         updateWithData();
     }
 
@@ -43,7 +48,7 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     }
 
     public function updateWithData() {
-        var sectionData = ChartingState.SONG.notes[ChartingState.instance.sectionIndex];
+        var sectionData = ChartingState.SONG.notes[ChartingState.sectionIndex];
         if (sectionData == null) return;
         updateHeads(getCharIcon(ChartingState.SONG.players[0]), getCharIcon(ChartingState.SONG.players[1]), sectionData.mustHitSection);
     }
@@ -53,8 +58,8 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
         iconP2.makeIcon(p2);
 
         for (i in [iconP1, iconP2]) {
-            i.scrollFactor.set(1,1);
-            i.scale.set(0.4,0.4);
+            i.scrollFactor.set(1, 1);
+            i.scale.set(0.4, 0.4);
             i.updateHitbox();
         }
 

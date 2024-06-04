@@ -14,7 +14,10 @@ import flixel.addons.ui.FlxUITabMenu;
 
 import funkin.substates.CharSelectSubstate;
 
-class ChartTabs extends FlxUITabMenu {
+class ChartTabs extends FlxUITabMenu
+{
+	public static var instance:ChartTabs;
+
     public var tabs = [
 		{name: "Song", 		label: 'Song'},
 		{name: "Section", 	label: 'Section'},
@@ -22,9 +25,15 @@ class ChartTabs extends FlxUITabMenu {
 		{name: "Event",		label: 'Event'},
 		{name: "Editor", 	label: 'Editor'}
 	];
+
+	var postSignal:Array<()->Void> = [];
     
-    public function new() {
+    public function new(x:Float, y:Float) {
         super(null, tabs, true);
+		
+		instance = this;
+		
+		setPosition(x, y);
 		resize(400, 400);
 		curType = 'default';
 
@@ -33,7 +42,16 @@ class ChartTabs extends FlxUITabMenu {
 		addNoteUI();
 		addEventUI();
 		addEditorUI();
+
+		postSignal.fastForEach((func, i) -> func());
+		postSignal.clear();
     }
+
+	override function destroy() {
+		super.destroy();
+		if (instance == this)
+			instance = null;
+	}
 
 	function selectChar(?selectFunction:Void->Void):Void {
 		ChartingState.instance.stop();
@@ -192,7 +210,7 @@ class ChartTabs extends FlxUITabMenu {
 	};
 
 	public function updatePreview() {
-		var index = Std.int(ChartingState.instance.sectionIndex - stepperCopy.value);
+		var index = Std.int(ChartingState.sectionIndex - stepperCopy.value);
 		var copyData = ChartingState.SONG.notes[index];
 		if (copyData == null || stepperCopy.value == 0) return;
 		lastSectionPreview.resetDraw(index);
@@ -231,7 +249,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		var swapSection:FlxUIButton = new FlxUIButton(10, 180, "Swap Section", function() {
-			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
+			for (note in ChartingState.SONG.notes[ChartingState.sectionIndex].sectionNotes) {
 				var noteObject = ChartingState.instance.mainGrid.getDataObject(note);
 				note[1] = (note[1] + Conductor.NOTE_DATA_LENGTH) % Conductor.STRUMS_LENGTH;
 				ChartingState.instance.mainGrid.updateObject(noteObject, note);
@@ -239,7 +257,7 @@ class ChartTabs extends FlxUITabMenu {
 		});
 
 		var copySection:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 50, "Copy Section", function () {
-			sectionClipboard.section = JsonUtil.copyJson(ChartingState.SONG.notes[ChartingState.instance.sectionIndex]);
+			sectionClipboard.section = JsonUtil.copyJson(ChartingState.SONG.notes[ChartingState.sectionIndex]);
 			sectionClipboard.time = ChartingState.instance.sectionTime;
 		});
 		
@@ -252,7 +270,7 @@ class ChartTabs extends FlxUITabMenu {
 		setTypesLeft.checked = setTypesRight.checked = true;
 	
 		var setSectionNoteTypes:FlxUIButton = new FlxUIButton(swapSection.x, swapSection.y + 125, "Set Types", function() {
-			for (note in ChartingState.SONG.notes[ChartingState.instance.sectionIndex].sectionNotes) {
+			for (note in ChartingState.SONG.notes[ChartingState.sectionIndex].sectionNotes) {
 				final sideLength = Conductor.NOTE_DATA_LENGTH - 1;
 				if ((note[1] <= sideLength && setTypesLeft.checked) || (note[1] > sideLength && setTypesRight.checked)) {
 					final noteObject = ChartingState.instance.mainGrid.getDataObject(note);
@@ -460,7 +478,7 @@ class ChartTabs extends FlxUITabMenu {
 		tab_group_event.add(new FlxText(eventsDropDown.x, eventsDropDown.y - 15, 0, 'Event:'));
 		tab_group_event.add(eventsDropDown);
 
-		postCreateFuncs.push(function () {
+		postSignal.push(() -> {
 			initEvent = types[0];
 			if (initEvent != null) {
 				setCurEvent(initEvent);
@@ -469,8 +487,9 @@ class ChartTabs extends FlxUITabMenu {
 			}
 			
 			eventValueTab = new EventTab(150, 50, curEventDatas[eventID()].values);
-			eventValueTab.updateFunc = function (id:Int, value:Dynamic)
+			eventValueTab.updateFunc = (id:Int, value:Dynamic) -> {
 				ChartingState.instance.updateEvent(id, value);
+			}
 			tab_group_event.add(eventValueTab);
 			updateEventTxt();
 		});
@@ -552,10 +571,5 @@ class ChartTabs extends FlxUITabMenu {
 		addGrpObj([check_mute_inst,check_waveform_inst,
 			check_hitsound,check_metronome,slider_pitch,
 			button_clearSongNotes, button_clearSongEvents, button_clearSongFull], tab_group_editor);
-	}
-
-	var postCreateFuncs:Array<Dynamic> = [];
-	public function runPost() {
-		for (i in postCreateFuncs) i();
 	}
 }

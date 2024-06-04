@@ -1,5 +1,6 @@
 package funkin.substates;
 
+import flixel.text.FlxBitmapText;
 import funkin.objects.NotesGroup;
 
 class NotesSubstate extends MusicBeatSubstate
@@ -7,6 +8,7 @@ class NotesSubstate extends MusicBeatSubstate
     public var SONG:SwagSong;
     public var notesGroup:NotesGroup;
     public var position:Float = 0;
+    public var stats:FlxBitmapText;
 
     public function new(song:SwagSong, position:Float)
     {
@@ -20,12 +22,12 @@ class NotesSubstate extends MusicBeatSubstate
         Conductor.sync();
         add(notesGroup);
 
-        final txt:FlxFunkText = new FlxFunkText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.05 : 0.8), "coolswag", FlxPoint.weak(FlxG.width, FlxG.height * 0.3), 25);
-        txt.alignment = "center";
-        txt._dynamic.update = function (elapsed) {
-            txt.text = 'Song Position: ${Math.floor(Conductor.songPosition)}\nCurrent Step: $curStep\nCurrent Beat: $curBeat\nCurrent Section: $curSection\n\nCurrent BPM: ${Conductor.bpm}';
-        }
-        add(txt);
+        stats = new FlxBitmapText(0, FlxG.height * (Preferences.getPref('downscroll') ? 0.05 : 0.8));
+        stats.antialiasing = false;
+        stats.scale.set(3,3);
+        stats.updateHitbox();
+        stats.alignment = CENTER;
+        add(stats);
 
         camera = CoolUtil.getTopCam();
     }
@@ -46,6 +48,16 @@ class NotesSubstate extends MusicBeatSubstate
     var tmr:Float = 0.333;
     override function update(elapsed:Float) {
         super.update(elapsed);
+        
+        stats.text =
+        'Song Position: ${Math.floor(Conductor.songPosition)}\n'+
+        'Current Step: $curStep\n'+
+        'Current Beat: $curBeat\n'+
+        'Current Section: $curSection\n\n'+
+        'Current BPM: ${Conductor.bpm}';
+
+        stats.screenCenter(X);
+        
         if (tmr > 0) tmr -= elapsed;
         else {
             if (FlxG.keys.justPressed.ESCAPE || Conductor.songPosition >= Conductor.inst.length) {

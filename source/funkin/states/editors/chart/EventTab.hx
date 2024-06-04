@@ -6,7 +6,8 @@ import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUIDropDownMenu;
 
-class EventTab extends FlxTypedSpriteGroup<Dynamic> {
+class EventTab extends SpriteGroup
+{
     public function new(?X:Float, ?Y:Float, ?values:Array<Dynamic>) {
         super(X,Y);
         if (values != null)
@@ -14,14 +15,14 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
     }
 
     public var curValues:Array<Dynamic> = [];
-    public var getValuesArray:Array<Dynamic> = [];
+    public var getValuesArray:Array<()->Dynamic> = [];
 
-    public var curUIelements:Array<Dynamic> = [];
-    public var updateFunc:Dynamic = null;
+    public var curUIelements:Array<FlxSprite> = [];
+    public var updateFunc:(Int, Dynamic)->Void;
 
-    function addUI(obj:Dynamic) {
-        curUIelements.push(obj);
-        add(obj);
+    function addUI(object:FlxSprite) {
+        curUIelements.push(object);
+        add(object);
     }
 
     public function createUI(values:Array<Dynamic>) {
@@ -36,15 +37,15 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
             switch (Type.typeof(v)) {
                 case TInt | TFloat:
                     final stepper = new QuickStepper(X, Y,v);
-                    stepper.callback = function() if (updateFunc != null) updateFunc(id, stepper.value);
-                    getValuesArray.push(function () return stepper.value);
+                    stepper.callback = () -> updateFunc(id, stepper.value);
+                    getValuesArray.push(() -> return stepper.value);
                     addUI(stepper);
 
                 case TBool:
                     final checkbox = new FlxUICheckBox(X, Y, null, null, " ");
                     checkbox.checked = v;
-                    checkbox.callback = function() if (updateFunc != null) updateFunc(id, checkbox.checked);
-                    getValuesArray.push(function () return checkbox.checked);
+                    checkbox.callback = () -> updateFunc(id, checkbox.checked);
+                    getValuesArray.push(() -> return checkbox.checked);
                     addUI(checkbox);
 
                 case TClass(Array):
@@ -53,14 +54,14 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
                         updateFunc(id, value);
                     });
                     dropdown.selectedLabel = v[0];
-                    getValuesArray.push(function () return dropdown.selectedLabel);
+                    getValuesArray.push(() -> return dropdown.selectedLabel);
                     addUI(dropdown);
 
                 default: //TClass(String)
                     final input = new FlxUIInputText(X, Y, 100, Std.string(v), 8);
-                    ChartingState.instance.tabs.focusList.push(input);
-                    input.callback = function(var1, var2) if (updateFunc != null) updateFunc(id, input.text);
-                    getValuesArray.push(function () return input.text);
+                    ChartTabs.instance.focusList.push(input);
+                    input.callback = (var1, var2) -> updateFunc(id, input.text);
+                    getValuesArray.push(() -> return input.text);
                     addUI(input);
             }
             //add(new FlxText(_X,_Y - 15, 0, 'Value $i:'));
@@ -87,20 +88,25 @@ class EventTab extends FlxTypedSpriteGroup<Dynamic> {
 
     public function getValues():Array<Dynamic> {
         final array:Array<Dynamic> = [];
-        for (i in getValuesArray)
-            array.push(i());
+        getValuesArray.fastForEach((func, i) -> array.push(func()));
         return array;
     }
 
     public function clearGroup() {
-        FlxArrayUtil.clearArray(curUIelements);
-        FlxArrayUtil.clearArray(getValuesArray);
-        final focusList = ChartingState.instance.tabs.focusList;
-        for (i in members) {
-            if (focusList.contains(i)) focusList.remove(i);
-            i.destroy();
-            members.remove(i);
-        }
+        curUIelements.clear();
+        getValuesArray.clear();
+
+        var focus = ChartTabs.instance.focusList;
+        members.fastForEach((member, i) -> {
+            if (member is FlxUIInputText) {
+                if (focus.indexOf(cast member) != -1) {
+                    focus.remove(cast member);
+                }
+            }            
+            member.destroy();
+        });
+
+        members.clear();
         clear();
     }
 }

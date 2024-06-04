@@ -59,10 +59,10 @@ class FastArray<T>
     }
 
     inline public static function clear<T>(array:Array<T>) {
-        #if (cpp || hl)
-        array.resize(0);
-        #else
+        #if web
         array.splice(0, array.length); // Splice is faster on html5 for whatever reason
+        #else
+        array.resize(0);
         #end
     }
 

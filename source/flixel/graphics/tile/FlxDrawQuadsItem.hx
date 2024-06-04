@@ -13,7 +13,7 @@ import openfl.Vector;
 @:unreflective
 class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 {
-	static inline var VERTICES_PER_QUAD = #if (openfl >= "8.5.0") 4 #else 6 #end;
+	static inline var VERTICES_PER_QUAD = 4;
 
 	public var shader:FlxShader;
 
@@ -38,7 +38,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		rects.length = 0;
 		transforms.length = 0;
 		alphas.clear();
-		if (colorMultipliers != null)
+		if (colored)
 		{
 			colorMultipliers.clear();
 			colorOffsets.clear();
@@ -53,6 +53,14 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		alphas = null;
 		colorMultipliers = null;
 		colorOffsets = null;
+	}
+
+	override inline function set_colored(value:Bool) {
+		if (value) if (colorMultipliers == null) {
+			colorMultipliers = [];
+			colorOffsets = [];
+		}
+		return colored = value;
 	}
 
 	override public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void
@@ -75,12 +83,6 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 		if (colored)
 		{
-			if (colorMultipliers == null)
-			{
-				colorMultipliers = [];
-				colorOffsets = [];
-			}
-
 			for (i in 0...VERTICES_PER_QUAD)
 			{
 				colorMultipliers.push(transform.redMultiplier);
@@ -99,7 +101,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	#if !flash
 	override public function render(camera:FlxCamera):Void
 	{
-		if (rects.length == 0)
+		if (#if cpp untyped __cpp__('this->rects->_hx___array->length == 0') #else rects.length == 0 #end)
 			return;
 
 		if (shader == null)
@@ -137,7 +139,8 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	function drawFlxQuad(graphics:Graphics, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		// Override blend mode
-		graphics.__commands.overrideBlendMode(blend ?? NORMAL);
+		if (blend == null) blend = NORMAL;
+		graphics.__commands.overrideBlendMode(blend);
 
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();

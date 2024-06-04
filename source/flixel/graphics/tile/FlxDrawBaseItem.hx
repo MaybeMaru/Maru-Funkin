@@ -29,7 +29,7 @@ abstract class FlxDrawBaseItem<T>
 
 	public var graphics:FlxGraphic;
 	public var antialiasing:Bool = false;
-	public var colored:Bool = false;
+	public var colored(default, set):Bool = false;
 	public var hasColorOffsets:Bool = false;
 	public var blending:Int = 0;
 	public var blend:BlendMode;
@@ -62,6 +62,8 @@ abstract class FlxDrawBaseItem<T>
 	{
 		drawCalls++;
 	}
+
+	function set_colored(value:Bool) return colored = value;
 
 	public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void {}
 
