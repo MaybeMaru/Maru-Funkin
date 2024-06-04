@@ -240,6 +240,10 @@ class CoolUtil {
 		FlxG.sound.music = null;
 	}
 
+	// Keeping for backwards compatibility
+	public static function sin(rad:Float) return FunkMath.sin(rad);
+	public static function cos(rad:Float) return FunkMath.cos(rad);
+
 	inline public static function getLerp(ratio:Float):Float {
 		return FlxG.elapsed / (1 / 60) * ratio;
 	}

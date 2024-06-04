@@ -218,7 +218,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
 		});
 
-		// DONT USE THIS, ITS A WIP
+		// Kinda useable, still a wip
 		set('makeModchartManager', function () {
 			final manager = funkin.util.frontend.ModchartManager.makeManager();
 			final instance = PlayState.instance;
@@ -229,25 +229,13 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return manager;
 		});
 
-		set('addSpr', function(spr:FlxObject, ?key:String, onTop:Bool = false):Dynamic {
-			return ScriptUtil.addObject(spr, key, onTop);
+		set('addSpr', function(spr:FlxObject, ?key:String, ?layer:LayerKey):Dynamic {
+			return ScriptUtil.addObject(spr, key, layer ?? false);
 		});
 
-		set('insertSpr', function(position:Int = 0, spr:FlxObject, ?key:String, onTop:Bool = false):Dynamic {
-			return ScriptUtil.insertObject(position, spr, key, onTop);
+		set('insertSpr', function(position:Int = 0, spr:FlxObject, ?key:String, layer:LayerKey):Dynamic {
+			return ScriptUtil.insertObject(position, spr, key, layer ?? false);
 		});
-
-		/*set('insertBehind', function(spr:Dynamic, ?key:String, behindKey:String) {
-			var layer = ScriptUtil.getSpriteLayer(behindKey);
-			var bSpr = ScriptUtil.getSprite(behindKey);
-			ScriptUtil.insertSprite(spr, key, layer.indexOf(bSpr) - 1, layer);
-		});
-
-		set('insertAbove', function(spr:Dynamic, ?key:String, aboveKey:String) {
-			var layer = ScriptUtil.getSpriteLayer(aboveKey);
-			var aSpr = ScriptUtil.getSprite(aboveKey);
-			ScriptUtil.insertSprite(spr, key, layer.indexOf(aSpr), layer);
-		});*/
 
 		set('setObjMap', function(object:FlxObject, key:String):Void {
 			ScriptUtil.objects.set(key, object);
@@ -323,7 +311,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			{
 				var	curEvents = NotesGroup.instance.songEvents;
 				if (!curEvents.contains(name)) {
-					var script = ModdingUtil.addScript(Paths.script('events/$name'));
+					ModdingUtil.addScript(Paths.script('events/$name'));
 					curEvents.push(name);
 				}
 			}

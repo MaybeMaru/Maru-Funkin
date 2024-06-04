@@ -86,7 +86,10 @@ class ChartingState extends MusicBeatState
         add(eventsGrid);
         add(mainGrid);
 
-        noteTile = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE, FlxColor.WHITE);
+        noteTile = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+        noteTile.setGraphicSize(GRID_SIZE);
+        noteTile.updateHitbox();
+        noteTile.antialiasing = false;
         noteTile.alpha = 0.6;
         add(noteTile);
 
