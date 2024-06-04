@@ -141,6 +141,7 @@ class FreeplayState extends MusicBeatState
 	}
 
 	var loadedSong:String = "";
+	var loadedDiff:String = "";
 	var lerpPosition:Float = 0.0;
 
 	override function update(elapsed:Float):Void
@@ -173,15 +174,21 @@ class FreeplayState extends MusicBeatState
 
 		#if desktop
 		if(FlxG.keys.justPressed.ONE) {
-			final curSong = songs[curSelected];
-			if (curSong.song != loadedSong)
+			final curSong = songs[curSelected].song;
+			final curDiff = curWeekDiffs[curDifficulty];
+			if ((curSong != loadedSong) || (curDiff != loadedDiff))
 			{
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
 
 				// Make a new thread to load the music
-				FunkThread.run(() -> ModdingUtil.runFunctionMod(songs[curSelected].mod, () -> FlxG.sound.playMusic(Paths.inst(curSong.song), 0)));
-				loadedSong = curSong.song;
+				FunkThread.run(() -> ModdingUtil.runFunctionMod(songs[curSelected].mod, () -> {
+					PlayState.curDifficulty = curDiff;
+					FlxG.sound.playMusic(Paths.inst(curSong), 0);
+				}));
+
+				loadedSong = curSong;
+				loadedDiff = curDiff;
 			}
 			else if (FlxG.sound.music != null)
 				FlxG.sound.music.time = FlxG.sound.music.volume = 0;

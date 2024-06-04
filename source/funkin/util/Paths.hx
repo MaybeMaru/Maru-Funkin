@@ -177,7 +177,12 @@ class Paths
 	**/
 
 	inline static public function songAudioAssetPath(song:String, asset:String, ?globalAsset:Bool):String {
-		return getPath(Song.formatSongFolder(song) + '/audio/$asset.$SOUND_EXT', MUSIC, 'songs', globalAsset);
+		var songKey = Song.formatSongFolder(song) + '/audio/$asset';
+
+		var diffPath = getPath('$songKey-${PlayState.curDifficulty}.$SOUND_EXT', MUSIC, 'songs', globalAsset);
+		if (exists(diffPath, MUSIC)) return diffPath;
+		
+		return getPath('$songKey.$SOUND_EXT', MUSIC, 'songs', globalAsset);
 	}
 
 	inline static public function voicesPath(song:String, ?globalAsset:Bool):String {

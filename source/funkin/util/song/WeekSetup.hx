@@ -1,7 +1,6 @@
 package funkin.util.song;
 
 import funkin.states.LoadingState;
-import flixel.util.FlxArrayUtil;
 
 /*
     Setup mod folders
