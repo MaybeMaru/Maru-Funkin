@@ -11,6 +11,7 @@ typedef SongList = {
 	var songs:Array<String>;
 	var songIcons:Array<String>;
     var songColors:Array<String>;
+    var songDiffs:Array<Array<String>>;
 }
 
 typedef WeekJson = {
@@ -47,6 +48,7 @@ class WeekSetup
             songs:["Tutorial"],
             songIcons: ["gf"],
             songColors: null,
+            songDiffs: null
         },
         weekDiffs: CoolUtil.defaultDiffArray,
 
@@ -105,10 +107,16 @@ class WeekSetup
             final getJson = CoolUtil.getFileContent(Paths.getPath('data/weeks/$i.json', TEXT, null, true));
             if (getJson.length <= 0) continue; // dont add empty weeks
             
-            final parsedJson:WeekJson = checkWeek(Json.parse(getJson));
+            final weekJson:WeekJson = checkWeek(Json.parse(getJson));
+            
+            if (weekJson.songList.songColors == null || weekJson.songList.songColors.length <= 0)
+                weekJson.songList.songColors = [weekJson.weekColor];
+    
+            if (weekJson.songList.songDiffs == null || weekJson.songList.songDiffs.length <= 0)
+                weekJson.songList.songDiffs = [weekJson.weekDiffs];
 
             final _data:WeekData = {
-                data: parsedJson,
+                data: weekJson,
                 modFolder: modMap.get(i),
                 name: i
             }
@@ -120,7 +128,7 @@ class WeekSetup
             weekMap.set(i, _data);
 
             // Unlock the week
-            if (!Highscore.getWeekUnlock(i) && parsedJson.startUnlocked) {
+            if (!Highscore.getWeekUnlock(i) && weekJson.startUnlocked) {
                 Highscore.setWeekUnlock(i, true);
             }
         }
@@ -149,9 +157,6 @@ class WeekSetup
                 case "storyGf":    week.storyCharacters[2] = fieldValue;
             }
         }
-
-        if (week.songList.songColors == null)
-            week.songList.songColors = [week.weekColor];
 
         if (Reflect.hasField(week.songList, "songIcon"))
             week.songList.songIcons = Reflect.field(week.songList, "songIcon");

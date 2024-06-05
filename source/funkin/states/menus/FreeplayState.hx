@@ -6,21 +6,20 @@ typedef SongMetaData = {
 	var song:String;
 	var week:String;
 	var char:String;
-	var ID:Int;
+	var diffs:Array<String>;
+	var color:FlxColor;
 	var mod:String;
 }
 
 class FreeplayState extends MusicBeatState
 {
-	var bg:FunkinSprite;
-
 	var songs:Array<SongMetaData> = [];
-	var coolColors:Map<String, FlxColor>;
-	var curWeekDiffs:Array<String> = ['easy', 'normal', 'hard'];
+	var curSongDiffs:Array<String> = ['easy', 'normal', 'hard'];
 
 	public static var curSelected:Int = 0;
 	public static var curDifficulty:Int = 1;
 
+	var bg:FunkinSprite;
 	var scoreBG:FlxSprite;
 	var scoreText:FlxFunkText;
 	var diffText:FlxFunkText;
@@ -43,10 +42,8 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if debug
-		addSong('test','bf','test',-1);
+		addSong('test', 'bf', ['normal'], FlxColor.GRAY, 'test');
 		#end
-
-		coolColors = new Map<String, FlxColor>();
 
 		WeekSetup.getWeekList().fastForEach((data, i) -> {
 			final name = data.name;
@@ -55,13 +52,13 @@ class FreeplayState extends MusicBeatState
 			if (!week.hideFreeplay) if (Highscore.getWeekUnlock(name))
 			{
 				final list = week.songList;
-				addWeek(list.songs, list.songIcons, name, data.modFolder);
 
-				final colors = list.songColors;
-				for (s in 0...list.songs.length) {
-					final color = FlxColorFix.fromString(colors[cast FlxMath.bound(s, 0, colors.length - 1)]);
-					coolColors.set(formatColor(name, s), color);
-				}
+				// Parse colors
+				var colors:Array<FlxColor> = [];
+				list.songColors.fastForEach((color, i) -> colors.push(FlxColorFix.fromString(color)));
+				
+				// Add da week
+				addWeek(list.songs, list.songIcons, list.songDiffs, colors, name, data.modFolder);
 			}
 		});
 
@@ -110,34 +107,35 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
-	public function addSong(song:String, char:String, week:String, id:Int, mod:String = ""):Void {
+	public function addSong(song:String, icon:String, diffs:Array<String>, color:FlxColor, week:String, mod:String = ""):Void {
 		songs.push({
 			song: song,
 			week: week,
-			char: char,
-			ID: id,
+			char: icon,
+			diffs: diffs,
+			color: color,
 			mod: mod
 		});
 	}
 
-	public function addWeek(songs:Array<String>, ?songCharacters:Array<String>, week:String, mod:String):Void {
-		songCharacters ??= ['bf'];
-		songs.fastForEach((song, i) -> {
-			var icon = songCharacters[Std.int(FlxMath.bound(i, 0, songCharacters.length - 1))];
-			addSong(song, icon, week, i, mod);
-		});
-	}
+	public function addWeek(list:Array<String>, ?icons:Array<String>, ?diffs:Array<Array<String>>, ?colors:Array<FlxColor>, week:String, mod:String):Void {
+		icons ??= ["bf"];
+		diffs ??= [CoolUtil.defaultDiffArray.copy()];
+		colors ??= [FlxColor.WHITE];
 
-	inline function formatColor(weekName:String, id:Int):String {
-		return weekName + '_songID_' + id;
+		list.fastForEach((song, i) -> {
+			var icon = icons[Std.int(FlxMath.bound(i, 0, icons.length - 1))];
+			var diffs = diffs[Std.int(FlxMath.bound(i, 0, diffs.length - 1))];
+			var color = colors[Std.int(FlxMath.bound(i, 0, colors.length - 1))];
+			addSong(song, icon, diffs, color, week, mod);
+		});
 	}
 
 	var lerpColor:FlxColorFix;
 	var targetColor:FlxColor;
 
 	function getBgColor():FlxColor {
-		final curSongMeta = songs[curSelected];
-		return coolColors.get(formatColor(curSongMeta.week, curSongMeta.ID));
+		return songs[curSelected].color;
 	}
 
 	var loadedSong:String = "";
@@ -175,7 +173,7 @@ class FreeplayState extends MusicBeatState
 		#if desktop
 		if(FlxG.keys.justPressed.ONE) {
 			final curSong = songs[curSelected].song;
-			final curDiff = curWeekDiffs[curDifficulty];
+			final curDiff = curSongDiffs[curDifficulty];
 			if ((curSong != loadedSong) || (curDiff != loadedDiff))
 			{
 				if (FlxG.sound.music != null)
@@ -219,8 +217,8 @@ class FreeplayState extends MusicBeatState
 			startTmr +=  FlxG.elapsed;
 			if (startTmr >= 0.333) {
 				tmr += FlxG.elapsed;
-				if (tmr >= 0.1333) {
-					tmr = 0;
+				while (tmr >= 0.1333) {
+					tmr -= 0.1333;
 					changeSelection(getKey('UI_UP', PRESSED) ? -1 : 1);
 				}
 			}
@@ -237,17 +235,17 @@ class FreeplayState extends MusicBeatState
 
 	function loadSong(toChart:Bool):Void {
 		var songData = songs[curSelected];
-		var diff = curWeekDiffs[curDifficulty];
+		var diff = curSongDiffs[curDifficulty];
 		#if mobile MobileTouch.setLayout(NONE); #end
 		WeekSetup.loadSong(songData.week, songData.song, diff, false, false, #if DEV_TOOLS toChart ? ChartingState : #end null);
 	}
 
 	function changeDiff(change:Int = 0):Void {
-		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
-		intendedScore = Highscore.getSongScore(songs[curSelected].song, curWeekDiffs[curDifficulty]);
+		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curSongDiffs.length - 1);
+		intendedScore = Highscore.getSongScore(songs[curSelected].song, curSongDiffs[curDifficulty]);
 		
-		var diffString:String = curWeekDiffs[curDifficulty].toUpperCase();
-		diffText.text = curWeekDiffs.length > 1 ? "< " + diffString + " >" : diffString;
+		var diffString:String = curSongDiffs[curDifficulty].toUpperCase();
+		diffText.text = curSongDiffs.length > 1 ? "< " + diffString + " >" : diffString;
 		updateLerpPosition();
 	}
 
@@ -258,18 +256,15 @@ class FreeplayState extends MusicBeatState
 		scoreText.text = lastTxt;
 	}
 
-	function changeSelection(change:Int = 0):Void {
-		var lastWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].week);
+	function changeSelection(change:Int = 0):Void
+	{
+		var lastDiff = curSongDiffs[curDifficulty] ?? "";	
 		curSelected = FlxMath.wrap(curSelected += change, 0, songs.length - 1);
 		if (change != 0) CoolUtil.playSound('scrollMenu', 0.4);
 
-		curWeekDiffs = WeekSetup.getWeekDiffs(songs[curSelected].week);
-		if (lastWeekDiffs != curWeekDiffs) {	//	FIND MATCHES
-			if (curWeekDiffs.contains(lastWeekDiffs[curDifficulty])) {
-				curDifficulty = curWeekDiffs.indexOf(lastWeekDiffs[curDifficulty]);
-			}
-		}
-
+		// Try to find the index of the last song's diff
+		curSongDiffs = songs[curSelected].diffs;		
+		curDifficulty = curSongDiffs.indexOf(lastDiff);
 		changeDiff();
 
 		grpSongs.members.fastForEach((item, i) -> {
