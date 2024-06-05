@@ -11,8 +11,8 @@ function startCutscene()
     add(red);
 
     var senpaiEvil = new FunkinSprite('weeb/senpaiCrazy', [0,0], [0,0]);
-    senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion instance 1', 24, false, [0]);
-    senpaiEvil.addAnim('cutscene', 'Senpai Pre Explosion instance 1');
+    senpaiEvil.addAnim('preCutscene', 'Senpai Pre Explosion', 24, false, [0]);
+    senpaiEvil.addAnim('cutscene', 'Senpai Pre Explosion');
     senpaiEvil.playAnim('preCutscene');
     senpaiEvil.setScale(6, false);
     senpaiEvil.screenCenter();
