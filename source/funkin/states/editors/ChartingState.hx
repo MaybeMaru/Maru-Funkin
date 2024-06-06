@@ -34,6 +34,7 @@ class ChartingState extends MusicBeatState
     public var stats:FlxBitmapText;
     public var tabs:ChartTabs;
 
+    public var textGroup:TypedGroup<FlxBitmapText>;
     public var mainGrid:ChartNoteGrid;
     public var eventsGrid:ChartEventGrid;
 
@@ -79,12 +80,23 @@ class ChartingState extends MusicBeatState
         Conductor.volume = 1;
         stop();
 
+        textGroup = new TypedGroup<FlxBitmapText>();
         mainGrid = new ChartNoteGrid();
         eventsGrid = new ChartEventGrid();
-        eventsGrid.gridShadow.x = (eventsGrid.grid.x -= GRID_SIZE * 5);
+        eventsGrid.grid.x -= GRID_SIZE * 5;
+
+        var grid = mainGrid.grid;
         
         add(eventsGrid);
         add(mainGrid);
+
+        stats = new FlxBitmapText(grid.x + grid.width + 25, grid.y + 25);
+        stats.antialiasing = false;
+        stats.scale.set(3,3);
+        stats.scrollFactor.set();
+
+        add(textGroup);
+        add(stats);
 
         noteTile = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
         noteTile.setGraphicSize(GRID_SIZE);
@@ -92,8 +104,6 @@ class ChartingState extends MusicBeatState
         noteTile.antialiasing = false;
         noteTile.alpha = 0.6;
         add(noteTile);
-
-        var grid = mainGrid.grid;
 
         strumBar = new ChartStrumLine();
         strumBar.setPosition(grid.x, grid.y);
@@ -103,12 +113,6 @@ class ChartingState extends MusicBeatState
             sectionIndex = 0;
             lastSong = SONG.song;
         }
-        
-        stats = new FlxBitmapText(grid.x + grid.width + 25, grid.y + 25);
-        stats.antialiasing = false;
-        stats.scale.set(3,3);
-        stats.scrollFactor.set();
-        add(stats);
 
         tabs = new ChartTabs(stats.x, stats.y + FlxG.height * 0.25);
         tabs.scrollFactor.set();
@@ -119,35 +123,63 @@ class ChartingState extends MusicBeatState
         super.create();
     }
 
-    static final PRESSED_COLOR:Int = 0xffb496b4;
+    public function recycleText():FlxBitmapText {
+        var text:FlxBitmapText = textGroup.recycle(FlxBitmapText);
+        text.antialiasing = false;
+        text.scale.set(2, 2);
+        text.updateHitbox();
+        textGroup.add(text);
+        return text;
+    }
 
     function checkNoteSound()
     {
-        mainGrid.group.forEachAlive((note:ChartNote) -> {
-            if (note.strumTime + 0.1 <= Conductor.songPosition && note.strumTime + 0.1 >= sectionTime) {
-                if (note.color == FlxColor.WHITE) {
-                    strumBar.pressStrum(note.gridNoteData);
-                    if (playing && tabs.check_hitsound.checked) CoolUtil.playSound('chart/hitclick', 1, 1);
-                } 
-                note.color = PRESSED_COLOR;
-                if (note.child != null) note.child.color = PRESSED_COLOR;
-            }
-            else {
-                note.color = FlxColor.WHITE;
-                if (note.child != null) note.child.color = FlxColor.WHITE;
-            }
-        });
+        mainGrid.group.forEachAlive((note:ChartNote) ->
+        {
+            final hasChild:Bool = (note.child != null);
 
-        mainGrid.sustainsGroup.forEachAlive((sustain:ChartSustain) -> {
-            final note = sustain?.chartParent?.chartData;
-            if (note != null && Conductor.songPosition >= note[0] && Conductor.songPosition <= note[0] + (Conductor.stepCrochet * .5) + note[2]) {
-                strumBar.pressStrum(note[1]);
+            if (note.strumTime < Conductor.songPosition)
+            {
+                if (note.strumTime + 0.1 >= sectionTime)
+                {
+                    // Press note
+                    if (note.color == FlxColor.WHITE) {
+                        strumBar.pressStrum(note.gridNoteData);
+                        if (playing) if (tabs.check_hitsound.checked)
+                            CoolUtil.playSound('chart/hitclick', 1, 1);
+                    } 
+
+                    // Press note sustain
+                    if (hasChild) {
+                        var chartData = note.chartData;
+                        if (chartData != null) {
+                            var time = chartData[0];
+                            var length = chartData[2];
+                            if (Conductor.songPosition >= time) if (Conductor.songPosition <= time + (Conductor.stepCrochet * .5) + length)
+                            {
+                                strumBar.pressStrum(chartData[1]);
+                            }
+                        }
+                    }
+
+                }
+                
+                note.color = 0xffb496b4;
+            }
+            else
+            {
+                note.color = FlxColor.WHITE;
+            }
+
+            if (hasChild) {
+                note.child.color = note.color;
             }
         });
 
         eventsGrid.group.forEachAlive((event:ChartEvent) -> {
-            if (event.strumTime + 0.1 <= Conductor.songPosition) event.color = PRESSED_COLOR;
-            else event.color = FlxColor.WHITE;
+            event.color = (event.strumTime + 0.1 <= Conductor.songPosition)
+            ? event.color = 0xffb496b4
+            : FlxColor.WHITE;
         });
     }
 

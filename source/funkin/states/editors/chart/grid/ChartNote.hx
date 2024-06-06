@@ -15,10 +15,29 @@ class ChartNote extends Note
     }
 
     public var chartData:Array<Dynamic>;
-    public var typeText:FlxBitmapText;
     public var gridNoteData:Int = 0;
 
     override function removeNote() {}
+
+    public var text(default, set):FlxBitmapText;
+    function set_text(value) {
+        if (value != null) {
+            value.alignment = LEFT;
+        }
+        return text = value;
+    }
+
+    override function kill() {
+        super.kill();
+        if (child != null) {
+            child.kill();
+            child = null;
+        }
+        if (text != null) {
+            text.kill();
+            text = null;
+        }
+    }
 
     public function init(?chartData:Array<Dynamic>, ?skin:String, position:FlxPoint) {
         this.chartData = chartData;

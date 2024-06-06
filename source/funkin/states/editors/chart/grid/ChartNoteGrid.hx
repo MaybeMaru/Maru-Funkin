@@ -14,7 +14,7 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
     public var voicesWaveform:AudioWaveform;
 
     public var sustainsGroup:TypedGroup<ChartSustain>;
-    public var textGroup:TypedGroup<FlxBitmapText>;
+    //public var textGroup:TypedGroup<FlxBitmapText>;
 
     override function drawSectionClipping(section:SwagSection, minTime:Float, ?pushArray:Array<ChartNote>) {
         var hasArray:Bool = pushArray != null;
@@ -66,29 +66,17 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
             final type:String = (noteType.startsWith('default')) ? noteType.replace('default', '').replace('-','') : noteType;
             if (type.length > 0)
             {
-                var text:FlxBitmapText = textGroup.recycle(FlxBitmapText);
-                text.antialiasing = false;
+                var text:FlxBitmapText = ChartingState.instance.recycleText();
                 text.text = type;
-                text.scale.set(2, 2);
-                text.updateHitbox();
-
-                text.setPosition(pos.x - (text.width - note.width) * .5, pos.y - (text.height - note.height) * .5);
-                text.scrollFactor.set(1,1);
-
-                note.typeText = text;
-                textGroup.add(text);
+                text.x = pos.x - (text.width - note.width) * .5;
+                text.y = pos.y - (text.height - note.height) * .5;
+                note.text = text;
             }
         }
 
         pos.put();
 
         return note;
-    }
-
-    override function clearObject(note:ChartNote) {
-        super.clearObject(note);
-        if (note.child != null) note.child.kill();
-        if (note.typeText != null) note.typeText.kill();
     }
 
     override function equalObjectData(note:ChartNote, data:Array<Dynamic>) {
@@ -132,8 +120,8 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
         sustainsGroup = new TypedGroup<ChartSustain>();
         insert(members.indexOf(group), sustainsGroup);
         
-        textGroup = new TypedGroup<FlxBitmapText>();
-        insert(members.indexOf(gridShadow), textGroup);
+        //textGroup = new TypedGroup<FlxBitmapText>();
+        //insert(members.indexOf(gridShadow), textGroup);
     }
 
     public function updateWaveform():Void

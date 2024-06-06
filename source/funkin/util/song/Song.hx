@@ -209,10 +209,9 @@ class Song
 			else
 			{
 				sec.sectionNotes.fastForEach((note, i) -> {
-					final type:String = note[3];
-					if (type != null) {
-						if (type == "default")
-							note.pop(); 
+					final type:String = Std.string(note[3]);
+					if (type != null) if (type.length <= 0 || type == "default") {
+						note.pop(); 
 					}
 				});
 				sec.sectionNotes.sort(sortNotes);

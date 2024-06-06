@@ -13,7 +13,6 @@ class ChartEvent extends SpriteGroup
     public var names:Array<String> = [];
     
     public var sprite:FlxSpriteExt;
-    public var text:FlxBitmapText;
     var packSprite:FlxSpriteExt;
 
     public var strumTime:Float = 0;
@@ -29,17 +28,25 @@ class ChartEvent extends SpriteGroup
         packSprite = new FlxSpriteExt().loadImage("options/packedEvent");
         packSprite.offset.set(-14,-20);
         add(packSprite);
-        
-        text = new FlxBitmapText(0, 0, "");
-        text.scale.set(2, 2);
-        text.updateHitbox();
-        text.antialiasing = false;
-        text.alignment = RIGHT;
-        text.borderStyle = NONE;
-        add(text);
 
         scrollFactor.set(1,1);
         data.push(new Event()); // Dummy event
+    }
+
+    public var text(default, set):FlxBitmapText;
+    function set_text(value) {
+        if (value != null) {
+            value.alignment = RIGHT;
+        }
+        return text = value;
+    }
+
+    override function kill() {
+        super.kill();
+        if (text != null) {
+            text.kill();
+            text = null;
+        }
     }
 
     public function loadSettings() {
@@ -99,9 +106,16 @@ class ChartEvent extends SpriteGroup
         updateText();
     }
 
-    public function init(strumTime:Float, events:Array<Array<Dynamic>>, pos:FlxPoint) {
-        setPosition(pos.x, pos.y);
+    public function init(strumTime:Float, events:Array<Array<Dynamic>>, pos:FlxPoint)
+    {
         this.strumTime = strumTime;
+        x = pos.x;
+        y = pos.y;
+
+        if (text == null) {
+            text = ChartingState.instance.recycleText();
+            text.setPosition(x, y);
+        }
         
         data.clear();
         names.clear();

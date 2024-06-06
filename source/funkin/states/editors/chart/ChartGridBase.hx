@@ -7,7 +7,7 @@ import flixel.addons.display.FlxBackdrop;
 class ChartGridBase<T:FlxObject> extends Group
 {
     public var grid:FlxBackdrop;
-    public var gridShadow:FlxSprite;
+    //public var gridShadow:FlxSprite;
     public var group:FlxTypedGroup<T>;
     
     public function new(columns:Int) {
@@ -39,7 +39,7 @@ class ChartGridBase<T:FlxObject> extends Group
         group = new FlxTypedGroup<T>();
         add(group);
 
-        gridShadow = new FlxSprite(grid.x, grid.y - grid.height);
+        /*gridShadow = new FlxSprite(grid.x, grid.y - grid.height);
         gridShadow.makeGraphic(cast grid.width, cast grid.height * 3, FlxColor.BLACK);
         gridShadow.alpha = 0.6;
         add(gridShadow);
@@ -51,7 +51,7 @@ class ChartGridBase<T:FlxObject> extends Group
             grid.height
         );
 
-        gridShadow.pixels.fillRect(rect, FlxColor.fromRGB(0,0,0,1));
+        gridShadow.pixels.fillRect(rect, FlxColor.fromRGB(0,0,0,1));*/
 
         Rectangle.__pool.release(rect);
     }
