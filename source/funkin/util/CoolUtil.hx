@@ -292,8 +292,7 @@ class CoolUtil {
 	
 	inline public static function formatClass(daClass:Dynamic, formatDir:Bool = true):String {
 		var className = Type.getClassName(Type.getClass(daClass));
-		var classFolders:Array<String> = className.split('.');
-		return classFolders.join(formatDir ? '/' : '.');
+		return formatDir ? className.replace(".", "/") : className;
 	}
 
 	inline public static function formatInt(value:Dynamic, zeroLength:Int = 5):String

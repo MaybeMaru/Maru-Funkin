@@ -41,15 +41,18 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 	{
 		instance = this;
 		curState = CoolUtil.formatClass(this, false);
-		
+
 		super.create();
 
 		//State Scripts
 		if (!curState.endsWith("PlayState"))
 		{
 			ModdingUtil.clearScripts();
-			final globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
-			final curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/${CoolUtil.formatClass(this).split('funkin/states/')[1]}');
+			
+			var statePath = curState.replace(".", "/").replace("funkin/states/", "");
+			
+			var globalStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state');
+			var curStateScripts:Array<String> = ModdingUtil.getScriptList('data/scripts/state/$statePath');
 			
 			globalStateScripts.fastForEach((script, i) -> ModdingUtil.addScript(script));
 			curStateScripts.fastForEach((script, i) -> ModdingUtil.addScript(script));
@@ -57,8 +60,8 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 			ModdingUtil.addCall('stateCreate');
 		}
 
-		if (Main.transition != null) // Make sure it runs after all of create is loaded in
-			FlxG.signals.postUpdate.addOnce(() -> Main.transition.exitTrans());
+		if (Main.transition != null) // Make sure it runs after everything is loaded in
+			FlxG.signals.postDraw.addOnce(() -> Main.transition.exitTrans());
 	}
 
 	// Only for backwards compatibility

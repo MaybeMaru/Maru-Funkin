@@ -13,7 +13,7 @@ class HealthIcon extends FlxSpriteExt
 	public var playIcon:Bool = false;
 	public var isDying:Bool = false;
 	public var singleAnim:Bool = false;
-	public var staticSize:Float = 1;
+	public var staticSize(default, set):Float = 1;
 	public var iconName:String = '';
 
 	public function new(char:String = 'bf', isPlayer:Bool = false, playIcon:Bool = false):Void {
@@ -66,6 +66,12 @@ class HealthIcon extends FlxSpriteExt
 	var bumpLerp:Float = 0.0;
 	var coolOffset:Float = 0.0;
 
+	function set_staticSize(value:Float):Float {
+		staticSize = value;
+		initBumpVars();
+		return value;
+	}
+
 	function initBumpVars() {
 		_height = height * __getScale() * 0.55;
 		_width = width * __getScale();
@@ -104,8 +110,9 @@ class HealthIcon extends FlxSpriteExt
 		}
 	}
 
-	inline function __getScale()
-		return singleAnim ? 1.0 : lodScale;
+	inline function __getScale() {
+		return singleAnim ? staticSize : lodScale * staticSize;
+	}
 
 	public function setSprTrackerPos():Void {
 		if (sprTracker != null) {
