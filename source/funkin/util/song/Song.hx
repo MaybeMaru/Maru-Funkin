@@ -9,17 +9,55 @@ import funkin.util.song.formats.QuaFormat;
 import funkin.util.song.formats.GhFormat;
 import funkin.util.song.formats.FunkinFormat;
 
-typedef SwagSection = {
-	var ?sectionNotes:Array<Array<Dynamic>>;
-	var ?sectionEvents:Array<Array<Dynamic>>;
+abstract NoteJson(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
+	public var time(get, set):Float;
+	inline function set_time(value):Float return this[0] = value;
+	inline function get_time():Float return this[0];
+
+	public var lane(get, set):Int;
+	inline function set_lane(value):Int return this[1] = value;
+	inline function get_lane():Int return this[1];
+
+	public var length(get, set):Float;
+	inline function set_length(value):Float return this[2] = value;
+	inline function get_length():Float return this[2];
+
+	public var type(get, set):String;
+	inline function set_type(value):String return this[3] = value;
+	inline function get_type():String return this[3];
+
+	public inline function push(value:Dynamic) this.push(value);
+	public inline function pop() return this.pop();
+}
+
+abstract EventJson(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
+	public var time(get, set):Float;
+	inline function set_time(value):Float return this[0] = value;
+	inline function get_time():Float return this[0];
+
+	public var name(get, set):String;
+	inline function set_name(value):String return this[1] = value;
+	inline function get_name():String return this[1];
+
+	public var values(get, set):Array<Dynamic>;
+	inline function set_values(value):Array<Dynamic> return this[2] = value;
+	inline function get_values():Array<Dynamic> return this[2];
+
+	public inline function push(value:Dynamic) this.push(value);
+	public inline function pop() return this.pop();
+}
+
+typedef SectionJson = {
+	var ?sectionNotes:Array<NoteJson>;
+	var ?sectionEvents:Array<EventJson>;
 	var ?mustHitSection:Bool;
 	var ?bpm:Float;
 	var ?changeBPM:Bool;
 }
 
-typedef SwagSong = {
+typedef SongJson = {
 	var song:String;
-	var notes:Array<SwagSection>;
+	var notes:Array<SectionJson>;
 	var bpm:Float;
 	var speed:Float;
 	var offsets:Array<Int>;
@@ -28,7 +66,7 @@ typedef SwagSong = {
 }
 
 typedef SongMeta = {
-	var events:Array<SwagSection>;
+	var events:Array<SectionJson>;
 	var offsets:Array<Int>;
 	var diffs:Array<String>;
 	//var bpm:Float;
@@ -44,7 +82,7 @@ class Song
 		'chart'						// Guitar Hero
 	];
 
-	public static function loadFromFile(diff:String, folder:String):SwagSong
+	public static function loadFromFile(diff:String, folder:String):SongJson
 	{
 		folder = formatSongFolder(folder);
 		
@@ -81,7 +119,7 @@ class Song
 	}
 
 	//Check null values and remove unused format variables
-	public static function checkSong(?song:SwagSong, ?meta:SongMeta, checkEngine:Bool = false, diff:String = ""):SwagSong
+	public static function checkSong(?song:SongJson, ?meta:SongMeta, checkEngine:Bool = false, diff:String = ""):SongJson
 	{
 		if (checkEngine) {
 			meta = FunkinFormat.metaCheck(meta, diff);
@@ -117,7 +155,7 @@ class Song
 		return song;
 	}
 
-	public static function checkSection(section:Null<SwagSection> = null):SwagSection
+	public static function checkSection(section:Null<SectionJson> = null):SectionJson
 	{
 		section = JsonUtil.checkJson(getDefaultSection(), section);
 		final foundNotes:Map<String, Int> = [];
@@ -145,7 +183,7 @@ class Song
 		return section;
 	}
 
-	public static function getSectionTime(song:SwagSong, section:Int = 0):Float {
+	public static function getSectionTime(song:SongJson, section:Int = 0):Float {
 		var crochet:Float = (60000 / song.bpm);
         var time:Float = 0;
 
@@ -164,9 +202,9 @@ class Song
 		return time;
 	}
 
-	public static function checkAddSections(song:SwagSong, index:Int, i:Int = 0):Void
+	public static function checkAddSections(song:SongJson, index:Int, i:Int = 0):Void
 	{
-		final notes:Array<SwagSection> = song.notes;
+		final notes:Array<SectionJson> = song.notes;
 		
 		while (notes.length < index + 1)
 			notes.push(getDefaultSection());
@@ -177,7 +215,7 @@ class Song
 		}
 	}
 
-	public static function getTimeSection(song:SwagSong, time:Float):Int
+	public static function getTimeSection(song:SongJson, time:Float):Int
 	{
 		var section:Int = 0;
 		var startTime:Float = 0;
@@ -194,9 +232,9 @@ class Song
 	}
 
 	//Removes unused variables for smaller size
-	public static function optimizeJson(input:SwagSong, metaClear:Bool = false):SwagSong
+	public static function optimizeJson(input:SongJson, metaClear:Bool = false):SongJson
 	{
-		var song:SwagSong = JsonUtil.copyJson(input);
+		var song:SongJson = JsonUtil.copyJson(input);
 		song.notes.fastForEach((sec, i) -> {
 			if (!sec.changeBPM) {
 				Reflect.deleteField(sec, 'changeBPM');
@@ -242,7 +280,7 @@ class Song
 		return song;
 	}
 
-	public static function parseJson(chartPath:String, rawJson:String = ""):SwagSong
+	public static function parseJson(chartPath:String, rawJson:String = ""):SongJson
 	{
 		if (rawJson.length <= 0) {
 			rawJson = CoolUtil.getFileContent(chartPath).trim();
@@ -289,7 +327,7 @@ class Song
 		return folder;
 	}
 
-	inline public static function getDefaultSong():SwagSong {
+	inline public static function getDefaultSong():SongJson {
 		return {
 			song: 'Test',
 			notes: [],
@@ -301,7 +339,7 @@ class Song
 		};
 	}
 
-	inline public static function getDefaultSection():SwagSection {
+	inline public static function getDefaultSection():SectionJson {
 		return {
 			sectionNotes: [],
 			sectionEvents: [],

@@ -6,9 +6,9 @@ class GhFormat {
         map = CoolUtil.getFileContent(path).split('\n');
     }
     
-    public static function convertSong(path:String, ?input:GhFormat):SwagSong {
+    public static function convertSong(path:String, ?input:GhFormat):SongJson {
         var ghMap:GhFormat = input ?? new GhFormat(path);
-        var fnfMap:SwagSong = Song.getDefaultSong();
+        var fnfMap:SongJson = Song.getDefaultSong();
 
         final title = ghMap.getVar("Name");
         final bpmMap = ghMap.getBpmChanges();

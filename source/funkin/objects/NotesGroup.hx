@@ -9,7 +9,7 @@ import funkin.objects.note.StrumLineGroup;
 class NotesGroup extends Group
 {	
 	public static var instance:NotesGroup;
-    public var SONG:SwagSong;
+    public var SONG:SongJson;
 	public var game:PlayState;
 	public var boyfriend:Character;
 	public var dad:Character;
@@ -101,12 +101,12 @@ class NotesGroup extends Group
 
 	public var vanillaUI:Bool = false;
     
-    public function new(_SONG:SwagSong, isPlayState:Bool = true) {
+    public function new(song:SongJson, isPlayState:Bool = true) {
         super();
 		instance = this;
 		game = isPlayState ? PlayState.instance : null;
 		this.isPlayState = isPlayState;
-        SONG = Song.checkSong(_SONG, null, false); //Double check null values
+        SONG = Song.checkSong(song, null, false); //Double check null values
 		curSong = SONG.song;
 
 		if (isPlayState) {
@@ -241,18 +241,19 @@ class NotesGroup extends Group
 	
 		SONG.notes.fastForEach((section, i) ->
 		{
-			for (songNotes in section.sectionNotes)
+			var mustHit:Bool = section.mustHitSection;
+			for (songNote in section.sectionNotes)
 			{
-				var strumTime:Float = songNotes[0];
-				var initNoteData:Int = songNotes[1];
-				var susLength:Float = songNotes[2] ?? 0;
+				var strumTime:Float = songNote.time;
+				var initNoteData:Int = songNote.lane;
+				var susLength:Float = songNote.length ?? 0;
 				
 				if ((strumTime + susLength) < Conductor.songPosition) continue; // Save on creating missed notes
 				if (initNoteData < 0) continue; // Negative notes arent supported
 
 				var noteData:Int = initNoteData % Conductor.NOTE_DATA_LENGTH;
-				var noteType:String = NoteUtil.getTypeName(songNotes[3]);
-				var mustPress:Bool = section.mustHitSection ? initNoteData < Conductor.NOTE_DATA_LENGTH : initNoteData >= Conductor.NOTE_DATA_LENGTH;
+				var noteType:String = NoteUtil.getTypeName(songNote.type);
+				var mustPress:Bool = mustHit ? initNoteData < Conductor.NOTE_DATA_LENGTH : initNoteData >= Conductor.NOTE_DATA_LENGTH;
 				var targetStrum:NoteStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
 				var skin:String = NoteUtil.getTypeJson(noteType)?.skin ?? SkinUtil.curSkin;
 
@@ -285,9 +286,9 @@ class NotesGroup extends Group
 			}
 
 			section.sectionEvents.fastForEach((e, i) -> {
-				var strumTime:Float = e[0];
-				var eventName:String = e[1];
-				var eventValues:Array<Dynamic> = e[2];
+				var strumTime:Float = e.time;
+				var eventName:String = e.name;
+				var eventValues:Array<Dynamic> = e.values;
 				
 				events.push(new Event(strumTime, eventName, eventValues));
 

@@ -5,12 +5,12 @@ import funkin.objects.NotesGroup;
 
 class NotesSubstate extends MusicBeatSubstate
 {
-    public var SONG:SwagSong;
+    public var SONG:SongJson;
     public var notesGroup:NotesGroup;
     public var position:Float = 0;
     public var stats:FlxBitmapText;
 
-    public function new(song:SwagSong, position:Float)
+    public function new(song:SongJson, position:Float)
     {
         super(true, 0x98000000);
         this.position = position;

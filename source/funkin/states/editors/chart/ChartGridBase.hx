@@ -57,17 +57,17 @@ class ChartGridBase<T:FlxObject> extends Group
     }
 
     public var sectionMembers:Array<T> = [];
-    public var sectionData(default, set):SwagSection;
+    public var sectionData(default, set):SectionJson;
     public var sectionIndex:Int = 0;
     public var sectionTime:Float = 0;
 
-    public function set_sectionData(value:SwagSection):SwagSection {
+    public function set_sectionData(value:SectionJson):SectionJson {
         clearMembers(true);
         drawSectionData(value, false, sectionMembers);
         return sectionData = value;
     }
 
-    public function drawSectionData(?section:SwagSection, clip:Bool = false, ?pushArray:Array<T>) {        
+    public function drawSectionData(?section:SectionJson, clip:Bool = false, ?pushArray:Array<T>) {        
         if (section != null) {
             drawSectionClipping(
                 section,
@@ -77,7 +77,7 @@ class ChartGridBase<T:FlxObject> extends Group
         }
     }
 
-    public function drawSectionClipping(section:SwagSection, minTime:Float, ?pushArray:Array<T>) {}
+    public function drawSectionClipping(section:SectionJson, minTime:Float, ?pushArray:Array<T>) {}
 
     public function setData(sectionIndex:Int = 0) {
         this.sectionIndex = sectionIndex;

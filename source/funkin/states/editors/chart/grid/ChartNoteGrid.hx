@@ -14,9 +14,8 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
     public var voicesWaveform:AudioWaveform;
 
     public var sustainsGroup:TypedGroup<ChartSustain>;
-    //public var textGroup:TypedGroup<FlxBitmapText>;
 
-    override function drawSectionClipping(section:SwagSection, minTime:Float, ?pushArray:Array<ChartNote>) {
+    override function drawSectionClipping(section:SectionJson, minTime:Float, ?pushArray:Array<ChartNote>) {
         var hasArray:Bool = pushArray != null;
         section.sectionNotes.fastForEach((data, i) ->
         {

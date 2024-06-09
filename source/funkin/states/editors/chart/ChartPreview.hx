@@ -5,9 +5,9 @@ import openfl.geom.Rectangle;
 
 class ChartPreview extends FlxSpriteExt {
     inline static var NOTE_SIZE:Int = 1;
-    public var SONG:SwagSong = null;
+    public var SONG:SongJson;
 
-    public function new(SONG:SwagSong):Void {
+    public function new(SONG:SongJson):Void {
         super(50,100);
         makeGraphic(NOTE_SIZE * Conductor.STRUMS_LENGTH, NOTE_SIZE * Conductor.STEPS_PER_MEASURE, FlxColor.GRAY, true, '_CHART_PREVIEW_');
         antialiasing = false;

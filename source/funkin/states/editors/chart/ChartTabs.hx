@@ -208,7 +208,7 @@ class ChartTabs extends FlxUITabMenu
 	var lastSectionPreview:ChartPreview;
 	var sectionNoteTypesDropDown:FlxUIDropDownMenu;
 
-	var sectionClipboard:{section:SwagSection, time:Float} = {
+	var sectionClipboard:{section:SectionJson, time:Float} = {
 		section: null,
 		time: 0.0
 	};

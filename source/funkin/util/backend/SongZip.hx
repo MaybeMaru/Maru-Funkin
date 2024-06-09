@@ -14,7 +14,7 @@ enum ZipFormat {
 
 typedef UnZipType = {
     var getMap: (chart:String) -> Dynamic;
-    var convert: (map:Dynamic) -> SwagSong;
+    var convert: (map:Dynamic) -> SongJson;
     var title: String;
     var diff: String;
     var audio: String;
@@ -136,7 +136,7 @@ class SongZip {
         File.saveContent(path, jsonString);
     }
 
-    static function createSongFolder(prefix:String, chart:SwagSong, audio:String, diff:String = 'hard') {
+    static function createSongFolder(prefix:String, chart:SongJson, audio:String, diff:String = 'hard') {
         for (i in ["charts", "audio"]) ModSetupState.createFolder('$prefix/$i', "");
         saveJson({song: Song.optimizeJson(chart)}, '$prefix/charts/$diff.json');
         final finalAudio = '$prefix/audio/Inst.ogg';

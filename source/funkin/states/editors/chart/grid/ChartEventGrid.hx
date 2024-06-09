@@ -30,7 +30,7 @@ class ChartEventGrid extends ChartGridBase<ChartEvent>
 
     var packedEvents:Map<Int, Array<Array<Dynamic>>> = [];
 
-    public override function drawSectionData(?section:SwagSection, clip:Bool = false, ?pushArray:Array<ChartEvent>) {        
+    public override function drawSectionData(?section:SectionJson, clip:Bool = false, ?pushArray:Array<ChartEvent>) {        
         if (section == null)
             return;
 

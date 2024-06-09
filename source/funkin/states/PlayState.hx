@@ -13,7 +13,7 @@ class PlayState extends MusicBeatState
 	public static var clearCache:Bool = true;
 	public static var clearCacheData:Null<CacheClearing> = null;
 
-	public static var SONG:SwagSong;
+	public static var SONG:SongJson;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:String = 'tutorial';
 	public static var storyPlaylist:Array<String> = [];
@@ -37,7 +37,7 @@ class PlayState extends MusicBeatState
 	private var targetCamPos:FlxPoint;
 	private static var prevCamFollow:FlxObject;
 
-	private var curSectionData:SwagSection;
+	private var curSectionData:SectionJson;
 
 	public var notesGroup:NotesGroup;
 	private var ratingGroup:RatingGroup;

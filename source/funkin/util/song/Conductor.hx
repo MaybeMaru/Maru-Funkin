@@ -109,7 +109,7 @@ class Conductor
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
-	public static function mapBPMChanges(song:SwagSong):Void
+	public static function mapBPMChanges(song:SongJson):Void
 	{
 		bpmChangeMap.clear();
 

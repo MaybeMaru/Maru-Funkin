@@ -10,11 +10,11 @@ import funkin.util.song.formats.BasicParser.BasicBpmChange;
  */
 
 class SmFormat extends BasicParser {
-    public static function convert(path:String, diff:String):SwagSong {
+    public static function convert(path:String, diff:String):SongJson {
         return new SmFormat().convertSong(path, diff);
     }
 
-    override function applyVars(variables:Map<String, String>, fnfMap:SwagSong) {
+    override function applyVars(variables:Map<String, String>, fnfMap:SongJson) {
         fnfMap.offsets = [Std.int(Std.parseFloat(variables.get('OFFSET')) * -1000), 0];
         fnfMap.speed = 2.5;
     }
