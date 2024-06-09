@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import openfl.display.BitmapData;
 import flixel.text.FlxBitmapText;
 import funkin.states.editors.chart.grid.ChartNote.ChartSustain;
 import haxe.ds.Vector;
@@ -49,20 +50,12 @@ class ChartingState extends MusicBeatState
     override function create() {
         instance = this;
         autoSaveChart = SaveData.getSave('autoSaveChart');
+        
         bg = new FunkinSprite('menuDesat', [0,0], [0,0]);
 		bg.color = 0xFF242424;
-        bg.setScale(1.1);
+        bg.setScale(1.11);
 		bg.screenCenter();
-        bg._dynamic.update = function (elapsed) {
-            if (bg.scale.x <= 1.11) return;
-            bg.scale.set(
-                CoolUtil.coolLerp(bg.scale.x, 1.1, 0.25),
-                CoolUtil.coolLerp(bg.scale.y, 1.1, 0.25));
-        }
 		add(bg);
-
-        NoteUtil.initTypes();
-        EventUtil.initEvents();
 
         if (FlxG.sound.music != null) FlxG.sound.music.stop();
         PlayState.inChartEditor = true;
@@ -72,13 +65,18 @@ class ChartingState extends MusicBeatState
         FlxG.cameras.add(camTop, false);
         
         SONG = Song.checkSong(PlayState.SONG);
-        Conductor.bpm = SONG.bpm;
-        Conductor.setTimeSignature(4,4);
+        Conductor.setTimeSignature(4,4, SONG.bpm);
         loadMusic(SONG.song);
         Conductor.mapBPMChanges(SONG);
 		Conductor.offset = Vector.fromArrayCopy(SONG.offsets);
         Conductor.volume = 1;
         stop();
+
+        NoteUtil.initTypes();
+        EventUtil.initEvents();
+
+        var stageSkin = Stage.getJson(SONG.stage).skin;
+        SkinUtil.setCurSkin(stageSkin);
 
         textGroup = new TypedGroup<FlxBitmapText>();
         mainGrid = new ChartNoteGrid();
@@ -97,6 +95,19 @@ class ChartingState extends MusicBeatState
 
         add(textGroup);
         add(stats);
+
+        var gay = FlxG.bitmap.create(1, cast grid.height * 3, FlxColor.fromRGB(0,0,0,153));
+        gay.bitmap.fillRect(new Rectangle(0, grid.height, 1, grid.height), FlxColor.fromRGB(0,0,0,1));
+
+        var mainShadow = new FlxSprite(grid.x, grid.y - grid.height).loadGraphic(gay);
+        mainShadow.scale.x = grid.width;
+        mainShadow.updateHitbox();
+        add(mainShadow);
+
+        var eventShadow = new FlxSprite(eventsGrid.grid.x, grid.y - grid.height).loadGraphic(gay);
+        eventShadow.scale.x = eventsGrid.grid.width;
+        eventShadow.updateHitbox();
+        add(eventShadow);
 
         noteTile = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
         noteTile.setGraphicSize(GRID_SIZE);
@@ -549,7 +560,7 @@ class ChartingState extends MusicBeatState
     public function clearSongEvents() {
         stop();
         openSubState(new PromptSubstate('Are you sure you want to\nclear these song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
-            for (i in SONG.notes) FlxArrayUtil.clearArray(i.sectionEvents);
+            SONG.notes.fastForEach((section, i) -> section.sectionEvents.clear());
             clearSectionData(false, true);
         }));
     }
@@ -557,7 +568,7 @@ class ChartingState extends MusicBeatState
     public function clearSongNotes() {
         stop();
         openSubState(new PromptSubstate('Are you sure you want to\nclear these song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
-            for (i in SONG.notes) FlxArrayUtil.clearArray(i.sectionNotes);
+            SONG.notes.fastForEach((section, i) -> section.sectionNotes.clear());
             clearSectionData(true, false);
         }));
     }
@@ -565,13 +576,13 @@ class ChartingState extends MusicBeatState
     public function clearSongFull() {
         stop();
         openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
-            for (i in SONG.notes) {
-                FlxArrayUtil.clearArray(i.sectionNotes);
-                FlxArrayUtil.clearArray(i.sectionEvents);
-                i.mustHitSection = true;
-                i.changeBPM = false;
-                i.bpm = 0;
-            }
+            SONG.notes.fastForEach((section, i) -> {
+                section.sectionNotes.clear();
+                section.sectionEvents.clear();
+                section.mustHitSection = true;
+                section.changeBPM = false;
+                section.bpm = 0;
+            });
             clearSectionData();
             updateSectionTabUI();
         }));
@@ -652,6 +663,11 @@ class ChartingState extends MusicBeatState
         "Section: "     + Math.max(0, curSection) + "\n\n" +
         "Position: "    + Math.floor(Conductor.songPosition) + "\n" +
         "BPM: "         + Conductor.bpm;
+
+        if (bg.scale.x > 1.11) {
+            var x = CoolUtil.coolLerp(bg.scale.x, 1.1, 0.25);
+            bg.scale.set(x, x);
+        }
         
         super.update(elapsed);
 

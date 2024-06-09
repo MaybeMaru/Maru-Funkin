@@ -90,7 +90,7 @@ class HealthIcon extends FlxSpriteExt
 	}
 
 	public function bumpIcon(bumpSize:Float = 1.2):Void {
-		setScale(bumpSize);
+		setScale(bumpSize * staticSize);
 		update(0);
 	}
 
