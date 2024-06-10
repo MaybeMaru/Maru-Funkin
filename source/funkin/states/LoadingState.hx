@@ -42,8 +42,8 @@ class LoadingState extends MusicBeatState
             });
         }
         else {
-            //var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
-            assetCache.set(key, {sound: AssetManager.__getFileSound(key)});
+            var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
+            assetCache.set(key, {sound: sound});
         }
     }
 

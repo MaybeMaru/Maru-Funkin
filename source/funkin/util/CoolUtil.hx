@@ -218,8 +218,8 @@ class CoolUtil {
 		lil shortcut to play music
 		itll also change the conductor bpm to the music's data text file thing
 	*/
-	public static function playMusic(music:String, volume:Float = 1, looped:Bool = true):Void {
-		FlxG.sound.playMusic(Paths.music(music), volume, looped);
+	public static function playMusic(music:String, volume:Float = 1, looped:Bool = true, ?stream:Bool):Void {
+		FlxG.sound.playMusic(Paths.music(music, null, null, stream), volume, looped);
 
 		var musicDataPath:String = Paths.getPath('music/$music-data.txt', MUSIC, null);
 		if (Paths.exists(musicDataPath, TEXT)) {

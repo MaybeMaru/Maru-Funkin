@@ -315,7 +315,7 @@ class TitleState extends MusicBeatState
 					case 'gay':
 						if (!gay) {
 							FlxG.camera.flash(flashy ? FlxColor.WHITE : 0x79ffffff, 3);
-							CoolUtil.playMusic("gay", 0);
+							CoolUtil.playMusic("gay", 0, true, true); // Stream this if possible :p
 							FlxG.sound.music.fadeIn();
 							codes.remove("gay");
 							gay = true;

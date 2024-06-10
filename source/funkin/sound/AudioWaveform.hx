@@ -13,6 +13,8 @@ class AudioWaveform extends FlxSpriteExt
     var graphics:Graphics;
     var bounds:Rectangle;
 
+    var waveformWidth:Float;
+
     public function new(X:Float = 0.0, Y:Float = 0.0, Width:Float = 250.0, Height:Float = 500.0, ?sound:Sound):Void
     {
         super(X, Y);
@@ -21,6 +23,8 @@ class AudioWaveform extends FlxSpriteExt
         bounds = new Rectangle(0, 0, width, height);
         canvas = new Sprite();
         graphics = canvas.graphics;
+
+        waveformWidth = Width * 0.5;
 
         if (sound != null)
             setSound(sound);
@@ -34,41 +38,53 @@ class AudioWaveform extends FlxSpriteExt
     static inline var QUALITY:Int = 250;
 
     var sampleRate:Float = 0.0;
-    var avgBytes:Array<Int> = [];
-
+    var data:Array<#if cpp cpp.Float32 #else Float #end> = [];
+    
     override function destroy():Void {
         super.destroy();
-        avgBytes = null;
+        data = null;
         canvas = null;
         graphics = null;
         bounds = null;
     }
-
-    public function setSound(sound:Sound):Void
-    {
-        sampleRate = sound.__buffer.sampleRate / QUALITY;
-        var bytes:Bytes = sound.__buffer.data.toBytes();
-        avgBytes.splice(0, avgBytes.length);
-
+    
+    public function setSound(sound:Sound):Void {
+        data.clear();
+    
+        var buffer = sound.__buffer;
+        if (buffer == null || buffer.data == null)
+            return;
+    
+        sampleRate = buffer.sampleRate / QUALITY;
+        var bytes:Bytes = buffer.data.toBytes();
+    
         var i:Int = 0;
         var l:Int = bytes.length;
-        var bigByte:Int = 0;
-
-        while(i < l)
-        {
+        var sum:Int = 0;
+        var count:Int = 0;
+    
+        while(i < l) {
             var byte = bytes.getUInt16(i);
             if (byte > (65535 / 2))
                 byte -= 65535;
-            
-            if (Math.abs(byte) > Math.abs(bigByte))
-                bigByte = byte;
-
-            if (i % QUALITY == 0) {
-                avgBytes.push(Std.int((bigByte / 65535) * 50));
-                bigByte = 0;
+    
+            sum += FlxMath.absInt(byte);
+            count++;
+    
+            if (count == QUALITY) {
+                var average = sum / count;
+                data.push(average * (1 / 65535 * waveformWidth));
+                sum = 0;
+                count = 0;
             }
-
+    
             i++;
+        }
+    
+        // Handle any remaining samples
+        if (count > 0) {
+            var average = sum / count;
+            data.push(average * (1 / 65535 * waveformWidth));
         }
     }
 
@@ -86,40 +102,29 @@ class AudioWaveform extends FlxSpriteExt
 
     public function redrawWaveform():Void
     {
-        graphics.__bounds = bounds;
+        //graphics.__bounds = bounds;
 
-        if (!visible || avgBytes.length <= 0 || end <= 0) {
+        if (!visible || data.length <= 0 || end <= 0) {
             return;
         }
 
-        final w:Int = Std.int(width * .5);
-        final h:Int = Std.int(height);
+        var w:Int = Std.int(width * .5);
         
-        graphics.beginFill();
-        graphics.lineStyle(0.7, -1, 1.0);
-        graphics.moveTo(w, 0);
+        graphics.beginFill(FlxColor.WHITE);
 
         var i:Int = start;
-        var l:Int = FlxMath.minInt(end, avgBytes.length);
-        var lastByte:Int = 0;
+        var l:Int = FlxMath.minInt(end, data.length);
 
         while (i < l)
         {
-            final byte:Int = avgBytes.unsafeGet(i);
+            var byte = data.unsafeGet(i);
 
-            if (byte != lastByte)
-            {
-                lastByte = byte;
+            var y:Float = inline FlxMath.remapToRange((i - start), 0, (l - start), 0, height);
+            graphics.drawRect(w - (byte * 0.5), y, byte, 1);
 
-                final y:Float = inline FlxMath.remapToRange((i - start), 0, (l - start), 0, h);
-                lineTo(w + byte, y);
-                //lineTo(w, y);
-            }
-
-            i = (i + 1);
+            i++;
         }
 
-        lineTo(w, h);
         graphics.endFill();
         graphics.__dirty = true;
 
@@ -140,11 +145,5 @@ class AudioWaveform extends FlxSpriteExt
             clearGraphics();
         }
         return super.set_visible(value);
-    }
-
-    inline function lineTo(x:Float, y:Float):Void {
-        graphics.__positionX = x;
-		graphics.__positionY = y;
-        graphics.__commands.lineTo(x, y);
     }
 }

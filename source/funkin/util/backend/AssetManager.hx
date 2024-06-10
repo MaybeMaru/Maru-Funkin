@@ -345,7 +345,7 @@ class AssetManager
 	 * SOUND CACHE
 	 */
 
-	public static function cacheSoundPath(path:String, staticAsset:Bool = false, ?key:String, stream:Bool = false):Sound
+	public static function cacheSoundPath(path:String, staticAsset:Bool = false, ?key:String, ?stream:Bool):Sound
 	{
 		if (key == null)
 			key = path;
@@ -354,6 +354,7 @@ class AssetManager
 		if (asset != null)
 			return asset.asset;
 
+		stream ??= false;
 		var sound = stream ? __streamSound(path) : __getFileSound(path);
 
 		var asset = Asset.fromAsset(sound, key);
@@ -434,8 +435,15 @@ class AssetManager
 		asset.dispose();
 		assetsMap.remove(key);
 
-		if (tempAssets.contains(key)) tempAssets.removeAt(tempAssets.indexOf(key));
-		else if (staticAssets.contains(key)) staticAssets.removeAt(staticAssets.indexOf(key));
+		var tempIndex:Int = tempAssets.indexOf(key);
+		if (tempIndex != -1) {
+			tempAssets.removeAt(tempIndex);
+		}
+		else {
+			var staticIndex:Int = staticAssets.indexOf(key);
+			if (staticIndex != -1)
+				staticAssets.removeAt(staticIndex);
+		}
 
 		return true;
 	}

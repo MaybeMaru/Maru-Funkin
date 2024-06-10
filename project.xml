@@ -78,13 +78,12 @@
 
 	<haxedev set='webgl' if="web" />
 
-	<haxelib name="flixel" />
-	<haxelib name="flixel-ui" />
-	<haxelib name="flixel-addons" />
+	<haxelib name="flixel"/>
+	<haxelib name="flixel-ui"/>
+	<haxelib name="flixel-addons"/>
 	<haxelib name="haxeui-core" unless="mac"/>
 	<haxelib name="haxeui-openfl" unless="mac"/>
-	<haxelib name="maru-hscript" />
-	<haxedef name="hscriptPos"/>
+	<haxelib name="maru-hscript"/>
 
 	<section if="cpp">
 		<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
@@ -92,6 +91,7 @@
 	</section>
 
 	<define name="TEXTURES_OFF" if="hl || web"/>
+	<haxedef name="hscriptPos"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

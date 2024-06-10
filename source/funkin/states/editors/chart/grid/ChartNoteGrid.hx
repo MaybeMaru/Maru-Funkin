@@ -118,9 +118,6 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
 
         sustainsGroup = new TypedGroup<ChartSustain>();
         insert(members.indexOf(group), sustainsGroup);
-        
-        //textGroup = new TypedGroup<FlxBitmapText>();
-        //insert(members.indexOf(gridShadow), textGroup);
     }
 
     public function updateWaveform():Void

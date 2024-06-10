@@ -167,9 +167,9 @@ class Paths
 		return soundExt(key, "music", library, level);
 	}
 
-	inline static public function music(key:String, ?library:String, ?level:String):Sound {
+	inline static public function music(key:String, ?library:String, ?level:String, ?stream:Bool):Sound {
 		var musicPath = musicFolder(key, library, level);
-		return AssetManager.cacheSoundPath(musicPath);
+		return AssetManager.cacheSoundPath(musicPath, false, null, stream);
 	}
 
 	/*
@@ -189,7 +189,7 @@ class Paths
 		return songAudioAssetPath(song, "Voices", globalAsset);
 	}
 
-	inline static public function voices(song:String, ?globalAsset:Bool, stream:Bool = false):Sound {
+	inline static public function voices(song:String, ?globalAsset:Bool, ?stream:Bool):Sound {
 		var voicesPath:String = voicesPath(song, globalAsset);
 		return AssetManager.cacheSoundPath(voicesPath, false, null, stream);
 	}
@@ -198,7 +198,7 @@ class Paths
 		return songAudioAssetPath(song, "Inst", globalAsset);
 	}
 
-	inline static public function inst(song:String, ?globalAsset:Bool, stream:Bool = false):Sound {
+	inline static public function inst(song:String, ?globalAsset:Bool, ?stream:Bool):Sound {
 		var instPath:String = instPath(song, globalAsset);
 		return AssetManager.cacheSoundPath(instPath, false, null, stream);
 	}
