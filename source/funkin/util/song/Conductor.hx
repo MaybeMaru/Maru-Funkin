@@ -78,11 +78,13 @@ class Conductor
 		song = Song.formatSongFolder(song);
 		if (loadedSong != song)
 		{
-			inst.loadSound(Paths.inst(song));
+			var stream = Preferences.getPref('song-stream') ?? false;
+
+			inst.loadSound(Paths.inst(song, null, stream));
 			
 			hasVocals = Paths.exists(Paths.voicesPath(song), MUSIC);
 			if (hasVocals)
-				vocals.loadSound(Paths.voices(song));
+				vocals.loadSound(Paths.voices(song, null, stream));
 
 			// Reload song file on dispose
 			var asset = AssetManager.getAsset(Paths.instPath(song));

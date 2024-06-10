@@ -189,18 +189,18 @@ class Paths
 		return songAudioAssetPath(song, "Voices", globalAsset);
 	}
 
-	inline static public function voices(song:String, ?globalAsset:Bool):Sound {
+	inline static public function voices(song:String, ?globalAsset:Bool, stream:Bool = false):Sound {
 		var voicesPath:String = voicesPath(song, globalAsset);
-		return AssetManager.cacheSoundPath(voicesPath);
+		return AssetManager.cacheSoundPath(voicesPath, false, null, stream);
 	}
 
 	inline static public function instPath(song:String, ?globalAsset:Bool):String {
 		return songAudioAssetPath(song, "Inst", globalAsset);
 	}
 
-	inline static public function inst(song:String, ?globalAsset:Bool):Sound {
+	inline static public function inst(song:String, ?globalAsset:Bool, stream:Bool = false):Sound {
 		var instPath:String = instPath(song, globalAsset);
-		return AssetManager.cacheSoundPath(instPath);
+		return AssetManager.cacheSoundPath(instPath, false, null, stream);
 	}
 
 	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {

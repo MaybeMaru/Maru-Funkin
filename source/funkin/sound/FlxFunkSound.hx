@@ -257,9 +257,12 @@ class FlxFunkSound extends FlxBasic
         return time + FlxG.game.ticks - __lastTick;
     }
 
-    public function setTime(time:Float):Float {
-        if (time <= 0) if (stream)
-            time = 1.0; // hacky fix
+    public function setTime(time:Float):Float
+    {
+        if (stream) {
+            if (source.currentTime <= 0)
+                return time;
+        }
         
         source.currentTime = Std.int(time);
         return time;
