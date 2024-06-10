@@ -273,8 +273,8 @@ class ChartingState extends MusicBeatState
 	}
 
     public function updateNoteTabUI():Void {
-        if (selectedNote == null || selectedNoteObject == null) return;
-        tabs.stepperSusLength.value = selectedNote[2];
+        if (nullNote()) return;
+        tabs.stepperSusLength.value = selectedNote.length;
     }
 
     var playing:Bool = false;
@@ -413,8 +413,9 @@ class ChartingState extends MusicBeatState
         }
     }
 
-    public var selectedNote:Array<Dynamic> = null;
+    public var selectedNote:NoteJson;
     public var selectedNoteObject(default, set):ChartNote = null;
+    
     function set_selectedNoteObject(value) {
         if (value != null && selectedNoteObject != null && value != selectedNoteObject) {
             value.blend = ADD;
@@ -457,7 +458,7 @@ class ChartingState extends MusicBeatState
         }
     }
 
-    public var selectedEvents:Array<Array<Dynamic>> = [];
+    public var selectedEvents:Array<EventJson> = [];
     public var selectedEventObject(default, set):ChartEvent = null;
     public var eventID:Int = 0;
 
@@ -557,15 +558,17 @@ class ChartingState extends MusicBeatState
         eventsGrid.clearObject(event);
     }
 
+    inline function nullNote():Bool return selectedNote == null || selectedNoteObject == null;
+
     public function changeNoteSus(value:Float = 0) {
-        if (selectedNote == null || selectedNoteObject == null) return;
-        selectedNote[2] = Math.max((selectedNote[2] ?? 0) + value, 0);
+        if (nullNote()) return;
+        selectedNote.length = Math.max((selectedNote.length ?? 0) + value, 0);
         mainGrid.updateObject(selectedNoteObject, selectedNote);
         updateNoteTabUI();
     }
 
     function updateSelectedNote() {
-        if (selectedNote == null || selectedNoteObject == null) return;
+        if (nullNote()) return;
         mainGrid.updateObject(selectedNoteObject, selectedNote);
     }
 
@@ -821,8 +824,10 @@ class ChartingState extends MusicBeatState
                     mainGrid.updateWaveform();
 
 				case 'note_susLength':
-					selectedNote[2] = nums.value;
-					updateSelectedNote();
+                    if (!nullNote()) {
+                        selectedNote.length = nums.value;
+                        updateSelectedNote();
+                    }
 
 				case 'section_bpm':
                     Conductor.mapBPMChanges(ChartingState.SONG);

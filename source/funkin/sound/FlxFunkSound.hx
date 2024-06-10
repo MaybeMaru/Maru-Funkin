@@ -75,8 +75,10 @@ class FlxFunkSound extends FlxBasic
 
                 _lastStopTime = 0;
 
-                if (this.onLoad != null)
+                if (this.onLoad != null) {
                     this.onLoad();
+                    this.onLoad = null;
+                }
             }
 
             if (value.__urlLoading)
@@ -111,8 +113,13 @@ class FlxFunkSound extends FlxBasic
         {
             stop();
 
-            if (autoDestroy)
+            if (autoDestroy) {
                 destroy();
+            }
+            else {
+                _lastStopTime = 0;
+                set_sound(sound);
+            }   
         }
     }
 

@@ -33,7 +33,7 @@ class LoadingState extends MusicBeatState
         streamSounds = Preferences.getPref('song-stream') ?? false;
     }
 
-    function cacheAsset(asset:UncachedAsset) {
+    inline function cacheAsset(asset:UncachedAsset) {
         var key = asset.key;
         if (asset.isImage) {
             assetCache.set(key, {
@@ -42,8 +42,8 @@ class LoadingState extends MusicBeatState
             });
         }
         else {
-            var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
-            assetCache.set(key, {sound: sound});
+            //var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
+            assetCache.set(key, {sound: AssetManager.__getFileSound(key)});
         }
     }
 
@@ -111,6 +111,9 @@ class LoadingState extends MusicBeatState
             }
         });
 
+        if (streamSounds)
+            soundAssets.clear();
+
         soundAssets.fastForEach((sound, i) -> {
             if (addedAssets.indexOf(sound) == -1) {
                 uncachedAssets.push({isImage:false, key: sound});
@@ -142,20 +145,7 @@ class LoadingState extends MusicBeatState
 
                 assetsQueued.unsafeSet(index, true);
 
-                var asset = uncachedAssets[index];
-                var key = asset.key;
-                if (asset.isImage) {
-                    //trace("trying to load image " + key);
-                    assetCache.set(key, {
-                        bitmap: AssetManager.__getFileBitmap(key),
-                        lod: asset.lod
-                    });
-                }
-                else {
-                    //trace("trying to load sound " + key);
-                    var sound:Sound = streamSounds ? AssetManager.__streamSound(key) : AssetManager.__getFileSound(key);
-                    assetCache.set(key, {sound: sound});
-                }
+                cacheAsset(uncachedAssets[index]);
 
                 assetsCached.unsafeSet(index, true);
                 //trace(index, key, thread);
