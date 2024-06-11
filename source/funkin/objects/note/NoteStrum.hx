@@ -7,6 +7,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 {
     public var noteData:Int = 0;
 	public var modchart:ModchartData;
+	public var initPos:FlxPoint;
 	
 	public var swagWidth:Float = 110;
 	public var swagHeight:Float = 110;
@@ -25,6 +26,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
 		super(x,y);
+		initPos = FlxPoint.get(x, y);
 		this.noteData = noteData;
 		ID = noteData;
 		loadSkin();
@@ -34,6 +36,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		super.destroy();
 		modchart = null;
 		controlFunction = null;
+		initPos = FlxDestroyUtil.put(initPos);
 	}
 
 	public function loadSkin(?skin:String):Void {

@@ -53,12 +53,28 @@ class ModchartManager extends EventHandler
         return getStrumLine(strumlineID)?.members[strumID] ?? null;
     }
 
+    inline public function getStrumLineLength(id:Int = 0):Int {
+        return getStrumLine(id).strums.length;
+    }
+
+    inline public function forEachStrum(strumlineID:Int = 0, callback:(NoteStrum)->Void):Void {
+        getStrumLine(strumlineID).strums.fastForEach((strum, i) -> callback(strum));
+    }
+
     /**
       * STRUM MOVEMENT
      **/
 
+    inline public function getStrumInitPos(l:Int, s:Int):FlxPoint {
+        return FlxPoint.get().copyFrom(getStrumLine(l).initPos[s]);
+    }
+
+    inline public function setStrumInitPos(l:Int, s:Int, x:Float, y:Float):Void {
+        getStrumLine(l).initPos[s].set(x, y);
+    }
+
     inline public function setStrumPos(l:Int = 0, s:Int = 0, ?X:Float, ?Y:Float):Void {
-        getStrum(l,s).setPosition(X,Y);
+        getStrum(l, s).setPosition(X,Y);
     }
 
     inline public function moveStrum(l:Int = 0, s:Int = 0, X:Float = 0, Y:Float = 0):Void {
@@ -76,7 +92,12 @@ class ModchartManager extends EventHandler
     }
 
     inline public function tweenStrumPos(l:Int = 0, s:Int = 0, X:Float = 0, Y:Float = 0, time:Float = 1.0, ?ease:Dynamic) {
-        return tweenStrum(l,s, {x: X, y:Y}, time, {ease: ease ?? FlxEase.linear});
+        return tweenStrum(l,s, {x: X, y: Y}, time, {ease: ease ?? FlxEase.linear});
+    }
+
+    inline public function tweenStrumInitPos(l:Int, s:Int, time:Float = 1.0, ?ease:Dynamic) {
+        var initPos = getStrumInitPos(l, s);
+        return tweenStrumPos(l, s, initPos.x, initPos.y, time, ease);
     }
 
     /**
@@ -91,7 +112,7 @@ class ModchartManager extends EventHandler
     }
 
     inline public function setStrumLineValue(strumline:Int, value:String, ?data:Dynamic) {
-        for (i in 0...getStrumLine(strumline).members.length)
+        for (i in 0...getStrumLineLength(strumline))
             setStrumValue(strumline, i, value, data);
     }
 

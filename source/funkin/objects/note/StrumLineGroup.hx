@@ -3,7 +3,7 @@ package funkin.objects.note;
 class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
 {
     public static var strumLineY:Float = 50;
-
+    public var strums:Array<NoteStrum> = [];
     public var initPos:Array<FlxPoint> = [];
     
     var startX:Float = 0;
@@ -16,7 +16,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
         
         final isPlayer:Bool = p == 1;
         for (i in 0...lanes) {
-			final strumNote = addStrum(i);
+			var strumNote = addStrum(i);
 			ModdingUtil.addCall('generateStrum', [strumNote, isPlayer]);
 		}
     }
@@ -30,23 +30,8 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
 
     static inline var seperateWidth:Int = NoteUtil.noteWidth + 5;
 
-    public function insertStrum(position:Int = 0) {
-        if (members.length >= 9)
-            return null; // STOP
-        
-        for (i in position...members.length) {
-            if (members[i] == null)
-                continue;
-            
-            members[i].x += seperateWidth;
-            members[i].ID++;
-        }
-
-        return addStrum(position);
-    }
-
     public function introStrums() {
-        members.fastForEach((strum, i) -> {
+        strums.fastForEach((strum, i) -> {
             strum.alpha = 0;
 			strum.y += offsetY;
             FlxTween.tween(strum, {y: strum.y - offsetY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * strum.noteData)});
@@ -54,7 +39,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
     }
 
     public function checkStrums():Void {
-        members.fastForEach((strum, i) -> {
+        strums.fastForEach((strum, i) -> {
             var hasAnim = strum.animation.curAnim != null;
 
             if (strum.getControl(JUST_PRESSED)) {
@@ -96,16 +81,33 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
         }
     }
 
-    public function addStrum(noteData:Int = 0)
-    {
-        if (members.length >= 9) // STOP
+    public function insertStrum(position:Int = 0, noteData:Int = 0) {
+        if (strums.length >= 9) // STOP
             return null;
+
+        for (i in position...strums.length) {
+            var strum = strums[i];
+            strum.x += seperateWidth;
+            strum.initPos.x += seperateWidth;
+        }
+
+        return addStrum(noteData, position);
+    }
+
+    public function addStrum(noteData:Int = 0, ?index:Int)
+    {
+        if (strums.length >= 9) // STOP
+            return null;
+
+        index ??= strums.length;
         
-        var x:Float = startX + seperateWidth * noteData;
+        var x:Float = startX + seperateWidth * index;
 		var strum:NoteStrum = new NoteStrum(x, strumLineY, noteData);
-        initPos.push(strum.getPosition());
 		strum.scrollFactor.set();
         add(strum);
+
+        strums.insert(index, strum);
+        initPos.insert(index, strum.initPos);
 
         if (noteData < DEFAULT_CONTROL_CHECKS.length) {
             strum.controlFunction = DEFAULT_CONTROL_CHECKS[noteData];
@@ -116,6 +118,7 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
 
     override function destroy() {
         super.destroy();
-        initPos = FlxDestroyUtil.putArray(initPos);
+        strums = null;
+        initPos = null;
     }
 }
