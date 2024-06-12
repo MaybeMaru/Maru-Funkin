@@ -1,12 +1,12 @@
 package funkin.objects.note;
 
-import funkin.util.frontend.ModchartManager.ModchartData;
+import funkin.util.frontend.modifiers.BasicModifier;
 import funkin.objects.note.BasicNote.INoteData;
 
 class NoteStrum extends FlxSpriteExt implements INoteData
 {
     public var noteData:Int = 0;
-	public var modchart:ModchartData;
+	public var modifiers:Map<String, BasicModifier> = [];
 	public var initPos:FlxPoint;
 	
 	public var swagWidth:Float = 110;
@@ -34,7 +34,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 
 	override function destroy() {
 		super.destroy();
-		modchart = null;
+		modifiers = null;
 		controlFunction = null;
 		initPos = FlxDestroyUtil.put(initPos);
 	}

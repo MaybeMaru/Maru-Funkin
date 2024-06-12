@@ -3,6 +3,7 @@ package funkin.states;
 import funkin.util.modding.ScriptUtil;
 import funkin.util.backend.MusicBeat;
 import flixel.addons.ui.FlxUIState;
+import flixel.util.FlxSignal.FlxTypedSignal;
 
 interface IMusicHit {
 	public function stepHit(curStep:Int):Void;
@@ -28,6 +29,10 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 	public static var curState:String;
 
 	public var musicBeat(default, null):MusicBeat;
+
+	public var onStepHit:FlxTypedSignal<(Int)->Void> = new FlxTypedSignal<(Int)->Void>();
+	public var onBeatHit:FlxTypedSignal<(Int)->Void> = new FlxTypedSignal<(Int)->Void>();
+	public var onSectionHit:FlxTypedSignal<(Int)->Void> = new FlxTypedSignal<(Int)->Void>();
 
 	public function startTransition():Void {} // Called in CoolUtil
 
@@ -128,6 +133,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 			}
 		});
 		
+		onStepHit.dispatch(curStep);
 		ModdingUtil.addCall('stateStepHit', [curStep]);
 	}
 
@@ -139,6 +145,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 			}
 		});
 
+		onBeatHit.dispatch(curBeat);
 		ModdingUtil.addCall('stateBeatHit', [curBeat]);
 	}
 
@@ -150,11 +157,16 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 			}
 		});
 
+		onSectionHit.dispatch(curSection);
 		ModdingUtil.addCall('stateSectionHit', [curSection]);
 	}
 
 	override function destroy() {
 		ModdingUtil.addCall('stateDestroy');
+
+		onStepHit = cast FlxDestroyUtil.destroy(onStepHit);
+		onBeatHit = cast FlxDestroyUtil.destroy(onBeatHit);
+		onSectionHit = cast FlxDestroyUtil.destroy(onSectionHit);
 
 		if (instance == this)
 			instance = null;

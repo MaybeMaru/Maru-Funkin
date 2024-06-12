@@ -1,25 +1,12 @@
 package funkin.util.frontend;
 
+import funkin.util.frontend.modifiers.BasicModifier;
 import funkin.objects.NotesGroup;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
 
-typedef ModchartData = {
-    var cos:Array<Float>; // [size, speed, offset]
-	var sin:Array<Float>; // [size, speed, offset]
-    var boost:Array<Float>; // [acceleration, startPosition]
-    // var beat:Array<Float>; // [size, speed]
-}
-
 class ModchartManager extends EventHandler
 {
-    @:unreflective
-    static final DEFAULT_DATA:ModchartData = {
-        cos: [0, 0],
-        sin: [0, 0],
-        boost: [0, 200]
-    }
-
     private var strumLines:Map<Int, StrumLineGroup> = [];
     
     public function new():Void {
@@ -91,8 +78,11 @@ class ModchartManager extends EventHandler
         return FlxTween.tween(getStrum(l, s), values, time, settings);
     }
 
-    inline public function tweenStrumPos(l:Int = 0, s:Int = 0, X:Float = 0, Y:Float = 0, time:Float = 1.0, ?ease:Dynamic) {
-        return tweenStrum(l,s, {x: X, y: Y}, time, {ease: ease ?? FlxEase.linear});
+    inline public function tweenStrumPos(l:Int = 0, s:Int = 0, ?X:Float, ?Y:Float, time:Float = 1.0, ?ease:Dynamic) {
+        var values:Dynamic = {};
+        if (X != null) values.x = X;
+        if (Y != null) values.y = Y;
+        return tweenStrum(l, s, values, time, {ease: ease ?? FlxEase.linear});
     }
 
     inline public function tweenStrumInitPos(l:Int, s:Int, time:Float = 1.0, ?ease:Dynamic) {
@@ -106,24 +96,28 @@ class ModchartManager extends EventHandler
 
     // TODO: add the typical modchart effects like drunk, wavy n all that shit
 
-    public function setValue(value:String, ?data:Dynamic) {
+    public function setValue(value:String, ?data:Array<Dynamic>) {
         for (strumline in strumLines.keys())
             setStrumLineValue(strumline, value, data);
     }
 
-    inline public function setStrumLineValue(strumline:Int, value:String, ?data:Dynamic) {
+    public function setStrumLineValue(strumline:Int, value:String, ?data:Array<Dynamic>) {
         for (i in 0...getStrumLineLength(strumline))
             setStrumValue(strumline, i, value, data);
     }
 
-    inline public function setStrumValue(strumline:Int, id:Int, value:String, ?valueData:Dynamic) {
-        final data = resolveData(getStrum(strumline, id));
-        value = value.toLowerCase().trim();
+    public function setStrumValue(strumline:Int, id:Int, value:String, ?valueData:Array<Dynamic>) {
+        var strumMods = getStrum(strumline, id).modifiers;
+        value = value.toUpperCase().trim();        
         
-        if (Reflect.hasField(data, value))
+        var mod:BasicModifier = strumMods.get(value);
+        mod ??= BasicModifier.fromName(value);
+
+        if (mod != null)
         {
-            if (valueData != null)
-                Reflect.setProperty(data, value, valueData);
+            strumMods.set(value, mod);
+            valueData ??= mod.getDefaultValues();
+            mod.data = valueData.copy();
         }
         else
         {
@@ -144,75 +138,41 @@ class ModchartManager extends EventHandler
         position = Conductor.songPosition;
     }
 
-    override function beatHit(curBeat) {}
-
     override function update(elapsed:Float)
     {
-        super.update(elapsed);
-
         timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
 
         for (key => strumline in strumLines) {
-            strumline.members.fastForEach((strum, i) -> {
-                if (strum.modchart != null)
-                    manageStrum(strum, strum.modchart);
+            strumline.strums.fastForEach((strum, i) -> {
+                strum.xModchart = 0;
+                strum.yModchart = 0;
+
+                forEachStrumMod(strum, (mod) -> {
+                    mod.manageStrumUpdate(strum, elapsed, timeElapsed);
+                    if (mod.eachNote) {
+                        forEachStrumNote(strum, (note) -> {
+                            mod.manageStrumNote(strum, note);
+                        });
+                    }
+                });
             });
         }
+
+        super.update(elapsed);
     }
 
     // Backend crap
 
-    function resolveData(strum:NoteStrum):ModchartData
-    {
-        if (strum.modchart == null)
-            strum.modchart = Reflect.copy(DEFAULT_DATA);
-           
-        return strum.modchart;
+    inline function forEachStrumMod(strum:NoteStrum, callback:BasicModifier->Void) {
+        for (key => mod in strum.modifiers) {
+            callback(mod);
+        }
     }
 
-    function forEachStrumNote(strum:NoteStrum, callback:Note->Void) {
+    inline function forEachStrumNote(strum:NoteStrum, callback:Note->Void) {
         NotesGroup.instance.notes.members.fastForEach((note, i) -> {
             if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
                 callback(cast note);
         });
-    }
-
-    // TODO: make a new modifiers system
-    // maybe make a basic modifier base and work up from there?
-
-    function manageStrum(strum:NoteStrum, data:ModchartData)
-    {
-        strum.xModchart = 0;
-        strum.yModchart = 0;
-
-        // COS MODIFIER
-        if (data.cos[0] != 0) {
-            strum.xModchart += (FunkMath.cos((timeElapsed + (data.cos[2] * 0.001)) * data.cos[1]) * data.cos[0]);
-        }
-        
-        // SIN MODIFIER
-        if (data.sin[0] != 0) {
-            strum.yModchart += (FunkMath.sin((timeElapsed + (data.sin[2] * 0.001)) * data.sin[1]) * data.sin[0]);
-        }
-
-        // BOOST MODIFIER
-        if (data.boost[0] != 0)
-        {
-            forEachStrumNote(strum, (note) -> {
-                final diff = note.strumTime - Conductor.songPosition;
-                final pos = diff * (0.45 * note.noteSpeed);
-
-                if (pos <= data.boost[1])
-                {
-                    // Boost acceleration crap
-                    final targetTime = data.boost[1] / (0.45 * note.noteSpeed);
-                    final mult = (1 - (diff / targetTime)) * data.boost[0];
-
-                    note.speedMult = mult;
-                    if (note.child != null)
-                        note.child.speedMult = mult;
-                }
-            });
-        }
     }
 }
