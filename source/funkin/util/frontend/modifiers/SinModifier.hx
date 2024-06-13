@@ -9,11 +9,18 @@ class SinModifier extends BasicModifier
     }
 
     override function manageStrumUpdate(strum:NoteStrum, elapsed:Float, timeElapsed:Float) {
-        strum.yModchart += (FunkMath.sin((timeElapsed + (data[2] * 0.001)) * data[1]) * data[0]);
+        var size:Float = data[0];
+        if (FunkMath.isZero(size))
+            return;
+
+        var speed:Float = scale(data[1]); 
+        var offset:Float = data[2] * 0.001;
+        
+        strum.yModchart += FunkMath.sin((timeElapsed + offset) * speed) * scaleHeight(size);
     }
 
     // [size, speed, offset]
     override function getDefaultValues() {
-        return [0, 1, 0];
+        return [0.5, 0.5, 0];
     }
 }

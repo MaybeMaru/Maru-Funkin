@@ -31,6 +31,6 @@ class BoostModifier extends BasicModifier
 
     // [acceleration, startPosition]
     override function getDefaultValues() {
-        return [0, 200];
+        return [0.5, 500];
     }
 }

@@ -5,6 +5,7 @@ enum abstract Modifiers(String) from String to String {
     var SIN = "SIN";
     var BOOST = "BOOST";
     var DRUNK = "DRUNK";
+    var TIPSY = "TIPSY";
 }
 
 class BasicModifier
@@ -26,6 +27,7 @@ class BasicModifier
             case SIN: new SinModifier();
             case BOOST: new BoostModifier();
             case DRUNK: new DrunkModifier();
+            case TIPSY: new TipsyModifier();
             case _: null;
         }
     }
@@ -48,4 +50,18 @@ class BasicModifier
     public function getDefaultValues():Array<Dynamic> {
         return [];
     }
+
+    // BACKEND UTIL
+
+    inline function scale(value:Float) {
+        return value * ((NoteUtil.noteWidth + NoteUtil.noteHeight) / 4);
+    }
+
+    inline function scaleWidth(value:Float) {
+        return value * (NoteUtil.noteWidth / 2);
+    } 
+    
+    inline function scaleHeight(value:Float) {
+        return value * (NoteUtil.noteHeight / 2);
+    } 
 }
