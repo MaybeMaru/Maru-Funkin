@@ -82,7 +82,7 @@ class Sustain extends BasicNote
             setPositionToStrum();
 
             // Update rect
-            cutHeight = getMillPos(strumTime - Conductor.songPosition);
+            cutHeight = -distanceToStrum();
             percentLeft = 1 + (cutHeight / repeatHeight);
             clipRect.y = cutHeight;
             

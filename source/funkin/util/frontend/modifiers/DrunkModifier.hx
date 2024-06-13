@@ -1,5 +1,6 @@
 package funkin.util.frontend.modifiers;
 
+import funkin.objects.note.BasicNote;
 import funkin.util.frontend.modifiers.BasicModifier.Modifiers;
 
 class DrunkModifier extends BasicModifier
@@ -8,7 +9,7 @@ class DrunkModifier extends BasicModifier
         super(DRUNK, true);
     }
 
-    override function manageStrumNote(strum:NoteStrum, note:Note)
+    override function manageStrumNote(strum:NoteStrum, note:BasicNote)
     {
         var percent:Float = data[0];
         if (FunkMath.isZero(percent))
@@ -20,9 +21,8 @@ class DrunkModifier extends BasicModifier
         var sine:Float = scaleWidth(percent * FunkMath.sinAngle(angle));
 
         note.x += sine;
-        if (note.child != null) {
-            note.child.x += sine;
-            note.child.wigglePower = sine * -2; // TODO: make sustains based on points
+        if (note.isSustainNote) {
+            note.wigglePower = (sine * -2) / note.scale.x; // TODO: make sustains based on points
         }
     }
 

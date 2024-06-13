@@ -1,5 +1,6 @@
 package funkin.util.frontend;
 
+import funkin.objects.note.BasicNote;
 import funkin.util.frontend.modifiers.BasicModifier;
 import funkin.objects.NotesGroup;
 import funkin.objects.note.StrumLineGroup;
@@ -180,10 +181,13 @@ class ModchartManager extends EventHandler
         }
     }
 
-    inline function forEachStrumNote(strum:NoteStrum, callback:Note->Void) {
+    // TODO: may rethink this
+    // mainly because speedMult isnt cutting it, should make another notespeed modifier system thingy
+    inline function forEachStrumNote(strum:NoteStrum, callback:BasicNote->Void) {
         NotesGroup.instance.notes.members.fastForEach((note, i) -> {
-            if (note != null) if (!note.isSustainNote) if (note.targetStrum == strum)
-                callback(cast note);
+            if (note != null) if (note.targetStrum == strum) {
+                callback(note);
+            }
         });
     }
 }

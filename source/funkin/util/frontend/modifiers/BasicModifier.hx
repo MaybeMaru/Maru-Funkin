@@ -1,5 +1,7 @@
 package funkin.util.frontend.modifiers;
 
+import funkin.objects.note.BasicNote;
+
 enum abstract Modifiers(String) from String to String {
     var COS = "COS";
     var SIN = "SIN";
@@ -33,7 +35,7 @@ class BasicModifier
     }
 
     // For each strum note (that isnt a sustain)
-    public function manageStrumNote(strum:NoteStrum, note:Note) {}
+    public function manageStrumNote(strum:NoteStrum, note:BasicNote) {}
 
     // Called every frame
     public function manageStrumUpdate(strum:NoteStrum, elapsed:Float, timeElapsed:Float) {}
