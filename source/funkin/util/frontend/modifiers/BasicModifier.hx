@@ -4,6 +4,7 @@ enum abstract Modifiers(String) from String to String {
     var COS = "COS";
     var SIN = "SIN";
     var BOOST = "BOOST";
+    var DRUNK = "DRUNK";
 }
 
 class BasicModifier
@@ -24,6 +25,7 @@ class BasicModifier
             case COS: new CosModifier();
             case SIN: new SinModifier();
             case BOOST: new BoostModifier();
+            case DRUNK: new DrunkModifier();
             case _: null;
         }
     }

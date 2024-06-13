@@ -8,16 +8,28 @@ import funkin.util.frontend.CutsceneManager;
 class ModchartManager extends EventHandler
 {
     private var strumLines:Map<Int, StrumLineGroup> = [];
+
+    var __postUpdate:Void->Void;
     
     public function new():Void {
         super();
         strumLines = new Map<Int, StrumLineGroup>();
         destroyOnComplete = false;
+
+        // TODO: fix the pause frame in substates fucking all of this up
+        __postUpdate = () -> {
+            if (this.active) if (FlxG.state.persistentUpdate || FlxG.state.subState == null) {
+                this.postUpdate(FlxG.elapsed);
+            }
+        }
+        FlxG.signals.postUpdate.add(__postUpdate);
     }
 
     override function destroy():Void {
         super.destroy();
         strumLines = null;
+        FlxG.signals.postUpdate.remove(__postUpdate);
+        __postUpdate = null;
     }
 
     public static function makeManager():ModchartManager {
@@ -138,7 +150,8 @@ class ModchartManager extends EventHandler
         position = Conductor.songPosition;
     }
 
-    override function update(elapsed:Float)
+    // Adding modifiers after everything is already positioned :p
+    function postUpdate(elapsed:Float)
     {
         timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
 
@@ -157,8 +170,6 @@ class ModchartManager extends EventHandler
                 });
             });
         }
-
-        super.update(elapsed);
     }
 
     // Backend crap

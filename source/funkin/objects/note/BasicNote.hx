@@ -127,7 +127,11 @@ class BasicNote extends SmartSprite implements INoteData implements ITimingObjec
     }
 
     inline public function distanceToStrum():Float {
-        return getMillPos(Conductor.songPosition - strumTime);
+        return getMillPos(timeToStrum());
+    }
+
+    inline public function timeToStrum():Float {
+        return Conductor.songPosition - strumTime;
     }
 
     // Converts song milliseconds to a position on screen

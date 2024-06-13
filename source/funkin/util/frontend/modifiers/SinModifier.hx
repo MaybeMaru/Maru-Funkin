@@ -14,6 +14,6 @@ class SinModifier extends BasicModifier
 
     // [size, speed, offset]
     override function getDefaultValues() {
-        return [0, 0, 0];
+        return [0, 1, 0];
     }
 }
