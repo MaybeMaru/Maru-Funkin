@@ -1,10 +1,18 @@
 package funkin.util.frontend;
 
+import funkin.util.frontend.modifiers.*;
 import funkin.objects.note.BasicNote;
-import funkin.util.frontend.modifiers.BasicModifier;
 import funkin.objects.NotesGroup;
 import funkin.objects.note.StrumLineGroup;
 import funkin.util.frontend.CutsceneManager;
+
+enum abstract Modifiers(String) from String to String {
+    var COS = "COS";
+    var SIN = "SIN";
+    var BOOST = "BOOST";
+    var DRUNK = "DRUNK";
+    var TIPSY = "TIPSY";
+}
 
 class ModchartManager extends EventHandler
 {
@@ -35,6 +43,42 @@ class ModchartManager extends EventHandler
 
     public static function makeManager():ModchartManager {
         return new ModchartManager();
+    }
+
+    // TODO: this crap
+
+    var modifiers:Map<String, Void->BasicModifier> = [
+        COS => () -> return new CosModifier(),
+        SIN => () -> return new SinModifier(),
+        BOOST => () -> return new BoostModifier(),
+        DRUNK => () -> return new DrunkModifier(),
+        TIPSY => () -> return new TipsyModifier()
+    ];
+
+    function modifierFromName(name:String):BasicModifier {
+        if (modifiers.exists(name)) {
+            return modifiers.get(name)();
+        }
+        return null;
+    }
+
+    public function makeModifier(name:String, defaultValues:Array<Dynamic>, callbacks:Dynamic) {
+        name = name.toUpperCase().trim();
+        modifiers.set(name, () -> {
+            var mod:ScriptModifier = new ScriptModifier(
+                name,
+                callbacks.manageStrumNote != null,
+                defaultValues
+            );
+    
+            mod.strumNote = callbacks.manageStrumNote;
+            mod.strumUpdate = callbacks.manageStrumUpdate;
+            mod.strumStep = callbacks.manageStrumStep;
+            mod.strumBeat = callbacks.manageStrumBeat;
+            mod.strumSection = callbacks.manageStrumSection;
+            
+            return mod;
+        });
     }
 
     /**
@@ -124,7 +168,7 @@ class ModchartManager extends EventHandler
         value = value.toUpperCase().trim();        
         
         var mod:BasicModifier = strumMods.get(value);
-        mod ??= BasicModifier.fromName(value);
+        mod ??= modifierFromName(value);
 
         if (mod != null)
         {
@@ -149,6 +193,30 @@ class ModchartManager extends EventHandler
 
     override function updatePosition() {
         position = Conductor.songPosition;
+    }
+
+    override function stepHit(curStep:Int) {
+        for (key => strumline in strumLines) {
+            strumline.strums.fastForEach((strum, i) -> {
+                forEachStrumMod(strum, (mod) -> mod.manageStrumStep(strum, curStep));
+            });
+        }
+    }
+
+    override function beatHit(curBeat:Int) {
+        for (key => strumline in strumLines) {
+            strumline.strums.fastForEach((strum, i) -> {
+                forEachStrumMod(strum, (mod) -> mod.manageStrumBeat(strum, curBeat));
+            });
+        }
+    }
+
+    override function sectionHit(curSection:Int) {
+        for (key => strumline in strumLines) {
+            strumline.strums.fastForEach((strum, i) -> {
+                forEachStrumMod(strum, (mod) -> mod.manageStrumSection(strum, curSection));
+            });
+        }
     }
 
     // Adding modifiers after everything is already positioned :p

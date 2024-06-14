@@ -1,7 +1,7 @@
 package funkin.util.frontend.modifiers;
 
 import funkin.objects.note.BasicNote;
-import funkin.util.frontend.modifiers.BasicModifier.Modifiers;
+import funkin.util.frontend.ModchartManager.Modifiers;
 
 class DrunkModifier extends BasicModifier
 {

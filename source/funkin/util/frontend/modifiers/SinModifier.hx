@@ -1,6 +1,6 @@
 package funkin.util.frontend.modifiers;
 
-import funkin.util.frontend.modifiers.BasicModifier.Modifiers;
+import funkin.util.frontend.ModchartManager.Modifiers;
 
 class SinModifier extends BasicModifier
 {

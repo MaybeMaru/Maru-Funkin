@@ -2,14 +2,6 @@ package funkin.util.frontend.modifiers;
 
 import funkin.objects.note.BasicNote;
 
-enum abstract Modifiers(String) from String to String {
-    var COS = "COS";
-    var SIN = "SIN";
-    var BOOST = "BOOST";
-    var DRUNK = "DRUNK";
-    var TIPSY = "TIPSY";
-}
-
 class BasicModifier
 {
     public var name(default, null):String;
@@ -20,18 +12,6 @@ class BasicModifier
         this.name = name;
         this.eachNote = eachNote;
         this.data = getDefaultValues();
-    }
-
-    public static function fromName(name:String):BasicModifier
-    {
-        return switch(name) {
-            case COS: new CosModifier();
-            case SIN: new SinModifier();
-            case BOOST: new BoostModifier();
-            case DRUNK: new DrunkModifier();
-            case TIPSY: new TipsyModifier();
-            case _: null;
-        }
     }
 
     // For each strum note (that isnt a sustain)
