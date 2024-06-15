@@ -238,10 +238,16 @@ class NotesGroup extends Group
 		// Prevent the need for pushing (in most songs)
 		for (i in 0...15)
 			notes.members.push(null);
+
+		var stepCrochet:Float = 60000 / SONG.bpm / Conductor.STEPS_PER_BEAT;
 	
 		SONG.notes.fastForEach((section, i) ->
 		{
 			var mustHit:Bool = section.mustHitSection;
+			if (section.changeBPM) {
+				stepCrochet = 60000 / section.bpm / Conductor.STEPS_PER_BEAT;
+			}
+			
 			for (songNote in section.sectionNotes)
 			{
 				var strumTime:Float = songNote.time;
@@ -265,7 +271,7 @@ class NotesGroup extends Group
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
-					var sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
+					var sustain:Sustain = new Sustain(noteData, strumTime, susLength + stepCrochet, skin, note);
 					sustain.noteSpeed = songSpeed;
 					
 					// Too short sustains shouldnt be added

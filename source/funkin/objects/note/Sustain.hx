@@ -93,7 +93,7 @@ class Sustain extends BasicNote
     }
 
     public inline function inSustain():Bool {
-        return Conductor.songPosition >= strumTime && Conductor.songPosition <= (susLength + Conductor.stepCrochet);
+        return Conductor.songPosition >= strumTime && Conductor.songPosition <= susLength;
     }
 
     public inline function updateSusLength():Float {
@@ -102,7 +102,7 @@ class Sustain extends BasicNote
 
     public inline function setSusLength(mills:Float = 0.0):Float
     {
-        repeatHeight = getMillPos(mills) + ((NoteUtil.noteHeight * 0.5) * (calcSpeed() * 0.45));
+        repeatHeight = getMillPos(mills) - NoteUtil.noteHeight * 0.5;
         
         if (clipRect != null)
             clipRect.height = repeatHeight;
