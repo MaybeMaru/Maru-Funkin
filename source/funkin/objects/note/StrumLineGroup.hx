@@ -39,18 +39,17 @@ class StrumLineGroup extends TypedSpriteGroup<NoteStrum>
     }
 
     public function checkStrums():Void {
-        strums.fastForEach((strum, i) -> {
-            var hasAnim = strum.animation.curAnim != null;
-
+        strums.fastForEach((strum, i) ->
+        {
             if (strum.getControl(JUST_PRESSED)) {
-                if (hasAnim) if (!strum.animation.curAnim.name.startsWith('confirm'))
+                if (strum.animation.curAnim != null) if (!strum.animation.curAnim.name.startsWith('confirm'))
                     strum.playStrumAnim('pressed');
             }
             else if (!strum.getControl()) {
                 strum.playStrumAnim('static');
             }
             else {
-                strum.applyOffsets();
+                strum.applyCurOffset(true);
             }
 		});
     }

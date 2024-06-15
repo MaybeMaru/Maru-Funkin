@@ -8,6 +8,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
     public var noteData:Int = 0;
 	public var modifiers:Map<String, BasicModifier> = [];
 	public var initPos:FlxPoint;
+	public var centerOffset:FlxPoint;
 	
 	public var swagWidth:Float = 110;
 	public var swagHeight:Float = 110;
@@ -27,9 +28,11 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
 		super(x,y);
 		initPos = FlxPoint.get(x, y);
+		centerOffset = FlxPoint.get();
 		this.noteData = noteData;
 		ID = noteData;
 		loadSkin();
+		applyCurOffset(true);
 	}
 
 	override function destroy() {
@@ -37,45 +40,46 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		modifiers = null;
 		controlFunction = null;
 		initPos = FlxDestroyUtil.put(initPos);
+		centerOffset = FlxDestroyUtil.put(centerOffset);
 	}
 
 	public function loadSkin(?skin:String):Void {
 		skin ??= SkinUtil.curSkin;
 		if (curSkin != skin) {
-			animOffsets = new Map<String, FlxPoint>();
+			animOffsets.clear();
 			curSkin = skin;
 			loadJsonInput(SkinUtil.getSkinData(skin).strumData, 'skins/$skin');
 			getWidth();
 		}
 	}
 
-	inline function getWidth():Void	{ // For centered notes
-		var lastAnim:Null<String> = animation.curAnim != null ? animation.curAnim.name.split(CoolUtil.directionArray[noteData])[0] : null;
-		updateHitbox();
+	// For centered notes
+	inline function getWidth():Void	{
+		var lastAnim:Null<String> = null;
+		if (animation.curAnim != null) {
+			var name = animation.curAnim.name;
+			lastAnim = name.split(CoolUtil.directionArray[noteData])[0];
+		}
+		
 		playStrumAnim('static');
+		updateHitbox();
 		swagWidth = width;
 		swagHeight = height;
+
+		centerOffsets();
+		centerOffset.set(
+			offset.x,
+			offset.y
+		);
+
 		if (lastAnim != null) {
 			playStrumAnim(lastAnim);
-		}
-	}
-
-	dynamic public function applyOffsets():Void {
-		if (animation.curAnim != null) {
-			updateHitbox();
-			centerOffsets();
-			var animOffset = animOffsets.get(animation.curAnim.name);
-			if (animOffset != null) {
-				var scaleDiff = getScaleDiff();
-				offset.add(animOffset.x * scaleDiff.x, animOffset.y * scaleDiff.y);
-			}
 		}
 	}
 
 	public inline function playStrumAnim(anim:String = 'static', forced:Bool = false, ?data:Int) {
 		data ??= noteData;
 		playAnim(anim + CoolUtil.directionArray[data], forced);
-		applyOffsets();
 	}
 
 	public var xModchart:Float = 0.0;
@@ -85,6 +89,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 	{
 		result = super.getScreenPosition(result, camera);
 		result.add(xModchart, yModchart);
+		result.subtract(centerOffset.x, centerOffset.y);
 		return result;
 	}
 
