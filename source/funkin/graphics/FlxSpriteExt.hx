@@ -417,7 +417,10 @@ class FlxSpriteExt extends FlxSkewedSprite
 	static final __scaleDiff:FlxPoint = FlxPoint.get();
 	inline public function getScaleDiff():FlxPoint {
 		var jsonScale:Float = spriteJson.scale;
-		return __scaleDiff.set(scale.x / jsonScale, scale.y / jsonScale);
+		return __scaleDiff.set(
+			Math.abs(scale.x) / jsonScale,
+			Math.abs(scale.y) / jsonScale
+		);
 	}
 
 	public var scaleOffset:Bool = false;

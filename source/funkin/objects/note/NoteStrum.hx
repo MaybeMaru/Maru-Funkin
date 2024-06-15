@@ -9,9 +9,10 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 	public var modifiers:Map<String, BasicModifier> = [];
 	public var initPos:FlxPoint;
 	public var centerOffset:FlxPoint;
-	
+
 	public var swagWidth:Float = 110;
-	public var swagHeight:Float = 110;
+	public var swagHeight:Float = 110;	
+	
 	public var staticTime:Float = 0;
 	public var curSkin:String = '';
 
@@ -31,8 +32,8 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		centerOffset = FlxPoint.get();
 		this.noteData = noteData;
 		ID = noteData;
+		scaleOffset = true;
 		loadSkin();
-		applyCurOffset(true);
 	}
 
 	override function destroy() {
@@ -50,11 +51,12 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 			curSkin = skin;
 			loadJsonInput(SkinUtil.getSkinData(skin).strumData, 'skins/$skin');
 			getWidth();
+			applyCurOffset(true);
 		}
 	}
 
 	// For centered notes
-	inline function getWidth():Void	{
+	public inline function getWidth():Void	{
 		var lastAnim:Null<String> = null;
 		if (animation.curAnim != null) {
 			var name = animation.curAnim.name;
@@ -67,10 +69,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		swagHeight = height;
 
 		centerOffsets();
-		centerOffset.set(
-			offset.x,
-			offset.y
-		);
+		centerOffset.copyFrom(offset);
 
 		if (lastAnim != null) {
 			playStrumAnim(lastAnim);

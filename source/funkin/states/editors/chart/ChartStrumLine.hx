@@ -2,8 +2,8 @@ package funkin.states.editors.chart;
 
 import funkin.states.editors.chart.ChartGridBase.GRID_SIZE;
 
-class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
-    
+class ChartStrumLine extends SpriteGroup
+{
     var strums:Array<NoteStrum> = [];
     var eventBar:FlxSprite;
 
@@ -16,7 +16,7 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
             var strum = new NoteStrum(i * GRID_SIZE, 0, i % Conductor.NOTE_DATA_LENGTH);
             strum.alpha = 0.8;
             strum.setGraphicSize(GRID_SIZE, GRID_SIZE);
-            strum.updateHitbox();
+            strum.getWidth(); // recalculate this because fuck shit ass fuck fuck crap ass
             strums.push(strum);
             add(strum);
         }
@@ -42,13 +42,13 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
     var charIcons:Map<String, String> = [];
     private function getCharIcon(char:String = "bf") {
         if (charIcons.exists(char)) return charIcons.get(char);
-        var ico = Character.getCharData(char).icon;
-        charIcons.set(char, ico);
-        return ico;
+        var icon = Character.getCharData(char).icon;
+        charIcons.set(char, icon);
+        return icon;
     }
 
     public function updateWithData() {
-        var sectionData = ChartingState.SONG.notes[ChartingState.sectionIndex];
+        var sectionData = ChartingState.instance.notes[ChartingState.sectionIndex];
         if (sectionData == null) return;
         updateHeads(getCharIcon(ChartingState.SONG.players[0]), getCharIcon(ChartingState.SONG.players[1]), sectionData.mustHitSection);
     }
@@ -69,12 +69,11 @@ class ChartStrumLine extends FlxTypedSpriteGroup<Dynamic> {
 
     public function pressStrum(data:Int = 0) {
         data %= Conductor.STRUMS_LENGTH;
-        var isStatic = strums[data].animation.curAnim.name.startsWith('static');
-        isStatic ? strums[data].playStrumAnim("confirm", true) : strums[data].animation.curAnim.curFrame = 0;
-        strums[data].staticTime = Conductor.stepCrochetMills;
-    }
+        var strum = strums[data];
+        if (strum == null) return;
 
-    override function update(elapsed:Float) {
-        super.update(elapsed);
+        var isConfirm = (strum.animation.curAnim != null && strum.animation.curAnim.name.startsWith('confirm'));
+        isConfirm ? strum.animation.curAnim.curFrame = 0 : strum.playStrumAnim("confirm", true);
+        strum.staticTime = Conductor.stepCrochetMills;
     }
 }

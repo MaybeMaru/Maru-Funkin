@@ -21,7 +21,7 @@ import funkin.states.editors.chart.ChartGridBase.getGridCoords;
 class ChartingState extends MusicBeatState
 {
     public static var SONG:SongJson;
-    var notes:Array<SectionJson>;
+    public var notes:Array<SectionJson>;
     
     public static var autoSaveChart:String;
     public static var instance:ChartingState;
