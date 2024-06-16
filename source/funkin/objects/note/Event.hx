@@ -24,7 +24,7 @@ class EventUtil
     public static function initEvents():Void
     {
         eventsMap.clear();
-		eventsArray.splice(0, eventsArray.length);
+        eventsArray.clear();
 		getList().fastForEach((e, i) -> {
 			eventsArray.push(e);
             getEventData(e);

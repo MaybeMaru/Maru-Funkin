@@ -20,7 +20,7 @@ abstract NoteJson(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
 
 	public var length(get, set):Float;
 	inline function set_length(value):Float return this[2] = value;
-	inline function get_length():Float return this[2];
+	inline function get_length():Float return this[2] ?? 0;
 
 	public var type(get, set):String;
 	inline function set_type(value):String return this[3] = value;

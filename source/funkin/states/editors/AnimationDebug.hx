@@ -437,7 +437,7 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	function clearOffsetText() {
-		animsList.splice(0, animsList.length);
+		animsList.clear();
 		animsText.members.fastForEach((text, i) -> {
 			text.kill();
 		});
@@ -518,12 +518,12 @@ class AnimationDebug extends MusicBeatState {
 	}
 
 	inline function indicesToTxt(indices:Array<Int>):String {
-		return indices.map(function(i) return Std.string(i)).join(",");
+		return indices.map((i) -> return Std.string(i)).join(",");
 	}
 
 	inline function txtToIndices(text:String):Array<Int> {
 		if (text.length <= 0) return [];
-		return text.split(",").map(function(str) return Std.parseInt(str)).filter(function(value) return value != null);
+		return text.split(",").map((str) -> return Std.parseInt(str)).filter((value) -> return value != null);
 	}
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

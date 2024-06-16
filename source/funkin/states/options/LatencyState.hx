@@ -87,7 +87,7 @@ class LatencyState extends MusicBeatState
 		var averageOff:Float = 0;
 		
 		if (lastOffsets.length > 15)
-			lastOffsets.splice(0, 1);
+			lastOffsets.removeAt(0);
 		
 		lastOffsets.fastForEach((sum, i) -> {
 			averageOff += sum;

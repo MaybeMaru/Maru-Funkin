@@ -58,7 +58,7 @@ class NoteUtil
     public static function initTypes():Void
     {
 		noteTypesMap.clear();
-		noteTypesArray.splice(0, noteTypesArray.length);
+        noteTypesArray.clear();
         getList().fastForEach((type, i) -> {
             noteTypesArray.push(type);
             getTypeJson(type);

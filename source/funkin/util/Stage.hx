@@ -328,7 +328,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
 
     public function removeLayer(layerKey:LayerKey) {
         layers.remove(__resolveLayerKey(layerKey));
-        layersOrder.splice(getLayerIndex(layerKey), 1);
+        layersOrder.removeAt(getLayerIndex(layerKey));
     }
 
     public function insertLayer(index:Int = 0, layer:Layer, layerKey:LayerKey) {

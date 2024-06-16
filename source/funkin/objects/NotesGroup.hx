@@ -252,7 +252,7 @@ class NotesGroup extends Group
 			{
 				var strumTime:Float = songNote.time;
 				var initNoteData:Int = songNote.lane;
-				var susLength:Float = songNote.length ?? 0;
+				var susLength:Float = songNote.length > 0 ? songNote.length + stepCrochet : 0;
 				
 				if ((strumTime + susLength) < Conductor.songPosition) continue; // Save on creating missed notes
 				if (initNoteData < 0) continue; // Negative notes arent supported
@@ -271,11 +271,11 @@ class NotesGroup extends Group
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
-					var sustain:Sustain = new Sustain(noteData, strumTime, susLength + stepCrochet, skin, note);
+					var sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
 					sustain.noteSpeed = songSpeed;
 					
 					// Too short sustains shouldnt be added
-					if (sustain.alive) {
+					if (sustain.repeatHeight > (NoteUtil.noteHeight / 2)) {
 						sustain.targetStrum = targetStrum;
 						sustain.mustPress = mustPress;
 						sustain.noteType = noteType;
