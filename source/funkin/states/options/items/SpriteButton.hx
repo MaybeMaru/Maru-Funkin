@@ -1,6 +1,6 @@
 package funkin.states.options.items;
 
-class SpriteButton extends FlxSpriteGroup
+class SpriteButton extends SpriteGroup
 {
     public var clickCallback:()->Void;
     public var text:Alphabet;
@@ -10,7 +10,7 @@ class SpriteButton extends FlxSpriteGroup
         super(X, Y);
         this.clickCallback = clickCallback;
 
-        button = new FunkinSprite('options/$baseSpr', [0,0], [0,0]);
+        button = new FunkinSprite('options/$baseSpr', null, [0,0]);
         if (button.animated) {
             button.addAnim('loop', 'buttonSprite', 24, true);
             button.playAnim('loop');

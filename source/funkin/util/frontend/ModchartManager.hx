@@ -1,5 +1,6 @@
 package funkin.util.frontend;
 
+import funkin.util.backend.MusicBeat;
 import funkin.util.frontend.modifiers.*;
 import funkin.objects.note.BasicNote;
 import funkin.objects.NotesGroup;
@@ -230,7 +231,7 @@ class ModchartManager extends EventHandler
                 strum.yModchart = 0;
 
                 forEachStrumMod(strum, (mod) -> {
-                    mod.manageStrumUpdate(strum, elapsed, timeElapsed);
+                    mod.manageStrumUpdate(strum, elapsed, MusicBeat.get().curBeatDecimal);
                     if (mod.eachNote) {
                         forEachStrumNote(strum, (note) -> {
                             mod.manageStrumNote(strum, note);

@@ -17,13 +17,14 @@ class DrunkModifier extends BasicModifier
 
         var speed:Float = data[1];
 
-        var angle:Float = note.distanceToStrum() * speed;
-        var sine:Float = scaleWidth(percent * FunkMath.sinAngle(angle));
+        // Stole part of this from schmovin because im stupid
+		var phaseShift = -note.distanceToStrum() / 222 * FunkMath.PI;
+		var offsetX = scaleWidth(FunkMath.sin(phaseShift * speed)) * percent;
 
-        note.x += sine;
-        if (note.isSustainNote) {
-            note.wigglePower = (sine * -2) / note.scale.x; // TODO: make sustains based on points
-        }
+        note.x += offsetX;
+        //if (note.isSustainNote) {
+        //    note.wigglePower = (offsetX * -2) / note.scale.x; // TODO: make sustains based on points
+        //}
     }
 
     // [percentage, speed]

@@ -55,8 +55,8 @@ class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T
 	override public function draw():Void
 	{
 		final oldDefaultCameras = FlxCamera._defaultCameras;
-		if (cameras != null)
-			FlxCamera._defaultCameras = cameras;
+		if (_cameras != null)
+			FlxCamera._defaultCameras = _cameras;
 
 		members.fastForEach((basic, i) -> {
 			if (basic != null) if (basic.exists) if (basic.visible)

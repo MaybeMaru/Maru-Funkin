@@ -1,6 +1,7 @@
 package funkin.states.options.items;
 
-class ModItem extends FlxSpriteGroup {
+class ModItem extends SpriteGroup
+{
     public var mod:ModFolder = null;
     public var enabled:Bool = true;
     
@@ -11,12 +12,15 @@ class ModItem extends FlxSpriteGroup {
         super();
         this.mod = mod;
 
-        var modBox:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.5), Std.int(FlxG.height / 4), FlxColor.BLACK);
+        var modBox:FlxSprite = new FlxSprite().makeGraphic(1,1,FlxColor.BLACK);
+        modBox.antialiasing = false;
+        modBox.scale.set(FlxG.width / 1.5, FlxG.height / 4);
+        modBox.updateHitbox();
         modBox.alpha = 0.6;
         add(modBox);
 
         var modIcon = 'mods/${mod.folder}/${mod.icon}.png';
-        var iconGraphic = Paths.exists(modIcon, IMAGE) ? AssetManager.cacheGraphicPath(modIcon) :Paths.image('options/' + switch(mod.folder.substring(0, 4)) {
+        var iconGraphic = Paths.exists(modIcon, IMAGE) ? AssetManager.cacheGraphicPath(modIcon) : Paths.image('options/' + switch(mod.folder.substring(0, 4)) {
             case "osu-": "osuMod";
             case "qua-": "quaverMod";
             default: "blankMod";

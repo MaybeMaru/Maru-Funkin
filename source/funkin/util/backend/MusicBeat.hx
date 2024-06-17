@@ -14,11 +14,24 @@ class MusicBeat extends FlxBasic
 
 	public var targetSound:FlxSound;
 	public var parent:IMusicGetter;
+
+	public static var instance:MusicBeat;
+	public static inline function get():MusicBeat {
+		return instance;
+	}
 	
 	public function new(?parent:IMusicGetter) {
         this.parent = parent;
+		instance = this;
         super();
     }
+
+	override function destroy() {
+		super.destroy();
+		if (instance == this) instance = null;
+		targetSound = null;
+		parent = null;
+	}
 
 	var lastStep(default, null):Int = -1;
 

@@ -24,7 +24,7 @@ class AudioWaveform extends FlxSpriteExt
         canvas = new Sprite();
         graphics = canvas.graphics;
 
-        waveformWidth = Width * 0.5;
+        waveformWidth = Width * 0.75;
 
         if (sound != null)
             setSound(sound);
@@ -32,7 +32,7 @@ class AudioWaveform extends FlxSpriteExt
     
     public inline function getIndex(time:Float):Int
     {
-        return Std.int(Math.max(time * sampleRate * 0.004, 0));
+        return Std.int(Math.max(time * sampleRate * 0.004, 0) * 0.5);
     }
 
     static inline var QUALITY:Int = 250;
@@ -62,29 +62,29 @@ class AudioWaveform extends FlxSpriteExt
         var l:Int = bytes.length;
         var sum:Int = 0;
         var count:Int = 0;
-    
-        while(i < l) {
-            var byte = bytes.getUInt16(i);
+
+        while (i < l) {
+            var byte:Int = bytes.getUInt16(i);
             if (byte > (65535 / 2))
                 byte -= 65535;
-    
+            
             sum += FlxMath.absInt(byte);
             count++;
-    
+
             if (count == QUALITY) {
-                var average = sum / count;
-                data.push(average * (1 / 65535 * waveformWidth));
+                var average:Float = sum / count;
+                data.push(average / 32768 * waveformWidth);
                 sum = 0;
                 count = 0;
             }
-    
-            i++;
+
+            i += 2;
         }
-    
+
         // Handle any remaining samples
         if (count > 0) {
-            var average = sum / count;
-            data.push(average * (1 / 65535 * waveformWidth));
+            var average:Float = sum / count;
+            data.push(average / 32768 * waveformWidth);
         }
     }
 

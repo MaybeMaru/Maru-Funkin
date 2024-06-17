@@ -18,7 +18,7 @@ class BasicModifier
     public function manageStrumNote(strum:NoteStrum, note:BasicNote) {}
 
     // Called every frame
-    public function manageStrumUpdate(strum:NoteStrum, elapsed:Float, timeElapsed:Float) {}
+    public function manageStrumUpdate(strum:NoteStrum, elapsed:Float, beat:Float) {}
 
     // Called every song step
     public function manageStrumStep(strum:NoteStrum, step:Int) {}
@@ -34,6 +34,10 @@ class BasicModifier
     }
 
     // BACKEND UTIL
+
+    inline function beatRads(beat:Float, snap:Float) {
+        return beat * ((0.25 / snap) * FunkMath.PI);
+    }
 
     inline function scale(value:Float) {
         return value * ((NoteUtil.noteWidth + NoteUtil.noteHeight) / 4);

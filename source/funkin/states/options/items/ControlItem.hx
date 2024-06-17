@@ -1,6 +1,7 @@
 package funkin.states.options.items;
 
-class ControlItem extends FlxSpriteGroup {
+class ControlItem extends SpriteGroup
+{
     public var key:String = '';
     public var selected:Bool = false;
     public var bindSelected:Int = 0;

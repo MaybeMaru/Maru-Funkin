@@ -8,7 +8,7 @@ class TipsyModifier extends BasicModifier
         super(TIPSY, false);
     }
 
-    override function manageStrumUpdate(strum:NoteStrum, elapsed:Float, timeElapsed:Float) {
+    override function manageStrumUpdate(strum:NoteStrum, elapsed:Float, beat:Float) {
         var size:Float = data[0];
         if (FunkMath.isZero(size))
             return;
@@ -16,7 +16,7 @@ class TipsyModifier extends BasicModifier
         var speed:Float = data[1];
         var period:Float = data[2] * speed;
 
-        strum.yModchart += FunkMath.sin((timeElapsed + (strum.noteData * period)) * scale(speed)) * scaleHeight(size);
+        strum.yModchart += FunkMath.sin((beatRads(beat, 4) + (strum.noteData * period)) * scale(speed)) * scaleHeight(size);
     }
 
     // [size, speed, period]

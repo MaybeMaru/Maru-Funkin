@@ -1,12 +1,13 @@
 package funkin.states.options.items;
 
-enum PrefType {
-    BOOL;
-    NUMBER;
-    ARRAY;
+enum abstract PrefType(Int) {
+    var BOOL;
+    var NUMBER;
+    var ARRAY;
 }
 
-class PrefItem extends FlxSpriteGroup {
+class PrefItem extends SpriteGroup
+{
     private var usePrefs:Bool = true;
     private var settingTxt:Alphabet;
     public var type:PrefType;
