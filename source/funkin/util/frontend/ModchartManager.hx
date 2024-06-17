@@ -13,10 +13,20 @@ enum abstract Modifiers(String) from String to String {
     var BOOST = "BOOST";
     var DRUNK = "DRUNK";
     var TIPSY = "TIPSY";
+    var BEAT = "BEAT";
 }
 
 class ModchartManager extends EventHandler
 {
+    var modifiers:Map<String, Void->BasicModifier> = [
+        COS => () -> return new CosModifier(),
+        SIN => () -> return new SinModifier(),
+        BOOST => () -> return new BoostModifier(),
+        DRUNK => () -> return new DrunkModifier(),
+        TIPSY => () -> return new TipsyModifier(),
+        BEAT => () -> return new BeatModifier()
+    ];
+
     private var strumLines:Map<Int, StrumLineGroup> = [];
 
     var __postUpdate:Void->Void;
@@ -46,22 +56,14 @@ class ModchartManager extends EventHandler
         return new ModchartManager();
     }
 
-    // TODO: this crap
-
-    var modifiers:Map<String, Void->BasicModifier> = [
-        COS => () -> return new CosModifier(),
-        SIN => () -> return new SinModifier(),
-        BOOST => () -> return new BoostModifier(),
-        DRUNK => () -> return new DrunkModifier(),
-        TIPSY => () -> return new TipsyModifier()
-    ];
-
     function modifierFromName(name:String):BasicModifier {
         if (modifiers.exists(name)) {
             return modifiers.get(name)();
         }
         return null;
     }
+
+    // TODO: add a way for scripted modifiers to get the current mod data values
 
     public function makeModifier(name:String, defaultValues:Array<Dynamic>, callbacks:Dynamic) {
         name = name.toUpperCase().trim();

@@ -18,6 +18,7 @@ Current version is beta 2.0, beta 3.0 soon to come!
 * [Midnight](https://github.com/what-is-a-git) - More accurate memory counter
 * [cyn](https://twitter.com/cyn0x8) - Demon Blur Shader
 * [Cracsthor](https://gamebanana.com/members/1844732) - PhantomMuff font
+* [4mbr0s32](https://github.com/4mbr0s3-2) - Modifiers from Schmovin
 
 ## How to make a mod
 

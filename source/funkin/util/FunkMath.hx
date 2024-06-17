@@ -4,10 +4,10 @@ import flixel.math.FlxMatrix;
 
 class FunkMath
 {
-    public static inline var PI:Float = 3.14159265358979323846;
-	public static inline var DOUBLE_PI:Float = PI * 2;
-	public static inline var TO_RADS:Float = PI / 180;
-	public static inline var TO_DEGREES:Float = 180 / PI;
+    @:keep public static inline var PI:Float = 3.14159265358979323846;
+	@:keep public static inline var DOUBLE_PI:Float = PI * 2;
+	@:keep public static inline var TO_RADS:Float = PI / 180;
+	@:keep public static inline var TO_DEGREES:Float = 180 / PI;
 
 	public static inline function isZero(value:Float):Bool {
 		return Math.abs(value) < 0.0001;
