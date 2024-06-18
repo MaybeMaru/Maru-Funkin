@@ -15,11 +15,6 @@ class BoostModifier extends BasicModifier
         if (FunkMath.isZero(boost))
             return;
 
-        if (note.isSustainNote) {
-            if (note.toSustain().pressed)
-                return;
-        }
-
         var startY:Float = data[1];
         var diff:Float = -note.timeToStrum();
         var pos:Float = diff * (0.45 * note.noteSpeed);
@@ -28,8 +23,8 @@ class BoostModifier extends BasicModifier
         {
             var targetTime = startY / (0.45 * note.noteSpeed);
             var mult = (1 - (diff / targetTime)) * boost;
-
-            note.speedMult = mult;
+            
+            note.speedMult *= Math.max((1 + mult), 0.05);
         }
     }
 

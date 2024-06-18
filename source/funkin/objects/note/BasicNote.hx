@@ -29,13 +29,11 @@ class BasicNote extends SmartSprite implements INoteData implements ITimingObjec
         return noteSpeed = value;
     }
 
-    public var speedMult(default, set):Float = 0;
-    function set_speedMult(value:Float):Float {
-        return speedMult = value;
-    }
+    // Used internally for modcharts
+    public var speedMult:Float = 1;
 
     public inline function calcSpeed() {
-        return Math.max(noteSpeed + (noteSpeed * speedMult), 0.1);
+        return noteSpeed * speedMult;
     }
     
     public var isSustainNote(default, set):Bool = false;

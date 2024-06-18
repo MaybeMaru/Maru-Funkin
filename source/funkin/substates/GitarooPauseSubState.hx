@@ -1,12 +1,14 @@
 package funkin.substates;
 
-class GitarooPauseSubState extends MusicBeatSubstate {
+class GitarooPauseSubState extends MusicBeatSubstate
+{
 	var replayButton:FunkinSprite;
 	var cancelButton:FunkinSprite;
 	var replaySelect:Bool = false;
 
-	public function new():Void {
-		super();
+	public function new():Void
+	{
+		super(false);
 
 		if (FlxG.sound.music != null) {
 			FlxG.sound.music.stop();

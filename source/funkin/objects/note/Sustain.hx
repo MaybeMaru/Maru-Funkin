@@ -31,14 +31,6 @@ class Sustain extends BasicNote
         return value;
     }
 
-    override function set_speedMult(value:Float):Float {
-        if (speedMult != value) {
-            speedMult = value;
-            updateSusLength();
-        }
-        return value;
-    }
-
     public var autoFlip:Bool = true; // If to flip the sustain at a certain angle
     override inline function set_approachAngle(value:Float):Float {
         if (approachAngle != value) {

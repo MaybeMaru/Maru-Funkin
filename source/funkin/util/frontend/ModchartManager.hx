@@ -177,12 +177,24 @@ class ModchartManager extends EventHandler
         {
             strumMods.set(value, mod);
             valueData ??= mod.getDefaultValues();
-            mod.data = valueData.copy();
+
+            valueData.fastForEach((value, i) -> {
+                if (i < mod.data.length) {
+                    mod.data.unsafeSet(i, value);
+                }
+                else {
+                    mod.data.push(value);
+                }
+            });
         }
         else
         {
             ModdingUtil.warningPrint("Couldn't find modchart value for " + '"$value"');
         }
+    }
+
+    public function getStrumValue(strumline:Int, id:Int, value:String):BasicModifier {
+        return getStrum(strumline, id).modifiers.get(value.toUpperCase().trim());
     }
     
     public var speed:Float = 1.0;
@@ -222,24 +234,40 @@ class ModchartManager extends EventHandler
         }
     }
 
+    var eachNoteMods:Array<BasicModifier> = [];
+
     // Adding modifiers after everything is already positioned :p
     function postUpdate(elapsed:Float)
     {
         timeElapsed = ((FlxG.game.ticks - startTick) * speed * 0.0001) % FunkMath.DOUBLE_PI;
 
-        for (key => strumline in strumLines) {
+        for (key => strumline in strumLines)
+        {
             strumline.strums.fastForEach((strum, i) -> {
                 strum.xModchart = 0;
                 strum.yModchart = 0;
 
+                eachNoteMods.clear();
+
+                // Strum update
                 forEachStrumMod(strum, (mod) -> {
                     mod.manageStrumUpdate(strum, elapsed, MusicBeat.get().curBeatDecimal);
-                    if (mod.eachNote) {
-                        forEachStrumNote(strum, (note) -> {
+                    if (mod.eachNote) eachNoteMods.push(mod);
+                });
+
+                // Each note update
+                if (eachNoteMods.length > 0) {
+                    forEachStrumNote(strum, (note) -> {
+                        note.speedMult = 1;
+                        eachNoteMods.fastForEach((mod, i) -> {
                             mod.manageStrumNote(strum, note);
                         });
-                    }
-                });
+
+                        if (note.isSustainNote) {
+                            note.toSustain().updateSusLength();
+                        }
+                    });    
+                }
             });
         }
     }
