@@ -40,15 +40,21 @@ class AlphabetFont extends FlxBitmapFont
 
 	public var lodScale:Float;
 
-	// TODO: make this not forced to be sparrow atlas
-
 	public function new(key:String, bold:Bool)
 	{
-		var graphic:LodGraphic = AssetManager.cacheGraphicPath(key);
-		var xml = CoolUtil.getFileContent(key.replace(".png", ".xml"));
-		var atlas = Paths.__checkLodFrames(Paths.getFrames(graphic, () -> return FlxAtlasFrames.fromSparrow(graphic, xml)));
+		var dummySprite = new FlxSpriteExt().loadImage("alphabet");	
+		if (dummySprite.packer == IMAGE) {
+			ModdingUtil.warningPrint('Alphabet atlas not found for "$key".');
+		}
+		
+		var graphic:LodGraphic = cast dummySprite.graphic;
+		var atlas = dummySprite.frames;
 
 		var rawFont = CoolUtil.getFileContent(key.replace(".png", "-font.json"));
+		if (rawFont.length <= 0) {
+			throw 'Alphabet font json not found for "$key".';
+		}
+		
 		var font:AlphabetFontJson = Json.parse(rawFont);
 
 		AssetManager.getAsset(key).onDispose = () -> {

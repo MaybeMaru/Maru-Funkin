@@ -243,16 +243,23 @@ class CoolUtil {
 	// Keeping for backwards compatibility
 	public static function sin(rad:Float) return FunkMath.sin(rad);
 	public static function cos(rad:Float) return FunkMath.cos(rad);
+	public static function coolLerp(a:Float, b:Float, r:Float) return lerp(a, b, r);
 
 	inline public static function getLerp(ratio:Float):Float {
 		return FlxG.elapsed / (1 / 60) * ratio;
 	}
 
-	inline public static function lerp(a:Float, b:Float, ratio:Float):Float {
-		return FlxMath.lerp(a, b, getLerp(ratio));
+	inline public static function lerp(a:Float, b:Float, ratio:Float):Float
+	{
+		if (FunkMath.isZero(a - b))
+			return b;
+		
+		return b + (a - b) * Math.exp(-ratio * FlxG.elapsed * 60);
 	}
 
-	inline public static function coolLerp(a:Float, b:Float, r:Float):Float return lerp(a, b, r);
+	inline public static function resolveLerp(a:Float, b:Float, r:Float, smooth:Bool) {
+		return smooth ? lerp(a, b, r) : FlxMath.lerp(a, b, r);
+	}
 
 	public static function sortAlphabetically(a:String, b:String):Int {
         a = a.toUpperCase();

@@ -37,8 +37,8 @@ class FlxColorFix {
 		return FlxColor.fromRGB(red, green, blue, alpha);
 	}
 
-	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
-		return FlxColor.interpolate(color1, color2, fpsLerp ? CoolUtil.getLerp(factor) : factor);
+	public static function interpolate(color1:Int, color2:Int, factor:Float = 0.5, smooth:Bool = false):FlxColor {
+		return FlxColor.interpolate(color1, color2, smooth ? CoolUtil.getLerp(factor) : factor);
 	}
 
 	public static function fromInt(value:Int):FlxColor {
@@ -78,11 +78,10 @@ class FlxColorFix {
 		return FlxColor.fromRGB(Std.int(R), Std.int(G), Std.int(B), Std.int(A));
 	}
 
-	public function lerp(target:FlxColor, factor:Float = 0.5, fpsLerp:Bool = false):FlxColor {
-		var lerpVal = fpsLerp ? CoolUtil.getLerp(factor) : factor;
-		R = FlxMath.lerp(R, target.red, lerpVal);
-		G = FlxMath.lerp(G, target.green, lerpVal);
-		B = FlxMath.lerp(B, target.blue, lerpVal);
+	public function lerp(target:FlxColor, factor:Float = 0.5, smooth:Bool = false):FlxColor {
+		R = CoolUtil.resolveLerp(R, target.red, factor, smooth);
+		G = CoolUtil.resolveLerp(G, target.green, factor, smooth);
+		B = CoolUtil.resolveLerp(B, target.blue, factor, smooth);
 		return get();
 	}
 
