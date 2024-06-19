@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="senpai.png" width="1390" height="238">
   <SubTexture name="senpaiIdle0001" x="4" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>
   <SubTexture name="senpaiIdle0003" x="282" y="4"  width="270" height="230" frameX="-0" frameY="-0" frameWidth="270" frameHeight="230"/>

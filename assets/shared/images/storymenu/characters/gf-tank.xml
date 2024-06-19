@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="gf-tank.png" width="1778" height="1965">
   <SubTexture name="GF Dancing at Gunpoint0017" x="4" y="4"  width="456" height="318" frameX="-0" frameY="-6" frameWidth="456" frameHeight="324"/>
   <SubTexture name="GF Dancing at Gunpoint0001" x="4" y="330"  width="456" height="317" frameX="-0" frameY="-7" frameWidth="456" frameHeight="324"/>

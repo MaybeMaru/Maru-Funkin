@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="bfLol.png" width="545" height="211">
   <SubTexture name="funnyThing instance 10000" x="4" y="4"  width="279" height="184" frameX="-1" frameY="-12" frameWidth="280" frameHeight="204"/>
   <SubTexture name="funnyThing instance 10010" x="291" y="4"  width="250" height="203" frameX="-11" frameY="-0" frameWidth="280" frameHeight="204"/>

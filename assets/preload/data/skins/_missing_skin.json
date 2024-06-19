@@ -41,7 +41,7 @@
         ],
         "imagePath": "noteAssets",
         "antialiasing": true,
-        "scale": 0.7,
+        "scale": 1,
         "noteColorArray" : ["0xffc24b99", "0xff00ffff", "0xff12fa05", "0xfff9393f"]
     },
     "strumData": {

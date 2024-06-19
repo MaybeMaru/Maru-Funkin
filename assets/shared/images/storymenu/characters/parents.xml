@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="parents.png" width="3102" height="399">
   <SubTexture name="Parent Christmas Idle0003" x="4" y="4"  width="438" height="380" frameX="-0" frameY="-11" frameWidth="442" frameHeight="391"/>
   <SubTexture name="Parent Christmas Idle0005" x="450" y="4"  width="439" height="383" frameX="-2" frameY="-8" frameWidth="442" frameHeight="391"/>

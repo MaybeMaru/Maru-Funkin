@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="spooky.png" width="640" height="554">
   <SubTexture name="spooky dance idle0009" x="4" y="4"  width="246" height="267" frameX="-0" frameY="-8" frameWidth="246" frameHeight="275"/>
   <SubTexture name="spooky dance idle0001" x="258" y="4"  width="191" height="275" frameX="-25" frameY="-0" frameWidth="246" frameHeight="275"/>

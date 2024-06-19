@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="pauseUI.png" width="900" height="203">
   <SubTexture name="bluereplay instance 10000" x="4" y="4"  width="227" height="195" frameX="-15" frameY="-0" frameWidth="256" frameHeight="200"/>
   <SubTexture name="yellowreplay instance 10000" x="239" y="4"  width="227" height="195" frameX="-15" frameY="-1" frameWidth="256" frameHeight="200"/>

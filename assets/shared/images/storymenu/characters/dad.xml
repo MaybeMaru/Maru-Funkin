@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="dad.png" width="1253" height="372">
   <SubTexture name="Dad idle dance0005" x="4" y="4"  width="202" height="359" frameX="-0" frameY="-5" frameWidth="203" frameHeight="364"/>
   <SubTexture name="Dad idle dance0003" x="214" y="4"  width="203" height="360" frameX="-0" frameY="-4" frameWidth="203" frameHeight="364"/>

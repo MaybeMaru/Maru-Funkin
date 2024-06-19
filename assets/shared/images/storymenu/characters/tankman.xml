@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="tankman.png" width="1741" height="222">
   <SubTexture name="Tankman Idle Dance0005" x="4" y="4" width="280" height="212" rotated="true"  frameX="-1" frameY="-6" frameWidth="215" frameHeight="286"/>
   <SubTexture name="Tankman Idle Dance0001" x="292" y="4" width="277" height="213" rotated="true"  frameX="-2" frameY="-9" frameWidth="215" frameHeight="286"/>

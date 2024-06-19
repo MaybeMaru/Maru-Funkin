@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Free texture packer v0.6.7 http://free-tex-packer.com
--->
 <TextureAtlas imagePath="pico.png" width="1699" height="231">
   <SubTexture name="Pico Idle Dance0001" x="4" y="4" width="230" height="217" rotated="true"  frameX="-0" frameY="-6" frameWidth="226" frameHeight="237"/>
   <SubTexture name="Pico Idle Dance0003" x="242" y="4" width="234" height="221" rotated="true"  frameX="-0" frameY="-3" frameWidth="226" frameHeight="237"/>
