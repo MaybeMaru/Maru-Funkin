@@ -58,7 +58,7 @@ class FastArray<T>
         #end
     }
 
-    inline public static function clear<T>(array:Array<T>) {
+    inline public static function clear<T>(array:Array<T>):Void {
         #if web
         array.splice(0, array.length); // Splice is faster on html5 for whatever reason
         #else
@@ -66,7 +66,7 @@ class FastArray<T>
         #end
     }
 
-    inline public static function removeAt<T>(array:Array<T>, index:Int) {
+    inline public static function removeAt<T>(array:Array<T>, index:Int):Void {
       #if cpp
       cpp.NativeArray.removeAt(array, index);
       #else

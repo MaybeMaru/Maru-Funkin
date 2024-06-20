@@ -1,5 +1,6 @@
 package flixel.graphics.tile;
 
+import openfl.display.GraphicsShader;
 import openfl.display.Graphics;
 #if FLX_DRAW_QUADS
 import flixel.FlxCamera;
@@ -136,7 +137,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 
 	private static final bounds:Rectangle = new Rectangle(0, 0, 1280, 720);
 
-	function drawFlxQuad(graphics:Graphics, shader:FlxShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
+	function drawFlxQuad(graphics:Graphics, shader:GraphicsShader, rects:Vector<Float>, transforms:Vector<Float>):Void @:privateAccess
 	{
 		// Override blend mode
 		if (blend == null) blend = NORMAL;
@@ -145,7 +146,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		// Begin shader fill
 		final shaderBuffer = graphics.__shaderBufferPool.get();
 		graphics.__usedShaderBuffers.add(shaderBuffer);
-		shaderBuffer.update(cast shader);
+		shaderBuffer.update(shader);
 		graphics.__commands.beginShaderFill(shaderBuffer);
 
 		// Draw the quad

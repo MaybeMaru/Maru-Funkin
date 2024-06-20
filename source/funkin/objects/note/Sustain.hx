@@ -65,7 +65,7 @@ class Sustain extends BasicNote
 
     public var percentLeft(default, null):Float = 0;
     public var cutHeight(default, null):Float = 0;
-    public var susEndHeight:Int = 15;
+    public var endOffset:Int = 50; // lil offset for sustain ends to be a bit more fair
 
     public function pressSustain():Void {
         if (Conductor.songPosition >= strumTime) if (clipRect != null) {
@@ -77,9 +77,9 @@ class Sustain extends BasicNote
             cutHeight = -distanceToStrum();
             percentLeft = 1 + (cutHeight / repeatHeight);
             clipRect.y = cutHeight;
-            
+
             // Sustain is finished
-            if (cutHeight <= (-repeatHeight + (susEndHeight * calcSpeed() * 0.45)))
+            if (timeToStrum() >= susLength - endOffset)
                 removeNote();
         }
     }
