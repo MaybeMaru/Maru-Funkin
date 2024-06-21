@@ -7,6 +7,9 @@ class ReverseModifier extends BasicModifier
 {
     public function new() {
         super(REVERSE, true);
+    }
+
+    override function init() {
         isDownscroll = getPref("downscroll");
     }
 

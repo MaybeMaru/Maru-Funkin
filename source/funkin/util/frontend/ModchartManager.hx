@@ -15,6 +15,7 @@ enum abstract Modifiers(String) from String to String {
     var TIPSY = "TIPSY";
     var BEAT = "BEAT";
     var REVERSE = "REVERSE";
+    var SWAP = "SWAP";
 }
 
 class ModchartManager extends EventHandler
@@ -26,10 +27,11 @@ class ModchartManager extends EventHandler
         DRUNK => () -> return new DrunkModifier(),
         TIPSY => () -> return new TipsyModifier(),
         BEAT => () -> return new BeatModifier(),
-        REVERSE => () -> return new ReverseModifier()
+        REVERSE => () -> return new ReverseModifier(),
+        SWAP => () -> return new SwapModifier()
     ];
 
-    private var strumLines:Map<Int, StrumLineGroup> = [];
+    public var strumLines:Map<Int, StrumLineGroup> = [];
 
     var __postUpdate:Void->Void;
     
@@ -99,7 +101,7 @@ class ModchartManager extends EventHandler
     }
 
     inline public function getStrum(strumlineID:Int = 0, strumID:Int = 0):NoteStrum {
-        return getStrumLine(strumlineID)?.members[strumID] ?? null;
+        return getStrumLine(strumlineID)?.strums[strumID] ?? null;
     }
 
     inline public function getStrumLineLength(id:Int = 0):Int {
@@ -168,8 +170,12 @@ class ModchartManager extends EventHandler
             setStrumValue(strumline, i, value, data);
     }
 
-    public function setStrumValue(strumline:Int, id:Int, value:String, ?valueData:Array<Dynamic>) {
-        var strumMods = getStrum(strumline, id).modifiers;
+    public function setStrumValue(strumline:Int, id:Int, value:String, ?valueData:Array<Dynamic>)
+    {
+        var strumline = getStrumLine(strumline);
+        var strum = strumline.strums[id];
+        var strumMods = strum.modifiers;
+
         value = value.toUpperCase().trim();        
         
         var mod:BasicModifier = strumMods.get(value);
@@ -180,6 +186,10 @@ class ModchartManager extends EventHandler
             strumMods.set(value, mod);
             valueData ??= mod.getDefaultValues();
 
+            mod.parentStrumLine = strumline;
+            mod.parentStrum = strum;
+            mod.manager = this;
+
             valueData.fastForEach((value, i) -> {
                 if (i < mod.data.length) {
                     mod.data.unsafeSet(i, value);
@@ -188,6 +198,8 @@ class ModchartManager extends EventHandler
                     mod.data.push(value);
                 }
             });
+
+            mod.init();
         }
         else
         {

@@ -1,6 +1,6 @@
 package funkin.util.frontend.modifiers;
 
-import funkin.objects.note.BasicNote;
+import funkin.objects.note.*;
 
 class BasicModifier
 {
@@ -8,11 +8,18 @@ class BasicModifier
     public var eachNote(default, null):Bool;
     public var data:Array<Dynamic>;
 
+    public var parentStrumLine:StrumLineGroup;
+    public var parentStrum:NoteStrum;
+    public var manager:ModchartManager;
+
     public function new(name:String, eachNote:Bool) {
         this.name = name;
         this.eachNote = eachNote;
         this.data = getDefaultValues();
     }
+
+    // Called after the modifier is initiated in setValue
+    public function init() {}
 
     // For each strum note (that isnt a sustain)
     public function manageStrumNote(strum:NoteStrum, note:BasicNote) {}

@@ -252,7 +252,7 @@ class NotesGroup extends Group
 			{
 				var strumTime:Float = songNote.time;
 				var initNoteData:Int = songNote.lane;
-				var susLength:Float = songNote.length > 0 ? songNote.length + stepCrochet : 0;
+				var susLength:Float = songNote.length > 0 ? songNote.length + stepCrochet - 10 : 0;
 				
 				if ((strumTime + susLength) < Conductor.songPosition) continue; // Save on creating missed notes
 				if (initNoteData < 0) continue; // Negative notes arent supported
