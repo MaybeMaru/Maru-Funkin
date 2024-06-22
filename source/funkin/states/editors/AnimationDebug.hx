@@ -497,7 +497,7 @@ class AnimationDebug extends MusicBeatState {
 	function getUpdatedAnimData():SpriteAnimation {
 		var curAnim:String = dropDown_anims.selectedLabel;
 		var newAnimData = JsonUtil.copyJson(displayChar.getAnimData(curAnim));
-		var animOffsets:FlxPoint = displayChar.animOffsets.get(curAnim) ?? new FlxPoint();
+		var animOffsets:FlxPoint = displayChar.animOffsets.get(curAnim) ?? FlxPoint.get();
 		newAnimData.animName = input_animName.text;
 		newAnimData.animFile = input_animFile.text;
 		newAnimData.framerate = Std.int(stepper_animFramerate.value);
@@ -514,16 +514,22 @@ class AnimationDebug extends MusicBeatState {
 		input_animFile.text = curAnimData.animFile;
 		stepper_animFramerate.value = curAnimData.framerate;
 		check_loop.checked = curAnimData.loop;
-		input_indices.text = indicesToTxt(curAnimData.indices);
+		input_indices.text = curAnimData.indices.join(",");
 	}
 
-	inline function indicesToTxt(indices:Array<Int>):String {
-		return indices.map((i) -> return Std.string(i)).join(",");
-	}
+	function txtToIndices(text:String):Array<Int> {
+		var indices:Array<Int> = [];
 
-	inline function txtToIndices(text:String):Array<Int> {
-		if (text.length <= 0) return [];
-		return text.split(",").map((str) -> return Std.parseInt(str)).filter((value) -> return value != null);
+		if (text.length > 0) {
+			text.split(",").fastForEach((index, i) -> {
+				var int:Null<Int> = Std.parseInt(index.trim());
+				if (int != null) {
+					indices.push(int);
+				}
+			});
+		}
+
+		return indices;
 	}
 
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {

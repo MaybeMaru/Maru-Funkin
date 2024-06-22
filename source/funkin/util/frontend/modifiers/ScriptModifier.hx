@@ -9,35 +9,41 @@ class ScriptModifier extends BasicModifier
         super(name, eachNote);
     }
 
-    public var strumNote:(NoteStrum, BasicNote)->Void;
-    public var strumUpdate:(NoteStrum, Float, Float)->Void;
-    public var strumStep:(NoteStrum, Int)->Void;
-    public var strumBeat:(NoteStrum, Int)->Void;
-    public var strumSection:(NoteStrum, Int)->Void;
+    public var modInit:(Array<Dynamic>)->Void;
+    public var strumNote:(NoteStrum, BasicNote, Array<Dynamic>)->Void;
+    public var strumUpdate:(NoteStrum, Float, Float, Array<Dynamic>)->Void;
+    public var strumStep:(NoteStrum, Int, Array<Dynamic>)->Void;
+    public var strumBeat:(NoteStrum, Int, Array<Dynamic>)->Void;
+    public var strumSection:(NoteStrum, Int, Array<Dynamic>)->Void;
+
+    override function init() {
+        if (modInit != null)
+            modInit(data);
+    }
 
     override function manageStrumNote(strum:NoteStrum, note:BasicNote) {
         if (strumNote != null)
-            strumNote(strum, note);
+            strumNote(strum, note, data);
     }
 
-    override function manageStrumUpdate(strum:NoteStrum, elapsed:Float, timeElapsed:Float) {
+    override function manageStrumUpdate(strum:NoteStrum, elapsed:Float, beat:Float) {
         if (strumUpdate != null)
-            strumUpdate(strum, elapsed, timeElapsed);
+            strumUpdate(strum, elapsed, beat, data);
     }
 
     override function manageStrumStep(strum:NoteStrum, step:Int) {
         if (strumStep != null)
-            strumStep(strum, step);
+            strumStep(strum, step, data);
     }
     
     override function manageStrumBeat(strum:NoteStrum, beat:Int) {
         if (strumBeat != null)
-            strumBeat(strum, beat);
+            strumBeat(strum, beat, data);
     }
 
     override function manageStrumSection(strum:NoteStrum, section:Int) {
         if (strumSection != null)
-            strumSection(strum, section);
+            strumSection(strum, section, data);
     }
 
     var defaultValues:Array<Dynamic>;

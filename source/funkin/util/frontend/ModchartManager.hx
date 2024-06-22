@@ -78,6 +78,7 @@ class ModchartManager extends EventHandler
                 defaultValues
             );
     
+            mod.modInit = callbacks.init;
             mod.strumNote = callbacks.manageStrumNote;
             mod.strumUpdate = callbacks.manageStrumUpdate;
             mod.strumStep = callbacks.manageStrumStep;
