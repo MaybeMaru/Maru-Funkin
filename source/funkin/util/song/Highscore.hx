@@ -80,4 +80,24 @@ class Highscore {
 			   acc >= 0 ? 	'miss' :
 			   '?';
 	}
+
+	public static final ratingMap:Map<String, Rating> = [
+		"sick" 	=> new Rating(350, 	1, 		0),
+		"good" 	=> new Rating(200, 	0.8, 	0),
+		"bad" 	=> new Rating(100, 	0.5, 	0.06),
+		"shit" 	=> new Rating(50, 	0.25, 	0.1)
+	];
+}
+
+class Rating
+{
+	public var score:Int;
+	public var noteGain:Float;
+	public var ghostLoss:Float;
+
+	public function new(score:Int, noteGain:Float, ghostLoss:Float) {
+		this.score = score;
+		this.noteGain = noteGain;
+		this.ghostLoss = ghostLoss;
+	}
 }

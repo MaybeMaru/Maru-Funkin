@@ -698,23 +698,17 @@ class PlayState extends MusicBeatState
 		super.startTransition();
 	}
 
-	static final ratingMap:Map<String, {final score:Int; final note:Float; final ghostLoss:Float;}> = [
-		"sick" => {score: 350, note: 1, ghostLoss: 0},
-		"good" => {score: 200, note: 0.8, ghostLoss: 0},
-		"bad" => {score: 100, note: 0.5, ghostLoss: 0.06},
-		"shit" => {score: 50, note: 0.25, ghostLoss: 0.1}
-	];
-
 	public function popUpScore(strumtime:Float, daNote:Note) {
 		combo++;
 		noteCount++;
 		ModdingUtil.addCall('popUpScore', [daNote]);
 
 		final noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
-		final ratingData = ratingMap.get(noteRating);
-		songScore += ratingData.score;
-		noteTotal += ratingData.note;
-		health -= ghostTapEnabled ? ratingData.ghostLoss : 0;
+		final rating = Highscore.ratingMap.get(noteRating);
+		
+		songScore = (songScore + rating.score);
+		noteTotal = (noteTotal + rating.noteGain);
+		if (ghostTapEnabled) health = (health - rating.ghostLoss);
 
 		if (!getPref('stack-rating'))
 			ratingGroup.clearGroup();
@@ -833,9 +827,7 @@ class PlayState extends MusicBeatState
 		#if mobile MobileTouch.setLayout(bool ? NOTES : NONE); #end
 		
 		final displayObjects:Array<FlxBasic> = [iconGroup, scoreTxt, healthBar, notesGroup, watermark];
-		displayObjects.fastForEach((object, i) -> {
-			object.visible = bool;
-		});
+		displayObjects.fastForEach((object, i) -> object.visible = bool);
 	}
 
 	// Some quick shortcuts
