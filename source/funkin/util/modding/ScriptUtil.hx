@@ -30,7 +30,7 @@ class ScriptUtil
     {
         var layer = getLayer(layerKey);
         if (layer != null)
-            stage.insertToLayer(layer, tag, object);
+            stage.insertToLayer(position, layer, tag, object);
         
         return object;
     }
@@ -49,9 +49,37 @@ class ScriptUtil
         return stage.objects.exists(tag);
     }
 
+    public static function removeObject(tag:String):Void {
+        if (!existsObject(tag))
+            return;
+        
+        var object = getObject(tag);
+            
+        var layer = stage.getObjectLayer(object);
+        if (layer != null)
+            layer.remove(object, true);
+
+        objects.remove(tag);
+    }
+
+    public static function getObjectIndex(tag:String):Int {
+        if (!existsObject(tag))
+            return -1;
+
+        var object = getObject(tag);
+        var layer = stage.getObjectLayer(object);
+		return layer?.members?.indexOf(object) ?? -1;
+    }
+
     public static function addLayer(layer:Layer, layerKey:String):Layer
     {
         stage.addLayer(layer, layerKey);
+        return layer;
+    }
+
+    public static function insertLayer(index:Int = 0, layer:Layer, layerKey:String):Layer
+    {
+        stage.insertLayer(index, layer, layerKey);
         return layer;
     }
 

@@ -68,14 +68,19 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 	@:noCompletion
 	public function implementNonStatic():Void { // For the runCode event and script console
 		set('State', cast FlxG.state);
+		set('add', FlxG.state.add);
+		set('insert', FlxG.state.insert);
+		set('remove', FlxG.state.remove);
 	}
 
 	public function implement():Void { //Preloaded Variables
 		implementNonStatic();
 
-		set("trace", Reflect.makeVarArgs(function(el) {
-			var v = el.shift();
-			ModdingUtil.print(Std.string(v), NONE);
+		set("trace", Reflect.makeVarArgs((traces) -> {
+			while (traces.length > 0) {
+				var str = Std.string(traces.shift());
+				ModdingUtil.print(str, NONE);
+			}
 		}));
 
 		// Wip
@@ -151,7 +156,8 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			#elseif linux "linux"
 			#elseif mac "mac"
 			#elseif android "android"
-			#else null // ios and html5 dont exist and will never do
+			#elseif html5 "html5"
+			#else null // ios doesnt exist
 			#end
 		);
 
@@ -205,14 +211,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			CoolUtil.playSound(key, volume);
 		});
 
-		set('pauseSounds', function () {
-			CoolUtil.pauseSounds();
-		});
+		set('pauseSounds', CoolUtil.pauseSounds);
 
 		// Needs pauseSounds() first
-		set('resumeSounds', function () {
-			CoolUtil.resumeSounds();
-		});
+		set('resumeSounds', CoolUtil.resumeSounds);
 
 		set('makeCutsceneManager', function (?targetSound:FlxSound) {
 			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
@@ -229,70 +231,24 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return manager;
 		});
 
-		set('addSpr', function(spr:FlxObject, ?key:String, ?layer:LayerKey):FlxObject {
-			return ScriptUtil.addObject(spr, key, layer ?? false);
-		});
-
-		set('insertSpr', function(position:Int = 0, spr:FlxObject, ?key:String, ?layer:LayerKey):FlxObject {
-			return ScriptUtil.insertObject(position, spr, key, layer ?? false);
-		});
-
 		set('setObjMap', function(object:FlxObject, key:String):Void {
 			ScriptUtil.objects.set(key, object);
 		});
 
-		set('getSpr', function(key:String):Null<FlxObject> {
-			return ScriptUtil.getObject(key);
-		});
+		// Stage objects stuff
+		set('addSpr', ScriptUtil.addObject);
+		set('insertSpr', ScriptUtil.insertObject);
+		set('existsSpr', ScriptUtil.existsObject);
+		set('removeSpr', ScriptUtil.removeObject);
+		set('getSpr', ScriptUtil.getObject);
+		set('getSprOrder', ScriptUtil.getObjectIndex);
 
-		// TODO: improve this shit
-		set('getSprOrder', function(key:String):Int {
-			var sprite = ScriptUtil.getObject(key);
-			if (sprite != null)
-			{
-				var layer = ScriptUtil.stage.getObjectLayer(sprite);
-				return	layer == null ? -1 : layer.members.indexOf(sprite);
-			}
-
-			return -1;
-		});
-
-		set('existsSpr', function(key:String):Bool {
-			return ScriptUtil.existsObject(key);					
-		});
-
-		// TODO: improve this shit
-		set('removeSpr', function(key:String) {
-			var sprite = ScriptUtil.getObject(key);
-			if (sprite != null)
-			{
-				var layer = ScriptUtil.stage.getObjectLayer(sprite);
-				if (layer != null)
-					layer.remove(sprite, true);
-
-				ScriptUtil.objects.remove(key);
-			}
-		});
-
-		set('makeLayer', function(?maxSize:Int) {
-			return new Layer(maxSize);
-		});
-
-		set('addLayer', function(layer:Layer, key:String) {
-			ScriptUtil.addLayer(layer, key);
-		});
-
-		set('insertLayer', function (index:Int = 0, layer:Layer, key:String) {
-			ScriptUtil.stage.insertLayer(index, layer, key);
-		});
-
-		set('getLayer', function (key:String) {
-			return ScriptUtil.getLayer(key);
-		});
-
-		set('existsLayer', function (key:String) {
-			return ScriptUtil.existsLayer(key);
-		});
+		// Stage layers stuff
+		set('makeLayer', (?maxSize:Int) -> return new Layer(maxSize));
+		set('addLayer', ScriptUtil.addLayer);
+		set('insertLayer', ScriptUtil.insertLayer);
+		set('getLayer', ScriptUtil.getLayer);
+		set('existsLayer', ScriptUtil.existsLayer);
 
 		set('cacheCharacter', function(name:String):Character {
 			final cachedChar = new Character(0, 0, name);
@@ -420,20 +376,6 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 
 		set('switchCustomState', function (key:String, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
 			ScriptUtil.switchCustomState(key, skipTransOpen, skipTransClose);
-		});
-
-		// Base state functions
-
-		set('add', function(object:Dynamic) {
-			FlxG.state.add(object);
-		});
-
-		set('insert', function(position:Int, object:Dynamic) {
-			FlxG.state.insert(position, object);
-		});
-
-		set('remove', function(object:Dynamic) {
-			FlxG.state.remove(object);
 		});
 	}
 }
