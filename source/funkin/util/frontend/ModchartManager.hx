@@ -16,6 +16,7 @@ enum abstract Modifiers(String) from String to String {
     var BEAT = "BEAT";
     var REVERSE = "REVERSE";
     var SWAP = "SWAP";
+    var SHAKE = "SHAKE";
 }
 
 class ModchartManager extends EventHandler
@@ -28,7 +29,8 @@ class ModchartManager extends EventHandler
         TIPSY => () -> return new TipsyModifier(),
         BEAT => () -> return new BeatModifier(),
         REVERSE => () -> return new ReverseModifier(),
-        SWAP => () -> return new SwapModifier()
+        SWAP => () -> return new SwapModifier(),
+        SHAKE => () -> return new ShakeModifier()
     ];
 
     public var strumLines:Map<Int, StrumLineGroup> = [];

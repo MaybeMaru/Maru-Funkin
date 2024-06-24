@@ -3,6 +3,7 @@ package funkin.util.modding;
 import funkin.objects.NotesGroup;
 import hscript.Script;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
+import funkin.util.frontend.*;
 
 enum abstract HscriptFunctionCallback(Bool) {
 	var CONTINUE_FUNCTION = true;
@@ -168,7 +169,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		//HScript Functions
 
 		// DEPRECATED
-		set('importLib', function(classStr:String, packageStr:String = '', ?customName:String):Void {
+		set('importLib', (classStr:String, packageStr:String = '', ?customName:String) -> {
 			if(packageStr != '') packageStr += '.';
 			if (customName != null && !exists(customName)) {
 				warningPrint('importLib() is deprecated, use ``import ... as`` instead');
@@ -179,50 +180,30 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			set(classStr, Type.resolveClass(packageStr + classStr));
 		});
 
-		set('closeScript', function () {
+		set('closeScript', () -> {
 			FlxG.signals.preUpdate.addOnce(() -> ModdingUtil.removeScript(this));
 		});
 
-		set('getBlendMode', function(blendType:String):openfl.display.BlendMode {
-			return ScriptUtil.stringToBlend(blendType);
-		});
+		set('getBlendMode', ScriptUtil.stringToBlend);
+		set('getEase', ScriptUtil.stringToEase);
 
-		set('parseJson', function (value:String):Dynamic {
-			return Json.parse(value);
-		});
-
-		set('stringifyJson', function (value:Dynamic, pretty:Bool = true):String {
+		set('parseJson',  Json.parse);
+		set('stringifyJson', (value:Dynamic, pretty:Bool = true) -> {
 			return FunkyJson.stringify(value, pretty ? "\t" : null);
 		});
 
-		set('getPref', function(pref:String):Dynamic {
-			return Preferences.getPref(pref);
-		});
-
-		set('getKey', function(key:String):Bool {
-			return Controls.getKeyOld(key);
-		});
+		set('getPref', Preferences.getPref);
+		set('getKey',  Controls.getKeyOld);
 		
-		set('getSound', function (key:String):FlxSound {
-			return CoolUtil.getSound(key);
-		});
-
-		set('playSound', function (key:String, volume:Float = 1) {
-			CoolUtil.playSound(key, volume);
-		});
-
+		// Sounds stuff
+		set('getSound', CoolUtil.getSound);
+		set('playSound', CoolUtil.playSound);
 		set('pauseSounds', CoolUtil.pauseSounds);
-
-		// Needs pauseSounds() first
 		set('resumeSounds', CoolUtil.resumeSounds);
 
-		set('makeCutsceneManager', function (?targetSound:FlxSound) {
-			return funkin.util.frontend.CutsceneManager.makeManager(targetSound);
-		});
-
-		// Kinda useable, still a wip
-		set('makeModchartManager', function () {
-			final manager = funkin.util.frontend.ModchartManager.makeManager();
+		set('makeCutsceneManager',  CutsceneManager.makeManager);
+		set('makeModchartManager', () -> {
+			final manager = ModchartManager.makeManager();
 			final instance = PlayState.instance;
 			if (instance != null) {
 				manager.setStrumLine(0, instance.notesGroup.opponentStrums);
@@ -231,7 +212,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return manager;
 		});
 
-		set('setObjMap', function(object:FlxObject, key:String):Void {
+		set('setObjMap', (object:FlxObject, key:String) -> {
 			ScriptUtil.objects.set(key, object);
 		});
 
@@ -250,16 +231,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('getLayer', ScriptUtil.getLayer);
 		set('existsLayer', ScriptUtil.existsLayer);
 
-		set('cacheCharacter', function(name:String):Character {
-			final cachedChar = new Character(0, 0, name);
-			return cachedChar;
-		});
+		set('cacheImage', CoolUtil.cacheImage);
+		set('cacheCharacter', (name:String) -> return new Character(0, 0, name));
 
-		set('cacheImage', function(image:FlxGraphicAsset, ?library:String):FlxGraphicAsset {
-			return CoolUtil.cacheImage(image, library);
-		});
-
-		set('runEvent', function(name:String, ?values:Array<Dynamic>):Bool {
+		set('runEvent', (name:String, ?values:Array<Dynamic>) -> {
 			if (name == "runCode") // why would you-
 				return false;
 
@@ -279,15 +254,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 
 		// Script functions
 
-		set('addScript', function(path:String, ?tag:String):Null<FunkScript> {
-			return ModdingUtil.addScript(path, tag);
-		});
+		set('addScript', ModdingUtil.addScript);
+		set('removeScript', ModdingUtil.removeScriptByTag);
 
-		set('removeScript', function(tag:String):Void {
-			ModdingUtil.removeScriptByTag(tag);
-		});
-
-		set('getScriptVar', function(script:String, key:String):Dynamic {
+		set('getScriptVar', (script:String, key:String) -> {
 			var script = ModdingUtil.scriptsMap.get(script);
 			if (script.exists(key)) {
 				return script.get(key);
@@ -295,11 +265,9 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return null;
 		});
 
-		set('callScriptsFunction', function(func:String, ?args:Array<Dynamic>) {
-			ModdingUtil.addCall(func, args);
-		});
+		set('callScriptsFunction', ModdingUtil.addCall);
 
-		set('callScriptFunction', function(script:String, method:String, ?args:Array<Dynamic>):Dynamic {
+		set('callScriptFunction', (script:String, method:String, ?args:Array<Dynamic>) -> {
 			var script = ModdingUtil.scriptsMap.get(script);
 			if (script != null)
 				return script.safeCall(method, args);
@@ -307,22 +275,22 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			return CONTINUE_FUNCTION;
 		});
 
-		set('addGlobalVar', function(key:String, _var:Dynamic, forced:Bool = false) {
+		set('addGlobalVar', (key:String, _var:Dynamic, forced:Bool = false) -> {
 			ModdingUtil.scripts.fastForEach((script, i) -> {
 				if (forced || !script.exists(key))
 					script.set(key, _var);
 			});
 		});
 
-		set('setGlobalVar', function (key:String, _var:Dynamic) {
-			globalVariables.set(key, _var);
+		set('setGlobalVar', (key:String, value:Dynamic) -> {
+			globalVariables.set(key, value);
 		});
 
-		set('existsGlobalVar', function (key:String) {
+		set('existsGlobalVar', (key:String) -> {
 			return globalVariables.exists(key);
 		});
 
-		set('getGlobalVar', function (key:String) {
+		set('getGlobalVar', (key:String) -> {
 			if (globalVariables.exists(key)) return globalVariables.get(key);
 			else {
 				warningPrint('Variable not found: $key');
@@ -374,9 +342,7 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 
 		// Custom state
 
-		set('switchCustomState', function (key:String, skipTransOpen:Bool = false, ?skipTransClose:Bool) {
-			ScriptUtil.switchCustomState(key, skipTransOpen, skipTransClose);
-		});
+		set('switchCustomState', ScriptUtil.switchCustomState);
 	}
 }
 
