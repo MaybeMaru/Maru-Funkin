@@ -399,6 +399,7 @@ class CustomState extends MusicBeatState {
 
     override public function create() {
 		ModdingUtil.addPrint(key + " / Custom State");
+		script.implementNonStatic();
 		checkSuper(CREATE);
     }
     
