@@ -87,14 +87,15 @@ class Print extends Sprite {
         return color = textField.textColor = value;
     }
 
-    public var timer:Float = 7.0;
+    public var timer:Float = 7;
     inline public function resetTimer() {
-        timer = 7.0;
+        timer = 7;
         alpha = 1;
     }
 
     inline public function hide() {
-        timer = 0.0;
+        text = ""; // Clear text rendering crap
+        timer = 0;
         alpha = 0;
     }
 
@@ -102,6 +103,9 @@ class Print extends Sprite {
         if (timer > 0) {
             timer -= e;
             alpha = timer;
+            if (alpha <= 0) {
+                hide();
+            }
         }
     }
 }

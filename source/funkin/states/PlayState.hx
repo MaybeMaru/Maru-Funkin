@@ -683,14 +683,15 @@ class PlayState extends MusicBeatState
 		PlayState.SONG = Song.loadFromFile(curDifficulty, nextSong);
 		Conductor.stop();
 
-		// Reset cam follow if the stage changed
-		prevCamFollow = (SONG.stage == curStage) ? camFollow : null;
+		// Reset cam follow and enable transition if the stage changed
+		final changedStage:Bool = (SONG.stage != curStage);
+		prevCamFollow = changedStage ? null : camFollow;
 		seenCutscene = false;
 
 		clearCache = true;
 		clearCacheData = {tempCache: false, skins: false}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
-		switchState(new PlayState(), true);
+		switchState(new PlayState(), !changedStage);
 	}
 
 	override function startTransition() {

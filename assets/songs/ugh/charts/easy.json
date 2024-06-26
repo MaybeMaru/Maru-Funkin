@@ -37,7 +37,7 @@
 					[5062.5,1,0],
 					[5250,0,281.25],
 					[5625,2,0,
-						true
+						"default-alt"
 					]
 				],
 				"mustHitSection": false
@@ -291,7 +291,7 @@
 					[41062.5,1,0],
 					[41250,0,281.25],
 					[41625,2,0,
-						true
+						"default-alt"
 					]
 				],
 				"mustHitSection": false
@@ -338,7 +338,7 @@
 					[48750,1,0],
 					[48937.5,3,0],
 					[49125,2,0,
-						true
+						"default-alt"
 					]
 				],
 				"mustHitSection": false
@@ -521,7 +521,7 @@
 					[77062.5,1,0],
 					[77250,0,281.25],
 					[77625,2,0,
-						true
+						"default-alt"
 					]
 				],
 				"mustHitSection": false
