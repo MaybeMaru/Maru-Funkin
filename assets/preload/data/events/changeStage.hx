@@ -16,50 +16,25 @@ function changeStage(stageName)
         return;
     }
     
-    State.stage.visible = false;
-    State.stage.active = false;
+    var lastStage = State.stage;
+    lastStage.visible = false;
+    lastStage.active = false;
 
-    if (State.stage.script != null)
-        State.stage.script.safeCall("hideStage");
+    if (lastStage.script != null)
+        lastStage.script.safeCall("hideStage");
     
     stage.visible = true;
     stage.active = true;
 
-    // Setup the layers crap
-    stage.__existsAddToLayer("bf", State.boyfriendGroup);
-    stage.__existsAddToLayer("dad", State.dadGroup);
-    stage.__existsAddToLayer("gf", State.gfGroup);
-    
-    stage.applyData(State.boyfriend, State.dad, State.gf);
-    repositionChar(State.boyfriend, 770, 450);
-    repositionChar(State.dad, 100, 450);
-    repositionChar(State.gf, 400, 360);
+    // Setup the layers and positions crap
+    stage.setupPlayState(State);
 
     if (stage.script != null)
         stage.script.safeCall("changeStage");
 
     State.defaultCamZoom = stage.data.zoom;
     State.stageData = stage.data;
-    
     State.stage = stage;
-}
-
-// Reposition correctly the group elements
-function repositionChar(char, x, y)
-{
-    var ogX = char.x;
-    var ogY = char.y;
-
-    char.setXY(x, y);
-
-    var diffX = char.x - ogX;
-    var diffY = char.y - ogY;
-
-    char.group.x += diffX;
-    char.group.y += diffY;
-
-    char.x -= diffX;
-    char.y -= diffY;
 }
 
 var cachedStages = [
@@ -97,7 +72,7 @@ function createPost() {
             cachedStages.set(stage, stageObject);
             stageObject.visible = false;
             stageObject.active = false;
-            State.add(stageObject);
+            State.stageGroup.add(stageObject);
         }
     }
 

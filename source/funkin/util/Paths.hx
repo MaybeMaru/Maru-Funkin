@@ -315,30 +315,78 @@ class Paths
 		return frames;
 	}
 
+	public static function quickFileList(folder:String, extension:String, fullPath:Bool)
+	{
+		var assetType:AssetType = switch (extension) {
+			case "png": IMAGE;
+			case "ogg": MUSIC;
+			case _: TEXT;
+		}
+
+		var assetFiles = getFileList(assetType, fullPath, extension, folder);
+		var modFiles = getModFileList(folder, extension, fullPath);
+
+		var list = assetFiles.concat(modFiles);
+		return CoolUtil.removeDuplicates(list);
+	}
+
+	public static function findSort(dir:String):Array<String>
+	{
+		if (dir.endsWith("/"))
+			dir = dir.substring(0, dir.length - 1);
+
+		var folder = dir.split("/").pop();
+
+		for (i in ['listSort', '$folder-sort']) {
+			var sort = CoolUtil.getFileContent('$dir/$i.txt');
+			if (sort.length > 0)
+				return sort.split(",");
+		}
+
+		// Folder has no sorts :p
+		return [];
+	}
+
+	public static function setupSort(folder:String, ?extension:String, fullPath:Bool = true)
+	{
+		var sort:Array<String> = findSort(folder);
+		sort.fastForEach((file, i) -> {
+			var prefix = fullPath ? '$folder/' : '';
+			var suffix = ((extension == null) || !fullPath) ? "" : '.$extension';
+			sort.unsafeSet(i, prefix + file + suffix);
+		});
+		return sort;
+	}
+
 	static public function getFileList(type:AssetType = IMAGE, fullPath:Bool = true, extension:String = "", folder:String = ""):Array<String>
 	{
-		if (folder.length > 0) if (!folder.endsWith("/"))
-			folder = '$folder/';
+		if (folder.length > 0) {
+			if (!folder.endsWith("/"))
+				folder = '$folder/';
+
+			if (!folder.startsWith('assets/'))
+				folder =  folder.startsWith('/') ? 'assets$folder' : 'assets/$folder';
+		}
 
 		var list:Array<String> = [];
-		OpenFlAssets.list(type).fastForEach((file, i) ->
+		
+		for (file in OpenFlAssets.list(type))
 		{
-			if (file.startsWith('assets/'))
-			{
-				if (extension.length == 0 || file.endsWith(extension))
-				{
-					if (folder.length == 0 || file.contains(folder))
-					{
-						list.push(fullPath ? file
-							: file.split('/')[file.split('/').length-1].split('.')[0]
-						);
-					}
-				}
-			}
-		});
+			if (!file.startsWith('assets/'))
+				continue;
 
-		list.sort(CoolUtil.sortAlphabetically);
-		return list;
+			var validExtension:Bool = (extension.length == 0 || file.endsWith(extension));
+			var validFolder:Bool = (folder.length == 0 || file.contains(folder));
+
+			if (validExtension) if (validFolder) {
+				list.push(fullPath ? file : file.split('/').pop().split('.')[0]);
+			}
+		}
+		
+		var sort = setupSort(folder, extension, fullPath);
+		var sortedList = CoolUtil.customSort(list, sort);
+
+		return sortedList;
 	}
 
 	public static function getModFileList(folder:String, ?extension:String, fullPath:Bool = true, global:Bool = true, curFolder:Bool = true, allFolders:Bool = false):Array<String> {
@@ -348,13 +396,6 @@ class Paths
 		{
 			if (FileSystem.exists(folder))
 			{
-				var sort:Array<String> = CoolUtil.getFileContent('$folder/listSort.txt').split(",");
-				sort.fastForEach((file, i) -> {
-					var prefix = fullPath ? '$folder/' : '';
-					var suffix = ((extension == null) || !fullPath) ? "" : '.$extension';
-					sort.unsafeSet(i, prefix + file + suffix);
-				});
-
 				var folderList:Array<String> = [];
 				FileSystem.readDirectory(folder).fastForEach((path, i) -> {
 					if (extension == null || path.endsWith(extension))
@@ -364,8 +405,9 @@ class Paths
 					}
 				});
 
+				var sort = setupSort(folder, extension, fullPath);
 				var sortedList = CoolUtil.customSort(folderList, sort);
-				sortedList.fastForEach((file, i) -> fileList.push(file));
+				fileList = fileList.concat(sortedList);
 			}
 		};
 

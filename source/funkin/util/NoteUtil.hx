@@ -49,10 +49,9 @@ class NoteUtil
 
     static function getList():Array<String>
     {
-        var song = PlayState.SONG != null ? PlayState.SONG.song : "";
-        var typesList = JsonUtil.getSubFolderJsonList('notetypes', [Song.formatSongFolder(song)]);
-        var typesSort = CoolUtil.getFileContent(Paths.txt("notetypes/types-sort", null)).split(",");
-        return CoolUtil.customSort(typesList, typesSort);
+        var song = PlayState.SONG?.song ?? "";
+        song = Song.formatSongFolder(song);
+        return JsonUtil.getSubFolderJsonList('notetypes', [song]);
     }
 
     public static function initTypes():Void

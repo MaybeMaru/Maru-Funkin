@@ -7,13 +7,14 @@ class CharSelectSubstate extends MusicBeatSubstate
 
     var curFolder:Int = 0;
     var curSelected:Array<Int> = [];
+
     var iconArray:Array<Array<HealthIcon>> = [];
     var charArray:Array<Array<MenuAlphabet>> = [];
+    
     var folderTxt:Alphabet;
-
     var textGroup:TypedGroup<MenuAlphabet>;
 
-	public function new(?selectFunction:()->Void):Void {
+	public function new(?selectFunction:()->Void, ?openChar:String):Void {
 		super();
         this.selectFunction = selectFunction;
 
@@ -29,11 +30,8 @@ class CharSelectSubstate extends MusicBeatSubstate
         folderTxt.scrollFactor.set();
         folderTxt.color = FlxColor.YELLOW;
 
-        var vanillaSort = CoolUtil.getFileContent(Paths.txt("characters/characters-sort", null, false)).split(",");
-        var modSort = CoolUtil.getFileContent(Paths.txt("characters/characters-sort")).split(',');
-       
-        var vanillaChars:Array<String> = CoolUtil.customSort(Paths.getFileList(TEXT, false, 'json', 'data/characters'), vanillaSort);
-        var modChars:Array<String> = CoolUtil.customSort(Paths.getModFileList('data/characters', 'json', false), modSort);
+        var vanillaChars:Array<String> = Paths.getFileList(TEXT, false, 'json', 'data/characters');
+        var modChars:Array<String> = Paths.getModFileList('data/characters', 'json', false);
 
         var listsToAdd:Array<Array<String>> = [vanillaChars, modChars];
 
@@ -62,11 +60,19 @@ class CharSelectSubstate extends MusicBeatSubstate
                 iconArray.unsafeGet(f).push(charIcon);
                 charArray.unsafeGet(f).push(charText);
             });
+
+            if (openChar != null) {
+                var index = folder.indexOf(openChar);
+                if (index != -1) {
+                    curFolder = f;
+                    curSelected[f] = index;
+                }
+            }
         });
 
         changeFolder();
         add(folderTxt);
-        cameras = [CoolUtil.getTopCam()];
+        camera = CoolUtil.getTopCam();
     }
     
     override public function update(elapsed:Float):Void {

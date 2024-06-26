@@ -24,6 +24,7 @@ class PlayState extends MusicBeatState
 	public static var curStage:String = '';
 	public var stageData:StageJson;
 	public var stage:Stage;
+	public var stageGroup:TypedGroup<Stage>;
 
 	public var dad:Character;
 	public var gf:Character;
@@ -47,6 +48,8 @@ class PlayState extends MusicBeatState
 	public var startingSong:Bool = false;
 
 	public var gfSpeed:Int = 1;
+	public var gfOpponent:Bool = false;
+
 	public var combo:Int = 0;
 	public var health(default, set):Float = 1;
 	function set_health(value:Float) {
@@ -157,6 +160,10 @@ class PlayState extends MusicBeatState
 		dad = new Character(0, 0, SONG.players[1]);
 		boyfriend = new Character(0, 0, SONG.players[0], true);
 
+		gf.group = gfGroup;
+		dad.group = dadGroup;
+		boyfriend.group = boyfriendGroup;
+
 		// CACHE GAMEOVER STUFF
 		GameOverSubstate.cacheSounds();
 
@@ -177,21 +184,17 @@ class PlayState extends MusicBeatState
 		// Stage Script
 		var stageScript = ModdingUtil.addScript(Paths.script('stages/$curStage'));
 		stage = Stage.fromJson(stageData, stageScript);
-		add(stage);
+
+		stageGroup = new TypedGroup<Stage>();
+		stageGroup.add(stage);
+		add(stageGroup);
 
 		if (stageScript != null)
 			stageScript.set("ScriptStage", stage);
-
+		
 		// Set stage character positions
-		stage.applyData(boyfriend, dad, gf);
-		boyfriend.setXY(770, 450);
-		dad.setXY(100, 450);
-		gf.setXY(400, 360);
-
-		// Set up stuff for scripts
-		gf.group = gfGroup;
-		dad.group = dadGroup;
-		boyfriend.group = boyfriendGroup;
+		gfOpponent = SONG.players[1] == SONG.players[2] && dad.isGF;
+		stage.setupPlayState(this);
 
 		iconGroup = new SpriteGroup();
 		iconP1 = new HealthIcon(boyfriend.icon, true, true);
@@ -225,20 +228,6 @@ class PlayState extends MusicBeatState
 		gfGroup.add(gf);
 		dadGroup.add(dad);
 		boyfriendGroup.add(boyfriend);
-
-		// Make Dad GF
-		if (SONG.players[1] == SONG.players[2] && dad.isGF)  {
-			dadGroup.setPosition(gf.OG_X - dad.OG_X, gf.OG_Y - dad.OG_Y);
-			dadGroup.scrollFactor.set(0.95, 0.95);
-			stage.__existsAddToLayer("gf", dadGroup);
-		}
-		else {
-			gfGroup.scrollFactor.set(0.95, 0.95);
-			stage.__existsAddToLayer("gf", gfGroup);
-			stage.__existsAddToLayer("dad", dadGroup);
-		}
-
-		stage.__existsAddToLayer("bf", boyfriendGroup);
 
 		//Cam Follow
 		if (prevCamFollow != null) {

@@ -4,7 +4,6 @@ import openfl.display.BitmapData;
 import flixel.text.FlxBitmapText;
 import funkin.states.editors.chart.grid.ChartNote.ChartSustain;
 import haxe.ds.Vector;
-import flixel.util.FlxArrayUtil;
 import funkin.substates.NotesSubstate;
 import funkin.substates.PromptSubstate;
 import flixel.addons.ui.FlxUINumericStepper;
@@ -623,7 +622,7 @@ class ChartingState extends MusicBeatState
 
     function deselectEvent() {
         eventID = 0;
-        FlxArrayUtil.clearArray(selectedEvents);
+        selectedEvents.clear();
         selectedEventObject = null;
     }
 

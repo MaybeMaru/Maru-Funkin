@@ -53,10 +53,10 @@ class ChartTabs extends FlxUITabMenu
 			instance = null;
 	}
 
-	function selectChar(?selectFunction:Void->Void):Void {
+	function selectChar(?curChar:String, ?selectFunction:Void->Void):Void {
 		ChartingState.instance.stop();
 		Conductor.setPitch(1, false);
-		ChartingState.instance.openSubState(new CharSelectSubstate(selectFunction));
+		ChartingState.instance.openSubState(new CharSelectSubstate(selectFunction, curChar));
 	}
 
 	public var focusList:Array<FlxUIInputText> = [];
@@ -124,7 +124,7 @@ class ChartTabs extends FlxUITabMenu
 		stepperOffsetVocals.name = 'song_vocals_offset';
 
 		p1Button = new FlxUIButton(10, 155, "Boyfriend", function() {
-			selectChar(function () {
+			selectChar(p1Button.label.text, () -> {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p1Button.label.text = newChar;
 				ChartingState.SONG.players[0] = newChar;
@@ -134,7 +134,7 @@ class ChartTabs extends FlxUITabMenu
 		p1Button.label.text = ChartingState.SONG.players[0];
 
 		p2Button = new FlxUIButton(stepperOffsetInst.x, p1Button.y, "Dad", function() {
-			selectChar(function () {
+			selectChar(p2Button.label.text, () -> {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p2Button.label.text = newChar;
 				ChartingState.SONG.players[1] = newChar;
@@ -144,11 +144,10 @@ class ChartTabs extends FlxUITabMenu
 		p2Button.label.text = ChartingState.SONG.players[1];
 
 		p3Button = new FlxUIButton(p2Button.x + 100, p2Button.y, "Girlfriend", function() {
-			selectChar(function () {
+			selectChar(p3Button.label.text, () -> {
 				var newChar:String = CharSelectSubstate.lastChar;
 				p3Button.label.text = newChar;
 				ChartingState.SONG.players[2] = newChar;
-				//ChartingState.instance.updateIcons();
 			});
 		});
 		p3Button.label.text = ChartingState.SONG.players[2];
@@ -375,6 +374,7 @@ class ChartTabs extends FlxUITabMenu
 		else {
 			setCurEvent(newEvent);
 			ChartingState.instance.setEventData(_defValues.copy(), newEvent); // Set defaults
+			// TODO: fix defaults for <list> values
 		}
 	}
 
@@ -386,8 +386,8 @@ class ChartTabs extends FlxUITabMenu
 	}
 
 	function addEventUI():Void {
-		FlxArrayUtil.clearArray(curEventDatas);
-		FlxArrayUtil.clearArray(curEventNames);
+		curEventDatas.clear();
+		curEventNames.clear();
 
 		var tab_group_event = new FlxUI(null, this);
 		tab_group_event.name = 'Event';

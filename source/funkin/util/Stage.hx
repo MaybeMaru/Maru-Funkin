@@ -213,15 +213,53 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return super.set_active(value);
     }
 
+    public function setupPlayState(instance:PlayState) {
+        final dadOpponent:Bool = !instance.gfOpponent;
+
+        __existsAddToLayer("bf", instance.boyfriendGroup);
+        
+        if (dadOpponent)
+        {
+            __existsAddToLayer("dad", instance.dadGroup);
+            __existsAddToLayer("gf", instance.gfGroup);
+
+            applyData(
+                instance.boyfriend,
+                instance.dad,
+                instance.gf
+            );
+        }
+        else
+        {
+            __existsAddToLayer("gf", instance.dadGroup);
+
+            applyData(
+                instance.boyfriend,
+                null,
+                instance.dad
+            );
+        }
+    }
+
     public function applyData(bf:Character, dad:Character, gf:Character)
     {
-        bf.stageOffsets.set(data.bfOffsets[0], data.bfOffsets[1]);
-		dad.stageOffsets.set(data.dadOffsets[0], data.dadOffsets[1]);
-		gf.stageOffsets.set(data.gfOffsets[0], data.gfOffsets[1]);
+        if (bf != null) {
+            bf.stageOffsets.set(data.bfOffsets[0], data.bfOffsets[1]);
+            bf.stageCamOffsets.set(data.bfCamOffsets[0], data.bfCamOffsets[1]);
+            bf.reposition(770, 450);
+        }
 
-		bf.stageCamOffsets.set(data.bfCamOffsets[0], data.bfCamOffsets[1]);
-		dad.stageCamOffsets.set(data.dadCamOffsets[0], data.dadCamOffsets[1]);
-		gf.stageCamOffsets.set(data.gfCamOffsets[0], data.gfCamOffsets[1]);
+        if (dad != null) {
+            dad.stageOffsets.set(data.dadOffsets[0], data.dadOffsets[1]);
+            dad.stageCamOffsets.set(data.dadCamOffsets[0], data.dadCamOffsets[1]);
+            dad.reposition(100, 450);
+        }
+
+        if (gf != null) {
+            gf.stageOffsets.set(data.gfOffsets[0], data.gfOffsets[1]);
+            gf.stageCamOffsets.set(data.gfCamOffsets[0], data.gfCamOffsets[1]);
+            gf.reposition(400, 360);
+        }
     }
 
     // Creating the stage

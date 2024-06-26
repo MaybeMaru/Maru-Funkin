@@ -32,18 +32,23 @@ typedef JsonSpritesheet = {
 
 class JsonUtil
 {
-	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>) {
-        subFolders = subFolders == null ? [] : subFolders;
-        var subFolderList:Array<String> = [];
-        for (i in subFolders)
-            subFolderList = subFolderList.concat(getJsonList(folder + "/" + i));
-        return getJsonList(folder).concat(subFolderList);
+	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>)
+	{   
+		var subFolderList:Array<String> = [];
+		
+		if (subFolders != null) {
+			subFolders.fastForEach((subFolder, i) -> {
+				subFolderList = subFolderList.concat(getJsonList('$folder/$subFolder'));
+			});
+		}
+        
+		return getJsonList(folder).concat(subFolderList);
     }
 
 	inline public static function getJsonList(folder:String = 'scripts/global',
 		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
-		fullPath:Bool = false, mainFolder:String = 'data'):Array<String> {
-		
+		fullPath:Bool = false, mainFolder:String = 'data'):Array<String>
+	{
         var assetsList:Array<String> = assets ? Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder') : [];
         var modList:Array<String> = #if desktop Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods); #else []; #end
         return assetsList.concat(modList);

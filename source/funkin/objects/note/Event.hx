@@ -15,10 +15,9 @@ class EventUtil
 
     static function getList():Array<String>
     {
-        var song = PlayState.SONG != null ? PlayState.SONG.song : "";
-        var eventSort = CoolUtil.getFileContent(Paths.txt("events/events-sort", null)).split(",");
-        var eventList = JsonUtil.getSubFolderJsonList('events', [song]);
-        return CoolUtil.customSort(eventList, eventSort);
+        var song = PlayState.SONG?.song ?? "";
+        song = Song.formatSongFolder(song);
+        return JsonUtil.getSubFolderJsonList('events', [song]);
     }
 
     public static function initEvents():Void

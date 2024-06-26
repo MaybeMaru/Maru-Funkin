@@ -95,6 +95,25 @@ class Character extends FlxSpriteExt
 		flipX = isPlayer ? !value : value;
 	}
 
+	// Move the whole character with the group too
+	public function reposition(X:Float, Y:Float) {
+		var ogX = x;
+        var ogY = y;
+        
+        setXY(X, Y);
+        
+        var diffX = x - ogX;
+        var diffY = y - ogY;
+        
+		if (group != null) {
+			group.x += diffX;
+			group.y += diffY;
+		}
+        
+        x -= diffX;
+        y -= diffY;
+	}
+
 	public function loadCharJson(inputJson:CharacterJson):Void
 	{
 		var path:String = inputJson.imagePath.startsWith("characters/") ? inputJson.imagePath : "characters/" + inputJson.imagePath;

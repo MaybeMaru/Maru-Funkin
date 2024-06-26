@@ -11,7 +11,8 @@ typedef SkinJson = SpriteJson & {
     var splashData:SpriteJson;
 }
 
-class SkinUtil {
+class SkinUtil
+{
     public static var curSkin:String = 'default';
     public static var curSkinData:SkinJson;
     public static var dataMap:Map<String, SkinJson>;
