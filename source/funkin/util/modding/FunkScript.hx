@@ -143,8 +143,10 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
+		set('FunkVideo', funkin.objects.FunkVideo);
+
 		#if hxvlc
-		set('FlxVideo', hxvlc.flixel.FlxVideo);
+		set('FlxVideo', funkin.objects.FunkVideo); // Deprecated lol
 		set('FlxVideoSprite', hxvlc.flixel.FlxVideoSprite);
 		#end
 
