@@ -206,13 +206,15 @@ class WeekSetup
         else                        CoolUtil.switchState(instance, skipTrans);
     }
 
-    public static function loadPlayState(instance:PlayState, skipTrans:Bool = false):Void
+    public static function loadPlayState(instance:PlayState, skipTrans:Bool = false, clearCache:Bool = true):Void
     {
         var loadScreen:LoadingState = new LoadingState();
 
         loadScreen.onStart = () -> {
-            PlayState.clearCache = false;
-            CoolUtil.clearCache();
+            if (clearCache) {
+                PlayState.clearCache = false;
+                CoolUtil.clearCache();
+            }
         }
 
         loadScreen.onComplete = () -> {

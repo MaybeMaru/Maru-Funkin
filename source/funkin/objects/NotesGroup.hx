@@ -271,7 +271,6 @@ class NotesGroup extends Group
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
-					// TODO: notetype skin sustains arent loading for some reason (?) fix dat
 					var sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
 					sustain.noteSpeed = songSpeed;
 					

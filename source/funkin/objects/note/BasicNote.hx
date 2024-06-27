@@ -52,7 +52,7 @@ class BasicNote extends SmartSprite implements INoteData implements ITimingObjec
     }
 
     public function changeSkin(?value:String):Void {
-        if (value != skin)
+        if ((value != skin) || isSustainNote)
             skin = value;
     }
 

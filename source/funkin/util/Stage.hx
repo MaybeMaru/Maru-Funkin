@@ -389,18 +389,8 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return key is Bool ? (key ? "fg" : "bg") : key;
     }
 
-    public function stepHit(curStep:Int):Void
-    {
-
-    }
-
-    public function beatHit(curBeat:Int):Void
-    {
-        
-    }
-
-    public function sectionHit(curSection:Int):Void
-    {
-        
-    }
+    // TODO: could add some metadata to setup boopers or something like that?
+    public function stepHit(curStep:Int):Void {}
+    public function beatHit(curBeat:Int):Void {}
+    public function sectionHit(curSection:Int):Void {}
 }

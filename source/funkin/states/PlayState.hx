@@ -680,7 +680,10 @@ class PlayState extends MusicBeatState
 		clearCache = true;
 		clearCacheData = {tempCache: false, skins: false}
 		ModdingUtil.addCall('switchSong', [nextSong, curDifficulty]); // Could be used to change cache clear
-		switchState(new PlayState(), !changedStage);
+		
+		// If the stage has changed we can sneak in a lil loading screen :]
+		changedStage ? 	WeekSetup.loadPlayState(new PlayState(), false, false)
+		: 				switchState(new PlayState(), true);
 	}
 
 	override function startTransition() {
