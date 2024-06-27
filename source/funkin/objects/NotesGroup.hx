@@ -258,7 +258,7 @@ class NotesGroup extends Group
 				if (initNoteData < 0) continue; // Negative notes arent supported
 
 				var noteData:Int = initNoteData % Conductor.NOTE_DATA_LENGTH;
-				var noteType:String = NoteUtil.getTypeName(songNote.type);
+				var noteType:String = NoteUtil.resolveType(songNote.type);
 				var mustPress:Bool = mustHit ? initNoteData < Conductor.NOTE_DATA_LENGTH : initNoteData >= Conductor.NOTE_DATA_LENGTH;
 				var targetStrum:NoteStrum = mustPress ? playerStrums.members[noteData] : opponentStrums.members[noteData];
 				var skin:String = NoteUtil.getTypeJson(noteType)?.skin ?? SkinUtil.curSkin;
@@ -271,6 +271,7 @@ class NotesGroup extends Group
 				unspawnNotes.push(note);
 
 				if (susLength > 0) {
+					// TODO: notetype skin sustains arent loading for some reason (?) fix dat
 					var sustain:Sustain = new Sustain(noteData, strumTime, susLength, skin, note);
 					sustain.noteSpeed = songSpeed;
 					

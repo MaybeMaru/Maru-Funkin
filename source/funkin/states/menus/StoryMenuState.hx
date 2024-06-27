@@ -30,6 +30,11 @@ class StoryMenuState extends MusicBeatState {
 	inline function getCurData() 	return storyWeeks[curWeek].data;
 	inline function getWeekChars() 	return getCurData().storyCharacters;
 
+	override function destroy():Void {
+		super.destroy();
+		MenuCharacter.cachedChars.clear();
+	}
+
 	override function create():Void
 	{
 		if (FlxG.sound.music == null)
@@ -58,17 +63,18 @@ class StoryMenuState extends MusicBeatState {
 				storyWeeks.push(week);
 
 				ModdingUtil.runFunctionMod(week.modFolder, () -> {
-					var item = new MenuItem(i, week.data.weekImage, !Highscore.getWeekUnlock(week.name));
+					var locked = !Highscore.getWeekUnlock(week.name);
+					var item = new MenuItem(i, week.data.weekImage, locked);
 					grpWeekText.add(item);
 				});
 			}
 		});
 
-		MenuCharacter.cachedChars.clear();
 		for (i in 0...3) {
 			var weekChar:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + i) - 150, 70, getWeekChars()[i]);
 			grpWeekCharacters.add(weekChar);
 		}
+
 		grpWeekCharacters.members[1].screenCenter(X);
 
 		difficultySelectors = new FlxGroup();
@@ -178,17 +184,24 @@ class StoryMenuState extends MusicBeatState {
 	var cachedChars:Array<String> = [];
 
 	function cacheChars() {
-		final startMod = ModdingUtil.curModFolder;
-		for (week in storyWeeks) {
-			if (WeekSetup.vanillaWeekList.contains(week)) continue;
+		var startMod = ModdingUtil.curModFolder;
+		var dummyChar = new MenuCharacter(0,0,"");
+		for (week in storyWeeks)
+		{
+			if (WeekSetup.vanillaWeekList.contains(week))
+				continue;
+			
 			ModdingUtil.curModFolder = week.modFolder;
-			for (i in week.data.storyCharacters) {
-				if (cachedChars.contains(i)) continue; // Avoid duplicates
+			for (i in week.data.storyCharacters)
+			{
+				if (i.length <= 0 || cachedChars.contains(i))// Avoid duplicates
+					continue;
+
 				cachedChars.push(i);
-				var char = new MenuCharacter(0,0,i);
-				char = null;
+				dummyChar.setupChar(i);
 			}
 		}
+		dummyChar.destroy();
 		ModdingUtil.curModFolder = startMod;
 	}
 

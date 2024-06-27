@@ -82,9 +82,9 @@ class ChartPreview extends FlxSpriteExt {
     function getNoteColor(note:Array<Dynamic>):FlxColor {
         final key =  note[3] + "-" + note[1] % 4;
         if (colorMap.exists(key)) return colorMap.get(key);
-        final _skin = NoteUtil.getTypeJson(NoteUtil.getTypeName(note[3])).skin;
-        final _colors = SkinUtil.getSkinData(_skin).noteData.noteColorArray;
-        final color = FlxColorFix.fromString(_colors[cast note[1]%4]);
+        final skin = NoteUtil.getTypeJson(NoteUtil.resolveType(note[3])).skin;
+        final colors = SkinUtil.getSkinData(skin).noteData.noteColorArray;
+        final color = FlxColorFix.fromString(colors[cast note[1] % 4]);
         colorMap.set(key, color);
         return color;
     }

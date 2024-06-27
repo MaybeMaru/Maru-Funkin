@@ -30,8 +30,11 @@ class MenuCharacter extends FlxSpriteExt
 
 	public static var cachedChars:Map<String, MenuCharJson> = [];
 	
-	static function cacheChar(char:String):MenuCharJson
+	public static function cacheChar(char:String):MenuCharJson
 	{
+		if (cachedChars.exists(char))
+			return cachedChars.get(char);
+
 		var data:MenuCharJson = JsonUtil.checkJson(DEFAULT_MENU_CHAR, JsonUtil.getJson(char, charsFolder, "images"));
 		cachedChars.set(char, data);
 		return data;
@@ -51,9 +54,7 @@ class MenuCharacter extends FlxSpriteExt
 			{
 				lastChar = char;
 				
-				var charJson:MenuCharJson = cachedChars.get(char);
-				if (charJson == null)
-					charJson = cacheChar(char);
+				var charJson:MenuCharJson = cacheChar(char);
 
 				lerpColor = charJson.lerpColor;
 				if (!lerpColor)

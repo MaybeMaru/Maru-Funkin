@@ -34,7 +34,7 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
         final noteData:Int = data[1];
         final susLength:Float = data[2];
         
-        final noteType:String = NoteUtil.getTypeName(data[3]);
+        final noteType:String = NoteUtil.resolveType(data[3]);
         final typeData:NoteTypeJson = NoteUtil.getTypeJson(noteType);
 
         var pos:FlxPoint = FlxPoint.get(

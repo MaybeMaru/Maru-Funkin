@@ -32,36 +32,49 @@ typedef JsonSpritesheet = {
 
 class JsonUtil
 {
-	public static function getSubFolderJsonList(folder:String= 'data/scripts/global', ?subFolders:Array<String>)
+	public static function getSubFolderJsonList(folder:String, ?subFolders:Array<String>)
 	{   
 		var subFolderList:Array<String> = [];
 		
 		if (subFolders != null) {
 			subFolders.fastForEach((subFolder, i) -> {
-				subFolderList = subFolderList.concat(getJsonList('$folder/$subFolder'));
+				subFolderList.merge(getJsonList('$folder/$subFolder'));
 			});
 		}
         
 		return getJsonList(folder).concat(subFolderList);
     }
 
-	inline public static function getJsonList(folder:String = 'scripts/global',
-		assets:Bool = true, globalMod:Bool = true, curMod:Bool = true, allMods:Bool = false,
-		fullPath:Bool = false, mainFolder:String = 'data'):Array<String>
+	public static function getJsonList(?folder:String, ?assets:Bool, ?global:Bool, ?mod:Bool, ?all:Bool, ?fullPath:Bool, ?mainFolder:String):Array<String>
 	{
-        var assetsList:Array<String> = assets ? Paths.getFileList(TEXT, fullPath, 'json', '/$mainFolder/$folder') : [];
-        var modList:Array<String> = #if desktop Paths.getModFileList('$mainFolder/$folder', 'json', fullPath, globalMod, curMod, allMods); #else []; #end
-        return assetsList.concat(modList);
+		folder ??= 'scripts/global';
+		assets ??= true;
+		global ??= true; mod ??= true; all ??= false;
+		fullPath ??= false;
+		mainFolder ??= 'data';
+
+		if (!folder.startsWith('$mainFolder/'))
+			folder = '$mainFolder/$folder';
+
+		var list:Array<String> = [];
+
+		if (assets) {
+			list.merge(Paths.getFileList(TEXT, fullPath, 'json', '/$folder'));
+		}
+
+		#if MODS_ALLOWED
+		if (global || mod || all) {
+			list.merge(Paths.getModFileList(folder, 'json', fullPath, global, mod, all));
+		}
+		#end
+
+		return list;
 	}
 
 	public static function getJson(path:String, folder:String = '', library:String = 'data'):Dynamic
 	{
-		if (!getJsonList(folder, true, true, true, false, false, library).contains(path))
-			return null;
-
-		var getJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
-		var returnJson:Dynamic = Json.parse(getJson);
-		return returnJson;
+		var rawJson = CoolUtil.getFileContent(Paths.file('$library/$folder/$path.json', TEXT));
+		return rawJson.length > 0 ? Json.parse(rawJson) : null;
 	}
 
 	inline public static function getAsepritePacker(graphic:FlxGraphic, sourceJson:String):FlxAtlasFrames {

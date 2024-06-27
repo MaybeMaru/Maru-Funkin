@@ -43,8 +43,8 @@ class NoteUtil
     public static var noteTypesMap:Map<String, NoteTypeJson> = [];
 	public static var noteTypesArray:Array<String> = [];
     
-    inline public static function getTypeName(type:Dynamic):Dynamic {
-		return (Std.isOfType(type, String)) ? type : noteTypesArray[type];
+    public static inline function resolveType(type:Dynamic):String {
+		return (type is String) ? type : (noteTypesArray[type] ?? "default");
 	}
 
     static function getList():Array<String>
@@ -69,8 +69,7 @@ class NoteUtil
 		if (noteTypesMap.exists(type))
             return noteTypesMap.get(type);
 		
-        var typeJson:NoteTypeJson = JsonUtil.getJson(type, 'notetypes');
-		typeJson = JsonUtil.checkJson(DEFAULT_NOTE_TYPE, typeJson);
+		var typeJson:NoteTypeJson = JsonUtil.checkJson(DEFAULT_NOTE_TYPE, JsonUtil.getJson(type, 'notetypes'));
 		noteTypesMap.set(type, typeJson);
 		return typeJson;
 	}

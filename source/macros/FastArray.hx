@@ -58,6 +58,16 @@ class FastArray<T>
         #end
     }
 
+    inline public static function merge<T>(array:Array<T>, input:Array<T>):Void {
+        var l:Int = input.length;
+        var i:Int = 0;
+
+        while (i < l) {
+            array.push(unsafeGet(input, i));
+            i++;
+        }
+    }
+
     inline public static function clear<T>(array:Array<T>):Void {
         #if web
         array.splice(0, array.length); // Splice is faster on html5 for whatever reason
