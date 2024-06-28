@@ -27,6 +27,12 @@ class FunkVideo extends Sprite implements IFlxDestroyable
         video = new Video(FlxSprite.defaultAntialiasing);
         video.onEndReached.add(endVideo);
         addChild(video);
+
+        video.onOpening.add(() -> {
+            if (!FlxG.signals.postUpdate.has(postUpdate))
+                FlxG.signals.postUpdate.add(postUpdate);
+        });
+        
         #elseif web
         video = new Video();
         addChild(video);
@@ -87,6 +93,9 @@ class FunkVideo extends Sprite implements IFlxDestroyable
         FlxG.state.visible = true;
         if (video != null)
             video.dispose();
+
+        if (FlxG.signals.postUpdate.has(postUpdate))
+            FlxG.signals.postUpdate.remove(postUpdate);
         #elseif web
         FlxG.state.visible = true;
         if (netStream != null) {
@@ -100,5 +109,20 @@ class FunkVideo extends Sprite implements IFlxDestroyable
 
         if (FlxG.game.contains(this))
             FlxG.game.removeChild(this);
+    }
+
+    // Stole this from hxvlc to be safe when FlxVideo becomes deprecated lmao
+    function postUpdate() {
+        video.width = FlxG.scaleMode.gameSize.x;
+        video.height = FlxG.scaleMode.gameSize.y;
+
+        var volume:Float = FlxG.sound.muted ? 0 : FlxG.sound.volume;
+
+        #if hxvlc
+        video.volume = Std.int(volume * 100);
+        #elseif web
+        @:privateAccess
+        netStream.__video.volume = volume;
+        #end
     }
 }
