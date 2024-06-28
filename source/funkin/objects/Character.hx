@@ -12,6 +12,14 @@ typedef CharacterJson = {
 	var isGF:Bool;
 } & SpriteJson;
 
+enum abstract CharacterType(String) from String to String
+{
+	var BF = "bf";
+	var DAD = "dad";
+	var GF = "gf";
+	var UNKNOWN = "";
+}
+
 class Character extends FlxSpriteExt
 {
 	public static final DEFAULT_CHARACTER:CharacterJson = {
@@ -42,7 +50,7 @@ class Character extends FlxSpriteExt
 	public var debugMode:Bool = false;
 	public var botMode:Bool = false;
 	public var script:FunkScript = null;
-	public var type:String = "";
+	public var type:CharacterType = UNKNOWN;
 
 	//	Display
 	public var icon:String = 'face';

@@ -213,7 +213,7 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
         return super.set_active(value);
     }
 
-    public function setupPlayState(instance:PlayState) {
+    public function setupPlayState(instance:PlayState, init:Bool = false) {
         final dadOpponent:Bool = !instance.gfOpponent;
 
         __existsAddToLayer("bf", instance.boyfriendGroup);
@@ -226,7 +226,8 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
             applyData(
                 instance.boyfriend,
                 instance.dad,
-                instance.gf
+                instance.gf,
+                init
             );
         }
         else
@@ -236,29 +237,30 @@ class Stage extends TypedGroup<Layer> implements IMusicHit
             applyData(
                 instance.boyfriend,
                 null,
-                instance.dad
+                instance.dad,
+                init
             );
         }
     }
 
-    public function applyData(bf:Character, dad:Character, gf:Character)
+    public function applyData(bf:Character, dad:Character, gf:Character, init:Bool = false)
     {
         if (bf != null) {
             bf.stageOffsets.set(data.bfOffsets[0], data.bfOffsets[1]);
             bf.stageCamOffsets.set(data.bfCamOffsets[0], data.bfCamOffsets[1]);
-            bf.reposition(770, 450);
+            init ? bf.setXY(770, 450) : bf.reposition(770, 450);
         }
 
         if (dad != null) {
             dad.stageOffsets.set(data.dadOffsets[0], data.dadOffsets[1]);
             dad.stageCamOffsets.set(data.dadCamOffsets[0], data.dadCamOffsets[1]);
-            dad.reposition(100, 450);
+            init ? dad.setXY(100, 450) : dad.reposition(100, 450);
         }
 
         if (gf != null) {
             gf.stageOffsets.set(data.gfOffsets[0], data.gfOffsets[1]);
             gf.stageCamOffsets.set(data.gfCamOffsets[0], data.gfCamOffsets[1]);
-            gf.reposition(400, 360);
+            init ? gf.setXY(400, 360) : gf.reposition(400, 360);
         }
     }
 

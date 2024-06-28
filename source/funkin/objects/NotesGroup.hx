@@ -55,7 +55,7 @@ class NotesGroup extends Group
 		return dadBotplay = value;
 	}
 
-	public function spawnSplash(note:Note) {
+	public inline function spawnSplash(note:Note) {
 		grpNoteSplashes.spawnSplash(note);
 	}
 
@@ -66,7 +66,7 @@ class NotesGroup extends Group
 
 		if (character != null) {
 			character.sing(note.noteData, note.altAnim);
-			Conductor.vocals.volume = 1;
+			Conductor.vocals.volume = note.mustHit ? 1 : 0;
 		}
 
 		if (!botplayCheck || prefBot) {

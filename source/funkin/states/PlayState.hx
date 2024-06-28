@@ -193,8 +193,8 @@ class PlayState extends MusicBeatState
 			stageScript.set("ScriptStage", stage);
 		
 		// Set stage character positions
-		gfOpponent = SONG.players[1] == SONG.players[2] && dad.isGF;
-		stage.setupPlayState(this);
+		gfOpponent = (SONG.players[1] == SONG.players[2]) && dad.isGF;
+		stage.setupPlayState(this, true);
 
 		iconGroup = new SpriteGroup();
 		iconP1 = new HealthIcon(boyfriend.icon, true, true);
@@ -203,7 +203,7 @@ class PlayState extends MusicBeatState
 		boyfriend.iconSpr = iconP1;
 
 		//Character Scripts
-		boyfriend.type = "bf"; dad.type = "dad"; gf.type = "gf";
+		boyfriend.type = BF; dad.type = DAD; gf.type = GF;
 		addCharScript(boyfriend); addCharScript(dad); addCharScript(gf);
 
 		//Song Scripts
@@ -636,7 +636,7 @@ class PlayState extends MusicBeatState
 	public function exitSong():Void {
 		if (isStoryMode) {
 			campaignScore += songScore;
-			storyPlaylist.remove(storyPlaylist[0]);
+			storyPlaylist.removeAt(0);
 			storyPlaylist.length <= 0 ? endWeek() : switchSong();
 		}
 		else {
