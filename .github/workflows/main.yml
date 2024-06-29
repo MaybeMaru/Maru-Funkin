@@ -24,11 +24,7 @@ jobs:
           haxe-version: 4.3.4
 
       - name: Install Libraries
-        run: |
-          haxe -cp ./actions -D analyzer-optimize -main Main --interp
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
-          haxelib run lime rebuild hxcpp
-          haxelib set hxcpp git
+        run: haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Build
         run: haxelib run lime build windows -D analyzer-optimize
@@ -56,11 +52,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install libvlc-dev libvlccore-dev vlc-bin vlc
 
       - name: Install Libraries
-        run: |
-          haxe -cp ./actions -D analyzer-optimize -main Main --interp
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
-          haxelib run lime rebuild hxcpp
-          haxelib set hxcpp git
+        run: haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Build
         run: haxelib run lime build linux -D analyzer-optimize
@@ -84,6 +76,12 @@ jobs:
         with:
           haxe-version: 4.3.4
 
+      - name: Setup Android NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@main
+        with:
+          ndk-version: r21e
+
       - name: Setup Java
         uses: actions/setup-java@main
         with:
@@ -91,19 +89,17 @@ jobs:
           distribution: 'temurin'
 
       - name: Install Libraries
-        run: |
-          haxe -cp ./actions -D analyzer-optimize -main Main --interp
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet
-          haxelib run lime rebuild hxcpp
-          haxelib set hxcpp git
+        run: haxe -cp ./actions -D analyzer-optimize -main Main --interp
       
       - name: Configure Android
         run: |
           haxelib run lime setup -alias -y
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
-          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_ROOT
+          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Build
         run: haxelib run lime build android -D analyzer-optimize
