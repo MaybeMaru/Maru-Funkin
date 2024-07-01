@@ -14,17 +14,10 @@ class CharSelectSubstate extends MusicBeatSubstate
     var folderTxt:Alphabet;
     var textGroup:TypedGroup<MenuAlphabet>;
 
-	public function new(?selectFunction:()->Void, ?openChar:String):Void {
-		super();
+	public function new(?selectFunction:()->Void, ?openChar:String):Void
+    {
+		super(false, FlxColor.fromRGBFloat(0, 0, 0, 0.6));
         this.selectFunction = selectFunction;
-
-        var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
-        bg.setGraphicSize(FlxG.width, FlxG.height);
-        bg.updateHitbox();
-        bg.antialiasing = false;
-		bg.alpha = 0.6;
-		bg.scrollFactor.set();
-		add(bg);
 
         folderTxt = new Alphabet(0, 10);
         folderTxt.scrollFactor.set();

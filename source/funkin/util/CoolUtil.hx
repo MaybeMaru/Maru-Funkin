@@ -8,8 +8,6 @@ import flixel.system.FlxAssets.FlxSoundAsset;
 import cpp.vm.Gc;
 #elseif hl
 import hl.Gc;
-#elseif neko
-import neko.vm.Gc;
 #end
 
 typedef CacheClearing =  {
@@ -19,9 +17,9 @@ typedef CacheClearing =  {
 	?skins:Bool
 }
 
-enum abstract SoundType(Int) from Int to Int {
-	var SOUND = 0;
-	var MUSIC = 1;
+enum abstract SoundType(Bool) from Bool to Bool {
+	var SOUND = true;
+	var MUSIC = false;
 }
 
 class CoolUtil {
@@ -51,12 +49,8 @@ class CoolUtil {
 
 	public inline static function resetMatrix():FlxMatrix {
 		final mat = matrix;
-		mat.a = 1;
-		mat.b = 0;
-		mat.c = 0;
-		mat.d = 1;
-		mat.tx = 0;
-		mat.ty = 0;
+		mat.a = mat.d = 1;
+		mat.b = mat.c = mat.tx = mat.ty = 0;
 		return mat;
 	}
 
@@ -113,7 +107,7 @@ class CoolUtil {
 	}
 	
 	inline public static function gc(major:Bool = false) {
-		#if (cpp || hl || neko)
+		#if (cpp || hl)
 			#if hl
 				Gc.blocking(true);
 				Gc.major();
@@ -142,7 +136,7 @@ class CoolUtil {
 
 	inline static function soundFromAsset(asset:FlxSoundAsset, kill:Bool = false):FlxSound {
 		var sound:FlxSound = FlxG.sound.list.recycle(FlxSound).loadEmbedded(asset);
-		sound.onComplete = !kill ? null : function () {
+		sound.onComplete = !kill ? null : () -> {
 			sound.volume = 0;
 			sound.kill();
 		}

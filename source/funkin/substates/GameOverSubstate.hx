@@ -3,9 +3,9 @@ package funkin.substates;
 import openfl.media.Sound;
 
 enum abstract GameOverSound(Int) {
-	var DEATH = 0;
-	var MUSIC = 1;
-	var MUSIC_END = 2;
+	var DEATH;
+	var MUSIC;
+	var MUSIC_END;
 }
 
 class GameOverSubstate extends MusicBeatSubstate

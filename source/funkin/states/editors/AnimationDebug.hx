@@ -18,7 +18,8 @@ import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 
-class AnimationDebug extends MusicBeatState {
+class AnimationDebug extends MusicBeatState
+{
 	var UI_box:FlxUITabMenu;
 	var tabs = [
 		{name: "Animation", label: 'Animation'},
@@ -42,7 +43,7 @@ class AnimationDebug extends MusicBeatState {
 	var lastPos:FlxPoint;
 	var camSnapped:Bool = false;
 
-	var animsText:FlxTypedGroup<FunkinText>;
+	var animsText:TypedGroup<FunkinText>;
 	var curAnimText:FunkinText;
 	var charGroup:FlxSpriteGroup;
 
@@ -65,12 +66,12 @@ class AnimationDebug extends MusicBeatState {
 		FlxG.cameras.add(camUI);
 		FlxG.cameras.setDefaultDrawTarget(camUI, true);
 
-		final gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.create(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e).pixels);
-		gridBG.cameras = [camChar];
+		final gridBG:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(20, 20, 40*16, 40*16, true, 0xff7c7c7c,0xff6e6e6e));
+		gridBG.camera = camChar;
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
 
-		animsText = new FlxTypedGroup<FunkinText>();
+		animsText = new TypedGroup<FunkinText>();
 		add(animsText);
 
 		curAnimText = new FunkinText(10, 45, 'NULL_ANIM', 26);
@@ -80,23 +81,23 @@ class AnimationDebug extends MusicBeatState {
 		bf_offset.setPosition(bf_offset.x-bf_offset.width/2,bf_offset.y-bf_offset.height/2);
 		bf_offset.alpha = 0.4;
 		add(bf_offset);
-		bf_offset.cameras = [camChar];
+		bf_offset.camera = camChar;
 
 		charGroup = new FlxSpriteGroup();
 		add(charGroup);
-		charGroup.cameras = [camChar];
+		charGroup.camera = camChar;
 
 		camFollow = new FlxObject(0, 0, 2, 2);
 		camFollow.screenCenter();
 		add(camFollow);
-		camFollow.cameras = [camChar];
+		camFollow.camera = camChar;
 		camChar.follow(camFollow);
 		lastPos = FlxPoint.get(camFollow.x,camFollow.y);
 
 		cam_offset = new FunkinSprite('options/cam_offset');
 		cam_offset.offset.set(cam_offset.width * 0.5, cam_offset.height * 0.5);
 		add(cam_offset);
-		cam_offset.cameras = [camChar];
+		cam_offset.camera = camChar;
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
 		UI_box.resize(355, 200);
@@ -106,8 +107,11 @@ class AnimationDebug extends MusicBeatState {
 
 		addCharacterUI();
 		addAnimationUI();
+		UI_box.selected_tab = 1;
+		
 		loadCharacter(createChar);
 		focus = [input_icon, input_imagePath, input_animName, input_animFile, input_indices];
+		
 		super.create();
 	}
 
@@ -136,17 +140,17 @@ class AnimationDebug extends MusicBeatState {
 		var tab_group_char = new FlxUI(null, UI_box);
 		tab_group_char.name = 'Character';
 
-		charButton = new FlxUIButton(10, 20, "Boyfriend", function() {
-			var getChar = function () {
+		charButton = new FlxUIButton(10, 20, "bf", () -> {
+			var getChar = () -> {
 				var newChar:String = CharSelectSubstate.lastChar;
 				charButton.label.text = newChar;
 				loadCharacter(newChar);
 			}
-			openSubState(new CharSelectSubstate(getChar));
+			openSubState(new CharSelectSubstate(getChar, charButton.label.text));
 		});
 		charButton.label.text = createChar;
 
-		var reloadButton:FlxUIButton = new FlxUIButton(charButton.x,charButton.y+30, "Reload Image", function () {
+		var reloadButton:FlxUIButton = new FlxUIButton(charButton.x,charButton.y+30, "Reload Image", () -> {
 			formatJsonChar();
 			final lastGhostAnim = ghostChar.animation.curAnim?.name ?? null;
 			displayChar.loadCharJson(character);
@@ -456,10 +460,12 @@ class AnimationDebug extends MusicBeatState {
 		if (create)
 			clearOffsetText();
 		
-		anims.fastForEach((anim, i) -> {
+		anims.fastForEach((anim, i) ->
+		{
 			final charOffsets = displayChar.animOffsets.get(anim);
 			var offsetText:String = '$anim: [${charOffsets.x}, ${charOffsets.y}]';
 			final isCurAnim = i == curAnimIndex;
+			
 			if (create) {
 				final animText:FunkinText = animsText.recycle(FunkinText);
 				animText.setPosition(10, curAnimText.y+40+(22*i));

@@ -46,6 +46,9 @@ class FunkVideo extends Sprite implements IFlxDestroyable
             video.attachNetStream(netStream);
 		    video.width = FlxG.width;
 		    video.height = FlxG.height;
+
+            if (!FlxG.signals.postUpdate.has(postUpdate))
+                FlxG.signals.postUpdate.add(postUpdate);
         }};
 
 		netConnection.addEventListener('netStatus', (e) -> {
@@ -93,9 +96,6 @@ class FunkVideo extends Sprite implements IFlxDestroyable
         FlxG.state.visible = true;
         if (video != null)
             video.dispose();
-
-        if (FlxG.signals.postUpdate.has(postUpdate))
-            FlxG.signals.postUpdate.remove(postUpdate);
         #elseif web
         FlxG.state.visible = true;
         if (netStream != null) {
@@ -106,6 +106,9 @@ class FunkVideo extends Sprite implements IFlxDestroyable
 
         if (video != null)
             video = null;
+
+        if (FlxG.signals.postUpdate.has(postUpdate))
+            FlxG.signals.postUpdate.remove(postUpdate);
 
         if (FlxG.game.contains(this))
             FlxG.game.removeChild(this);
