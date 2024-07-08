@@ -49,7 +49,10 @@ class StoryMenuState extends MusicBeatState {
 		grpWeekText = new TypedGroup<MenuItem>();
 		add(grpWeekText);
 
-		var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
+		var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(1,1,FlxColor.BLACK);
+		blackBarThingie.scale.set(FlxG.width, 56);
+		blackBarThingie.antialiasing = false;
+		blackBarThingie.updateHitbox();
 		add(blackBarThingie);
 
 		grpWeekCharacters = new TypedGroup<MenuCharacter>();
@@ -109,8 +112,11 @@ class StoryMenuState extends MusicBeatState {
 		rightArrow.x += leftArrow.width*0.1;
 		difficultySelectors.add(rightArrow);
 
-		storyBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFFFFFFF);//0xFFF9CF51
+		storyBG = new FlxSprite(0, 56).makeGraphic(1,1,FlxColor.WHITE);
+		storyBG.antialiasing = false;
+		storyBG.scale.set(FlxG.width, 400);
 		storyBG.color = FlxColorFix.fromString(storyWeeks[0].data.weekColor);
+		storyBG.updateHitbox();
 		add(storyBG);
 		add(grpWeekCharacters);
 
@@ -135,7 +141,8 @@ class StoryMenuState extends MusicBeatState {
 	
 	public static var unlockWeek:WeekData = null;
 
-	function unlockWeekAnim() {
+	function unlockWeekAnim():Void
+	{
 		var moveIndex = -1;
 		storyWeeks.fastForEach((week, i) -> {
 			if (week.name == unlockWeek.name) if (week.modFolder == unlockWeek.modFolder)
@@ -291,44 +298,48 @@ class StoryMenuState extends MusicBeatState {
 				stopCancelSpam = true;
 				CoolUtil.playSound('rejectMenu');
 				grpWeekText.members[curWeek].startFlashing();
-				new FlxTimer().start(0.3, function(tmr:FlxTimer) {
-					stopCancelSpam = false;
-				});
+				new FlxTimer().start(0.3, (tmr:FlxTimer) -> stopCancelSpam = false);
 			}
 		}
 	}
 
-	function changeDifficulty(change:Int = 0):Void {
-		final lastDiff:String = curWeekDiffs[curDifficulty];
-		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
-		intendedScore = Highscore.getWeekScore(storyWeeks[curWeek].name, curWeekDiffs[curDifficulty]);
+	var diffColors:Map<String, FlxColor> = [];
 
-		var _spr:FlxSprite;
-		final diffPath = 'storymenu/difficulties/' + curWeekDiffs[curDifficulty].toLowerCase();
-		final tryPath = Paths.png(diffPath, null, true);
+	function changeDifficulty(change:Int = 0):Void
+	{
+		var lastDiff:String = curWeekDiffs[curDifficulty];
+		curDifficulty = FlxMath.wrap(curDifficulty += change, 0, curWeekDiffs.length - 1);
 		
-		if (Paths.exists(tryPath, IMAGE)) {
+		var newDiff:String = curWeekDiffs[curDifficulty];
+		intendedScore = Highscore.getWeekScore(storyWeeks[curWeek].name, newDiff);
+
+		var diffSprite:FlxSprite;
+		var diffPath = 'storymenu/difficulties/' + newDiff.toLowerCase();
+		var hasImage = Paths.exists(Paths.png(diffPath), IMAGE);
+		
+		if (hasImage)
+		{
 			sprDiff.loadImage(diffPath, true);
 			diffText.visible = false;
 			sprDiff.visible = true;
 			sprDiff.screenCenter(X);
 			sprDiff.x += FlxG.width*0.335;
-			_spr = sprDiff;
+			diffSprite = sprDiff;
 		}
 		else {
-			diffText.text = curWeekDiffs[curDifficulty];
+			diffText.text = newDiff;
+			diffText.color = diffColors.get(newDiff) ?? 0xc508ff;
 			diffText.visible = true;
-			diffText.color = 0xc508ff;
 			sprDiff.visible = false;
 			diffText.offset.y = 10;
 			diffText.x = FlxG.width*0.335;
-			_spr = diffText;
+			diffSprite = diffText;
 		}
 		
-		if (curWeekDiffs[curDifficulty] != lastDiff) {
-			_spr.alpha = 0;
-			_spr.y = FlxG.height*0.685 - 15;
-			FlxTween.tween(_spr, {y: _spr.y + 15, alpha: 1}, 0.07);
+		if (newDiff != lastDiff) {
+			diffSprite.alpha = 0;
+			diffSprite.y = FlxG.height*0.685 - 15;
+			FlxTween.tween(diffSprite, {y: diffSprite.y + 15, alpha: 1}, 0.07);
 		}
 	}
 
@@ -347,9 +358,7 @@ class StoryMenuState extends MusicBeatState {
 			}
 		}
 
-		grpWeekText.members.fastForEach((item, i) -> {
-			item.targetY = i - curWeek;
-		});
+		grpWeekText.members.fastForEach((item, i) -> item.targetY = i - curWeek);
 
 		changeDifficulty();
 		updateText();
@@ -357,16 +366,17 @@ class StoryMenuState extends MusicBeatState {
 	}
 
 	function updateText():Void {
-		ModdingUtil.runFunctionMod(storyWeeks[curWeek].modFolder, function () {
+		ModdingUtil.runFunctionMod(storyWeeks[curWeek].modFolder, () -> {
 			var weekChars = getWeekChars();
 			grpWeekCharacters.members.fastForEach((member, i) -> {
 				member.setupChar(weekChars[i]);
 			});
 		});
 
-		txtTracklist.text = 'Tracks\n';
-		for (song in getCurData().songList.songs) txtTracklist.text += '\n' + song;
-		txtTracklist.text = txtTracklist.text.toUpperCase();
+		var trackTxt = 'Tracks\n';
+		getCurData().songList.songs.fastForEach((song, i) -> trackTxt += '\n' + song);
+
+		txtTracklist.text = trackTxt.toUpperCase();
 		txtTracklist.screenCenter(X);
 		txtTracklist.x -= FlxG.width * 0.35;
 	}

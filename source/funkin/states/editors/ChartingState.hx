@@ -663,7 +663,7 @@ class ChartingState extends MusicBeatState
         
         if (noteTile.visible) {
             var grid = overlapNotes ? mainGrid.grid : eventsGrid.grid;
-            var tile = getGridCoords(mouseX, mouseY, grid.x, grid.y);
+            var tile = getGridCoords(mouseX, mouseY, grid.x, grid.y, !FlxG.keys.pressed.SHIFT);
             noteTile.setPosition(tile.x, tile.y);
         }
     }
