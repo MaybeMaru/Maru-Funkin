@@ -29,7 +29,8 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
         });
     }
 
-    override function drawObject(data:Array<Dynamic>):ChartNote {
+    override function drawObject(data:Array<Dynamic>):ChartNote
+    {
         final strumTime:Float = data[0];
         final noteData:Int = data[1];
         final susLength:Float = data[2];

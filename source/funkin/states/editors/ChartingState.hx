@@ -148,46 +148,45 @@ class ChartingState extends MusicBeatState
 
     function checkNoteSound()
     {
-        mainGrid.group.forEachAlive((note:ChartNote) ->
+        var songTime = Std.int(Conductor.songPosition);
+        mainGrid.sectionMembers.fastForEach((note, i) ->
         {
             final hasChild:Bool = (note.child != null);
+            final pressed:Bool = Std.int(note.strumTime) <= songTime;
 
-            if (note.strumTime < Conductor.songPosition)
+            if (pressed)
             {
-                if (note.strumTime + 0.1 >= sectionTime)
+                // Press note
+                if (note.color == FlxColor.WHITE) 
                 {
-                    // Press note
-                    if (note.color == FlxColor.WHITE) {
-                        strumBar.pressStrum(note.gridNoteData);
-                        if (playing) if (tabs.check_hitsound.checked)
-                            CoolUtil.playSound('chart/hitclick', 1, 1);
-                    } 
+                    strumBar.pressStrum(note.gridNoteData);
+                    if (playing) if (tabs.check_hitsound.checked)
+                        CoolUtil.playSound('chart/hitclick', 1, 1);
+                } 
 
-                    // Press note sustain
-                    if (hasChild) {
-                        var chartData = note.chartData;
-                        if (chartData != null) {
-                            var time = chartData[0];
-                            var length = chartData[2];
-                            if (Conductor.songPosition >= time) if (Conductor.songPosition <= time + (Conductor.stepCrochet * .5) + length)
-                            {
-                                strumBar.pressStrum(chartData[1]);
-                            }
+                // Press note sustain
+                if (hasChild)
+                {
+                    final chartData = note.chartData;
+                    if (chartData != null)
+                    {
+                        final time:Float = chartData[0];
+                        final length:Float = chartData[2];
+                        if (songTime >= time) if (songTime <= time + (Conductor.stepCrochet * .5) + length)
+                        {
+                            final lane:Int = chartData[1];
+                            strumBar.pressStrum(lane);
                         }
                     }
-
                 }
-                
+
                 note.color = 0xffb496b4;
             }
             else
-            {
                 note.color = FlxColor.WHITE;
-            }
 
-            if (hasChild) {
+            if (hasChild)
                 note.child.color = note.color;
-            }
         });
 
         eventsGrid.group.forEachAlive((event:ChartEvent) -> {
@@ -272,8 +271,8 @@ class ChartingState extends MusicBeatState
 	}
 
     public function updateNoteTabUI():Void {
-        if (nullNote()) return;
-        tabs.stepperSusLength.value = selectedNote.length;
+        if (noteSelected)
+            tabs.stepperSusLength.value = selectedNote.length;
     }
 
     var playing:Bool = false;
@@ -557,23 +556,27 @@ class ChartingState extends MusicBeatState
         eventsGrid.clearObject(event);
     }
 
-    inline function nullNote():Bool return selectedNote == null || selectedNoteObject == null;
+    var noteSelected(get, never):Bool;
+    inline function get_noteSelected() {
+        return selectedNote != null && selectedNoteObject != null;
+    }
 
     public function changeNoteSus(value:Float = 0) {
-        if (nullNote()) return;
-        selectedNote.length = Math.max((selectedNote.length ?? 0) + value, 0);
-        mainGrid.updateObject(selectedNoteObject, selectedNote);
-        updateNoteTabUI();
+        if (noteSelected) {
+            selectedNote.length = Math.max((selectedNote.length ?? 0) + value, 0);
+            mainGrid.updateObject(selectedNoteObject, selectedNote);
+            updateNoteTabUI();
+        }
     }
 
     function updateSelectedNote() {
-        if (nullNote()) return;
-        mainGrid.updateObject(selectedNoteObject, selectedNote);
+        if (noteSelected)
+            mainGrid.updateObject(selectedNoteObject, selectedNote);
     }
 
     public function clearSongEvents() {
         stop();
-        openSubState(new PromptSubstate('Are you sure you want to\nclear these song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+        openSubState(new PromptSubstate('Are you sure you want to\nclear these song events?\nUnsaved charts wont be restored\n\n\nPress back to cancel', () -> {
             notes.fastForEach((section, i) -> section.sectionEvents.clear());
             clearSectionData(false, true);
         }));
@@ -581,7 +584,7 @@ class ChartingState extends MusicBeatState
 
     public function clearSongNotes() {
         stop();
-        openSubState(new PromptSubstate('Are you sure you want to\nclear these song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+        openSubState(new PromptSubstate('Are you sure you want to\nclear these song notes?\nUnsaved charts wont be restored\n\n\nPress back to cancel', () -> {
             notes.fastForEach((section, i) -> section.sectionNotes.clear());
             clearSectionData(true, false);
         }));
@@ -589,7 +592,7 @@ class ChartingState extends MusicBeatState
 
     public function clearSongFull() {
         stop();
-        openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', function () {
+        openSubState(new PromptSubstate('Are you sure you want to\nclear this song?\nUnsaved charts wont be restored\n\n\nPress back to cancel', () -> {
             notes.fastForEach((section, i) -> {
                 section.sectionNotes.clear();
                 section.sectionEvents.clear();
@@ -823,7 +826,7 @@ class ChartingState extends MusicBeatState
                     mainGrid.updateWaveform();
 
 				case 'note_susLength':
-                    if (!nullNote()) {
+                    if (noteSelected) {
                         selectedNote.length = nums.value;
                         updateSelectedNote();
                     }

@@ -51,6 +51,7 @@ class ChartNote extends Note
         setGraphicSize(GRID_SIZE, GRID_SIZE);
         updateHitbox();
 
+        color = FlxColor.WHITE;
         setPosition(position.x, position.y);
     }
 }
