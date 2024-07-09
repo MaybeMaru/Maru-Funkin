@@ -82,7 +82,7 @@ class WeekSetup
 
         // Make sure theres no mods from innactive weeks
         for (week in modWeeks) {
-            final mod = Paths.getFileMod(week)[0];
+            var mod = Paths.getPathMod(week);
             if (!ModdingUtil.existsModFolder(mod) || !ModdingUtil.getModActive(mod))
                 modWeeks.remove(week);
         }
@@ -90,7 +90,7 @@ class WeekSetup
         //Vanilla weeks go first >:)
         if (!hideVanilla) weeks = weeks.concat(vanillaWeeks);
         weeks = weeks.concat(globalWeeks);
-        weeks = weeks.concat(modWeeks.map(week -> Paths.getFileMod(week)[1]));
+        weeks = weeks.concat(modWeeks.map(week -> Paths.getPathMod(week)));
         weeks = CoolUtil.removeDuplicates(weeks);
 
         weekList.clear();
@@ -99,8 +99,10 @@ class WeekSetup
 
         final modMap:Map<String, String> = [];
         for (i in modWeeks) {
-			final pathParts = Paths.getFileMod(i);
-			modMap.set(pathParts[1], pathParts[0]);
+			modMap.set(
+                Paths.getPathMod(i),
+                Paths.getPathFile(i)
+            );
 		}
 
         for (i in weeks) {

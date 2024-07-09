@@ -33,9 +33,10 @@ class InitState extends FlxState
     }
 }
 
+@:keepSub(Http)
 class Main extends Sprite
 {
-	var settings = {
+	final settings = {
 		width: 1280, 					// Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		height: 720, 					// Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		initialState: InitState,		// The FlxState the game starts with.

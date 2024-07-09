@@ -40,9 +40,13 @@ class ModdingUtil
         value ??= "";
 
         curModFolder = value;
-        curModData = value.length > 0 ? modsMap.get(value) : null;
+        curModData = value.length > 0 ? getModFolder(value) : null;
         
         return value;
+    }
+
+    public static inline function getModFolder(mod:String):ModFolder {
+        return modsMap.get(mod);
     }
     
     public static var activeMods:Map<String, Bool> = [];
@@ -152,9 +156,9 @@ class ModdingUtil
         tag ??= path;
         
         if (path.startsWith("mods/")) {
-            final _mod = ModdingUtil.modsMap.get(Paths.getFileMod(path)[0]);
-            if (_mod != null) if (_mod.apiVersion != API_VERSION)
-                scriptCode = updateScript(scriptCode, _mod.apiVersion);
+            var mod = getModFolder(Paths.getPathMod(path));
+            if (mod != null) if (mod.apiVersion != API_VERSION)
+                scriptCode = updateScript(scriptCode, mod.apiVersion);
         }
 
         final script:FunkScript = new FunkScript(scriptCode, tag);

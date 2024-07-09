@@ -33,13 +33,7 @@ class ChartEvent extends SpriteGroup
         data.push(new Event()); // Dummy event
     }
 
-    public var text(default, set):FlxBitmapText;
-    function set_text(value) {
-        if (value != null) {
-            value.alignment = RIGHT;
-        }
-        return text = value;
-    }
+    public var text:FlxBitmapText;
 
     override function kill() {
         super.kill();
@@ -76,17 +70,19 @@ class ChartEvent extends SpriteGroup
         
         data.fastForEach((event, i) -> {
             dataText += strigifyArray(event.values) + ' - ' + event.name;
-            if (i < data.length - 1) {
+            if (i < data.length - 1)
                 dataText += "\n";
-            }
         });
 
-        text.text = dataText;
+        text.text = dataText.trim();
+        text.alignment = LEFT;
         packSprite.visible = chartData.length > 1;
 
+        text.updateHitbox();
+        text.origin.set();
         text.offset.set(
-            text.width - GRID_SIZE * 0.75,
-            (text.height * 0.75 - GRID_SIZE) * 0.5
+            (text.textWidth * 2) + (GRID_SIZE / 4),
+            ((text.textHeight * 2) - GRID_SIZE) / 2
         );
     }
     

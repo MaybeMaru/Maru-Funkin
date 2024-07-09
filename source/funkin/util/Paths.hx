@@ -14,7 +14,7 @@ class Paths
 	inline public static var SOUND_EXT = "ogg";
 	public static var currentLevel(default, set):String = "";
 
-	public static function set_currentLevel(value:String)
+	public static inline function set_currentLevel(value:String)
 		return currentLevel = value.toLowerCase();
 
 	public static function getPath(file:String, type:AssetType, ?library:String, allMods:Bool = false, mods:Bool = true, ?level:String):String
@@ -94,12 +94,9 @@ class Paths
 		return (library == "preload" || library == "default") ? getAssetsPath(file) : getLibraryPathForce(file, library, level, root);
 	}
 
-	inline static function getLibraryPathForce(file:String, library:String, ?level:String, root:String = "assets"):String
+	inline static public function getLibraryPathForce(file:String, library:String, ?level:String, root:String = "assets"):String
 	{
-		if (level != null)
-			return '$root/$library/$level/$file';
-
-		return '$root/$library/$file';
+		return (level != null) ? '$root/$library/$level/$file' : '$root/$library/$file';
 	}
 
 	inline static public function getModPath(file:String):String
@@ -236,17 +233,19 @@ class Paths
 	}
 
 	inline static public function exists(file:String, type:AssetType):Bool {
-		#if desktop
+		#if sys
 		return FileSystem.exists(file);
 		#else
 		return OpenFlAssets.exists(file, type);
 		#end
 	}
 
-	//	Returns [file Mod, file Name]
-	inline static public function getFileMod(dir:String):Array<String> {
-		var dirParts = dir.split('/');
-		return [dirParts[1], dirParts[dirParts.length-1].split('.')[0]];
+	public static inline function getPathMod(path:String):String {
+		return path.split('/')[1];
+	}
+
+	public static inline function getPathFile(path:String):String {
+		return path.split('/').pop().split('.')[0];
 	}
 
 	// Gotta do this to make sure FlxAtlasFrames doesnt lose his shit when the graphic is smaller than the data
@@ -258,7 +257,7 @@ class Paths
 		return frames;
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	static public function getSparrowAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
 	{
 		var image = image(key, library, false, useTexture, lodLevel);
 		var frames = FlxAtlasFrames.findFrame(image);
@@ -269,7 +268,7 @@ class Paths
 		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSparrow(image, xml)));
 	}
 
-	inline static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	static public function getSpriteSheetAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
 	{
 		var image = image(key, library, false, useTexture, lodLevel);
 		var frames = FlxAtlasFrames.findFrame(image);
@@ -280,7 +279,7 @@ class Paths
 		return __checkLodFrames(getFrames(image, () -> return FlxAtlasFrames.fromSpriteSheetPacker(image, txt)));
 	}
 
-	inline static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
+	static public function getAsepriteAtlas(key:String, ?library:String, ?useTexture:Bool, ?lodLevel:LodLevel):FlxAtlasFrames
 	{
 		var image = image(key, library, false, useTexture, lodLevel);
 		var frames = FlxAtlasFrames.findFrame(image);
@@ -292,7 +291,7 @@ class Paths
 	}
 
 	@:noCompletion
-	inline public static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {
+	public static function __checkLodFrames(frames:FlxAtlasFrames):FlxAtlasFrames {
 		var parent:LodGraphic = cast(frames.parent, LodGraphic);
 		if (parent.lodLevel == 0 || parent.parsedChildren)
 			return frames;
@@ -430,7 +429,7 @@ class Paths
 		#end
 	}
 
-	inline static public function getPackerType(key:String, ?library:String):PackerType {
+	static public function getPackerType(key:String, ?library:String):PackerType {
 		if 		(exists(file('images/$key.xml', library), TEXT))				return SPARROW;
 		else if (exists(file('images/$key.txt', library), TEXT))				return SHEETPACKER;
 		else if (exists(file('images/$key.json', library), TEXT))				return JSON;
