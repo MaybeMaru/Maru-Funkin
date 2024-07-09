@@ -33,7 +33,6 @@ class InitState extends FlxState
     }
 }
 
-@:keepSub(Http)
 class Main extends Sprite
 {
 	final settings = {

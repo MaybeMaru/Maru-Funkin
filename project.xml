@@ -92,6 +92,7 @@
 
 	<define name="TEXTURES_OFF" if="hl || web"/>
 	<haxedef name="hscriptPos"/>
+	<haxeflag name="--macro" value="macros.PackagesMacro.include()" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
