@@ -7,7 +7,7 @@ class PackagesMacro
 {   
     public static macro function include()
     {
-        var includePackages:Array<String> = [
+        final includePackages:Array<String> = [
             #if sys "sys", #end
             // Copy pasted from codename cuz im lazy lol
             "flixel.addons.api", "flixel.addons.display", "flixel.addons.effects", "flixel.addons.ui",
