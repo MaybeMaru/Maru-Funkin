@@ -46,10 +46,8 @@
         },
         {
             "name": "hxvlc",
-            "type": "git", 
-            "version": null,
-            "ref": "main",
-            "url": "https://github.com/MaybeMaru/hxvlc"
+            "type": "install",
+            "version": null
         },
         {
             "name": "maru-hscript",
