@@ -77,6 +77,7 @@ class ChartGridBase<T:FlxObject> extends Group
 
     public function clearObject(object:T) {
         object.kill();
+        sectionMembers.remove(object);
     }
 
     public function clearMembers(onlySection:Bool = false) {

@@ -432,7 +432,10 @@ class ChartingState extends MusicBeatState
         var note:Array<Dynamic> = [strumTime, noteData, 0, ChartTabs.curType];
         curSectionData.sectionNotes.push(note);
         selectedNote = note;
-        selectedNoteObject = mainGrid.drawObject(note);
+        
+        var noteObject = mainGrid.drawObject(note);
+        selectedNoteObject = noteObject;
+        mainGrid.sectionMembers.push(noteObject);
     }
 
     public function selectNote(note:ChartNote) {
@@ -446,14 +449,23 @@ class ChartingState extends MusicBeatState
         }
     }
 
-    public function removeNote(note:ChartNote) {
-        if (note.chartData != null) {
-            if (note.chartData == selectedNote || note == selectedNoteObject) {
-                deselectNote();
-            }
-            curSectionData.sectionNotes.remove(note.chartData);
-            mainGrid.clearObject(note);
+    public function removeNote(note:ChartNote)
+    {
+        var chartData = note.chartData;
+        if (chartData == null)
+            return;
+
+        if (chartData == selectedNote || note == selectedNoteObject)
+            deselectNote();
+
+        // Make sure note gets removed
+        for (i in 0...3) {
+            var section = notes[sectionIndex - 1 + i];
+            if (section != null)
+                section.sectionNotes.remove(chartData);
         }
+        
+        mainGrid.clearObject(note);
     }
 
     public var selectedEvents:Array<EventJson> = [];

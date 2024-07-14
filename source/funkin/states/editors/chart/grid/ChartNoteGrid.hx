@@ -22,9 +22,7 @@ class ChartNoteGrid extends ChartGridBase<ChartNote>
             if (data[0] + data[2] >= minTime)
             {
                 var note = drawObject(data);
-                if (hasArray) {
-                    pushArray.push(note);
-                }
+                if (hasArray) pushArray.push(note);
             }
         });
     }
