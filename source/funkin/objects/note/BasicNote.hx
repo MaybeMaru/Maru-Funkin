@@ -60,6 +60,8 @@ class BasicNote extends SmartSprite implements INoteData implements ITimingObjec
         loadFromSprite(curSkinData.baseSprite);
     }
 
+    public function updateAnim():Void {}
+
     public var approachAngle(default, set):Float = 0;
     function set_approachAngle(value:Float):Float {
         if (approachAngle != value) calcApproachTrig(value);

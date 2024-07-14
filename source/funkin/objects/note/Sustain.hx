@@ -119,7 +119,7 @@ class Sustain extends BasicNote
     override function updateSprites():Void {
         loadFromSprite(curSkinData.baseSprite);
         
-        playAnim("hold" + CoolUtil.directionArray[noteData]);
+        updateAnim();
         targetStrum = targetStrum;
         smoothTiles = Math.round(125 / height);
 
@@ -132,10 +132,14 @@ class Sustain extends BasicNote
             clipRect.width = repeatWidth;
     }
 
+    override function updateAnim() {
+        playAnim("hold" + CoolUtil.directionArray[noteData]);
+    }
+
     override function setupTile(tileX:Int, tileY:Int, baseFrame:FlxFrame):FlxPoint {
         switch (tileY) {
             case 0: playAnim("hold" + CoolUtil.directionArray[noteData] + "-end");  // Tail
-            case 1: playAnim("hold" + CoolUtil.directionArray[noteData]);           // Piece
+            case 1: updateAnim();                                                   // Piece
         }
         return super.setupTile(tileX, tileY, frame);
     }

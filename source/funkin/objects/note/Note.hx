@@ -13,7 +13,7 @@ class Note extends BasicNote
         updateAnim();
     }
 
-	public function updateAnim() {
+	override function updateAnim() {
 		playAnim('scroll' + CoolUtil.directionArray[noteData]);
 	}
 

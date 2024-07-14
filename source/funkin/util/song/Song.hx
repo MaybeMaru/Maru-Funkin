@@ -9,7 +9,8 @@ import funkin.util.song.formats.QuaFormat;
 import funkin.util.song.formats.GhFormat;
 import funkin.util.song.formats.FunkinFormat;
 
-abstract NoteJson(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic> {
+abstract NoteJson(Array<Dynamic>) from Array<Dynamic> to Array<Dynamic>
+{
 	public var time(get, set):Float;
 	inline function set_time(value):Float return this[0] = value;
 	inline function get_time():Float return this[0];

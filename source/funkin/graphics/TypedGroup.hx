@@ -12,13 +12,15 @@ typedef Group = TypedGroup<FlxBasic>;
 @:access(flixel.FlxCamera)
 class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T>  #else FlxTypedGroup<T> #end
 {
-	public inline function setNull(object:T) {
+	public inline function setNull(object:T):Void
+	{
 		var index:Int = members.indexOf(object);
 		if (index != -1)
 			members.unsafeSet(index, null);
 	}
 
-	public function insertTop(object:T) {
+	public function insertTop(object:T):Void
+	{
 		var index:Int = members.length;
 		while (index > 0) {
 			index--;
@@ -31,7 +33,8 @@ class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T
 		members.push(object);
 	}
 
-	public function insertBelow(object:T) {
+	public function insertBelow(object:T):Void
+	{
 		var index:Int = 0;
 		final l:Int = members.length;
 		while (index < l) {
@@ -45,7 +48,8 @@ class TypedGroup<T:FlxBasic> extends #if (flixel >= "5.7.0") FlxTypedContainer<T
 		members.unshift(object);
 	}
 
-	override function forEachAlive(func:T -> Void, recurse:Bool = false) {
+	override function forEachAlive(func:T -> Void, recurse:Bool = false):Void
+	{
 		members.fastForEach((basic, i) -> {
 			if (basic != null) if (basic.exists) if (basic.alive)
 				func(basic);
