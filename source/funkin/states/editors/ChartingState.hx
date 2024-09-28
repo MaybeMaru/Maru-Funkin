@@ -65,7 +65,7 @@ class ChartingState extends MusicBeatState
         camTop = new FlxCamera(); camTop.bgColor.alpha = 0;
         FlxG.cameras.add(camTop, false);
         
-        SONG = Song.checkSong(PlayState.SONG);
+        SONG = PlayState.SONG;
         notes = SONG.notes;
 
         Conductor.offset = Vector.fromArrayCopy(SONG.offsets);
@@ -737,17 +737,19 @@ class ChartingState extends MusicBeatState
 
     public function loadJson(song:String):Void {
         stop();
-		PlayState.SONG = Song.checkSong(Song.loadFromFile(PlayState.curDifficulty, song));
+		//PlayState.SONG = Song.checkSong(Song.loadFromFile(PlayState.curDifficulty, song));
+        PlayState.SONG = Song.loadFromFile(PlayState.curDifficulty, song);
 		FlxG.resetState();
 	}
 
     public function loadAutosave():Void {
-		PlayState.SONG = Song.checkSong(Song.parseJson('', autoSaveChart));
+		//PlayState.SONG = Song.checkSong(Song.parseJson('', autoSaveChart));
+        PlayState.SONG = Json.parse(autoSaveChart);//Song.parseJson('', autoSaveChart);
 		FlxG.resetState();
 	}
 
     public function autosaveSong():Void {
-		SONG = Song.checkSong(SONG);
+		//SONG = Song.checkSong(SONG);
 		autoSaveChart = getSongString();
 		SaveData.setSave('autoSaveChart', autoSaveChart);
 		SaveData.flushData();
@@ -767,8 +769,8 @@ class ChartingState extends MusicBeatState
 		}
     }
 
-    public function saveChart() {
-        SONG = Song.checkSong(SONG);
+    public inline function saveChart()
+    {
         saveJson(getSongString("\t"), PlayState.curDifficulty);
     }
 
@@ -776,9 +778,12 @@ class ChartingState extends MusicBeatState
     {
         var metaEvents:Array<SectionJson> = [];
         notes.fastForEach((section, i) -> {
-            metaEvents.push(section.sectionEvents.length <= 0 ? {} : {
-                sectionEvents: section.sectionEvents.copy()
-            });
+            if (section.sectionEvents.length > 0)
+            {
+                metaEvents.push(cast {
+                    sectionEvents: section.sectionEvents.copy()
+                });
+            }
         });
 
         if (metaEvents.length > 1) {
@@ -789,14 +794,12 @@ class ChartingState extends MusicBeatState
 				else 										break;
 			}
 		}
-        
-        final meta:SongMeta = {
+
+        saveJson({
             diffs: [PlayState.curDifficulty],
             offsets: SONG.offsets.copy(),
             events: metaEvents
-        }
-
-        saveJson(meta, "songMeta");
+        }, "songMeta");
     }
 
     override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void

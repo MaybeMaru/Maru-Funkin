@@ -38,7 +38,7 @@ class PlayState extends MusicBeatState
 	private var targetCamPos:FlxPoint;
 	private static var prevCamFollow:FlxObject;
 
-	private var curSectionData:SectionJson;
+	private var curSectionData:Dynamic;
 
 	public var notesGroup:NotesGroup;
 	private var ratingGroup:RatingGroup;
@@ -140,7 +140,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		persistentUpdate = persistentDraw = true;
 
-		SONG = Song.checkSong(SONG, null, false);
+		//SONG = Song.checkSong(SONG, null, false);
 
 		#if discord_rpc
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
@@ -363,7 +363,8 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -Conductor.crochet * 5;
 		Conductor.setPitch(Conductor.songPitch);
-		curSectionData = Song.checkSection(SONG.notes[0]);
+		
+		curSectionData = SONG.notes[0];
 		cameraMovement();
 
 		if (skipCountdown) {

@@ -50,6 +50,13 @@
             "version": null
         },
         {
+            "name": "moonchart",
+            "type": "git",
+            "dir": null,
+            "ref": "master",
+            "url": "https://github.com/MaybeMaru/moonchart"
+        },
+        {
             "name": "maru-hscript",
             "type": "git",
             "dir": null,

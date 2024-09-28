@@ -2,8 +2,6 @@ package funkin.util.backend;
 
 import haxe.io.Path;
 import flixel.util.FlxArrayUtil;
-import funkin.util.song.formats.QuaFormat;
-import funkin.util.song.formats.OsuFormat;
 import funkin.states.editors.ModSetupState;
 
 enum ZipFormat {
@@ -78,7 +76,7 @@ class SongZip {
     }
 
     static final UNZIP_FORMAT:Map<String, UnZipType> = [
-        "osu" => {
+        /*"osu" => {
             getMap: function(chart) return cast new OsuFormat(chart),
             convert: function(map) return OsuFormat.convertSong("", map),
             title: "Title",
@@ -91,7 +89,7 @@ class SongZip {
             title: "Title",
             diff: "DifficultyName",
             audio: "AudioFile"
-        }
+        }*/
     ];
 
     static function unzipFormat(format:String, modPath:String, zipFiles:Array<String>) {        

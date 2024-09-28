@@ -225,7 +225,8 @@ class WeekSetup
         }
 
         final song = PlayState.SONG;
-        loadScreen.setupPlay(Stage.getJson(song.stage), song.players.copy(), song.song);
+        final players:Array<String> = song.players;
+        loadScreen.setupPlay(Stage.getJson(song.stage), players.copy(), song.song);
 
         Conductor.stop();
 

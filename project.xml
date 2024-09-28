@@ -84,6 +84,7 @@
 	<haxelib name="haxeui-core" unless="mac"/>
 	<haxelib name="haxeui-openfl" unless="mac"/>
 	<haxelib name="maru-hscript"/>
+	<haxelib name="moonchart"/>
 
 	<section if="cpp">
 		<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
