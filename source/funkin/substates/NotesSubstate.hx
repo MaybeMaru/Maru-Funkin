@@ -14,8 +14,7 @@ class NotesSubstate extends MusicBeatSubstate
     {
         super(true, 0x98000000);
         this.position = position;
-
-        //SONG = Song.checkSong(song);
+        
         SONG = song;
         notesGroup = new NotesGroup(SONG, false);
         notesGroup.skipStrumIntro = true;

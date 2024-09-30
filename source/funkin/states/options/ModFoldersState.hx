@@ -1,10 +1,6 @@
 package funkin.states.options;
 import funkin.states.options.items.ModItem;
 import funkin.states.options.items.SpriteButton;
-#if ZIPS_ALLOWED
-import haxe.io.Path;
-import funkin.util.backend.SongZip;
-#end
 
 class ModFoldersState extends MusicBeatState
 {
@@ -50,23 +46,6 @@ class ModFoldersState extends MusicBeatState
         }
 
         super.create();
-
-        #if ZIPS_ALLOWED
-        FlxG.stage.window.onDropFile.removeAll();
-        FlxG.stage.window.onDropFile.add(function (file:String) {
-            var extension = Path.extension(file).toLowerCase();
-            if (SongZip.zipMap.exists(extension))
-            {
-                var newPath = "./mods/" + Path.withoutDirectory(file);
-                sys.io.File.copy(file, newPath);
-                reloadFolders();
-            }
-            else
-            { // Invalid mod zip format
-                CoolUtil.playSound("rejectMenu");
-            }
-        });
-        #end
     }
 
     function reloadFolders():Void {

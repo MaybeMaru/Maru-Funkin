@@ -140,8 +140,6 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		persistentUpdate = persistentDraw = true;
 
-		//SONG = Song.checkSong(SONG, null, false);
-
 		#if discord_rpc
 		detailsText = isStoryMode ? 'Story Mode: ${storyWeek.toUpperCase()}' : 'Freeplay';
 		detailsPausedText = 'Paused - $detailsText';

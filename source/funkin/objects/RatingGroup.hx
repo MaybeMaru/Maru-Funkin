@@ -76,15 +76,19 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating>
     }
 }
 
-class JudgeRating extends RemoveRating {
-    public static var judgeRatings:Array<String> = ['shit', 'bad', 'good', 'sick'];
+class JudgeRating extends RemoveRating
+{
     var animated:Bool = true;
+    
     public function new() {
         super();
+
+        var judgeRatings:Array<String> = ['shit', 'bad', 'good', 'sick'];
+        
         judgeRatings.fastForEach((i, _) -> {
             var oldJudge = Paths.png('skins/${SkinUtil.curSkin}/ratings/$i');
             if (Paths.exists(oldJudge, IMAGE)) {
-                animated = false; // Backwards compatibility ???
+                animated = false; // Backwards compatibility
                 break;
             }
         });
@@ -123,25 +127,39 @@ class ComboRating extends RemoveRating {
     }
 }
 
-class NumRating extends RemoveRating {
+class NumRating extends RemoveRating
+{
     public var initScale:Float = 1;
+    var animated:Bool = true;
     
     public function new() {
         super();
-        final path:String = 'skins/${SkinUtil.curSkin}/ratings/nums';
-        loadImage(path, false, null, null, lodLevel);
         
-        loadGraphic(graphic, true, Std.int(width * 0.1 / lodScale), Std.int(height / lodScale));
         for (i in 0...10)
-            animation.add(Std.string(i), [i], 1);
+        {
+            var oldNum = Paths.png('skins/${SkinUtil.curSkin}/ratings/num$i');
+            if (Paths.exists(oldNum, IMAGE)) {
+                animated = false; // Backwards compatibility
+                break;
+            }
+        }
         
-        setScale(scale.x);
-        initScale = scale.x;
+        if (animated) {
+            final path:String = 'skins/${SkinUtil.curSkin}/ratings/nums';
+            loadImage(path, false, null, null, lodLevel);
+            
+            loadGraphic(graphic, true, Std.int(width * 0.1 / lodScale), Std.int(height / lodScale));
+            for (i in 0...10)
+                animation.add(Std.string(i), [i], 1);
+            
+            setScale(scale.x);
+            initScale = scale.x;
+        }
     }
 
     public function init(num:String, id:Int = 0) {
         setPosition(0, 100);
-        animation.play(num, true);
+        animated ? animation.play(num, true) : loadImage('skins/${SkinUtil.curSkin}/ratings/num$num', false, null, null, lodLevel);
         updateHitbox();
         start(Conductor.crochetMills * 2, Conductor.stepCrochet * 0.025);
         jump(0.8);

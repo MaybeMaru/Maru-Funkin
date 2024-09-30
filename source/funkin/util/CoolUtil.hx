@@ -30,9 +30,6 @@ class CoolUtil {
 	public static var debugMode:Bool = false;
 
 	inline public static function init():Void {
-		#if ZIPS_ALLOWED
-		FunkThread.run(funkin.util.backend.SongZip.init);
-		#end
 		#if desktop
 		ModdingUtil.reloadMods();
 		#end

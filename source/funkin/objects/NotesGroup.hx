@@ -106,7 +106,7 @@ class NotesGroup extends Group
 		instance = this;
 		game = isPlayState ? PlayState.instance : null;
 		this.isPlayState = isPlayState;
-        //SONG = Song.checkSong(song, null, false); //Double check null values
+		
 		SONG = song;
 		curSong = SONG.song;
 
