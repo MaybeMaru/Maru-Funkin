@@ -20,6 +20,8 @@ import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end
 
+using macros.FastArray;
+
 #if !openfl_debug
 @:fileXml('tags="haxe,release"')
 @:noDebug
@@ -41,7 +43,6 @@ class Context3DGraphics
 	private static function buildBuffer(graphics:Graphics, renderer:OpenGLRenderer):Void
 	{
 		var quadBufferPosition = 0;
-		var triangleIndexBufferPosition = 0;
 		var vertexBufferPosition = 0;
 		var vertexBufferPositionUVT = 0;
 
@@ -94,59 +95,32 @@ class Context3DGraphics
 					{
 						var c = data.readDrawQuads();
 
-						var rects = c.rects;
-						var indices = c.indices;
-						var transforms = c.transforms;
-
 						#if cpp
-						var rects:Array<Float> = rects == null ? null : untyped __cpp__('({0})->_hx___array', rects);
-						var indices:Array<Int> = indices == null ? null : untyped __cpp__('({0})->_hx___array', indices);
-						var transforms:Array<Float> = transforms == null ? null :untyped __cpp__('({0})->_hx___array', transforms);
+						var rects:Array<Float> = untyped __cpp__('c2->buffer->o->__unsafe_get(c2->oPos).StaticCast<::openfl::_Vector::FloatVector>()->_hx___array');
+						var transforms:Array<Float> = untyped __cpp__('c2->buffer->o->__unsafe_get(c2->oPos + 2).StaticCast<::openfl::_Vector::FloatVector>()->_hx___array');
+						#else
+						var rects = c.rects;
+						var transforms = c.transforms;
 						#end
-
-						var hasIndices = (indices != null);
-						var transformABCD = false, transformXY = false;
-
-						var length = hasIndices ? indices.length : Math.floor(rects.length * 0.25);
-						if (length == 0) return;
-
-						if (transforms != null)
-						{
-							if (transforms.length >= length * 6)
-							{
-								transformABCD = true;
-								transformXY = true;
-							}
-							else if (transforms.length >= length * 4)
-							{
-								transformABCD = true;
-							}
-							else if (transforms.length >= length * 2)
-							{
-								transformXY = true;
-							}
-						}
-
-						var dataPerVertex = 4;
-						var stride = dataPerVertex * 4;
+						
+						var length = Math.floor(rects.length * 0.25);
+						if (length == 0)
+							return;
 
 						if (graphics.__quadBuffer == null)
 						{
-							graphics.__quadBuffer = new Context3DBuffer(context, QUADS, length, dataPerVertex);
+							graphics.__quadBuffer = new Context3DBuffer(context, QUADS, length, 4);
 						}
 						else
 						{
-							graphics.__quadBuffer.resize(quadBufferPosition + length, dataPerVertex);
+							graphics.__quadBuffer.resize(quadBufferPosition + length, 4);
 						}
 
-						var vertexOffset, alpha = 1.0, tileData, id;
-						var bitmapWidth,
-							bitmapHeight,
-							tileWidth:Float,
-							tileHeight:Float;
+						var vertexOffset:Int;
+						var bitmapWidth:Int, bitmapHeight:Int, tileWidth:Float, tileHeight:Float;
 						var uvX, uvY, uvWidth, uvHeight;
 						var x, y, x2, y2, x3, y3, x4, y4;
-						var ri, ti;
+						var ri:Int, ti:Int;
 
 						var vertexBufferData = graphics.__quadBuffer.vertexBufferData;
 
@@ -166,54 +140,46 @@ class Context3DGraphics
 						bitmapHeight = bitmap.height;
 						#end
 
-						// var sourceRect = bitmap.rect;
-
-						for (i in 0...length)
+						var i = -1;
+						while (i < length)
 						{
-							vertexOffset = (quadBufferPosition + i) * stride;
-
-							ri = (hasIndices ? (indices[i] * 4) : i * 4);
-							if (ri < 0) continue;
-							tileRect.setTo(rects[ri], rects[ri + 1], rects[ri + 2], rects[ri + 3]);
+							i++;
+							vertexOffset = (quadBufferPosition + i) * 16;
+							ri = i * 4;
+							
+							if (ri < 0)
+								continue;
+							
+							tileRect.setTo(
+								rects[ri],
+								rects[ri + 1],
+								rects[ri + 2],
+								rects[ri + 3]
+							);
 
 							tileWidth = tileRect.width;
 							tileHeight = tileRect.height;
 
 							if (tileWidth <= 0 || tileHeight <= 0)
-							{
 								continue;
-							}
 
-							if (transformABCD && transformXY)
-							{
-								ti = i * 6;
-								tileTransform.setTo(transforms[ti], transforms[ti + 1], transforms[ti + 2], transforms[ti + 3], transforms[ti + 4],
-									transforms[ti + 5]);
-							}
-							else if (transformABCD)
-							{
-								ti = i * 4;
-								tileTransform.setTo(transforms[ti], transforms[ti + 1], transforms[ti + 2], transforms[ti + 3], tileRect.x, tileRect.y);
-							}
-							else if (transformXY)
-							{
-								ti = i * 2;
-								tileTransform.tx = transforms[ti];
-								tileTransform.ty = transforms[ti + 1];
-							}
-							else
-							{
-								tileTransform.tx = tileRect.x;
-								tileTransform.ty = tileRect.y;
-							}
+							ti = i * 6;
+							tileTransform.setTo(
+								transforms[ti],
+								transforms[ti + 1],
+								transforms[ti + 2],
+								transforms[ti + 3],
+								transforms[ti + 4],
+								transforms[ti + 5]
+							);
 
 							uvX = tileRect.x / bitmapWidth;
 							uvY = tileRect.y / bitmapHeight;
 							uvWidth = tileRect.right / bitmapWidth;
 							uvHeight = tileRect.bottom / bitmapHeight;
 
-							x = tileTransform.tx; // tileTransform.__transformX(0, 0);
-							y = tileTransform.ty; // tileTransform.__transformY(0, 0);
+							x = tileTransform.tx;
+							y = tileTransform.ty;
 							x2 = tileTransform.__transformX(tileWidth, 0);
 							y2 = tileTransform.__transformY(tileWidth, 0);
 							x3 = tileTransform.__transformX(0, tileHeight);
@@ -226,20 +192,20 @@ class Context3DGraphics
 							vertexBufferData[vertexOffset + 2] = uvX;
 							vertexBufferData[vertexOffset + 3] = uvY;
 
-							vertexBufferData[vertexOffset + dataPerVertex + 0] = x2;
-							vertexBufferData[vertexOffset + dataPerVertex + 1] = y2;
-							vertexBufferData[vertexOffset + dataPerVertex + 2] = uvWidth;
-							vertexBufferData[vertexOffset + dataPerVertex + 3] = uvY;
+							vertexBufferData[vertexOffset + (4 + 0)] = x2;
+							vertexBufferData[vertexOffset + (4 + 1)] = y2;
+							vertexBufferData[vertexOffset + (4 + 2)] = uvWidth;
+							vertexBufferData[vertexOffset + (4 + 3)] = uvY;
 
-							vertexBufferData[vertexOffset + (dataPerVertex * 2) + 0] = x3;
-							vertexBufferData[vertexOffset + (dataPerVertex * 2) + 1] = y3;
-							vertexBufferData[vertexOffset + (dataPerVertex * 2) + 2] = uvX;
-							vertexBufferData[vertexOffset + (dataPerVertex * 2) + 3] = uvHeight;
+							vertexBufferData[vertexOffset + (4 * 2) + 0] = x3;
+							vertexBufferData[vertexOffset + (4 * 2) + 1] = y3;
+							vertexBufferData[vertexOffset + (4 * 2) + 2] = uvX;
+							vertexBufferData[vertexOffset + (4 * 2) + 3] = uvHeight;
 
-							vertexBufferData[vertexOffset + (dataPerVertex * 3) + 0] = x4;
-							vertexBufferData[vertexOffset + (dataPerVertex * 3) + 1] = y4;
-							vertexBufferData[vertexOffset + (dataPerVertex * 3) + 2] = uvWidth;
-							vertexBufferData[vertexOffset + (dataPerVertex * 3) + 3] = uvHeight;
+							vertexBufferData[vertexOffset + (4 * 3) + 0] = x4;
+							vertexBufferData[vertexOffset + (4 * 3) + 1] = y4;
+							vertexBufferData[vertexOffset + (4 * 3) + 2] = uvWidth;
+							vertexBufferData[vertexOffset + (4 * 3) + 3] = uvHeight;
 						}
 
 						quadBufferPosition += length;
@@ -265,8 +231,6 @@ class Context3DGraphics
 					var vertexOffset = hasUVTData ? vertexBufferPositionUVT : vertexBufferPosition;
 
 					// TODO: Use index buffer for indexed render
-
-					// if (hasIndices) resizeIndexBuffer (graphics, false, triangleIndexBufferPosition + length);
 					resizeVertexBuffer(graphics, hasUVTData, vertexOffset + (length * dataPerVertex));
 
 					// var indexBufferData = graphics.__triangleIndexBufferData;
@@ -278,8 +242,6 @@ class Context3DGraphics
 						offset = vertexOffset + (i * dataPerVertex);
 						vertOffset = hasIndices ? indices[i] * 2 : i * 2;
 						uvOffset = hasIndices ? indices[i] * uvStride : i * uvStride;
-
-						// if (hasIndices) indexBufferData[triangleIndexBufferPosition + i] = indices[i];
 
 						if (hasUVTData)
 						{
@@ -300,7 +262,6 @@ class Context3DGraphics
 						vertexBufferData[offset + vertLength + 1] = hasUVData ? uvtData[uvOffset + 1] : 0;
 					}
 
-					// if (hasIndices) triangleIndexBufferPosition += length;
 					if (hasUVTData)
 					{
 						vertexBufferPositionUVT += length * dataPerVertex;
@@ -323,20 +284,6 @@ class Context3DGraphics
 		if (quadBufferPosition > 0)
 		{
 			graphics.__quadBuffer.flushVertexBufferData();
-		}
-
-		if (triangleIndexBufferPosition > 0)
-		{
-			var buffer = graphics.__triangleIndexBuffer;
-
-			if (buffer == null || triangleIndexBufferPosition > graphics.__triangleIndexBufferCount)
-			{
-				buffer = context.createIndexBuffer(triangleIndexBufferPosition, DYNAMIC_DRAW);
-				graphics.__triangleIndexBuffer = buffer;
-				graphics.__triangleIndexBufferCount = triangleIndexBufferPosition;
-			}
-
-			buffer.uploadFromTypedArray(graphics.__triangleIndexBufferData);
 		}
 
 		if (vertexBufferPosition > 0)
@@ -550,12 +497,19 @@ class Context3DGraphics
 
 				var quadBufferPosition = 0;
 				var shaderBufferOffset = 0;
-				var triangleIndexBufferPosition = 0;
+
 				var vertexBufferPosition = 0;
 				var vertexBufferPositionUVT = 0;
 
-				for (type in graphics.__commands.types)
+				var t = 0;
+				final types = graphics.__commands.types;
+				final l = types.length;
+				
+				while (t < l)
 				{
+					final type = types.unsafeGet(t);
+					t++;
+
 					switch (type)
 					{
 						case BEGIN_BITMAP_FILL:
@@ -595,27 +549,13 @@ class Context3DGraphics
 							if (bitmap != null)
 							{
 								var c = data.readDrawQuads();
-                                var indices = c.indices;
-
-                                var length:Int;
-
-                                if (indices != null)
-                                {
-                                    length = #if cpp
-                                    untyped __cpp__('({0})->_hx___array->length', indices);
-                                    #else indices.length;
-                                    #end
-                                }
-                                else
-                                {
-                                    var rects = c.rects;
-                                    length = Math.floor(
-                                        #if cpp untyped __cpp__('({0})->_hx___array->length', rects)
-                                        #else rects.length
-                                        #end * 0.25
-                                        );
-                                }
-
+								
+								var length = Math.floor(
+									#if cpp untyped __cpp__('c3->buffer->o->__unsafe_get(c3->oPos).StaticCast<::openfl::_Vector::FloatVector>()->_hx___array->length')
+									#else c.rects.length #end
+									* 0.25
+								);
+								
 								var uMatrix = renderer.__getMatrix(graphics.__owner.__renderTransform, AUTO);
 								var updateBuffer = shaderBuffer != null && !maskRender;
 								var shader;
@@ -789,16 +729,7 @@ class Context3DGraphics
 								default:
 							}
 
-							// if (hasIndices) {
-
-							// 	context.drawTriangles (graphics.__triangleIndexBuffer, triangleIndexBufferPosition, Math.floor (length / 3));
-							// 	triangleIndexBufferPosition += length;
-
-							// } else {
-
 							context.__drawTriangles(0, length);
-
-							// }
 
 							shaderBufferOffset += length;
 							if (hasUVTData)

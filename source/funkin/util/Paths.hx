@@ -1,5 +1,6 @@
 package funkin.util;
 
+import moonchart.formats.fnf.FNFMaru;
 import openfl.media.Sound;
 import haxe.io.Path;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -174,7 +175,7 @@ class Paths
 	**/
 
 	inline static public function songAudioAssetPath(song:String, asset:String, ?globalAsset:Bool):String {
-		var songKey = Song.formatSongFolder(song) + '/audio/$asset';
+		var songKey = FNFMaru.formatTitle(song) + '/audio/$asset';
 
 		var diffPath = getPath('$songKey-${PlayState.curDifficulty}.$SOUND_EXT', MUSIC, 'songs', globalAsset);
 		if (exists(diffPath, MUSIC)) return diffPath;
@@ -200,7 +201,12 @@ class Paths
 		return AssetManager.cacheSoundPath(instPath, false, null, stream);
 	}
 
-	inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
+	inline static public function chartFolder(title:String, ?allowMods:Bool):String
+	{
+		return getPath(title + "/charts", BINARY, "songs", false, allowMods);
+	}
+
+	/*inline static public function chart(song:String, diff:String, ext:String = 'json'):String {
 		if (!ext.startsWith('/'))
 			ext = '.$ext';
 
@@ -209,7 +215,7 @@ class Paths
 
 	inline static public function songMeta(song:String) {
 		return getPath(Song.formatSongFolder(song) + '/charts/songMeta.json', TEXT, 'songs');
-	}
+	}*/
 
 	/*
 	 * GRAPHICS

@@ -1,7 +1,6 @@
 package funkin.util.song;
 
 import moonchart.backend.Optimizer;
-import haxe.Json;
 import flixel.util.FlxSort;
 
 import moonchart.backend.FormatDetector;
@@ -16,58 +15,80 @@ typedef EventJson = FNFMaruEvent;
 
 class Song
 {
-	public static function loadFromFile(diff:String, folder:String):SongJson
+	public static function existsChart(diff:String, title:String):Bool
 	{
-		folder = formatSongFolder(folder);
+		title = FNFMaru.formatTitle(title);
 
-		var formats:Array<String> = [];
-
-		@:privateAccess
-		for (format => data in FormatDetector.formatMap)
+		try
 		{
-			if (formats.indexOf(data.extension) == -1)
-				formats.push(data.extension);
+			FormatDetector.findInFolder(Paths.chartFolder(title), title, diff);
+			return true;
+		}
+		catch (e)
+		{
+			return false;
 		}
 
-		formats.fastForEach((format, i) ->
+		return false;
+	}
+
+	public static function loadFromFile(diff:String, title:String):SongJson
+	{
+		title = FNFMaru.formatTitle(title);
+		
+		var folder:String = "";
+		var foundFormat:DetectedFormatFiles = null;
+
+		try // Try finding in the current mod folder
 		{
-			var chartPath:String = Paths.chart(folder, diff, format);
-
-			if (Paths.exists(chartPath, TEXT)) {
-
-				var format = FormatDetector.findFormat([chartPath]);
-				var maru:FNFMaru = new FNFMaru();
-
-				switch (format)
-				{
-					case FNF_MARU:
-						maru.fromFile(chartPath);
-					case _:
-						var chart = FormatDetector.createFormatInstance(format);
-						chart.fromFile(chartPath);
-						maru.fromFormat(chart);
-				}
-
-				trace("LOADED CHART FROM FORMAT: " + format);
-				return maru.data.song;
+			folder = Paths.chartFolder(title, true);
+			foundFormat = FormatDetector.findInFolder(folder, title, diff);
+		}
+		catch (e)
+		{
+			try // If that failed then force it to be on assets
+			{
+				folder = Paths.chartFolder(title, false);
+				foundFormat = FormatDetector.findInFolder(folder, title, diff);
 			}
-		});		
-		
-		// Couldnt even find tutorial safe fail
-		if (folder == "tutorial") if (diff == "hard")
-		{
-			throw 'Failed loading chart.';
-			return null;
+			catch (e)
+			{
+				if (title == "tutorial" && diff == "hard") // Couldnt even find tutorial
+				{
+					throw 'Failed loading chart: ' + Std.string(e);
+					return null;
+				}
+				else // Fail safe to tutorial
+				{
+					trace('$folder$title-$diff CHART NOT FOUND');
+					return loadFromFile('hard', 'tutorial');
+				}
+			}
 		}
-		
-		trace('$folder-$diff CHART NOT FOUND');
-		return loadFromFile('hard', 'tutorial');
+
+		var format = foundFormat.format;
+		var files = foundFormat.files;
+		var maru:FNFMaru = new FNFMaru();
+
+		switch (format)
+		{
+			case FNF_MARU:
+				maru.fromFile(files[0], files[1]);
+			case _:
+				var chart = FormatDetector.createFormatInstance(format);
+				chart.fromFile(files[0], files[1]);
+				maru.fromFormat(chart);
+		}
+
+		trace('\nLOADED CHART SUCCESSFULLY.\nFROM FORMAT: $format\nFROM FILES: $files');
+		return maru.data.song;
 	}
 
-	public static function getSongMeta(song:String):Null<SongMeta> {
-		var meta = CoolUtil.getFileContent(Paths.songMeta(song));
-		return meta.length > 0 ? cast Json.parse(meta) : null;
-	}
+	//public static function getSongMeta(song:String):Null<SongMeta> {
+		//var meta = CoolUtil.getFileContent(Paths.songMeta(song));
+		//return meta.length > 0 ? cast Json.parse(meta) : null;
+	//	return null;
+	//}
 
 	public static function getSectionTime(song:SongJson, section:Int = 0):Float {
 		var crochet:Float = (60000 / song.bpm);
@@ -166,7 +187,7 @@ class Song
 		final notes:Array<NoteJson> = [];
 		
 		loadFromFile(diff, song).notes.fastForEach((s, i) -> {
-			if (s.sectionNotes != null) {
+			if (s.sectionNotes != null) if (s.sectionNotes.length > 0) {
 				s.sectionNotes.fastForEach((n, i) -> {
 					notes.push(n);
 				});
@@ -177,24 +198,20 @@ class Song
 		return notes;
 	}
 
-	private static inline function sortNotes(note1:NoteJson, note2:NoteJson):Int {
+	private static inline function sortNotes(note1:NoteJson, note2:NoteJson):Int
+	{
 		return FlxSort.byValues(FlxSort.ASCENDING, note1.time, note2.time);
 	}
 
-	public static function formatSongFolder(songName:String):String {
-		var folder:String = "";
-		songName.split("").fastForEach((char, i) -> {
-			switch (char) {
-				case "." | "?" | "*" | '"' | "'":
-				case " " | ":":				folder = (folder + "-");
-				default:					folder = (folder + char.toLowerCase());
-			}
-		});
-		return folder;
+	public static inline function formatSongFolder(title:String):String
+	{
+		return FNFMaru.formatTitle(title);
 	}
 
-	inline public static function getDefaultSong():SongJson {
-		return {
+	inline public static function getDefaultSong():SongJson
+	{
+		return
+		{
 			song: 'Test',
 			notes: [],
 			bpm: 150,

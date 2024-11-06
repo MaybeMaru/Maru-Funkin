@@ -174,14 +174,15 @@ class WeekSetup
         return weekMap.get(week);
     }
 
-    public static function setupSong(weekName:String, songName:String, songDiff:String, storyMode:Bool):Void {
-        final _modFolder = weekMap.get(weekName)?.modFolder;
-        if (_modFolder == null) { // Base game
+    public static function setupSong(weekName:String, songName:String, songDiff:String, storyMode:Bool):Void
+    {
+        final modFolder = weekMap.get(weekName)?.modFolder;
+        if (modFolder == null) { // Base game
             ModdingUtil.curModFolder = "";
         }
-        else if (ModdingUtil.modsMap.exists(_modFolder)) { // Mods
-            trace("Selected Mod folder " + _modFolder);
-            ModdingUtil.curModFolder = _modFolder;
+        else if (ModdingUtil.modsMap.exists(modFolder)) { // Mods
+            trace("Selected Mod folder " + modFolder);
+            ModdingUtil.curModFolder = modFolder;
         }
 
         PlayState.storyWeek = weekName;
@@ -230,9 +231,8 @@ class WeekSetup
 
         Conductor.stop();
 
-        if (FlxG.sound.music != null) {
+        if (FlxG.sound.music != null)
             FlxG.sound.music.fadeOut(0.333);
-        }
 
         CoolUtil.switchState(loadScreen, skipTrans, true);
     }

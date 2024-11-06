@@ -2,15 +2,37 @@ package funkin.objects;
 
 class RatingGroup extends TypedSpriteGroup<RemoveRating>
 {
-    public var targetSpr:FlxObject = null;
+    public var targetSpr(default, set):FlxObject;
     public var _offset:FlxPoint;
 
-    public function new(?targetSpr:FlxSprite):Void {
+    function set_targetSpr(obj:FlxObject)
+    {
+        if (obj != null)
+        {
+            if (obj is FlxSprite)
+            {
+                if (obj is Character)
+                {
+                    var char = cast(obj, Character);
+                    char.prepareCamPoint(_offset).subtract(char.x, char.y);
+                }
+                else
+                {
+                    var spr = cast(obj, FlxSprite);
+                    _offset.set(spr.frameWidth * spr.scale.x * 0.5, spr.frameHeight * spr.scale.y * 0.5);
+                }
+            }
+        }
+
+        return targetSpr = obj;
+    }
+
+    public function new(?targetSpr:FlxObject):Void
+    {
         super();
-        this.targetSpr = targetSpr;
+        
         _offset = FlxPoint.get();
-        if (targetSpr is FlxSprite)
-            _offset.set(targetSpr.frameWidth * targetSpr.scale.x, targetSpr.frameHeight * targetSpr.scale.y);
+        this.targetSpr = targetSpr;
 
         // Cache default ratings
         add(new JudgeRating());
@@ -31,7 +53,7 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating>
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
         if (targetSpr != null) {
-            setPosition(targetSpr.x - _offset.x * 0.5, targetSpr.y - _offset.y * 0.5);
+            setPosition(targetSpr.x - _offset.x, targetSpr.y - _offset.y);
         }
     }
 

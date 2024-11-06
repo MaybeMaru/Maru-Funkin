@@ -13,6 +13,8 @@ import openfl.display.TriangleCulling;
 import openfl.geom.Matrix;
 import openfl.Vector;
 
+using macros.FastArray;
+
 #if !openfl_debug
 @:fileXml('tags="haxe,release"')
 @:noDebug
@@ -162,7 +164,7 @@ class DrawCommandReader
 	@SuppressWarnings("checkstyle:Dynamic")
 	private inline function obj(index:Int):Dynamic
 	{
-		return buffer.o[oPos + index];
+		return buffer.o.unsafeGet(oPos + index);
 	}
 
 	public inline function readBeginBitmapFill():BeginBitmapFillView

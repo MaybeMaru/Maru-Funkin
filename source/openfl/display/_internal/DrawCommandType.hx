@@ -1,6 +1,6 @@
 package openfl.display._internal;
 
-enum abstract DrawCommandType(Int)
+enum abstract DrawCommandType(#if cpp cpp.UInt8 #else Int #end)
 {
 	var BEGIN_BITMAP_FILL;
 	var BEGIN_FILL;
