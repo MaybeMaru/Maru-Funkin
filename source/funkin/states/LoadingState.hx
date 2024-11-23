@@ -86,10 +86,15 @@ class LoadingState extends MusicBeatState
 
         var instPath = Paths.instPath(song);
         var voicesPath = Paths.voicesPath(song);
+        var backupPath = Paths.backupPath(song);
 
         soundAssets.push(instPath);
+        
         if (Paths.exists(voicesPath, MUSIC))
             soundAssets.push(voicesPath);
+
+        if (Paths.exists(backupPath, MUSIC))
+            soundAssets.push(backupPath);
 
         startAsyncLoad(imageAssets, soundAssets);
     }

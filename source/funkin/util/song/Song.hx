@@ -60,7 +60,7 @@ class Song
 				}
 				else // Fail safe to tutorial
 				{
-					trace('$folder$title-$diff CHART NOT FOUND');
+					trace('$folder/$title-$diff CHART NOT FOUND');
 					return loadFromFile('hard', 'tutorial');
 				}
 			}
@@ -69,6 +69,13 @@ class Song
 		var format = foundFormat.format;
 		var files = foundFormat.files;
 		var maru:FNFMaru = new FNFMaru();
+
+		// Lets double check that (for backwards compat)
+		if (format == FNF_MARU)
+		{
+			var jsonFormats = FormatDetector.getList().filter((f) -> return FormatDetector.getFormatData(f).extension == "json");
+			format = FormatDetector.findFromContents(CoolUtil.getFileContent(files[0]), {possibleFormats: jsonFormats});
+		}
 
 		switch (format)
 		{

@@ -59,14 +59,20 @@ class NotesGroup extends Group
 		grpNoteSplashes.spawnSplash(note);
 	}
 
-	inline function hitNote(note:Note, character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	inline function getVocals(char:Character):FlxFunkSound
+	{
+		return (Conductor.hasBackup && char != null && !char .isPlayer) ? Conductor.backup : Conductor.vocals;
+	}
+
+	inline function hitNote(note:Note, char:Character, botplayCheck:Bool = false, prefBot:Bool = false)
+	{
 		note.wasGoodHit = true;
 		if (note.child != null)
 			note.child.startedPress = true;
 
-		if (character != null) {
-			character.sing(note.noteData, note.altAnim);
-			Conductor.vocals.volume = note.mustHit ? 1 : 0;
+		if (char != null) {
+			char.sing(note.noteData, note.altAnim);
+			getVocals(char).volume = note.mustHit ? 1 : 0;
 		}
 
 		if (!botplayCheck || prefBot) {
@@ -80,13 +86,13 @@ class NotesGroup extends Group
 		note.targetStrum.playStrumAnim('confirm', true);
 	}
 
-	function pressSustain(sustain:Sustain, character:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
+	function pressSustain(sustain:Sustain, char:Character, botplayCheck:Bool = false, prefBot:Bool = false) {
 		if (!sustain.exists)
 			return;
 		
-		if (character != null) {
-			character.sing(sustain.noteData, sustain.altAnim, false);
-			Conductor.vocals.volume = 1;
+		if (char != null) {
+			char.sing(sustain.noteData, sustain.altAnim, false);
+			getVocals(char).volume = 1;
 		}
 
 		if (!botplayCheck || prefBot) {
@@ -171,7 +177,7 @@ class NotesGroup extends Group
 			if (game.combo > 4) game.gf.playAnim('sad');
 			game.combo = 0;
 				
-			Conductor.vocals.volume = 0;
+			
 			final healthLoss = note.missHealth[note.isSustainNote ? 1 : 0];
 
 			var healthMult = 1.0;
@@ -188,7 +194,9 @@ class NotesGroup extends Group
 					
 			ModdingUtil.addCall('noteMiss', [note]);
 
-			(note.mustPress ? boyfriend : game.dad).sing(note.noteData, "miss");
+			var char = (note.mustPress ? boyfriend : game.dad);
+			char.sing(note.noteData, "miss");
+			getVocals(char).volume = 0;
 			
 			game.updateScore();
 		});

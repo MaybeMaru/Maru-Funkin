@@ -3,7 +3,8 @@ package funkin.util.song;
 import haxe.ds.Vector;
 import funkin.sound.FlxFunkSound;
 
-class BPMChangeEvent {
+class BPMChangeEvent
+{
 	public var stepTime:Int;
 	public var songTime:Float;
 	public var bpm:Float;
@@ -59,19 +60,23 @@ class Conductor
 	public static var latency:Float = 0.0;
 	public static var offset:Vector<Int> = Vector.fromArrayCopy([0, 0]);
 
-	public static var hasVocals:Bool = true;
-	public static var inst:FlxFunkSound;
-	public static var vocals:FlxFunkSound;
-	
 	public static var loadedSong(default, null):String = "";
+	public static var hasVocals(default, null):Bool = true;
+	public static var hasBackup(default, null):Bool = false;
+	
+	public static var inst:FlxFunkSound;
+	public static var backup:FlxFunkSound;
+	public static var vocals:FlxFunkSound;
 
 	public static function loadSong(song:String)
 	{
 		if (inst == null) {
 			inst = new FlxFunkSound(true);
+			backup = new FlxFunkSound(true);
 			vocals = new FlxFunkSound(true);
 
 			inst.persist = true;
+			backup.persist = true;
 			vocals.persist = true;
 		}
 		
@@ -81,6 +86,10 @@ class Conductor
 			var stream = Preferences.getPref('song-stream') ?? false;
 
 			inst.loadSound(Paths.inst(song, null, stream));
+
+			hasBackup = Paths.exists(Paths.backupPath(song), MUSIC);
+			if (hasBackup)
+				backup.loadSound(Paths.backup(song, null, stream));
 			
 			hasVocals = Paths.exists(Paths.voicesPath(song), MUSIC);
 			if (hasVocals)
@@ -91,14 +100,15 @@ class Conductor
 			if (asset != null) {
 				asset.onDispose = () -> {
 					inst.dispose();
+					backup.dispose();
 					vocals.dispose();
 					loadedSong = "";
 				}
 			}
 		}
+
 		loadedSong = song;
-		inst.onComplete = null;
-		vocals.onComplete = null;
+		inst.onComplete = backup.onComplete = vocals.onComplete = null;
 	}
 
 	public static inline var safeFrames:Int = 15;
@@ -162,7 +172,7 @@ class Conductor
 	public static var volume(default, set):Float = 1.0;
 	static inline function set_volume(value:Float) {
 		if (inst != null)
-			inst.volume = vocals.volume = value;
+			inst.volume = backup.volume = vocals.volume = value;
 
 		return volume = value;
 	}
@@ -173,6 +183,7 @@ class Conductor
 	public static function play():Void {
 		if (inst != null) {
 			inst.play();
+			if (hasBackup) backup.play();
 			if (hasVocals) vocals.play();
 		}
 	}
@@ -180,6 +191,7 @@ class Conductor
 	public static function stop():Void {
 		if (inst != null) {
 			inst.stop();
+			if (hasBackup) backup.stop();
 			if (hasVocals) vocals.stop();
 		}
 	}
@@ -187,6 +199,7 @@ class Conductor
 	public static function resume():Void {
 		if (inst != null) {
 			inst.resume();
+			if (hasBackup) backup.resume();
 			if (hasVocals) vocals.resume();
 		}
 	}
@@ -194,12 +207,14 @@ class Conductor
 	public static function pause():Void {
 		if (inst != null) {
 			inst.pause();
+			if (hasBackup) backup.pause();
 			if (hasVocals) vocals.pause();
 		}
 	}
 
 	public static function sync():Void {		
 		soundSync(inst, offset[0]);
+		if (hasBackup) soundSync(backup, offset[1]);
 		if (hasVocals) soundSync(vocals, offset[1]);
 	}
 
@@ -214,6 +229,12 @@ class Conductor
 		
 		if (Math.abs(songPosition - (inst.time + offset[0] + latency)) > maxOff)
 			soundSync(inst, offset[0]);
+
+		if (hasBackup)
+		{
+			if (Math.abs(songPosition - (backup.time + offset[1] + latency)) > maxOff)
+				soundSync(backup, offset[1]);
+		}
 
 		if (hasVocals)
 		{
@@ -230,6 +251,7 @@ class Conductor
 		songPitch = (forceVar) ? pitch : songPitch;
 		FlxG.timeScale = (forceTime) ? pitch : FlxG.timeScale;
 		inst.pitch = pitch;
+		if (hasBackup) backup.pitch = pitch;
 		if (hasVocals) vocals.pitch = pitch;
 		#end
 	}

@@ -6,10 +6,6 @@ import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
-#if !mac
-import haxe.ui.Toolkit;
-import haxe.ui.locale.LocaleManager;
-#end
 
 class InitState extends FlxState
 {
@@ -89,14 +85,9 @@ class Main extends Sprite
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 
-		#if !mac
-		// Init haxeui
-		Toolkit.theme = "dark";
-		Toolkit.init();
-		#end
-		
-		// TODO: Only spanish and portuguese exist
-		//LocaleManager.instance.language;
+		moonchart.backend.FormatDetector.defaultFileFormatter = (title, diff) -> {
+			return [diff.trim().toLowerCase()];
+		}
 
 		setupGame();
 	}

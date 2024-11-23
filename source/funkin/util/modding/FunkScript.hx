@@ -21,7 +21,25 @@ class FunkScript extends hscript.Script implements IFlxDestroyable
 			dispose();
 	}
 
-	public inline function safeCall(method:String, args:Array<Dynamic>):Dynamic {
+	public function callBasic(method:String, ?value:Dynamic):Dynamic
+	{
+		var method:Dynamic = get(method);
+		return method != null ? method(value) : CONTINUE_FUNCTION;
+	}
+
+	public function safeCallBasic(method:String, ?value:Dynamic):Dynamic
+	{
+		try {
+			return callBasic(method, value);
+		}
+		catch(e) {
+			errorPrint(e);
+			return CONTINUE_FUNCTION;
+		}	
+	}
+
+	public function safeCall(method:String, args:Array<Dynamic>):Dynamic
+	{
 		try {
 			return call(method, args);
 		}
@@ -391,11 +409,11 @@ class CustomState extends MusicBeatState {
 		}
 	}
 
-	function checkSuper(f:String, ?v:Array<Dynamic>) {
+	function checkSuper(f:String, ?v:Dynamic) {
 		if (script.exists(f)) {
-			script.safeCall(f, v);
+			script.safeCallBasic(f, v);
 		} else {
-			callDynamicSuper(f, v[0]); // Gets called if function doesnt have an override
+			callDynamicSuper(f, v); // Gets called if function doesnt have an override
 		}
 	}
 
@@ -408,15 +426,15 @@ class CustomState extends MusicBeatState {
     override public function update(elapsed:Float) {
 		if (FlxG.keys.justPressed.F4) switchState(new MainMenuState()); // emergency exit
 		if (FlxG.keys.justPressed.F5) ScriptUtil.switchCustomState(key, false, false);
-		checkSuper(UPDATE, [elapsed]);
+		checkSuper(UPDATE, elapsed);
     }
 
-	override public function stepHit(curStep) 		checkSuper(STEP, [curStep]);
-	override public function beatHit(curBeat) 		checkSuper(BEAT, [curBeat]);
-	override public function sectionHit(curSection) checkSuper(SECTION, [curSection]);
+	override public function stepHit(curStep) 		checkSuper(STEP, curStep);
+	override public function beatHit(curBeat) 		checkSuper(BEAT, curBeat);
+	override public function sectionHit(curSection) checkSuper(SECTION, curSection);
 	
 	override public function destroy() {
-		script.safeCall("destroy", null);
+		script.safeCallBasic("destroy");
 		super.destroy();
 	}
 }

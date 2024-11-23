@@ -116,8 +116,9 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 
 	@:noCompletion
 	@:unreflective
-	inline private function __superUpdate(elapsed:Float) {
-		ModdingUtil.addCall('stateUpdate', [elapsed]);
+	inline private function __superUpdate(elapsed:Float)
+	{
+		ModdingUtil.addCallBasic('stateUpdate', elapsed);
 		
 		members.fastForEach((basic, i) -> {
 			if (basic != null) if (basic.exists) if (basic.active)
@@ -134,7 +135,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 		});
 		
 		onStepHit.dispatch(curStep);
-		ModdingUtil.addCall('stateStepHit', [curStep]);
+		ModdingUtil.addCallBasic('stateStepHit', curStep);
 	}
 
 	public function beatHit(curBeat:Int):Void {
@@ -146,7 +147,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 		});
 
 		onBeatHit.dispatch(curBeat);
-		ModdingUtil.addCall('stateBeatHit', [curBeat]);
+		ModdingUtil.addCallBasic('stateBeatHit', curBeat);
 	}
 
 	public function sectionHit(curSection:Int):Void {
@@ -158,7 +159,7 @@ class MusicBeatState extends FlxUIState implements IMusicGetter
 		});
 
 		onSectionHit.dispatch(curSection);
-		ModdingUtil.addCall('stateSectionHit', [curSection]);
+		ModdingUtil.addCallBasic('stateSectionHit', curSection);
 	}
 
 	override function destroy() {

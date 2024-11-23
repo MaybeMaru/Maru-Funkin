@@ -284,7 +284,7 @@ class PlayState extends MusicBeatState
 
 		startingSong = true;
 		ModdingUtil.addCall('createPost');
-		inCutscene ? ModdingUtil.addCall('startCutscene', [false]) : startCountdown();
+		inCutscene ? ModdingUtil.addCallBasic('startCutscene', false) : startCountdown();
 
 		super.create();
 		destroySubStates = false;
@@ -389,9 +389,10 @@ class PlayState extends MusicBeatState
 
 		var swagCounter:Int = 0;
 
-		startTimer = new FlxTimer().start(Conductor.crochetMills, (tmr) -> {
+		startTimer = new FlxTimer().start(Conductor.crochetMills, (tmr) ->
+		{
 			beatCharacters();
-			ModdingUtil.addCall('startTimer', [swagCounter]);
+			ModdingUtil.addCallBasic('startTimer', swagCounter);
 
 			if (swagCounter > 0) {
 				final countdownSpr:FunkinSprite = new FunkinSprite(countdownImages[swagCounter-1]);
@@ -521,7 +522,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float):Void {
 		__superUpdate(elapsed);
-		ModdingUtil.addCall('update', [elapsed]);
+		ModdingUtil.addCallBasic('update', elapsed);
 
 		if (canDebug) {
 			final justPressed = FlxG.keys.justPressed;
@@ -578,7 +579,7 @@ class PlayState extends MusicBeatState
 		if (!inCutscene) if (canDebug) if (getKey('RESET', JUST_PRESSED))
 			health = 0;
 
-		ModdingUtil.addCall('updatePost', [elapsed]);
+		ModdingUtil.addCallBasic('updatePost', elapsed);
 	}
 
 	public function openGameOverSubstate():Void
@@ -629,7 +630,7 @@ class PlayState extends MusicBeatState
 			switchState(new ChartingState());
 			#if discord_rpc DiscordClient.changePresence("Chart Editor", null, null, true); #end
 		}
-		else #end inCutscene ? ModdingUtil.addCall('startCutscene', [true]) : exitSong();
+		else #end inCutscene ? ModdingUtil.addCallBasic('startCutscene', true) : exitSong();
 	}
 
 	public function exitSong():Void {
@@ -693,7 +694,7 @@ class PlayState extends MusicBeatState
 	public function popUpScore(strumtime:Float, daNote:Note) {
 		combo++;
 		noteCount++;
-		ModdingUtil.addCall('popUpScore', [daNote]);
+		ModdingUtil.addCallBasic('popUpScore', daNote);
 
 		final noteRating:String = CoolUtil.getNoteJudgement(CoolUtil.getNoteDiff(daNote));
 		final rating = Highscore.ratingMap.get(noteRating);
@@ -714,7 +715,7 @@ class PlayState extends MusicBeatState
 	override function stepHit(curStep:Int):Void {
 		super.stepHit(curStep);
 		Conductor.autoSync();
-		ModdingUtil.addCall('stepHit', [curStep]);
+		ModdingUtil.addCallBasic('stepHit', curStep);
 	}
 
 	inline function beatCharacters() {
@@ -727,7 +728,7 @@ class PlayState extends MusicBeatState
 	{
 		super.beatHit(curBeat);
 		beatCharacters();
-		ModdingUtil.addCall('beatHit', [curBeat]);
+		ModdingUtil.addCallBasic('beatHit', curBeat);
 	}
 
 	override public function sectionHit(curSection:Int):Void
@@ -752,7 +753,7 @@ class PlayState extends MusicBeatState
 				ghostTapEnabled = !curSectionData.mustHitSection;
 		}
 
-		ModdingUtil.addCall('sectionHit', [curSection]);
+		ModdingUtil.addCallBasic('sectionHit', curSection);
 	}
 
 	override function destroy():Void
@@ -783,7 +784,8 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function switchChar(type:String, newCharName:String):Void {
+	public function switchChar(type:String, newCharName:String):Void
+	{
 		final targetChar:Character = switch(type = type.toLowerCase().trim()) {
 			case 'dad': dad;
 			case 'gf' | 'girlfriend': gf;
@@ -831,4 +833,5 @@ class PlayState extends MusicBeatState
 	public var songSpeed(get,never):Float; inline function get_songSpeed() return NotesGroup.songSpeed;
 	public var inst(get, never):FlxFunkSound; inline function get_inst() return Conductor.inst;
 	public var vocals(get, never):FlxFunkSound; inline function get_vocals() return Conductor.vocals;
+	public var backup(get, never):FlxFunkSound; inline function get_backup() return Conductor.backup;
 }

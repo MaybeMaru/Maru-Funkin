@@ -183,6 +183,15 @@ class Paths
 		return getPath('$songKey.$SOUND_EXT', MUSIC, 'songs', globalAsset);
 	}
 
+	inline static public function backupPath(song:String, ?globalAsset:Bool):String {
+		return songAudioAssetPath(song, "Backup", globalAsset);
+	}
+
+	inline static public function backup(song:String, ?globalAsset:Bool, ?stream:Bool):Sound {
+		var backupPath:String = backupPath(song, globalAsset);
+		return AssetManager.cacheSoundPath(backupPath, false, null, stream);
+	}
+
 	inline static public function voicesPath(song:String, ?globalAsset:Bool):String {
 		return songAudioAssetPath(song, "Voices", globalAsset);
 	}

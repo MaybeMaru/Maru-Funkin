@@ -77,8 +77,6 @@
 	<haxelib name="flixel"/>
 	<haxelib name="flixel-ui"/>
 	<haxelib name="flixel-addons"/>
-	<haxelib name="haxeui-core" unless="mac"/>
-	<haxelib name="haxeui-openfl" unless="mac"/>
 	<haxelib name="maru-hscript"/>
 	<haxelib name="moonchart"/>
 

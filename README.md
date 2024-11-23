@@ -48,8 +48,6 @@ haxelib install flixel-addons
 haxelib install flixel-ui
 haxelib install hxvlc
 haxelib git moonchart https://github.com/MaybeMaru/moonchart
-haxelib git haxeui-openfl https://github.com/haxeui/haxeui-openfl
-haxelib git haxeui-core https://github.com/haxeui/haxeui-core
 haxelib git maru-hscript https://github.com/MaybeMaru/hscript-improved
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 ```

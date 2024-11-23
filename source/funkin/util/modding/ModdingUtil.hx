@@ -221,6 +221,15 @@ class ModdingUtil
     }
 
     /**Calls a method in all the scripts**/
+    public static function addCallBasic(name:String, arg:Dynamic):Void
+    {
+        scripts.fastForEach((script, i) -> {
+            if (script != null) if (script.active)
+                script.safeCallBasic(name, arg);
+        });
+    }
+
+    /**Calls a method in all the scripts**/
     public static function addCall(name:String, args:Array<Dynamic> = null):Void
     {
         scripts.fastForEach((script, i) -> {

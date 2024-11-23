@@ -18,8 +18,6 @@ import memory.Memory;
 
 class FPS_Mem extends TextField
 {
-	private var times:Array<Float>;
-
 	public function new(X:Float = 10.0, Y:Float = 10.0, Color:Int = 0x000000) 
 	{
 		super();
@@ -31,7 +29,6 @@ class FPS_Mem extends TextField
 		defaultTextFormat = new TextFormat("_sans", 12, Color);
 
 		text = "FPS: ";
-		times = [];
 
 		addEventListener(Event.ENTER_FRAME, onEnter);
 		addEventListener(Event.ADDED_TO_STAGE, create);
@@ -45,6 +42,7 @@ class FPS_Mem extends TextField
     }
 
 	function onResize(_):Void {
+		lastTime = Timer.stamp();
         final _scale = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
         scaleX = _scale;
         scaleY = _scale;
@@ -60,6 +58,10 @@ class FPS_Mem extends TextField
 	}
 
 	var memPeak:Float = 0;
+	var lastTime:Float = 0;
+
+	var timeFrame:Float = 0;
+	var frames:Int = 0;
 
 	private function onEnter(_):Void
 	{
@@ -67,21 +69,25 @@ class FPS_Mem extends TextField
 			return;
 
 		final now = Timer.stamp();
-		times.push(now);
+		timeFrame += (now - lastTime);
+		frames++;
 
-		while (times[0] < now - 1)
-			times.shift();
+		if (timeFrame >= (1 / 6))
+		{
+			final fps = Std.int(frames / timeFrame);
+			final bytes = #if (cpp && !mobile) Memory.getCurrentUsage(); #else System.totalMemory; #end
+			final memCur = formatBytes(bytes);
 
-		final fps:Int = times.length;
+			if (memCur > memPeak)
+				memPeak = memCur;
 
-		final bytes = #if (cpp && !mobile) Memory.getCurrentUsage(); #else System.totalMemory; #end
-		final memCur = formatBytes(bytes);
+			text = 'FPS: ${Math.min(fps, FlxG.updateFramerate)}\nRAM: $memCur mb/$memPeak mb';
 
-		if (memCur > memPeak)
-			memPeak = memCur;
+			frames = 0;
+			while (timeFrame > 0)
+				timeFrame = timeFrame - (1 / 6);
+		}
 
-		text =
-		'FPS: ${fps > FlxG.updateFramerate ? FlxG.updateFramerate : fps}\n' +
-		'RAM: $memCur mb/$memPeak mb';
+		lastTime = now;
 	}
 }

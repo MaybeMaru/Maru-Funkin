@@ -230,15 +230,23 @@ class Character extends FlxSpriteExt
 		__superUpdate(elapsed);
 	}
 
-	public function prepareCamPoint(?point:Null<FlxPoint>, ?bounds:Array<Float>)
+	public function getCamPoint(?point:Null<FlxPoint>):FlxPoint
 	{
-		point = getMidpoint(point);
-
+		point ??= FlxPoint.get();
+		point.set(width * 0.5, height * 0.5);
 		point.subtract(camOffsets.x * (flippedOffsets ? -1 : 1), camOffsets.y);
 		point.subtract(stageCamOffsets.x, stageCamOffsets.y);
-		
+
 		if (flippedOffsets)
 			point.add((width * (isPlayerJson ? 0.25 : -(0.25 / 2))), 0);
+
+		return point;
+	}
+
+	public function prepareCamPoint(?point:Null<FlxPoint>, ?bounds:Array<Float>)
+	{
+		point = getCamPoint(point);
+		point.add(x, y);
 		
 		if (bounds != null) {
 			point.x = FlxMath.bound(point.x, bounds[0], bounds[2]);

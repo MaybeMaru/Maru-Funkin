@@ -26,20 +26,6 @@
             "version": null
         },
         {
-            "name": "haxeui-openfl",
-            "type": "git",
-            "dir": null,
-            "ref": "master",
-            "url": "https://github.com/haxeui/haxeui-openfl"
-        },
-        {
-            "name": "haxeui-core",
-            "type": "git",
-            "dir": null,
-            "ref": "master",
-            "url": "https://github.com/haxeui/haxeui-core"
-        },
-        {
             "name": "hxcpp-debug-server",
             "type": "install",
             "version": null

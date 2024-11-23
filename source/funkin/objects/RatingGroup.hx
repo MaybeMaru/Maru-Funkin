@@ -14,7 +14,7 @@ class RatingGroup extends TypedSpriteGroup<RemoveRating>
                 if (obj is Character)
                 {
                     var char = cast(obj, Character);
-                    char.prepareCamPoint(_offset).subtract(char.x, char.y);
+                    _offset = char.getCamPoint(_offset);
                 }
                 else
                 {
