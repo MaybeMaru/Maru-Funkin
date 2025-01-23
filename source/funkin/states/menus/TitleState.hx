@@ -158,7 +158,7 @@ class TitleState extends MusicBeatState
 				FlxG.sound.music.volume += elapsed * 0.1;
 		}
 
-		if (#if mobile MobileTouch.justPressed() #else getKey('ACCEPT', JUST_PRESSED) #end)
+		if (#if mobile MobileTouch.justPressed() #else FlxG.keys.justPressed.ENTER || getKey('ACCEPT', JUST_PRESSED) #end)
 		{
 			if (!transitioning && (skippedIntro || openedGame) )
 			{

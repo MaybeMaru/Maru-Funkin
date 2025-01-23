@@ -1,9 +1,8 @@
 package funkin.util.song;
 
-import moonchart.backend.Optimizer;
 import flixel.util.FlxSort;
-
 import moonchart.backend.FormatDetector;
+import moonchart.backend.Optimizer;
 import moonchart.formats.fnf.FNFMaru;
 import moonchart.formats.fnf.legacy.FNFLegacy;
 
@@ -35,7 +34,7 @@ class Song
 	public static function loadFromFile(diff:String, title:String):SongJson
 	{
 		title = FNFMaru.formatTitle(title);
-		
+
 		var folder:String = "";
 		var foundFormat:DetectedFormatFiles = null;
 
@@ -91,40 +90,45 @@ class Song
 		return maru.data.song;
 	}
 
-	//public static function getSongMeta(song:String):Null<SongMeta> {
-		//var meta = CoolUtil.getFileContent(Paths.songMeta(song));
-		//return meta.length > 0 ? cast Json.parse(meta) : null;
+	// public static function getSongMeta(song:String):Null<SongMeta> {
+	// var meta = CoolUtil.getFileContent(Paths.songMeta(song));
+	// return meta.length > 0 ? cast Json.parse(meta) : null;
 	//	return null;
-	//}
+	// }
 
-	public static function getSectionTime(song:SongJson, section:Int = 0):Float {
+	public static function getSectionTime(song:SongJson, section:Int = 0):Float
+	{
 		var crochet:Float = (60000 / song.bpm);
-        var time:Float = 0;
+		var time:Float = 0;
 
 		checkAddSections(song, section);
 
 		var i:Int = 0;
-		while (i < section) {
-			if (song.notes[i].changeBPM) {
+		while (i < section)
+		{
+			if (song.notes[i].changeBPM)
+			{
 				crochet = (60000 / song.notes[i].bpm);
 			}
 
 			time += Conductor.BEATS_PER_MEASURE * crochet;
 			i++;
 		}
-        
+
 		return time;
 	}
 
 	public static function checkAddSections(song:SongJson, index:Int, i:Int = 0):Void
 	{
 		final notes:Array<SectionJson> = song.notes;
-		
+
 		while (notes.length < index + 1)
 			notes.push(getDefaultSection());
 
-		while (i < index) {
-			if (notes[i] == null)  notes.unsafeSet(i, getDefaultSection());
+		while (i < index)
+		{
+			if (notes[i] == null)
+				notes.unsafeSet(i, getDefaultSection());
 			i++;
 		}
 	}
@@ -139,26 +143,25 @@ class Song
 		{
 			section++;
 			startTime = endTime;
-			endTime = getSectionTime(song, section+1);
+			endTime = getSectionTime(song, section + 1);
 		}
 
 		return section;
 	}
 
-	//Removes unused variables for smaller size
+	// Removes unused variables for smaller size
 	public static function optimizeJson(input:SongJson):SongJson
 	{
 		var song:SongJson = JsonUtil.copyJson(input);
 
 		song.notes.fastForEach((section, i) ->
 		{
-			Optimizer.removeDefaultValues(section,
-			{
+			Optimizer.removeDefaultValues(section, {
 				bpm: 0,
-                changeBPM: false,
-                mustHitSection: true,
-                sectionNotes: [],
-                sectionEvents: []
+				changeBPM: false,
+				mustHitSection: true,
+				sectionNotes: [],
+				sectionEvents: []
 			});
 
 			if (section.sectionNotes != null)
@@ -175,7 +178,7 @@ class Song
 		while (true)
 		{
 			var lastSection = song.notes[song.notes.length - 1];
-			
+
 			if (lastSection == null || Reflect.fields(lastSection).length > 0)
 				break;
 
@@ -188,17 +191,21 @@ class Song
 	/*
 		Use this function to get the sorted notes from a song as an array
 		Used for pico in Stress, but you can use it on other cool stuff
-	*/
+	 */
 	public static function getSongNotes(diff:String, song:String):Array<NoteJson>
 	{
 		final notes:Array<NoteJson> = [];
-		
-		loadFromFile(diff, song).notes.fastForEach((s, i) -> {
-			if (s.sectionNotes != null) if (s.sectionNotes.length > 0) {
-				s.sectionNotes.fastForEach((n, i) -> {
-					notes.push(n);
-				});
-			}
+
+		loadFromFile(diff, song).notes.fastForEach((s, i) ->
+		{
+			if (s.sectionNotes != null)
+				if (s.sectionNotes.length > 0)
+				{
+					s.sectionNotes.fastForEach((n, i) ->
+					{
+						notes.push(n);
+					});
+				}
 		});
 
 		notes.sort(sortNotes);
@@ -217,19 +224,19 @@ class Song
 
 	inline public static function getDefaultSong():SongJson
 	{
-		return
-		{
+		return {
 			song: 'Test',
 			notes: [],
 			bpm: 150,
 			stage: 'stage',
-			players: ['bf','dad','gf'],
-			offsets: [0,0],
+			players: ['bf', 'dad', 'gf'],
+			offsets: [0, 0],
 			speed: 1,
 		};
 	}
 
-	inline public static function getDefaultSection():SectionJson {
+	inline public static function getDefaultSection():SectionJson
+	{
 		return {
 			sectionNotes: [],
 			sectionEvents: [],

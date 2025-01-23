@@ -4,7 +4,7 @@ import haxe.ds.Vector;
 import funkin.graphics.SmartSprite;
 
 interface INoteData {
-    public var noteData:Int;
+    public var noteData:Int8;
 }
 
 interface ITimingObject {
@@ -14,7 +14,7 @@ interface ITimingObject {
 class BasicNote extends SmartSprite implements INoteData implements ITimingObject
 {
     public var strumTime:Float = 0.0;
-    public var noteData:Int = 0;
+    public var noteData:Int8 = 0;
     public var mustPress:Bool = false;
     public var parent:Note;
     public var child:Sustain;
@@ -79,7 +79,7 @@ class BasicNote extends SmartSprite implements INoteData implements ITimingObjec
     
     public var spawnMult:Float = 1.0;
 
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default"):Void {
+    public function new(noteData:Int8 = 0, strumTime:Float = 0.0, skin:String = "default"):Void {
         super();
         this.noteData = noteData;
         this.strumTime = strumTime;

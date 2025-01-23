@@ -123,9 +123,9 @@ class LodGraphic extends FlxGraphic
 	public var parsedChildren:Bool = false;
 	
 	public var lodScale(default, null):Float = 1.0;
-	public var lodLevel(default, null):Int = 0;
+	public var lodLevel(default, null):LodLevel = HIGH;
 	
-	public function generateLod(level:Int = 0)
+	public function generateLod(level:Int8 = 0)
 	{
 		lodLevel = level;
 		if (_lodGenerated || level <= 0 || !bitmap.readable)
@@ -171,14 +171,15 @@ class LodGraphic extends FlxGraphic
 	}
 }
 
-enum abstract LodLevel(Int) from Int to Int {
+enum abstract LodLevel(Int8) from Int8 to Int8
+{
 	var DEFAULT = -1;
 	var HIGH = 0;
 	var MEDIUM = 1;
 	var LOW = 2;
 	var RUDY = 3;
 
-	public static inline function resolve(useLod:Bool):Int {
+	public static inline function resolve(useLod:Bool):LodLevel {
 		return useLod ? DEFAULT : HIGH;
 	}
 

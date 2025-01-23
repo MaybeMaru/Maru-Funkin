@@ -2,7 +2,7 @@ package funkin.objects.note;
 
 class Note extends BasicNote
 {
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, skin:String = "default", ?child:Sustain) {
+    public function new(noteData:Int8 = 0, strumTime:Float = 0.0, skin:String = "default", ?child:Sustain) {
         super(noteData, strumTime, skin); // Load skin
         this.child = child;
         isSustainNote = false;

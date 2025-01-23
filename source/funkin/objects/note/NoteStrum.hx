@@ -5,7 +5,7 @@ import funkin.objects.note.BasicNote.INoteData;
 
 class NoteStrum extends FlxSpriteExt implements INoteData
 {
-    public var noteData:Int = 0;
+    public var noteData:Int8 = 0;
 	public var modifiers:Map<String, BasicModifier> = [];
 	public var initPos:FlxPoint;
 	public var centerOffset:FlxPoint;
@@ -26,7 +26,7 @@ class NoteStrum extends FlxSpriteExt implements INoteData
 		return false;
 	}
 
-	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0):Void {
+	public function new(x:Float = 0, y:Float = 0, noteData:Int8 = 0):Void {
 		super(x,y);
 		initPos = FlxPoint.get(x, y);
 		centerOffset = FlxPoint.get();

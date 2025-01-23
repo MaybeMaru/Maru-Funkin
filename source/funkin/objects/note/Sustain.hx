@@ -4,7 +4,7 @@ import flixel.graphics.frames.FlxFrame;
 
 class Sustain extends BasicNote
 {
-    public function new(noteData:Int = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void
+    public function new(noteData:Int8 = 0, strumTime:Float = 0.0, susLength:Float = 0.0, skin:String = "default", ?parent:Note):Void
     {
         var initSus:Bool = (susLength > 0);
         if (initSus) clipRect = FlxRect.get();

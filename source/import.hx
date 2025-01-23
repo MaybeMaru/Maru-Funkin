@@ -126,4 +126,6 @@ import haxe.Json;
 
 using StringTools;
 using macros.FastArray;
+
+import #if cpp cpp.UInt8 #else Int #end as Int8;
 #end

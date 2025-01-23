@@ -21,11 +21,12 @@ class SplashGroup extends TypedGroup<NoteSplash> {
 	}
 }
 
-class NoteSplash extends FlxSpriteExt implements INoteData {
-    public var noteData:Int = 0;
+class NoteSplash extends FlxSpriteExt implements INoteData
+{
+    public var noteData:Int8 = 0;
     public var curSkin:String = '';
 
-	public function new(x:Float, y:Float, noteData:Int = 0):Void {
+	public function new(x:Float, y:Float, noteData:Int8 = 0):Void {
 		super(x,y);
         this.noteData = noteData;
         loadSkin();
@@ -34,7 +35,7 @@ class NoteSplash extends FlxSpriteExt implements INoteData {
         moves = false;
 	}
 
-	public function setupNoteSplash(X:Float, Y:Float, noteData:Int = 0, ?note:Note):Void {
+	public function setupNoteSplash(X:Float, Y:Float, noteData:Int8 = 0, ?note:Note):Void {
         if (note != null) {
             if (note.skin != curSkin) {
                 loadSkin(note.skin);
