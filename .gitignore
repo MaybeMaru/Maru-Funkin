@@ -2,3 +2,4 @@ export/
 dump/
 source/funkin/states/TestState.hx
 .vscode/
+.haxelib/
